@@ -80,7 +80,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .app { display: grid; grid-template-columns: 248px minmax(0, 1fr); min-height: 100%; }
 .rail { position: sticky; top: env(safe-area-inset-top, 0px); height: 100vh; height: 100dvh; overflow-y: auto; background: var(--surface); border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 18px; padding: 20px 14px 16px; }
 .brand { display: grid; gap: 2px; padding: 0 6px; }
-.brand .eyebrow { font: 600 11px/1 var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.brand .eyebrow, .raileyebrow { font: 600 11px/1 var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
 .brand .name { font: 700 26px/1 var(--f-display); letter-spacing: .01em; text-transform: uppercase; }
 .brand .stamp { display: flex; gap: 3px; margin-top: 8px; }
 .brand .stamp i { height: 4px; flex: 1; border-radius: 2px; }
@@ -439,6 +439,54 @@ table.ptab .p-setor { min-width: 150px; } table.ptab .p-filial { min-width: 175p
 .spin { border: 0 !important; border-radius: 50%; background: conic-gradient(var(--av) 0 54deg, transparent 54deg 60deg, var(--serv) 60deg 114deg, transparent 114deg 120deg, var(--rnc) 120deg 174deg, transparent 174deg 180deg, var(--rncc) 180deg 234deg, transparent 234deg 240deg, var(--cal) 240deg 294deg, transparent 294deg 300deg, var(--geral) 300deg 354deg, transparent 354deg 360deg);
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px)); animation: sp 1.1s linear infinite; }
 
+/* linha "Aços Vital · Qualidade" abaixo do Banco online */
+.raileyebrow { padding: 0 6px; }
+@media (max-width: 860px) { .raileyebrow { display: none; } }
+.field .unrev { margin-left: 10px; font-weight: 500; text-transform: none; letter-spacing: 0; }
+
+/* ---------- RNC de fornecedor: faixa de alerta (neon), prazos, cobrança ---------- */
+.rbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; max-width: 1480px; margin-bottom: 18px; padding: 12px 16px; border-radius: 8px; font-weight: 600; }
+.rbar .ic { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; color: #fff; font: 700 16px/1 var(--f-body); flex: none; }
+.rbar .txt { flex: 1; min-width: 200px; }
+.rbar .txt small { display: block; font-weight: 400; opacity: .88; margin-top: 2px; }
+.rbar.crit { background: color-mix(in srgb, var(--crit) 7%, var(--surface)); color: var(--crit); border: 2px solid #ff2a1f; animation: rnc-neon 1.4s ease-in-out infinite; }
+.rbar.crit .ic { background: #ff2a1f; animation: rnc-dot 1.4s ease-in-out infinite; }
+.rbar.crit .rb-ver { background: var(--crit); border-color: var(--crit); color: #fff; }
+.rbar.crit .rb-ok { background: transparent; border-color: currentColor; color: var(--crit); }
+.rbar.crit.calmo, .rbar.crit.calmo .ic { animation: none; }
+.rbar.crit.calmo { box-shadow: 0 0 10px 2px rgba(255, 42, 31, .55); }
+.rbar.warn { background: color-mix(in srgb, var(--warn) 9%, var(--surface)); color: var(--warn); border: 2px solid #f2a300; box-shadow: 0 0 10px 2px rgba(242, 163, 0, .45); }
+.rbar.warn .ic { background: #f2a300; }
+.rbar.warn .rb-ver { background: var(--warn); border-color: var(--warn); color: #fff; }
+@keyframes rnc-neon { 0%, 100% { box-shadow: 0 0 4px 1px rgba(255, 42, 31, .55), 0 0 0 0 rgba(255, 42, 31, 0); } 50% { box-shadow: 0 0 14px 4px rgba(255, 42, 31, .85), 0 0 30px 10px rgba(255, 42, 31, .35); } }
+@keyframes rnc-dot { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+@media (prefers-reduced-motion: reduce) { .rbar.crit, .rbar.crit .ic { animation: none; box-shadow: 0 0 12px 3px rgba(255, 42, 31, .6); } }
+@media print { .rbar { display: none !important; } }
+.rel { font-weight: 600; color: var(--ink-2); white-space: nowrap; }
+.rel.crit { color: var(--crit); } .rel.serious { color: var(--serious); } .rel.warn { color: var(--warn); }
+.prz { display: grid; gap: 0; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.pz { display: grid; grid-template-columns: minmax(150px, 1.3fr) minmax(130px, 1fr) auto; gap: 10px; align-items: center; padding: 8px 12px; border-top: 1px solid var(--line); font-size: 13px; }
+.pz:first-child { border-top: 0; }
+.pz .pl { font-weight: 600; } .pz .pd { color: var(--ink-2); }
+.pz.venc { background: color-mix(in srgb, var(--crit) 6%, transparent); }
+@media (max-width: 560px) { .pz { grid-template-columns: 1fr auto; } .pz .pd { grid-column: 1; } .pz .ps { grid-row: 1 / span 2; grid-column: 2; } }
+.cobl { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.cobl li { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; font-size: 12.5px; padding: 6px 10px; border-left: 3px solid var(--rnc); background: var(--surface-2); border-radius: 0 4px 4px 0; }
+.cobl li.ret { border-left-color: var(--ok); }
+.cobl .when { color: var(--ink-3); white-space: nowrap; }
+@media (max-width: 560px) { .cobl li { grid-template-columns: 1fr; gap: 2px; } }
+.cm-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.cm-sug { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; font-size: 12.5px; }
+textarea.cm-body { min-height: 260px; font-family: var(--f-mono, ui-monospace, monospace); font-size: 12.5px; }
+.regq { display: grid; gap: 2px; flex: 1 1 100%; font-size: 13px; }
+.minha { font: 600 10.5px/1 var(--f-body); text-transform: uppercase; letter-spacing: .06em; color: var(--rnc); border: 1px solid currentColor; border-radius: 10px; padding: 2px 6px; margin-left: 4px; }
+.mine-tg { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; font-size: 12.5px; }
+.mine-tg .btn[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.rnclist { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-height: 300px; overflow: auto; }
+.rnclist li { padding: 7px 10px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; font-size: 13px; }
+.rnclist li:hover { background: var(--surface-2); }
+.rlanes { margin-bottom: 4px; }
+
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
 #fb-gate[hidden] { display: none; }
@@ -469,7 +517,6 @@ table.ptab .p-setor { min-width: 150px; } table.ptab .p-filial { min-width: 175p
 <div class="app">
   <aside class="rail" aria-label="Navegação">
     <div class="brand">
-      <span class="eyebrow">Aços Vital · Qualidade</span>
       <span class="name">Central da Qualidade</span>
       <span class="stamp" aria-hidden="true"><i style="background:var(--av)"></i><i style="background:var(--serv)"></i><i style="background:var(--rnc)"></i><i style="background:var(--rncc)"></i><i style="background:var(--cal)"></i><i style="background:var(--geral)"></i></span>
     </div>
@@ -477,6 +524,7 @@ table.ptab .p-setor { min-width: 150px; } table.ptab .p-filial { min-width: 175p
       <span class="st"><i class="dot" id="db-dot"></i><span id="db-st">Conectando…</span></span>
       <button class="btn small" type="button" id="db-stale" hidden>Há dados novos · atualizar tela</button>
     </div>
+    <span class="eyebrow raileyebrow">Aços Vital · Qualidade</span>
     <div class="logocard" id="logocard" hidden><img id="logo-img" alt="Logo da empresa"></div>
     <nav class="nav" id="nav">
       <span class="grp">Visão geral</span>
@@ -2158,6 +2206,10 @@ re2js/build/index.js:
   let GATE_LOGO = null;
   const MODCOLS = ['av', 'serv', 'rnc', 'rncc', 'ins', 'trello', 'acomp', 'tcert', 'tusin'];
   const MODULOS = [['av', 'Lotes (AV)'], ['serv', 'Serviços'], ['rnc', 'RNC Fornecedor'], ['rncc', 'RNC Cliente'], ['ins', 'Calibração'], ['trello', 'Trello Jurong'], ['acomp', 'Acompanhamento Jurong'], ['tcert', 'Trello Certificados'], ['tusin', 'Inspeção Usinagem']];
+  /* telas gerais: quem não tem a escolha gravada (cadastros antigos) vê tudo, consulta Configurações e exporta */
+  const TELAS = [['painel', 'Painel'], ['alertas', 'Alertas'], ['rastreio', 'Rastreabilidade'], ['auditoria', 'Auditoria'], ['relatorio', 'Relatório mensal'], ['historico', 'Histórico']];
+  const TELA_OPC = { config: [['nao', 'Não vê'], ['ver', 'Só consulta'], ['edita', 'Edita']], exportar: [['sim', 'Permite'], ['nao', 'Não permite']] };
+  const TELA_DEF = { painel: 've', alertas: 've', rastreio: 've', auditoria: 've', relatorio: 've', historico: 've', config: 'ver', exportar: 'sim' };
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   window.CQ_TEXT = {
@@ -2237,6 +2289,8 @@ re2js/build/index.js:
         id: path.split('/').pop(),
         get: () => w(SDK.getDoc(ref).then(wrapDoc)),
         set: (d) => w(SDK.setDoc(ref, d)),
+        /* junta campos aninhados sem precisar ler o documento antes (usado no histórico) */
+        merge: (d) => w(SDK.setDoc(ref, d, { merge: true })),
         /* "update" do Claude junta objetos aninhados; aqui é feito numa transação para não perder alterações de outras pessoas */
         update: (patch) => w(SDK.runTransaction(fs, async (tx) => {
           const s = await tx.get(ref);
@@ -2265,7 +2319,7 @@ re2js/build/index.js:
   };
 
   /* ---------- quem está usando ---------- */
-  const ME = { uid: null, email: '', nome: '', perfil: null, acesso: {} };
+  const ME = { uid: null, email: '', nome: '', perfil: null, acesso: {}, telas: Object.assign({}, TELA_DEF) };
   const names = {};
   const isAdmin = () => ME.perfil === 'admin' || ME.perfil === 'dono';
   const lvl = (c) => (isAdmin() ? 'lanca' : (ME.acesso[c] || 'nao'));
@@ -2279,6 +2333,16 @@ re2js/build/index.js:
     return out;
   }
   window.CQ_ACCESS = (c) => (MODCOLS.includes(c) ? lvl(c) : 'lanca');
+  function telasDe(d) {
+    const t = d && d.telas && typeof d.telas === 'object' ? d.telas : {}, out = {};
+    Object.keys(TELA_DEF).forEach((k) => { const ok = k === 'config' ? ['nao', 'ver', 'edita'] : k === 'exportar' ? ['sim', 'nao'] : ['ve', 'nao']; out[k] = ok.includes(t[k]) ? t[k] : TELA_DEF[k]; });
+    return out;
+  }
+  window.CQ_SCREEN = (v) => {
+    if (v === 'usuarios') return isAdmin() ? 've' : 'nao';
+    if (isAdmin()) return v === 'config' ? 'admin' : v === 'exportar' ? 'sim' : 've';
+    return v in ME.telas ? ME.telas[v] : null;
+  };
   const userApi = {
     id: async () => ME.uid,
     me: async () => ({ id: ME.uid, name: ME.nome, email: ME.email }),
@@ -2320,7 +2384,7 @@ re2js/build/index.js:
         const s = await SDK.getDoc(SDK.doc(fs, 'usuarios/' + email)).catch(() => null);
         const d = s && s.exists() ? s.data() : null;
         if (!d || d.ativo === false) { showGate('denied', email); return; }
-        ME.perfil = d.perfil === 'admin' ? 'admin' : 'usuario'; ME.acesso = acessoDe(d); if (d.nome) ME.nome = d.nome;
+        ME.perfil = d.perfil === 'admin' ? 'admin' : 'usuario'; ME.acesso = acessoDe(d); ME.telas = telasDe(d); if (d.nome) ME.nome = d.nome;
       }
       names[ME.uid] = ME.nome;
       SDK.setDoc(SDK.doc(fs, 'perfis/' + ME.uid), { nome: ME.nome, email, at: Date.now() }).catch(() => {});
@@ -2377,11 +2441,16 @@ re2js/build/index.js:
       const a = acessoDe(u), g = { lanca: [], ver: [] };
       MODULOS.forEach(([k, l]) => { if (a[k] === 'lanca') g.lanca.push(l); else if (a[k] === 'ver') g.ver.push(l); });
       const part = (t, l) => (l.length ? `<div><span class="muted">${t}:</span> ${esc(l.length === MODULOS.length ? 'todos os módulos' : l.join(', '))}</div>` : '');
-      return part('Lança', g.lanca) + part('Só consulta', g.ver) || '<span class="muted">nenhum módulo</span>';
+      const tl = telasDe(u), off = TELAS.filter(([k]) => tl[k] === 'nao').map(([, l]) => l), extra = [];
+      if (tl.config === 'nao') off.push('Configurações'); else if (tl.config === 'edita') extra.push('edita Configurações');
+      if (tl.exportar === 'nao') extra.push('sem Exportar tudo');
+      const telas = off.length || extra.length ? `<div><span class="muted">Telas:</span> ${esc([off.length ? 'não vê ' + off.join(', ') : ''].concat(extra).filter(Boolean).join(' · '))}</div>` : '';
+      return (part('Lança', g.lanca) + part('Só consulta', g.ver) || '<span class="muted">nenhum módulo</span>') + telas;
     };
     function form(u) {
-      const novo = !u; u = u || { email: '', nome: '', perfil: 'usuario', acesso: Object.fromEntries(MODCOLS.map((c) => [c, 'ver'])), ativo: true };
-      const podeAdmin = ME.perfil === 'dono', ac = acessoDe(u);
+      const novo = !u; u = u || { email: '', nome: '', perfil: 'usuario', acesso: Object.fromEntries(MODCOLS.map((c) => [c, 'ver'])), telas: Object.assign({}, TELA_DEF), ativo: true };
+      const podeAdmin = ME.perfil === 'dono', ac = acessoDe(u), tl = telasDe(u);
+      const tRow = (k, l, opc) => `<div class="acc-row" role="row"><span role="cell">${esc(l)}</span><div class="seg" role="radiogroup" aria-label="${esc(l)}">${opc.map(([v, t]) => `<button type="button" role="radio" data-t="${k}" data-v="${v}" aria-pressed="${tl[k] === v}" aria-checked="${tl[k] === v}">${t}</button>`).join('')}</div></div>`;
       A.openModal(novo ? 'Liberar novo usuário' : 'Editar usuário', `
         <div class="ufrm">
           <label class="field"><span>E-mail Google (Gmail) <b>*</b></span><input id="u-email" type="email" value="${esc(u.email)}" ${novo ? '' : 'disabled'} placeholder="nome@gmail.com" autocomplete="off"></label>
@@ -2392,7 +2461,10 @@ re2js/build/index.js:
           </select></label>
           <div id="u-acc"><div class="acc-head"><span>Acesso por módulo</span><span class="acc-all">Marcar todos: ${NIVEIS.map(([v, l]) => `<button type="button" class="linkbtn" data-all="${v}">${l}</button>`).join(' · ')}</span></div>
             <div class="acc-tab" role="table">${MODULOS.map(([k, l]) => `<div class="acc-row" role="row"><span role="cell">${esc(l)}</span><div class="seg" role="radiogroup" aria-label="${esc(l)}">${NIVEIS.map(([v, t]) => `<button type="button" role="radio" data-m="${k}" data-v="${v}" aria-pressed="${ac[k] === v}" aria-checked="${ac[k] === v}">${t}</button>`).join('')}</div></div>`).join('')}</div>
-            <p class="muted" style="margin:0;font-size:12px"><b>Não vê</b>: o módulo some do menu e dos painéis · <b>Só consulta</b>: vê e exporta · <b>Lança</b>: também lança, edita e importa.</p></div>
+            <p class="muted" style="margin:0;font-size:12px"><b>Não vê</b>: o módulo some do menu e dos painéis · <b>Só consulta</b>: vê e exporta · <b>Lança</b>: também lança, edita e importa.</p>
+            <div class="acc-head" style="margin-top:14px"><span>Telas gerais</span></div>
+            <div class="acc-tab" role="table">${TELAS.map(([k, l]) => tRow(k, l, [['ve', 'Vê'], ['nao', 'Não vê']])).join('')}${tRow('config', 'Configurações', TELA_OPC.config)}${tRow('exportar', 'Exportar tudo (.xlsx)', TELA_OPC.exportar)}</div>
+            <p class="muted" style="margin:0;font-size:12px">Se o <b>Painel</b> ficar oculto, a Central abre na primeira tela liberada · Configurações <b>Edita</b>: altera listas, feriados, tipos de equipamento e e-mails dos fornecedores e dos setores (parâmetros de prazo, pessoas e logo continuam só com os administradores) · <b>Cadastro</b> aparece sozinho para quem lança em algum módulo.</p></div>
           <label class="check"><input type="checkbox" id="u-ativo" ${u.ativo !== false ? 'checked' : ''}> Acesso ativo</label>
         </div>
         <div class="formfoot"><button class="btn primary" type="button" id="u-save">Salvar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
@@ -2401,6 +2473,7 @@ re2js/build/index.js:
       const setLvl = (m, v) => accBox.querySelectorAll(`[data-m="${m}"]`).forEach((b) => { const on = b.dataset.v === v; b.setAttribute('aria-pressed', on); b.setAttribute('aria-checked', on); });
       accBox.addEventListener('click', (e) => {
         const b = e.target.closest('[data-m]'); if (b) { setLvl(b.dataset.m, b.dataset.v); return; }
+        const tb = e.target.closest('[data-t]'); if (tb) { accBox.querySelectorAll(`[data-t="${tb.dataset.t}"]`).forEach((x) => { const on = x === tb; x.setAttribute('aria-pressed', on); x.setAttribute('aria-checked', on); }); return; }
         const a = e.target.closest('[data-all]'); if (a) MODCOLS.forEach((m) => setLvl(m, a.dataset.all));
       });
       document.getElementById('u-save').onclick = async () => {
@@ -2409,7 +2482,8 @@ re2js/build/index.js:
         if (email === OWNER) { A.toast('Essa é a conta dona da Central; ela já tem acesso total.', true); return; }
         if (novo && (users || []).some((x) => x.email === email)) { A.toast('Esse e-mail já está cadastrado.', true); return; }
         const acesso = {}; MODCOLS.forEach((m) => { const on = accBox.querySelector(`[data-m="${m}"][aria-pressed="true"]`); acesso[m] = on ? on.dataset.v : 'nao'; });
-        const d = { nome: document.getElementById('u-nome').value.trim(), perfil: pf.value === 'admin' ? 'admin' : 'usuario', acesso, ativo: document.getElementById('u-ativo').checked, _u: Date.now(), _ub: ME.email };
+        const telas = {}; Object.keys(TELA_DEF).forEach((k) => { const on = accBox.querySelector(`[data-t="${k}"][aria-pressed="true"]`); telas[k] = on ? on.dataset.v : TELA_DEF[k]; });
+        const d = { nome: document.getElementById('u-nome').value.trim(), perfil: pf.value === 'admin' ? 'admin' : 'usuario', acesso, telas, ativo: document.getElementById('u-ativo').checked, _u: Date.now(), _ub: ME.email };
         try { await SDK.setDoc(SDK.doc(fs, 'usuarios/' + email), d); A.closeLayer(); A.toast(novo ? 'Usuário liberado: ' + email : 'Usuário atualizado. A pessoa vê a mudança ao recarregar a página.'); }
         catch (e) { A.toast(mapErr(e).message, true); }
       };
@@ -2440,7 +2514,7 @@ re2js/build/index.js:
           <tr><td><b>Conta dona</b></td><td class="mono">${esc(OWNER)}</td><td>Dono</td><td>Tudo</td><td><span class="chip ok"><i>✓</i>Ativo</span></td><td></td></tr>
           ${users == null ? '<tr><td colspan="6" class="muted">Carregando…</td></tr>' : L.map((u) => `<tr><td>${esc(u.nome || '—')}</td><td class="mono">${esc(u.email)}</td><td>${esc(PERFIS[u.perfil] || u.perfil)}</td><td class="accsum">${resumo(u)}</td><td>${u.ativo === false ? '<span class="chip off"><i>–</i>Bloqueado</span>' : '<span class="chip ok"><i>✓</i>Ativo</span>'}</td><td style="white-space:nowrap">${u.perfil === 'admin' && ME.perfil !== 'dono' ? '' : `<button class="btn small" type="button" data-u-edit="${esc(u.email)}">Editar</button> <button class="btn small ghost" type="button" data-u-del="${esc(u.email)}">Remover</button>`}</td></tr>`).join('') || '<tr><td colspan="6" class="muted">Nenhum usuário liberado ainda. Clique em “Liberar novo usuário”.</td></tr>'}
         </tbody></table></div>
-        <div class="readonly"><b>Como funciona:</b> para cada <b>Usuário</b> você escolhe, módulo por módulo, se ele <b>não vê</b>, vê <b>só para consulta</b> ou <b>lança</b>. O <b>Administrador</b> vê e lança tudo, altera Configurações e libera usuários · só a <b>conta dona</b> cria administradores e zera o banco.</div>
+        <div class="readonly"><b>Como funciona:</b> para cada <b>Usuário</b> você escolhe, módulo por módulo, se ele <b>não vê</b>, vê <b>só para consulta</b> ou <b>lança</b>, e quais telas gerais (Painel, Histórico, Configurações…) ele vê. O <b>Administrador</b> vê e lança tudo, altera Configurações e libera usuários · só a <b>conta dona</b> cria administradores e zera o banco.</div>
         ${ME.perfil === 'dono' ? `<section class="sec"><div class="band" style="--c:var(--geral);background:var(--geral)"><h2>Migração</h2></div><div class="block"><div class="body"><p style="margin:0">Importe aqui o arquivo de backup gerado a partir da versão no Claude (<span class="mono">backup-central.json</span>). Só a conta dona vê esta opção.</p><div><input type="file" id="u-imp" accept=".json,application/json" hidden><button class="btn" type="button" id="u-imp-b">Importar backup (.json)</button> <span id="u-imp-st" class="muted"></span></div></div></div></section>` : ''}
       </div>`;
       document.getElementById('u-new').onclick = () => form(null);
@@ -3044,7 +3118,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   const FMAP = {
     AV: { A: 'id', B: 'data', C: 'filial', D: 'volume', E: 'corrida', F: 'desc', G: 'diam', H: 'esp', I: 'liga', J: 'norma', K: 'forn', L: 'nf', M: 'pc', N: 'pv', O: 'cert', P: 'conf', Q: 'retrab', R: 'quant', S: 'und', T: 'certLink', U: 'insp' },
     SERV: { A: 'data', B: 'desc', C: 'nf', D: 'forn', E: 'pc', F: 'pv', G: 'cert' },
-    RNC: { A: 'num', B: 'data', D: 'comprador', E: 'filial', F: 'emissor', G: 'forn', H: 'cliente', I: 'nf', J: 'pv', K: 'oc', L: 'depto', M: 'motivo', P: 'disp', Q: 'fechDisp', R: 'corretiva', T: 'nivel', V: 'analise', X: 'conclusao', Y: 'cancel', Z: 'info' },
+    RNC: { A: 'num', B: 'data', D: 'comprador', E: 'filial', F: 'emissor', G: 'forn', H: 'cliente', I: 'nf', J: 'pv', K: 'oc', L: 'depto', M: 'motivo', P: 'disp', Q: 'fechDisp', R: 'corretiva', T: 'nivel', V: 'analise', X: 'conclusao', Y: 'cancel', Z: 'info', AA: 'emPara', AB: 'emCc' },
     INS: { A: 'codigo', B: 'desc', C: 'marca', D: 'cert', E: 'dataCal', F: 'freq', K: 'resp', L: 'depto', M: 'obs', P: 'tipo', Q: 'resCal', S: 'situacao' },
     RNCC: { A: 'num', B: 'data', C: 'filial', D: 'emissor', E: 'cliente', F: 'contato', G: 'canal', H: 'nf', I: 'pv', J: 'lotes', K: 'produto', L: 'qtd', M: 'desc', N: 'motivo', O: 'gravidade', P: 'procedente', Q: 'contencao', R: 'contData', S: 'disp', T: 'setor', U: 'origem', V: 'rncf', W: 'causa', X: 'acao', Y: 'resp', Z: 'acaoPrazo', AA: 'respData', AB: 'eficacia', AC: 'eficData', AD: 'conclusao', AE: 'cancel', AF: 'info' }
   };
@@ -3054,7 +3128,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     fechDisp: 'Fechamento da disposição', corretiva: 'Corretiva?', nivel: 'Nível do prazo', analise: 'Análise crítica', conclusao: 'Conclusão', cancel: 'Cancelada', info: 'Informações', codigo: 'Código', marca: 'Marca', dataCal: 'Data da calibração',
     freq: 'Frequência', resp: 'Responsável', obs: 'Observação', tipo: 'Tipo de equipamento', resCal: 'Resultado (erro)', situacao: 'Situação',
     contato: 'Contato', canal: 'Canal', lotes: 'Lotes / corridas', produto: 'Produto', qtd: 'Quantidade afetada', gravidade: 'Gravidade', procedente: 'Procedente', contencao: 'Contenção', contData: 'Data da contenção', setor: 'Setor responsável',
-    origem: 'Origem da causa', quant: 'Quantidade', und: 'Unidade', certLink: 'Link do certificado', insp: 'Resultado da inspeção', rncf: 'RNC de fornecedor vinculada', causa: 'Causa raiz', acao: 'Ação corretiva', acaoPrazo: 'Prazo da ação', respData: 'Resposta ao cliente', eficacia: 'Eficácia', eficData: 'Data da verificação'
+    origem: 'Origem da causa', quant: 'Quantidade', und: 'Unidade', certLink: 'Link do certificado', insp: 'Resultado da inspeção', rncf: 'RNC de fornecedor vinculada', causa: 'Causa raiz', acao: 'Ação corretiva', acaoPrazo: 'Prazo da ação', respData: 'Resposta ao cliente', eficacia: 'Eficácia', eficData: 'Data da verificação', emPara: 'E-mails (Para)', emCc: 'E-mails (Cópia)'
   };
   const DATEF = new Set(['data', 'fechDisp', 'conclusao', 'dataCal', 'contData', 'acaoPrazo', 'respData', 'eficData']);
   const MODS = ['AV', 'SERV', 'RNC', 'INS', 'RNCC'];
@@ -3220,6 +3294,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     if (!l.AV_UNIDADES) c.AV_UNIDADES = ['PÇ', 'KG', 'M', 'M²', 'T', 'BARRA', 'UN'];
     c.AV_INSPECAO = ['Aprovado', 'Reprovado', 'Em análise'];
     c.FORN_EMAILS = {}; (Array.isArray(d.fornEmails) ? d.fornEmails : Object.entries(d.fornEmails || {}).map(([nome, email]) => ({ nome, email }))).forEach((o) => { if (o && o.nome) c.FORN_EMAILS[o.nome] = o.email || ''; });
+    c.SETOR_EMAILS = {}; (Array.isArray(d.setorEmails) ? d.setorEmails : []).forEach((o) => { if (o && o.nome) c.SETOR_EMAILS[o.nome] = o.email || ''; });
+    c.RNC_CC_ATRASO = String(d.rncCcAtraso || '');
     c.RNC_NIVEL_PRAZO = ['Padrão', 'Estendido', 'Complexo']; c.CAL_SITUACAO = ['Em uso', 'Manutenção', 'Fora de uso']; c.CAL_RESULTADO = ['APROVADO', 'REPROVADO'];
     ['AV_DESCRICOES', 'AV_DIAMETROS', 'AV_ESPESSURAS', 'AV_LIGAS', 'AV_NORMAS', 'SERV_TIPOS', 'RNC_MOTIVOS', 'RNC_DISPOSICAO', 'RNC_ANALISE_CRITICA', 'CAL_FREQUENCIAS', 'CAL_EMAILS', 'GER_FORNECEDORES', 'GER_CLIENTES'].forEach((k) => { if (!c[k]) c[k] = []; });
     return c;
@@ -3278,6 +3354,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     DB.raw = toRaw();
     S.model = E.build(DB.raw, [], S.today);
     S.model.cfgDoc = DB.cfg || {};
+    rncHours(S.model);
+    setTimeout(pubSync, 0);
     S.model.serv.forEach((x) => { x.sv = svOf(x.key); });
     S.model.rncc = computeRncc(DB.rnccItems || [], S.model.cfg, S.today, S.model.hol);
     const sevO = { alta: 0, media: 1, baixa: 2 };
@@ -3288,7 +3366,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const busy = ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName);
     const formView = S.view === 'cadastro' || S.view === 'config' || S.view === 'historico';
     setTimeout(maybeMigrate, 800);
-    if (!S.rendered) { S.rendered = true; render(); }
+    if (!S.rendered) { S.rendered = true; render(); setTimeout(rncDailyNotice, 900); }
     else if (formView || busy || $('#layer').innerHTML) S.stale = true;
     else render();
     updateChrome();
@@ -3307,6 +3385,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       try { DB.canWrite = await u.can('data.write'); } catch (e) { DB.canWrite = null; }
       try { DB.owner = !!(await u.isOwner()); } catch (e) { DB.owner = false; }
       try { DB.admin = !!(await u.canEdit()); } catch (e) { DB.admin = null; }
+      try { if (typeof u.me === 'function') { const me = await u.me(); DB.meName = (me && me.name) || ''; DB.meEmail = (me && me.email) || ''; } } catch (e) { /* sem nome */ }
       updateChrome();
       if (S.model && !['cadastro', 'config'].includes(S.view)) render();
       setTimeout(maybeMigrate, 800);
@@ -3347,6 +3426,11 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   const VIEW_COL = { av: 'av', serv: 'serv', rnc: 'rnc', rncc: 'rncc', cal: 'ins', trello: 'trello', acomp: 'acomp', tcert: 'tcert', tusin: 'tusin' };
   const visMod = (m) => !MOD[m] || m === 'GERAL' || vis(MOD[m].col);
   const anyLanca = () => canWrite() && Object.values(VIEW_COL).some((c) => ACC(c) === 'lanca');
+  /* telas gerais (versão hospedada): Painel, Alertas, ... 've'/'nao' · Configurações 'nao'/'ver'/'edita'/'admin' · Exportar tudo 'sim'/'nao' */
+  const SCR = (v) => (typeof window.CQ_SCREEN === 'function' ? window.CQ_SCREEN(v) : null);
+  const viewOk = (v) => { if (VIEW_COL[v]) return vis(VIEW_COL[v]); if (v === 'cadastro') return typeof window.CQ_ACCESS !== 'function' || anyLanca(); const s = SCR(v); return s == null || s !== 'nao'; };
+  const firstView = () => $$('#nav a').map((a) => a.dataset.v).find((v) => VIEWS[v] && viewOk(v)) || null;
+  const cfgMode = () => { const s = SCR('config'); if (s === 'admin' || s === 'edita' || s === 'ver') return s; return DB.admin === false ? 'ver' : 'admin'; };
   async function lock(mod) {
     const holder = (DB.me || 'anon') + ':' + TAB;
     for (let i = 0; i < 12; i++) {
@@ -3386,10 +3470,12 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   }
   async function updateRecord(mod, key, changes) {
     const docId = DB.where[mod][key]; if (!docId) throw new Error('Registro não encontrado. Atualize a tela.');
+    if (mod === 'AV' && !('qr' in changes)) PUBQ.add(key);
     await DB.db.doc(MOD[mod].col + '/' + docId).update({ items: { [key]: clean(Object.assign({}, changes, { _u: Date.now(), _ub: DB.me || null })) } });
   }
   async function deleteRecord(mod, key) {
     const docId = DB.where[mod][key]; if (!docId) throw new Error('Registro não encontrado.');
+    if (mod === 'AV' && PUB()) { const tok = ((DB.meta.AV || {})[key] || {}).qr; if (tok) DB.db.doc('pub/' + tok).delete().catch(() => {}); }
     await DB.db.doc(MOD[mod].col + '/' + docId).update({ items: { [key]: { _del: true, _u: Date.now(), _ub: DB.me || null } } });
   }
   async function logEntry(mod, key, act, label, diff) {
@@ -3398,8 +3484,11 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       const short = (v) => (v == null ? null : typeof v === 'number' ? v : String(v).slice(0, 180));
       const entry = { at: Date.now(), by: DB.me || null, mod, key, act, label: String(label || '').slice(0, 200) };
       if (diff) entry.campos = Object.fromEntries(Object.entries(diff).map(([f, [a, b]]) => [f, [short(a), short(b)]]));
-      try { await ref.update({ e: { [id]: entry } }); }
-      catch (e) { await ref.set({ e: { [id]: entry } }); }
+      if (typeof ref.merge === 'function') await ref.merge({ e: { [id]: entry } });
+      else {
+        try { await ref.update({ e: { [id]: entry } }); }
+        catch (e) { await ref.set({ e: { [id]: entry } }); }
+      }
     } catch (e) { console.warn('histórico não gravado', e); }
   }
 
@@ -3464,7 +3553,13 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       const cu = $('#ct-aud'); cu.hidden = !AU.length; cu.textContent = AU.length; cu.classList.toggle('hot', hi > 0);
     }
     applyLogo();
-    if (typeof window.CQ_ACCESS === 'function') $$('#nav a').forEach((a) => { const c = VIEW_COL[a.dataset.v]; if (c) a.hidden = !vis(c); else if (a.dataset.v === 'cadastro') a.hidden = !anyLanca(); });
+    if (typeof window.CQ_ACCESS === 'function') {
+      $$('#nav a').forEach((a) => { a.hidden = !viewOk(a.dataset.v); });
+      let g = null, any = false; /* título do grupo some quando todas as telas dele estão ocultas */
+      Array.from($('#nav').children).forEach((el) => { if (el.classList.contains('grp')) { if (g) g.hidden = !any; g = el; any = false; } else if (!el.hidden) any = true; });
+      if (g) g.hidden = !any;
+      $('#exp-all').hidden = SCR('exportar') === 'nao';
+    }
     $('#db-stale').hidden = !S.stale;
   }
 
@@ -3503,7 +3598,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const x = findRec(mod, key); if (!x) return;
     const m = (DB.meta[mod] || {})[key] || {};
     await resolveNames([m._cb, m._ub]);
-    let pairs = [], acts = '';
+    let pairs = [], acts = '', extra = '';
     const t = (v) => esc(disp(v));
     const editBtn = cw(MOD[mod].col) ? `<button class="btn" type="button" data-act="edit" data-mod="${mod}" data-key="${esc(key)}">Editar</button>` : '';
     if (mod === 'AV') {
@@ -3517,10 +3612,14 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       acts = editBtn;
     } else if (mod === 'RNC') {
       const dl = x.diasParaFinal;
-      pairs = [['Número', `<span class="mono">${esc(x.num)}</span>`], ['Status', chipRnc(x.status)], ['Abertura', fD(x.data)], ['Comprador', t(x.comprador)], ['Filial', t(x.filial)], ['Emissor', t(x.emissor)], ['Fornecedor', t(x.forn)], ['Cliente', t(x.cliente)], ['Nota fiscal', t(x.nf)], ['Pedido de venda', t(x.pv)], ['Ordem de compra', t(x.oc)], ['Depto. responsável', t(x.depto)], ['Motivo', t(x.motivo)], ['Reincidência', esc(x.reinc)],
-        ['Prazo de disposição', fD(x.prazoDisp)], ['Disposição', t(x.disp)], ['Fechamento da disposição', fD(x.fechDisp)], ['Ação corretiva?', t(x.corretiva)], ['Prazo da ação', fD(x.prazoAcao)], ['Nível do prazo', t(x.nivel)], ['Prazo para fechar', fD(x.prazoFechar)], ['Análise crítica', t(x.analise)],
-        ['Prazo final', fD(x.prazoFinal) + (x.aberta && dl != null ? ` <span class="muted">(${dl < 0 ? 'vencido há ' + (-dl) + ' dia(s)' : dl === 0 ? 'vence hoje' : 'faltam ' + dl + ' dia(s)'})</span>` : '')], ['Conclusão', fD(x.conclusao)], ['Cancelada', t(x.cancel)], ['Informações', `<span style="white-space:pre-wrap">${t(x.info)}</span>`]];
-      acts = (cw(MOD[mod].col) ? `<button class="btn primary" type="button" data-act="edit-rnc" data-key="${esc(key)}">Atualizar andamento</button>` : '') + (x.aberta ? `<button class="btn" type="button" data-act="msg-rnc" data-key="${esc(key)}">Texto de cobrança</button>` : '') + editBtn;
+      pairs = [['Número', `<span class="mono">${esc(x.num)}</span>`], ['Status', chipRnc(x.status)], ['Abertura', esc(fmtTs(x.data))], ['Comprador', t(x.comprador)], ['Filial', t(x.filial)], ['Emissor', t(x.emissor)], ['Fornecedor', t(x.forn)], ['Cliente', t(x.cliente)], ['Nota fiscal', t(x.nf)], ['Pedido de venda', t(x.pv)], ['Ordem de compra', t(x.oc)], ['Depto. responsável', t(x.depto)], ['Motivo', t(x.motivo)], ['Reincidência', esc(x.reinc)],
+        ['Prazo de disposição', esc(fmtTs(x.dispDue != null ? x.dispDue : x.prazoDisp)) + (x.aberta && !x.disp && x.dispDue != null ? ' ' + relHTML(x.dispDue) : '')], ['Disposição', t(x.disp)], ['Fechamento da disposição', fD(x.fechDisp)], ['Ação corretiva?', t(x.corretiva)], ['Prazo da ação', fD(x.prazoAcao)], ['Nível do prazo', t(x.nivel)], ['Prazo para fechar', fD(x.prazoFechar)], ['Análise crítica', t(x.analise)],
+        ['Prazo final', fD(x.prazoFinal) + (x.aberta && dl != null ? ` <span class="muted">(${dl < 0 ? 'vencido há ' + (-dl) + ' dia(s)' : dl === 0 ? 'vence hoje' : 'faltam ' + dl + ' dia(s)'})</span>` : '')], ['Conclusão', fD(x.conclusao)], ['Cancelada', t(x.cancel)], ['E-mails acionados (Para)', t(m.emPara)], ['E-mails acionados (Cópia)', t(m.emCc)], ['Informações', `<span style="white-space:pre-wrap">${t(x.info)}</span>`]];
+      acts = (cw(MOD[mod].col) ? `<button class="btn primary" type="button" data-act="edit-rnc" data-key="${esc(key)}">Atualizar andamento</button>` : '') + (x.aberta ? `<button class="btn" type="button" data-act="msg-rnc" data-key="${esc(key)}">Cobrança</button>` : '')
+        + (x.aberta && cw('rnc') ? `<button class="btn" type="button" data-act="rnc-ret" data-key="${esc(key)}">Registrar retorno</button>` : '') + editBtn;
+      const PZ = rncPrazos(x);
+      extra = (PZ.length ? `<div class="fsec"><h3>Prazos</h3><div class="prz">${PZ.map((pz) => `<div class="pz ${pz.s}"><span class="pl">${esc(pz.l)}</span><span class="pd">${esc(fmtTs(pz.ts))}</span><span class="ps">${prazoChip(pz)}</span></div>`).join('')}</div></div>` : '')
+        + `<div class="fsec"><h3>Cobranças e retornos</h3>${await rncTimeline(x)}</div>`;
     } else if (mod === 'RNCC') {
       const dl = x.diasParaFinal;
       pairs = [['Número', `<span class="mono">${esc(x.num)}</span>`], ['Status', chipRnc(x.status)], ['Abertura', fD(x.data)], ['Filial', t(x.filial)], ['Emissor', t(x.emissor)], ['Cliente', t(x.cliente)], ['Contato', t(x.contato)], ['Canal', t(x.canal)],
@@ -3542,7 +3641,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       rel = `<div class="fsec"><h3>Registros ligados (${r.length})</h3>${r.length ? '<div class="rel">' + r.map((o) => `<button type="button" style="--c:${MOD[o.rec.mod].c}" data-open="${o.rec.mod}:${esc(o.rec.key)}" title="${esc(o.why)}">${esc(recLabel(o.rec))} <span class="muted">· ${esc(o.why)}</span></button>`).join('') + '</div>' : '<span class="muted">Nenhum outro registro com a mesma NF, pedido ou corrida.</span>'}</div>`;
     }
     const title = mod === 'SERV' ? `${x.sv ? x.sv + ' · ' : ''}${x.desc || 'Serviço'}` : recTitle(x);
-    openDrawer(title, MOD[mod].name, (acts ? `<div class="formfoot">${acts}</div>` : '') + kv(pairs) + metaLine(mod, key) + rel, MOD[mod].c);
+    openDrawer(title, MOD[mod].name, (acts ? `<div class="formfoot">${acts}</div>` : '') + extra + kv(pairs) + metaLine(mod, key) + rel, MOD[mod].c);
   }
 
   /* ================= tabelas ================= */
@@ -3582,7 +3681,10 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   /* ================= navegação ================= */
   const VIEWS = {};
   function go(v, replace) {
-    if (!VIEWS[v] || (VIEW_COL[v] && !vis(VIEW_COL[v])) || (v === 'cadastro' && !anyLanca() && typeof window.CQ_ACCESS === 'function')) v = 'painel';
+    if (!VIEWS[v] || !viewOk(v)) {
+      if (S.model && v !== S.view && VIEWS[S.view] && viewOk(S.view)) { toast('Essa tela não está liberada para você.'); return; }
+      v = firstView() || 'painel';
+    }
     if (v !== 'cadastro') S.editKey = null;
     S.view = v; S.stale = false;
     try { if (replace) history.replaceState(null, '', '#' + v); else history.pushState(null, '', '#' + v); } catch (e) { /* sem histórico */ }
@@ -3593,12 +3695,20 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   function render() {
     const main = $('#main');
     if (!S.model) return;
+    if (!viewOk(S.view)) {
+      const fv = firstView();
+      if (!fv) { main.innerHTML = '<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--warn)">Sem telas liberadas</span><h2>Nenhuma tela liberada para você</h2><p>Peça ao administrador da Central para liberar as telas que você usa, na tela Usuários.</p></div></div>'; return; }
+      S.view = fv;
+      try { history.replaceState(null, '', '#' + fv); } catch (e) { /* sem histórico */ }
+      $$('#nav a').forEach((a) => { if (a.dataset.v === fv) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+    }
     const n = S.model.av.length + S.model.rnc.length + S.model.ins.length + S.model.serv.length;
     if (!n && !DB.cfg && !(VIEWS[S.view] && VIEWS[S.view].always)) {
       main.innerHTML = `<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--warn)">Banco vazio</span><h2>Os dados ainda não foram migrados</h2><p>Assim que os dados da planilha REV.011 forem carregados no banco, o painel aparece aqui automaticamente.</p>${VIEWS.usuarios && DB.owner ? '<button class="btn primary" type="button" data-go=\'{"v":"usuarios"}\'>Importar o backup em Usuários</button>' : ''}</div></div>`;
       return;
     }
     VIEWS[S.view](main);
+    const bn = rncBanner(); if (bn) main.insertAdjacentHTML('afterbegin', bn);
     hideInvisible(main);
   }
   function hideInvisible(root) {
@@ -3751,15 +3861,86 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   };
 
   /* ================= ALERTAS ================= */
-  function rncStage(x) {
-    if (!x.disp) return { t: 'Aguardando disposição', due: x.prazoDisp };
-    if (E.low(x.corretiva) === 'sim' && !x.conclusao) {
-      if (x.prazoFechar) return { t: 'Ação corretiva em curso', due: x.prazoFechar };
-      return { t: 'Ação corretiva sem nível de prazo', due: x.prazoAcao || x.prazoFinal };
-    }
-    return { t: 'Aguardando fechamento', due: x.prazoFinal };
+  /* ================= RNC de fornecedor: prazo em horas, alertas e cobrança ================= */
+  const nowS = () => E.nowSerial();
+  const pad2 = (n) => String(n).padStart(2, '0');
+  /* expediente: início (o prazo volta a contar nesse horário depois de fim de semana/feriado) e fim (prazo que cair depois vence nesse horário) */
+  function EXP() {
+    const c = (S.model && S.model.cfg) || {};
+    return { ini: typeof c.EXP_INICIO === 'number' ? c.EXP_INICIO : 7, fim: c.EXP_FIM === null ? null : (typeof c.EXP_FIM === 'number' ? c.EXP_FIM : 17) };
   }
-  function relDays(s) {
+  function isWD(d, hol) { const w = E.dow(d); return w !== 0 && w !== 6 && !hol.has(d); }
+  /* soma horas corridas nos dias úteis: congela à meia-noite antes de sábado, domingo ou feriado e volta no início do expediente */
+  function addWorkHours(start, hours, hol, h0) {
+    let d = Math.floor(start), t = (start - d) * 24, rem = hours;
+    if (!isWD(d, hol)) { do d++; while (!isWD(d, hol)); t = h0; }
+    for (let i = 0; i < 500; i++) {
+      const avail = 24 - t;
+      if (rem <= avail + 1e-9) return d + (t + rem) / 24;
+      rem -= avail;
+      let nd = d + 1;
+      if (isWD(nd, hol)) { d = nd; t = 0; } else { do nd++; while (!isWD(nd, hol)); d = nd; t = h0; }
+    }
+    return d;
+  }
+  /* prazo que cai fora do expediente é antecipado para o fim do expediente */
+  function capExp(ts, hol, ex) {
+    if (ex.fim == null) return ts;
+    const d = Math.floor(ts + 1e-9), h = (ts - d) * 24;
+    if (h > ex.fim + 1e-6) return d + ex.fim / 24;
+    if (h < ex.ini - 1e-6) { let p = d - 1; while (!isWD(p, hol)) p--; return p + ex.fim / 24; }
+    return ts;
+  }
+  /* recalcula o prazo de disposição em horas e, se a data mudar, os prazos que dependem dela */
+  function rncHoursOne(x, M) {
+    x.dispDue = null;
+    if (!x || x.data == null || x.prazoDisp == null) return x;
+    const ex = EXP(), hol = M.hol, pz = M.prazo || {}, hd = (typeof pz.disp === 'number' ? pz.disp : 2) * 24;
+    x.dispDue = capExp(addWorkHours(x.data, hd, hol, ex.ini), hol, ex);
+    const pd = Math.floor(x.dispDue + 1e-9);
+    if (pd === x.prazoDisp) return x;
+    x.prazoDisp = pd;
+    x.prazoAcao = E.low(x.corretiva) === 'sim' ? E.workday(pd, pz.acao, hol) : null;
+    const nv = E.low(x.nivel), nd = nv === 'padrão' ? pz.padrao : nv === 'estendido' ? pz.estendido : nv === 'complexo' ? pz.complexo : null;
+    x.prazoFechar = x.prazoAcao != null && nd != null ? E.workday(x.prazoAcao, nd, hol) : null;
+    const wf = E.workday(x.data, pz.fin, hol);
+    x.prazoFinal = x.prazoFechar == null ? wf : Math.max(wf, x.prazoFechar);
+    if (x.status && x.status !== 'Cancelada' && x.status !== 'Concluida') x.status = S.today >= x.prazoFinal ? 'Atrasado' : S.today >= x.prazoDisp ? 'Pendente' : 'Em Andamento';
+    x.aberta = x.status === 'Em Andamento' || x.status === 'Pendente' || x.status === 'Atrasado';
+    x.diasParaFinal = x.prazoFinal != null ? x.prazoFinal - S.today : null;
+    return x;
+  }
+  function rncHours(M) { M.rnc.forEach((x) => rncHoursOne(x, M)); }
+  const endOfDay = (s) => { const f = EXP().fim; return Math.floor(s) + (f == null ? 23.98 : f) / 24; };
+  function fmtTs(ts) {
+    if (ts == null) return '';
+    const d = Math.floor(ts + 1e-9), mins = Math.round((ts - d) * 1440);
+    if (mins <= 0) return fD(d);
+    return `${fD(d)} às ${pad2(Math.floor(mins / 60))}:${pad2(mins % 60)}`;
+  }
+  function rncStage(x) {
+    if (!x.disp) return { t: 'Aguardando disposição', k: 'disp', due: x.prazoDisp, ts: x.dispDue != null ? x.dispDue : (x.prazoDisp != null ? endOfDay(x.prazoDisp) : null) };
+    if (E.low(x.corretiva) === 'sim' && !x.conclusao) {
+      if (x.prazoFechar) return { t: 'Ação corretiva em curso', k: 'fechar', due: x.prazoFechar, ts: endOfDay(x.prazoFechar) };
+      const d = x.prazoAcao || x.prazoFinal;
+      return { t: 'Ação corretiva sem nível de prazo', k: 'acao', due: d, ts: d != null ? endOfDay(d) : null };
+    }
+    return { t: 'Aguardando fechamento', k: 'final', due: x.prazoFinal, ts: x.prazoFinal != null ? endOfDay(x.prazoFinal) : null };
+  }
+  /* contagem regressiva: "vence em 5 h", "venceu há 20 h" */
+  function relTxt(ts) {
+    if (ts == null) return '';
+    const h = (ts - nowS()) * 24;
+    if (h < 0) { const a = -h; return a < 1 ? 'venceu há menos de 1 h' : a < 48 ? `venceu há ${Math.floor(a)} h` : `venceu há ${Math.floor(a / 24)} dias`; }
+    if (h < 1) return 'vence em menos de 1 h';
+    return h < 48 ? `vence em ${Math.floor(h)} h` : `vence em ${Math.floor(h / 24)} dias`;
+  }
+  function relHTML(ts) {
+    if (ts == null) return '';
+    const h = (ts - nowS()) * 24, c = h < 0 ? 'crit' : h < 24 ? 'serious' : h < 48 ? 'warn' : '';
+    return `<span class="rel ${c}">${esc(relTxt(ts))}</span>`;
+  }
+  function relDays(s) { /* RNC de cliente (prazos em dias) */
     if (s == null) return '';
     const d = s - S.today;
     if (d < 0) return `<span style="color:var(--crit);font-weight:600">vencido há ${-d} dia(s)</span>`;
@@ -3767,21 +3948,255 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const wd = E.workdaysBetween(S.today, s, S.model.hol);
     return `em ${d} dia(s) <span class="muted">(${wd} útil${wd === 1 ? '' : 'eis'})</span>`;
   }
-  function rncMsg(x) {
-    const stg = rncStage(x), wd = E.workday(S.today, 2, S.model.hol), L = [];
-    const pc = (S.model.cfg.PESSOAS || []).find((p) => E.key(p.nome) === E.key(x.comprador));
-    if (pc && pc.email) L.push('Para: ' + pc.email);
-    L.push(`Assunto: ${x.num} — ${x.forn || 'fornecedor não informado'} — ${stg.t}`, '', `Olá${x.comprador ? ', ' + x.comprador.split(' ')[0] : ''}.`, '');
-    L.push(`A ${x.num}, aberta em ${fD(x.data)}, está com status "${{ 'Em Andamento': 'em andamento', Pendente: 'pendente', Atrasado: 'atrasada' }[x.status] || x.status}".`);
-    const ref = [x.forn && `Fornecedor: ${x.forn}`, E.filled(x.nf) && `NF ${x.nf}`, E.filled(x.oc) && `OC ${x.oc}`, E.filled(x.pv) && `PV ${x.pv}`, x.cliente && `Cliente: ${x.cliente}`].filter(Boolean).join(' · ');
-    if (ref) L.push(ref);
+  /* todos os prazos da RNC com a situação de cada um */
+  function rncPrazos(x) {
+    const out = [], now = nowS(), canc = x.status === 'Cancelada', fim = x.conclusao != null || x.status === 'Concluida';
+    const st = (done, ts, late) => (canc ? 'canc' : done ? (late ? 'atraso' : 'ok') : ts == null ? 'na' : ts < now ? 'venc' : 'aberto');
+    if (x.prazoDisp != null) { const ts = x.dispDue != null ? x.dispDue : endOfDay(x.prazoDisp); out.push({ l: 'Disposição', ts, s: st(!!x.disp, ts, !!x.disp && x.fechDisp != null && x.fechDisp > Math.floor(ts + 1e-9)) }); }
+    if (E.low(x.corretiva) === 'sim' && x.prazoAcao != null) { const ts = endOfDay(x.prazoAcao); out.push({ l: 'Tomar ação (definir o nível)', ts, s: st(!!x.nivel, ts, false) }); }
+    if (x.prazoFechar != null) { const ts = endOfDay(x.prazoFechar); out.push({ l: 'Fechar a ação corretiva', ts, s: st(fim, ts, x.conclusao != null && x.conclusao > x.prazoFechar) }); }
+    if (x.prazoFinal != null) { const ts = endOfDay(x.prazoFinal); out.push({ l: 'Prazo final', ts, s: st(fim, ts, x.conclusao != null && x.conclusao > x.prazoFinal) }); }
+    return out;
+  }
+  const prazoTxt = (p) => ({ ok: 'cumprido', atraso: 'cumprido com atraso', canc: 'RNC cancelada', na: '—' }[p.s] || relTxt(p.ts));
+  function prazoChip(p) {
+    const m = { ok: ['ok', '✓'], atraso: ['warn', '✓'], venc: ['crit', '✕'], canc: ['off', '–'], na: ['off', '–'] }[p.s];
+    if (m) return `<span class="chip ${m[0]}"><i>${m[1]}</i>${esc(prazoTxt(p))}</span>`;
+    return relHTML(p.ts);
+  }
+  /* RNCs em aberto com a etapa atual e se está vencida ou vence hoje */
+  function rncOpen() {
+    const now = nowS();
+    return S.model.rnc.filter((x) => x.aberta).map((x) => {
+      const s = rncStage(x), h = s.ts == null ? null : (s.ts - now) * 24, venc = x.status === 'Atrasado' || (h != null && h < 0);
+      return { x, s, h, venc, hoje: !venc && s.ts != null && Math.floor(s.ts + 1e-9) === S.today };
+    });
+  }
+  /* ---------- faixa de alerta no topo de todas as telas ---------- */
+  function rncAck() { try { const o = JSON.parse(lsGet('cq-rnc-ciente', '') || 'null'); return o && Array.isArray(o.k) ? o : null; } catch (e) { return null; } }
+  const plural = (n, s, p) => n + ' ' + (n === 1 ? s : p);
+  function rncBanner() {
+    if (!S.model || !vis('rnc')) return '';
+    const L = rncOpen(), V = L.filter((o) => o.venc), H = L.filter((o) => o.hoje);
+    if (!V.length && !H.length) return '';
+    const det = (o) => `${o.x.num} (${o.x.forn || 'sem fornecedor'}) · ${o.s.k === 'disp' ? 'disposição' : o.s.t.toLowerCase()} ${relTxt(o.s.ts)}`;
+    const bySoon = (a, b) => (a.s.ts == null ? 9e9 : a.s.ts) - (b.s.ts == null ? 9e9 : b.s.ts);
+    if (V.length) {
+      const nA = V.filter((o) => o.x.status === 'Atrasado').length, nD = V.filter((o) => o.x.status !== 'Atrasado' && o.s.k === 'disp').length, nO = V.length - nA - nD;
+      const parts = [nA && plural(nA, 'RNC atrasada', 'RNCs atrasadas'), nD && plural(nD, 'disposição vencida', 'disposições vencidas'), nO && plural(nO, 'etapa vencida', 'etapas vencidas'), H.length && plural(H.length, 'vence hoje', 'vencem hoje')].filter(Boolean);
+      const ack = rncAck(), pulse = !(ack && ack.d === S.today && V.every((o) => ack.k.includes(o.x.key)));
+      const list = V.slice().sort(bySoon).slice(0, 3).map(det).join(' · ') + (V.length > 3 ? ` · +${V.length - 3}` : '');
+      return `<div class="rbar crit${pulse ? '' : ' calmo'}" id="rnc-banner" role="alert"><span class="ic">!</span><span class="txt">${esc(parts.join(' · '))}<small>${esc(list)}</small></span><button class="btn small rb-ver" type="button" data-act="rnc-ver">Ver RNCs →</button>${pulse ? '<button class="btn small rb-ok" type="button" data-act="rnc-ciente">Ciente</button>' : ''}</div>`;
+    }
+    const list = H.slice().sort(bySoon).slice(0, 3).map((o) => `${det(o)} · hoje às ${fmtTs(o.s.ts).split(' às ')[1] || ''}`).join(' · ') + (H.length > 3 ? ` · +${H.length - 3}` : '');
+    const one = H.length === 1 ? `${H[0].s.k === 'disp' ? '1 disposição' : '1 etapa de RNC'} ${relTxt(H[0].s.ts)}` : `${H.length} prazos de RNC vencem hoje`;
+    return `<div class="rbar warn" id="rnc-banner" role="status"><span class="ic">!</span><span class="txt">${esc(one)}<small>${esc(list)}</small></span><button class="btn small rb-ver" type="button" data-act="rnc-ver">Ver RNC${H.length > 1 ? 's' : ''} →</button></div>`;
+  }
+  function refreshBanner() {
+    if (!S.model) return;
+    const b = $('#rnc-banner'), html = rncBanner();
+    if (b) { if (html) b.outerHTML = html; else b.remove(); } else if (html && $('#main .view')) $('#main').insertAdjacentHTML('afterbegin', html);
+  }
+  /* aviso ao entrar, uma vez por dia */
+  function rncDailyNotice() {
+    if (!S.model || !vis('rnc') || $('#layer').innerHTML) return;
+    if (navigator.webdriver && !window.__CQ_AVISO) return; /* testes automáticos */
+    if (lsGet('cq-rnc-aviso', '') === String(S.today)) return;
+    const L = rncOpen(), V = L.filter((o) => o.venc), H = L.filter((o) => o.hoje);
+    if (!V.length && !H.length) return;
+    lsSet('cq-rnc-aviso', String(S.today));
+    const row = (o) => `<li data-open="RNC:${esc(o.x.key)}" tabindex="0"><span class="mono">${esc(o.x.num)}</span> · ${esc(o.x.forn || 'sem fornecedor')} · ${esc(o.s.t)} · ${relHTML(o.s.ts)}</li>`;
+    openModal('Atenção às RNCs de fornecedor', `<p style="margin:0">${V.length ? `<b style="color:var(--crit)">${esc(plural(V.length, 'RNC com prazo vencido', 'RNCs com prazo vencido'))}</b>` : ''}${V.length && H.length ? ' e ' : ''}${H.length ? `<b>${esc(plural(H.length, 'prazo que vence hoje', 'prazos que vencem hoje'))}</b>` : ''}.</p>
+      <ul class="rnclist">${V.concat(H).slice(0, 8).map(row).join('')}</ul>${V.length + H.length > 8 ? `<span class="muted">+${V.length + H.length - 8} nos Alertas</span>` : ''}
+      <div class="formfoot"><button class="btn primary" type="button" data-act="rnc-ver">Ver nos Alertas</button><button class="btn" type="button" data-act="close">Fechar</button></div>`);
+  }
+
+  /* ---------- destinatários, cobranças e retornos ---------- */
+  const splitEm = (s) => String(s || '').split(/[;,\s]+/).map((e) => e.trim()).filter(Boolean);
+  const joinEm = (arr) => { const seen = new Set(), out = []; arr.forEach((e) => { const k = e.toLowerCase(); if (!seen.has(k)) { seen.add(k); out.push(e); } }); return out.join(', '); };
+  const okEm = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  function pessoaEmail(nome) { const p = (S.model.cfg.PESSOAS || []).find((q) => E.key(q.nome) === E.key(nome)); return p && p.email ? p.email : ''; }
+  function setorEmail(setor) { const m = S.model.cfg.SETOR_EMAILS || {}; const k = Object.keys(m).find((n) => E.low(n) === E.low(setor)); return k ? String(m[k]).trim() : ''; }
+  const rncMeta = (x) => (DB.meta.RNC || {})[x.key] || {};
+  function rncCobr(x) {
+    const m = rncMeta(x), c = Array.isArray(m.cobr) ? m.cobr : [], r = Array.isArray(m.ret) ? m.ret : [];
+    const lc = c.reduce((a, o) => Math.max(a, o.at || 0), 0), lr = r.reduce((a, o) => Math.max(a, o.at || 0), 0);
+    return { n: c.length, last: lc, nRet: r.length, lastRet: lr, semRet: lc > 0 && lr < lc, list: c, rets: r };
+  }
+  const haDias = (ms) => { const d = Math.floor((Date.now() - ms) / 86400000); return d <= 0 ? 'hoje' : d === 1 ? 'há 1 dia' : `há ${d} dias`; };
+  function cobrHTML(x) {
+    const c = rncCobr(x);
+    if (!c.n) return '<span class="muted">nunca cobrada</span>';
+    return `cobrada ${c.n}x · ${haDias(c.last)}${c.semRet ? `<br><span class="chip warn"><i>!</i>sem retorno ${esc(haDias(c.last))}</span>` : ''}`;
+  }
+  const appendInfo = (prev, txt) => (prev ? String(prev).replace(/\s+$/, '') + '\n' : '') + E.fmtDate(S.today) + ' - ' + txt;
+  const MODL = { lembrete: 'Lembrete', cobranca: 'Cobrança', atrasada: 'Atrasada' };
+  function rncModelo(x) { const s = rncStage(x); return x.status === 'Atrasado' ? 'atrasada' : s.ts != null && s.ts < nowS() ? 'cobranca' : 'lembrete'; }
+  function rncDados(x) {
+    const L = [`RNC: ${x.num}`, `Abertura: ${fmtTs(x.data)}`];
+    if (x.forn) L.push(`Fornecedor: ${x.forn}`);
+    const docs = [E.filled(x.nf) && `NF ${x.nf}`, E.filled(x.oc) && `OC ${x.oc}`, E.filled(x.pv) && `PV ${x.pv}`].filter(Boolean);
+    if (docs.length) L.push('Documentos: ' + docs.join(' · '));
+    if (x.cliente) L.push(`Cliente: ${x.cliente}`);
+    if (x.depto) L.push(`Setor responsável: ${x.depto}`);
     if (x.motivo) L.push(`Motivo: ${x.motivo}`);
-    L.push('', `Pendência: ${stg.t.toLowerCase()}.`, `Prazo de disposição: ${fD(x.prazoDisp)}${x.disp ? ' (disposição: ' + x.disp + ')' : ''}`);
-    if (x.prazoFechar) L.push(`Prazo para fechar a ação corretiva: ${fD(x.prazoFechar)}`);
-    L.push(`Prazo final: ${fD(x.prazoFinal)}${x.prazoFinal < S.today ? ' — já vencido' : ''}`, '', `Peço o posicionamento do fornecedor até ${fD(wd)}.`);
-    if (x.info) L.push('', 'Histórico registrado:', x.info);
-    L.push('', 'Obrigado,', 'Qualidade — Aços Vital');
+    if (x.comprador) L.push(`Comprador: ${x.comprador}`);
+    L.push(`Disposição: ${x.disp || 'pendente'}`);
+    if (x.corretiva) L.push(`Ação corretiva: ${x.corretiva}${x.nivel ? ' · nível ' + x.nivel : ''}`);
+    const P = rncPrazos(x);
+    if (P.length) { L.push('', 'Prazos:'); P.forEach((p) => L.push(`  • ${p.l}: ${fmtTs(p.ts)} — ${prazoTxt(p)}`)); }
+    if (x.info) L.push('', 'Histórico:', x.info);
     return L.join('\n');
+  }
+  function rncMailText(x, modelo) {
+    const s = rncStage(x), first = x.comprador ? x.comprador.split(' ')[0] : '', c = rncCobr(x), forn = x.forn || 'fornecedor não informado';
+    const f = EXP().fim, ate = `${fD(E.workday(S.today, 1, S.model.hol))} às ${pad2(f == null ? 17 : f)}:00`;
+    const oi = `Olá${first ? ', ' + first : ''}.`, dados = rncDados(x);
+    if (modelo === 'lembrete') return { subject: `Lembrete — ${x.num} — ${forn} — ${s.t} até ${fmtTs(s.ts)}`, body: `${oi}\n\nPassando para lembrar que a ${x.num} (${forn}) está na etapa "${s.t.toLowerCase()}", com prazo até ${fmtTs(s.ts)} (${relTxt(s.ts)}).\n\n${dados}\n\nPodemos contar com o retorno dentro desse prazo?\n\nObrigado,\nQualidade — Aços Vital` };
+    if (modelo === 'cobranca') return { subject: `Cobrança — ${x.num} — ${forn} — prazo vencido`, body: `${oi}\n\nO prazo da etapa "${s.t.toLowerCase()}" da ${x.num} (${forn}) venceu em ${fmtTs(s.ts)} (${relTxt(s.ts)}). Precisamos do posicionamento para dar andamento à RNC.\n\nPedimos o retorno até ${ate}.\n\n${dados}\n\nObrigado,\nQualidade — Aços Vital` };
+    return { subject: `URGENTE — ${x.num} — ${forn} — RNC atrasada`, body: `Prezados,\n\nA ${x.num} (${forn}), aberta em ${fmtTs(x.data)}, está atrasada (prazo final em ${fD(x.prazoFinal)}) e a etapa "${s.t.toLowerCase()}" segue pendente${c.n ? `, mesmo após ${c.n} cobrança${c.n > 1 ? 's' : ''} (a última em ${dmy(c.last)})` : ''}.\n\nSolicitamos retorno com urgência, até ${ate}, com a disposição e o plano de ação.\n\n${dados}\n\nAtenciosamente,\nQualidade — Aços Vital` };
+  }
+  function mailHref(to, cc, subject, body) {
+    const enc = (s) => encodeURIComponent(s || '').replace(/%40/g, '@').replace(/%2C/gi, ',');
+    return `mailto:${enc(to)}?${cc ? 'cc=' + enc(cc) + '&' : ''}subject=${encodeURIComponent(subject || '')}&body=${encodeURIComponent(body || '')}`;
+  }
+  function openHref(href) { const a = document.createElement('a'); a.href = href; a.target = '_top'; a.rel = 'noopener'; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 500); }
+  async function copyText(text) { try { await navigator.clipboard.writeText(text); return true; } catch (e) { return false; } }
+  function rncMailDialog(x) {
+    const m = rncMeta(x), can = cw('rnc'), cc0 = S.model.cfg.RNC_CC_ATRASO || '';
+    let modelo = rncModelo(x);
+    const sug = [];
+    const pc = pessoaEmail(x.comprador); if (pc) sug.push({ l: 'Comprador · ' + x.comprador, e: pc, to: 1 });
+    const se = setorEmail(x.depto); if (se) sug.push({ l: 'Setor · ' + x.depto, e: se, to: 1 });
+    const fe = fornEmail(x.forn); if (fe) sug.push({ l: 'Fornecedor · ' + x.forn, e: fe, to: 1 });
+    if (cc0) sug.push({ l: 'Cópia de RNC atrasada', e: cc0, to: 0 });
+    const defTo = m.emPara || joinEm(splitEm(pc).concat(splitEm(se)));
+    const defCc = m.emCc || (modelo === 'atrasada' ? cc0 : '');
+    const t0 = rncMailText(x, modelo);
+    openModal('Cobrança · ' + x.num, `<div class="seg" role="group" aria-label="Modelo do e-mail" id="cm-mod">${Object.entries(MODL).map(([k, l]) => `<button type="button" data-m="${k}" aria-pressed="${k === modelo}">${l}</button>`).join('')}</div>
+      <div class="fgrid cm-grid"><label class="field"><span>Para</span><input id="cm-to" value="${esc(defTo)}" placeholder="nome@acosvital.com.br, outro@…" autocomplete="off"></label>
+      <label class="field"><span>Cópia</span><input id="cm-cc" value="${esc(defCc)}" autocomplete="off"></label></div>
+      ${sug.length ? `<div class="cm-sug"><span class="muted">Adicionar:</span> ${sug.map((s, i) => `<button type="button" class="linkbtn" data-sg="${i}" title="${esc(s.e)}">+ ${esc(s.l)}${s.to ? '' : ' (cópia)'}</button>`).join('')}</div>` : '<div class="muted" style="font-size:12.5px">Nenhum e-mail cadastrado para o comprador, o setor ou o fornecedor desta RNC. Cadastre em Configurações (Pessoas, E-mails por setor, E-mails dos fornecedores) ou digite acima.</div>'}
+      <label class="field"><span>Assunto</span><input id="cm-sub" value="${esc(t0.subject)}"></label>
+      <label class="field"><span>Texto</span><textarea id="cm-body" spellcheck="false" class="cm-body">${esc(t0.body)}</textarea></label>
+      ${can ? '<label class="check"><input type="checkbox" id="cm-save" checked> Gravar estes destinatários na RNC</label>' : ''}
+      <div class="formfoot" id="cm-foot"><button class="btn primary" type="button" id="cm-out">Abrir no Outlook</button><button class="btn" type="button" id="cm-copy">Copiar texto</button><button class="btn ghost" type="button" data-act="close">Fechar</button></div>`);
+    const setModelo = (k) => {
+      modelo = k; $$('#cm-mod [data-m]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.m === k));
+      const t = rncMailText(x, k); $('#cm-sub').value = t.subject; $('#cm-body').value = t.body;
+      if (k === 'atrasada' && cc0 && !$('#cm-cc').value.trim()) $('#cm-cc').value = cc0;
+    };
+    $('#cm-mod').onclick = (e) => { const b = e.target.closest('[data-m]'); if (b) setModelo(b.dataset.m); };
+    $$('[data-sg]').forEach((b) => b.onclick = () => { const s = sug[+b.dataset.sg], inp = $(s.to ? '#cm-to' : '#cm-cc'); inp.value = joinEm(splitEm(inp.value).concat(splitEm(s.e))); });
+    const read = () => ({ to: joinEm(splitEm($('#cm-to').value)), cc: joinEm(splitEm($('#cm-cc').value)), sub: $('#cm-sub').value.trim(), body: $('#cm-body').value });
+    const check = (r) => { const bad = splitEm(r.to + ',' + r.cc).filter((e) => !okEm(e)); if (bad.length) { toast('E-mail inválido: ' + bad[0], true); return false; } return true; };
+    const saveRecips = async (r) => { if (!can || !$('#cm-save') || !$('#cm-save').checked) return null; if (r.to === (m.emPara || '') && r.cc === (m.emCc || '')) return null; return { emPara: r.to, emCc: r.cc }; };
+    const after = (r) => {
+      if (!can) return;
+      $('#cm-foot').innerHTML = `<div class="regq"><b>Registrar esta cobrança na RNC?</b><span class="muted">Fica no histórico com a data, o modelo e os destinatários.</span></div><button class="btn primary" type="button" id="cm-reg">Registrar</button><button class="btn" type="button" id="cm-noreg">Agora não</button>`;
+      $('#cm-reg').onclick = async () => {
+        const b = $('#cm-reg'); b.disabled = true; b.textContent = 'Gravando…';
+        try {
+          const m2 = rncMeta(x), list = (Array.isArray(m2.cobr) ? m2.cobr : []).concat([{ at: Date.now(), by: DB.me || null, modelo, para: r.to, cc: r.cc }]);
+          const ch = Object.assign({ cobr: list, info: appendInfo(m2.info, `Cobrança enviada (modelo ${MODL[modelo]}) para: ${r.to || '—'}${r.cc ? ' · cópia: ' + r.cc : ''}`) }, (await saveRecips(r)) || {});
+          await updateRecord('RNC', x.key, ch);
+          logEntry('RNC', x.key, 'alterado', `${x.num} · cobrança registrada (${MODL[modelo]})`, null);
+          closeLayer(); toast('Cobrança registrada no histórico da RNC.');
+        } catch (err) { toast('Não foi possível registrar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; b.textContent = 'Registrar'; }
+      };
+      $('#cm-noreg').onclick = async () => { try { const ch = await saveRecips(r); if (ch) { await updateRecord('RNC', x.key, ch); toast('Destinatários gravados na RNC.'); } } catch (e) { /* sem gravação */ } closeLayer(); };
+    };
+    $('#cm-out').onclick = async () => {
+      const r = read(); if (!check(r)) return;
+      if (!r.to) { toast('Informe pelo menos um destinatário em Para.', true); $('#cm-to').focus(); return; }
+      let href = mailHref(r.to, r.cc, r.sub, r.body);
+      if (href.length > 1900) { const ok = await copyText(r.body); href = mailHref(r.to, r.cc, r.sub, ok ? '' : r.body.slice(0, 1200)); toast(ok ? 'O texto é longo: ele foi copiado. Cole no corpo do e-mail (Ctrl+V).' : 'O texto é longo: copie pelo botão Copiar texto e cole no e-mail.'); }
+      openHref(href); after(r);
+    };
+    $('#cm-copy').onclick = async () => {
+      const r = read(); if (!check(r)) return;
+      if (await copyText(r.body)) toast('Texto copiado.'); else { const ta = $('#cm-body'); ta.focus(); ta.select(); toast('Texto selecionado. Use Ctrl+C para copiar.'); }
+      after(r);
+    };
+  }
+  function rncRetDialog(x) {
+    openModal('Retorno do fornecedor · ' + x.num, `<label class="field"><span>Data do retorno</span><input type="date" id="rt-d" value="${E.isoDate(S.today)}"></label>
+      <label class="field"><span>Resumo do retorno <b>*</b></span><textarea id="rt-t" style="min-height:110px" placeholder="O que foi respondido, próximos passos…"></textarea></label>
+      <div class="formfoot"><button class="btn primary" type="button" id="rt-ok">Registrar retorno</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    $('#rt-t').focus();
+    $('#rt-ok').onclick = async () => {
+      const d = E.fromIso($('#rt-d').value), txt = $('#rt-t').value.trim();
+      if (d == null) { toast('Data inválida.', true); return; }
+      if (!txt) { toast('Escreva o resumo do retorno.', true); $('#rt-t').focus(); return; }
+      const b = $('#rt-ok'); b.disabled = true; b.textContent = 'Gravando…';
+      try {
+        const m = rncMeta(x), list = (Array.isArray(m.ret) ? m.ret : []).concat([{ d, txt, at: Date.now(), by: DB.me || null }]);
+        await updateRecord('RNC', x.key, { ret: list, info: appendInfo(m.info, `Retorno do fornecedor (${fD(d)}): ${txt}`) });
+        logEntry('RNC', x.key, 'alterado', `${x.num} · retorno do fornecedor registrado`, null);
+        closeLayer(); toast('Retorno registrado na RNC.');
+      } catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; b.textContent = 'Registrar retorno'; }
+    };
+  }
+  async function rncTimeline(x) {
+    const c = rncCobr(x), ev = c.list.map((o) => ({ at: o.at, by: o.by, t: `Cobrança enviada (modelo ${MODL[o.modelo] || 'e-mail'}) para ${o.para || '—'}${o.cc ? ' · cópia: ' + o.cc : ''}` }))
+      .concat(c.rets.map((o) => ({ at: o.at, by: o.by, t: `Retorno do fornecedor${o.d != null ? ' (' + fD(o.d) + ')' : ''}: ${o.txt || ''}`, ret: 1 }))).sort((a, b) => b.at - a.at);
+    await resolveNames(ev.map((e) => e.by));
+    if (!ev.length) return '<span class="muted">Nenhuma cobrança registrada ainda.</span>';
+    return `<ul class="cobl">${ev.map((e) => `<li class="${e.ret ? 'ret' : ''}"><span class="when">${dmy(e.at)} ${hhmm(e.at)}</span><span>${esc(e.t)}</span><span class="muted">${esc(who(e.by))}</span></li>`).join('')}</ul>`;
+  }
+
+  /* ---------- "Minhas RNCs": comprador ou emissor = pessoa logada (pelo e-mail ou pelo nome em Pessoas) ---------- */
+  function myPessoa() {
+    if (!DB.meName && !DB.meEmail) return null;
+    const ps = (S.model && S.model.cfg.PESSOAS) || [];
+    const p = ps.find((q) => DB.meEmail && q.email && E.low(q.email) === E.low(DB.meEmail)) || ps.find((q) => DB.meName && E.key(q.nome) === E.key(DB.meName));
+    return p ? p.nome : (DB.meName || null);
+  }
+  function isMine(x) { const n = myPessoa(); return !!n && (E.key(x.comprador) === E.key(n) || E.key(x.emissor) === E.key(n)); }
+
+  /* ---------- resumo geral das RNCs em aberto ---------- */
+  function rncResumo(by) {
+    const L = rncOpen().sort((a, b) => (a.s.ts == null ? 9e9 : a.s.ts) - (b.s.ts == null ? 9e9 : b.s.ts));
+    const nA = L.filter((o) => o.x.status === 'Atrasado').length, nV = L.filter((o) => o.venc).length;
+    const g = new Map();
+    L.forEach((o) => { const k = (by === 'setor' ? o.x.depto : o.x.comprador) || (by === 'setor' ? '(sem setor)' : '(sem comprador)'); if (!g.has(k)) g.set(k, []); g.get(k).push(o); });
+    const out = [`Assunto: Resumo das RNCs de fornecedor em aberto — ${fD(S.today)}`, '', 'Olá.', '', `Resumo das RNCs de fornecedor em aberto em ${fD(S.today)}: ${L.length} no total${nV ? `, ${nV} com prazo vencido` : ''}${nA ? ` (${nA} atrasada${nA > 1 ? 's' : ''})` : ''}.`];
+    Array.from(g.keys()).sort((a, b) => a.localeCompare(b, 'pt-BR')).forEach((k) => {
+      out.push('', `${by === 'setor' ? 'SETOR' : 'COMPRADOR'}: ${k} (${g.get(k).length})`);
+      g.get(k).forEach((o) => { const c = rncCobr(o.x); out.push(`  • ${o.x.num} — ${o.x.forn || 'sem fornecedor'} — ${o.s.t} — prazo ${fmtTs(o.s.ts)} (${relTxt(o.s.ts)})${o.x.status === 'Atrasado' ? ' — ATRASADA' : ''}${c.n ? ` — cobrada ${c.n}x` : ''}`); });
+    });
+    out.push('', 'Obrigado,', 'Qualidade — Aços Vital');
+    return out.join('\n');
+  }
+  function rncResumoDialog() {
+    let by = 'comprador';
+    openModal('Resumo das RNCs em aberto', `<div class="seg" role="group" aria-label="Agrupar" id="rs-by"><button type="button" data-b="comprador" aria-pressed="true">Por comprador</button><button type="button" data-b="setor" aria-pressed="false">Por setor</button></div>
+      <textarea id="rs-text" spellcheck="false" class="cm-body">${esc(rncResumo(by))}</textarea>
+      <div class="formfoot"><button class="btn primary" type="button" id="rs-copy">Copiar texto</button><button class="btn" type="button" id="rs-out">Abrir no Outlook</button><button class="btn ghost" type="button" data-act="close">Fechar</button></div>`);
+    $('#rs-by').onclick = (e) => { const b = e.target.closest('[data-b]'); if (!b) return; by = b.dataset.b; $$('#rs-by [data-b]').forEach((o) => o.setAttribute('aria-pressed', o === b)); $('#rs-text').value = rncResumo(by); };
+    $('#rs-copy').onclick = async () => { if (await copyText($('#rs-text').value)) toast('Texto copiado.'); else { $('#rs-text').select(); toast('Texto selecionado. Use Ctrl+C para copiar.'); } };
+    $('#rs-out').onclick = async () => {
+      const t = $('#rs-text').value, i = t.indexOf('\n'), sub = t.startsWith('Assunto: ') ? t.slice(9, i) : 'Resumo das RNCs de fornecedor', body = t.startsWith('Assunto: ') ? t.slice(i + 1).replace(/^\n+/, '') : t;
+      let href = mailHref('', '', sub, body);
+      if (href.length > 1900) { const ok = await copyText(body); href = mailHref('', '', sub, ''); toast(ok ? 'O texto é longo: ele foi copiado. Cole no corpo do e-mail (Ctrl+V).' : 'Copie o texto pelo botão Copiar texto.'); }
+      openHref(href);
+    };
+  }
+
+  /* ---------- indicadores de prazo (últimos 12 meses) ---------- */
+  function rncIndicadores(M) {
+    const de = S.today - 365, L = M.rnc.filter((x) => x.data != null && x.data >= de && x.status !== 'Cancelada');
+    const D = L.filter((x) => x.disp && x.fechDisp != null && x.dispDue != null);
+    const ok = (x) => x.fechDisp <= Math.floor(x.dispDue + 1e-9), dias = (x) => Math.max(0, E.workdaysBetween(Math.floor(x.data), x.fechDisp, M.hol));
+    const avg = (a) => (a.length ? a.reduce((s, v) => s + v, 0) / a.length : null), r1 = (v) => Math.round(v * 10) / 10;
+    const pct = D.length ? Math.round(D.filter(ok).length / D.length * 100) : null, med = avg(D.map(dias));
+    const grp = (fn) => { const m = new Map(); D.forEach((x) => { const k = fn(x) || '(não informado)'; if (!m.has(k)) m.set(k, []); m.get(k).push(x); }); return Array.from(m.entries()); };
+    const porComp = grp((x) => x.comprador).map(([k, a]) => ({ label: k, value: Math.round(a.filter(ok).length / a.length * 100), tip: `${k} (${a.length} RNC)` })).sort((a, b) => b.value - a.value || a.label.localeCompare(b.label));
+    const porForn = grp((x) => x.forn).map(([k, a]) => ({ label: k, value: r1(avg(a.map(dias))), tip: `${k} (${a.length} RNC)` })).sort((a, b) => b.value - a.value || a.label.localeCompare(b.label));
+    return `<section class="sec">${band('RNC', 'Indicadores de prazo da disposição', 'últimos 12 meses · RNCs com disposição registrada')}<div class="block"><div class="body">
+      <div class="kpis">${kpiHTML({ l: 'Disposição dentro das 48 h', v: pct == null ? '—' : pct + '%', sub: D.length ? `${D.filter(ok).length} de ${D.length} RNC` : 'sem dados no período', c: MOD.RNC.c, cls: pct == null ? '' : pct >= 80 ? 'ok' : pct >= 50 ? 'warn' : 'crit' })}${kpiHTML({ l: 'Tempo médio de disposição', v: med == null ? '—' : NF1.format(med), sub: 'dias úteis da abertura à disposição', c: MOD.RNC.c })}${kpiHTML({ l: 'RNCs abertas no período', v: NF.format(L.length), sub: 'sem as canceladas', c: MOD.RNC.c })}</div>
+      <div class="charts">${chartHTML('Disposição dentro das 48 h por comprador', barsHTML(porComp, MOD.RNC.c, { suf: '%', max: 12 }), '% das RNCs')}${chartHTML('Tempo médio de disposição por fornecedor', barsHTML(porForn, MOD.RNC.c, { max: 12 }), 'dias úteis')}</div>
+    </div></div></section>`;
   }
   function calMsg() {
     const act = S.model.ins.filter((x) => x.dias != null && x.status !== 'FORA DE USO' && x.status !== 'MANUTENÇÃO');
@@ -3837,7 +4252,41 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   const LABEL_SIZES = [['100x50', '100 × 50 mm'], ['100x75', '100 × 75 mm'], ['60x40', '60 × 40 mm'], ['50x30', '50 × 30 mm'], ['custom', 'Personalizado']];
   const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } };
   const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* sem armazenamento */ } };
-  function lotUrl(x) { return window.CQ_FIREBASE_CONFIG ? location.href.split('#')[0] + '#lote=' + encodeURIComponent(x.id) : x.id; }
+  /* ---------- página pública do lote (QR code da etiqueta): só consulta, sem acesso à Central ---------- */
+  const PUB = () => !!window.CQ_FIREBASE_CONFIG;
+  const PUBQ = new Set();
+  function newToken() { const a = new Uint8Array(16), A = 'abcdefghijkmnpqrstuvwxyz23456789'; crypto.getRandomValues(a); return Array.from(a, (b) => A[b % 32]).join(''); }
+  function pubUrl(tok) { return new URL('lote.html', location.href.split('#')[0].split('?')[0]).href + '?c=' + tok; }
+  const pubTok = (x) => ((DB.meta.AV || {})[x.key] || {}).qr || null;
+  function pubData(x) {
+    const s = (v) => (v == null || v === '' || E.isStar(v) ? '' : String(v).trim());
+    return { id: s(x.id), desc: s(x.desc), material: s(x.norma), diam: s(x.diam), esp: s(x.esp), liga: s(x.liga), corrida: s(x.corrida), volume: s(x.volume),
+      quant: x.quant == null || x.quant === '' ? '' : String(x.quant) + (x.und ? ' ' + x.und : ''), insp: s(x.insp), recebido: x.data != null ? fD(x.data) : '', filial: s(x.filial),
+      forn: s(x.forn), nf: s(x.nf), pc: s(x.pc), pv: s(x.pv), at: Date.now() };
+  }
+  async function pubWrite(x, tok) { try { await DB.db.doc('pub/' + tok).set(pubData(x)); } catch (e) { console.warn('página do lote não atualizada', e); } }
+  /* garante o código da página para cada lote (cria na primeira etiqueta) e atualiza os dados públicos */
+  async function ensurePub(lots) {
+    const out = {};
+    if (!PUB()) return out;
+    for (const x of lots) {
+      let tok = pubTok(x);
+      if (!tok && cw('av')) {
+        for (let i = 0; i < 24 && !(DB.where.AV || {})[x.key]; i++) await sleep(250);
+        tok = newToken();
+        try { await updateRecord('AV', x.key, { qr: tok }); } catch (e) { tok = null; }
+      }
+      if (tok && cw('av')) await pubWrite(x, tok);
+      if (tok) out[x.key] = tok;
+    }
+    return out;
+  }
+  /* depois de editar um lote que já tem página, a cópia pública é atualizada */
+  function pubSync() {
+    if (!PUB() || !PUBQ.size || !cw('av')) { PUBQ.clear(); return; }
+    Array.from(PUBQ).forEach((k) => { PUBQ.delete(k); const x = findRec('AV', k), tok = x && pubTok(x); if (tok) pubWrite(x, tok); });
+  }
+  function lotUrl(x, tok) { if (!PUB()) return x.id; const t = tok || pubTok(x); return t ? pubUrl(t) : x.id; }
   function qrSvg(text, mm) {
     if (typeof qrcode !== 'function') return '';
     const q = qrcode(0, 'M'); q.addData(text); q.make();
@@ -3845,10 +4294,10 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.isDark(r, c)) d += `M${c},${r}h1v1h-1z`;
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 ${n + 2} ${n + 2}" width="${mm}mm" height="${mm}mm" shape-rendering="crispEdges"><rect x="-1" y="-1" width="${n + 2}" height="${n + 2}" fill="#fff"/><path d="${d}" fill="#000"/></svg>`;
   }
-  function labelHTML(x, W, H) {
+  function labelHTML(x, W, H, tok) {
     const pad = Math.max(1.5, H * 0.05), qr = Math.min(H - pad * 2, W * 0.4), fs = H * 0.075, small = (v) => esc(String(v == null ? '' : v));
     const line = (l, v) => (E.filled(v) && !E.isStar(v) ? `<div class="ln"><span>${l}</span> ${small(v)}</div>` : '');
-    return `<div class="lab" style="width:${W}mm;height:${H}mm;padding:${pad}mm;font-size:${fs}mm"><div class="tx"><div class="id" style="font-size:${H * 0.17}mm">${small(x.id)}</div><div class="ds">${small(x.desc)}${E.filled(x.diam) ? ' ' + small(x.diam) : ''}${E.filled(x.esp) ? ' × ' + small(x.esp) : ''}</div>${line('Corrida', x.corrida)}${line('Volume', x.volume)}${line('Material', x.norma)}<div class="ln"><span>NF</span> ${small(x.nf)} · ${small(fD(x.data))}${x.quant != null && x.quant !== '' ? ' · ' + small(x.quant) + ' ' + small(x.und || '') : ''}</div><div class="ft">${small(x.forn)}</div></div><div class="qr">${qrSvg(lotUrl(x), qr)}</div></div>`;
+    return `<div class="lab" style="width:${W}mm;height:${H}mm;padding:${pad}mm;font-size:${fs}mm"><div class="tx"><div class="id" style="font-size:${H * 0.17}mm">${small(x.id)}</div><div class="ds">${small(x.desc)}${E.filled(x.diam) ? ' ' + small(x.diam) : ''}${E.filled(x.esp) ? ' × ' + small(x.esp) : ''}</div>${line('Corrida', x.corrida)}${line('Volume', x.volume)}${line('Material', x.norma)}<div class="ln"><span>NF</span> ${small(x.nf)} · ${small(fD(x.data))}${x.quant != null && x.quant !== '' ? ' · ' + small(x.quant) + ' ' + small(x.und || '') : ''}</div><div class="ft">${small(x.forn)}</div></div><div class="qr">${qrSvg(lotUrl(x, tok), qr)}</div></div>`;
   }
   const LABEL_CSS = (W, H) => `@page{size:${W}mm ${H}mm;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0}body{font-family:"Arial Narrow",Arial,Helvetica,sans-serif;color:#000;background:#fff}
     .lab{display:flex;gap:2mm;align-items:center;overflow:hidden;page-break-after:always;break-after:page;line-height:1.15}.lab:last-child{page-break-after:auto;break-after:auto}
@@ -3869,21 +4318,30 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       <div class="fgrid" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))"><label class="field"><span>Tamanho da etiqueta</span><select id="lb-size">${LABEL_SIZES.map(([v, l]) => `<option value="${v}" ${v === (LABEL_SIZES.some((s2) => s2[0] === cur) ? cur : 'custom') ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
         <label class="field" id="lb-wf"><span>Largura (mm)</span><input id="lb-w" type="number" min="20" max="200" value="${esc(lsGet('cq-etq-w', '100'))}"></label><label class="field" id="lb-hf"><span>Altura (mm)</span><input id="lb-h" type="number" min="15" max="200" value="${esc(lsGet('cq-etq-h', '50'))}"></label></div>
       <div class="lbprev" id="lb-prev"></div>
-      <p class="muted" style="margin:0;font-size:12.5px">Na janela de impressão, escolha a impressora de etiquetas e, se ela pedir, o mesmo tamanho de papel. O QR code abre o lote na Central.</p>
+      <p class="muted" style="margin:0;font-size:12.5px">Na janela de impressão, escolha a impressora de etiquetas e, se ela pedir, o mesmo tamanho de papel. O QR code abre uma página só de consulta com os dados do lote, sem acesso à Central.</p>
       <div class="formfoot"><button class="btn primary" type="button" id="lb-print">Imprimir ${lots.length > 1 ? lots.length + ' etiquetas' : 'etiqueta'}</button><button class="btn" type="button" data-act="close">Fechar</button></div>`);
     const draw = () => { const custom = $('#lb-size').value === 'custom'; $('#lb-wf').hidden = $('#lb-hf').hidden = !custom; const [W, H] = dims(); $('#lb-prev').innerHTML = `<style>${LABEL_CSS(W, H).replace(/@page[^}]*}/, '').replace(/html,body\{[^}]*\}/, '').replace(/body\{[^}]*\}/, '')}</style><div class="lbsheet">${labelHTML(lots[0], W, H)}</div>`; };
     ['lb-size', 'lb-w', 'lb-h'].forEach((id) => $('#' + id).addEventListener('input', draw));
     draw();
-    $('#lb-print').onclick = () => {
+    $('#lb-print').onclick = async () => {
       const [W, H] = dims(); lsSet('cq-etq', $('#lb-size').value); lsSet('cq-etq-w', String(W)); lsSet('cq-etq-h', String(H));
-      printHTML(`<!doctype html><html><head><meta charset="utf-8"><title>Etiquetas</title><style>${LABEL_CSS(W, H)}</style></head><body>${lots.map((x) => labelHTML(x, W, H)).join('')}</body></html>`);
+      const bt = $('#lb-print'), lbl = bt.textContent; bt.disabled = true; bt.textContent = 'Preparando…';
+      const toks = await ensurePub(lots);
+      bt.disabled = false; bt.textContent = lbl;
+      if (PUB() && lots.some((x) => !toks[x.key])) toast('Sem permissão para criar a página do lote: o QR code sai só com o código do lote.', true);
+      printHTML(`<!doctype html><html><head><meta charset="utf-8"><title>Etiquetas</title><style>${LABEL_CSS(W, H)}</style></head><body>${lots.map((x) => labelHTML(x, W, H, toks[x.key])).join('')}</body></html>`);
     };
   }
   VIEWS.alertas = (main) => {
     const M = S.model;
     const ab = M.rnc.filter((x) => x.aberta).map((x) => ({ x, stg: rncStage(x) }));
     const atras = ab.filter((o) => o.x.status === 'Atrasado');
-    const dispV = ab.filter((o) => !o.x.disp && o.x.prazoDisp < S.today && o.x.status !== 'Atrasado');
+    const nowA = nowS(), hOf = (o) => (o.stg.ts == null ? null : (o.stg.ts - nowA) * 24);
+    const dispV = ab.filter((o) => !o.x.disp && o.stg.ts != null && o.stg.ts < nowA && o.x.status !== 'Atrasado');
+    const venc = ab.filter((o) => o.x.status === 'Atrasado' || (hOf(o) != null && hOf(o) < 0));
+    const h24 = ab.filter((o) => !venc.includes(o) && hOf(o) != null && hOf(o) <= 24), h48 = ab.filter((o) => !venc.includes(o) && hOf(o) != null && hOf(o) > 24 && hOf(o) <= 48);
+    const mais = ab.filter((o) => !venc.includes(o) && !h24.includes(o) && !h48.includes(o)), mine = myPessoa() ? ab.filter((o) => isMine(o.x)) : null;
+    const rLanes = [{ k: 'crit', t: 'Vencidas', l: venc }, { k: 'serious', t: 'Vencem em até 24 h', l: h24 }, { k: 'warn', t: 'Vencem em até 48 h', l: h48 }, { k: 'info', t: 'Mais de 2 dias', l: mais }];
     const soon = ab.filter((o) => o.x.status !== 'Atrasado' && o.stg.due != null && o.stg.due >= S.today && E.workdaysBetween(S.today, o.stg.due, M.hol) <= 3 && !dispV.includes(o));
     const act = M.ins.filter((x) => x.dias != null && x.status !== 'FORA DE USO' && x.status !== 'MANUTENÇÃO');
     const lanes = [
@@ -3896,9 +4354,9 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const groups = Array.from(grp.values()).sort((a, b) => b.data - a.data);
     S.alertGroups = groups;
     const filt = S.f.alert || 'todas';
-    const pick = { todas: ab, atras, disp: dispV, soon }[filt] || ab;
+    const pick = { todas: ab, venc, atras, disp: dispV, soon, h24, h48, minhas: mine || [] }[filt] || ab;
     const nada = !atras.length && !dispV.length && !soon.length && !lanes.some((ln) => ln.l.length) && !sem.length && !(M.rncc || []).some((x) => x.aberta && (x.status === 'Atrasado' || (x.respData == null && x.prazoResp != null && S.today > x.prazoResp)));
-    main.innerHTML = `<div class="view">${head('Alertas', 'O que precisa de ação hoje. Os prazos de RNC usam dias úteis e os feriados de Configurações.', '<button class="btn" type="button" data-act="msg-cal">Texto do alerta de calibração</button>')}
+    main.innerHTML = `<div class="view">${head('Alertas', 'O que precisa de ação hoje. Os prazos de RNC usam dias úteis e os feriados de Configurações.', (vis('rnc') ? '<button class="btn" type="button" data-act="rnc-resumo">Resumo das RNCs</button>' : '') + '<button class="btn" type="button" data-act="msg-cal">Texto do alerta de calibração</button>')}
       ${nada ? okSeal('Nenhum alerta urgente', 'Sem RNC atrasada, calibração vencida ou lote sem certificado. Tudo certo por aqui.') : ''}
       <div class="kpis">
         ${kpiHTML({ l: 'RNC fornecedor atrasadas', v: NF.format(atras.length), sub: 'passaram do prazo final', c: MOD.RNC.c, cls: atras.length ? 'crit' : 'ok' })}
@@ -3909,7 +4367,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
         ${kpiHTML({ l: 'RNC cliente: resposta vencida', v: NF.format((M.rncc || []).filter((x) => x.aberta && x.respData == null && x.prazoResp != null && S.today > x.prazoResp).length), sub: 'cliente ainda sem retorno', c: MOD.RNCC.c, cls: (M.rncc || []).some((x) => x.aberta && x.respData == null && x.prazoResp != null && S.today > x.prazoResp) ? 'crit' : 'ok' })}
       </div>
       <section class="sec">${band('RNC', 'RNC de fornecedor em aberto · próxima etapa')}<div class="block"><div class="body">
-        <div class="seg" role="group" aria-label="Filtro">${[['todas', 'Todas abertas', ab.length], ['atras', 'Atrasadas', atras.length], ['disp', 'Disposição vencida', dispV.length], ['soon', 'Prazo em até 3 dias úteis', soon.length]].map(([k, l, n]) => `<button type="button" data-af="${k}" aria-pressed="${filt === k}">${l} (${n})</button>`).join('')}</div>
+        <div class="alertgrid rlanes">${rLanes.map((ln) => `<div class="lane ${ln.k}"><header><b>${ln.t}</b><span class="n">${ln.l.length}</span></header>${ln.l.length ? '<ul>' + ln.l.slice().sort((a, b) => (a.stg.ts == null ? 9e9 : a.stg.ts) - (b.stg.ts == null ? 9e9 : b.stg.ts)).slice(0, 8).map((o) => `<li data-open="RNC:${esc(o.x.key)}" tabindex="0"><span class="l1"><span class="mono">${esc(o.x.num)}</span>${relHTML(o.stg.ts)}</span><span class="l2">${esc(o.x.forn || 'sem fornecedor')} · ${esc(o.stg.t)}</span></li>`).join('') + '</ul>' + (ln.l.length > 8 ? `<div class="none">+${ln.l.length - 8} na lista abaixo</div>` : '') : '<div class="none">Nenhuma RNC.</div>'}</div>`).join('')}</div>
+        <div class="seg" role="group" aria-label="Filtro">${[['todas', 'Todas abertas', ab.length], ['venc', 'Vencidas', venc.length], ['atras', 'Atrasadas', atras.length], ['disp', 'Disposição vencida', dispV.length], ['h24', 'Vencem em até 24 h', h24.length], ['h48', 'Vencem em até 48 h', h48.length]].concat(mine ? [['minhas', 'Minhas', mine.length]] : []).map(([k, l, n]) => `<button type="button" data-af="${k}" aria-pressed="${filt === k}">${l} (${n})</button>`).join('')}</div>
         <div id="al-rnc"></div></div></div></section>
       <section class="sec">${band('RNCC', 'RNC de cliente em aberto · próxima etapa')}<div class="block"><div class="body"><div id="al-rncc"></div></div></div></section>
       <section class="sec">${band('INS', 'Calibração · vencimentos')}<div class="block"><div class="body">
@@ -3918,9 +4377,9 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       <section class="sec">${band('AV', 'Lotes sem certificado · últimos 30 dias', 'agrupados por fornecedor e NF')}<div class="block"><div class="body"><div id="al-cert"></div></div></div></section>
     </div>`;
     mountTable($('#al-rnc'), { id: 'al-rnc-' + filt, rows: pick.map((o) => Object.assign(Object.create(o.x), { _stg: o.stg })), noun: 'RNC', open: true, sort: 'due', dir: 1, cols: [
-      { k: 'num', l: 'Nº', cls: 'mono' }, { k: 'status', l: 'Status', f: (x) => chipRnc(x.status) }, { k: 'forn', l: 'Fornecedor', cls: 'clip' }, { k: 'comprador', l: 'Comprador', cls: 'clip' },
-      { k: 'etapa', l: 'Etapa', s: (x) => x._stg.t, f: (x) => esc(x._stg.t) }, { k: 'due', l: 'Prazo da etapa', s: (x) => x._stg.due, f: (x) => `${fD(x._stg.due)}<br><small>${relDays(x._stg.due)}</small>` },
-      { k: 'prazoFinal', l: 'Prazo final', f: (x) => fD(x.prazoFinal) }, { k: 'msg', l: '', nosort: 1, f: (x) => `<button class="btn small" type="button" data-act="msg-rnc" data-key="${esc(x.key)}">Cobrança</button>` }] });
+      { k: 'num', l: 'Nº', cls: 'mono', f: (x) => esc(x.num) + (mine && isMine(x) ? ' <span class="minha">minha</span>' : '') }, { k: 'status', l: 'Status', f: (x) => chipRnc(x.status) }, { k: 'forn', l: 'Fornecedor', cls: 'clip' }, { k: 'comprador', l: 'Comprador', cls: 'clip' },
+      { k: 'etapa', l: 'Etapa', s: (x) => x._stg.t, f: (x) => esc(x._stg.t) }, { k: 'due', l: 'Prazo da etapa', s: (x) => (x._stg.ts == null ? 9e9 : x._stg.ts), f: (x) => `${esc(fmtTs(x._stg.ts))}<br><small>${relHTML(x._stg.ts)}</small>` },
+      { k: 'prazoFinal', l: 'Prazo final', f: (x) => fD(x.prazoFinal) }, { k: 'cobr', l: 'Cobranças', s: (x) => rncCobr(x).last, f: (x) => `<small>${cobrHTML(x)}</small>` }, { k: 'msg', l: '', nosort: 1, f: (x) => `<button class="btn small" type="button" data-act="msg-rnc" data-key="${esc(x.key)}">Cobrança</button>` }] });
     const abC = (M.rncc || []).filter((x) => x.aberta).map((x) => Object.assign(Object.create(x), { _stg: rnccStage(x) }));
     mountTable($('#al-rncc'), { id: 'al-rncc', rows: abC, noun: 'RNC de cliente', open: true, sort: 'due', dir: 1, cols: [
       { k: 'num', l: 'Nº', cls: 'mono' }, { k: 'status', l: 'Status', f: (x) => chipRnc(x.status) }, { k: 'cliente', l: 'Cliente', cls: 'clip' }, { k: 'gravidade', l: 'Gravidade', f: (x) => chipGrav(x.gravidade) }, { k: 'resp', l: 'Responsável', cls: 'clip' },
@@ -4062,14 +4521,17 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const M = S.model, f = S.f.rnc || (S.f.rnc = {});
     main.innerHTML = `<div class="view">${head('RNC de fornecedor', 'Não-conformidades de fornecedores. Status e prazos recalculados hoje, com dias úteis e feriados.', newBtn('rncupd', 'Atualizar andamento') + newBtn('rnc', 'Nova RNC de fornecedor', 1))}
       ${multiChips('Status', [['Em Andamento', 'Em andamento'], ['Pendente', 'Pendente'], ['Atrasado', 'Atrasada'], ['Concluida', 'Concluída'], ['Cancelada', 'Cancelada']], f.status)}
+      ${myPessoa() ? `<div class="mine-tg"><button class="btn small" type="button" id="fr-minhas" aria-pressed="${!!f.minhas}">Somente minhas RNCs (${NF.format(M.rnc.filter(isMine).length)})</button><span class="muted">comprador ou emissor: ${esc(myPessoa())}</span></div>` : ''}
       <div class="filters">${ftext('fr-q', 'Buscar', f.q, 'número, NF, OC, PV, cliente, histórico…', 1)}${ftext('fr-forn', 'Fornecedor', f.forn, 'nome do fornecedor')}${fsel('fr-comprador', 'Comprador', distinct(M.rnc, (x) => x.comprador), f.comprador)}${fsel('fr-filial', 'Filial', distinct(M.rnc, (x) => x.filial), f.filial)}${fsel('fr-motivo', 'Motivo', distinct(M.rnc, (x) => x.motivo), f.motivo)}
       <label class="field"><span>Reincidência</span><select id="fr-reinc"><option value="">Todas</option><option ${f.reinc === 'Sim' ? 'selected' : ''}>Sim</option><option ${f.reinc === 'Não' ? 'selected' : ''}>Não</option></select></label>${fdate('fr-de', 'Abertura de', f.de)}${fdate('fr-ate', 'até', f.ate)}<button class="btn ghost" type="button" id="f-clear">Limpar filtros</button></div><div id="tbl"></div></div>`;
     const draw = () => {
-      const rows = M.rnc.filter((x) => (!f.status || !f.status.length || f.status.includes(x.status)) && txtMatch(f.q, [x.num, x.nf, x.oc, x.pv, x.cliente, x.info, x.emissor]) && (!f.forn || E.key(x.forn).includes(E.key(f.forn))) && eqL(x.comprador, f.comprador) && eqL(x.filial, f.filial) && eqL(x.motivo, f.motivo) && (!f.reinc || x.reinc === f.reinc) && dateIn(x.data, f.de, f.ate));
+      const rows = M.rnc.filter((x) => (!f.minhas || isMine(x)) && (!f.status || !f.status.length || f.status.includes(x.status)) && txtMatch(f.q, [x.num, x.nf, x.oc, x.pv, x.cliente, x.info, x.emissor]) && (!f.forn || E.key(x.forn).includes(E.key(f.forn))) && eqL(x.comprador, f.comprador) && eqL(x.filial, f.filial) && eqL(x.motivo, f.motivo) && (!f.reinc || x.reinc === f.reinc) && dateIn(x.data, f.de, f.ate));
       mountTable($('#tbl'), { id: 'rnc', rows, total: M.rnc.length, noun: 'RNC', open: true, sort: 'num', dir: -1, cols: COLS.RNC, export: 'RNC' });
     };
     wireFilters('rnc', [['fr-q', 'q'], ['fr-forn', 'forn'], ['fr-comprador', 'comprador'], ['fr-filial', 'filial'], ['fr-motivo', 'motivo'], ['fr-reinc', 'reinc'], ['fr-de', 'de'], ['fr-ate', 'ate']], draw);
+    const mt = $('#fr-minhas'); if (mt) mt.onclick = () => { f.minhas = !f.minhas; mt.setAttribute('aria-pressed', !!f.minhas); if (S.t.rnc) S.t.rnc.page = 0; draw(); };
     draw();
+    const vw = $('.view', main); if (vw) vw.insertAdjacentHTML('beforeend', rncIndicadores(M));
   };
   VIEWS.cal = (main) => {
     const M = S.model, f = S.f.cal || (S.f.cal = {});
@@ -4199,6 +4661,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       { c: 'R', l: 'Ação corretiva?', type: 'select', opts: () => cfgL('RNC_CORRETIVA') }, { c: 'T', l: 'Nível do prazo para fechar', type: 'select', opts: () => cfgL('RNC_NIVEL_PRAZO'), help: 'Necessário quando há ação corretiva.' },
       { c: 'V', l: 'Análise crítica da eficácia', type: 'select', opts: () => cfgL('RNC_ANALISE_CRITICA') }] }),
     rncFe: () => ({ t: 'Fechamento', f: [{ c: 'X', l: 'Data de conclusão', type: 'date', help: 'Preencher conclui a RNC.' }, { c: 'Y', l: 'Cancelar RNC?', type: 'select', opts: () => cfgL('RNC_CANCELAMENTO') }] }),
+    rncEm: () => ({ t: 'E-mails acionados', f: [{ c: 'AA', l: 'Para', type: 'text', w: 's2', help: 'Quem recebe a cobrança. Separe os e-mails com vírgula.' }, { c: 'AB', l: 'Cópia', type: 'text', w: 's2', help: 'Opcional. Separe com vírgula.' }] }),
     rncHi: (t) => ({ t: t || 'Histórico', f: [{ c: 'Z', l: 'Informações complementares', type: 'area', w: 's3', help: 'Use “Acrescentar registro de hoje” para anotar sem apagar o que já existe.' }] }),
     rnccAb: () => ({ t: 'Abertura', f: [
       { c: 'A', l: 'Número da RNC de cliente', type: 'text', store: 'text', req: 1, def: () => nextRncc(), cls: 'mono', help: 'Sugerido: próximo número livre.', lock: 1 },
@@ -4246,8 +4709,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     rnccupd: { t: 'Atualizar andamento da RNC de cliente', mod: 'RNCC', btn: 'Salvar andamento', pick: 'RNCC', secs: () => [SEC.rnccCont(), SEC.rnccCausa(), SEC.rnccAcao(), SEC.rnccFim(), Object.assign(SEC.rnccRecl(0), { t: 'Reclamação (corrigir se precisar)' }), SEC.rnccHi()], label: (v, k) => `Andamento ${k}` },
     av: { t: 'Novo lote (AV)', et: 'Editar lote', mod: 'AV', btn: 'Gravar lote', secs: () => [SEC.avNota(), SEC.avMat()], keep: 'BCKLMP', label: (v, k) => `Lote ${k} · ${v.F || ''} · NF ${v.L || ''}` },
     serv: { t: 'Novo serviço', et: 'Editar serviço', mod: 'SERV', btn: 'Gravar serviço', secs: () => [SEC.serv()], keep: 'A', label: (v, k, rec) => `${rec ? rec.sv || 'Serviço' : svOf(k) || 'Serviço'} · ${v.B || ''} · NF ${v.C || ''}` },
-    rnc: { t: 'Nova RNC', et: 'Editar RNC', mod: 'RNC', btn: 'Abrir RNC', secs: () => [SEC.rncAb(), SEC.rncId(1), SEC.rncHi('Informações complementares')], editSecs: () => [SEC.rncAb(), SEC.rncId(0), SEC.rncAn(), SEC.rncFe(), SEC.rncHi()], label: (v, k) => `${k} · ${v.G || 'sem fornecedor'}` },
-    rncupd: { t: 'Atualizar andamento da RNC', mod: 'RNC', btn: 'Salvar andamento', pick: 'RNC', secs: () => [SEC.rncAn(), SEC.rncFe(), Object.assign(SEC.rncId(0), { t: 'Identificação (corrigir se precisar)' }), SEC.rncHi()], label: (v, k) => `Andamento ${k}` },
+    rnc: { t: 'Nova RNC', et: 'Editar RNC', mod: 'RNC', btn: 'Abrir RNC', secs: () => [SEC.rncAb(), SEC.rncId(1), SEC.rncEm(), SEC.rncHi('Informações complementares')], editSecs: () => [SEC.rncAb(), SEC.rncId(0), SEC.rncAn(), SEC.rncFe(), SEC.rncEm(), SEC.rncHi()], label: (v, k) => `${k} · ${v.G || 'sem fornecedor'}` },
+    rncupd: { t: 'Atualizar andamento da RNC', mod: 'RNC', btn: 'Salvar andamento', pick: 'RNC', secs: () => [SEC.rncAn(), SEC.rncFe(), SEC.rncEm(), Object.assign(SEC.rncId(0), { t: 'Identificação (corrigir se precisar)' }), SEC.rncHi()], label: (v, k) => `Andamento ${k}` },
     cal: { t: 'Registrar calibração', mod: 'INS', btn: 'Registrar calibração', pick: 'INS', fresh: { E: () => E.isoDate(S.today), D: () => '', Q: () => '' }, secs: () => [SEC.insCal(1, 1)], label: (v, k, rec) => `Calibração ${rec ? rec.codigo : ''} em ${v.E ? E.fmtDate(E.fromIso(v.E)) : ''}` },
     ins: { t: 'Novo instrumento', et: 'Editar instrumento', mod: 'INS', btn: 'Gravar instrumento', secs: () => [SEC.insId(), SEC.insCal(0, 0)], label: (v) => `Instrumento ${v.A} · ${v.B}` }
   };
@@ -4296,13 +4759,23 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   }
   function wireReveal(fields, idOf) {
     fields.filter((f) => f.reveal).forEach((f) => {
-      const el = $('#' + idOf(f)); if (!el) return; const lab = el.closest('.field'); if (!lab) return;
-      const old = lab.parentNode.querySelector(`[data-reveal="${idOf(f)}"]`); if (old) old.remove();
-      if (el.value) { lab.hidden = false; return; }
-      lab.hidden = true;
-      const b = document.createElement('button'); b.type = 'button'; b.className = 'linkbtn'; b.textContent = f.reveal; b.dataset.reveal = idOf(f);
-      b.onclick = () => { lab.hidden = false; b.remove(); el.focus(); };
-      const prev = lab.previousElementSibling; (prev || lab.parentNode).appendChild(b);
+      const id = idOf(f), el = $('#' + id); if (!el) return; const lab = el.closest('.field'); if (!lab) return;
+      const old = lab.parentNode.querySelector(`[data-reveal="${id}"]`); if (old) old.remove();
+      const oldX = lab.querySelector('[data-unreveal]'); if (oldX) oldX.remove();
+      const show = () => {
+        lab.hidden = false;
+        /* "– tirar volume": apaga o que foi digitado e esconde o campo de novo */
+        const x = document.createElement('button'); x.type = 'button'; x.className = 'linkbtn unrev'; x.dataset.unreveal = id; x.textContent = '– tirar ' + String(f.l || '').toLowerCase();
+        x.onclick = (e) => { e.preventDefault(); e.stopPropagation(); el.value = ''; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); x.remove(); hide(); };
+        (lab.querySelector('span') || lab).appendChild(x);
+      };
+      const hide = () => {
+        lab.hidden = true;
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'linkbtn'; b.textContent = f.reveal; b.dataset.reveal = id;
+        b.onclick = () => { b.remove(); show(); el.focus(); };
+        const prev = lab.previousElementSibling; (prev || lab.parentNode).appendChild(b);
+      };
+      if (el.value) show(); else hide();
     });
   }
   /* ---------- AV: vários lotes de uma nota fiscal ---------- */
@@ -4501,6 +4974,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       else if (S.model.rnc.some((x) => E.low(x.num) === E.low(vals.A))) errs.A = 'Esse número já existe.';
       else { const m = /^RNCF-(\d{4})-(\d+)$/.exec(vals.A); if (m && +m[2] <= +((DB.numer.rnc || {})[+m[1]] || 0)) errs.A = 'Esse número já foi usado antes da virada.'; }
     }
+    if (fd.mod === 'RNC') ['AA', 'AB'].forEach((c) => { const bad = splitEm(vals[c]).filter((e) => !okEm(e)); if (bad.length) errs[c] = 'E-mail inválido: ' + bad[0]; });
     if (fd.mod === 'INS' && vals.A && S.model.ins.some((x) => E.key(x.codigo) === E.key(vals.A) && (!rec || x.key !== rec.key))) errs.A = 'Esse código já existe.';
     if (!isNew && !Object.keys(changes).length) errs._ = 'Nada foi alterado.';
     return { errs, isNew, fields, changes, before, vals, rec };
@@ -4530,7 +5004,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const fm = FMAP[fd.mod], inv = {}; Object.keys(fm).forEach((L) => { inv[fm[L]] = L; });
     const letters = {};
     Object.entries(isNew ? c.fields : c.changes).forEach(([n, v]) => { letters[inv[n]] = v; });
-    let r = null; try { r = previewModel(fd.mod, isNew ? null : rec.key, letters); } catch (e) { console.error(e); }
+    let r = null; try { r = previewModel(fd.mod, isNew ? null : rec.key, letters); if (r && fd.mod === 'RNC') rncHoursOne(r, S.model); } catch (e) { console.error(e); }
     let html = ''; const warn = [];
     if (fd.mod === 'AV' && isNew) {
       const nx = avUltimo() + 1;
@@ -4549,7 +5023,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     } else if (fd.mod === 'RNC' && r) {
       html += `<div class="pv"><h3>${isNew ? 'RNC que será aberta' : 'Situação após salvar'}</h3><div class="big mono">${esc(r.num || vals.A || '')}</div>
         ${pvRow('Status', (!isNew && rec.status !== r.status ? chipRnc(rec.status) + ' → ' : '') + chipRnc(r.status))}
-        ${pvRow('Prazo de disposição', fD(r.prazoDisp))}${r.prazoAcao ? pvRow('Prazo da ação', fD(r.prazoAcao)) : ''}${r.prazoFechar ? pvRow('Prazo para fechar', fD(r.prazoFechar)) : ''}
+        ${pvRow('Prazo de disposição', fmtTs(r.dispDue != null ? r.dispDue : r.prazoDisp))}${r.prazoAcao ? pvRow('Prazo da ação', fD(r.prazoAcao)) : ''}${r.prazoFechar ? pvRow('Prazo para fechar', fD(r.prazoFechar)) : ''}
         ${pvRow('Prazo final', (!isNew && rec.prazoFinal !== r.prazoFinal ? fD(rec.prazoFinal) + ' → ' : '') + fD(r.prazoFinal))}${pvRow('Reincidência', esc(r.reinc))}</div>`;
       if (r.reinc === 'Sim') warn.push(`Reincidência: ${esc(r.forn)} já teve RNC com o motivo "${esc(r.motivo || '(vazio)')}".`);
       if (E.low(r.corretiva) === 'sim' && !r.nivel) warn.push('Com ação corretiva, escolha o nível do prazo para calcular o prazo de fechamento.');
@@ -4682,7 +5156,9 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     ['CAL_FREQUENCIAS', 'Frequência de calibração (meses)', 'INS', 'Calibração › Frequência', [['INS', 'freq']]],
     ['CAL_EMAILS', 'E-mails de aviso', 'INS', 'Destinatários do alerta de calibração', []]];
   const CFG_PARAMS_RNCC = [['RNCC_PRAZO_CONTENCAO', 'Prazo de contenção (dias úteis)'], ['RNCC_PRAZO_RESPOSTA', 'Prazo para responder ao cliente (dias úteis)'], ['RNCC_PRAZO_FINAL', 'Prazo final (dias úteis)']];
-  const CFG_PARAMS = [['PRAZO_DISPOSICAO', 'Prazo de disposição (dias úteis)'], ['PRAZO_TOMAR_ACAO', 'Prazo para tomar ação (dias úteis)'], ['PRAZO_FINAL_DIAS', 'Prazo final (dias úteis)'], ['NIVEL_PADRAO', 'Nível Padrão (dias úteis)'], ['NIVEL_ESTENDIDO', 'Nível Estendido (dias úteis)'], ['NIVEL_COMPLEXO', 'Nível Complexo (dias úteis)'], ['CAL_DIAS_AVISO', 'Calibração: dias de antecedência do aviso']];
+  /* valor efetivo do parâmetro (os horários do expediente têm padrão 7h e 17h) */
+  const pval = (c, n) => (n === 'EXP_INICIO' ? (typeof c[n] === 'number' ? c[n] : (c[n] === null ? null : 7)) : n === 'EXP_FIM' ? (c[n] === null ? null : typeof c[n] === 'number' ? c[n] : 17) : (c[n] == null ? null : c[n]));
+  const CFG_PARAMS = [['PRAZO_DISPOSICAO', 'Prazo de disposição (dias úteis · cada dia = 24 h, 2 = 48 h)'], ['EXP_INICIO', 'Expediente: início (hora em que o prazo volta a contar depois de fim de semana ou feriado)'], ['EXP_FIM', 'Expediente: fim (prazo que cair depois desse horário vence nesse horário · vazio = sem ajuste)'], ['PRAZO_TOMAR_ACAO', 'Prazo para tomar ação (dias úteis)'], ['PRAZO_FINAL_DIAS', 'Prazo final (dias úteis)'], ['NIVEL_PADRAO', 'Nível Padrão (dias úteis)'], ['NIVEL_ESTENDIDO', 'Nível Estendido (dias úteis)'], ['NIVEL_COMPLEXO', 'Nível Complexo (dias úteis)'], ['CAL_DIAS_AVISO', 'Calibração: dias de antecedência do aviso']];
   function easter(y) { const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451), mo = Math.floor((h + l - 7 * m + 114) / 31), da = ((h + l - 7 * m + 114) % 31) + 1; return E.serialFromYMD(y, mo, da); }
   function feriadosDoAno(y) {
     const p = easter(y), d = (m, dd) => E.serialFromYMD(y, m, dd);
@@ -4697,7 +5173,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       ${FUNCOES.map(([k]) => `<td class="ctr"><input type="checkbox" class="p-f" data-f="${k}" ${(p.funcoes || []).includes(k) ? 'checked' : ''}${dis} aria-label="${k}"></td>`).join('')}<td>${ro ? '' : '<button class="btn small ghost p-del" type="button" aria-label="Remover pessoa">✕</button>'}</td></tr>`;
   }
   VIEWS.config = (main) => {
-    const c = S.model.cfg, ro = DB.admin === false;
+    const mode = cfgMode(), c = S.model.cfg, ro = mode === 'ver', roA = mode !== 'admin';
     const ta = (id, lines) => `<textarea id="${id}" spellcheck="false" ${ro ? 'disabled' : ''}>${esc(lines.join('\n'))}</textarea>`;
     const item = ([n, l, , use]) => `<div class="cfgitem" data-cfg="${n}"><b>${esc(l)}</b><span class="use">Usado em: ${esc(use)} · <span class="cnt">${(c[n] || []).length}</span> itens</span>${ta('cfg-' + n, (c[n] || []).map(String))}</div>`;
     const fixed = (title, vals, why) => `<div class="cfgitem fixed"><b>${esc(title)}</b><span class="use">Opções fixas: ${esc(why)}</span><div class="chips">${vals.map((v) => `<span class="chip off">${esc(v)}</span>`).join(' ')}</div></div>`;
@@ -4706,7 +5182,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const y0 = E.ymd(S.today).y;
     const pes = (c.PESSOAS || []);
     main.innerHTML = `<div class="view">${head('Configurações', 'Listas e parâmetros usados pelos formulários. Um item por linha. As mudanças valem para toda a equipe assim que você salvar.', ro ? '' : '<button class="btn primary" type="button" id="cfg-save">Salvar configurações</button>')}
-      ${ro ? '<div class="readonly">' + esc(TXT.cfgRo) + '</div>' : ''}
+      ${ro ? '<div class="readonly">' + esc(TXT.cfgRo) + '</div>' : mode === 'edita' ? '<div class="readonly">Você pode alterar as listas, os feriados, os tipos de equipamento e os e-mails dos fornecedores e dos setores. Parâmetros de prazo, pessoas e logo só os administradores alteram.</div>' : ''}
       <section class="sec">${band('GERAL', 'Geral — vale para todos os módulos')}<div class="block"><div class="body">
         <div class="cfg">${lists('GERAL')}
           <div class="cfgitem" data-cfg="FERIADOS"><b>Feriados</b><span class="use">Prazos de RNC em dias úteis · um por linha, dd/mm/aaaa</span>${ta('cfg-FERIADOS', (c.GER_FERIADOS || []).slice().sort((a, b) => a - b).map((s) => ferLine(s, nm[s])))}
@@ -4714,8 +5190,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
         </div>
         <div class="fsec"><h3>Pessoas (${pes.length})</h3>
           <p class="use" style="margin:0">Uma linha por pessoa. As funções marcadas definem em quais listas o nome aparece: Conferido por (lotes), Emissor e Comprador (RNC), Responsável pela análise (calibração). O e-mail do comprador entra no texto de cobrança da RNC.</p>
-          <div class="formfoot"><input class="inp" id="p-busca" type="search" placeholder="Buscar pessoa" style="max-width:260px">${ro ? '' : '<button class="btn small" type="button" id="p-add">Adicionar pessoa</button>'}</div>
-          <div class="twrap"><table class="t ptab"><thead><tr><th class="nosort">Nome</th><th class="nosort">Setor</th><th class="nosort">Filial</th><th class="nosort">E-mail</th>${FUNCOES.map(([, l]) => `<th class="nosort ctr">${esc(l)}</th>`).join('')}<th class="nosort"></th></tr></thead><tbody id="p-body">${pes.map((p, i) => pessoaRow(p, i, ro)).join('')}</tbody></table></div>
+          <div class="formfoot"><input class="inp" id="p-busca" type="search" placeholder="Buscar pessoa" style="max-width:260px">${roA ? '' : '<button class="btn small" type="button" id="p-add">Adicionar pessoa</button>'}</div>
+          <div class="twrap"><table class="t ptab"><thead><tr><th class="nosort">Nome</th><th class="nosort">Setor</th><th class="nosort">Filial</th><th class="nosort">E-mail</th>${FUNCOES.map(([, l]) => `<th class="nosort ctr">${esc(l)}</th>`).join('')}<th class="nosort"></th></tr></thead><tbody id="p-body">${pes.map((p, i) => pessoaRow(p, i, roA)).join('')}</tbody></table></div>
         </div>
         <div class="fsec" id="cfg-fornmail"><h3>E-mails dos fornecedores (${Object.keys(c.FORN_EMAILS || {}).length})</h3>
           <p class="use" style="margin:0">Usados no botão “E-mail ao fornecedor” dos Alertas (lotes sem certificado). Para mais de um e-mail, separe com vírgula.</p>
@@ -4723,19 +5199,26 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
           <datalist id="dl-fe">${optList(fornList())}</datalist>
           <div class="twrap"><table class="t ptab"><thead><tr><th class="nosort">Fornecedor</th><th class="nosort">E-mail(s)</th><th class="nosort"></th></tr></thead><tbody id="fe-body">${Object.entries(c.FORN_EMAILS || {}).sort((a, b) => a[0].localeCompare(b[0], 'pt-BR')).map(([n, e]) => feRow(n, e, ro)).join('')}</tbody></table></div>
         </div>
+        <div class="fsec" id="cfg-setormail"><h3>E-mails por setor (${Object.keys(c.SETOR_EMAILS || {}).length})</h3>
+          <p class="use" style="margin:0">Usados na cobrança da RNC de fornecedor: o setor responsável da RNC já sugere estes e-mails. Para mais de um e-mail, separe com vírgula.</p>
+          ${ro ? '' : '<div class="formfoot"><button class="btn small" type="button" id="se-add">Adicionar setor</button></div>'}
+          <datalist id="dl-se">${optList(cfgL('GER_SETORES'))}</datalist>
+          <div class="twrap"><table class="t ptab"><thead><tr><th class="nosort">Setor</th><th class="nosort">E-mail(s)</th><th class="nosort"></th></tr></thead><tbody id="se-body">${Object.entries(c.SETOR_EMAILS || {}).sort((a, b) => a[0].localeCompare(b[0], 'pt-BR')).map(([n, e]) => feRow(n, e, ro, 'dl-se', 'nome do setor')).join('')}</tbody></table></div>
+          <label class="field" style="max-width:640px"><span>Cópia nas cobranças de RNC atrasada (ex.: gestor)</span><input class="inp" id="cfg-ccatraso" value="${esc(c.RNC_CC_ATRASO || '')}" placeholder="gestor@acosvital.com.br" ${ro ? 'disabled' : ''}></label>
+        </div>
         <div class="fsec" id="cfg-logo-sec"><h3>Logo da empresa</h3>
           <p class="use" style="margin:0">Aparece no menu, na tela de entrada e no cabeçalho do Relatório mensal. PNG, JPG ou SVG — a Central reduz o tamanho automaticamente. Vale na hora para toda a equipe.</p>
-          <div class="cfg-logo"><div class="lp">${DB.logo ? `<img src="${DB.logo}" alt="Logo atual">` : '<span class="muted">sem logo</span>'}</div>${ro ? '' : `<input type="file" id="logo-file" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden><button class="btn small" type="button" id="logo-up">${DB.logo ? 'Trocar logo' : 'Enviar logo'}</button>${DB.logo ? '<button class="btn small ghost" type="button" id="logo-del">Remover logo</button>' : ''}`}</div>
+          <div class="cfg-logo"><div class="lp">${DB.logo ? `<img src="${DB.logo}" alt="Logo atual">` : '<span class="muted">sem logo</span>'}</div>${roA ? '' : `<input type="file" id="logo-file" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden><button class="btn small" type="button" id="logo-up">${DB.logo ? 'Trocar logo' : 'Enviar logo'}</button>${DB.logo ? '<button class="btn small ghost" type="button" id="logo-del">Remover logo</button>' : ''}`}</div>
         </div>
       </div></div></section>
       <section class="sec">${band('AV', 'Lotes (AV)')}<div class="block"><div class="body"><div class="cfg">${lists('AV')}${fixed('Retrabalho', ['Sim', 'Não'], 'Sim/Não')}${fixed('Resultado da inspeção', ['Aprovado', 'Reprovado', 'Em análise'], 'lote novo já vem como Aprovado')}</div></div></div></section>
       <section class="sec">${band('SERV', 'Serviços')}<div class="block"><div class="body"><div class="cfg">${lists('SERV')}</div></div></div></section>
       <section class="sec">${band('RNC', 'RNC de fornecedor')}<div class="block"><div class="body"><div class="cfg">${lists('RNC')}
-        <div class="cfgitem" data-cfg="PARAMS"><b>Parâmetros de prazo</b><span class="use">Dias de cada prazo (os nomes dos níveis são fixos)</span>${CFG_PARAMS.map(([n, l]) => `<label class="field"><span>${esc(l)}</span><input id="cfgp-${n}" type="number" min="0" step="1" value="${esc(c[n] == null ? '' : c[n])}" ${ro ? 'disabled' : ''}></label>`).join('')}</div>
+        <div class="cfgitem" data-cfg="PARAMS"><b>Parâmetros de prazo</b><span class="use">Dias de cada prazo (os nomes dos níveis são fixos)</span>${CFG_PARAMS.map(([n, l]) => `<label class="field"><span>${esc(l)}</span><input id="cfgp-${n}" type="number" min="0" step="1" value="${esc(pval(c, n) == null ? '' : pval(c, n))}" ${roA ? 'disabled' : ''}></label>`).join('')}</div>
         ${fixed('Nível do prazo para fechar', ['Padrão', 'Estendido', 'Complexo'], 'controlam o cálculo do prazo; os dias ficam em Parâmetros')}${fixed('Ação corretiva? · Cancelar RNC?', ['Sim', 'Não'], 'Sim/Não')}
       </div></div></div></section>
       <section class="sec">${band('RNCC', 'RNC de cliente — reclamações')}<div class="block"><div class="body"><div class="cfg">${lists('RNCC')}
-        <div class="cfgitem" data-cfg="PARAMS-RNCC"><b>Parâmetros de prazo</b><span class="use">Contados a partir da abertura</span>${CFG_PARAMS_RNCC.map(([n, l]) => `<label class="field"><span>${esc(l)}</span><input id="cfgp-${n}" type="number" min="0" step="1" value="${esc(c[n] == null ? '' : c[n])}" ${ro ? 'disabled' : ''}></label>`).join('')}</div>
+        <div class="cfgitem" data-cfg="PARAMS-RNCC"><b>Parâmetros de prazo</b><span class="use">Contados a partir da abertura</span>${CFG_PARAMS_RNCC.map(([n, l]) => `<label class="field"><span>${esc(l)}</span><input id="cfgp-${n}" type="number" min="0" step="1" value="${esc(c[n] == null ? '' : c[n])}" ${roA ? 'disabled' : ''}></label>`).join('')}</div>
         ${fixed('Gravidade', ['Baixa', 'Média', 'Alta'], 'Baixa/Média/Alta')}${fixed('Procedente?', ['Em análise', 'Sim', 'Não'], 'usadas nos indicadores')}${fixed('Origem da causa', ['Interna', 'Fornecedor', 'Transporte', 'Cliente (uso/aplicação)'], '“Fornecedor” liga a RNC de fornecedor')}${fixed('Eficácia', ['Em verificação', 'Eficaz', 'Não eficaz'], 'verificação da ação corretiva')}
       </div></div></div></section>
       <section class="sec">${band('INS', 'Calibração de instrumentos')}<div class="block"><div class="body"><div class="cfg">${lists('INS')}
@@ -4750,6 +5233,11 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     feb.addEventListener('input', (e) => dirty(e.target));
     feb.addEventListener('click', (e) => { const b = e.target.closest('.fe-del'); if (b) { const tr = b.closest('tr'); dirty(tr.parentNode); tr.remove(); } });
     const fea = $('#fe-add'); if (fea) fea.onclick = () => { feb.insertAdjacentHTML('afterbegin', feRow('', '', false)); dirty(feb); feb.querySelector('.fe-n').focus(); };
+    const seb = $('#se-body');
+    seb.addEventListener('input', (e) => dirty(e.target));
+    seb.addEventListener('click', (e) => { const b = e.target.closest('.fe-del'); if (b) { const tr = b.closest('tr'); dirty(tr.parentNode); tr.remove(); } });
+    const sea = $('#se-add'); if (sea) sea.onclick = () => { seb.insertAdjacentHTML('afterbegin', feRow('', '', false, 'dl-se', 'nome do setor')); dirty(seb); seb.querySelector('.fe-n').focus(); };
+    $('#cfg-ccatraso').addEventListener('input', (e) => dirty(e.target));
     wireLogo();
     if (S.cfgFocus) { const el = $(S.cfgFocus === 'FORN_EMAILS' ? '#cfg-fornmail' : '#' + S.cfgFocus); S.cfgFocus = null; if (el) setTimeout(() => el.scrollIntoView({ block: 'start', behavior: 'smooth' }), 60); }
     $('#p-body').addEventListener('click', (e) => { const b = e.target.closest('.p-del'); if (b) { const tr = b.closest('tr'); dirty(tr); tr.remove(); } });
@@ -4766,14 +5254,14 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const sv = $('#cfg-save'); if (sv) sv.onclick = () => saveConfig(false);
     wireReset();
   };
-  function feRow(n, e, ro) { const dis = ro ? ' disabled' : ''; return `<tr><td><input class="inp fe-n" list="dl-fe" value="${esc(n)}" placeholder="nome do fornecedor"${dis}></td><td><input class="inp fe-e" value="${esc(e)}" placeholder="compras@fornecedor.com.br"${dis}></td><td>${ro ? '' : '<button class="btn small ghost fe-del" type="button" aria-label="Remover">✕</button>'}</td></tr>`; }
-  function readFornEmails() {
-    const out = [], errs = [], seen = new Set();
-    $$('#fe-body tr').forEach((tr) => {
+  function feRow(n, e, ro, dl, ph) { const dis = ro ? ' disabled' : ''; return `<tr><td><input class="inp fe-n" list="${dl || 'dl-fe'}" value="${esc(n)}" placeholder="${ph || 'nome do fornecedor'}"${dis}></td><td><input class="inp fe-e" value="${esc(e)}" placeholder="compras@fornecedor.com.br"${dis}></td><td>${ro ? '' : '<button class="btn small ghost fe-del" type="button" aria-label="Remover">✕</button>'}</td></tr>`; }
+  function readFornEmails(body, what) {
+    const out = [], errs = [], seen = new Set(), W = what || 'Fornecedor';
+    $$((body || '#fe-body') + ' tr').forEach((tr) => {
       const nome = tr.querySelector('.fe-n').value.trim().replace(/\s+/g, ' '), email = tr.querySelector('.fe-e').value.trim().replace(/\s*[;,]\s*/g, ', ');
       if (!nome && !email) return;
-      if (!nome) { errs.push('E-mail sem fornecedor: ' + email); return; }
-      const k = E.key(nome); if (seen.has(k)) { errs.push('Fornecedor repetido nos e-mails: ' + nome); return; } seen.add(k);
+      if (!nome) { errs.push('E-mail sem ' + W.toLowerCase() + ': ' + email); return; }
+      const k = E.key(nome); if (seen.has(k)) { errs.push(W + ' repetido nos e-mails: ' + nome); return; } seen.add(k);
       email.split(', ').filter(Boolean).forEach((m) => { if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)) errs.push('E-mail inválido: ' + m); });
       out.push({ nome, email });
     });
@@ -4843,10 +5331,13 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     return n;
   }
   async function saveConfig(force) {
-    const c = S.model.cfg, up = {}, errs = [], warns = [];
+    const c = S.model.cfg, up = {}, errs = [], warns = [], roA = cfgMode() !== 'admin';
+    /* seções de módulos ocultos para a pessoa não aparecem na tela: o que não está na tela fica como está */
+    const has = (id) => !!$('#' + id);
     const lines = (id) => $('#' + id).value.split('\n').map((s) => s.trim()).filter(Boolean);
     const listas = {};
     CFG_LISTS.forEach(([n, l, , , pairs]) => {
+      if (!has('cfg-' + n)) return;
       let v = lines('cfg-' + n);
       if (n === 'CAL_FREQUENCIAS') v = v.map((s) => (/^\d+$/.test(s) ? +s : s));
       const seen = new Set(); v = v.filter((s) => { const k = E.low(s); if (seen.has(k)) return false; seen.add(k); return true; });
@@ -4862,22 +5353,28 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     fer.sort((a, b) => a - b);
     const oldNomes = (S.model.cfgDoc && S.model.cfgDoc.feriadosNomes) || {};
     if (JSON.stringify(fer) !== JSON.stringify((c.GER_FERIADOS || []).slice().sort((a, b) => a - b)) || JSON.stringify(nomes) !== JSON.stringify(oldNomes)) { up.feriados = fer; up.feriadosNomes = nomes; }
-    const tipos = [];
-    lines('cfg-TIPOS').forEach((s) => { const p = s.split(';'); const tipo = p[0].trim(); const fx = (p[1] || '').trim().replace(',', '.'); if (!tipo) return; if (fx && !isFinite(+fx)) errs.push('Faixa inválida em: ' + s); tipos.push({ tipo, faixa: fx === '' ? null : +fx }); });
-    if (JSON.stringify(tipos) !== JSON.stringify((c.CAL_TIPOS || []).map((t) => ({ tipo: t.tipo, faixa: t.faixa == null ? null : t.faixa })))) {
+    const tipos = [], hasTipos = has('cfg-TIPOS');
+    if (hasTipos) lines('cfg-TIPOS').forEach((s) => { const p = s.split(';'); const tipo = p[0].trim(); const fx = (p[1] || '').trim().replace(',', '.'); if (!tipo) return; if (fx && !isFinite(+fx)) errs.push('Faixa inválida em: ' + s); tipos.push({ tipo, faixa: fx === '' ? null : +fx }); });
+    if (hasTipos && JSON.stringify(tipos) !== JSON.stringify((c.CAL_TIPOS || []).map((t) => ({ tipo: t.tipo, faixa: t.faixa == null ? null : t.faixa })))) {
       up.tipos = tipos;
       const now = new Set(tipos.map((t) => E.low(t.tipo)));
       (c.CAL_TIPOS || []).filter((t) => !now.has(E.low(t.tipo))).forEach((t) => { const u = usageOf([['INS', 'tipo']], t.tipo); if (u) warns.push(`Tipo de equipamento: “${t.tipo}” aparece em ${u} instrumento(s)`); });
     }
     const params = {};
-    CFG_PARAMS.concat(CFG_PARAMS_RNCC).forEach(([n]) => { const s = $('#cfgp-' + n).value.trim(); const v = s === '' ? null : +s; if (s !== '' && (!isFinite(v) || v < 0)) errs.push('Parâmetro inválido: ' + n); if (v !== (c[n] == null ? null : c[n])) params[n] = v; });
-    if (Object.keys(params).length) up.params = params;
+    CFG_PARAMS.concat(CFG_PARAMS_RNCC).forEach(([n]) => { if (!has('cfgp-' + n)) return; const s = $('#cfgp-' + n).value.trim(); const v = s === '' ? null : +s; if (s !== '' && (!isFinite(v) || v < 0)) errs.push('Parâmetro inválido: ' + n); if (/^EXP_/.test(n) && v != null && v > 24) errs.push('Horário do expediente deve ser de 0 a 24.'); if (v !== pval(c, n)) params[n] = v; });
+    if (Object.keys(params).length && !roA) up.params = params;
     const FE = readFornEmails(); errs.push(...FE.errs);
     const oldFE = Object.entries(c.FORN_EMAILS || {}).map(([nome, email]) => ({ nome, email })).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
     if (JSON.stringify(FE.out) !== JSON.stringify(oldFE)) up.fornEmails = FE.out;
+    const SE = readFornEmails('#se-body', 'Setor'); errs.push(...SE.errs);
+    const oldSE = Object.entries(c.SETOR_EMAILS || {}).map(([nome, email]) => ({ nome, email })).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    if (JSON.stringify(SE.out) !== JSON.stringify(oldSE)) up.setorEmails = SE.out;
+    const ccA = $('#cfg-ccatraso').value.trim().replace(/\s*[;,]\s*/g, ', ');
+    ccA.split(', ').filter(Boolean).forEach((m) => { if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)) errs.push('E-mail inválido: ' + m); });
+    if (ccA !== (c.RNC_CC_ATRASO || '')) up.rncCcAtraso = ccA;
     const P = readPessoas(); errs.push(...P.errs);
     const oldP = c.PESSOAS || [];
-    if (JSON.stringify(P.out) !== JSON.stringify(oldP)) {
+    if (!roA && JSON.stringify(P.out) !== JSON.stringify(oldP)) {
       up.pessoas = P.out;
       const fmap = { conferente: [['AV', 'conf']], emissor: [['RNC', 'emissor']], comprador: [['RNC', 'comprador']], resp_cal: [['INS', 'resp']] };
       oldP.forEach((op) => { const np = P.out.find((x) => E.key(x.nome) === E.key(op.nome)); (op.funcoes || []).forEach((f) => { if (!np || !(np.funcoes || []).includes(f)) { const u = usageOf(fmap[f], op.nome); if (u) warns.push(`Pessoa “${op.nome}” (${FUNCOES.find((x) => x[0] === f)[1]}) aparece em ${NF.format(u)} registro(s)`); } }); });
@@ -4893,7 +5390,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     try {
       const ref = DB.db.doc('cfg/main');
       if (DB.cfg) await ref.update(up); else await ref.set(up);
-      const what = [].concat(Object.keys(up.listas || {}).map((n) => (CFG_LISTS.find((l) => l[0] === n) || [n, n])[1]), up.feriados ? ['Feriados'] : [], up.tipos ? ['Tipos de equipamento'] : [], up.params ? ['Parâmetros de prazo'] : [], up.pessoas ? ['Pessoas'] : [], up.fornEmails ? ['E-mails dos fornecedores'] : []);
+      const what = [].concat(Object.keys(up.listas || {}).map((n) => (CFG_LISTS.find((l) => l[0] === n) || [n, n])[1]), up.feriados ? ['Feriados'] : [], up.tipos ? ['Tipos de equipamento'] : [], up.params ? ['Parâmetros de prazo'] : [], up.pessoas ? ['Pessoas'] : [], up.fornEmails ? ['E-mails dos fornecedores'] : [], up.setorEmails ? ['E-mails por setor'] : [], up.rncCcAtraso != null ? ['Cópia de RNC atrasada'] : []);
       logEntry('GERAL', 'cfg', 'alterado', 'Configurações: ' + what.join(', '), null);
       toast('Configurações salvas: ' + what.join(', ') + '.');
       S.cfgDirty = false; await sleep(250); S.stale = false; render(); updateChrome();
@@ -5876,6 +6373,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   /* ================= exportar tudo ================= */
   function exportAll() {
     if (!S.model) return Promise.resolve(false);
+    if (SCR('exportar') === 'nao') { toast('Exportar tudo não está liberado para você.', true); return Promise.resolve(false); }
     const M = S.model, wb = XLSX.utils.book_new();
     const sheet = (name, title, headRow, rows, widths) => {
       const ws = XLSX.utils.aoa_to_sheet([[title], headRow].concat(rows));
@@ -5919,7 +6417,11 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       if (a === 'msg-rncc') { const x = findRec('RNCC', key); if (x) textModal('Cobrança interna da ' + x.num, rnccMsg(x)); return; }
       if (a === 'edit-rncc') { const x = findRec('RNCC', key); S.form = 'rnccupd'; S.pickPreset = x && x.num; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); return; }
       if (a === 'rncc-to-rncf') { const x = findRec('RNCC', key); if (!x) return; S.form = 'rnc'; S.editKey = null; S.linkBack = x.key; S.prefill = { H: x.cliente, I: x.nf ? '' : '', J: x.pv == null ? '' : String(x.pv), Z: 'Originada da ' + x.num + (x.desc ? ': ' + x.desc : '') }; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); return; }
-      if (a === 'msg-rnc') { const x = findRec('RNC', key); if (x) textModal('Cobrança da ' + x.num, rncMsg(x)); return; }
+      if (a === 'msg-rnc') { const x = findRec('RNC', key); if (x) rncMailDialog(x); return; }
+      if (a === 'rnc-ret') { const x = findRec('RNC', key); if (x) rncRetDialog(x); return; }
+      if (a === 'rnc-resumo') { rncResumoDialog(); return; }
+      if (a === 'rnc-ver') { S.f.alert = 'venc'; if (!rncOpen().some((o) => o.venc)) S.f.alert = 'h24'; closeLayer(); go('alertas'); return; }
+      if (a === 'rnc-ciente') { lsSet('cq-rnc-ciente', JSON.stringify({ d: S.today, k: rncOpen().filter((o) => o.venc).map((o) => o.x.key) })); refreshBanner(); return; }
       if (a === 'av-serie') { S.avSerie = key; render(); return; }
       if (a === 'cert-baixa') { const gr = S.alertGroups[+key]; if (gr) baixaCert(gr); return; }
       if (a === 'cert-mail') { const gr = S.alertGroups[+key]; if (gr) mailForn(gr); return; }
@@ -5962,7 +6464,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   const startV = location.hash.replace('#', '');
   if (startV && VIEWS[startV]) S.view = startV;
   $$('#nav a').forEach((a) => { if (a.dataset.v === S.view) a.setAttribute('aria-current', 'page'); });
-  setInterval(() => { if (S.model && E.todaySerial() !== S.today) scheduleRebuild(); }, 60000);
+  setInterval(() => { if (S.model && E.todaySerial() !== S.today) scheduleRebuild(); else refreshBanner(); }, 60000);
   boot();
   window.__CQ = { S, DB };
 })();
