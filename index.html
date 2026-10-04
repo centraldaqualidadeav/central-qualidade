@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Central da Qualidade Aços Vital</title>
+<meta name="theme-color" content="#1b211e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Central CQ">
 <style id="app-css">
 /* Layout: trilho lateral de módulos (cores da planilha) + área de trabalho; faixas coloridas por módulo como no PAINEL */
 :root {
@@ -140,11 +146,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 :root[data-theme="dark"] .band { color: #0f1211; }
 
 /* ---------- KPIs ---------- */
-.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 10px; }
 .kpi { position: relative; display: grid; gap: 4px; align-content: start; padding: 12px 14px 12px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); text-align: left; cursor: default; }
 button.kpi { cursor: pointer; }
 button.kpi:hover { border-color: var(--ink-3); }
-.kpi .lbl { font: 600 11px/1.25 var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.kpi .lbl { font: 600 11px/1.25 var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); min-height: 2.5em; padding-right: 14px; }
 .kpi .val { font: 700 40px/0.95 var(--f-display); font-variant-numeric: tabular-nums; letter-spacing: .01em; }
 .kpi .sub { font-size: 12px; color: var(--ink-3); }
 .kpi .tag { position: absolute; top: 12px; right: 12px; width: 8px; height: 8px; border-radius: 2px; background: var(--c, var(--geral)); }
@@ -401,6 +407,38 @@ table.ptab .p-setor { min-width: 150px; } table.ptab .p-filial { min-width: 175p
 .view.tuover { outline: 2px dashed var(--usi); outline-offset: 6px; border-radius: 8px; }
 .view.tuover .drop { border-color: var(--usi); background: color-mix(in srgb, var(--usi) 6%, var(--surface)); }
 
+/* v3: logo, lançamento de vários lotes, etiqueta */
+.logocard { border: 1px solid var(--line); border-radius: var(--r); padding: 12px; background: #fff; display: grid; place-items: center; }
+.logocard img { display: block; max-width: 100%; max-height: 96px; object-fit: contain; }
+@media (max-width: 860px) { .logocard { display: none !important; } }
+.linkbtn { background: none; border: 0; padding: 2px 0; color: var(--info); font: 600 12.5px/1.3 var(--f-body); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; justify-self: start; }
+.linkbtn:hover { color: var(--ink); }
+.avm-items { display: grid; gap: 12px; }
+.avitem { border: 1px solid var(--line); border-left: 3px solid var(--av); border-radius: var(--r); padding: 10px 12px 12px; display: grid; gap: 8px; background: var(--surface); }
+.avitem header { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.avitem header .sp { flex: 1; }
+.avitem [hidden] { display: none !important; }
+.avm-done { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.chart h3 .seg.mini { margin-left: auto; }
+.chart h3:has(.seg.mini) { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.seg.mini button { padding: 3px 9px; font-size: 12px; }
+.lbprev { display: grid; place-items: center; padding: 14px; background: var(--sunken); border-radius: var(--r); overflow: auto; }
+.lbprev .lbsheet { background: #fff; color: #000; box-shadow: 0 1px 6px rgba(0,0,0,.25); }
+.lbprev .lab { display: flex; gap: 2mm; align-items: center; overflow: hidden; line-height: 1.15; font-family: "Arial Narrow", Arial, Helvetica, sans-serif; }
+.cfg-logo { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.cfg-logo .lp { width: 220px; height: 90px; border: 1px dashed var(--line-2); border-radius: var(--r); display: grid; place-items: center; background: #fff; }
+.cfg-logo .lp img { max-width: 200px; max-height: 76px; object-fit: contain; }
+.rephead { display: block; }
+.replogo { float: right; max-height: 56px; max-width: 220px; object-fit: contain; margin: 0 0 8px 16px; }
+.seal { display: block; color: var(--ink); }
+.allok { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+.allok .seal { width: 56px; height: 56px; flex: none; }
+.allok b { display: block; font: 700 20px/1.1 var(--f-display); text-transform: uppercase; }
+.allok span { color: var(--ink-2); font-size: 13px; }
+/* carregamento com o anel do selo */
+.spin { border: 0 !important; border-radius: 50%; background: conic-gradient(var(--av) 0 54deg, transparent 54deg 60deg, var(--serv) 60deg 114deg, transparent 114deg 120deg, var(--rnc) 120deg 174deg, transparent 174deg 180deg, var(--rncc) 180deg 234deg, transparent 234deg 240deg, var(--cal) 240deg 294deg, transparent 294deg 300deg, var(--geral) 300deg 354deg, transparent 354deg 360deg);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px)); animation: sp 1.1s linear infinite; }
+
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
 #fb-gate[hidden] { display: none; }
@@ -412,6 +450,18 @@ table.ptab .p-setor { min-width: 150px; } table.ptab .p-filial { min-width: 175p
 .fbme { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 12.5px; margin-top: 8px; }
 .fbme[hidden] { display: none; }
 .fbme > span:first-child { font-weight: 600; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 860px) { .railfoot { display: flex !important; order: 3; width: 100%; justify-content: flex-end; } .railfoot #exp-all { display: none; } .fbme { margin-top: 0; } }
+.ufrm { display: grid; gap: 12px; }
+.acc-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; font-size: 12px; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
+.acc-all { font-weight: 500; }
+.acc-tab { display: grid; gap: 4px; margin-bottom: 6px; }
+.acc-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 4px 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.acc-row > span { font-size: 13.5px; font-weight: 500; }
+.acc-row .seg button { padding: 5px 10px; font-size: 12.5px; }
+.accsum { font-size: 12.5px; line-height: 1.45; }
+#fb-gate .gtop { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
+#fb-gate .gtop .seal { width: 88px; height: 88px; }
+#fb-gate .glogo { max-height: 64px; max-width: 200px; object-fit: contain; }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 </head>
@@ -425,10 +475,9 @@ table.ptab .p-setor { min-width: 150px; } table.ptab .p-filial { min-width: 175p
     </div>
     <div class="dbcard" id="dbcard">
       <span class="st"><i class="dot" id="db-dot"></i><span id="db-st">Conectando…</span></span>
-      <span class="meta" id="db-meta"></span>
-      <span class="meta" id="db-perm"></span>
       <button class="btn small" type="button" id="db-stale" hidden>Há dados novos · atualizar tela</button>
     </div>
+    <div class="logocard" id="logocard" hidden><img id="logo-img" alt="Logo da empresa"></div>
     <nav class="nav" id="nav">
       <span class="grp">Visão geral</span>
       <a href="#painel" data-v="painel" style="--c:var(--geral)"><span class="sw"></span>Painel</a>
@@ -2103,14 +2152,18 @@ re2js/build/index.js:
   const SDK = window.__FBSDK;
   const CONF = window.CQ_FIREBASE_CONFIG;
   const OWNER = String(window.CQ_OWNER || '').toLowerCase();
-  const PERFIS = { consulta: 'Consulta', lancamento: 'Lançamento', admin: 'Administrador', dono: 'Dono' };
+  const PERFIS = { usuario: 'Usuário', consulta: 'Usuário', lancamento: 'Usuário', admin: 'Administrador', dono: 'Dono' };
+  const NIVEIS = [['nao', 'Não vê'], ['ver', 'Só consulta'], ['lanca', 'Lança']];
+  const SEAL = '<svg class="seal" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke-width="10"><path d="M52.7 12.1A38 38 0 0 1 81.5 28.8" stroke="var(--av)"/><path d="M84.2 33.3A38 38 0 0 1 84.2 66.7" stroke="var(--serv)"/><path d="M81.5 71.2A38 38 0 0 1 52.7 87.9" stroke="var(--rnc)"/><path d="M47.3 87.9A38 38 0 0 1 18.5 71.2" stroke="var(--rncc)"/><path d="M15.8 66.7A38 38 0 0 1 15.8 33.3" stroke="var(--cal)"/><path d="M18.5 28.8A38 38 0 0 1 47.3 12.1" stroke="var(--geral)"/></g><path d="M35 51 L46 62 L67 39" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  let GATE_LOGO = null;
+  const MODCOLS = ['av', 'serv', 'rnc', 'rncc', 'ins', 'trello', 'acomp', 'tcert', 'tusin'];
   const MODULOS = [['av', 'Lotes (AV)'], ['serv', 'Serviços'], ['rnc', 'RNC Fornecedor'], ['rncc', 'RNC Cliente'], ['ins', 'Calibração'], ['trello', 'Trello Jurong'], ['acomp', 'Acompanhamento Jurong'], ['tcert', 'Trello Certificados'], ['tusin', 'Inspeção Usinagem']];
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   window.CQ_TEXT = {
     noClaude: 'Não foi possível iniciar a Central. Recarregue a página.',
     noDb: 'Entre com sua conta Google para abrir a Central da Qualidade.',
-    ro: 'Seu acesso é só de consulta. Para lançar dados, peça ao administrador da Central para mudar seu perfil em Usuários.',
+    ro: 'Seu acesso aqui é só de consulta. Para lançar, peça ao administrador da Central para liberar este módulo em Usuários.',
     cfgRo: 'Só administradores alteram as configurações. Você pode consultar.',
     cfgDenied: 'Sem permissão para alterar configurações (só administradores).'
   };
@@ -2119,9 +2172,10 @@ re2js/build/index.js:
   const gate = document.createElement('div');
   gate.id = 'fb-gate';
   document.body.appendChild(gate);
+  let gateKind = null, gateExtra = null;
   function showGate(kind, extra) {
-    gate.hidden = false;
-    const brand = '<span class="eyebrow">Aços Vital · Qualidade</span><h2>Central da Qualidade</h2>';
+    gate.hidden = false; gateKind = kind; gateExtra = extra;
+    const brand = `<div class="gtop">${GATE_LOGO ? `<img class="glogo" src="${GATE_LOGO}" alt="Logo da empresa">` : ''}${SEAL}</div><span class="eyebrow">Aços Vital · Qualidade</span><h2>Central da Qualidade</h2>`;
     let body = '';
     if (kind === 'loading') body = '<div class="loading"><span class="spin"></span><span>Verificando seu acesso…</span></div>';
     else if (kind === 'login') body = `<p>Entre com a sua conta Google (Gmail) para acessar.</p><button class="btn primary" type="button" id="fb-login">Entrar com Google</button>${extra ? `<p class="err">${esc(extra)}</p>` : ''}`;
@@ -2139,6 +2193,8 @@ re2js/build/index.js:
   const app = SDK.initializeApp(CONF);
   const auth = SDK.getAuth(app);
   const fs = SDK.initializeFirestore(app, { ignoreUndefinedProperties: true });
+  /* logo da empresa na tela de entrada (o documento do logo é público) */
+  SDK.getDoc(SDK.doc(fs, 'cfg/logo')).then((s) => { if (s.exists() && s.data().img) { GATE_LOGO = s.data().img; if (!gate.hidden && gateKind) showGate(gateKind, gateExtra); } }).catch(() => {});
   const provider = new SDK.GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' });
 
@@ -2198,19 +2254,31 @@ re2js/build/index.js:
     },
     collection(c) {
       const ref = SDK.collection(fs, c);
+      const blocked = () => MODCOLS.includes(c) && lvl(c) === 'nao';
+      const empty = { docs: [], size: 0, empty: true };
       return {
         doc: (id) => db.doc(c + '/' + id),
-        get: () => w(SDK.getDocs(ref).then(wrapQ)),
-        onSnapshot: (cb, err) => SDK.onSnapshot(ref, (q) => cb(wrapQ(q)), (e) => { if (err) err(mapErr(e)); })
+        get: () => (blocked() ? Promise.resolve(empty) : w(SDK.getDocs(ref).then(wrapQ))),
+        onSnapshot: (cb, err) => { if (blocked()) { setTimeout(() => cb(empty), 0); return () => {}; } return SDK.onSnapshot(ref, (q) => cb(wrapQ(q)), (e) => { if (err) err(mapErr(e)); }); }
       };
     }
   };
 
   /* ---------- quem está usando ---------- */
-  const ME = { uid: null, email: '', nome: '', perfil: null, modulos: [] };
+  const ME = { uid: null, email: '', nome: '', perfil: null, acesso: {} };
   const names = {};
-  const canWriteAny = () => ['lancamento', 'admin', 'dono'].includes(ME.perfil);
   const isAdmin = () => ME.perfil === 'admin' || ME.perfil === 'dono';
+  const lvl = (c) => (isAdmin() ? 'lanca' : (ME.acesso[c] || 'nao'));
+  const canWriteAny = () => isAdmin() || MODCOLS.some((c) => lvl(c) === 'lanca');
+  /* cadastros antigos (perfil Consulta/Lançamento + módulos) viram a tabela de acesso por módulo */
+  function acessoDe(d) {
+    const out = {};
+    if (d.acesso && typeof d.acesso === 'object') { MODCOLS.forEach((c) => { out[c] = ['nao', 'ver', 'lanca'].includes(d.acesso[c]) ? d.acesso[c] : 'nao'; }); return out; }
+    const mods = Array.isArray(d.modulos) ? d.modulos : [];
+    MODCOLS.forEach((c) => { out[c] = d.perfil === 'lancamento' ? (!mods.length || mods.includes(c) ? 'lanca' : 'ver') : 'ver'; });
+    return out;
+  }
+  window.CQ_ACCESS = (c) => (MODCOLS.includes(c) ? lvl(c) : 'lanca');
   const userApi = {
     id: async () => ME.uid,
     me: async () => ({ id: ME.uid, name: ME.nome, email: ME.email }),
@@ -2247,12 +2315,12 @@ re2js/build/index.js:
     const email = String(u.email || '').toLowerCase();
     ME.uid = u.uid; ME.email = email; ME.nome = u.displayName || email;
     try {
-      if (email && email === OWNER) { ME.perfil = 'dono'; ME.modulos = []; }
+      if (email && email === OWNER) { ME.perfil = 'dono'; }
       else {
         const s = await SDK.getDoc(SDK.doc(fs, 'usuarios/' + email)).catch(() => null);
         const d = s && s.exists() ? s.data() : null;
         if (!d || d.ativo === false) { showGate('denied', email); return; }
-        ME.perfil = PERFIS[d.perfil] ? d.perfil : 'consulta'; ME.modulos = Array.isArray(d.modulos) ? d.modulos : []; if (d.nome) ME.nome = d.nome;
+        ME.perfil = d.perfil === 'admin' ? 'admin' : 'usuario'; ME.acesso = acessoDe(d); if (d.nome) ME.nome = d.nome;
       }
       names[ME.uid] = ME.nome;
       SDK.setDoc(SDK.doc(fs, 'perfis/' + ME.uid), { nome: ME.nome, email, at: Date.now() }).catch(() => {});
@@ -2281,6 +2349,14 @@ re2js/build/index.js:
     link.innerHTML = '<span class="sw"></span>Usuários';
     nav.appendChild(link);
     const foot = document.querySelector('.railfoot');
+    /* app instalável: registra o service worker e mostra "Instalar app" quando o navegador permitir */
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
+    const inst = document.createElement('button'); inst.type = 'button'; inst.className = 'btn small'; inst.id = 'fb-install'; inst.hidden = true; inst.textContent = 'Instalar app';
+    foot.insertBefore(inst, foot.firstChild);
+    let deferred = null;
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferred = e; inst.hidden = false; });
+    window.addEventListener('appinstalled', () => { inst.hidden = true; deferred = null; A.toast('Central instalada como app.'); });
+    inst.onclick = async () => { if (!deferred) return; deferred.prompt(); try { await deferred.userChoice; } catch (e) { /* cancelado */ } deferred = null; inst.hidden = true; };
     const box = document.createElement('div'); box.className = 'fbme'; box.hidden = true;
     foot.appendChild(box);
     onMe(() => {
@@ -2296,33 +2372,45 @@ re2js/build/index.js:
       if (unsub) return;
       unsub = SDK.onSnapshot(SDK.collection(fs, 'usuarios'), (q) => { users = q.docs.map((d) => Object.assign({ email: d.id }, d.data())); if (A.S.view === 'usuarios' && !document.getElementById('layer').innerHTML) A.render(); }, (e) => { users = []; A.toast('Não foi possível ler os usuários (' + mapErr(e).message + ').', true); });
     }
-    const modName = (m) => (MODULOS.find((x) => x[0] === m) || [m, m])[1];
+    const resumo = (u) => {
+      if (u.perfil === 'admin') return '<b>Tudo</b> (administrador)';
+      const a = acessoDe(u), g = { lanca: [], ver: [] };
+      MODULOS.forEach(([k, l]) => { if (a[k] === 'lanca') g.lanca.push(l); else if (a[k] === 'ver') g.ver.push(l); });
+      const part = (t, l) => (l.length ? `<div><span class="muted">${t}:</span> ${esc(l.length === MODULOS.length ? 'todos os módulos' : l.join(', '))}</div>` : '');
+      return part('Lança', g.lanca) + part('Só consulta', g.ver) || '<span class="muted">nenhum módulo</span>';
+    };
     function form(u) {
-      const novo = !u; u = u || { email: '', nome: '', perfil: 'lancamento', modulos: [], ativo: true };
-      const podeAdmin = ME.perfil === 'dono';
-      A.openModal(novo ? 'Novo usuário' : 'Editar usuário', `
-        <div class="fgrid" style="display:grid;gap:12px">
+      const novo = !u; u = u || { email: '', nome: '', perfil: 'usuario', acesso: Object.fromEntries(MODCOLS.map((c) => [c, 'ver'])), ativo: true };
+      const podeAdmin = ME.perfil === 'dono', ac = acessoDe(u);
+      A.openModal(novo ? 'Liberar novo usuário' : 'Editar usuário', `
+        <div class="ufrm">
           <label class="field"><span>E-mail Google (Gmail) <b>*</b></span><input id="u-email" type="email" value="${esc(u.email)}" ${novo ? '' : 'disabled'} placeholder="nome@gmail.com" autocomplete="off"></label>
           <label class="field"><span>Nome</span><input id="u-nome" value="${esc(u.nome || '')}" placeholder="como aparece no histórico"></label>
           <label class="field"><span>Perfil</span><select id="u-perfil">
-            <option value="consulta" ${u.perfil === 'consulta' ? 'selected' : ''}>Consulta — só vê e exporta</option>
-            <option value="lancamento" ${u.perfil === 'lancamento' ? 'selected' : ''}>Lançamento — lança e edita registros</option>
-            ${podeAdmin || u.perfil === 'admin' ? `<option value="admin" ${u.perfil === 'admin' ? 'selected' : ''}>Administrador — também configurações e usuários</option>` : ''}
+            <option value="usuario" ${u.perfil !== 'admin' ? 'selected' : ''}>Usuário — acesso definido por módulo</option>
+            ${podeAdmin || u.perfil === 'admin' ? `<option value="admin" ${u.perfil === 'admin' ? 'selected' : ''}>Administrador — vê e lança tudo, configurações e usuários</option>` : ''}
           </select></label>
-          <fieldset class="field" id="u-mods-f" style="border:0;padding:0;margin:0"><span>Módulos em que pode lançar <small class="muted">(nenhum marcado = todos)</small></span>
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:4px 12px;margin-top:4px">${MODULOS.map(([k, l]) => `<label style="display:flex;gap:6px;align-items:center;font-size:13px"><input type="checkbox" data-mod="${k}" ${(u.modulos || []).includes(k) ? 'checked' : ''}> ${esc(l)}</label>`).join('')}</div></fieldset>
-          <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="u-ativo" ${u.ativo !== false ? 'checked' : ''}> Acesso ativo</label>
+          <div id="u-acc"><div class="acc-head"><span>Acesso por módulo</span><span class="acc-all">Marcar todos: ${NIVEIS.map(([v, l]) => `<button type="button" class="linkbtn" data-all="${v}">${l}</button>`).join(' · ')}</span></div>
+            <div class="acc-tab" role="table">${MODULOS.map(([k, l]) => `<div class="acc-row" role="row"><span role="cell">${esc(l)}</span><div class="seg" role="radiogroup" aria-label="${esc(l)}">${NIVEIS.map(([v, t]) => `<button type="button" role="radio" data-m="${k}" data-v="${v}" aria-pressed="${ac[k] === v}" aria-checked="${ac[k] === v}">${t}</button>`).join('')}</div></div>`).join('')}</div>
+            <p class="muted" style="margin:0;font-size:12px"><b>Não vê</b>: o módulo some do menu e dos painéis · <b>Só consulta</b>: vê e exporta · <b>Lança</b>: também lança, edita e importa.</p></div>
+          <label class="check"><input type="checkbox" id="u-ativo" ${u.ativo !== false ? 'checked' : ''}> Acesso ativo</label>
         </div>
         <div class="formfoot"><button class="btn primary" type="button" id="u-save">Salvar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
-      const pf = document.getElementById('u-perfil'), mf = document.getElementById('u-mods-f');
-      const sync = () => { mf.hidden = pf.value !== 'lancamento'; }; pf.onchange = sync; sync();
+      const pf = document.getElementById('u-perfil'), accBox = document.getElementById('u-acc');
+      const sync = () => { accBox.hidden = pf.value === 'admin'; }; pf.onchange = sync; sync();
+      const setLvl = (m, v) => accBox.querySelectorAll(`[data-m="${m}"]`).forEach((b) => { const on = b.dataset.v === v; b.setAttribute('aria-pressed', on); b.setAttribute('aria-checked', on); });
+      accBox.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-m]'); if (b) { setLvl(b.dataset.m, b.dataset.v); return; }
+        const a = e.target.closest('[data-all]'); if (a) MODCOLS.forEach((m) => setLvl(m, a.dataset.all));
+      });
       document.getElementById('u-save').onclick = async () => {
         const email = String(document.getElementById('u-email').value || '').trim().toLowerCase();
         if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { A.toast('Informe um e-mail válido.', true); return; }
         if (email === OWNER) { A.toast('Essa é a conta dona da Central; ela já tem acesso total.', true); return; }
         if (novo && (users || []).some((x) => x.email === email)) { A.toast('Esse e-mail já está cadastrado.', true); return; }
-        const d = { nome: document.getElementById('u-nome').value.trim(), perfil: pf.value, modulos: pf.value === 'lancamento' ? Array.from(document.querySelectorAll('[data-mod]:checked')).map((x) => x.dataset.mod) : [], ativo: document.getElementById('u-ativo').checked, _u: Date.now(), _ub: ME.email };
-        try { await SDK.setDoc(SDK.doc(fs, 'usuarios/' + email), d); A.closeLayer(); A.toast(novo ? 'Usuário liberado: ' + email : 'Usuário atualizado.'); }
+        const acesso = {}; MODCOLS.forEach((m) => { const on = accBox.querySelector(`[data-m="${m}"][aria-pressed="true"]`); acesso[m] = on ? on.dataset.v : 'nao'; });
+        const d = { nome: document.getElementById('u-nome').value.trim(), perfil: pf.value === 'admin' ? 'admin' : 'usuario', acesso, ativo: document.getElementById('u-ativo').checked, _u: Date.now(), _ub: ME.email };
+        try { await SDK.setDoc(SDK.doc(fs, 'usuarios/' + email), d); A.closeLayer(); A.toast(novo ? 'Usuário liberado: ' + email : 'Usuário atualizado. A pessoa vê a mudança ao recarregar a página.'); }
         catch (e) { A.toast(mapErr(e).message, true); }
       };
     }
@@ -2345,14 +2433,14 @@ re2js/build/index.js:
       if (!isAdmin()) { main.innerHTML = `<div class="view">${A.head('Usuários', 'Só administradores veem esta tela.')}</div>`; return; }
       listen();
       const L = (users || []).slice().sort((a, b) => (a.ativo === false) - (b.ativo === false) || String(a.nome || a.email).localeCompare(String(b.nome || b.email), 'pt-BR'));
-      const cnt = (p) => L.filter((u) => u.ativo !== false && u.perfil === p).length;
+      const cnt = (p) => L.filter((u) => u.ativo !== false && (p === 'admin' ? u.perfil === 'admin' : u.perfil !== 'admin')).length;
       main.innerHTML = `<div class="view">${A.head('Usuários', 'Quem pode entrar na Central e o que cada pessoa pode fazer. O login é com a conta Google (Gmail) da própria pessoa.', '<button class="btn primary" type="button" id="u-new">Liberar novo usuário</button>')}
-        <div class="kpis">${A.kpiHTML({ l: 'Com acesso', v: A.NF.format(L.filter((u) => u.ativo !== false).length + 1), sub: 'inclui a conta dona' })}${A.kpiHTML({ l: 'Administradores', v: A.NF.format(cnt('admin')) })}${A.kpiHTML({ l: 'Lançamento', v: A.NF.format(cnt('lancamento')) })}${A.kpiHTML({ l: 'Consulta', v: A.NF.format(cnt('consulta')) })}</div>
-        <div class="twrap"><table class="t"><thead><tr><th class="nosort">Nome</th><th class="nosort">E-mail</th><th class="nosort">Perfil</th><th class="nosort">Pode lançar em</th><th class="nosort">Situação</th><th class="nosort"></th></tr></thead><tbody>
+        <div class="kpis">${A.kpiHTML({ l: 'Com acesso', v: A.NF.format(L.filter((u) => u.ativo !== false).length + 1), sub: 'inclui a conta dona' })}${A.kpiHTML({ l: 'Administradores', v: A.NF.format(cnt('admin')) })}${A.kpiHTML({ l: 'Usuários', v: A.NF.format(cnt('usuario')), sub: 'acesso definido por módulo' })}</div>
+        <div class="twrap"><table class="t"><thead><tr><th class="nosort">Nome</th><th class="nosort">E-mail</th><th class="nosort">Perfil</th><th class="nosort">Acesso</th><th class="nosort">Situação</th><th class="nosort"></th></tr></thead><tbody>
           <tr><td><b>Conta dona</b></td><td class="mono">${esc(OWNER)}</td><td>Dono</td><td>Tudo</td><td><span class="chip ok"><i>✓</i>Ativo</span></td><td></td></tr>
-          ${users == null ? '<tr><td colspan="6" class="muted">Carregando…</td></tr>' : L.map((u) => `<tr><td>${esc(u.nome || '—')}</td><td class="mono">${esc(u.email)}</td><td>${esc(PERFIS[u.perfil] || u.perfil)}</td><td>${u.perfil === 'lancamento' ? esc((u.modulos || []).length ? u.modulos.map(modName).join(', ') : 'Todos os módulos') : u.perfil === 'consulta' ? '<span class="muted">—</span>' : 'Tudo'}</td><td>${u.ativo === false ? '<span class="chip off"><i>–</i>Bloqueado</span>' : '<span class="chip ok"><i>✓</i>Ativo</span>'}</td><td style="white-space:nowrap">${u.perfil === 'admin' && ME.perfil !== 'dono' ? '' : `<button class="btn small" type="button" data-u-edit="${esc(u.email)}">Editar</button> <button class="btn small ghost" type="button" data-u-del="${esc(u.email)}">Remover</button>`}</td></tr>`).join('') || '<tr><td colspan="6" class="muted">Nenhum usuário liberado ainda. Clique em “Liberar novo usuário”.</td></tr>'}
+          ${users == null ? '<tr><td colspan="6" class="muted">Carregando…</td></tr>' : L.map((u) => `<tr><td>${esc(u.nome || '—')}</td><td class="mono">${esc(u.email)}</td><td>${esc(PERFIS[u.perfil] || u.perfil)}</td><td class="accsum">${resumo(u)}</td><td>${u.ativo === false ? '<span class="chip off"><i>–</i>Bloqueado</span>' : '<span class="chip ok"><i>✓</i>Ativo</span>'}</td><td style="white-space:nowrap">${u.perfil === 'admin' && ME.perfil !== 'dono' ? '' : `<button class="btn small" type="button" data-u-edit="${esc(u.email)}">Editar</button> <button class="btn small ghost" type="button" data-u-del="${esc(u.email)}">Remover</button>`}</td></tr>`).join('') || '<tr><td colspan="6" class="muted">Nenhum usuário liberado ainda. Clique em “Liberar novo usuário”.</td></tr>'}
         </tbody></table></div>
-        <div class="readonly"><b>Perfis:</b> <b>Consulta</b> vê tudo e exporta · <b>Lançamento</b> lança e edita registros nos módulos marcados (e importa os CSVs desses módulos) · <b>Administrador</b> também altera Configurações e libera usuários de Consulta e Lançamento · só a <b>conta dona</b> cria administradores e zera o banco.</div>
+        <div class="readonly"><b>Como funciona:</b> para cada <b>Usuário</b> você escolhe, módulo por módulo, se ele <b>não vê</b>, vê <b>só para consulta</b> ou <b>lança</b>. O <b>Administrador</b> vê e lança tudo, altera Configurações e libera usuários · só a <b>conta dona</b> cria administradores e zera o banco.</div>
         ${ME.perfil === 'dono' ? `<section class="sec"><div class="band" style="--c:var(--geral);background:var(--geral)"><h2>Migração</h2></div><div class="block"><div class="body"><p style="margin:0">Importe aqui o arquivo de backup gerado a partir da versão no Claude (<span class="mono">backup-central.json</span>). Só a conta dona vê esta opção.</p><div><input type="file" id="u-imp" accept=".json,application/json" hidden><button class="btn" type="button" id="u-imp-b">Importar backup (.json)</button> <span id="u-imp-st" class="muted"></span></div></div></div></section>` : ''}
       </div>`;
       document.getElementById('u-new').onclick = () => form(null);
@@ -2363,6 +2451,12 @@ re2js/build/index.js:
     A.VIEWS.usuarios.always = true;
   };
 })();
+
+</script>
+<script>
+var qrcode=(function(){var P=function(x,w){var g=236,l=17,n=x,s=O[w],t=null,r=0,h=null,i=[],v={},_=function(a,f){r=n*4+17,t=(function(e){for(var u=new Array(e),o=0;o<e;o+=1){u[o]=new Array(e);for(var d=0;d<e;d+=1)u[o][d]=null}return u})(r),B(0,0),B(r-7,0),B(0,r-7),E(),T(),m(a,f),n>=7&&N(a),h==null&&(h=nr(n,s,i)),U(h,f)},B=function(a,f){for(var e=-1;e<=7;e+=1)if(!(a+e<=-1||r<=a+e))for(var u=-1;u<=7;u+=1)f+u<=-1||r<=f+u||(0<=e&&e<=6&&(u==0||u==6)||0<=u&&u<=6&&(e==0||e==6)||2<=e&&e<=4&&2<=u&&u<=4?t[a+e][f+u]=!0:t[a+e][f+u]=!1)},y=function(){for(var a=0,f=0,e=0;e<8;e+=1){_(!0,e);var u=k.getLostPoint(v);(e==0||a>u)&&(a=u,f=e)}return f},T=function(){for(var a=8;a<r-8;a+=1)t[a][6]==null&&(t[a][6]=a%2==0);for(var f=8;f<r-8;f+=1)t[6][f]==null&&(t[6][f]=f%2==0)},E=function(){for(var a=k.getPatternPosition(n),f=0;f<a.length;f+=1)for(var e=0;e<a.length;e+=1){var u=a[f],o=a[e];if(t[u][o]==null)for(var d=-2;d<=2;d+=1)for(var c=-2;c<=2;c+=1)d==-2||d==2||c==-2||c==2||d==0&&c==0?t[u+d][o+c]=!0:t[u+d][o+c]=!1}},N=function(a){for(var f=k.getBCHTypeNumber(n),e=0;e<18;e+=1){var u=!a&&(f>>e&1)==1;t[Math.floor(e/3)][e%3+r-8-3]=u}for(var e=0;e<18;e+=1){var u=!a&&(f>>e&1)==1;t[e%3+r-8-3][Math.floor(e/3)]=u}},m=function(a,f){for(var e=s<<3|f,u=k.getBCHTypeInfo(e),o=0;o<15;o+=1){var d=!a&&(u>>o&1)==1;o<6?t[o][8]=d:o<8?t[o+1][8]=d:t[r-15+o][8]=d}for(var o=0;o<15;o+=1){var d=!a&&(u>>o&1)==1;o<8?t[8][r-o-1]=d:o<9?t[8][15-o-1+1]=d:t[8][15-o-1]=d}t[r-8][8]=!a},U=function(a,f){for(var e=-1,u=r-1,o=7,d=0,c=k.getMaskFunction(f),p=r-1;p>0;p-=2)for(p==6&&(p-=1);;){for(var b=0;b<2;b+=1)if(t[u][p-b]==null){var C=!1;d<a.length&&(C=(a[d]>>>o&1)==1);var A=c(u,p-b);A&&(C=!C),t[u][p-b]=C,o-=1,o==-1&&(d+=1,o=7)}if(u+=e,u<0||r<=u){u-=e,e=-e;break}}},H=function(a,f){for(var e=0,u=0,o=0,d=new Array(f.length),c=new Array(f.length),p=0;p<f.length;p+=1){var b=f[p].dataCount,C=f[p].totalCount-b;u=Math.max(u,b),o=Math.max(o,C),d[p]=new Array(b);for(var A=0;A<d[p].length;A+=1)d[p][A]=255&a.getBuffer()[A+e];e+=b;var R=k.getErrorCorrectPolynomial(C),I=K(d[p],R.getLength()-1),S=I.mod(R);c[p]=new Array(R.getLength()-1);for(var A=0;A<c[p].length;A+=1){var X=A+S.getLength()-c[p].length;c[p][A]=X>=0?S.getAt(X):0}}for(var Z=0,A=0;A<f.length;A+=1)Z+=f[A].totalCount;for(var J=new Array(Z),Q=0,A=0;A<u;A+=1)for(var p=0;p<f.length;p+=1)A<d[p].length&&(J[Q]=d[p][A],Q+=1);for(var A=0;A<o;A+=1)for(var p=0;p<f.length;p+=1)A<c[p].length&&(J[Q]=c[p][A],Q+=1);return J},nr=function(a,f,e){for(var u=Y.getRSBlocks(a,f),o=G(),d=0;d<e.length;d+=1){var c=e[d];o.put(c.getMode(),4),o.put(c.getLength(),k.getLengthInBits(c.getMode(),a)),c.write(o)}for(var p=0,d=0;d<u.length;d+=1)p+=u[d].dataCount;if(o.getLengthInBits()>p*8)throw"code length overflow. ("+o.getLengthInBits()+">"+p*8+")";for(o.getLengthInBits()+4<=p*8&&o.put(0,4);o.getLengthInBits()%8!=0;)o.putBit(!1);for(;!(o.getLengthInBits()>=p*8||(o.put(g,8),o.getLengthInBits()>=p*8));)o.put(l,8);return H(o,u)};v.addData=function(a,f){f=f||"Byte";var e=null;switch(f){case"Numeric":e=$(a);break;case"Alphanumeric":e=W(a);break;case"Byte":e=V(a);break;case"Kanji":e=q(a);break;default:throw"mode:"+f}i.push(e),h=null},v.isDark=function(a,f){if(a<0||r<=a||f<0||r<=f)throw a+","+f;return t[a][f]},v.getModuleCount=function(){return r},v.make=function(){if(n<1){for(var a=1;a<40;a++){for(var f=Y.getRSBlocks(a,s),e=G(),u=0;u<i.length;u++){var o=i[u];e.put(o.getMode(),4),e.put(o.getLength(),k.getLengthInBits(o.getMode(),a)),o.write(e)}for(var d=0,u=0;u<f.length;u++)d+=f[u].dataCount;if(e.getLengthInBits()<=d*8)break}n=a}_(!1,y())},v.createTableTag=function(a,f){a=a||2,f=typeof f>"u"?a*4:f;var e="";e+='<table style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: "+f+"px;",e+='">',e+="<tbody>";for(var u=0;u<v.getModuleCount();u+=1){e+="<tr>";for(var o=0;o<v.getModuleCount();o+=1)e+='<td style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: 0px;",e+=" width: "+a+"px;",e+=" height: "+a+"px;",e+=" background-color: ",e+=v.isDark(u,o)?"#000000":"#ffffff",e+=";",e+='"/>';e+="</tr>"}return e+="</tbody>",e+="</table>",e},v.createSvgTag=function(a,f,e,u){var o={};typeof arguments[0]=="object"&&(o=arguments[0],a=o.cellSize,f=o.margin,e=o.alt,u=o.title),a=a||2,f=typeof f>"u"?a*4:f,e=typeof e=="string"?{text:e}:e||{},e.text=e.text||null,e.id=e.text?e.id||"qrcode-description":null,u=typeof u=="string"?{text:u}:u||{},u.text=u.text||null,u.id=u.text?u.id||"qrcode-title":null;var d=v.getModuleCount()*a+f*2,c,p,b,C,A="",R;for(R="l"+a+",0 0,"+a+" -"+a+",0 0,-"+a+"z ",A+='<svg version="1.1" xmlns="http://www.w3.org/2000/svg"',A+=o.scalable?"":' width="'+d+'px" height="'+d+'px"',A+=' viewBox="0 0 '+d+" "+d+'" ',A+=' preserveAspectRatio="xMinYMin meet"',A+=u.text||e.text?' role="img" aria-labelledby="'+F([u.id,e.id].join(" ").trim())+'"':"",A+=">",A+=u.text?'<title id="'+F(u.id)+'">'+F(u.text)+"</title>":"",A+=e.text?'<description id="'+F(e.id)+'">'+F(e.text)+"</description>":"",A+='<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>',A+='<path d="',b=0;b<v.getModuleCount();b+=1)for(C=b*a+f,c=0;c<v.getModuleCount();c+=1)v.isDark(b,c)&&(p=c*a+f,A+="M"+p+","+C+R);return A+='" stroke="transparent" fill="black"/>',A+="</svg>",A},v.createDataURL=function(a,f){a=a||2,f=typeof f>"u"?a*4:f;var e=v.getModuleCount()*a+f*2,u=f,o=e-f;return er(e,e,function(d,c){if(u<=d&&d<o&&u<=c&&c<o){var p=Math.floor((d-u)/a),b=Math.floor((c-u)/a);return v.isDark(b,p)?0:1}else return 1})},v.createImgTag=function(a,f,e){a=a||2,f=typeof f>"u"?a*4:f;var u=v.getModuleCount()*a+f*2,o="";return o+="<img",o+=' src="',o+=v.createDataURL(a,f),o+='"',o+=' width="',o+=u,o+='"',o+=' height="',o+=u,o+='"',e&&(o+=' alt="',o+=F(e),o+='"'),o+="/>",o};var F=function(a){for(var f="",e=0;e<a.length;e+=1){var u=a.charAt(e);switch(u){case"<":f+="&lt;";break;case">":f+="&gt;";break;case"&":f+="&amp;";break;case'"':f+="&quot;";break;default:f+=u;break}}return f},ar=function(a){var f=1;a=typeof a>"u"?f*2:a;var e=v.getModuleCount()*f+a*2,u=a,o=e-a,d,c,p,b,C,A={"\u2588\u2588":"\u2588","\u2588 ":"\u2580"," \u2588":"\u2584","  ":" "},R={"\u2588\u2588":"\u2580","\u2588 ":"\u2580"," \u2588":" ","  ":" "},I="";for(d=0;d<e;d+=2){for(p=Math.floor((d-u)/f),b=Math.floor((d+1-u)/f),c=0;c<e;c+=1)C="\u2588",u<=c&&c<o&&u<=d&&d<o&&v.isDark(p,Math.floor((c-u)/f))&&(C=" "),u<=c&&c<o&&u<=d+1&&d+1<o&&v.isDark(b,Math.floor((c-u)/f))?C+=" ":C+="\u2588",I+=a<1&&d+1>=o?R[C]:A[C];I+=`
+`}return e%2&&a>0?I.substring(0,I.length-e-1)+Array(e+1).join("\u2580"):I.substring(0,I.length-1)};return v.createASCII=function(a,f){if(a=a||1,a<2)return ar(f);a-=1,f=typeof f>"u"?a*2:f;var e=v.getModuleCount()*a+f*2,u=f,o=e-f,d,c,p,b,C=Array(a+1).join("\u2588\u2588"),A=Array(a+1).join("  "),R="",I="";for(d=0;d<e;d+=1){for(p=Math.floor((d-u)/a),I="",c=0;c<e;c+=1)b=1,u<=c&&c<o&&u<=d&&d<o&&v.isDark(p,Math.floor((c-u)/a))&&(b=0),I+=b?C:A;for(p=0;p<a;p+=1)R+=I+`
+`}return R.substring(0,R.length-1)},v.renderTo2dContext=function(a,f){f=f||2;for(var e=v.getModuleCount(),u=0;u<e;u++)for(var o=0;o<e;o++)a.fillStyle=v.isDark(u,o)?"black":"white",a.fillRect(u*f,o*f,f,f)},v};P.stringToBytesFuncs={default:function(x){for(var w=[],g=0;g<x.length;g+=1){var l=x.charCodeAt(g);w.push(l&255)}return w}},P.stringToBytes=P.stringToBytesFuncs.default,P.createStringToBytes=function(x,w){var g=(function(){for(var n=rr(x),s=function(){var T=n.read();if(T==-1)throw"eof";return T},t=0,r={};;){var h=n.read();if(h==-1)break;var i=s(),v=s(),_=s(),B=String.fromCharCode(h<<8|i),y=v<<8|_;r[B]=y,t+=1}if(t!=w)throw t+" != "+w;return r})(),l=63;return function(n){for(var s=[],t=0;t<n.length;t+=1){var r=n.charCodeAt(t);if(r<128)s.push(r);else{var h=g[n.charAt(t)];typeof h=="number"?(h&255)==h?s.push(h):(s.push(h>>>8),s.push(h&255)):s.push(l)}}return s}};var D={MODE_NUMBER:1,MODE_ALPHA_NUM:2,MODE_8BIT_BYTE:4,MODE_KANJI:8},O={L:1,M:0,Q:3,H:2},L={PATTERN000:0,PATTERN001:1,PATTERN010:2,PATTERN011:3,PATTERN100:4,PATTERN101:5,PATTERN110:6,PATTERN111:7},k=(function(){var x=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],w=1335,g=7973,l=21522,n={},s=function(t){for(var r=0;t!=0;)r+=1,t>>>=1;return r};return n.getBCHTypeInfo=function(t){for(var r=t<<10;s(r)-s(w)>=0;)r^=w<<s(r)-s(w);return(t<<10|r)^l},n.getBCHTypeNumber=function(t){for(var r=t<<12;s(r)-s(g)>=0;)r^=g<<s(r)-s(g);return t<<12|r},n.getPatternPosition=function(t){return x[t-1]},n.getMaskFunction=function(t){switch(t){case L.PATTERN000:return function(r,h){return(r+h)%2==0};case L.PATTERN001:return function(r,h){return r%2==0};case L.PATTERN010:return function(r,h){return h%3==0};case L.PATTERN011:return function(r,h){return(r+h)%3==0};case L.PATTERN100:return function(r,h){return(Math.floor(r/2)+Math.floor(h/3))%2==0};case L.PATTERN101:return function(r,h){return r*h%2+r*h%3==0};case L.PATTERN110:return function(r,h){return(r*h%2+r*h%3)%2==0};case L.PATTERN111:return function(r,h){return(r*h%3+(r+h)%2)%2==0};default:throw"bad maskPattern:"+t}},n.getErrorCorrectPolynomial=function(t){for(var r=K([1],0),h=0;h<t;h+=1)r=r.multiply(K([1,M.gexp(h)],0));return r},n.getLengthInBits=function(t,r){if(1<=r&&r<10)switch(t){case D.MODE_NUMBER:return 10;case D.MODE_ALPHA_NUM:return 9;case D.MODE_8BIT_BYTE:return 8;case D.MODE_KANJI:return 8;default:throw"mode:"+t}else if(r<27)switch(t){case D.MODE_NUMBER:return 12;case D.MODE_ALPHA_NUM:return 11;case D.MODE_8BIT_BYTE:return 16;case D.MODE_KANJI:return 10;default:throw"mode:"+t}else if(r<41)switch(t){case D.MODE_NUMBER:return 14;case D.MODE_ALPHA_NUM:return 13;case D.MODE_8BIT_BYTE:return 16;case D.MODE_KANJI:return 12;default:throw"mode:"+t}else throw"type:"+r},n.getLostPoint=function(t){for(var r=t.getModuleCount(),h=0,i=0;i<r;i+=1)for(var v=0;v<r;v+=1){for(var _=0,B=t.isDark(i,v),y=-1;y<=1;y+=1)if(!(i+y<0||r<=i+y))for(var T=-1;T<=1;T+=1)v+T<0||r<=v+T||y==0&&T==0||B==t.isDark(i+y,v+T)&&(_+=1);_>5&&(h+=3+_-5)}for(var i=0;i<r-1;i+=1)for(var v=0;v<r-1;v+=1){var E=0;t.isDark(i,v)&&(E+=1),t.isDark(i+1,v)&&(E+=1),t.isDark(i,v+1)&&(E+=1),t.isDark(i+1,v+1)&&(E+=1),(E==0||E==4)&&(h+=3)}for(var i=0;i<r;i+=1)for(var v=0;v<r-6;v+=1)t.isDark(i,v)&&!t.isDark(i,v+1)&&t.isDark(i,v+2)&&t.isDark(i,v+3)&&t.isDark(i,v+4)&&!t.isDark(i,v+5)&&t.isDark(i,v+6)&&(h+=40);for(var v=0;v<r;v+=1)for(var i=0;i<r-6;i+=1)t.isDark(i,v)&&!t.isDark(i+1,v)&&t.isDark(i+2,v)&&t.isDark(i+3,v)&&t.isDark(i+4,v)&&!t.isDark(i+5,v)&&t.isDark(i+6,v)&&(h+=40);for(var N=0,v=0;v<r;v+=1)for(var i=0;i<r;i+=1)t.isDark(i,v)&&(N+=1);var m=Math.abs(100*N/r/r-50)/5;return h+=m*10,h},n})(),M=(function(){for(var x=new Array(256),w=new Array(256),g=0;g<8;g+=1)x[g]=1<<g;for(var g=8;g<256;g+=1)x[g]=x[g-4]^x[g-5]^x[g-6]^x[g-8];for(var g=0;g<255;g+=1)w[x[g]]=g;var l={};return l.glog=function(n){if(n<1)throw"glog("+n+")";return w[n]},l.gexp=function(n){for(;n<0;)n+=255;for(;n>=256;)n-=255;return x[n]},l})();function K(x,w){if(typeof x.length>"u")throw x.length+"/"+w;var g=(function(){for(var n=0;n<x.length&&x[n]==0;)n+=1;for(var s=new Array(x.length-n+w),t=0;t<x.length-n;t+=1)s[t]=x[t+n];return s})(),l={};return l.getAt=function(n){return g[n]},l.getLength=function(){return g.length},l.multiply=function(n){for(var s=new Array(l.getLength()+n.getLength()-1),t=0;t<l.getLength();t+=1)for(var r=0;r<n.getLength();r+=1)s[t+r]^=M.gexp(M.glog(l.getAt(t))+M.glog(n.getAt(r)));return K(s,0)},l.mod=function(n){if(l.getLength()-n.getLength()<0)return l;for(var s=M.glog(l.getAt(0))-M.glog(n.getAt(0)),t=new Array(l.getLength()),r=0;r<l.getLength();r+=1)t[r]=l.getAt(r);for(var r=0;r<n.getLength();r+=1)t[r]^=M.gexp(M.glog(n.getAt(r))+s);return K(t,0).mod(n)},l}var Y=(function(){var x=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],w=function(n,s){var t={};return t.totalCount=n,t.dataCount=s,t},g={},l=function(n,s){switch(s){case O.L:return x[(n-1)*4+0];case O.M:return x[(n-1)*4+1];case O.Q:return x[(n-1)*4+2];case O.H:return x[(n-1)*4+3];default:return}};return g.getRSBlocks=function(n,s){var t=l(n,s);if(typeof t>"u")throw"bad rs block @ typeNumber:"+n+"/errorCorrectionLevel:"+s;for(var r=t.length/3,h=[],i=0;i<r;i+=1)for(var v=t[i*3+0],_=t[i*3+1],B=t[i*3+2],y=0;y<v;y+=1)h.push(w(_,B));return h},g})(),G=function(){var x=[],w=0,g={};return g.getBuffer=function(){return x},g.getAt=function(l){var n=Math.floor(l/8);return(x[n]>>>7-l%8&1)==1},g.put=function(l,n){for(var s=0;s<n;s+=1)g.putBit((l>>>n-s-1&1)==1)},g.getLengthInBits=function(){return w},g.putBit=function(l){var n=Math.floor(w/8);x.length<=n&&x.push(0),l&&(x[n]|=128>>>w%8),w+=1},g},$=function(x){var w=D.MODE_NUMBER,g=x,l={};l.getMode=function(){return w},l.getLength=function(t){return g.length},l.write=function(t){for(var r=g,h=0;h+2<r.length;)t.put(n(r.substring(h,h+3)),10),h+=3;h<r.length&&(r.length-h==1?t.put(n(r.substring(h,h+1)),4):r.length-h==2&&t.put(n(r.substring(h,h+2)),7))};var n=function(t){for(var r=0,h=0;h<t.length;h+=1)r=r*10+s(t.charAt(h));return r},s=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-48;throw"illegal char :"+t};return l},W=function(x){var w=D.MODE_ALPHA_NUM,g=x,l={};l.getMode=function(){return w},l.getLength=function(s){return g.length},l.write=function(s){for(var t=g,r=0;r+1<t.length;)s.put(n(t.charAt(r))*45+n(t.charAt(r+1)),11),r+=2;r<t.length&&s.put(n(t.charAt(r)),6)};var n=function(s){if("0"<=s&&s<="9")return s.charCodeAt(0)-48;if("A"<=s&&s<="Z")return s.charCodeAt(0)-65+10;switch(s){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+s}};return l},V=function(x){var w=D.MODE_8BIT_BYTE,g=x,l=P.stringToBytes(x),n={};return n.getMode=function(){return w},n.getLength=function(s){return l.length},n.write=function(s){for(var t=0;t<l.length;t+=1)s.put(l[t],8)},n},q=function(x){var w=D.MODE_KANJI,g=x,l=P.stringToBytesFuncs.SJIS;if(!l)throw"sjis not supported.";(function(t,r){var h=l(t);if(h.length!=2||(h[0]<<8|h[1])!=r)throw"sjis not supported."})("\u53CB",38726);var n=l(x),s={};return s.getMode=function(){return w},s.getLength=function(t){return~~(n.length/2)},s.write=function(t){for(var r=n,h=0;h+1<r.length;){var i=(255&r[h])<<8|255&r[h+1];if(33088<=i&&i<=40956)i-=33088;else if(57408<=i&&i<=60351)i-=49472;else throw"illegal char at "+(h+1)+"/"+i;i=(i>>>8&255)*192+(i&255),t.put(i,13),h+=2}if(h<r.length)throw"illegal char at "+(h+1)},s},j=function(){var x=[],w={};return w.writeByte=function(g){x.push(g&255)},w.writeShort=function(g){w.writeByte(g),w.writeByte(g>>>8)},w.writeBytes=function(g,l,n){l=l||0,n=n||g.length;for(var s=0;s<n;s+=1)w.writeByte(g[s+l])},w.writeString=function(g){for(var l=0;l<g.length;l+=1)w.writeByte(g.charCodeAt(l))},w.toByteArray=function(){return x},w.toString=function(){var g="";g+="[";for(var l=0;l<x.length;l+=1)l>0&&(g+=","),g+=x[l];return g+="]",g},w},z=function(){var x=0,w=0,g=0,l="",n={},s=function(r){l+=String.fromCharCode(t(r&63))},t=function(r){if(!(r<0)){if(r<26)return 65+r;if(r<52)return 97+(r-26);if(r<62)return 48+(r-52);if(r==62)return 43;if(r==63)return 47}throw"n:"+r};return n.writeByte=function(r){for(x=x<<8|r&255,w+=8,g+=1;w>=6;)s(x>>>w-6),w-=6},n.flush=function(){if(w>0&&(s(x<<6-w),x=0,w=0),g%3!=0)for(var r=3-g%3,h=0;h<r;h+=1)l+="="},n.toString=function(){return l},n},rr=function(x){var w=x,g=0,l=0,n=0,s={};s.read=function(){for(;n<8;){if(g>=w.length){if(n==0)return-1;throw"unexpected end of file./"+n}var r=w.charAt(g);if(g+=1,r=="=")return n=0,-1;if(r.match(/^\s$/))continue;l=l<<6|t(r.charCodeAt(0)),n+=6}var h=l>>>n-8&255;return n-=8,h};var t=function(r){if(65<=r&&r<=90)return r-65;if(97<=r&&r<=122)return r-97+26;if(48<=r&&r<=57)return r-48+52;if(r==43)return 62;if(r==47)return 63;throw"c:"+r};return s},tr=function(x,w){var g=x,l=w,n=new Array(x*w),s={};s.setPixel=function(i,v,_){n[v*g+i]=_},s.write=function(i){i.writeString("GIF87a"),i.writeShort(g),i.writeShort(l),i.writeByte(128),i.writeByte(0),i.writeByte(0),i.writeByte(0),i.writeByte(0),i.writeByte(0),i.writeByte(255),i.writeByte(255),i.writeByte(255),i.writeString(","),i.writeShort(0),i.writeShort(0),i.writeShort(g),i.writeShort(l),i.writeByte(0);var v=2,_=r(v);i.writeByte(v);for(var B=0;_.length-B>255;)i.writeByte(255),i.writeBytes(_,B,255),B+=255;i.writeByte(_.length-B),i.writeBytes(_,B,_.length-B),i.writeByte(0),i.writeString(";")};var t=function(i){var v=i,_=0,B=0,y={};return y.write=function(T,E){if(T>>>E)throw"length over";for(;_+E>=8;)v.writeByte(255&(T<<_|B)),E-=8-_,T>>>=8-_,B=0,_=0;B=T<<_|B,_=_+E},y.flush=function(){_>0&&v.writeByte(B)},y},r=function(i){for(var v=1<<i,_=(1<<i)+1,B=i+1,y=h(),T=0;T<v;T+=1)y.add(String.fromCharCode(T));y.add(String.fromCharCode(v)),y.add(String.fromCharCode(_));var E=j(),N=t(E);N.write(v,B);var m=0,U=String.fromCharCode(n[m]);for(m+=1;m<n.length;){var H=String.fromCharCode(n[m]);m+=1,y.contains(U+H)?U=U+H:(N.write(y.indexOf(U),B),y.size()<4095&&(y.size()==1<<B&&(B+=1),y.add(U+H)),U=H)}return N.write(y.indexOf(U),B),N.write(_,B),N.flush(),E.toByteArray()},h=function(){var i={},v=0,_={};return _.add=function(B){if(_.contains(B))throw"dup key:"+B;i[B]=v,v+=1},_.size=function(){return v},_.indexOf=function(B){return i[B]},_.contains=function(B){return typeof i[B]<"u"},_};return s},er=function(x,w,g){for(var l=tr(x,w),n=0;n<w;n+=1)for(var s=0;s<x;s+=1)l.setPixel(s,n,g(s,n));var t=j();l.write(t);for(var r=z(),h=t.toByteArray(),i=0;i<h.length;i+=1)r.writeByte(h[i]);return r.flush(),"data:image/gif;base64,"+r};return P})();(function(){qrcode.stringToBytesFuncs["UTF-8"]=function(P){function D(O){for(var L=[],k=0;k<O.length;k++){var M=O.charCodeAt(k);M<128?L.push(M):M<2048?L.push(192|M>>6,128|M&63):M<55296||M>=57344?L.push(224|M>>12,128|M>>6&63,128|M&63):(k++,M=65536+((M&1023)<<10|O.charCodeAt(k)&1023),L.push(240|M>>18,128|M>>12&63,128|M>>6&63,128|M&63))}return L}return D(P)}})(),(function(P){typeof define=="function"&&define.amd?define([],P):typeof exports=="object"&&(module.exports=P())})(function(){return qrcode});
 
 </script>
 <script>
@@ -2598,7 +2692,7 @@ var ENGINE = (function () {
       if (id) { cnt++; var mm = /^AV-(\d+)$/.exec(id); if (mm && +mm[1] > maxId) maxId = +mm[1]; }
       if (!id && !content && blank(o.B)) return;
       av.push({ mod: 'AV', row: r, key: o.__k || id, id: id || '', data: toSerial(o.B), filial: str(o.C), volume: o.D, corrida: o.E, desc: str(o.F), diam: o.G, esp: o.H, liga: o.I, norma: o.J,
-        forn: str(o.K), nf: o.L, pc: o.M, pv: o.N, cert: o.O, conf: str(o.P), retrab: str(o.Q), pending: mav.pend.get(r) || null, raw: o });
+        forn: str(o.K), nf: o.L, pc: o.M, pv: o.N, cert: o.O, conf: str(o.P), retrab: str(o.Q), quant: o.R, und: str(o.S), certLink: str(o.T), insp: str(o.U), pending: mav.pend.get(r) || null, raw: o });
     });
     M.av = av; M.avMaxComputed = maxId;
 
@@ -2948,19 +3042,19 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   };
   /* campos gravados no banco (nome) ↔ coluna usada pelo motor de cálculo */
   const FMAP = {
-    AV: { A: 'id', B: 'data', C: 'filial', D: 'volume', E: 'corrida', F: 'desc', G: 'diam', H: 'esp', I: 'liga', J: 'norma', K: 'forn', L: 'nf', M: 'pc', N: 'pv', O: 'cert', P: 'conf', Q: 'retrab' },
+    AV: { A: 'id', B: 'data', C: 'filial', D: 'volume', E: 'corrida', F: 'desc', G: 'diam', H: 'esp', I: 'liga', J: 'norma', K: 'forn', L: 'nf', M: 'pc', N: 'pv', O: 'cert', P: 'conf', Q: 'retrab', R: 'quant', S: 'und', T: 'certLink', U: 'insp' },
     SERV: { A: 'data', B: 'desc', C: 'nf', D: 'forn', E: 'pc', F: 'pv', G: 'cert' },
     RNC: { A: 'num', B: 'data', D: 'comprador', E: 'filial', F: 'emissor', G: 'forn', H: 'cliente', I: 'nf', J: 'pv', K: 'oc', L: 'depto', M: 'motivo', P: 'disp', Q: 'fechDisp', R: 'corretiva', T: 'nivel', V: 'analise', X: 'conclusao', Y: 'cancel', Z: 'info' },
     INS: { A: 'codigo', B: 'desc', C: 'marca', D: 'cert', E: 'dataCal', F: 'freq', K: 'resp', L: 'depto', M: 'obs', P: 'tipo', Q: 'resCal', S: 'situacao' },
     RNCC: { A: 'num', B: 'data', C: 'filial', D: 'emissor', E: 'cliente', F: 'contato', G: 'canal', H: 'nf', I: 'pv', J: 'lotes', K: 'produto', L: 'qtd', M: 'desc', N: 'motivo', O: 'gravidade', P: 'procedente', Q: 'contencao', R: 'contData', S: 'disp', T: 'setor', U: 'origem', V: 'rncf', W: 'causa', X: 'acao', Y: 'resp', Z: 'acaoPrazo', AA: 'respData', AB: 'eficacia', AC: 'eficData', AD: 'conclusao', AE: 'cancel', AF: 'info' }
   };
   const FLABEL = {
-    id: 'ID', data: 'Data', filial: 'Filial', volume: 'Volume', corrida: 'Corrida', desc: 'Descrição', diam: 'Diâmetro', esp: 'Espessura', liga: 'Liga/Tipo', norma: 'Norma', forn: 'Fornecedor', nf: 'Nota fiscal', pc: 'Pedido de compra', pv: 'Pedido de venda',
+    id: 'ID', data: 'Data', filial: 'Filial', volume: 'Volume', corrida: 'Corrida', desc: 'Descrição', diam: 'Diâmetro', esp: 'Espessura', liga: 'Liga/Tipo', norma: 'Material', forn: 'Fornecedor', nf: 'Nota fiscal', pc: 'Pedido de compra', pv: 'Pedido de venda',
     cert: 'Certificado', conf: 'Conferido', retrab: 'Retrabalho', num: 'Número', comprador: 'Comprador', emissor: 'Emissor', cliente: 'Cliente', oc: 'Ordem de compra', depto: 'Departamento', motivo: 'Motivo', disp: 'Disposição',
     fechDisp: 'Fechamento da disposição', corretiva: 'Corretiva?', nivel: 'Nível do prazo', analise: 'Análise crítica', conclusao: 'Conclusão', cancel: 'Cancelada', info: 'Informações', codigo: 'Código', marca: 'Marca', dataCal: 'Data da calibração',
     freq: 'Frequência', resp: 'Responsável', obs: 'Observação', tipo: 'Tipo de equipamento', resCal: 'Resultado (erro)', situacao: 'Situação',
     contato: 'Contato', canal: 'Canal', lotes: 'Lotes / corridas', produto: 'Produto', qtd: 'Quantidade afetada', gravidade: 'Gravidade', procedente: 'Procedente', contencao: 'Contenção', contData: 'Data da contenção', setor: 'Setor responsável',
-    origem: 'Origem da causa', rncf: 'RNC de fornecedor vinculada', causa: 'Causa raiz', acao: 'Ação corretiva', acaoPrazo: 'Prazo da ação', respData: 'Resposta ao cliente', eficacia: 'Eficácia', eficData: 'Data da verificação'
+    origem: 'Origem da causa', quant: 'Quantidade', und: 'Unidade', certLink: 'Link do certificado', insp: 'Resultado da inspeção', rncf: 'RNC de fornecedor vinculada', causa: 'Causa raiz', acao: 'Ação corretiva', acaoPrazo: 'Prazo da ação', respData: 'Resposta ao cliente', eficacia: 'Eficácia', eficData: 'Data da verificação'
   };
   const DATEF = new Set(['data', 'fechDisp', 'conclusao', 'dataCal', 'contData', 'acaoPrazo', 'respData', 'eficData']);
   const MODS = ['AV', 'SERV', 'RNC', 'INS', 'RNCC'];
@@ -2992,6 +3086,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     if (!m) return '<span class="chip off"><i>–</i>Sem data</span>';
     return `<span class="chip ${m[0]}"><i>${m[1]}</i>${m[2]}</span>`;
   }
+  function chipInsp(v) { const m = { aprovado: ['ok', '✓', 'Aprovado'], reprovado: ['crit', '✕', 'Reprovado'], 'em análise': ['warn', '!', 'Em análise'], 'em analise': ['warn', '!', 'Em análise'] }[String(v || '').trim().toLowerCase()]; return m ? `<span class="chip ${m[0]}"><i>${m[1]}</i>${m[2]}</span>` : '<span class="muted">—</span>'; }
   function chipRes(r) { return r === 'REPROVADO' ? '<span class="chip crit"><i>✕</i>Reprovado</span>' : r === 'APROVADO' ? '<span class="chip ok"><i>✓</i>Aprovado</span>' : ''; }
   function countBy(arr, fn) {
     const m = new Map();
@@ -3027,6 +3122,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     try { const ps = await DB.user.profiles(need); need.forEach((i) => { DB.names[i] = (ps && ps[i] && ps[i].name) || ''; }); } catch (e) { need.forEach((i) => { DB.names[i] = ''; }); }
   }
 
+  const SEAL = '<svg class="seal" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke-width="10"><path d="M52.7 12.1A38 38 0 0 1 81.5 28.8" stroke="var(--av)"/><path d="M84.2 33.3A38 38 0 0 1 84.2 66.7" stroke="var(--serv)"/><path d="M81.5 71.2A38 38 0 0 1 52.7 87.9" stroke="var(--rnc)"/><path d="M47.3 87.9A38 38 0 0 1 18.5 71.2" stroke="var(--rncc)"/><path d="M15.8 66.7A38 38 0 0 1 15.8 33.3" stroke="var(--cal)"/><path d="M18.5 28.8A38 38 0 0 1 47.3 12.1" stroke="var(--geral)"/></g><path d="M35 51 L46 62 L67 39" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const okSeal = (title, sub) => `<div class="allok">${SEAL}<div><b>${esc(title)}</b>${sub ? `<span>${esc(sub)}</span>` : ''}</div></div>`;
   /* ================= gráficos ================= */
   function barsHTML(items, color, opts = {}) {
     if (!items.length) return '<div class="empty">Sem registros no período.</div>';
@@ -3034,7 +3131,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const max = Math.max(...list.map((i) => i.value)) || 1;
     return `<div class="bars" style="--c:${color}">` + list.map((i) => {
       const go = i.go ? ` data-go="${esc(JSON.stringify(i.go))}" role="button" tabindex="0"` : '';
-      return `<div class="bar${i.go ? ' click' : ''}"${go} data-tip="${esc(i.label)}: ${NF.format(i.value)}"><span class="bl">${esc(i.label)}</span><span class="bt"><span class="bf" style="width:${Math.max(1.5, i.value / max * 100).toFixed(1)}%"></span></span><span class="bv">${NF.format(i.value)}</span></div>`;
+      return `<div class="bar${i.go ? ' click' : ''}"${go} data-tip="${esc(i.tip || i.label)}: ${NF.format(i.value)}${opts.suf || ''}"><span class="bl">${esc(i.label)}</span><span class="bt"><span class="bf" style="width:${Math.max(1.5, i.value / max * 100).toFixed(1)}%"></span></span><span class="bv">${NF.format(i.value)}${opts.suf || ''}</span></div>`;
     }).join('') + '</div>';
   }
   function niceMax(m) { if (m <= 4) return 4; const p = Math.pow(10, Math.floor(Math.log10(m))); const n = m / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * p; }
@@ -3061,12 +3158,14 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     return `<div class="cols"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Gráfico de colunas">${g}${bars}${xl}${vl}</svg></div>`;
   }
   function chartHTML(title, inner, sub) { return `<div class="chart"><h3>${esc(title)}${sub ? `<small>${esc(sub)}</small>` : ''}</h3>${inner}</div>`; }
+  const COLOR_COL = { 'var(--av)': 'av', 'var(--serv)': 'serv', 'var(--rnc)': 'rnc', 'var(--rncc)': 'rncc', 'var(--cal)': 'ins' };
   function kpiHTML(k) {
+    if (COLOR_COL[k.c] && !vis(COLOR_COL[k.c])) return '';
     const tag = k.go ? 'button' : 'div';
     const go = k.go ? ` type="button" data-go="${esc(JSON.stringify(k.go))}"` : '';
     return `<${tag} class="kpi ${k.cls || ''}"${go} style="--c:${k.c || 'var(--geral)'}"><span class="tag"></span><span class="lbl">${esc(k.l)}</span><span class="val">${k.v}</span>${k.sub ? `<span class="sub">${esc(k.sub)}</span>` : ''}</${tag}>`;
   }
-  function band(mod, title, src) { return `<div class="band" style="--c:${MOD[mod].c};background:${MOD[mod].c}"><h2>${esc(title)}</h2>${src ? `<span class="src">${esc(src)}</span>` : ''}</div>`; }
+  function band(mod, title, src) { return `<div class="band" data-bmod="${mod}" style="--c:${MOD[mod].c};background:${MOD[mod].c}"><h2>${esc(title)}</h2>${src ? `<span class="src">${esc(src)}</span>` : ''}</div>`; }
 
   /* ================= salvar arquivo ================= */
   async function saveFile(name, blob) {
@@ -3088,6 +3187,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
 
   /* ================= BANCO DE DADOS ================= */
   const keyNum = (k) => { const m = /\d+/.exec(String(k)); return m ? +m[0] : 0; };
+  const svOf = (k) => (/^S\d+$/.test(String(k || '')) ? 'SV-' + E.pad(keyNum(k), 4) : '');
   const chunkOf = {
     AV: (key) => 'c' + E.pad(Math.floor(keyNum(key) / 500), 3),
     SERV: (key) => 'c' + E.pad(Math.floor(keyNum(key) / 500), 3),
@@ -3117,6 +3217,9 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     Object.keys(dflt).forEach((k) => { if (!l[k]) c[k] = dflt[k].slice(); });
     [['RNCC_PRAZO_CONTENCAO', 1], ['RNCC_PRAZO_RESPOSTA', 5], ['RNCC_PRAZO_FINAL', 30]].forEach(([k, v]) => { if (typeof c[k] !== 'number') c[k] = v; });
     c.RNCC_GRAVIDADE = ['Baixa', 'Média', 'Alta']; c.RNCC_PROCEDENTE = ['Em análise', 'Sim', 'Não']; c.RNCC_ORIGENS = ['Interna', 'Fornecedor', 'Transporte', 'Cliente (uso/aplicação)']; c.RNCC_EFICACIA = ['Em verificação', 'Eficaz', 'Não eficaz'];
+    if (!l.AV_UNIDADES) c.AV_UNIDADES = ['PÇ', 'KG', 'M', 'M²', 'T', 'BARRA', 'UN'];
+    c.AV_INSPECAO = ['Aprovado', 'Reprovado', 'Em análise'];
+    c.FORN_EMAILS = {}; (Array.isArray(d.fornEmails) ? d.fornEmails : Object.entries(d.fornEmails || {}).map(([nome, email]) => ({ nome, email }))).forEach((o) => { if (o && o.nome) c.FORN_EMAILS[o.nome] = o.email || ''; });
     c.RNC_NIVEL_PRAZO = ['Padrão', 'Estendido', 'Complexo']; c.CAL_SITUACAO = ['Em uso', 'Manutenção', 'Fora de uso']; c.CAL_RESULTADO = ['APROVADO', 'REPROVADO'];
     ['AV_DESCRICOES', 'AV_DIAMETROS', 'AV_ESPESSURAS', 'AV_LIGAS', 'AV_NORMAS', 'SERV_TIPOS', 'RNC_MOTIVOS', 'RNC_DISPOSICAO', 'RNC_ANALISE_CRITICA', 'CAL_FREQUENCIAS', 'CAL_EMAILS', 'GER_FORNECEDORES', 'GER_CLIENTES'].forEach((k) => { if (!c[k]) c[k] = []; });
     return c;
@@ -3145,6 +3248,27 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     });
     return raw;
   }
+  /* ================= ajustes únicos de versão (feitos por um administrador) ================= */
+  const ACENTOS = { 'Documentacão': 'Documentação', 'Documentacao': 'Documentação', 'Identificacão': 'Identificação', 'Identificacao': 'Identificação', 'Devolucao': 'Devolução' };
+  let migrando = false;
+  async function maybeMigrate() {
+    if (migrando || DB.admin !== true || !DB.cfg || !S.model || (DB.cfg.versao || 0) >= 3) return;
+    migrando = true;
+    try {
+      const fix = (v) => (typeof v === 'string' && ACENTOS[v.trim()] ? ACENTOS[v.trim()] : v);
+      const l = DB.cfg.listas || {}, listas = {};
+      ['RNC_MOTIVOS', 'RNC_DISPOSICAO'].forEach((n) => { if (Array.isArray(l[n])) { const nv = l[n].map(fix); if (JSON.stringify(nv) !== JSON.stringify(l[n])) listas[n] = nv.filter((v, i) => nv.indexOf(v) === i); } });
+      let n = 0;
+      for (const x of S.model.rnc) {
+        const ch = {}; if (fix(x.motivo) !== x.motivo) ch.motivo = fix(x.motivo); if (fix(x.disp) !== x.disp) ch.disp = fix(x.disp);
+        if (Object.keys(ch).length) { await updateRecord('RNC', x.key, ch); n++; }
+      }
+      const up = { versao: 3 }; if (Object.keys(listas).length) up.listas = listas;
+      await DB.db.doc('cfg/main').update(up);
+      if (n || up.listas) logEntry('GERAL', 'cfg', 'alterado', `Correção de acentos (Documentação, Identificação, Devolução) em ${n} RNC e nas listas`, null);
+    } catch (e) { console.warn('ajuste de versão não concluído', e); }
+    migrando = false;
+  }
   let rebT = null;
   function scheduleRebuild() { clearTimeout(rebT); rebT = setTimeout(rebuild, 60); }
   function allReady() { return MODS.every((m) => DB.ready[m]) && DB.ready.cfg; }
@@ -3154,6 +3278,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     DB.raw = toRaw();
     S.model = E.build(DB.raw, [], S.today);
     S.model.cfgDoc = DB.cfg || {};
+    S.model.serv.forEach((x) => { x.sv = svOf(x.key); });
     S.model.rncc = computeRncc(DB.rnccItems || [], S.model.cfg, S.today, S.model.hol);
     const sevO = { alta: 0, media: 1, baixa: 2 };
     S.audit = E.audit(S.model).concat(rnccAudit(S.model)).sort((a, b) => sevO[a.sev] - sevO[b.sev] || b.items.length - a.items.length);
@@ -3162,6 +3287,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const ae = document.activeElement;
     const busy = ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName);
     const formView = S.view === 'cadastro' || S.view === 'config' || S.view === 'historico';
+    setTimeout(maybeMigrate, 800);
     if (!S.rendered) { S.rendered = true; render(); }
     else if (formView || busy || $('#layer').innerHTML) S.stale = true;
     else render();
@@ -3183,6 +3309,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       try { DB.admin = !!(await u.canEdit()); } catch (e) { DB.admin = null; }
       updateChrome();
       if (S.model && !['cadastro', 'config'].includes(S.view)) render();
+      setTimeout(maybeMigrate, 800);
     }).catch(() => {});
     MODS.forEach((mod) => {
       db.collection(MOD[mod].col).onSnapshot((snap) => {
@@ -3207,11 +3334,19 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); TJ.docs = o; tjAssemble(); TJ.ready = true;
       if (S.view === 'trello' && S.model && !TJ.busy) { const ae = document.activeElement; if (!(ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName)) && !$('#layer').innerHTML) render(); }
     }, () => { TJ.ready = true; if (S.view === 'trello' && S.model) render(); });
+    db.doc('cfg/logo').onSnapshot((snap) => { DB.logo = snap.exists ? (snap.data().img || null) : null; applyLogo(); if (S.model && (S.view === 'config' || S.view === 'relatorio') && !$('#layer').innerHTML) render(); }, () => {});
     db.doc('meta/numeracao').onSnapshot((snap) => { DB.numer = snap.exists ? snap.data() : {}; }, () => {});
     db.doc('cfg/main').onSnapshot((snap) => { DB.cfg = snap.exists ? snap.data() : null; DB.ready.cfg = true; scheduleRebuild(); }, () => { DB.ready.cfg = true; scheduleRebuild(); });
     setTimeout(() => { if (!allReady()) renderStatus('Carregando os dados… A primeira abertura pode levar alguns segundos.'); }, 2500);
   }
   function canWrite() { return DB.canWrite !== false && !!DB.db; }
+  /* acesso por módulo (versão hospedada): 'nao' = não vê, 'ver' = só consulta, 'lanca' = lança */
+  const ACC = (col) => (typeof window.CQ_ACCESS === 'function' ? window.CQ_ACCESS(col) : 'lanca');
+  const vis = (col) => ACC(col) !== 'nao';
+  const cw = (col) => canWrite() && ACC(col) === 'lanca';
+  const VIEW_COL = { av: 'av', serv: 'serv', rnc: 'rnc', rncc: 'rncc', cal: 'ins', trello: 'trello', acomp: 'acomp', tcert: 'tcert', tusin: 'tusin' };
+  const visMod = (m) => !MOD[m] || m === 'GERAL' || vis(MOD[m].col);
+  const anyLanca = () => canWrite() && Object.values(VIEW_COL).some((c) => ACC(c) === 'lanca');
   async function lock(mod) {
     const holder = (DB.me || 'anon') + ':' + TAB;
     for (let i = 0; i < 12; i++) {
@@ -3302,29 +3437,34 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   }
   function recLabel(x) {
     if (x.mod === 'AV') return `${x.id} · ${x.desc || 'lote'}${E.filled(x.corrida) ? ' · corrida ' + x.corrida : ''}`;
-    if (x.mod === 'SERV') return `${x.desc || 'Serviço'} · NF ${disp(x.nf)}`;
+    if (x.mod === 'SERV') return `${x.sv ? x.sv + ' · ' : ''}${x.desc || 'Serviço'} · NF ${disp(x.nf)}`;
     if (x.mod === 'RNC') return `${x.num || 'RNC'} · ${x.forn || 'sem fornecedor'}`;
     if (x.mod === 'RNCC') return `${x.num} · ${x.cliente || 'sem cliente'}`;
     return `${x.codigo} · ${x.desc}`;
   }
   const listOf = (mod) => (mod === 'AV' ? S.model.av : mod === 'SERV' ? S.model.serv : mod === 'RNC' ? S.model.rnc : mod === 'RNCC' ? (S.model.rncc || []) : S.model.ins);
   function findRec(mod, key) { return listOf(mod).find((x) => x.key === key); }
-  const recTitle = (x) => (x.mod === 'AV' ? x.id : x.mod === 'SERV' ? `Serviço ${x.desc || ''} · NF ${disp(x.nf)}` : (x.mod === 'RNC' || x.mod === 'RNCC') ? x.num : x.codigo);
+  const recTitle = (x) => (x.mod === 'AV' ? x.id : x.mod === 'SERV' ? `${x.sv || 'Serviço'} · ${x.desc || ''} · NF ${disp(x.nf)}` : (x.mod === 'RNC' || x.mod === 'RNCC') ? x.num : x.codigo);
 
   /* ================= chrome ================= */
+  function applyLogo() {
+    const c = $('#logocard'), im = $('#logo-img'); if (!c || !im) return;
+    if (DB.logo) { if (im.getAttribute('src') !== DB.logo) im.src = DB.logo; c.hidden = false; } else { c.hidden = true; im.removeAttribute('src'); }
+  }
   function updateChrome() {
     const dot = $('#db-dot'), st = $('#db-st');
     dot.className = 'dot ' + (DB.state === 'on' ? 'on' : DB.state === 'off' ? 'off' : 'wait');
     st.textContent = DB.state === 'on' ? 'Banco online' : DB.state === 'off' ? 'Sem conexão' : 'Conectando…';
     if (S.model) {
       const m = S.model;
-      $('#db-meta').textContent = `${NF.format(m.av.length)} lotes · ${NF.format(m.serv.length)} serviços · ${NF.format(m.rnc.length)} RNC fornecedor · ${NF.format((m.rncc || []).length)} RNC cliente · ${NF.format(m.ins.length)} instrumentos · atualizado às ${hhmm(DB.last)}`;
-      const al = m.rnc.filter((x) => x.status === 'Atrasado').length + (m.rncc || []).filter((x) => x.status === 'Atrasado').length + m.ins.filter((x) => x.status === 'VENCIDO' || x.status === 'VENCE HOJE').length;
+      $('#dbcard').title = `Atualizado às ${hhmm(DB.last)} · ${NF.format(m.av.length)} lotes · ${NF.format(m.serv.length)} serviços · ${NF.format(m.rnc.length)} RNC fornecedor · ${NF.format((m.rncc || []).length)} RNC cliente · ${NF.format(m.ins.length)} instrumentos `;
+      const al = (vis('rnc') ? m.rnc.filter((x) => x.status === 'Atrasado').length : 0) + (vis('rncc') ? (m.rncc || []).filter((x) => x.status === 'Atrasado').length : 0) + (vis('ins') ? m.ins.filter((x) => x.status === 'VENCIDO' || x.status === 'VENCE HOJE').length : 0);
       const ca = $('#ct-alertas'); ca.hidden = !al; ca.textContent = al; ca.classList.toggle('hot', al > 0);
-      const hi = S.audit.filter((a) => a.sev === 'alta').length;
-      const cu = $('#ct-aud'); cu.hidden = !S.audit.length; cu.textContent = S.audit.length; cu.classList.toggle('hot', hi > 0);
+      const AU = S.audit.filter((a) => visMod(a.mod)), hi = AU.filter((a) => a.sev === 'alta').length;
+      const cu = $('#ct-aud'); cu.hidden = !AU.length; cu.textContent = AU.length; cu.classList.toggle('hot', hi > 0);
     }
-    $('#db-perm').textContent = DB.canWrite === false ? 'Seu acesso: só consulta' : DB.canWrite === true ? 'Seu acesso: pode lançar e editar' : '';
+    applyLogo();
+    if (typeof window.CQ_ACCESS === 'function') $$('#nav a').forEach((a) => { const c = VIEW_COL[a.dataset.v]; if (c) a.hidden = !vis(c); else if (a.dataset.v === 'cadastro') a.hidden = !anyLanca(); });
     $('#db-stale').hidden = !S.stale;
   }
 
@@ -3365,19 +3505,22 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     await resolveNames([m._cb, m._ub]);
     let pairs = [], acts = '';
     const t = (v) => esc(disp(v));
-    const editBtn = canWrite() ? `<button class="btn" type="button" data-act="edit" data-mod="${mod}" data-key="${esc(key)}">Editar</button>` : '';
+    const editBtn = cw(MOD[mod].col) ? `<button class="btn" type="button" data-act="edit" data-mod="${mod}" data-key="${esc(key)}">Editar</button>` : '';
     if (mod === 'AV') {
-      pairs = [['ID', `<span class="mono">${esc(x.id)}</span>`], ['Data de entrada', fD(x.data)], ['Filial', t(x.filial)], ['Volume', t(x.volume)], ['Corrida', `<span class="mono">${t(x.corrida)}</span>`], ['Descrição', t(x.desc)], ['Diâmetro', t(x.diam)], ['Espessura', t(x.esp)], ['Liga/Tipo', t(x.liga)], ['Norma', t(x.norma)], ['Fornecedor', t(x.forn)], ['Nota fiscal', t(x.nf)], ['Pedido de compra', t(x.pc)], ['Pedido de venda', t(x.pv)], ['Certificado', t(x.cert)], ['Conferido', t(x.conf)], ['Retrabalho', t(x.retrab)]];
-      acts = editBtn;
+      const link = /^https?:\/\//i.test(x.certLink || '') ? ` <a class="btn small" href="${esc(x.certLink)}" target="_blank" rel="noopener noreferrer">Abrir certificado ↗</a>` : (x.certLink ? ` <span class="muted">${t(x.certLink)}</span>` : '');
+      pairs = [['ID', `<span class="mono">${esc(x.id)}</span>`], ['Resultado da inspeção', chipInsp(x.insp)], ['Data de entrada', fD(x.data)], ['Filial', t(x.filial)], ['Corrida', `<span class="mono">${t(x.corrida)}</span>`], E.filled(x.volume) && !E.isStar(x.volume) ? ['Volume', `<span class="mono">${t(x.volume)}</span>`] : null, ['Descrição', t(x.desc)],
+        ['Quantidade', x.quant == null || x.quant === '' ? '' : t(x.quant) + (x.und ? ' ' + t(x.und) : '')], ['Diâmetro', t(x.diam)], ['Espessura', t(x.esp)], ['Liga/Tipo', t(x.liga)], ['Material', t(x.norma)], ['Fornecedor', t(x.forn)], ['Nota fiscal', t(x.nf)], ['Pedido de compra', t(x.pc)], ['Pedido de venda', t(x.pv)], ['Certificado', (semCert(x) ? '<span class="chip warn"><i>!</i>sem certificado</span>' : t(x.cert)) + link], ['Conferido', t(x.conf)], ['Retrabalho', t(x.retrab)]];
+      acts = (cw(MOD[mod].col) ? `<button class="btn" type="button" data-act="av-similar" data-key="${esc(key)}">Lançar parecido</button>` : '') + `<button class="btn" type="button" data-act="av-label" data-key="${esc(key)}">Etiqueta</button>`
+        + (cw('rnc') && E.low(x.insp) === 'reprovado' ? `<button class="btn" type="button" data-act="av-to-rncf" data-key="${esc(key)}" style="color:var(--crit)">Abrir RNC de fornecedor</button>` : '') + editBtn;
     } else if (mod === 'SERV') {
-      pairs = [['Data', fD(x.data)], ['Descrição', t(x.desc)], ['Nota fiscal', t(x.nf)], ['Fornecedor', t(x.forn)], ['Pedido de compra', t(x.pc)], ['Pedido de venda', t(x.pv)], ['Certificado', t(x.cert)]];
+      pairs = [['Número', `<span class="mono">${esc(x.sv || '')}</span>`], ['Data', fD(x.data)], ['Descrição', t(x.desc)], ['Nota fiscal', t(x.nf)], ['Fornecedor', t(x.forn)], ['Pedido de compra', t(x.pc)], ['Pedido de venda', t(x.pv)], ['Certificado', t(x.cert)]];
       acts = editBtn;
     } else if (mod === 'RNC') {
       const dl = x.diasParaFinal;
       pairs = [['Número', `<span class="mono">${esc(x.num)}</span>`], ['Status', chipRnc(x.status)], ['Abertura', fD(x.data)], ['Comprador', t(x.comprador)], ['Filial', t(x.filial)], ['Emissor', t(x.emissor)], ['Fornecedor', t(x.forn)], ['Cliente', t(x.cliente)], ['Nota fiscal', t(x.nf)], ['Pedido de venda', t(x.pv)], ['Ordem de compra', t(x.oc)], ['Depto. responsável', t(x.depto)], ['Motivo', t(x.motivo)], ['Reincidência', esc(x.reinc)],
         ['Prazo de disposição', fD(x.prazoDisp)], ['Disposição', t(x.disp)], ['Fechamento da disposição', fD(x.fechDisp)], ['Ação corretiva?', t(x.corretiva)], ['Prazo da ação', fD(x.prazoAcao)], ['Nível do prazo', t(x.nivel)], ['Prazo para fechar', fD(x.prazoFechar)], ['Análise crítica', t(x.analise)],
         ['Prazo final', fD(x.prazoFinal) + (x.aberta && dl != null ? ` <span class="muted">(${dl < 0 ? 'vencido há ' + (-dl) + ' dia(s)' : dl === 0 ? 'vence hoje' : 'faltam ' + dl + ' dia(s)'})</span>` : '')], ['Conclusão', fD(x.conclusao)], ['Cancelada', t(x.cancel)], ['Informações', `<span style="white-space:pre-wrap">${t(x.info)}</span>`]];
-      acts = (canWrite() ? `<button class="btn primary" type="button" data-act="edit-rnc" data-key="${esc(key)}">Atualizar andamento</button>` : '') + (x.aberta ? `<button class="btn" type="button" data-act="msg-rnc" data-key="${esc(key)}">Texto de cobrança</button>` : '') + editBtn;
+      acts = (cw(MOD[mod].col) ? `<button class="btn primary" type="button" data-act="edit-rnc" data-key="${esc(key)}">Atualizar andamento</button>` : '') + (x.aberta ? `<button class="btn" type="button" data-act="msg-rnc" data-key="${esc(key)}">Texto de cobrança</button>` : '') + editBtn;
     } else if (mod === 'RNCC') {
       const dl = x.diasParaFinal;
       pairs = [['Número', `<span class="mono">${esc(x.num)}</span>`], ['Status', chipRnc(x.status)], ['Abertura', fD(x.data)], ['Filial', t(x.filial)], ['Emissor', t(x.emissor)], ['Cliente', t(x.cliente)], ['Contato', t(x.contato)], ['Canal', t(x.canal)],
@@ -3387,18 +3530,18 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
         ['Ação corretiva', `<span style="white-space:pre-wrap">${t(x.acao)}</span>`], ['Responsável da ação', t(x.resp)], ['Prazo da ação', fD(x.acaoPrazo)],
         ['Prazo de resposta ao cliente', fD(x.prazoResp)], ['Resposta ao cliente', fD(x.respData) + (x.diasResposta != null ? ` <span class="muted">(${x.diasResposta} dia(s))</span>` : '')],
         ['Eficácia', t(x.eficacia)], ['Data da verificação', fD(x.eficData)], ['Prazo final', fD(x.prazoFinal) + (x.aberta && dl != null ? ` <span class="muted">(${dl < 0 ? 'vencido há ' + (-dl) + ' dia(s)' : dl === 0 ? 'vence hoje' : 'faltam ' + dl + ' dia(s)'})</span>` : '')], ['Conclusão', fD(x.conclusao)], ['Cancelada', t(x.cancel)], ['Histórico', `<span style="white-space:pre-wrap">${t(x.info)}</span>`]];
-      acts = (canWrite() ? `<button class="btn primary" type="button" data-act="edit-rncc" data-key="${esc(key)}">Atualizar andamento</button>` : '') + (x.aberta ? `<button class="btn" type="button" data-act="msg-rncc" data-key="${esc(key)}">Texto de cobrança interna</button>` : '')
-        + (canWrite() && E.low(x.origem) === 'fornecedor' && !x.rncf ? `<button class="btn" type="button" data-act="rncc-to-rncf" data-key="${esc(key)}">Abrir RNC de fornecedor</button>` : '') + editBtn;
+      acts = (cw(MOD[mod].col) ? `<button class="btn primary" type="button" data-act="edit-rncc" data-key="${esc(key)}">Atualizar andamento</button>` : '') + (x.aberta ? `<button class="btn" type="button" data-act="msg-rncc" data-key="${esc(key)}">Texto de cobrança interna</button>` : '')
+        + (cw('rncc') && cw('rnc') && E.low(x.origem) === 'fornecedor' && !x.rncf ? `<button class="btn" type="button" data-act="rncc-to-rncf" data-key="${esc(key)}">Abrir RNC de fornecedor</button>` : '') + editBtn;
     } else {
       pairs = [['Código', `<span class="mono">${esc(x.codigo)}</span>`], ['Status', chipIns(x.status)], ['Descrição', t(x.desc)], ['Marca', t(x.marca)], ['Tipo de equipamento', t(x.tipo)], ['Certificado', t(x.cert)], ['Data da calibração', fD(x.dataCal)], ['Frequência', x.freq ? x.freq + ' meses' : ''], ['Validade', fD(x.validade)], ['Dias para vencer', x.dias == null ? '' : NF.format(x.dias)], ['Resultado da calibração (erro)', t(x.resCal)], ['Critério de aceitação', x.criterio == null ? '' : NF.format(x.criterio)], ['Resultado', chipRes(x.resultado)], ['Responsável', t(x.resp)], ['Departamento', t(x.depto)], ['Situação operacional', t(x.situacao)], ['Observação', t(x.obs)]];
-      acts = (canWrite() ? `<button class="btn primary" type="button" data-act="edit-cal" data-key="${esc(key)}">Registrar calibração</button>` : '') + editBtn;
+      acts = (cw(MOD[mod].col) ? `<button class="btn primary" type="button" data-act="edit-cal" data-key="${esc(key)}">Registrar calibração</button>` : '') + editBtn;
     }
     let rel = '';
     if (mod !== 'INS') {
       const r = related(x);
       rel = `<div class="fsec"><h3>Registros ligados (${r.length})</h3>${r.length ? '<div class="rel">' + r.map((o) => `<button type="button" style="--c:${MOD[o.rec.mod].c}" data-open="${o.rec.mod}:${esc(o.rec.key)}" title="${esc(o.why)}">${esc(recLabel(o.rec))} <span class="muted">· ${esc(o.why)}</span></button>`).join('') + '</div>' : '<span class="muted">Nenhum outro registro com a mesma NF, pedido ou corrida.</span>'}</div>`;
     }
-    const title = mod === 'SERV' ? (x.desc || 'Serviço') : recTitle(x);
+    const title = mod === 'SERV' ? `${x.sv ? x.sv + ' · ' : ''}${x.desc || 'Serviço'}` : recTitle(x);
     openDrawer(title, MOD[mod].name, (acts ? `<div class="formfoot">${acts}</div>` : '') + kv(pairs) + metaLine(mod, key) + rel, MOD[mod].c);
   }
 
@@ -3439,7 +3582,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   /* ================= navegação ================= */
   const VIEWS = {};
   function go(v, replace) {
-    if (!VIEWS[v]) v = 'painel';
+    if (!VIEWS[v] || (VIEW_COL[v] && !vis(VIEW_COL[v])) || (v === 'cadastro' && !anyLanca() && typeof window.CQ_ACCESS === 'function')) v = 'painel';
     if (v !== 'cadastro') S.editKey = null;
     S.view = v; S.stale = false;
     try { if (replace) history.replaceState(null, '', '#' + v); else history.pushState(null, '', '#' + v); } catch (e) { /* sem histórico */ }
@@ -3456,6 +3599,12 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       return;
     }
     VIEWS[S.view](main);
+    hideInvisible(main);
+  }
+  function hideInvisible(root) {
+    if (typeof window.CQ_ACCESS !== 'function') return;
+    $$('.band[data-bmod]', root).forEach((b) => { if (!visMod(b.dataset.bmod)) { const sec = b.closest('.sec'); if (sec) sec.remove(); } });
+    $$('.report [style^="--c:var(--"]', root).forEach((el) => { const m = /--c:(var\(--[a-z]+\))/.exec(el.getAttribute('style') || ''); if (m && COLOR_COL[m[1]] && !vis(COLOR_COL[m[1]])) el.remove(); });
   }
   function renderStatus(msg, bad) {
     $('#main').innerHTML = `<div class="landing"><div class="drop">${bad ? '<span class="mtag" style="--c:var(--crit)">Sem acesso aos dados</span>' : '<div class="loading"><span class="spin"></span><span>Carregando</span></div>'}<h2>${bad ? 'Abra pela Central da Qualidade' : 'Central da Qualidade'}</h2><p>${esc(msg)}</p></div></div>`;
@@ -3502,6 +3651,10 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const fech = M.rnc.map((x) => x.diasFechamento).filter((v) => v != null);
     const tm = fech.length ? Math.round(fech.reduce((a, b) => a + b, 0) / fech.length * 10) / 10 : 0;
     const semCertAV = M.av.filter(semCert).length;
+    const inspL = M.av.filter((x) => ['aprovado', 'reprovado'].includes(E.low(x.insp)));
+    const insp = { n: inspL.length, ok: inspL.filter((x) => E.low(x.insp) === 'aprovado').length, rep: inspL.filter((x) => E.low(x.insp) === 'reprovado').length };
+    const fmapI = new Map(); inspL.forEach((x) => { const k = E.low(x.forn); const o = fmapI.get(k) || { label: x.forn || '(sem fornecedor)', n: 0, ok: 0 }; o.n++; if (E.low(x.insp) === 'aprovado') o.ok++; fmapI.set(k, o); });
+    const aprovForn = Array.from(fmapI.values()).filter((o) => o.n >= 3).map((o) => ({ label: o.label, value: Math.round(o.ok / o.n * 100), tip: `${o.label} (${o.ok} de ${o.n} lotes)`, go: { v: 'av', f: { forn: o.label } } })).sort((a2, b2) => a2.value - b2.value || a2.label.localeCompare(b2.label)).slice(0, 12);
     const mb12 = monthsBack(12);
     const ser = (arr, mb) => mb.map((m) => ({ label: m.label, tip: MESES_L[m.m - 1] + ' ' + m.y, value: arr.filter((x) => inRange(x.data, m.start, m.end)).length }));
     const prox = monthsBack(12, E.edate(t, 11)).map((m) => ({ label: m.label, tip: 'Vencem em ' + MESES_L[m.m - 1] + ' ' + m.y, value: M.ins.filter((x) => x.validade != null && inRange(x.validade, m.start, m.end) && x.status !== 'FORA DE USO').length }));
@@ -3543,18 +3696,20 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       ${rnccPainel(M, mb12, ser)}
       <section class="sec">${band('AV', 'Indicadores de lotes (AV)')}<div class="block"><div class="body">
         <div class="kpis sm">
-          ${kpiHTML({ l: 'Total de lotes', v: NF.format(M.av.length), c: MOD.AV.c, go: { v: 'av', f: {} } })}
+          ${kpiHTML({ l: 'Total de lotes', v: NF.format(M.av.length), sub: NF.format(nNotas(M.av)) + ' notas fiscais', c: MOD.AV.c, go: { v: 'av', f: {} } })}
           ${kpiHTML({ l: 'Lotes no mês atual', v: NF.format(avMes.length), c: MOD.AV.c, go: { v: 'av', f: mesAt } })}
-          ${kpiHTML({ l: 'Lotes no mês anterior', v: NF.format(M.av.filter((x) => inRange(x.data, p0, p1)).length), c: MOD.AV.c, go: { v: 'av', f: mesAn } })}
+          ${kpiHTML({ l: 'Notas fiscais no mês', v: NF.format(nNotas(avMes)), sub: `${NF.format(avMes.length)} lotes · mês anterior: ${NF.format(nNotas(M.av.filter((x) => inRange(x.data, p0, p1))))} notas`, c: MOD.AV.c, go: { v: 'av', f: mesAt } })}
           ${kpiHTML({ l: 'Lotes sem certificado', v: NF.format(semCertAV), sub: 'certificado "*" ou vazio', c: MOD.AV.c, go: { v: 'av', f: { cert: 'sem' } } })}
           ${kpiHTML({ l: 'Com certificado', v: (M.av.length ? NF1.format((1 - semCertAV / M.av.length) * 100) : '0') + '%', c: MOD.AV.c })}
           ${kpiHTML({ l: 'Com retrabalho', v: NF.format(M.av.filter((x) => E.low(x.retrab) === 'sim').length), c: MOD.AV.c, go: { v: 'av', f: { retrab: 'SIM' } } })}
+          ${kpiHTML({ l: 'Aprovação na inspeção', v: insp.n ? NF1.format(insp.ok / insp.n * 100) + '%' : '—', sub: insp.n ? `${NF.format(insp.rep)} reprovado(s) de ${NF.format(insp.n)} inspecionados` : 'sem resultado registrado', c: MOD.AV.c, cls: insp.rep ? 'warn' : '', go: insp.rep ? { v: 'av', f: { insp: 'Reprovado' } } : null })}
         </div>
         <div class="charts">
-          ${chartHTML('Lotes recebidos por mês', colsHTML(ser(M.av, mb12), MOD.AV.c), 'últimos 12 meses')}
+          <div class="chart"><h3>${S.avSerie === 'notas' ? 'Notas fiscais recebidas por mês' : 'Lotes recebidos por mês'}<small>últimos 12 meses</small><span class="seg mini" role="group" aria-label="Mostrar"><button type="button" data-act="av-serie" data-key="lotes" aria-pressed="${S.avSerie !== 'notas'}">Lotes</button><button type="button" data-act="av-serie" data-key="notas" aria-pressed="${S.avSerie === 'notas'}">Notas</button></span></h3>${colsHTML(S.avSerie === 'notas' ? mb12.map((m) => ({ label: m.label, tip: MESES_L[m.m - 1] + ' ' + m.y + ' · notas', value: nNotas(M.av.filter((x) => inRange(x.data, m.start, m.end))) })) : ser(M.av, mb12), MOD.AV.c)}</div>
           ${chartHTML('Top 10 fornecedores', barsHTML(countBy(M.av, (x) => x.forn).map((i) => ({ ...i, go: { v: 'av', f: { forn: i.label } } })), MOD.AV.c, { max: 10 }), 'nº de lotes')}
           ${chartHTML('Lotes por conferente', barsHTML(countBy(M.av, (x) => x.conf).map((i) => ({ ...i, go: { v: 'av', f: { conf: i.label } } })), MOD.AV.c, { max: 10 }))}
           ${chartHTML('Lotes por filial', barsHTML(countBy(M.av, (x) => x.filial).map((i) => ({ ...i, go: { v: 'av', f: { filial: i.label } } })), MOD.AV.c))}
+          ${chartHTML('Aprovação na inspeção por fornecedor', aprovForn.length ? barsHTML(aprovForn, MOD.AV.c, { suf: '%' }) : '<div class="empty">Ainda não há lotes com resultado de inspeção.</div>', 'piores primeiro · fornecedores com 3 ou mais lotes inspecionados')}
         </div></div></div></section>
       <section class="sec">${band('SERV', 'Indicadores de serviços')}<div class="block"><div class="body">
         <div class="kpis sm">
@@ -3640,6 +3795,90 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   function certMsg(g) {
     return `Assunto: Certificado pendente — ${g.forn} — NF ${g.nf}\n\nOlá.\n\nRecebemos a NF ${g.nf} do fornecedor ${g.forn} em ${fD(g.data)} sem certificado de qualidade para ${g.items.length} lote(s):\n\n${g.items.map((x) => `  • ${x.id} — ${x.desc}${E.filled(x.diam) ? ' ' + x.diam : ''}${E.filled(x.corrida) ? ' — corrida ' + x.corrida : ''}`).join('\n')}\n\nPor favor, solicitem ao fornecedor o envio dos certificados${E.filled(g.pc) ? ', referentes ao pedido de compra ' + g.pc : ''}.\n\nObrigado,\nQualidade — Aços Vital`;
   }
+  function fornMsg(g) {
+    return { subject: `Certificado de qualidade pendente — NF ${g.nf}`, body: `Prezados,\n\nRecebemos a NF ${g.nf}${E.filled(g.pc) ? ' (nosso pedido de compra ' + g.pc + ')' : ''} em ${fD(g.data)}, porém sem o certificado de qualidade dos itens abaixo:\n\n${g.items.map((x) => `  • ${x.desc}${E.filled(x.diam) ? ' ' + x.diam : ''}${E.filled(x.corrida) && !E.isStar(x.corrida) ? ' — corrida ' + x.corrida : ''}${E.filled(x.volume) && !E.isStar(x.volume) ? ' — volume ' + x.volume : ''}`).join('\n')}\n\nPor gentileza, enviem os certificados para darmos andamento ao recebimento.\n\nAtenciosamente,\nQualidade — Aços Vital` };
+  }
+  function fornEmail(forn) { const m = S.model.cfg.FORN_EMAILS || {}; const k = Object.keys(m).find((n) => E.low(n) === E.low(forn)); return k ? String(m[k]).trim() : ''; }
+  function openMail(to, subject, body) {
+    const a = document.createElement('a');
+    a.href = `mailto:${encodeURIComponent(to || '').replace(/%40/g, '@').replace(/%2C/gi, ',').replace(/%3B/gi, ';')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    a.target = '_top'; a.rel = 'noopener'; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 500);
+  }
+  function mailForn(g) {
+    const to = fornEmail(g.forn), m = fornMsg(g);
+    if (to) { openMail(to, m.subject, m.body); return; }
+    openModal('Fornecedor sem e-mail', `<p style="margin:0">${esc(g.forn)} ainda não tem e-mail cadastrado. Cadastre em <b>Configurações › E-mails dos fornecedores</b> para o destinatário vir preenchido.</p><div class="formfoot"><button class="btn primary" type="button" id="mf-go">Abrir e-mail sem destinatário</button><button class="btn" type="button" id="mf-cfg">Cadastrar e-mail</button><button class="btn ghost" type="button" data-act="close">Cancelar</button></div>`);
+    $('#mf-go').onclick = () => { closeLayer(); openMail('', m.subject, m.body); };
+    $('#mf-cfg').onclick = () => { closeLayer(); S.cfgFocus = 'FORN_EMAILS'; go('config'); };
+  }
+  function baixaCert(g) {
+    openModal(`Baixa do certificado · NF ${g.nf}`, `<p style="margin:0">${esc(g.forn)} — marque os lotes que chegaram com este certificado.</p>
+      <div style="display:grid;gap:4px;max-height:220px;overflow:auto">${g.items.map((x) => `<label class="check"><input type="checkbox" class="bx-it" value="${esc(x.key)}" checked> <span class="mono">${esc(x.id)}</span> · ${esc(x.desc || '')}${E.filled(x.corrida) && !E.isStar(x.corrida) ? ' · corrida ' + esc(x.corrida) : ''}</label>`).join('')}</div>
+      <label class="field"><span>Nº do certificado <b>*</b></span><input id="bx-cert" autocomplete="off"></label>
+      <label class="field"><span>Link do certificado (opcional)</span><input id="bx-link" placeholder="https://drive.google.com/…" autocomplete="off"></label>
+      <div class="formfoot"><button class="btn primary" type="button" id="bx-ok">Dar baixa</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    $('#bx-ok').onclick = async () => {
+      const cert = $('#bx-cert').value.trim(), link = $('#bx-link').value.trim(), keys = $$('.bx-it').filter((c) => c.checked).map((c) => c.value);
+      if (!cert) { toast('Informe o número do certificado.', true); $('#bx-cert').focus(); return; }
+      if (!keys.length) { toast('Marque pelo menos um lote.', true); return; }
+      const b = $('#bx-ok'); b.disabled = true; b.textContent = 'Gravando…';
+      const cv = /^\d{1,15}$/.test(cert) && !/^0\d/.test(cert) ? Number(cert) : cert;
+      try {
+        for (const k of keys) {
+          const x = findRec('AV', k); const ch = { cert: cv }; if (link) ch.certLink = link;
+          await updateRecord('AV', k, ch);
+          logEntry('AV', k, 'alterado', `Lote ${x ? x.id : k} · baixa do certificado (NF ${g.nf})`, { cert: [x ? x.cert : null, cv] });
+        }
+        closeLayer(); toast(`Certificado ${cert} lançado em ${keys.length} lote(s) da NF ${g.nf}.`);
+      } catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; b.textContent = 'Dar baixa'; }
+    };
+  }
+  /* ---------- etiqueta do lote (impressora térmica) ---------- */
+  const LABEL_SIZES = [['100x50', '100 × 50 mm'], ['100x75', '100 × 75 mm'], ['60x40', '60 × 40 mm'], ['50x30', '50 × 30 mm'], ['custom', 'Personalizado']];
+  const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* sem armazenamento */ } };
+  function lotUrl(x) { return window.CQ_FIREBASE_CONFIG ? location.href.split('#')[0] + '#lote=' + encodeURIComponent(x.id) : x.id; }
+  function qrSvg(text, mm) {
+    if (typeof qrcode !== 'function') return '';
+    const q = qrcode(0, 'M'); q.addData(text); q.make();
+    const n = q.getModuleCount(); let d = '';
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.isDark(r, c)) d += `M${c},${r}h1v1h-1z`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 ${n + 2} ${n + 2}" width="${mm}mm" height="${mm}mm" shape-rendering="crispEdges"><rect x="-1" y="-1" width="${n + 2}" height="${n + 2}" fill="#fff"/><path d="${d}" fill="#000"/></svg>`;
+  }
+  function labelHTML(x, W, H) {
+    const pad = Math.max(1.5, H * 0.05), qr = Math.min(H - pad * 2, W * 0.4), fs = H * 0.075, small = (v) => esc(String(v == null ? '' : v));
+    const line = (l, v) => (E.filled(v) && !E.isStar(v) ? `<div class="ln"><span>${l}</span> ${small(v)}</div>` : '');
+    return `<div class="lab" style="width:${W}mm;height:${H}mm;padding:${pad}mm;font-size:${fs}mm"><div class="tx"><div class="id" style="font-size:${H * 0.17}mm">${small(x.id)}</div><div class="ds">${small(x.desc)}${E.filled(x.diam) ? ' ' + small(x.diam) : ''}${E.filled(x.esp) ? ' × ' + small(x.esp) : ''}</div>${line('Corrida', x.corrida)}${line('Volume', x.volume)}${line('Material', x.norma)}<div class="ln"><span>NF</span> ${small(x.nf)} · ${small(fD(x.data))}${x.quant != null && x.quant !== '' ? ' · ' + small(x.quant) + ' ' + small(x.und || '') : ''}</div><div class="ft">${small(x.forn)}</div></div><div class="qr">${qrSvg(lotUrl(x), qr)}</div></div>`;
+  }
+  const LABEL_CSS = (W, H) => `@page{size:${W}mm ${H}mm;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0}body{font-family:"Arial Narrow",Arial,Helvetica,sans-serif;color:#000;background:#fff}
+    .lab{display:flex;gap:2mm;align-items:center;overflow:hidden;page-break-after:always;break-after:page;line-height:1.15}.lab:last-child{page-break-after:auto;break-after:auto}
+    .tx{flex:1;min-width:0;display:grid;gap:.6mm}.id{font-weight:800;letter-spacing:.02em;line-height:1}.ds{font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .ln{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ln span{font-weight:700}.ft{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}.qr{flex:none;line-height:0}`;
+  function printHTML(html) {
+    const fr = document.createElement('iframe');
+    fr.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
+    document.body.appendChild(fr);
+    fr.onload = () => { setTimeout(() => { try { fr.contentWindow.focus(); fr.contentWindow.print(); } catch (e) { toast('Este visualizador não permite imprimir.', true); } setTimeout(() => fr.remove(), 60000); }, 250); };
+    fr.srcdoc = html;
+  }
+  function labelDialog(lots) {
+    if (!lots.length) return;
+    const cur = lsGet('cq-etq', '100x50');
+    const dims = () => { const v = $('#lb-size').value; if (v === 'custom') return [Math.max(20, +$('#lb-w').value || 100), Math.max(15, +$('#lb-h').value || 50)]; const [w, h] = v.split('x').map(Number); return [w, h]; };
+    openModal(lots.length > 1 ? `Etiquetas (${lots.length} lotes)` : `Etiqueta · ${lots[0].id}`, `
+      <div class="fgrid" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))"><label class="field"><span>Tamanho da etiqueta</span><select id="lb-size">${LABEL_SIZES.map(([v, l]) => `<option value="${v}" ${v === (LABEL_SIZES.some((s2) => s2[0] === cur) ? cur : 'custom') ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+        <label class="field" id="lb-wf"><span>Largura (mm)</span><input id="lb-w" type="number" min="20" max="200" value="${esc(lsGet('cq-etq-w', '100'))}"></label><label class="field" id="lb-hf"><span>Altura (mm)</span><input id="lb-h" type="number" min="15" max="200" value="${esc(lsGet('cq-etq-h', '50'))}"></label></div>
+      <div class="lbprev" id="lb-prev"></div>
+      <p class="muted" style="margin:0;font-size:12.5px">Na janela de impressão, escolha a impressora de etiquetas e, se ela pedir, o mesmo tamanho de papel. O QR code abre o lote na Central.</p>
+      <div class="formfoot"><button class="btn primary" type="button" id="lb-print">Imprimir ${lots.length > 1 ? lots.length + ' etiquetas' : 'etiqueta'}</button><button class="btn" type="button" data-act="close">Fechar</button></div>`);
+    const draw = () => { const custom = $('#lb-size').value === 'custom'; $('#lb-wf').hidden = $('#lb-hf').hidden = !custom; const [W, H] = dims(); $('#lb-prev').innerHTML = `<style>${LABEL_CSS(W, H).replace(/@page[^}]*}/, '').replace(/html,body\{[^}]*\}/, '').replace(/body\{[^}]*\}/, '')}</style><div class="lbsheet">${labelHTML(lots[0], W, H)}</div>`; };
+    ['lb-size', 'lb-w', 'lb-h'].forEach((id) => $('#' + id).addEventListener('input', draw));
+    draw();
+    $('#lb-print').onclick = () => {
+      const [W, H] = dims(); lsSet('cq-etq', $('#lb-size').value); lsSet('cq-etq-w', String(W)); lsSet('cq-etq-h', String(H));
+      printHTML(`<!doctype html><html><head><meta charset="utf-8"><title>Etiquetas</title><style>${LABEL_CSS(W, H)}</style></head><body>${lots.map((x) => labelHTML(x, W, H)).join('')}</body></html>`);
+    };
+  }
   VIEWS.alertas = (main) => {
     const M = S.model;
     const ab = M.rnc.filter((x) => x.aberta).map((x) => ({ x, stg: rncStage(x) }));
@@ -3658,7 +3897,9 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     S.alertGroups = groups;
     const filt = S.f.alert || 'todas';
     const pick = { todas: ab, atras, disp: dispV, soon }[filt] || ab;
+    const nada = !atras.length && !dispV.length && !soon.length && !lanes.some((ln) => ln.l.length) && !sem.length && !(M.rncc || []).some((x) => x.aberta && (x.status === 'Atrasado' || (x.respData == null && x.prazoResp != null && S.today > x.prazoResp)));
     main.innerHTML = `<div class="view">${head('Alertas', 'O que precisa de ação hoje. Os prazos de RNC usam dias úteis e os feriados de Configurações.', '<button class="btn" type="button" data-act="msg-cal">Texto do alerta de calibração</button>')}
+      ${nada ? okSeal('Nenhum alerta urgente', 'Sem RNC atrasada, calibração vencida ou lote sem certificado. Tudo certo por aqui.') : ''}
       <div class="kpis">
         ${kpiHTML({ l: 'RNC fornecedor atrasadas', v: NF.format(atras.length), sub: 'passaram do prazo final', c: MOD.RNC.c, cls: atras.length ? 'crit' : 'ok' })}
         ${kpiHTML({ l: 'Disposição vencida', v: NF.format(dispV.length), sub: 'sem disposição após o prazo', c: MOD.RNC.c, cls: dispV.length ? 'warn' : 'ok' })}
@@ -3688,7 +3929,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     mountTable($('#al-cert'), { id: 'al-cert', rows: groups.map((g, i) => ({ ...g, mod: 'AVG', key: String(i), row: i, n: g.items.length })), noun: 'notas fiscais', sort: 'data', dir: -1, cols: [
       { k: 'data', l: 'Entrada', f: (g) => fD(g.data) }, { k: 'forn', l: 'Fornecedor', cls: 'clip' }, { k: 'nf', l: 'NF', cls: 'mono' }, { k: 'n', l: 'Lotes', r: 1 },
       { k: 'ids', l: 'IDs', nosort: 1, f: (g) => g.items.slice(0, 6).map((x) => `<button class="btn small ghost mono" type="button" data-open="AV:${esc(x.key)}">${esc(x.id)}</button>`).join(' ') + (g.items.length > 6 ? ` <span class="muted">+${g.items.length - 6}</span>` : '') },
-      { k: 'msg', l: '', nosort: 1, f: (g) => `<button class="btn small" type="button" data-act="msg-cert" data-key="${g.row}">Cobrança</button>` }] });
+      { k: 'msg', l: '', nosort: 1, f: (g) => `<span style="white-space:nowrap">${cw('av') ? `<button class="btn small" type="button" data-act="cert-baixa" data-key="${g.row}">Dar baixa</button> ` : ''}<button class="btn small" type="button" data-act="cert-mail" data-key="${g.row}">E-mail ao fornecedor</button> <button class="btn small ghost" type="button" data-act="msg-cert" data-key="${g.row}">Texto interno</button></span>` }] });
   };
 
   /* ================= RASTREABILIDADE ================= */
@@ -3736,15 +3977,16 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
 
   /* ================= MÓDULOS ================= */
   const semCert = (x) => E.isStar(x.cert) || E.blank(x.cert);
+  const nNotas = (arr) => new Set(arr.filter((x) => E.filled(x.nf)).map((x) => E.key(x.forn) + '|' + E.key(x.nf))).size;
   const COLS = {
     AV: [
       { k: 'id', l: 'ID', cls: 'mono', s: (x) => keyNum(x.id), w: 10 },
       { k: 'data', l: 'Entrada', f: (x) => fD(x.data), x: (x) => dateCell(x.data), w: 11 }, { k: 'filial', l: 'Filial', cls: 'clip', w: 20 },
-      { k: 'corrida', l: 'Corrida', cls: 'mono' }, { k: 'desc', l: 'Descrição', cls: 'clip', w: 26 }, { k: 'diam', l: 'Diâm.' }, { k: 'esp', l: 'Esp.' }, { k: 'liga', l: 'Liga/Tipo' }, { k: 'norma', l: 'Norma' },
+      { k: 'corrida', l: 'Corrida', cls: 'mono' }, { k: 'desc', l: 'Descrição', cls: 'clip', w: 26 }, { k: 'diam', l: 'Diâm.' }, { k: 'esp', l: 'Esp.' }, { k: 'liga', l: 'Liga/Tipo' }, { k: 'norma', l: 'Material' }, { k: 'quant', l: 'Qtd', r: 1, f: (x) => (x.quant == null || x.quant === '' ? '' : esc(disp(x.quant)) + (x.und ? ' <span class="muted">' + esc(x.und) + '</span>' : '')), x: (x) => (x.quant == null ? '' : disp(x.quant) + (x.und ? ' ' + x.und : '')) },
       { k: 'forn', l: 'Fornecedor', cls: 'clip', w: 24 }, { k: 'nf', l: 'NF', cls: 'mono' }, { k: 'pc', l: 'Ped. compra', cls: 'mono' }, { k: 'pv', l: 'Ped. venda', cls: 'mono' },
-      { k: 'cert', l: 'Certificado', f: (x) => semCert(x) ? '<span class="chip warn"><i>!</i>sem</span>' : esc(disp(x.cert)), x: (x) => disp(x.cert) }, { k: 'conf', l: 'Conferido', cls: 'clip', w: 20 }, { k: 'retrab', l: 'Retrab.' }],
+      { k: 'cert', l: 'Certificado', f: (x) => semCert(x) ? '<span class="chip warn"><i>!</i>sem</span>' : esc(disp(x.cert)), x: (x) => disp(x.cert) }, { k: 'conf', l: 'Conferido', cls: 'clip', w: 20 }, { k: 'retrab', l: 'Retrab.' }, { k: 'insp', l: 'Inspeção', f: (x) => chipInsp(x.insp), x: (x) => x.insp || '' }],
     SERV: [
-      { k: 'data', l: 'Data', f: (x) => fD(x.data), x: (x) => dateCell(x.data), w: 11 }, { k: 'desc', l: 'Descrição', cls: 'clip', w: 26 }, { k: 'nf', l: 'NF', cls: 'mono' }, { k: 'forn', l: 'Fornecedor', cls: 'clip', w: 24 },
+      { k: 'sv', l: 'Nº', cls: 'mono', s: (x) => keyNum(x.key), w: 9 }, { k: 'data', l: 'Data', f: (x) => fD(x.data), x: (x) => dateCell(x.data), w: 11 }, { k: 'desc', l: 'Descrição', cls: 'clip', w: 26 }, { k: 'nf', l: 'NF', cls: 'mono' }, { k: 'forn', l: 'Fornecedor', cls: 'clip', w: 24 },
       { k: 'pc', l: 'Ped. compra', cls: 'mono' }, { k: 'pv', l: 'Ped. venda', cls: 'mono' }, { k: 'cert', l: 'Certificado', f: (x) => semCert(x) ? '<span class="chip warn"><i>!</i>sem</span>' : esc(disp(x.cert)), x: (x) => disp(x.cert) }],
     RNC: [
       { k: 'num', l: 'Nº', cls: 'mono', w: 16, s: (x) => x.row }, { k: 'data', l: 'Abertura', f: (x) => fD(x.data), x: (x) => dateCell(x.data), w: 11 }, { k: 'status', l: 'Status', f: (x) => chipRnc(x.status), x: (x) => x.status, w: 13 },
@@ -3789,19 +4031,19 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   const txtMatch = (q, vals) => { if (!q) return true; const k = E.key(q); return vals.some((v) => E.filled(v) && E.key(v).includes(k)); };
   const eqL = (a, b) => !b || E.low(a) === E.low(b);
   const dateIn = (s, de, ate) => { const a = E.fromIso(de), b = E.fromIso(ate); if (a != null && (s == null || s < a)) return false; if (b != null && (s == null || s >= b + 1)) return false; return true; };
-  const newBtn = (form, label, primary) => (canWrite() ? `<button class="btn${primary ? ' primary' : ''}" type="button" data-act="form" data-form="${form}">${label}</button>` : '');
+  const newBtn = (form, label, primary) => (cw(MOD[FORMS[form].mod].col) ? `<button class="btn${primary ? ' primary' : ''}" type="button" data-act="form" data-form="${form}">${label}</button>` : '');
 
   VIEWS.av = (main) => {
     const M = S.model, f = S.f.av || (S.f.av = {});
     main.innerHTML = `<div class="view">${head('Lotes (AV)', 'Controle de lotes recebidos. O ID AV-xxxx é gerado em sequência na hora do lançamento.', newBtn('av', 'Novo lote', 1))}
       <div class="filters">${ftext('fa-q', 'Buscar', f.q, 'ID, corrida, NF, pedido, descrição…', 1)}${fsel('fa-filial', 'Filial', distinct(M.av, (x) => x.filial), f.filial)}${ftext('fa-forn', 'Fornecedor', f.forn, 'nome do fornecedor')}${fsel('fa-conf', 'Conferido por', distinct(M.av, (x) => x.conf), f.conf)}
-      ${fdate('fa-de', 'Entrada de', f.de)}${fdate('fa-ate', 'até', f.ate)}<label class="field"><span>Certificado</span><select id="fa-cert"><option value="">Todos</option><option value="com" ${f.cert === 'com' ? 'selected' : ''}>Com certificado</option><option value="sem" ${f.cert === 'sem' ? 'selected' : ''}>Sem certificado</option></select></label>${fsel('fa-retrab', 'Retrabalho', distinct(M.av, (x) => x.retrab), f.retrab)}<button class="btn ghost" type="button" id="f-clear">Limpar filtros</button></div>
+      ${fdate('fa-de', 'Entrada de', f.de)}${fdate('fa-ate', 'até', f.ate)}<label class="field"><span>Certificado</span><select id="fa-cert"><option value="">Todos</option><option value="com" ${f.cert === 'com' ? 'selected' : ''}>Com certificado</option><option value="sem" ${f.cert === 'sem' ? 'selected' : ''}>Sem certificado</option></select></label>${fsel('fa-retrab', 'Retrabalho', distinct(M.av, (x) => x.retrab), f.retrab)}${fsel('fa-insp', 'Inspeção', ['Aprovado', 'Reprovado', 'Em análise', 'Sem registro'], f.insp)}<button class="btn ghost" type="button" id="f-clear">Limpar filtros</button></div>
       <div id="tbl"></div></div>`;
     const draw = () => {
-      const rows = M.av.filter((x) => txtMatch(f.q, [x.id, x.corrida, x.nf, x.pc, x.pv, x.desc, x.cert, x.liga, x.norma]) && eqL(x.filial, f.filial) && (!f.forn || E.key(x.forn).includes(E.key(f.forn))) && eqL(x.conf, f.conf) && eqL(x.retrab, f.retrab) && dateIn(x.data, f.de, f.ate) && (!f.cert || (f.cert === 'sem') === semCert(x)));
+      const rows = M.av.filter((x) => txtMatch(f.q, [x.id, x.corrida, x.volume, x.nf, x.pc, x.pv, x.desc, x.cert, x.liga, x.norma]) && eqL(x.filial, f.filial) && (!f.forn || E.key(x.forn).includes(E.key(f.forn))) && eqL(x.conf, f.conf) && eqL(x.retrab, f.retrab) && dateIn(x.data, f.de, f.ate) && (!f.cert || (f.cert === 'sem') === semCert(x)) && (!f.insp || (f.insp === 'Sem registro' ? !x.insp : eqL(x.insp, f.insp))));
       mountTable($('#tbl'), { id: 'av', rows, total: M.av.length, noun: 'lotes', open: true, sort: 'id', dir: -1, cols: COLS.AV, export: 'Lotes_AV' });
     };
-    wireFilters('av', [['fa-q', 'q'], ['fa-filial', 'filial'], ['fa-forn', 'forn'], ['fa-conf', 'conf'], ['fa-de', 'de'], ['fa-ate', 'ate'], ['fa-cert', 'cert'], ['fa-retrab', 'retrab']], draw);
+    wireFilters('av', [['fa-q', 'q'], ['fa-filial', 'filial'], ['fa-forn', 'forn'], ['fa-conf', 'conf'], ['fa-de', 'de'], ['fa-ate', 'ate'], ['fa-cert', 'cert'], ['fa-retrab', 'retrab'], ['fa-insp', 'insp']], draw);
     draw();
   };
   VIEWS.serv = (main) => {
@@ -3810,7 +4052,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       <div class="filters">${ftext('fs-q', 'Buscar', f.q, 'NF, pedido, certificado…', 1)}${fsel('fs-desc', 'Descrição', distinct(M.serv, (x) => x.desc), f.desc)}${ftext('fs-forn', 'Fornecedor', f.forn, 'nome do fornecedor')}${fdate('fs-de', 'Data de', f.de)}${fdate('fs-ate', 'até', f.ate)}
       <label class="field"><span>Certificado</span><select id="fs-cert"><option value="">Todos</option><option value="com" ${f.cert === 'com' ? 'selected' : ''}>Com certificado</option><option value="sem" ${f.cert === 'sem' ? 'selected' : ''}>Sem certificado</option></select></label><button class="btn ghost" type="button" id="f-clear">Limpar filtros</button></div><div id="tbl"></div></div>`;
     const draw = () => {
-      const rows = M.serv.filter((x) => txtMatch(f.q, [x.nf, x.pc, x.pv, x.cert, x.desc, x.forn]) && eqL(x.desc, f.desc) && (!f.forn || E.key(x.forn).includes(E.key(f.forn))) && dateIn(x.data, f.de, f.ate) && (!f.cert || (f.cert === 'sem') === semCert(x)));
+      const rows = M.serv.filter((x) => txtMatch(f.q, [x.sv, x.nf, x.pc, x.pv, x.cert, x.desc, x.forn]) && eqL(x.desc, f.desc) && (!f.forn || E.key(x.forn).includes(E.key(f.forn))) && dateIn(x.data, f.de, f.ate) && (!f.cert || (f.cert === 'sem') === semCert(x)));
       mountTable($('#tbl'), { id: 'serv', rows, total: M.serv.length, noun: 'serviços', open: true, sort: 'data', dir: -1, cols: COLS.SERV, export: 'Servicos' });
     };
     wireFilters('serv', [['fs-q', 'q'], ['fs-desc', 'desc'], ['fs-forn', 'forn'], ['fs-de', 'de'], ['fs-ate', 'ate'], ['fs-cert', 'cert']], draw);
@@ -3929,10 +4171,12 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       { c: 'P', l: 'Conferido por', type: 'select', opts: () => cfgL('AV_CONFERENTES'), req: 1 }] }),
     avMat: () => ({ t: 'Material', f: [
       { c: 'F', l: 'Descrição', type: 'list', opts: lst('AV_DESCRICOES', 'AV', 'desc'), req: 1, w: 's2' },
-      { c: 'E', l: 'Corrida', type: 'text', store: 'auto', help: 'Use * quando não houver.' }, { c: 'D', l: 'Volume', type: 'text', store: 'auto', ph: '*' },
+      { c: 'E', l: 'Corrida', type: 'text', store: 'auto', help: 'Use * quando não houver.' }, { c: 'D', l: 'Volume', type: 'text', store: 'auto', reveal: '+ informar volume', help: 'Número do volume da usina (chapas).' },
+      { c: 'R', l: 'Quantidade', type: 'text', store: 'num', ph: 'opcional' }, { c: 'S', l: 'Unidade', type: 'select', opts: () => cfgL('AV_UNIDADES') },
       { c: 'G', l: 'Diâmetro', type: 'list', opts: lst('AV_DIAMETROS', 'AV', 'diam') }, { c: 'H', l: 'Espessura', type: 'list', opts: lst('AV_ESPESSURAS', 'AV', 'esp') },
-      { c: 'I', l: 'Liga/Tipo', type: 'list', opts: lst('AV_LIGAS', 'AV', 'liga') }, { c: 'J', l: 'Norma', type: 'list', opts: lst('AV_NORMAS', 'AV', 'norma') },
-      { c: 'O', l: 'Certificado', type: 'text', store: 'auto', help: '* = sem certificado' }, { c: 'Q', l: 'Retrabalho', type: 'select', opts: () => cfgL('AV_RETRABALHO') }] }),
+      { c: 'I', l: 'Liga/Tipo', type: 'list', opts: lst('AV_LIGAS', 'AV', 'liga') }, { c: 'J', l: 'Material', type: 'list', opts: lst('AV_NORMAS', 'AV', 'norma') },
+      { c: 'O', l: 'Certificado', type: 'text', store: 'auto', help: '* = sem certificado' }, { c: 'T', l: 'Link do certificado', type: 'text', store: 'text', ph: 'https://drive.google.com/…', w: 's2' },
+      { c: 'Q', l: 'Retrabalho', type: 'select', opts: () => cfgL('AV_RETRABALHO') }, { c: 'U', l: 'Resultado da inspeção', type: 'select', opts: () => cfgL('AV_INSPECAO'), def: () => 'Aprovado' }] }),
     serv: () => ({ t: 'Serviço', f: [
       { c: 'A', l: 'Data de entrada', type: 'date', req: 1, def: () => E.isoDate(S.today) },
       { c: 'B', l: 'Descrição', type: 'list', opts: lst('SERV_TIPOS', 'SERV', 'desc'), req: 1, w: 's2' },
@@ -4001,7 +4245,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     rncc: { t: 'Nova RNC de cliente', et: 'Editar RNC de cliente', mod: 'RNCC', btn: 'Abrir RNC de cliente', secs: () => [SEC.rnccAb(), SEC.rnccRast(), SEC.rnccRecl(1), SEC.rnccCont()], editSecs: () => [SEC.rnccAb(), SEC.rnccRast(), SEC.rnccRecl(0), SEC.rnccCont(), SEC.rnccCausa(), SEC.rnccAcao(), SEC.rnccFim(), SEC.rnccHi()], label: (v, k) => `${k} · ${v.E || 'cliente'}` },
     rnccupd: { t: 'Atualizar andamento da RNC de cliente', mod: 'RNCC', btn: 'Salvar andamento', pick: 'RNCC', secs: () => [SEC.rnccCont(), SEC.rnccCausa(), SEC.rnccAcao(), SEC.rnccFim(), Object.assign(SEC.rnccRecl(0), { t: 'Reclamação (corrigir se precisar)' }), SEC.rnccHi()], label: (v, k) => `Andamento ${k}` },
     av: { t: 'Novo lote (AV)', et: 'Editar lote', mod: 'AV', btn: 'Gravar lote', secs: () => [SEC.avNota(), SEC.avMat()], keep: 'BCKLMP', label: (v, k) => `Lote ${k} · ${v.F || ''} · NF ${v.L || ''}` },
-    serv: { t: 'Novo serviço', et: 'Editar serviço', mod: 'SERV', btn: 'Gravar serviço', secs: () => [SEC.serv()], keep: 'A', label: (v) => `Serviço ${v.B || ''} · NF ${v.C || ''}` },
+    serv: { t: 'Novo serviço', et: 'Editar serviço', mod: 'SERV', btn: 'Gravar serviço', secs: () => [SEC.serv()], keep: 'A', label: (v, k, rec) => `${rec ? rec.sv || 'Serviço' : svOf(k) || 'Serviço'} · ${v.B || ''} · NF ${v.C || ''}` },
     rnc: { t: 'Nova RNC', et: 'Editar RNC', mod: 'RNC', btn: 'Abrir RNC', secs: () => [SEC.rncAb(), SEC.rncId(1), SEC.rncHi('Informações complementares')], editSecs: () => [SEC.rncAb(), SEC.rncId(0), SEC.rncAn(), SEC.rncFe(), SEC.rncHi()], label: (v, k) => `${k} · ${v.G || 'sem fornecedor'}` },
     rncupd: { t: 'Atualizar andamento da RNC', mod: 'RNC', btn: 'Salvar andamento', pick: 'RNC', secs: () => [SEC.rncAn(), SEC.rncFe(), Object.assign(SEC.rncId(0), { t: 'Identificação (corrigir se precisar)' }), SEC.rncHi()], label: (v, k) => `Andamento ${k}` },
     cal: { t: 'Registrar calibração', mod: 'INS', btn: 'Registrar calibração', pick: 'INS', fresh: { E: () => E.isoDate(S.today), D: () => '', Q: () => '' }, secs: () => [SEC.insCal(1, 1)], label: (v, k, rec) => `Calibração ${rec ? rec.codigo : ''} em ${v.E ? E.fmtDate(E.fromIso(v.E)) : ''}` },
@@ -4009,6 +4253,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   };
   const FORM_FOR = { AV: 'av', SERV: 'serv', RNC: 'rnc', INS: 'ins', RNCC: 'rncc' };
   const FORM_ORDER = [['av', 'Lote AV'], ['serv', 'Serviço'], ['rnc', 'RNC fornecedor'], ['rncupd', 'Andamento RNCF'], ['rncc', 'RNC cliente'], ['rnccupd', 'Andamento RNCC'], ['cal', 'Calibração'], ['ins', 'Instrumento']];
+  const formTabs = () => (typeof window.CQ_ACCESS === 'function' ? FORM_ORDER.filter(([k]) => cw(MOD[FORMS[k].mod].col)) : FORM_ORDER);
   function secsOf(fd) { return S.editKey && fd.editSecs ? fd.editSecs() : fd.secs(); }
   function allFields(fd) { return secsOf(fd).flatMap((s) => s.f); }
   function fieldHTML(f, locked) {
@@ -4049,20 +4294,149 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       el.value = v;
     });
   }
+  function wireReveal(fields, idOf) {
+    fields.filter((f) => f.reveal).forEach((f) => {
+      const el = $('#' + idOf(f)); if (!el) return; const lab = el.closest('.field'); if (!lab) return;
+      const old = lab.parentNode.querySelector(`[data-reveal="${idOf(f)}"]`); if (old) old.remove();
+      if (el.value) { lab.hidden = false; return; }
+      lab.hidden = true;
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'linkbtn'; b.textContent = f.reveal; b.dataset.reveal = idOf(f);
+      b.onclick = () => { lab.hidden = false; b.remove(); el.focus(); };
+      const prev = lab.previousElementSibling; (prev || lab.parentNode).appendChild(b);
+    });
+  }
+  /* ---------- AV: vários lotes de uma nota fiscal ---------- */
+  const AVM_ITEM = () => SEC.avMat().f;
+  const avmBlank = () => ({ U: 'Aprovado' });
+  function avmDupes(nota, items) {
+    const out = [], seen = new Map();
+    items.forEach((it, i) => {
+      const co = it.E; if (!E.filled(co) || E.isStar(co) || !E.filled(nota.L)) return;
+      const vk = E.key(it.D || '');
+      const ex = S.model.av.filter((x) => E.key(x.nf) === E.key(nota.L) && E.key(x.corrida) === E.key(co) && E.key(x.volume == null || E.isStar(x.volume) ? '' : x.volume) === vk && (!nota.K || E.key(x.forn) === E.key(nota.K)));
+      if (ex.length) out.push(`Lote ${i + 1}: corrida <b>${esc(co)}</b>${it.D ? ' / volume ' + esc(it.D) : ''} já existe nesta NF em ${ex.map((x) => esc(x.id)).join(', ')}.`);
+      const k = E.key(co) + '|' + vk;
+      if (seen.has(k)) out.push(`Lotes ${seen.get(k) + 1} e ${i + 1} têm a mesma corrida${it.D ? ' e volume' : ''} (${esc(co)}).`); else seen.set(k, i);
+    });
+    return out;
+  }
+  function renderAvMulti(main) {
+    const st = S.avm || (S.avm = { items: [avmBlank()], last: null });
+    if (S.avmPrefill) { const pf = S.avmPrefill; S.avmPrefill = null; st.items = pf.items.map((x) => Object.assign({}, x)); st.nota = pf.nota; st.last = null; }
+    const nota = SEC.avNota(), itf = AVM_ITEM();
+    const dl = itf.filter((f) => f.type === 'list').map((f) => `<datalist id="dl-avm-${f.c}">${optList(f.opts())}</datalist>`).join('');
+    const itField = (f, i) => {
+      const id = `it${i}-${f.c}`, req = f.req ? ' <b>*</b>' : '';
+      let ctl;
+      if (f.type === 'select') ctl = `<select id="${id}" data-ic="${f.c}"><option value=""></option>${optList(f.opts())}</select>`;
+      else if (f.type === 'list') ctl = `<input id="${id}" data-ic="${f.c}" list="dl-avm-${f.c}" autocomplete="off" placeholder="digite ou escolha">`;
+      else ctl = `<input id="${id}" data-ic="${f.c}" type="text" autocomplete="off" placeholder="${esc(f.ph || '')}" ${f.store === 'num' ? 'inputmode="decimal"' : ''}>`;
+      return `<label class="field ${f.w || ''}"><span>${esc(f.l)}${req}</span>${ctl}<span class="errmsg" hidden></span></label>`;
+    };
+    const nx = avUltimo() + 1;
+    main.innerHTML = `<div class="view">${head('Cadastro', 'Cada lançamento é gravado na hora no banco da Qualidade e aparece para toda a equipe.')}
+      ${roBanner()}
+      <div class="seg" role="tablist" aria-label="Tipo de cadastro">${formTabs().map(([k, l]) => `<button type="button" role="tab" data-form="${k}" aria-pressed="${S.form === k}">${esc(l)}</button>`).join('')}</div>
+      ${st.last ? `<div class="okbox avm-done"><b>${st.last.length} lote(s) gravado(s):</b> ${st.last.map((k) => `<button class="btn small ghost mono" type="button" data-open="AV:${esc(k)}">${esc(k)}</button>`).join(' ')} <button class="btn small" type="button" id="avm-labels">Imprimir etiquetas (${st.last.length})</button> <button class="btn small ghost" type="button" id="avm-done-x">Fechar</button></div>` : ''}
+      <section class="sec">${band('AV', 'Novo lançamento de lotes (AV)')}<div class="block"><div class="body">
+        <div class="formwrap"><form id="fx" novalidate>${dl}
+          <div class="fsec"><h3>${esc(nota.t)}</h3><div class="fgrid">${nota.f.map((f) => fieldHTML(f, false)).join('')}</div></div>
+          <div class="fsec"><h3>Lotes desta nota <small class="muted" id="avm-n"></small></h3><div id="avm-items" class="avm-items"></div>
+            <div class="formfoot"><button class="btn" type="button" id="avm-add">+ Adicionar lote</button><span class="muted" style="font-size:12.5px">Cada lote recebe o seu número AV na hora de gravar.</span></div></div>
+          <div class="formfoot"><button class="btn primary" type="submit" id="fx-save" ${cw('av') ? '' : 'disabled'}>Gravar lotes</button><label class="check"><input type="checkbox" id="keep" checked> Manter os dados da nota para o próximo lançamento</label><button class="btn ghost" type="button" id="avm-clear">Limpar</button></div>
+        </form><aside class="preview" id="pv" aria-live="polite"></aside></div>
+      </div></div></section></div>`;
+    $$('[data-form]', main).forEach((b) => b.onclick = () => { S.form = b.dataset.form; S.editKey = null; render(); });
+    nota.f.forEach((f) => { const el = $(`#ff-${f.c}`); if (el) el.value = st.nota && st.nota[f.c] != null ? st.nota[f.c] : (f.def ? f.def() : ''); });
+    const box = $('#avm-items');
+    const readItems = () => $$('.avitem', box).map((el) => { const o = {}; $$('[data-ic]', el).forEach((c) => { o[c.dataset.ic] = c.value.trim(); }); return o; });
+    const readNota = () => { const o = {}; nota.f.forEach((f) => { const el = $(`#ff-${f.c}`); o[f.c] = el ? el.value.trim() : ''; }); return o; };
+    const drawItems = () => {
+      box.innerHTML = st.items.map((it, i) => `<div class="avitem" data-i="${i}"><header><b>Lote ${i + 1}</b><span class="mono muted">→ AV-${nx + i}</span><span class="sp"></span><button class="btn small ghost" type="button" data-it-dup="${i}">Duplicar</button>${st.items.length > 1 ? `<button class="btn small ghost" type="button" data-it-del="${i}" aria-label="Remover lote ${i + 1}">Remover</button>` : ''}</header><div class="fgrid">${itf.map((f) => itField(f, i)).join('')}</div></div>`).join('');
+      st.items.forEach((it, i) => itf.forEach((f) => { const el = $(`#it${i}-${f.c}`); if (!el) return; const v = it[f.c] != null ? String(it[f.c]) : ''; if (f.type === 'select' && v && !Array.from(el.options).some((o) => o.value === v)) { const o = document.createElement('option'); o.value = v; o.textContent = v + ' (fora da lista)'; el.appendChild(o); } el.value = v; }));
+      st.items.forEach((it, i) => wireReveal(itf, (f) => `it${i}-${f.c}`));
+      $('#avm-n').textContent = `(${st.items.length})`;
+      avmPreview();
+    };
+    const avmPreview = () => {
+      const n = readNota(), items = readItems(), w = [];
+      const pv = $('#pv'); if (!pv) return;
+      let html = `<div class="pv"><h3>Lotes que serão criados</h3><div class="big mono">${items.length > 1 ? `AV-${nx} a AV-${nx + items.length - 1}` : `AV-${nx}`}</div><span class="muted" style="font-size:12px">${items.length} lote(s). Os números são confirmados na hora de gravar.</span></div>`;
+      if (n.L) { const same = S.model.av.filter((x) => E.key(x.nf) === E.key(n.L) && (!n.K || E.key(x.forn) === E.key(n.K))); if (same.length) w.push(`Esta NF já tem ${same.length} lote(s): ${same.slice(-5).map((x) => esc(x.id)).join(', ')}${same.length > 5 ? '…' : ''}.`); }
+      avmDupes(n, items).forEach((d) => w.push('<b>Possível duplicidade:</b> ' + d));
+      if (n.K && !cfgL('GER_FORNECEDORES').some((f) => E.low(f) === E.low(n.K))) w.push('Fornecedor fora da lista de Configurações › Fornecedores.');
+      const semc = items.filter((it) => !it.O || E.isStar(it.O)).length; if (semc) w.push(`${semc} lote(s) sem certificado: vão aparecer em Alertas para cobrança.`);
+      const rep = items.filter((it) => E.low(it.U) === 'reprovado').length; if (rep) w.push(`${rep} lote(s) reprovado(s) na inspeção: depois de gravar, abra a RNC de fornecedor pela ficha do lote.`);
+      pv.innerHTML = html + w.map((x) => `<div class="warnbox">${x}</div>`).join('');
+    };
+    const sync = () => { st.items = readItems(); st.nota = readNota(); };
+    drawItems();
+    const form = $('#fx'); let tm;
+    form.addEventListener('input', () => { clearTimeout(tm); tm = setTimeout(() => { sync(); avmPreview(); }, 150); });
+    form.addEventListener('change', () => { sync(); avmPreview(); });
+    $('#avm-add').onclick = () => { sync(); st.items.push(avmBlank()); drawItems(); const f = $(`#it${st.items.length - 1}-F`); if (f) f.focus(); };
+    box.addEventListener('click', (e) => {
+      const d = e.target.closest('[data-it-dup]'), r = e.target.closest('[data-it-del]');
+      if (d) { sync(); const i = +d.dataset.itDup; st.items.splice(i + 1, 0, Object.assign({}, st.items[i])); drawItems(); }
+      if (r) { sync(); st.items.splice(+r.dataset.itDel, 1); drawItems(); }
+    });
+    $('#avm-clear').onclick = () => { st.items = [avmBlank()]; st.nota = null; st.last = null; render(); };
+    const dx = $('#avm-done-x'); if (dx) dx.onclick = () => { st.last = null; render(); };
+    const lb = $('#avm-labels'); if (lb) lb.onclick = () => labelDialog(st.last.map((k) => findRec('AV', k)).filter(Boolean));
+    form.onsubmit = async (e) => {
+      e.preventDefault(); sync();
+      const n = st.nota, items = st.items, errs = [];
+      $$('#fx .field').forEach((l) => l.classList.remove('err'));
+      const mark = (id, msg) => { const el = $('#' + id); if (!el) return; const l = el.closest('.field'); l.hidden = false; l.classList.add('err'); const m = l.querySelector('.errmsg'); if (m) { m.textContent = msg; m.hidden = false; } errs.push(id); };
+      nota.f.forEach((f) => { if (f.req && !n[f.c]) mark(`ff-${f.c}`, 'Obrigatório.'); if (f.type === 'date' && n[f.c] && E.fromIso(n[f.c]) == null) mark(`ff-${f.c}`, 'Data inválida.'); });
+      items.forEach((it, i) => itf.forEach((f) => { if (f.req && !it[f.c]) mark(`it${i}-${f.c}`, 'Obrigatório.'); if (f.store === 'num' && it[f.c] && !isFinite(Number(String(it[f.c]).replace(',', '.')))) mark(`it${i}-${f.c}`, 'Use só números.'); }));
+      if (errs.length) { toast(`Falta(m) ${errs.length} campo(s) obrigatório(s).`, true); const el = $('#' + errs[0]); if (el) el.focus(); return; }
+      const go2 = async () => {
+        const btn = $('#fx-save'); btn.disabled = true; btn.textContent = 'Gravando…';
+        const fm = FMAP.AV, all = nota.f.concat(itf), keys = [];
+        try {
+          for (const it of items) {
+            const fields = {};
+            all.forEach((f) => { const sv = f.c in it ? it[f.c] : n[f.c]; const v = toVal(f, sv); if (v != null) fields[fm[f.c]] = v; });
+            const key = await createRecord('AV', fields);
+            keys.push(key);
+            logEntry('AV', key, 'novo', `Lote ${key} · ${it.F || ''} · NF ${n.L || ''}`, null);
+          }
+          toast(`${keys.length} lote(s) gravado(s): ${keys[0]}${keys.length > 1 ? ' a ' + keys[keys.length - 1] : ''}.`);
+          const keep = $('#keep') && $('#keep').checked;
+          st.last = keys; st.items = [avmBlank()]; if (!keep) st.nota = null;
+          await sleep(150); S.stale = false; render(); updateChrome();
+        } catch (err) {
+          console.error(err);
+          if (keys.length) { st.last = keys; st.items = items.slice(keys.length); }
+          toast('Não foi possível gravar' + (keys.length ? ` todos os lotes (gravados: ${keys.join(', ')})` : '') + ': ' + ((err && (err.message || err.code)) || err), true);
+          render();
+        }
+      };
+      const dup = avmDupes(n, items);
+      if (dup.length) { openModal('Possível duplicidade', `<p style="margin:0">Encontrei lotes que parecem repetidos:</p><ul style="margin:0;padding-left:18px">${dup.map((d) => `<li>${d}</li>`).join('')}</ul><div class="formfoot"><button class="btn primary" type="button" id="dup-ok">Gravar mesmo assim</button><button class="btn" type="button" data-act="close">Voltar e revisar</button></div>`); $('#dup-ok').onclick = () => { closeLayer(); go2(); }; return; }
+      go2();
+    };
+  }
   VIEWS.cadastro = (main) => {
     const fd = FORMS[S.form], editing = !!S.editKey, erec = editing ? findRec(fd.mod, S.editKey) : null;
+    if (!S.editKey && typeof window.CQ_ACCESS === 'function' && !formTabs().some(([k]) => k === S.form)) {
+      const ok = formTabs(); if (!ok.length) { main.innerHTML = `<div class="view">${head('Cadastro', '')}<div class="readonly">${esc(TXT.ro)}</div></div>`; return; }
+      S.form = ok[0][0]; VIEWS.cadastro(main); return;
+    }
+    if (S.form === 'av' && !S.editKey) { renderAvMulti(main); return; }
     if (editing && !erec) { S.editKey = null; toast('Esse registro não existe mais.', true); VIEWS.cadastro(main); return; }
     const title = editing ? `${fd.et} ${fd.mod === 'SERV' ? '' : recTitle(erec)}` : fd.t;
     const pickList = fd.pick === 'RNCC' ? (S.model.rncc || []).slice().sort((a, b) => (b.aberta - a.aberta) || (b.row - a.row)).map((x) => ({ v: x.num, key: x.key, d: `${x.status || 'sem status'} · ${x.cliente || 'sem cliente'}` })) : fd.pick === 'RNC' ? S.model.rnc.slice().sort((a, b) => (b.aberta - a.aberta) || (b.row - a.row)).map((x) => ({ v: x.num, key: x.key, d: `${x.status || 'sem status'} · ${x.forn || 'sem fornecedor'}` }))
       : fd.pick === 'INS' ? S.model.ins.slice().sort((a, b) => (a.dias == null ? 1e9 : a.dias) - (b.dias == null ? 1e9 : b.dias)).map((x) => ({ v: x.codigo, key: x.key, d: `${x.desc} · ${x.status ? x.status.toLowerCase() : 'sem data'}` })) : [];
     main.innerHTML = `<div class="view">${head('Cadastro', 'Cada lançamento é gravado na hora no banco da Qualidade e aparece para toda a equipe.')}
       ${roBanner()}
-      ${editing ? `<div class="formfoot"><button class="btn" type="button" id="ed-back">‹ Voltar</button><span class="muted">Editando um registro existente.</span></div>` : `<div class="seg" role="tablist" aria-label="Tipo de cadastro">${FORM_ORDER.map(([k, l]) => `<button type="button" role="tab" data-form="${k}" aria-pressed="${S.form === k}">${esc(l)}</button>`).join('')}</div>`}
+      ${editing ? `<div class="formfoot"><button class="btn" type="button" id="ed-back">‹ Voltar</button><span class="muted">Editando um registro existente.</span></div>` : `<div class="seg" role="tablist" aria-label="Tipo de cadastro">${formTabs().map(([k, l]) => `<button type="button" role="tab" data-form="${k}" aria-pressed="${S.form === k}">${esc(l)}</button>`).join('')}</div>`}
       <section class="sec">${band(fd.mod, title)}<div class="block"><div class="body">
         <div class="formwrap"><form id="fx" novalidate>
           ${fd.pick && !editing ? `<div class="fsec"><h3>Escolha ${fd.pick === 'INS' ? 'o instrumento' : 'a RNC'}</h3><div class="fgrid"><label class="field s2"><span>${fd.pick === 'INS' ? 'Instrumento' : fd.pick === 'RNCC' ? 'RNC de cliente' : 'RNC de fornecedor'} <b>*</b></span><input id="pick" list="dl-pick" autocomplete="off" placeholder="digite o ${fd.pick === 'INS' ? 'código' : 'número'}"><datalist id="dl-pick">${pickList.map((o) => `<option value="${esc(o.v)}">${esc(o.d)}</option>`).join('')}</datalist><span class="errmsg" hidden></span></label></div></div>` : ''}
           <div id="fx-fields" ${fd.pick && !editing ? 'hidden' : ''}>${secsOf(fd).map((s) => `<div class="fsec"><h3>${esc(s.t)}</h3><div class="fgrid">${s.f.map((f) => fieldHTML(f, editing && f.lock)).join('')}</div></div>`).join('')}
-          <div class="formfoot">${allFields(fd).some((f) => f.c === 'Z' || f.c === 'AF') && (editing || fd.pick) ? '<button class="btn" type="button" id="addlog">Acrescentar registro de hoje</button>' : ''}<button class="btn primary" type="submit" id="fx-save" ${canWrite() ? '' : 'disabled'}>${esc(editing ? 'Salvar alterações' : fd.btn)}</button>${fd.keep && !editing ? `<label class="check"><input type="checkbox" id="keep" checked> Manter ${fd.mod === 'AV' ? 'os dados da nota (data, filial, fornecedor, NF, pedido de compra, conferente)' : 'a data'} para o próximo</label>` : ''}<button class="btn ghost" type="button" id="fx-reset">Desfazer edição</button>${editing && canWrite() ? '<button class="btn ghost" type="button" id="fx-del" style="color:var(--crit);margin-left:auto">Excluir registro</button>' : ''}</div></div>
+          <div class="formfoot">${allFields(fd).some((f) => f.c === 'Z' || f.c === 'AF') && (editing || fd.pick) ? '<button class="btn" type="button" id="addlog">Acrescentar registro de hoje</button>' : ''}<button class="btn primary" type="submit" id="fx-save" ${cw(MOD[fd.mod].col) ? '' : 'disabled'}>${esc(editing ? 'Salvar alterações' : fd.btn)}</button>${fd.keep && !editing ? `<label class="check"><input type="checkbox" id="keep" checked> Manter ${fd.mod === 'AV' ? 'os dados da nota (data, filial, fornecedor, NF, pedido de compra, conferente)' : 'a data'} para o próximo</label>` : ''}<button class="btn ghost" type="button" id="fx-reset">Desfazer edição</button>${editing && cw(MOD[fd.mod].col) ? '<button class="btn ghost" type="button" id="fx-del" style="color:var(--crit);margin-left:auto">Excluir registro</button>' : ''}</div></div>
         </form><aside class="preview" id="pv" aria-live="polite"></aside></div>
       </div></div></section></div>`;
     S.pickRec = null;
@@ -4070,11 +4444,12 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     $$('[data-form]', main).forEach((b) => b.onclick = () => { S.form = b.dataset.form; S.editKey = null; render(); });
     const back = $('#ed-back'); if (back) back.onclick = () => { const m = fd.mod, k = S.editKey; go(MOD[m].view); setTimeout(() => openRecord(m, k), 50); };
     setFieldValues(fd, erec);
+    wireReveal(allFields(fd), (f) => 'ff-' + f.c);
     const form = $('#fx');
     let tm; form.addEventListener('input', () => { clearTimeout(tm); tm = setTimeout(preview, 140); });
     form.addEventListener('change', () => { clearTimeout(tm); tm = setTimeout(preview, 60); });
     form.onsubmit = (e) => { e.preventDefault(); submitForm(); };
-    $('#fx-reset').onclick = () => { setFieldValues(fd, currentRec()); preview(); };
+    $('#fx-reset').onclick = () => { setFieldValues(fd, currentRec()); wireReveal(allFields(fd), (f) => 'ff-' + f.c); preview(); };
     const del = $('#fx-del');
     if (del) del.onclick = () => confirmBox('Excluir registro?', `${recTitle(erec)} sai das listas e dos indicadores. A exclusão fica registrada no Histórico.`, 'Excluir', async () => {
       try { const m = fd.mod, k = S.editKey, lb = recTitle(erec); await deleteRecord(m, k); logEntry(m, k, 'excluído', lb, null); toast(lb + ' excluído.'); go(MOD[m].view); } catch (err) { toast('Não foi possível excluir: ' + (err.message || err.code || err), true); }
@@ -4169,6 +4544,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       if (vals.K && !cfgL('GER_FORNECEDORES').some((f) => E.low(f) === E.low(vals.K))) warn.push('Fornecedor fora da lista de Configurações › Fornecedores.');
       if (vals.O === '*' || !vals.O) warn.push('Lote sem certificado: vai aparecer em Alertas para cobrança.');
     } else if (fd.mod === 'SERV' && isNew) {
+      html += `<div class="pv"><h3>Serviço que será criado</h3><div class="big mono">SV-${E.pad(Math.max(0, ...S.model.serv.map((x) => keyNum(x.key))) + 1, 4)}</div><span class="muted" style="font-size:12px">O número é confirmado na hora de gravar.</span></div>`;
       if (vals.C && S.model.serv.some((x) => E.key(x.nf) === E.key(vals.C) && E.key(x.forn) === E.key(vals.D) && E.key(x.desc) === E.key(vals.B))) warn.push('Já existe serviço com a mesma NF, fornecedor e descrição.');
     } else if (fd.mod === 'RNC' && r) {
       html += `<div class="pv"><h3>${isNew ? 'RNC que será aberta' : 'Situação após salvar'}</h3><div class="big mono">${esc(r.num || vals.A || '')}</div>
@@ -4294,7 +4670,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     ['AV_DIAMETROS', 'Diâmetros', 'AV', 'Lote › Diâmetro', [['AV', 'diam']]],
     ['AV_ESPESSURAS', 'Espessuras', 'AV', 'Lote › Espessura', [['AV', 'esp']]],
     ['AV_LIGAS', 'Ligas / tipos', 'AV', 'Lote › Liga/Tipo', [['AV', 'liga']]],
-    ['AV_NORMAS', 'Normas', 'AV', 'Lote › Norma', [['AV', 'norma']]],
+    ['AV_NORMAS', 'Materiais', 'AV', 'Lote › Material', [['AV', 'norma']]],
+    ['AV_UNIDADES', 'Unidades', 'AV', 'Lote › Unidade da quantidade', [['AV', 'und']]],
     ['SERV_TIPOS', 'Tipos de serviço', 'SERV', 'Serviço › Descrição', [['SERV', 'desc']]],
     ['RNC_MOTIVOS', 'Motivos', 'RNC', 'RNC › Motivo', [['RNC', 'motivo']]],
     ['RNC_DISPOSICAO', 'Disposição', 'RNC', 'RNC › Disposição', [['RNC', 'disp']]],
@@ -4340,8 +4717,18 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
           <div class="formfoot"><input class="inp" id="p-busca" type="search" placeholder="Buscar pessoa" style="max-width:260px">${ro ? '' : '<button class="btn small" type="button" id="p-add">Adicionar pessoa</button>'}</div>
           <div class="twrap"><table class="t ptab"><thead><tr><th class="nosort">Nome</th><th class="nosort">Setor</th><th class="nosort">Filial</th><th class="nosort">E-mail</th>${FUNCOES.map(([, l]) => `<th class="nosort ctr">${esc(l)}</th>`).join('')}<th class="nosort"></th></tr></thead><tbody id="p-body">${pes.map((p, i) => pessoaRow(p, i, ro)).join('')}</tbody></table></div>
         </div>
+        <div class="fsec" id="cfg-fornmail"><h3>E-mails dos fornecedores (${Object.keys(c.FORN_EMAILS || {}).length})</h3>
+          <p class="use" style="margin:0">Usados no botão “E-mail ao fornecedor” dos Alertas (lotes sem certificado). Para mais de um e-mail, separe com vírgula.</p>
+          ${ro ? '' : '<div class="formfoot"><button class="btn small" type="button" id="fe-add">Adicionar fornecedor</button></div>'}
+          <datalist id="dl-fe">${optList(fornList())}</datalist>
+          <div class="twrap"><table class="t ptab"><thead><tr><th class="nosort">Fornecedor</th><th class="nosort">E-mail(s)</th><th class="nosort"></th></tr></thead><tbody id="fe-body">${Object.entries(c.FORN_EMAILS || {}).sort((a, b) => a[0].localeCompare(b[0], 'pt-BR')).map(([n, e]) => feRow(n, e, ro)).join('')}</tbody></table></div>
+        </div>
+        <div class="fsec" id="cfg-logo-sec"><h3>Logo da empresa</h3>
+          <p class="use" style="margin:0">Aparece no menu, na tela de entrada e no cabeçalho do Relatório mensal. PNG, JPG ou SVG — a Central reduz o tamanho automaticamente. Vale na hora para toda a equipe.</p>
+          <div class="cfg-logo"><div class="lp">${DB.logo ? `<img src="${DB.logo}" alt="Logo atual">` : '<span class="muted">sem logo</span>'}</div>${ro ? '' : `<input type="file" id="logo-file" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden><button class="btn small" type="button" id="logo-up">${DB.logo ? 'Trocar logo' : 'Enviar logo'}</button>${DB.logo ? '<button class="btn small ghost" type="button" id="logo-del">Remover logo</button>' : ''}`}</div>
+        </div>
       </div></div></section>
-      <section class="sec">${band('AV', 'Lotes (AV)')}<div class="block"><div class="body"><div class="cfg">${lists('AV')}${fixed('Retrabalho', ['Sim', 'Não'], 'Sim/Não')}</div></div></div></section>
+      <section class="sec">${band('AV', 'Lotes (AV)')}<div class="block"><div class="body"><div class="cfg">${lists('AV')}${fixed('Retrabalho', ['Sim', 'Não'], 'Sim/Não')}${fixed('Resultado da inspeção', ['Aprovado', 'Reprovado', 'Em análise'], 'lote novo já vem como Aprovado')}</div></div></div></section>
       <section class="sec">${band('SERV', 'Serviços')}<div class="block"><div class="body"><div class="cfg">${lists('SERV')}</div></div></div></section>
       <section class="sec">${band('RNC', 'RNC de fornecedor')}<div class="block"><div class="body"><div class="cfg">${lists('RNC')}
         <div class="cfgitem" data-cfg="PARAMS"><b>Parâmetros de prazo</b><span class="use">Dias de cada prazo (os nomes dos níveis são fixos)</span>${CFG_PARAMS.map(([n, l]) => `<label class="field"><span>${esc(l)}</span><input id="cfgp-${n}" type="number" min="0" step="1" value="${esc(c[n] == null ? '' : c[n])}" ${ro ? 'disabled' : ''}></label>`).join('')}</div>
@@ -4359,6 +4746,12 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const dirty = (el) => { const it = el.closest('.cfgitem') || el.closest('.fsec'); if (it) it.classList.add('dirty'); S.cfgDirty = true; };
     $$('.cfgitem textarea, .cfgitem input, #p-body input, #p-body select').forEach((el) => el.addEventListener('input', () => { dirty(el); const cnt = el.closest('.cfgitem') && el.closest('.cfgitem').querySelector('.cnt'); if (cnt && el.tagName === 'TEXTAREA') cnt.textContent = el.value.split('\n').filter((s) => s.trim()).length; }));
     $('#p-body').addEventListener('change', (e) => dirty(e.target));
+    const feb = $('#fe-body');
+    feb.addEventListener('input', (e) => dirty(e.target));
+    feb.addEventListener('click', (e) => { const b = e.target.closest('.fe-del'); if (b) { const tr = b.closest('tr'); dirty(tr.parentNode); tr.remove(); } });
+    const fea = $('#fe-add'); if (fea) fea.onclick = () => { feb.insertAdjacentHTML('afterbegin', feRow('', '', false)); dirty(feb); feb.querySelector('.fe-n').focus(); };
+    wireLogo();
+    if (S.cfgFocus) { const el = $(S.cfgFocus === 'FORN_EMAILS' ? '#cfg-fornmail' : '#' + S.cfgFocus); S.cfgFocus = null; if (el) setTimeout(() => el.scrollIntoView({ block: 'start', behavior: 'smooth' }), 60); }
     $('#p-body').addEventListener('click', (e) => { const b = e.target.closest('.p-del'); if (b) { const tr = b.closest('tr'); dirty(tr); tr.remove(); } });
     const add = $('#p-add'); if (add) add.onclick = () => { const tb = $('#p-body'); tb.insertAdjacentHTML('afterbegin', pessoaRow({}, 'n', false)); dirty(tb); tb.querySelector('.p-nome').focus(); };
     $('#p-busca').addEventListener('input', (e) => { const q = E.key(e.target.value); $$('#p-body tr').forEach((tr) => { tr.hidden = !!q && !E.key(tr.querySelector('.p-nome').value).includes(q); }); });
@@ -4373,6 +4766,61 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const sv = $('#cfg-save'); if (sv) sv.onclick = () => saveConfig(false);
     wireReset();
   };
+  function feRow(n, e, ro) { const dis = ro ? ' disabled' : ''; return `<tr><td><input class="inp fe-n" list="dl-fe" value="${esc(n)}" placeholder="nome do fornecedor"${dis}></td><td><input class="inp fe-e" value="${esc(e)}" placeholder="compras@fornecedor.com.br"${dis}></td><td>${ro ? '' : '<button class="btn small ghost fe-del" type="button" aria-label="Remover">✕</button>'}</td></tr>`; }
+  function readFornEmails() {
+    const out = [], errs = [], seen = new Set();
+    $$('#fe-body tr').forEach((tr) => {
+      const nome = tr.querySelector('.fe-n').value.trim().replace(/\s+/g, ' '), email = tr.querySelector('.fe-e').value.trim().replace(/\s*[;,]\s*/g, ', ');
+      if (!nome && !email) return;
+      if (!nome) { errs.push('E-mail sem fornecedor: ' + email); return; }
+      const k = E.key(nome); if (seen.has(k)) { errs.push('Fornecedor repetido nos e-mails: ' + nome); return; } seen.add(k);
+      email.split(', ').filter(Boolean).forEach((m) => { if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)) errs.push('E-mail inválido: ' + m); });
+      out.push({ nome, email });
+    });
+    out.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    return { out, errs };
+  }
+  function shrinkImage(file) {
+    return new Promise((resolve, reject) => {
+      const rd = new FileReader();
+      rd.onerror = () => reject(new Error('Não consegui ler o arquivo.'));
+      rd.onload = () => {
+        const im = new Image();
+        im.onerror = () => reject(new Error('Arquivo de imagem inválido.'));
+        im.onload = () => {
+          const iw = im.naturalWidth || 600, ih = im.naturalHeight || 200, k = Math.min(1, 640 / iw, 240 / ih);
+          const w = Math.max(1, Math.round(iw * k)), h = Math.max(1, Math.round(ih * k));
+          const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+          cv.getContext('2d').drawImage(im, 0, 0, w, h);
+          let url = cv.toDataURL('image/png');
+          if (url.length > 280000) url = cv.toDataURL('image/webp', 0.9);
+          if (url.length > 600000) { reject(new Error('A imagem ficou grande demais. Use um arquivo mais simples.')); return; }
+          resolve({ img: url, w, h });
+        };
+        im.src = rd.result;
+      };
+      rd.readAsDataURL(file);
+    });
+  }
+  function wireLogo() {
+    const up = $('#logo-up'), inp = $('#logo-file'), del = $('#logo-del');
+    if (up) up.onclick = () => inp.click();
+    if (inp) inp.onchange = async () => {
+      const f = inp.files && inp.files[0]; inp.value = ''; if (!f) return;
+      if (!/^image\//.test(f.type)) { toast('Escolha uma imagem (PNG, JPG ou SVG).', true); return; }
+      try {
+        up.disabled = true; up.textContent = 'Enviando…';
+        const r = await shrinkImage(f);
+        await DB.db.doc('cfg/logo').set({ img: r.img, w: r.w, h: r.h, at: Date.now(), by: DB.me || null });
+        DB.logo = r.img; applyLogo(); logEntry('GERAL', 'logo', 'alterado', 'Logo da empresa atualizado', null);
+        toast('Logo atualizado para toda a equipe.'); render();
+      } catch (err) { toast(err && (err.code === 'permission_denied' || err.code === 'invalid_argument') ? 'Só administradores alteram o logo.' : 'Não foi possível enviar: ' + ((err && (err.message || err.code)) || err), true); up.disabled = false; up.textContent = 'Enviar logo'; }
+    };
+    if (del) del.onclick = () => confirmBox('Remover logo', 'O logo sai do menu, da tela de entrada e do relatório.', 'Remover', async () => {
+      try { await DB.db.doc('cfg/logo').delete(); DB.logo = null; applyLogo(); logEntry('GERAL', 'logo', 'alterado', 'Logo da empresa removido', null); toast('Logo removido.'); render(); }
+      catch (err) { toast('Não foi possível remover: ' + ((err && (err.message || err.code)) || err), true); }
+    }, true);
+  }
   function readPessoas() {
     const out = [], errs = [], seen = new Set();
     $$('#p-body tr').forEach((tr) => {
@@ -4424,6 +4872,9 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const params = {};
     CFG_PARAMS.concat(CFG_PARAMS_RNCC).forEach(([n]) => { const s = $('#cfgp-' + n).value.trim(); const v = s === '' ? null : +s; if (s !== '' && (!isFinite(v) || v < 0)) errs.push('Parâmetro inválido: ' + n); if (v !== (c[n] == null ? null : c[n])) params[n] = v; });
     if (Object.keys(params).length) up.params = params;
+    const FE = readFornEmails(); errs.push(...FE.errs);
+    const oldFE = Object.entries(c.FORN_EMAILS || {}).map(([nome, email]) => ({ nome, email })).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    if (JSON.stringify(FE.out) !== JSON.stringify(oldFE)) up.fornEmails = FE.out;
     const P = readPessoas(); errs.push(...P.errs);
     const oldP = c.PESSOAS || [];
     if (JSON.stringify(P.out) !== JSON.stringify(oldP)) {
@@ -4442,7 +4893,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     try {
       const ref = DB.db.doc('cfg/main');
       if (DB.cfg) await ref.update(up); else await ref.set(up);
-      const what = [].concat(Object.keys(up.listas || {}).map((n) => (CFG_LISTS.find((l) => l[0] === n) || [n, n])[1]), up.feriados ? ['Feriados'] : [], up.tipos ? ['Tipos de equipamento'] : [], up.params ? ['Parâmetros de prazo'] : [], up.pessoas ? ['Pessoas'] : []);
+      const what = [].concat(Object.keys(up.listas || {}).map((n) => (CFG_LISTS.find((l) => l[0] === n) || [n, n])[1]), up.feriados ? ['Feriados'] : [], up.tipos ? ['Tipos de equipamento'] : [], up.params ? ['Parâmetros de prazo'] : [], up.pessoas ? ['Pessoas'] : [], up.fornEmails ? ['E-mails dos fornecedores'] : []);
       logEntry('GERAL', 'cfg', 'alterado', 'Configurações: ' + what.join(', '), null);
       toast('Configurações salvas: ' + what.join(', ') + '.');
       S.cfgDirty = false; await sleep(250); S.stale = false; render(); updateChrome();
@@ -4553,7 +5004,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     TJ.local = { cards: parsed.cards, meta };
     S.f.trello = {}; if (S.t.trello) S.t.trello.page = 0;
     render();
-    if (!canWrite()) { toast(`${NF.format(parsed.cards.length)} cartões carregados. Seu acesso é só de consulta, então a importação não foi salva para a equipe.`); return; }
+    if (!cw('trello')) { toast(`${NF.format(parsed.cards.length)} cartões carregados. Seu acesso é só de consulta, então a importação não foi salva para a equipe.`); return; }
     await tjSave();
   }
   async function tjSave() {
@@ -4594,7 +5045,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       main.innerHTML = `<div class="view">${head('Trello Jurong', 'Gráficos do quadro do Trello a partir do arquivo CSV exportado.')}
         <div class="drop tjdrop"><span class="mtag" style="--c:var(--jur)">Trello Jurong</span><h2>Arraste o CSV do Trello aqui</h2>
         <p>No Trello, abra o quadro, entre no menu (⋯) → <b>Imprimir, exportar e compartilhar</b> → <b>Exportar como CSV</b>. Depois arraste o arquivo para esta área ou use o botão.</p>${pickBtn}
-        <p class="muted" style="font-size:12.5px">${canWrite() ? 'A importação fica salva online: a equipe da Qualidade abre esta tela e já vê os gráficos. Cada nova importação substitui a anterior.' : 'Seu acesso é só de consulta: o arquivo é lido só nesta tela, sem salvar para a equipe.'}</p></div></div>`;
+        <p class="muted" style="font-size:12.5px">${cw('trello') ? 'A importação fica salva online: a equipe da Qualidade abre esta tela e já vê os gráficos. Cada nova importação substitui a anterior.' : 'Seu acesso é só de consulta: o arquivo é lido só nesta tela, sem salvar para a equipe.'}</p></div></div>`;
       tjWireFile($('.view', main));
       return;
     }
@@ -4613,7 +5064,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const board = (meta.boards || []).join(' · ');
     let info;
     if (TJ.local && TJ.busy) info = `<div class="tjinfo"><span class="spin"></span><span>Salvando a importação para a equipe…</span></div>`;
-    else if (TJ.local) info = `<div class="tjinfo warn"><span><b>${esc(meta.file || 'arquivo')}</b> carregado só nesta tela (não salvo para a equipe${TJ.local.err ? ': ' + esc(TJ.local.err) : canWrite() ? '' : ' — seu acesso é só de consulta'}).</span>${canWrite() ? '<button class="btn small" type="button" id="tj-retry">Salvar para a equipe</button>' : ''}${TJ.cards ? '<button class="btn small ghost" type="button" id="tj-back">Voltar para a importação salva</button>' : ''}</div>`;
+    else if (TJ.local) info = `<div class="tjinfo warn"><span><b>${esc(meta.file || 'arquivo')}</b> carregado só nesta tela (não salvo para a equipe${TJ.local.err ? ': ' + esc(TJ.local.err) : cw('trello') ? '' : ' — seu acesso é só de consulta'}).</span>${cw('trello') ? '<button class="btn small" type="button" id="tj-retry">Salvar para a equipe</button>' : ''}${TJ.cards ? '<button class="btn small ghost" type="button" id="tj-back">Voltar para a importação salva</button>' : ''}</div>`;
     else info = `<div class="tjinfo"><span>Importação de <b>${dmy(meta.at)} às ${hhmm(meta.at)}</b>${by ? ' por ' + esc(by) : ''}</span><span class="muted">arquivo ${esc(meta.file || '')}</span>${meta.arch ? `<span class="muted">${NF.format(meta.arch)} cartão(ões) arquivado(s) ignorado(s)</span>` : ''}</div>`;
     const sitOpts = [['', 'Todas'], ['and', 'Em andamento'], ['env', 'Enviados'], ['par', `Parados há mais de ${parado} dias`], ['venc', 'Prazo vencido']];
     main.innerHTML = `<div class="view">${head('Trello Jurong', `Quadro ${board ? '<b>' + esc(board) + '</b>' : 'do Trello'} a partir da exportação CSV. Clique num número ou numa barra para filtrar a lista de cartões.`, pickBtn)}
@@ -4762,7 +5213,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     AJ.local = { items: parsed.items, meta };
     S.f.acomp = {}; ['acomp', 'ajpv'].forEach((k) => { if (S.t[k]) S.t[k].page = 0; });
     render();
-    if (!canWrite()) { toast(`${NF.format(parsed.items.length)} itens carregados. Seu acesso é só de consulta, então a importação não foi salva para a equipe.`); return; }
+    if (!cw('acomp')) { toast(`${NF.format(parsed.items.length)} itens carregados. Seu acesso é só de consulta, então a importação não foi salva para a equipe.`); return; }
     await ajSave();
   }
   async function ajSave() {
@@ -4820,7 +5271,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       main.innerHTML = `<div class="view">${head(T, D)}
         <div class="drop"><span class="mtag" style="--c:var(--acj)">Acompanhamento Jurong</span><h2>Arraste o CSV da Base_Dados aqui</h2>
         <p>Na planilha <b>Acompanhamento Jurong (Follow Up)</b>, abra a aba <b>Base_Dados</b> → Arquivo → Salvar como → <b>CSV</b>. Depois arraste o arquivo para esta área ou use o botão. Linhas vazias no fim do arquivo são ignoradas.</p>${pickBtn}
-        <p class="muted" style="font-size:12.5px">${canWrite() ? 'A importação fica salva online: a equipe abre esta tela e já vê os gráficos. Cada nova importação substitui a anterior.' : 'Seu acesso é só de consulta: o arquivo é lido só nesta tela, sem salvar para a equipe.'}</p></div></div>`;
+        <p class="muted" style="font-size:12.5px">${cw('acomp') ? 'A importação fica salva online: a equipe abre esta tela e já vê os gráficos. Cada nova importação substitui a anterior.' : 'Seu acesso é só de consulta: o arquivo é lido só nesta tela, sem salvar para a equipe.'}</p></div></div>`;
       ajWireFile($('.view', main));
       return;
     }
@@ -4846,7 +5297,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const q = { pend: cnt(A, (x) => x.inspF === 'Pendente'), ret: cnt(A, (x) => x.inspF === 'Em retrabalho'), rep: cnt(A, (x) => x.inspF === 'Reprovado'), sin: cnt(A, (x) => x.stSinA === 'Pendente'), doc: cnt(A, (x) => x.stDoc === 'Pendente'), docR: cnt(R, (x) => x.stDoc === 'Pendente') };
     let info;
     if (AJ.local && AJ.busy) info = `<div class="tjinfo" style="--jur:var(--acj)"><span class="spin"></span><span>Salvando a importação para a equipe…</span></div>`;
-    else if (AJ.local) info = `<div class="tjinfo warn"><span><b>${esc(meta.file || 'arquivo')}</b> carregado só nesta tela (não salvo para a equipe${AJ.local.err ? ': ' + esc(AJ.local.err) : canWrite() ? '' : ' — seu acesso é só de consulta'}).</span>${canWrite() ? '<button class="btn small" type="button" id="aj-retry">Salvar para a equipe</button>' : ''}${AJ.items ? '<button class="btn small ghost" type="button" id="aj-back">Voltar para a importação salva</button>' : ''}</div>`;
+    else if (AJ.local) info = `<div class="tjinfo warn"><span><b>${esc(meta.file || 'arquivo')}</b> carregado só nesta tela (não salvo para a equipe${AJ.local.err ? ': ' + esc(AJ.local.err) : cw('acomp') ? '' : ' — seu acesso é só de consulta'}).</span>${cw('acomp') ? '<button class="btn small" type="button" id="aj-retry">Salvar para a equipe</button>' : ''}${AJ.items ? '<button class="btn small ghost" type="button" id="aj-back">Voltar para a importação salva</button>' : ''}</div>`;
     else info = `<div class="tjinfo" style="--jur:var(--acj)"><span>Importação de <b>${dmy(meta.at)} às ${hhmm(meta.at)}</b>${by ? ' por ' + esc(by) : ''}</span><span class="muted">arquivo ${esc(meta.file || '')}</span><span class="muted">${NF.format(X.length)} itens, sendo ${NF.format(X.length - A.length)} cancelados</span></div>`;
     const sec = (title, inner, id) => `<section class="sec"${id ? ` id="${id}"` : ''}><div class="band" style="--c:var(--acj);background:var(--acj)"><h2>${esc(title)}</h2></div><div class="block"><div class="body">${inner}</div></div></section>`;
     const C = 'var(--acj)';
@@ -4976,7 +5427,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     TC.local = { cards, meta };
     S.f.tcert = {}; if (S.t.tcert) S.t.tcert.page = 0;
     render();
-    if (!canWrite()) { toast(`${NF.format(cards.length)} cartões carregados. Seu acesso é só de consulta, então a importação não foi salva para a equipe.`); return; }
+    if (!cw('tcert')) { toast(`${NF.format(cards.length)} cartões carregados. Seu acesso é só de consulta, então a importação não foi salva para a equipe.`); return; }
     await tcSave();
   }
   async function tcSave() {
@@ -5063,7 +5514,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       main.innerHTML = `<div class="view">${head(T, D)}
         <div class="drop"><span class="mtag" style="--c:var(--tcr)">Trello Certificados</span><h2>Arraste o CSV do Trello aqui</h2>
         <p>No Trello, abra o quadro <b>CERTIFICADOS DE QUALIDADE</b>, entre no menu (⋯) → <b>Imprimir, exportar e compartilhar</b> → <b>Exportar como CSV</b>. Depois arraste o arquivo para esta área ou use o botão.</p>${pickBtn}
-        <p class="muted" style="font-size:12.5px">${canWrite() ? 'A importação fica salva online: a equipe abre esta tela e já vê os números. Cada nova importação substitui a anterior.' : 'Seu acesso é só de consulta: o arquivo é lido só nesta tela, sem salvar para a equipe.'}</p></div></div>`;
+        <p class="muted" style="font-size:12.5px">${cw('tcert') ? 'A importação fica salva online: a equipe abre esta tela e já vê os números. Cada nova importação substitui a anterior.' : 'Seu acesso é só de consulta: o arquivo é lido só nesta tela, sem salvar para a equipe.'}</p></div></div>`;
       tcWireFile($('.view', main));
       return;
     }
@@ -5089,10 +5540,10 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const allPes = Array.from(new Set(src.cards.flatMap((c) => (c.lb || []).map((l) => tjNorm(l).trim())).filter((k) => k && !TC_NAOPESSOA.test(k)))).sort();
     let info;
     if (TC.local && TC.busy) info = `<div class="tjinfo" style="--jur:var(--tcr)"><span class="spin"></span><span>Salvando a importação para a equipe…</span></div>`;
-    else if (TC.local) info = `<div class="tjinfo warn"><span><b>${esc(meta.file || 'arquivo')}</b> carregado só nesta tela (não salvo para a equipe${TC.local.err ? ': ' + esc(TC.local.err) : canWrite() ? '' : ' — seu acesso é só de consulta'}).</span>${canWrite() ? '<button class="btn small" type="button" id="tc-retry">Salvar para a equipe</button>' : ''}${TC.cards ? '<button class="btn small ghost" type="button" id="tc-back">Voltar para a importação salva</button>' : ''}</div>`;
+    else if (TC.local) info = `<div class="tjinfo warn"><span><b>${esc(meta.file || 'arquivo')}</b> carregado só nesta tela (não salvo para a equipe${TC.local.err ? ': ' + esc(TC.local.err) : cw('tcert') ? '' : ' — seu acesso é só de consulta'}).</span>${cw('tcert') ? '<button class="btn small" type="button" id="tc-retry">Salvar para a equipe</button>' : ''}${TC.cards ? '<button class="btn small ghost" type="button" id="tc-back">Voltar para a importação salva</button>' : ''}</div>`;
     else info = `<div class="tjinfo" style="--jur:var(--tcr)"><span>Importação de <b>${dmy(meta.at)} às ${hhmm(meta.at)}</b>${by ? ' por ' + esc(by) : ''}</span><span class="muted">arquivo ${esc(meta.file || '')} · ${NF.format(meta.count || src.cards.length)} cartões no quadro</span></div>`;
-    const exclHTML = `<div class="tcexcl"><span class="lbl">Fora dos relatórios</span>${excl.length ? excl.map((p) => `<span class="tag">${esc(tcNome(p))}${canWrite() ? `<button type="button" data-tcx="${esc(p)}" aria-label="Voltar ${esc(tcNome(p))} para os relatórios">✕</button>` : ''}</span>`).join('') : '<span class="muted">ninguém</span>'}
-      ${canWrite() && allPes.some((p) => !excl.includes(p)) ? `<select id="tc-add" aria-label="Tirar pessoa dos relatórios"><option value="">+ tirar alguém dos relatórios…</option>${allPes.filter((p) => !excl.includes(p)).map((p) => `<option value="${esc(p)}">${esc(tcNome(p))}</option>`).join('')}</select>` : ''}
+    const exclHTML = `<div class="tcexcl"><span class="lbl">Fora dos relatórios</span>${excl.length ? excl.map((p) => `<span class="tag">${esc(tcNome(p))}${cw('tcert') ? `<button type="button" data-tcx="${esc(p)}" aria-label="Voltar ${esc(tcNome(p))} para os relatórios">✕</button>` : ''}</span>`).join('') : '<span class="muted">ninguém</span>'}
+      ${cw('tcert') && allPes.some((p) => !excl.includes(p)) ? `<select id="tc-add" aria-label="Tirar pessoa dos relatórios"><option value="">+ tirar alguém dos relatórios…</option>${allPes.filter((p) => !excl.includes(p)).map((p) => `<option value="${esc(p)}">${esc(tcNome(p))}</option>`).join('')}</select>` : ''}
       <span class="muted">Os cartões dessas pessoas ficam fora de gráficos, tabelas e totais; as etiquetas continuam no Trello.</span></div>`;
     const sec = (title, inner, id) => `<section class="sec"${id ? ` id="${id}"` : ''}><div class="band" style="--c:var(--tcr);background:var(--tcr)"><h2>${esc(title)}</h2></div><div class="block"><div class="body">${inner}</div></div></section>`;
     main.innerHTML = `<div class="view">${head(T, D + ' Clique num número, numa barra ou numa célula das tabelas para ver os cartões.', pickBtn)}
@@ -5184,7 +5635,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     TU.local = { cards, meta };
     S.f.tusin = {}; ['tusin', 'tusrep'].forEach((k) => { if (S.t[k]) S.t[k].page = 0; });
     render();
-    if (!canWrite()) { toast(`${NF.format(cards.length)} cartões carregados. Seu acesso é só de consulta, então a importação não foi salva para a equipe.`); return; }
+    if (!cw('tusin')) { toast(`${NF.format(cards.length)} cartões carregados. Seu acesso é só de consulta, então a importação não foi salva para a equipe.`); return; }
     await tuSave();
   }
   async function tuSave() {
@@ -5256,7 +5707,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       main.innerHTML = `<div class="view">${head(T, D)}
         <div class="drop"><span class="mtag" style="--c:var(--usi)">Inspeção Usinagem</span><h2>Arraste o CSV do Trello aqui</h2>
         <p>No Trello, abra o quadro <b>INSPEÇÃO USINAGEM</b>, entre no menu (⋯) → <b>Imprimir, exportar e compartilhar</b> → <b>Exportar como CSV</b>. Depois arraste o arquivo para esta área ou use o botão.</p>${pickBtn}
-        <p class="muted" style="font-size:12.5px">${canWrite() ? 'A importação fica salva online: a equipe abre esta tela e já vê os números. Cada nova importação substitui a anterior.' : 'Seu acesso é só de consulta: o arquivo é lido só nesta tela, sem salvar para a equipe.'}</p></div></div>`;
+        <p class="muted" style="font-size:12.5px">${cw('tusin') ? 'A importação fica salva online: a equipe abre esta tela e já vê os números. Cada nova importação substitui a anterior.' : 'Seu acesso é só de consulta: o arquivo é lido só nesta tela, sem salvar para a equipe.'}</p></div></div>`;
       tuWireFile($('.view', main));
       return;
     }
@@ -5282,7 +5733,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const origens = ['Padrão', 'Jurong', 'HRM', 'Uberaba'].map((g) => ({ label: g, value: P.filter((x) => x.origem === g).length, go: goU({ origem: g }) })).filter((g) => g.value);
     let info;
     if (TU.local && TU.busy) info = `<div class="tjinfo" style="--jur:var(--usi)"><span class="spin"></span><span>Salvando a importação para a equipe…</span></div>`;
-    else if (TU.local) info = `<div class="tjinfo warn"><span><b>${esc(meta.file || 'arquivo')}</b> carregado só nesta tela (não salvo para a equipe${TU.local.err ? ': ' + esc(TU.local.err) : canWrite() ? '' : ' — seu acesso é só de consulta'}).</span>${canWrite() ? '<button class="btn small" type="button" id="tu-retry">Salvar para a equipe</button>' : ''}${TU.cards ? '<button class="btn small ghost" type="button" id="tu-back">Voltar para a importação salva</button>' : ''}</div>`;
+    else if (TU.local) info = `<div class="tjinfo warn"><span><b>${esc(meta.file || 'arquivo')}</b> carregado só nesta tela (não salvo para a equipe${TU.local.err ? ': ' + esc(TU.local.err) : cw('tusin') ? '' : ' — seu acesso é só de consulta'}).</span>${cw('tusin') ? '<button class="btn small" type="button" id="tu-retry">Salvar para a equipe</button>' : ''}${TU.cards ? '<button class="btn small ghost" type="button" id="tu-back">Voltar para a importação salva</button>' : ''}</div>`;
     else info = `<div class="tjinfo" style="--jur:var(--usi)"><span>Importação de <b>${dmy(meta.at)} às ${hhmm(meta.at)}</b>${by ? ' por ' + esc(by) : ''}</span><span class="muted">arquivo ${esc(meta.file || '')} · ${NF.format(P.length)} cartões de pedido e ${NF.format(R.length)} cartões de relatório diário${repDup ? ` (${repDup} dia(s) com mais de um cartão, somados)` : ''}</span></div>`;
     const sec = (title, inner, id) => `<section class="sec"${id ? ` id="${id}"` : ''}><div class="band" style="--c:var(--usi);background:var(--usi)"><h2>${esc(title)}</h2></div><div class="block"><div class="body">${inner}</div></div></section>`;
     const sitOpts = [['', 'Todas'], ['aberto', 'Em aberto'], ['aprovado', 'Aprovados / liberados'], ['reprovado', 'Reprovados']];
@@ -5356,6 +5807,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const entries = [];
     snaps.forEach((s) => { if (s && s.exists) Object.values((s.data().e) || {}).forEach((e) => entries.push(e)); });
     entries.sort((a, b) => b.at - a.at);
+    if (typeof window.CQ_ACCESS === 'function') { for (let i = entries.length - 1; i >= 0; i--) { const m = entries[i].mod; const col = MOD[m] ? MOD[m].col : (VIEW_COL[m] || null); if (m !== 'GERAL' && col && !vis(col)) entries.splice(i, 1); } }
     await resolveNames(entries.map((e) => e.by));
     const out = $('#h-out'); if (!out || S.view !== 'historico') return;
     if (!entries.length) { out.innerHTML = '<div class="empty">Nenhuma alteração nesse período. Os lançamentos feitos no app aparecem aqui.</div>'; return; }
@@ -5373,10 +5825,10 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
 
   /* ================= AUDITORIA ================= */
   VIEWS.auditoria = (main) => {
-    const A = S.audit, c = (s) => A.filter((a) => a.sev === s).length;
+    const A = S.audit.filter((a) => visMod(a.mod)), c = (s) => A.filter((a) => a.sev === s).length;
     main.innerHTML = `<div class="view">${head('Auditoria dos dados', 'Inconsistências nos dados. Clique num item para abrir o registro e corrigir pelo botão Editar.')}
       <div class="kpis">${kpiHTML({ l: 'Alta prioridade', v: c('alta'), cls: c('alta') ? 'crit' : 'ok', sub: 'afetam números ou prazos' })}${kpiHTML({ l: 'Média', v: c('media'), cls: c('media') ? 'warn' : 'ok', sub: 'dados incompletos' })}${kpiHTML({ l: 'Baixa', v: c('baixa'), sub: 'padronização' })}</div>
-      <div class="aud">${A.map((a, i) => `<details ${i < 3 ? 'open' : ''}><summary><span class="sev ${a.sev}">${{ alta: 'Alta', media: 'Média', baixa: 'Baixa' }[a.sev]}</span><span><span class="mtag" style="--c:${MOD[a.mod].c}">${esc(MOD[a.mod].name)}</span><div class="tt">${esc(a.title)}</div><div class="hh">${esc(a.hint)}</div></span><span class="n">${NF.format(a.items.length)}</span></summary><div class="items">${a.items.slice(0, 300).map((it) => `<div class="${it.rec ? 'click' : ''}" ${it.rec ? `data-open="${it.rec.mod}:${esc(it.rec.key)}" tabindex="0"` : ''}><span class="mono">${esc(it.ref)}</span><span>${esc(it.text)}</span></div>`).join('')}${a.items.length > 300 ? `<div><span></span><span class="muted">+${a.items.length - 300} itens</span></div>` : ''}</div></details>`).join('') || '<div class="okbox">Nenhuma inconsistência encontrada.</div>'}</div></div>`;
+      <div class="aud">${A.map((a, i) => `<details ${i < 3 ? 'open' : ''}><summary><span class="sev ${a.sev}">${{ alta: 'Alta', media: 'Média', baixa: 'Baixa' }[a.sev]}</span><span><span class="mtag" style="--c:${MOD[a.mod].c}">${esc(MOD[a.mod].name)}</span><div class="tt">${esc(a.title)}</div><div class="hh">${esc(a.hint)}</div></span><span class="n">${NF.format(a.items.length)}</span></summary><div class="items">${a.items.slice(0, 300).map((it) => `<div class="${it.rec ? 'click' : ''}" ${it.rec ? `data-open="${it.rec.mod}:${esc(it.rec.key)}" tabindex="0"` : ''}><span class="mono">${esc(it.ref)}</span><span>${esc(it.text)}</span></div>`).join('')}${a.items.length > 300 ? `<div><span></span><span class="muted">+${a.items.length - 300} itens</span></div>` : ''}</div></details>`).join('') || okSeal('Nenhuma inconsistência encontrada', 'Os dados estão consistentes. Tudo certo por aqui.')}</div></div>`;
   };
 
   /* ================= RELATÓRIO ================= */
@@ -5392,8 +5844,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const semC = av.filter(semCert).length;
     const tbl = (rows, cols) => rows.length ? `<div class="twrap"><table class="t"><thead><tr>${cols.map((c) => `<th class="nosort">${esc(c.l)}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr>${cols.map((c) => `<td>${c.f(r)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '<div class="empty">Nenhum registro.</div>';
     return `<div class="report" id="report">
-      <div><span class="mtag" style="--c:var(--geral)">Aços Vital · Qualidade</span><h2>Relatório mensal da Qualidade — ${MESES_L[m - 1]} de ${y}</h2><p class="muted" style="margin:6px 0 0">Gerado em ${fD(S.today)} a partir do banco da Central da Qualidade.</p></div>
-      <div class="kpis sm">${kpiHTML({ l: 'Lotes recebidos', v: NF.format(av.length), c: MOD.AV.c })}${kpiHTML({ l: 'Lotes sem certificado', v: NF.format(semC), c: MOD.AV.c, cls: semC ? 'warn' : '' })}${kpiHTML({ l: 'Serviços', v: NF.format(sv.length), c: MOD.SERV.c })}${kpiHTML({ l: 'RNC fornecedor abertas no mês', v: NF.format(rnA.length), c: MOD.RNC.c })}${kpiHTML({ l: 'RNC fornecedor concluídas', v: NF.format(rnC.length), c: MOD.RNC.c })}${kpiHTML({ l: 'Tempo médio de fechamento', v: fech.length ? NF1.format(fech.reduce((p, q) => p + q, 0) / fech.length) : '—', sub: 'dias, das concluídas no mês', c: MOD.RNC.c })}${kpiHTML({ l: 'RNC cliente abertas no mês', v: NF.format(rcA.length), c: MOD.RNCC.c })}${kpiHTML({ l: 'RNC cliente concluídas', v: NF.format(rcC.length), c: MOD.RNCC.c })}${kpiHTML({ l: 'Tempo médio de resposta', v: rcR.length ? NF1.format(rcR.reduce((p, q) => p + q.diasResposta, 0) / rcR.length) : '—', sub: 'dias, das respondidas no mês', c: MOD.RNCC.c })}${kpiHTML({ l: 'Calibrações realizadas', v: NF.format(cal.length), c: MOD.INS.c })}${kpiHTML({ l: 'Vencem no mês seguinte', v: NF.format(venceProx.length), c: MOD.INS.c })}</div>
+      <div class="rephead">${DB.logo ? `<img class="replogo" src="${DB.logo}" alt="Logo da empresa">` : ''}<span class="mtag" style="--c:var(--geral)">Aços Vital · Qualidade</span><h2>Relatório mensal da Qualidade — ${MESES_L[m - 1]} de ${y}</h2><p class="muted" style="margin:6px 0 0">Gerado em ${fD(S.today)} a partir do banco da Central da Qualidade.</p></div>
+      <div class="kpis sm">${kpiHTML({ l: 'Lotes recebidos', v: NF.format(av.length), c: MOD.AV.c })}${kpiHTML({ l: 'Notas fiscais recebidas', v: NF.format(nNotas(av)), c: MOD.AV.c })}${kpiHTML({ l: 'Lotes sem certificado', v: NF.format(semC), c: MOD.AV.c, cls: semC ? 'warn' : '' })}${kpiHTML({ l: 'Serviços', v: NF.format(sv.length), c: MOD.SERV.c })}${kpiHTML({ l: 'RNC fornecedor abertas no mês', v: NF.format(rnA.length), c: MOD.RNC.c })}${kpiHTML({ l: 'RNC fornecedor concluídas', v: NF.format(rnC.length), c: MOD.RNC.c })}${kpiHTML({ l: 'Tempo médio de fechamento', v: fech.length ? NF1.format(fech.reduce((p, q) => p + q, 0) / fech.length) : '—', sub: 'dias, das concluídas no mês', c: MOD.RNC.c })}${kpiHTML({ l: 'RNC cliente abertas no mês', v: NF.format(rcA.length), c: MOD.RNCC.c })}${kpiHTML({ l: 'RNC cliente concluídas', v: NF.format(rcC.length), c: MOD.RNCC.c })}${kpiHTML({ l: 'Tempo médio de resposta', v: rcR.length ? NF1.format(rcR.reduce((p, q) => p + q.diasResposta, 0) / rcR.length) : '—', sub: 'dias, das respondidas no mês', c: MOD.RNCC.c })}${kpiHTML({ l: 'Calibrações realizadas', v: NF.format(cal.length), c: MOD.INS.c })}${kpiHTML({ l: 'Vencem no mês seguinte', v: NF.format(venceProx.length), c: MOD.INS.c })}</div>
       <div class="rgrid">
         <div style="--c:var(--av)"><h3>Recebimento · top fornecedores</h3>${barsHTML(countBy(av, (x) => x.forn), MOD.AV.c, { max: 10 })}</div>
         <div style="--c:var(--av)"><h3>Recebimento · por filial</h3>${barsHTML(countBy(av, (x) => x.filial), MOD.AV.c)}</div>
@@ -5431,17 +5883,17 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       XLSX.utils.book_append_sheet(wb, ws, name);
     };
     const v = (x) => (x == null ? '' : x);
-    sheet('AV', 'CONTROLE DE LOTES AV', ['ID LOTE', 'DATA ENTRADA', 'FILIAL', 'VOLUME', 'CORRIDA', 'DESCRIÇÃO', 'DIÂMETRO', 'ESPESSURA', 'LIGA/TIPO', 'NORMA', 'FORNECEDOR', 'NOTA FISCAL', 'PEDIDO COMPRA', 'PEDIDO VENDA', 'CERTIFICADO', 'CONFERIDO', 'RETRABALHO'],
+    if (vis('av')) sheet('AV', 'CONTROLE DE LOTES AV', ['ID LOTE', 'DATA ENTRADA', 'FILIAL', 'VOLUME', 'CORRIDA', 'DESCRIÇÃO', 'DIÂMETRO', 'ESPESSURA', 'LIGA/TIPO', 'NORMA', 'FORNECEDOR', 'NOTA FISCAL', 'PEDIDO COMPRA', 'PEDIDO VENDA', 'CERTIFICADO', 'CONFERIDO', 'RETRABALHO'],
       M.av.map((x) => [x.id, dateCell(x.data), v(x.filial), v(x.volume), v(x.corrida), v(x.desc), v(x.diam), v(x.esp), v(x.liga), v(x.norma), v(x.forn), v(x.nf), v(x.pc), v(x.pv), v(x.cert), v(x.conf), v(x.retrab)]), [11, 12, 22, 8, 14, 30, 10, 10, 12, 12, 26, 12, 12, 12, 14, 20, 10]);
-    sheet('SERV.', 'SERVIÇOS', ['DATA ENTRADA', 'DESCRIÇÃO', 'NOTA FISCAL', 'FORNECEDOR', 'PED. COMPRA', 'PED. VENDA', 'CERT. Nº'],
-      M.serv.map((x) => [dateCell(x.data), v(x.desc), v(x.nf), v(x.forn), v(x.pc), v(x.pv), v(x.cert)]), [12, 28, 12, 26, 12, 12, 12]);
-    sheet('RNC FORNECEDOR', 'Follow-up de Não-Conformidades - Fornecedores', ['Numero RNC', 'Data', 'Status', 'Comprador', 'Filial', 'Emissor', 'Fornecedor', 'Cliente', 'Nota Fiscal', 'Pedido de Venda', 'Ordem de Compra', 'Depto Resp.', 'Motivo', 'Reincid.', 'Prazo disp.', 'Disposicao', 'Fechamento disp.', 'Corretiva?', 'Prazo ação', 'Nivel prazo fechar', 'Prazo fechar', 'Analise critica da eficacia', 'Prazo Final', 'Conclusao', 'Cancelamento de RNC', 'Informações complementares'],
+    if (vis('serv')) sheet('SERV.', 'SERVIÇOS', ['Nº', 'DATA ENTRADA', 'DESCRIÇÃO', 'NOTA FISCAL', 'FORNECEDOR', 'PED. COMPRA', 'PED. VENDA', 'CERT. Nº'],
+      M.serv.map((x) => [v(x.sv), dateCell(x.data), v(x.desc), v(x.nf), v(x.forn), v(x.pc), v(x.pv), v(x.cert)]), [9, 12, 28, 12, 26, 12, 12, 12]);
+    if (vis('rnc')) sheet('RNC FORNECEDOR', 'Follow-up de Não-Conformidades - Fornecedores', ['Numero RNC', 'Data', 'Status', 'Comprador', 'Filial', 'Emissor', 'Fornecedor', 'Cliente', 'Nota Fiscal', 'Pedido de Venda', 'Ordem de Compra', 'Depto Resp.', 'Motivo', 'Reincid.', 'Prazo disp.', 'Disposicao', 'Fechamento disp.', 'Corretiva?', 'Prazo ação', 'Nivel prazo fechar', 'Prazo fechar', 'Analise critica da eficacia', 'Prazo Final', 'Conclusao', 'Cancelamento de RNC', 'Informações complementares'],
       M.rnc.map((x) => [x.num, dateCell(x.data), v(x.status), v(x.comprador), v(x.filial), v(x.emissor), v(x.forn), v(x.cliente), v(x.nf), v(x.pv), v(x.oc), v(x.depto), v(x.motivo), v(x.reinc), dateCell(x.prazoDisp), v(x.disp), dateCell(x.fechDisp), v(x.corretiva), dateCell(x.prazoAcao), v(x.nivel), dateCell(x.prazoFechar), v(x.analise), dateCell(x.prazoFinal), dateCell(x.conclusao), v(x.cancel), v(x.info)]),
       [16, 11, 13, 18, 20, 18, 22, 20, 11, 11, 11, 12, 14, 8, 11, 12, 11, 9, 11, 10, 11, 12, 11, 11, 9, 60]);
-    sheet('INSTRUMENTOS', 'CADASTRO E CONTROLE DE CALIBRAÇÃO', ['CÓDIGO', 'DESCRIÇÃO', 'MARCA', 'CERTIF. CALIBR.', 'DATA CALIBRAÇÃO', 'FREQ. DE CALIBR.', 'VALIDADE CALIBRAÇÃO', 'DIAS PARA VENCER', 'RESULTADO', 'STATUS', 'RESPONS. ANÁLISE/ATUALIZAÇÃO', 'DEPARTAMENTO', 'OBSERVAÇÃO', 'TIPO DE EQUIPAMENTO', 'RESULTADO DA CALIBRAÇÃO', 'CRITÉRIO DE ACEITAÇÃO', 'SITUAÇÃO OPERACIONAL'],
+    if (vis('ins')) sheet('INSTRUMENTOS', 'CADASTRO E CONTROLE DE CALIBRAÇÃO', ['CÓDIGO', 'DESCRIÇÃO', 'MARCA', 'CERTIF. CALIBR.', 'DATA CALIBRAÇÃO', 'FREQ. DE CALIBR.', 'VALIDADE CALIBRAÇÃO', 'DIAS PARA VENCER', 'RESULTADO', 'STATUS', 'RESPONS. ANÁLISE/ATUALIZAÇÃO', 'DEPARTAMENTO', 'OBSERVAÇÃO', 'TIPO DE EQUIPAMENTO', 'RESULTADO DA CALIBRAÇÃO', 'CRITÉRIO DE ACEITAÇÃO', 'SITUAÇÃO OPERACIONAL'],
       M.ins.map((x) => [x.codigo, v(x.desc), v(x.marca), v(x.cert), dateCell(x.dataCal), v(x.freq), dateCell(x.validade), v(x.dias), v(x.resultado), v(x.status), v(x.resp), v(x.depto), v(x.obs), v(x.tipo), v(x.resCal), v(x.criterio), v(x.situacao)]), [10, 36, 14, 24, 12, 8, 12, 8, 11, 20, 18, 22, 24, 24, 10, 10, 12]);
     const c = M.cfg, lists = CFG_LISTS.map((l) => l[0]);
-    sheet('RNC CLIENTE', 'RNC de cliente — reclamações', ['Número', 'Abertura', 'Status', 'Filial', 'Emissor', 'Cliente', 'Contato', 'Canal', 'NF de venda', 'Pedido de venda', 'Lotes / corridas', 'Produto', 'Qtde afetada', 'Reclamação', 'Motivo', 'Gravidade', 'Procedente', 'Reincid.', 'Prazo contenção', 'Contenção', 'Data contenção', 'Disposição', 'Setor responsável', 'Origem', 'RNCF vinculada', 'Causa raiz', 'Ação corretiva', 'Responsável', 'Prazo ação', 'Prazo resposta', 'Resposta ao cliente', 'Eficácia', 'Data verificação', 'Prazo final', 'Conclusão', 'Cancelada', 'Histórico'],
+    if (vis('rncc')) sheet('RNC CLIENTE', 'RNC de cliente — reclamações', ['Número', 'Abertura', 'Status', 'Filial', 'Emissor', 'Cliente', 'Contato', 'Canal', 'NF de venda', 'Pedido de venda', 'Lotes / corridas', 'Produto', 'Qtde afetada', 'Reclamação', 'Motivo', 'Gravidade', 'Procedente', 'Reincid.', 'Prazo contenção', 'Contenção', 'Data contenção', 'Disposição', 'Setor responsável', 'Origem', 'RNCF vinculada', 'Causa raiz', 'Ação corretiva', 'Responsável', 'Prazo ação', 'Prazo resposta', 'Resposta ao cliente', 'Eficácia', 'Data verificação', 'Prazo final', 'Conclusão', 'Cancelada', 'Histórico'],
       (M.rncc || []).map((x) => [x.num, dateCell(x.data), v(x.status), v(x.filial), v(x.emissor), v(x.cliente), v(x.contato), v(x.canal), v(x.nf), v(x.pv), v(x.lotes), v(x.produto), v(x.qtd), v(x.desc), v(x.motivo), v(x.gravidade), v(x.procedente), v(x.reinc), dateCell(x.prazoCont), v(x.contencao), dateCell(x.contData), v(x.disp), v(x.setor), v(x.origem), v(x.rncf), v(x.causa), v(x.acao), v(x.resp), dateCell(x.acaoPrazo), dateCell(x.prazoResp), dateCell(x.respData), v(x.eficacia), dateCell(x.eficData), dateCell(x.prazoFinal), dateCell(x.conclusao), v(x.cancel), v(x.info)]),
       [17, 11, 13, 18, 18, 22, 20, 10, 11, 11, 20, 24, 12, 50, 14, 9, 10, 8, 11, 40, 11, 16, 16, 14, 16, 40, 40, 18, 11, 11, 11, 12, 11, 11, 11, 8, 60]);
     const pw = XLSX.utils.aoa_to_sheet([['PESSOAS'], ['Nome', 'Setor', 'Filial', 'E-mail'].concat(FUNCOES.map((f) => f[1]))].concat((c.PESSOAS || []).map((p) => [p.nome, p.setor || '', p.filial || '', p.email || ''].concat(FUNCOES.map(([k]) => ((p.funcoes || []).includes(k) ? 'Sim' : '')))))); pw['!cols'] = [30, 18, 20, 30, 12, 14, 12, 16].map((w) => ({ wch: w })); XLSX.utils.book_append_sheet(wb, pw, 'PESSOAS');
@@ -5468,6 +5920,12 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       if (a === 'edit-rncc') { const x = findRec('RNCC', key); S.form = 'rnccupd'; S.pickPreset = x && x.num; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); return; }
       if (a === 'rncc-to-rncf') { const x = findRec('RNCC', key); if (!x) return; S.form = 'rnc'; S.editKey = null; S.linkBack = x.key; S.prefill = { H: x.cliente, I: x.nf ? '' : '', J: x.pv == null ? '' : String(x.pv), Z: 'Originada da ' + x.num + (x.desc ? ': ' + x.desc : '') }; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); return; }
       if (a === 'msg-rnc') { const x = findRec('RNC', key); if (x) textModal('Cobrança da ' + x.num, rncMsg(x)); return; }
+      if (a === 'av-serie') { S.avSerie = key; render(); return; }
+      if (a === 'cert-baixa') { const gr = S.alertGroups[+key]; if (gr) baixaCert(gr); return; }
+      if (a === 'cert-mail') { const gr = S.alertGroups[+key]; if (gr) mailForn(gr); return; }
+      if (a === 'av-label') { const x = findRec('AV', key); if (x) labelDialog([x]); return; }
+      if (a === 'av-similar') { const x = findRec('AV', key); if (!x) return; const r = x.raw || {}; const nota = {}; 'CKLMNP'.split('').forEach((c) => { if (r[c] != null) nota[c] = String(r[c]); }); nota.B = E.isoDate(S.today); const it = {}; 'FEDRSGHIJOTQU'.split('').forEach((c) => { if (r[c] != null) it[c] = String(r[c]); }); if (!it.U) it.U = 'Aprovado'; S.avmPrefill = { nota, items: [it] }; S.form = 'av'; S.editKey = null; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); toast('Formulário preenchido com os dados de ' + x.id + '. Altere o que for diferente (corrida, certificado…).'); return; }
+      if (a === 'av-to-rncf') { const x = findRec('AV', key); if (!x) return; S.form = 'rnc'; S.editKey = null; S.prefill = { G: x.forn, I: x.nf == null ? '' : String(x.nf), K: x.pc == null ? '' : String(x.pc), J: x.pv == null ? '' : String(x.pv), Z: `Lote ${x.id} (${x.desc || ''}${E.filled(x.corrida) && !E.isStar(x.corrida) ? ', corrida ' + x.corrida : ''}) reprovado na inspeção de recebimento.` }; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); return; }
       if (a === 'msg-cert') { const gr = S.alertGroups[+key]; if (gr) textModal('Cobrança de certificado', certMsg(gr)); return; }
       if (a === 'form') { S.form = act.dataset.form; closeLayer(); go('cadastro'); return; }
       if (a === 'edit') { S.form = FORM_FOR[act.dataset.mod]; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); S.editKey = key; render(); return; }
