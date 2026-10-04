@@ -542,9 +542,9 @@ textarea.cm-body { min-height: 260px; font-family: var(--f-mono, ui-monospace, m
       <a href="#auditoria" data-v="auditoria" style="--c:var(--warn)"><span class="sw"></span>Auditoria<span class="ct" id="ct-aud" hidden></span></a>
       <a href="#relatorio" data-v="relatorio" style="--c:var(--geral)"><span class="sw"></span>Relatório mensal</a>
       <a href="#trello" data-v="trello" style="--c:var(--jur)"><span class="sw"></span>Trello Jurong</a>
-      <a href="#acomp" data-v="acomp" style="--c:var(--acj)"><span class="sw"></span>Acompanhamento Jurong</a>
       <a href="#tcert" data-v="tcert" style="--c:var(--tcr)"><span class="sw"></span>Trello Certificados</a>
-      <a href="#tusin" data-v="tusin" style="--c:var(--usi)"><span class="sw"></span>Inspeção Usinagem</a>
+      <a href="#tusin" data-v="tusin" style="--c:var(--usi)"><span class="sw"></span>Trello Usinagem</a>
+      <a href="#acomp" data-v="acomp" style="--c:var(--acj)"><span class="sw"></span>Acompanhamento Jurong</a>
       <a href="#historico" data-v="historico" style="--c:var(--geral)"><span class="sw"></span>Histórico</a>
       <a href="#config" data-v="config" style="--c:var(--geral)"><span class="sw"></span>Configurações</a>
     </nav>
@@ -2205,7 +2205,7 @@ re2js/build/index.js:
   const SEAL = '<svg class="seal" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke-width="10"><path d="M52.7 12.1A38 38 0 0 1 81.5 28.8" stroke="var(--av)"/><path d="M84.2 33.3A38 38 0 0 1 84.2 66.7" stroke="var(--serv)"/><path d="M81.5 71.2A38 38 0 0 1 52.7 87.9" stroke="var(--rnc)"/><path d="M47.3 87.9A38 38 0 0 1 18.5 71.2" stroke="var(--rncc)"/><path d="M15.8 66.7A38 38 0 0 1 15.8 33.3" stroke="var(--cal)"/><path d="M18.5 28.8A38 38 0 0 1 47.3 12.1" stroke="var(--geral)"/></g><path d="M35 51 L46 62 L67 39" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   let GATE_LOGO = null;
   const MODCOLS = ['av', 'serv', 'rnc', 'rncc', 'ins', 'trello', 'acomp', 'tcert', 'tusin'];
-  const MODULOS = [['av', 'Lotes (AV)'], ['serv', 'Serviços'], ['rnc', 'RNC Fornecedor'], ['rncc', 'RNC Cliente'], ['ins', 'Calibração'], ['trello', 'Trello Jurong'], ['acomp', 'Acompanhamento Jurong'], ['tcert', 'Trello Certificados'], ['tusin', 'Inspeção Usinagem']];
+  const MODULOS = [['av', 'Lotes (AV)'], ['serv', 'Serviços'], ['rnc', 'RNC Fornecedor'], ['rncc', 'RNC Cliente'], ['ins', 'Calibração'], ['trello', 'Trello Jurong'], ['tcert', 'Trello Certificados'], ['tusin', 'Trello Usinagem'], ['acomp', 'Acompanhamento Jurong']];
   /* telas gerais: quem não tem a escolha gravada (cadastros antigos) vê tudo, consulta Configurações e exporta */
   const TELAS = [['painel', 'Painel'], ['alertas', 'Alertas'], ['rastreio', 'Rastreabilidade'], ['auditoria', 'Auditoria'], ['relatorio', 'Relatório mensal'], ['historico', 'Histórico']];
   const TELA_OPC = { config: [['nao', 'Não vê'], ['ver', 'Só consulta'], ['edita', 'Edita']], exportar: [['sim', 'Permite'], ['nao', 'Não permite']] };
@@ -3708,7 +3708,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       return;
     }
     VIEWS[S.view](main);
-    const bn = rncBanner(); if (bn) main.insertAdjacentHTML('afterbegin', bn);
+    const bn = BANNER_VIEWS.includes(S.view) ? rncBanner() : ''; if (bn) main.insertAdjacentHTML('afterbegin', bn);
     hideInvisible(main);
   }
   function hideInvisible(root) {
@@ -3992,9 +3992,10 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const one = H.length === 1 ? `${H[0].s.k === 'disp' ? '1 disposição' : '1 etapa de RNC'} ${relTxt(H[0].s.ts)}` : `${H.length} prazos de RNC vencem hoje`;
     return `<div class="rbar warn" id="rnc-banner" role="status"><span class="ic">!</span><span class="txt">${esc(one)}<small>${esc(list)}</small></span><button class="btn small rb-ver" type="button" data-act="rnc-ver">Ver RNC${H.length > 1 ? 's' : ''} →</button></div>`;
   }
+  const BANNER_VIEWS = ['rnc', 'alertas']; /* a faixa aparece só na RNC Fornecedor e nos Alertas */
   function refreshBanner() {
     if (!S.model) return;
-    const b = $('#rnc-banner'), html = rncBanner();
+    const b = $('#rnc-banner'), html = BANNER_VIEWS.includes(S.view) ? rncBanner() : '';
     if (b) { if (html) b.outerHTML = html; else b.remove(); } else if (html && $('#main .view')) $('#main').insertAdjacentHTML('afterbegin', html);
   }
   /* aviso ao entrar, uma vez por dia */
@@ -5480,6 +5481,23 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     }
     return out;
   }
+  /* zerar a importação salva de uma tela de CSV (Trello Jurong, Acompanhamento, Trello Certificados, Trello Usinagem) */
+  const CSV_NOME = { trello: 'Trello Jurong', acomp: 'Acompanhamento Jurong', tcert: 'Trello Certificados', tusin: 'Trello Usinagem' };
+  function zeroBtn(col, st) { return cw(col) && st.meta && !st.busy && !st.local ? `<button class="btn" type="button" data-act="csv-zero" data-key="${col}">Zerar dados</button>` : ''; }
+  function csvZero(col) {
+    const st = { trello: TJ, acomp: AJ, tcert: TC, tusin: TU }[col];
+    confirmBox('Zerar ' + CSV_NOME[col], 'Apaga a importação salva desta tela para toda a equipe. Para ver os dados de novo, é só importar o CSV outra vez.' + (col === 'tcert' ? ' As pessoas marcadas como "Fora dos relatórios" continuam guardadas.' : ''), 'Zerar dados', async () => {
+      st.busy = true; render();
+      try {
+        await DB.db.doc(col + '/meta').delete();
+        const ids = Object.keys(st.docs || {}).filter((id) => id !== 'meta' && id !== 'cfg');
+        for (const id of ids) await DB.db.doc(col + '/' + id).delete();
+        logEntry('GERAL', col, 'alterado', `${CSV_NOME[col]}: dados zerados`, null);
+        toast(CSV_NOME[col] + ': dados zerados.');
+      } catch (err) { toast('Não foi possível zerar: ' + ((err && (err.message || err.code)) || err), true); }
+      st.busy = false; st.local = null; render();
+    }, true);
+  }
   function tjAssemble() {
     const m = TJ.docs.meta;
     if (!m || !m.imp) { TJ.cards = null; TJ.meta = null; return; }
@@ -5535,7 +5553,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     view.addEventListener('drop', (e) => { e.preventDefault(); depth = 0; view.classList.remove('tjover'); const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; tjImport(f); });
   }
   VIEWS.trello = (main) => {
-    const pickBtn = `<input type="file" id="tj-file" accept=".csv,text/csv" hidden><button class="btn primary" type="button" id="tj-pick" ${TJ.busy ? 'disabled' : ''}>${TJ.busy ? 'Salvando…' : 'Importar CSV do Trello'}</button>`;
+    const pickBtn = `<input type="file" id="tj-file" accept=".csv,text/csv" hidden><button class="btn primary" type="button" id="tj-pick" ${TJ.busy ? 'disabled' : ''}>${TJ.busy ? 'Salvando…' : 'Importar CSV do Trello'}</button>${zeroBtn('trello', TJ)}`;
     if (!TJ.ready && !TJ.local) { main.innerHTML = `<div class="view">${head('Trello Jurong', 'Gráficos do quadro do Trello a partir do arquivo CSV exportado.')}<div class="loading"><span class="spin"></span><span>Carregando a última importação…</span></div></div>`; return; }
     const src = TJ.local || (TJ.cards ? { cards: TJ.cards, meta: TJ.meta } : null);
     if (!src) {
@@ -5760,7 +5778,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     openDrawer(x.id || x.key, sub, body, 'var(--acj)');
   }
   VIEWS.acomp = (main) => {
-    const pickBtn = `<input type="file" id="aj-file" accept=".csv,text/csv" hidden><button class="btn primary" type="button" id="aj-pick" ${AJ.busy ? 'disabled' : ''}>${AJ.busy ? 'Salvando…' : 'Importar CSV (Base_Dados)'}</button>`;
+    const pickBtn = `<input type="file" id="aj-file" accept=".csv,text/csv" hidden><button class="btn primary" type="button" id="aj-pick" ${AJ.busy ? 'disabled' : ''}>${AJ.busy ? 'Salvando…' : 'Importar CSV (Base_Dados)'}</button>${zeroBtn('acomp', AJ)}`;
     const T = 'Acompanhamento Jurong', D = 'Follow-up dos pedidos Jurong a partir da aba Base_Dados exportada em CSV.';
     if (!AJ.ready && !AJ.local) { main.innerHTML = `<div class="view">${head(T, D)}<div class="loading"><span class="spin"></span><span>Carregando a última importação…</span></div></div>`; return; }
     const src = AJ.local || (AJ.items ? { items: AJ.items, meta: AJ.meta } : null);
@@ -6003,7 +6021,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     }).join('')}</tbody><tfoot><tr><th scope="row" class="nosort">Total</th>${cols.map((c) => `<td class="r"><b>${NF.format(rows.reduce((s, r) => s + cell(r, c), 0))}</b></td>`).join('')}<td class="r"><b>${NF.format(rows.reduce((s, r) => s + cols.reduce((q, c) => q + cell(r, c), 0), 0))}</b></td></tr></tfoot></table></div>`;
   }
   VIEWS.tcert = (main) => {
-    const pickBtn = `<input type="file" id="tc-file" accept=".csv,text/csv" hidden><button class="btn primary" type="button" id="tc-pick" ${TC.busy ? 'disabled' : ''}>${TC.busy ? 'Salvando…' : 'Importar CSV do Trello'}</button>`;
+    const pickBtn = `<input type="file" id="tc-file" accept=".csv,text/csv" hidden><button class="btn primary" type="button" id="tc-pick" ${TC.busy ? 'disabled' : ''}>${TC.busy ? 'Salvando…' : 'Importar CSV do Trello'}</button>${zeroBtn('tcert', TC)}`;
     const T = 'Trello Certificados', D = 'Certificados emitidos por colaborador, por semana e por mês, a partir da exportação CSV do quadro CERTIFICADOS DE QUALIDADE.';
     if (!TC.ready && !TC.local) { main.innerHTML = `<div class="view">${head(T, D)}<div class="loading"><span class="spin"></span><span>Carregando a última importação…</span></div></div>`; return; }
     const src = TC.local || (TC.cards ? { cards: TC.cards, meta: TC.meta } : null);
@@ -6147,7 +6165,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       const meta = Object.assign({}, L.meta, { imp, n: chunks.length });
       await DB.db.doc('tusin/meta').set(meta);
       for (const k of Object.keys(TU.docs).filter((k) => /^c\d+$/.test(k) && +k.slice(1) >= chunks.length)) { try { await DB.db.doc('tusin/' + k).delete(); } catch (e) { /* sobra antiga, ignorada pela leitura */ } }
-      logEntry('GERAL', 'tusin', 'alterado', `Inspeção Usinagem: importação de ${L.meta.count} cartões (${L.meta.file})`, null);
+      logEntry('GERAL', 'tusin', 'alterado', `Trello Usinagem: importação de ${L.meta.count} cartões (${L.meta.file})`, null);
       TU.cards = L.cards; TU.meta = meta; TU.local = null;
       toast(`Importação salva para a equipe: ${NF.format(meta.count)} cartões.`);
     } catch (err) {
@@ -6196,13 +6214,13 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     return `<span class="chip ${x.rank === 4 ? 'serious' : 'warn'}"><i>!</i>${esc(x.l)}</span>`;
   }
   VIEWS.tusin = (main) => {
-    const pickBtn = `<input type="file" id="tu-file" accept=".csv,text/csv" hidden><button class="btn primary" type="button" id="tu-pick" ${TU.busy ? 'disabled' : ''}>${TU.busy ? 'Salvando…' : 'Importar CSV do Trello'}</button>`;
-    const T = 'Inspeção Usinagem', D = 'Inspeções de usinagem a partir da exportação CSV do quadro INSPEÇÃO USINAGEM no Trello.';
+    const pickBtn = `<input type="file" id="tu-file" accept=".csv,text/csv" hidden><button class="btn primary" type="button" id="tu-pick" ${TU.busy ? 'disabled' : ''}>${TU.busy ? 'Salvando…' : 'Importar CSV do Trello'}</button>${zeroBtn('tusin', TU)}`;
+    const T = 'Trello Inspeção Usinagem', D = 'Inspeções de usinagem a partir da exportação CSV do quadro INSPEÇÃO USINAGEM no Trello.';
     if (!TU.ready && !TU.local) { main.innerHTML = `<div class="view">${head(T, D)}<div class="loading"><span class="spin"></span><span>Carregando a última importação…</span></div></div>`; return; }
     const src = TU.local || (TU.cards ? { cards: TU.cards, meta: TU.meta } : null);
     if (!src) {
       main.innerHTML = `<div class="view">${head(T, D)}
-        <div class="drop"><span class="mtag" style="--c:var(--usi)">Inspeção Usinagem</span><h2>Arraste o CSV do Trello aqui</h2>
+        <div class="drop"><span class="mtag" style="--c:var(--usi)">Trello Usinagem</span><h2>Arraste o CSV do Trello aqui</h2>
         <p>No Trello, abra o quadro <b>INSPEÇÃO USINAGEM</b>, entre no menu (⋯) → <b>Imprimir, exportar e compartilhar</b> → <b>Exportar como CSV</b>. Depois arraste o arquivo para esta área ou use o botão.</p>${pickBtn}
         <p class="muted" style="font-size:12.5px">${cw('tusin') ? 'A importação fica salva online: a equipe abre esta tela e já vê os números. Cada nova importação substitui a anterior.' : 'Seu acesso é só de consulta: o arquivo é lido só nesta tela, sem salvar para a equipe.'}</p></div></div>`;
       tuWireFile($('.view', main));
@@ -6420,6 +6438,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       if (a === 'msg-rnc') { const x = findRec('RNC', key); if (x) rncMailDialog(x); return; }
       if (a === 'rnc-ret') { const x = findRec('RNC', key); if (x) rncRetDialog(x); return; }
       if (a === 'rnc-resumo') { rncResumoDialog(); return; }
+      if (a === 'csv-zero') { csvZero(key); return; }
       if (a === 'rnc-ver') { S.f.alert = 'venc'; if (!rncOpen().some((o) => o.venc)) S.f.alert = 'h24'; closeLayer(); go('alertas'); return; }
       if (a === 'rnc-ciente') { lsSet('cq-rnc-ciente', JSON.stringify({ d: S.today, k: rncOpen().filter((o) => o.venc).map((o) => o.x.key) })); refreshBanner(); return; }
       if (a === 'av-serie') { S.avSerie = key; render(); return; }
