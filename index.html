@@ -4250,7 +4250,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     };
   }
   /* ---------- etiqueta do lote (impressora térmica) ---------- */
-  const LABEL_SIZES = [['100x50', '100 × 50 mm'], ['100x75', '100 × 75 mm'], ['60x40', '60 × 40 mm'], ['50x30', '50 × 30 mm'], ['custom', 'Personalizado']];
+  const LABEL_SIZES = [['100x50', '100 × 50 mm'], ['100x75', '100 × 75 mm'], ['60x40', '60 × 40 mm'], ['50x30', '50 × 30 mm'], ['50x25', '50 × 25 mm'], ['40x30', '40 × 30 mm'], ['100x35', '100 × 35 mm (3,5 × 10 cm)'], ['custom', 'Personalizado']];
+  const LABEL_MODS = [['compacta', 'Compacta (AV + QR code)'], ['completa', 'Completa (com os dados do lote)']];
   const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } };
   const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* sem armazenamento */ } };
   /* ---------- página pública do lote (QR code da etiqueta): só consulta, sem acesso à Central ---------- */
@@ -4295,7 +4296,18 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.isDark(r, c)) d += `M${c},${r}h1v1h-1z`;
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 ${n + 2} ${n + 2}" width="${mm}mm" height="${mm}mm" shape-rendering="crispEdges"><rect x="-1" y="-1" width="${n + 2}" height="${n + 2}" fill="#fff"/><path d="${d}" fill="#000"/></svg>`;
   }
-  function labelHTML(x, W, H, tok) {
+  /* etiqueta compacta: só o número do lote e o QR code (deitada ou em pé, conforme o papel) */
+  function labelHTMLc(x, W, H, tok) {
+    const pad = Math.max(1.2, Math.min(W, H) * 0.05), id = esc(String(x.id || '')), n = Math.max(6, String(x.id || '').length);
+    if (W >= H * 1.4) {
+      const qr = Math.min(H - pad * 2, W * 0.5), gap = Math.max(1.5, W * 0.04), fs = Math.min(H * 0.34, (W - qr - pad * 2 - gap) / (n * 0.56));
+      return `<div class="lab cmp" style="width:${W}mm;height:${H}mm;padding:${pad}mm;gap:${gap}mm"><div class="id" style="font-size:${fs}mm">${id}</div><div class="qr">${qrSvg(lotUrl(x, tok), qr)}</div></div>`;
+    }
+    const fs = Math.min(H * 0.17, (W - pad * 2) / (n * 0.56)), qr = Math.min(W - pad * 2, H - pad * 2 - fs * 1.35);
+    return `<div class="lab cmp v" style="width:${W}mm;height:${H}mm;padding:${pad}mm"><div class="qr">${qrSvg(lotUrl(x, tok), qr)}</div><div class="id" style="font-size:${fs}mm">${id}</div></div>`;
+  }
+  function labelHTML(x, W, H, tok, mod) {
+    if (mod === 'compacta') return labelHTMLc(x, W, H, tok);
     const pad = Math.max(1.5, H * 0.05), qr = Math.min(H - pad * 2, W * 0.4), fs = H * 0.075, small = (v) => esc(String(v == null ? '' : v));
     const line = (l, v) => (E.filled(v) && !E.isStar(v) ? `<div class="ln"><span>${l}</span> ${small(v)}</div>` : '');
     return `<div class="lab" style="width:${W}mm;height:${H}mm;padding:${pad}mm;font-size:${fs}mm"><div class="tx"><div class="id" style="font-size:${H * 0.17}mm">${small(x.id)}</div><div class="ds">${small(x.desc)}${E.filled(x.diam) ? ' ' + small(x.diam) : ''}${E.filled(x.esp) ? ' × ' + small(x.esp) : ''}</div>${line('Corrida', x.corrida)}${line('Volume', x.volume)}${line('Material', x.norma)}<div class="ln"><span>NF</span> ${small(x.nf)} · ${small(fD(x.data))}${x.quant != null && x.quant !== '' ? ' · ' + small(x.quant) + ' ' + small(x.und || '') : ''}</div><div class="ft">${small(x.forn)}</div></div><div class="qr">${qrSvg(lotUrl(x, tok), qr)}</div></div>`;
@@ -4303,7 +4315,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   const LABEL_CSS = (W, H) => `@page{size:${W}mm ${H}mm;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0}body{font-family:"Arial Narrow",Arial,Helvetica,sans-serif;color:#000;background:#fff}
     .lab{display:flex;gap:2mm;align-items:center;overflow:hidden;page-break-after:always;break-after:page;line-height:1.15}.lab:last-child{page-break-after:auto;break-after:auto}
     .tx{flex:1;min-width:0;display:grid;gap:.6mm}.id{font-weight:800;letter-spacing:.02em;line-height:1}.ds{font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-    .ln{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ln span{font-weight:700}.ft{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}.qr{flex:none;line-height:0}`;
+    .ln{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ln span{font-weight:700}.ft{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}.qr{flex:none;line-height:0}
+    .lab.cmp{justify-content:center}.lab.cmp .id{white-space:nowrap}.lab.cmp.v{flex-direction:column;gap:.6mm}`;
   function printHTML(html) {
     const fr = document.createElement('iframe');
     fr.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
@@ -4313,24 +4326,25 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   }
   function labelDialog(lots) {
     if (!lots.length) return;
-    const cur = lsGet('cq-etq', '100x50');
+    const cur = lsGet('cq-etq', '100x50'), curM = lsGet('cq-etq-mod', 'compacta');
     const dims = () => { const v = $('#lb-size').value; if (v === 'custom') return [Math.max(20, +$('#lb-w').value || 100), Math.max(15, +$('#lb-h').value || 50)]; const [w, h] = v.split('x').map(Number); return [w, h]; };
     openModal(lots.length > 1 ? `Etiquetas (${lots.length} lotes)` : `Etiqueta · ${lots[0].id}`, `
-      <div class="fgrid" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))"><label class="field"><span>Tamanho da etiqueta</span><select id="lb-size">${LABEL_SIZES.map(([v, l]) => `<option value="${v}" ${v === (LABEL_SIZES.some((s2) => s2[0] === cur) ? cur : 'custom') ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+      <div class="fgrid" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))"><label class="field"><span>Modelo</span><select id="lb-mod">${LABEL_MODS.map(([v, l]) => `<option value="${v}" ${v === curM ? 'selected' : ''}>${l}</option>`).join('')}</select></label><label class="field"><span>Tamanho da etiqueta</span><select id="lb-size">${LABEL_SIZES.map(([v, l]) => `<option value="${v}" ${v === (LABEL_SIZES.some((s2) => s2[0] === cur) ? cur : 'custom') ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
         <label class="field" id="lb-wf"><span>Largura (mm)</span><input id="lb-w" type="number" min="20" max="200" value="${esc(lsGet('cq-etq-w', '100'))}"></label><label class="field" id="lb-hf"><span>Altura (mm)</span><input id="lb-h" type="number" min="15" max="200" value="${esc(lsGet('cq-etq-h', '50'))}"></label></div>
       <div class="lbprev" id="lb-prev"></div>
+      <p id="lb-warn" class="muted" style="margin:0;font-size:12.5px;color:var(--warn)" hidden>Etiqueta pequena: abaixo de 40 × 25 mm o QR code pode não ser lido pelo celular.</p>
       <p class="muted" style="margin:0;font-size:12.5px">Na janela de impressão, escolha a impressora de etiquetas e, se ela pedir, o mesmo tamanho de papel. O QR code abre uma página só de consulta com os dados do lote, sem acesso à Central.</p>
       <div class="formfoot"><button class="btn primary" type="button" id="lb-print">Imprimir ${lots.length > 1 ? lots.length + ' etiquetas' : 'etiqueta'}</button><button class="btn" type="button" data-act="close">Fechar</button></div>`);
-    const draw = () => { const custom = $('#lb-size').value === 'custom'; $('#lb-wf').hidden = $('#lb-hf').hidden = !custom; const [W, H] = dims(); $('#lb-prev').innerHTML = `<style>${LABEL_CSS(W, H).replace(/@page[^}]*}/, '').replace(/html,body\{[^}]*\}/, '').replace(/body\{[^}]*\}/, '')}</style><div class="lbsheet">${labelHTML(lots[0], W, H)}</div>`; };
-    ['lb-size', 'lb-w', 'lb-h'].forEach((id) => $('#' + id).addEventListener('input', draw));
+    const draw = () => { const custom = $('#lb-size').value === 'custom'; $('#lb-wf').hidden = $('#lb-hf').hidden = !custom; const [W, H] = dims(); $('#lb-prev').innerHTML = `<style>${LABEL_CSS(W, H).replace(/@page[^}]*}/, '').replace(/html,body\{[^}]*\}/, '').replace(/body\{[^}]*\}/, '')}</style><div class="lbsheet">${labelHTML(lots[0], W, H, null, $('#lb-mod').value)}</div>`; const sm = Math.min(W, H) < 25 && $('#lb-mod').value === 'compacta'; $('#lb-warn').hidden = !sm; };
+    ['lb-mod', 'lb-size', 'lb-w', 'lb-h'].forEach((id) => $('#' + id).addEventListener('input', draw));
     draw();
     $('#lb-print').onclick = async () => {
-      const [W, H] = dims(); lsSet('cq-etq', $('#lb-size').value); lsSet('cq-etq-w', String(W)); lsSet('cq-etq-h', String(H));
+      const [W, H] = dims(), mod = $('#lb-mod').value; lsSet('cq-etq', $('#lb-size').value); lsSet('cq-etq-w', String(W)); lsSet('cq-etq-h', String(H)); lsSet('cq-etq-mod', mod);
       const bt = $('#lb-print'), lbl = bt.textContent; bt.disabled = true; bt.textContent = 'Preparando…';
       const toks = await ensurePub(lots);
       bt.disabled = false; bt.textContent = lbl;
       if (PUB() && lots.some((x) => !toks[x.key])) toast('Sem permissão para criar a página do lote: o QR code sai só com o código do lote.', true);
-      printHTML(`<!doctype html><html><head><meta charset="utf-8"><title>Etiquetas</title><style>${LABEL_CSS(W, H)}</style></head><body>${lots.map((x) => labelHTML(x, W, H, toks[x.key])).join('')}</body></html>`);
+      printHTML(`<!doctype html><html><head><meta charset="utf-8"><title>Etiquetas</title><style>${LABEL_CSS(W, H)}</style></head><body>${lots.map((x) => labelHTML(x, W, H, toks[x.key], mod)).join('')}</body></html>`);
     };
   }
   VIEWS.alertas = (main) => {
