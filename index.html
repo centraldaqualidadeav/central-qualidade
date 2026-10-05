@@ -487,6 +487,19 @@ textarea.cm-body { min-height: 260px; font-family: var(--f-mono, ui-monospace, m
 .rnclist li:hover { background: var(--surface-2); }
 .rlanes { margin-bottom: 4px; }
 
+/* lotes afetados na RNC */
+.lotsug { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12.5px; margin-top: -4px; grid-column: 1 / -1; }
+.lchip { border: 1px solid var(--line-2); background: var(--surface); border-radius: 14px; padding: 3px 10px; cursor: pointer; font: 600 12px/1.3 var(--f-mono); color: var(--ink-2); }
+.lchip small { font: 400 11px var(--f-body); color: var(--ink-3); }
+.lchip[aria-pressed="true"] { background: var(--rnc); border-color: var(--rnc); color: #fff; }
+.lchip[aria-pressed="true"] small { color: rgba(255,255,255,.85); }
+.chip.lrnc { margin-left: 4px; font-size: 10.5px; }
+
+/* certificado de calibração anexado */
+.pdfmk { display: inline-block; margin-left: 6px; font: 700 10px/1 var(--f-body); color: var(--cal); border: 1px solid currentColor; border-radius: 3px; padding: 2px 4px; text-decoration: none; vertical-align: 1px; }
+.pdfmk:hover { background: var(--cal); color: #fff; }
+.cfgitem[data-cfg="DRIVE"] .inp { width: 100%; }
+
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
 #fb-gate[hidden] { display: none; }
@@ -2349,6 +2362,8 @@ re2js/build/index.js:
     can: async (n) => (n === 'data.write' ? canWriteAny() : null),
     isOwner: async () => ME.perfil === 'dono',
     canEdit: async () => isAdmin(),
+    /* token do login, para o script do Google Drive conferir quem está enviando */
+    idToken: async () => { const u = auth.currentUser; return u && typeof u.getIdToken === 'function' ? u.getIdToken() : (window.__FAKE_TOKEN || null); },
     profiles: async (ids) => {
       const out = {};
       await Promise.all((ids || []).filter(Boolean).map(async (id) => {
@@ -3118,7 +3133,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   const FMAP = {
     AV: { A: 'id', B: 'data', C: 'filial', D: 'volume', E: 'corrida', F: 'desc', G: 'diam', H: 'esp', I: 'liga', J: 'norma', K: 'forn', L: 'nf', M: 'pc', N: 'pv', O: 'cert', P: 'conf', Q: 'retrab', R: 'quant', S: 'und', T: 'certLink', U: 'insp' },
     SERV: { A: 'data', B: 'desc', C: 'nf', D: 'forn', E: 'pc', F: 'pv', G: 'cert' },
-    RNC: { A: 'num', B: 'data', D: 'comprador', E: 'filial', F: 'emissor', G: 'forn', H: 'cliente', I: 'nf', J: 'pv', K: 'oc', L: 'depto', M: 'motivo', P: 'disp', Q: 'fechDisp', R: 'corretiva', T: 'nivel', V: 'analise', X: 'conclusao', Y: 'cancel', Z: 'info', AA: 'emPara', AB: 'emCc' },
+    RNC: { A: 'num', B: 'data', D: 'comprador', E: 'filial', F: 'emissor', G: 'forn', H: 'cliente', I: 'nf', J: 'pv', K: 'oc', L: 'depto', M: 'motivo', P: 'disp', Q: 'fechDisp', R: 'corretiva', T: 'nivel', V: 'analise', X: 'conclusao', Y: 'cancel', Z: 'info', AA: 'emPara', AB: 'emCc', AC: 'lotesAV' },
     INS: { A: 'codigo', B: 'desc', C: 'marca', D: 'cert', E: 'dataCal', F: 'freq', K: 'resp', L: 'depto', M: 'obs', P: 'tipo', Q: 'resCal', S: 'situacao' },
     RNCC: { A: 'num', B: 'data', C: 'filial', D: 'emissor', E: 'cliente', F: 'contato', G: 'canal', H: 'nf', I: 'pv', J: 'lotes', K: 'produto', L: 'qtd', M: 'desc', N: 'motivo', O: 'gravidade', P: 'procedente', Q: 'contencao', R: 'contData', S: 'disp', T: 'setor', U: 'origem', V: 'rncf', W: 'causa', X: 'acao', Y: 'resp', Z: 'acaoPrazo', AA: 'respData', AB: 'eficacia', AC: 'eficData', AD: 'conclusao', AE: 'cancel', AF: 'info' }
   };
@@ -3128,10 +3143,11 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     fechDisp: 'Fechamento da disposição', corretiva: 'Corretiva?', nivel: 'Nível do prazo', analise: 'Análise crítica', conclusao: 'Conclusão', cancel: 'Cancelada', info: 'Informações', codigo: 'Código', marca: 'Marca', dataCal: 'Data da calibração',
     freq: 'Frequência', resp: 'Responsável', obs: 'Observação', tipo: 'Tipo de equipamento', resCal: 'Resultado (erro)', situacao: 'Situação',
     contato: 'Contato', canal: 'Canal', lotes: 'Lotes / corridas', produto: 'Produto', qtd: 'Quantidade afetada', gravidade: 'Gravidade', procedente: 'Procedente', contencao: 'Contenção', contData: 'Data da contenção', setor: 'Setor responsável',
-    origem: 'Origem da causa', quant: 'Quantidade', und: 'Unidade', certLink: 'Link do certificado', insp: 'Resultado da inspeção', rncf: 'RNC de fornecedor vinculada', causa: 'Causa raiz', acao: 'Ação corretiva', acaoPrazo: 'Prazo da ação', respData: 'Resposta ao cliente', eficacia: 'Eficácia', eficData: 'Data da verificação', emPara: 'E-mails (Para)', emCc: 'E-mails (Cópia)'
+    origem: 'Origem da causa', quant: 'Quantidade', und: 'Unidade', certLink: 'Link do certificado', insp: 'Resultado da inspeção', rncf: 'RNC de fornecedor vinculada', causa: 'Causa raiz', acao: 'Ação corretiva', acaoPrazo: 'Prazo da ação', respData: 'Resposta ao cliente', eficacia: 'Eficácia', eficData: 'Data da verificação', emPara: 'E-mails (Para)', emCc: 'E-mails (Cópia)', lotesAV: 'Lotes afetados'
   };
   const DATEF = new Set(['data', 'fechDisp', 'conclusao', 'dataCal', 'contData', 'acaoPrazo', 'respData', 'eficData']);
   const MODS = ['AV', 'SERV', 'RNC', 'INS', 'RNCC'];
+  const CONC = 'Liberado sob concessão';
   const inFrame = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
   const TAB = Math.random().toString(36).slice(2, 10);
   /* textos que mudam conforme onde a Central está hospedada (Claude ou Firebase) */
@@ -3160,7 +3176,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     if (!m) return '<span class="chip off"><i>–</i>Sem data</span>';
     return `<span class="chip ${m[0]}"><i>${m[1]}</i>${m[2]}</span>`;
   }
-  function chipInsp(v) { const m = { aprovado: ['ok', '✓', 'Aprovado'], reprovado: ['crit', '✕', 'Reprovado'], 'em análise': ['warn', '!', 'Em análise'], 'em analise': ['warn', '!', 'Em análise'] }[String(v || '').trim().toLowerCase()]; return m ? `<span class="chip ${m[0]}"><i>${m[1]}</i>${m[2]}</span>` : '<span class="muted">—</span>'; }
+  function chipInsp(v) { const m = { aprovado: ['ok', '✓', 'Aprovado'], reprovado: ['crit', '✕', 'Reprovado'], 'em análise': ['warn', '!', 'Em análise'], 'em analise': ['warn', '!', 'Em análise'], 'liberado sob concessão': ['warn', '!', CONC] }[String(v || '').trim().toLowerCase()]; return m ? `<span class="chip ${m[0]}"><i>${m[1]}</i>${m[2]}</span>` : '<span class="muted">—</span>'; }
   function chipRes(r) { return r === 'REPROVADO' ? '<span class="chip crit"><i>✕</i>Reprovado</span>' : r === 'APROVADO' ? '<span class="chip ok"><i>✓</i>Aprovado</span>' : ''; }
   function countBy(arr, fn) {
     const m = new Map();
@@ -3292,7 +3308,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     [['RNCC_PRAZO_CONTENCAO', 1], ['RNCC_PRAZO_RESPOSTA', 5], ['RNCC_PRAZO_FINAL', 30]].forEach(([k, v]) => { if (typeof c[k] !== 'number') c[k] = v; });
     c.RNCC_GRAVIDADE = ['Baixa', 'Média', 'Alta']; c.RNCC_PROCEDENTE = ['Em análise', 'Sim', 'Não']; c.RNCC_ORIGENS = ['Interna', 'Fornecedor', 'Transporte', 'Cliente (uso/aplicação)']; c.RNCC_EFICACIA = ['Em verificação', 'Eficaz', 'Não eficaz'];
     if (!l.AV_UNIDADES) c.AV_UNIDADES = ['PÇ', 'KG', 'M', 'M²', 'T', 'BARRA', 'UN'];
-    c.AV_INSPECAO = ['Aprovado', 'Reprovado', 'Em análise'];
+    c.AV_INSPECAO = ['Aprovado', 'Reprovado', 'Em análise', CONC];
     c.FORN_EMAILS = {}; (Array.isArray(d.fornEmails) ? d.fornEmails : Object.entries(d.fornEmails || {}).map(([nome, email]) => ({ nome, email }))).forEach((o) => { if (o && o.nome) c.FORN_EMAILS[o.nome] = o.email || ''; });
     c.SETOR_EMAILS = {}; (Array.isArray(d.setorEmails) ? d.setorEmails : []).forEach((o) => { if (o && o.nome) c.SETOR_EMAILS[o.nome] = o.email || ''; });
     c.RNC_CC_ATRASO = String(d.rncCcAtraso || '');
@@ -3355,6 +3371,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     S.model = E.build(DB.raw, [], S.today);
     S.model.cfgDoc = DB.cfg || {};
     rncHours(S.model);
+    S.model.rnc.forEach((x) => { x.lotesAV = normLotes((x.raw && x.raw.AC) || ''); });
+    buildLotLinks();
     setTimeout(pubSync, 0);
     S.model.serv.forEach((x) => { x.sv = svOf(x.key); });
     S.model.rncc = computeRncc(DB.rnccItems || [], S.model.cfg, S.today, S.model.hol);
@@ -3502,6 +3520,42 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     (S.model.rncc || []).forEach((x) => { add('nfv', x.nf, x); add('pv', x.pv, x); });
     S.idx = idx;
   }
+  /* ---------- lotes afetados (RNC) e lotes citados (RNC de cliente) ---------- */
+  function lotTokens(s) { return String(s || '').split(/[,;\s]+/).map((v) => v.trim()).filter(Boolean); }
+  function normLotes(s) {
+    const out = [];
+    lotTokens(s).forEach((v) => { const m = /^AV-?(\d+(?:-\d+)?)$/i.exec(v); const id = m ? 'AV-' + m[1] : v; if (!out.some((o) => E.low(o) === E.low(id))) out.push(id); });
+    return out.join(', ');
+  }
+  const avById = (id) => S.model.av.find((a) => E.low(a.id) === E.low(id));
+  function buildLotLinks() {
+    const L = new Map(), add = (id, rec, why) => { const k = E.low(id); if (!L.has(k)) L.set(k, []); if (!L.get(k).some((o) => o.rec === rec)) L.get(k).push({ rec, why }); };
+    S.model.rnc.forEach((x) => lotTokens(x.lotesAV).forEach((id) => add(id, x, 'RNC de fornecedor deste lote')));
+    (S.model.rncc || []).forEach((x) => (String(x.lotes || '').match(/AV-\d+(?:-\d+)?/gi) || []).forEach((id) => add(id, x, 'RNC de cliente que cita este lote')));
+    S.lotLinks = L;
+  }
+  const lotRncs = (x) => ((S.lotLinks && S.lotLinks.get(E.low(x.id))) || []);
+  const lotRncAberta = (x) => lotRncs(x).some((o) => o.rec.aberta);
+  /* sugestões de lotes no formulário da RNC: mesma NF (do mesmo fornecedor), pedido de compra ou pedido de venda */
+  function updateLotSug() {
+    const inp = $('#ff-AC'); if (!inp) return;
+    const lab = inp.closest('.field'); let box = $('#lotsug');
+    if (!box) { box = document.createElement('div'); box.id = 'lotsug'; box.className = 'lotsug'; lab.insertAdjacentElement('afterend', box); }
+    const v = (id) => { const el = $('#ff-' + id); return el ? el.value.trim() : ''; };
+    const nf = v('I'), oc = v('K'), pv = v('J'), forn = v('G'), K = (s) => E.key(s);
+    const sel = new Set(lotTokens(inp.value).map((s) => E.low(s)));
+    const L = S.model.av.filter((a) => (nf && E.filled(a.nf) && K(a.nf) === K(nf) && (!forn || !a.forn || K(a.forn) === K(forn))) || (oc && E.filled(a.pc) && K(a.pc) === K(oc)) || (pv && E.filled(a.pv) && K(a.pv) === K(pv)))
+      .sort((a, b) => keyNum(b.id) - keyNum(a.id)).slice(0, 40);
+    const extra = Array.from(sel).filter((s) => !L.some((a) => E.low(a.id) === s));
+    box.innerHTML = (L.length ? `<span class="muted">Lotes com a mesma NF ou pedido (${L.length}${L.length === 40 ? '+' : ''}):</span>` + L.map((a) => `<button type="button" class="lchip" data-lot="${esc(a.id)}" aria-pressed="${sel.has(E.low(a.id))}" title="${esc([a.desc, a.diam, E.filled(a.corrida) && !E.isStar(a.corrida) ? 'corrida ' + a.corrida : ''].filter(Boolean).join(' · '))}">${esc(a.id)} <small>${esc(a.desc || '')}</small></button>`).join('')
+      : `<span class="muted">${nf || oc || pv ? 'Nenhum lote com essa NF ou pedido.' : 'Preencha a NF, o pedido de compra ou o pedido de venda para ver os lotes sugeridos.'}</span>`)
+      + (extra.length ? ` <span class="muted">· também na lista: ${esc(extra.map((s) => s.toUpperCase()).join(', '))}</span>` : '');
+    box.querySelectorAll('[data-lot]').forEach((b) => b.onclick = () => {
+      const id = b.dataset.lot, cur = lotTokens(inp.value), has = cur.some((s) => E.low(s) === E.low(id));
+      inp.value = has ? cur.filter((s) => E.low(s) !== E.low(id)).join(', ') : cur.concat([id]).join(', ');
+      inp.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+  }
   function related(x) {
     const keys = [];
     const k = (t, v) => { if (E.filled(v)) keys.push([t, E.key(v)]); };
@@ -3514,6 +3568,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const put = (y, w) => { if (y && y !== x) { const id = y.mod + ':' + y.key; if (!out.has(id)) out.set(id, { rec: y, why: w }); } };
     if (x.mod === 'RNCC') { if (x.rncf) put(S.model.rnc.find((r) => E.low(r.num) === E.low(x.rncf)), 'RNC de fornecedor vinculada'); (String(x.lotes || '').match(/AV-\d+/gi) || []).forEach((id) => put(S.model.av.find((a) => E.low(a.id) === E.low(id)), 'lote citado')); }
     if (x.mod === 'RNC') (S.model.rncc || []).filter((c) => E.low(c.rncf) === E.low(x.num)).forEach((c) => put(c, 'originada da RNC de cliente'));
+    if (x.mod === 'RNC') lotTokens(x.lotesAV).forEach((id) => put(avById(id), 'lote afetado'));
+    if (x.mod === 'AV') lotRncs(x).forEach((o) => put(o.rec, o.why));
     keys.forEach(([t, v]) => {
       (S.idx.get(t + ':' + v) || []).forEach((y) => {
         if (y === x) return;
@@ -3603,16 +3659,20 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const editBtn = cw(MOD[mod].col) ? `<button class="btn" type="button" data-act="edit" data-mod="${mod}" data-key="${esc(key)}">Editar</button>` : '';
     if (mod === 'AV') {
       const link = /^https?:\/\//i.test(x.certLink || '') ? ` <a class="btn small" href="${esc(x.certLink)}" target="_blank" rel="noopener noreferrer">Abrir certificado ↗</a>` : (x.certLink ? ` <span class="muted">${t(x.certLink)}</span>` : '');
-      pairs = [['ID', `<span class="mono">${esc(x.id)}</span>`], ['Resultado da inspeção', chipInsp(x.insp)], ['Data de entrada', fD(x.data)], ['Filial', t(x.filial)], ['Corrida', `<span class="mono">${t(x.corrida)}</span>`], E.filled(x.volume) && !E.isStar(x.volume) ? ['Volume', `<span class="mono">${t(x.volume)}</span>`] : null, ['Descrição', t(x.desc)],
+      const LR = lotRncs(x);
+      pairs = [['ID', `<span class="mono">${esc(x.id)}</span>`], ['Resultado da inspeção', chipInsp(x.insp)], LR.length ? ['RNC deste lote', LR.map((o) => `<button class="btn small ghost" type="button" data-open="${o.rec.mod}:${esc(o.rec.key)}"><span class="mono">${esc(o.rec.num)}</span></button> ${chipRnc(o.rec.status)}`).join('<br>')] : null, ['Data de entrada', fD(x.data)], ['Filial', t(x.filial)], ['Corrida', `<span class="mono">${t(x.corrida)}</span>`], E.filled(x.volume) && !E.isStar(x.volume) ? ['Volume', `<span class="mono">${t(x.volume)}</span>`] : null, ['Descrição', t(x.desc)],
         ['Quantidade', x.quant == null || x.quant === '' ? '' : t(x.quant) + (x.und ? ' ' + t(x.und) : '')], ['Diâmetro', t(x.diam)], ['Espessura', t(x.esp)], ['Liga/Tipo', t(x.liga)], ['Material', t(x.norma)], ['Fornecedor', t(x.forn)], ['Nota fiscal', t(x.nf)], ['Pedido de compra', t(x.pc)], ['Pedido de venda', t(x.pv)], ['Certificado', (semCert(x) ? '<span class="chip warn"><i>!</i>sem certificado</span>' : t(x.cert)) + link], ['Conferido', t(x.conf)], ['Retrabalho', t(x.retrab)]];
       acts = (cw(MOD[mod].col) ? `<button class="btn" type="button" data-act="av-similar" data-key="${esc(key)}">Lançar parecido</button>` : '') + `<button class="btn" type="button" data-act="av-label" data-key="${esc(key)}">Etiqueta</button>`
-        + (cw('rnc') && E.low(x.insp) === 'reprovado' ? `<button class="btn" type="button" data-act="av-to-rncf" data-key="${esc(key)}" style="color:var(--crit)">Abrir RNC de fornecedor</button>` : '') + editBtn;
+        + (cw('rnc') && E.low(x.insp) === 'reprovado' ? `<button class="btn" type="button" data-act="av-to-rncf" data-key="${esc(key)}" style="color:var(--crit)">Abrir RNC de fornecedor</button>` : '')
+        + (cw('av') && ['reprovado', 'em análise', 'em analise'].includes(E.low(x.insp)) ? `<button class="btn" type="button" data-act="av-conc" data-key="${esc(key)}">Liberar sob concessão</button>` : '') + editBtn;
+      const cc = m.conc;
+      if (cc) pairs.splice(3, 0, ['Concessão', `Autorizado por <b>${esc(cc.aut || '—')}</b> em ${fD(cc.data)}${cc.cli ? ` · aceite do cliente <b>${esc(cc.cli)}</b>` : ''}<br><span style="white-space:pre-wrap">${esc(cc.just || '')}</span>${cc.rnc ? `<br><span class="muted">RNC:</span> <span class="mono">${esc(cc.rnc)}</span>` : ''}`]);
     } else if (mod === 'SERV') {
       pairs = [['Número', `<span class="mono">${esc(x.sv || '')}</span>`], ['Data', fD(x.data)], ['Descrição', t(x.desc)], ['Nota fiscal', t(x.nf)], ['Fornecedor', t(x.forn)], ['Pedido de compra', t(x.pc)], ['Pedido de venda', t(x.pv)], ['Certificado', t(x.cert)]];
       acts = editBtn;
     } else if (mod === 'RNC') {
       const dl = x.diasParaFinal;
-      pairs = [['Número', `<span class="mono">${esc(x.num)}</span>`], ['Status', chipRnc(x.status)], ['Abertura', esc(fmtTs(x.data))], ['Comprador', t(x.comprador)], ['Filial', t(x.filial)], ['Emissor', t(x.emissor)], ['Fornecedor', t(x.forn)], ['Cliente', t(x.cliente)], ['Nota fiscal', t(x.nf)], ['Pedido de venda', t(x.pv)], ['Ordem de compra', t(x.oc)], ['Depto. responsável', t(x.depto)], ['Motivo', t(x.motivo)], ['Reincidência', esc(x.reinc)],
+      pairs = [['Número', `<span class="mono">${esc(x.num)}</span>`], ['Status', chipRnc(x.status)], ['Abertura', esc(fmtTs(x.data))], ['Comprador', t(x.comprador)], ['Filial', t(x.filial)], ['Emissor', t(x.emissor)], ['Fornecedor', t(x.forn)], ['Cliente', t(x.cliente)], ['Nota fiscal', t(x.nf)], ['Pedido de venda', t(x.pv)], ['Ordem de compra', t(x.oc)], ['Depto. responsável', t(x.depto)], ['Motivo', t(x.motivo)], ['Lotes afetados', lotTokens(x.lotesAV).map((id) => { const a = avById(id); return a ? `<button class="btn small ghost mono" type="button" data-open="AV:${esc(a.key)}">${esc(a.id)}</button>` : `<span class="mono">${esc(id)}</span>`; }).join(' ')], ['Reincidência', esc(x.reinc)],
         ['Prazo de disposição', esc(fmtTs(x.dispDue != null ? x.dispDue : x.prazoDisp)) + (x.aberta && !x.disp && x.dispDue != null ? ' ' + relHTML(x.dispDue) : '')], ['Disposição', t(x.disp)], ['Fechamento da disposição', fD(x.fechDisp)], ['Ação corretiva?', t(x.corretiva)], ['Prazo da ação', fD(x.prazoAcao)], ['Nível do prazo', t(x.nivel)], ['Prazo para fechar', fD(x.prazoFechar)], ['Análise crítica', t(x.analise)],
         ['Prazo final', fD(x.prazoFinal) + (x.aberta && dl != null ? ` <span class="muted">(${dl < 0 ? 'vencido há ' + (-dl) + ' dia(s)' : dl === 0 ? 'vence hoje' : 'faltam ' + dl + ' dia(s)'})</span>` : '')], ['Conclusão', fD(x.conclusao)], ['Cancelada', t(x.cancel)], ['E-mails acionados (Para)', t(m.emPara)], ['E-mails acionados (Cópia)', t(m.emCc)], ['Informações', `<span style="white-space:pre-wrap">${t(x.info)}</span>`]];
       acts = (cw(MOD[mod].col) ? `<button class="btn primary" type="button" data-act="edit-rnc" data-key="${esc(key)}">Atualizar andamento</button>` : '') + (x.aberta ? `<button class="btn" type="button" data-act="msg-rnc" data-key="${esc(key)}">Cobrança</button>` : '')
@@ -3633,7 +3693,9 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
         + (cw('rncc') && cw('rnc') && E.low(x.origem) === 'fornecedor' && !x.rncf ? `<button class="btn" type="button" data-act="rncc-to-rncf" data-key="${esc(key)}">Abrir RNC de fornecedor</button>` : '') + editBtn;
     } else {
       pairs = [['Código', `<span class="mono">${esc(x.codigo)}</span>`], ['Status', chipIns(x.status)], ['Descrição', t(x.desc)], ['Marca', t(x.marca)], ['Tipo de equipamento', t(x.tipo)], ['Certificado', t(x.cert)], ['Data da calibração', fD(x.dataCal)], ['Frequência', x.freq ? x.freq + ' meses' : ''], ['Validade', fD(x.validade)], ['Dias para vencer', x.dias == null ? '' : NF.format(x.dias)], ['Resultado da calibração (erro)', t(x.resCal)], ['Critério de aceitação', x.criterio == null ? '' : NF.format(x.criterio)], ['Resultado', chipRes(x.resultado)], ['Responsável', t(x.resp)], ['Departamento', t(x.depto)], ['Situação operacional', t(x.situacao)], ['Observação', t(x.obs)]];
-      acts = (cw(MOD[mod].col) ? `<button class="btn primary" type="button" data-act="edit-cal" data-key="${esc(key)}">Registrar calibração</button>` : '') + editBtn;
+      const ic = insCert(x);
+      pairs.splice(6, 0, ['Certificado (arquivo)', ic.certUrl ? `<a class="btn small" href="${esc(ic.certUrl)}" target="_blank" rel="noopener noreferrer">Ver certificado ↗</a> <span class="muted">${esc(ic.certArq || '')}${ic.certEm ? ' · enviado em ' + dmy(ic.certEm) : ''}</span>` : '<span class="muted">nenhum arquivo enviado</span>']);
+      acts = (cw(MOD[mod].col) ? `<button class="btn primary" type="button" data-act="edit-cal" data-key="${esc(key)}">Registrar calibração</button>` : '') + (cw('ins') ? `<button class="btn" type="button" data-act="ins-cert" data-key="${esc(key)}">${ic.certUrl ? 'Enviar novo certificado' : 'Enviar certificado'}</button>` : '') + editBtn;
     }
     let rel = '';
     if (mod !== 'INS') {
@@ -3761,8 +3823,9 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const fech = M.rnc.map((x) => x.diasFechamento).filter((v) => v != null);
     const tm = fech.length ? Math.round(fech.reduce((a, b) => a + b, 0) / fech.length * 10) / 10 : 0;
     const semCertAV = M.av.filter(semCert).length;
-    const inspL = M.av.filter((x) => ['aprovado', 'reprovado'].includes(E.low(x.insp)));
-    const insp = { n: inspL.length, ok: inspL.filter((x) => E.low(x.insp) === 'aprovado').length, rep: inspL.filter((x) => E.low(x.insp) === 'reprovado').length };
+    const inspL = M.av.filter((x) => ['aprovado', 'reprovado', E.low(CONC)].includes(E.low(x.insp)));
+    const insp = { n: inspL.length, ok: inspL.filter((x) => E.low(x.insp) === 'aprovado').length, rep: inspL.filter((x) => E.low(x.insp) !== 'aprovado').length };
+    const concL = M.av.filter((x) => E.low(x.insp) === E.low(CONC)), concMes = concL.filter((x) => { const cc = ((DB.meta.AV || {})[x.key] || {}).conc; return cc && inRange(cc.data, m0, m1); });
     const fmapI = new Map(); inspL.forEach((x) => { const k = E.low(x.forn); const o = fmapI.get(k) || { label: x.forn || '(sem fornecedor)', n: 0, ok: 0 }; o.n++; if (E.low(x.insp) === 'aprovado') o.ok++; fmapI.set(k, o); });
     const aprovForn = Array.from(fmapI.values()).filter((o) => o.n >= 3).map((o) => ({ label: o.label, value: Math.round(o.ok / o.n * 100), tip: `${o.label} (${o.ok} de ${o.n} lotes)`, go: { v: 'av', f: { forn: o.label } } })).sort((a2, b2) => a2.value - b2.value || a2.label.localeCompare(b2.label)).slice(0, 12);
     const mb12 = monthsBack(12);
@@ -3812,7 +3875,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
           ${kpiHTML({ l: 'Lotes sem certificado', v: NF.format(semCertAV), sub: 'certificado "*" ou vazio', c: MOD.AV.c, go: { v: 'av', f: { cert: 'sem' } } })}
           ${kpiHTML({ l: 'Com certificado', v: (M.av.length ? NF1.format((1 - semCertAV / M.av.length) * 100) : '0') + '%', c: MOD.AV.c })}
           ${kpiHTML({ l: 'Com retrabalho', v: NF.format(M.av.filter((x) => E.low(x.retrab) === 'sim').length), c: MOD.AV.c, go: { v: 'av', f: { retrab: 'SIM' } } })}
-          ${kpiHTML({ l: 'Aprovação na inspeção', v: insp.n ? NF1.format(insp.ok / insp.n * 100) + '%' : '—', sub: insp.n ? `${NF.format(insp.rep)} reprovado(s) de ${NF.format(insp.n)} inspecionados` : 'sem resultado registrado', c: MOD.AV.c, cls: insp.rep ? 'warn' : '', go: insp.rep ? { v: 'av', f: { insp: 'Reprovado' } } : null })}
+          ${kpiHTML({ l: 'Aprovação na inspeção', v: insp.n ? NF1.format(insp.ok / insp.n * 100) + '%' : '—', sub: insp.n ? `${NF.format(insp.rep)} reprovado(s)${concL.length ? ' (' + NF.format(concL.length) + ' sob concessão)' : ''} de ${NF.format(insp.n)} inspecionados` : 'sem resultado registrado', c: MOD.AV.c, cls: insp.rep ? 'warn' : '', go: insp.rep ? { v: 'av', f: { insp: 'Reprovado' } } : null })}
+          ${concL.length ? kpiHTML({ l: 'Liberados sob concessão', v: NF.format(concL.length), sub: `${NF.format(concMes.length)} no mês atual · reprovados usados com autorização`, c: MOD.AV.c, cls: 'warn', go: { v: 'av', f: { insp: CONC } } }) : ''}
         </div>
         <div class="charts">
           <div class="chart"><h3>${S.avSerie === 'notas' ? 'Notas fiscais recebidas por mês' : 'Lotes recebidos por mês'}<small>últimos 12 meses</small><span class="seg mini" role="group" aria-label="Mostrar"><button type="button" data-act="av-serie" data-key="lotes" aria-pressed="${S.avSerie !== 'notas'}">Lotes</button><button type="button" data-act="av-serie" data-key="notas" aria-pressed="${S.avSerie === 'notas'}">Notas</button></span></h3>${colsHTML(S.avSerie === 'notas' ? mb12.map((m) => ({ label: m.label, tip: MESES_L[m.m - 1] + ' ' + m.y + ' · notas', value: nNotas(M.av.filter((x) => inRange(x.data, m.start, m.end))) })) : ser(M.av, mb12), MOD.AV.c)}</div>
@@ -4041,6 +4105,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     if (x.cliente) L.push(`Cliente: ${x.cliente}`);
     if (x.depto) L.push(`Setor responsável: ${x.depto}`);
     if (x.motivo) L.push(`Motivo: ${x.motivo}`);
+    if (x.lotesAV) L.push(`Lotes afetados: ${x.lotesAV}`);
     if (x.comprador) L.push(`Comprador: ${x.comprador}`);
     L.push(`Disposição: ${x.disp || 'pendente'}`);
     if (x.corretiva) L.push(`Ação corretiva: ${x.corretiva}${x.nivel ? ' · nível ' + x.nivel : ''}`);
@@ -4249,6 +4314,74 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       } catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; b.textContent = 'Dar baixa'; }
     };
   }
+  /* ---------- certificados de calibração no Google Drive (via script da conta da Central) ---------- */
+  const DRIVE_URL = () => String((DB.cfg && DB.cfg.driveUrl) || '').trim();
+  const insCert = (x) => (DB.meta.INS || {})[x.key] || {};
+  const fileBase = (code) => String(code || '').trim().replace(/[\\/:*?"<>|]/g, '-');
+  function readB64(file) { return new Promise((res, rej) => { const r = new FileReader(); r.onerror = () => rej(new Error('Não consegui ler o arquivo.')); r.onload = () => res(String(r.result).split(',')[1] || ''); r.readAsDataURL(file); }); }
+  function certUploadDialog(x) {
+    if (!DRIVE_URL()) {
+      openModal('Envio de certificados', `<p style="margin:0">O envio para o Google Drive ainda não foi configurado. ${DB.admin ? 'Cole o endereço do script em <b>Configurações › Calibração › Certificados no Google Drive</b>.' : 'Peça a um administrador para configurar em Configurações.'}</p><div class="formfoot">${DB.admin ? '<button class="btn primary" type="button" id="up-cfg">Abrir Configurações</button>' : ''}<button class="btn" type="button" data-act="close">Fechar</button></div>`);
+      const b = $('#up-cfg'); if (b) b.onclick = () => { closeLayer(); go('config'); };
+      return;
+    }
+    const cur = insCert(x).certUrl;
+    openModal('Certificado de calibração · ' + x.codigo, `<p style="margin:0">O arquivo será salvo no Google Drive da Central com o nome <b class="mono">${esc(fileBase(x.codigo))}</b>${cur ? ', e o certificado atual vai para a pasta <b>Anteriores</b> com a data de hoje no nome.' : '.'}</p>
+      <label class="field"><span>Arquivo do certificado (PDF ou foto)</span><input type="file" id="up-file" accept="application/pdf,image/*"></label>
+      <div id="up-st" class="muted" style="font-size:12.5px"></div>
+      <div class="formfoot"><button class="btn primary" type="button" id="up-ok" disabled>Enviar certificado</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    const inp = $('#up-file'), ok = $('#up-ok'), st = $('#up-st');
+    inp.onchange = () => { const f = inp.files && inp.files[0]; ok.disabled = !f; if (!f) { st.textContent = ''; return; } if (f.size > 15 * 1024 * 1024) { st.textContent = 'Arquivo maior que 15 MB. Use um PDF menor.'; ok.disabled = true; return; } st.textContent = `${f.name} · ${NF1.format(f.size / 1024 / 1024)} MB`; };
+    ok.onclick = async () => {
+      const f = inp.files && inp.files[0]; if (!f) return;
+      ok.disabled = true; ok.textContent = 'Enviando…'; st.textContent = 'Enviando para o Google Drive… pode levar alguns segundos.';
+      try {
+        const token = DB.user && typeof DB.user.idToken === 'function' ? await DB.user.idToken() : null;
+        if (!token) throw new Error('Não consegui confirmar o seu login. Recarregue a Central.');
+        const dados = await readB64(f);
+        const r = await fetch(DRIVE_URL(), { method: 'POST', body: JSON.stringify({ token, codigo: x.codigo, nome: f.name, tipo: f.type || 'application/pdf', dados }) });
+        const j = await r.json().catch(() => null);
+        if (!j || !j.ok) throw new Error((j && j.erro) || 'O script não respondeu. Confira o endereço em Configurações.');
+        await updateRecord('INS', x.key, { certUrl: j.url, certArq: j.nome, certEm: Date.now(), certBy: DB.me || null });
+        logEntry('INS', x.key, 'alterado', `${x.codigo} · certificado enviado ao Drive (${j.nome})`, null);
+        closeLayer(); toast(`Certificado de ${x.codigo} salvo no Drive como ${j.nome}.`);
+      } catch (err) { st.textContent = 'Não foi possível enviar: ' + ((err && err.message) || err); ok.disabled = false; ok.textContent = 'Enviar certificado'; }
+    };
+  }
+  /* ---------- lote liberado sob concessão ---------- */
+  function avConcDialog(x) {
+    const rncs = lotRncs(x).filter((o) => o.rec.mod === 'RNC');
+    const opts = rncs.map((o) => `<option value="${esc(o.rec.num)}">${esc(o.rec.num)} · ${esc(o.rec.status === 'Concluida' ? 'concluída' : 'aberta')}</option>`).join('')
+      + (cw('rnc') ? '<option value="__nova">Abrir uma RNC nova depois de salvar</option>' : '') + '<option value="">Sem RNC</option>';
+    openModal('Liberar sob concessão · ' + x.id, `<p style="margin:0">O lote <b>${esc(x.id)}</b> (${esc(x.desc || '')}) está <b>${esc(x.insp)}</b>. Registre quem autorizou o uso ou envio mesmo assim.</p>
+      <datalist id="dl-conc-p">${optList((S.model.cfg.PESSOAS || []).map((pp) => pp.nome))}</datalist><datalist id="dl-conc-c">${optList(cfgL('GER_CLIENTES'))}</datalist>
+      <div class="fgrid cm-grid"><label class="field"><span>Autorizado por <b>*</b></span><input id="cc-aut" list="dl-conc-p" autocomplete="off"></label>
+      <label class="field"><span>Data da autorização <b>*</b></span><input id="cc-data" type="date" value="${E.isoDate(S.today)}"></label></div>
+      <label class="field"><span>Justificativa <b>*</b></span><textarea id="cc-just" style="min-height:90px" placeholder="Por que o lote foi liberado mesmo reprovado"></textarea></label>
+      <div class="fgrid cm-grid"><label class="field"><span>Cliente que aceitou (se houver)</span><input id="cc-cli" list="dl-conc-c" autocomplete="off"></label>
+      <label class="field"><span>RNC vinculada</span><select id="cc-rnc">${opts}</select></label></div>
+      <div class="formfoot"><button class="btn primary" type="button" id="cc-ok">Liberar sob concessão</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    if (!rncs.length && cw('rnc')) $('#cc-rnc').value = '__nova';
+    $('#cc-ok').onclick = async () => {
+      const aut = $('#cc-aut').value.trim(), data = E.fromIso($('#cc-data').value), just = $('#cc-just').value.trim(), cli = $('#cc-cli').value.trim(), rsel = $('#cc-rnc').value;
+      if (!aut) { toast('Informe quem autorizou.', true); $('#cc-aut').focus(); return; }
+      if (data == null) { toast('Data inválida.', true); return; }
+      if (!just) { toast('Escreva a justificativa.', true); $('#cc-just').focus(); return; }
+      const b = $('#cc-ok'); b.disabled = true; b.textContent = 'Gravando…';
+      const txt = `Lote ${x.id} liberado sob concessão em ${fD(data)}, autorizado por ${aut}${cli ? ', com aceite do cliente ' + cli : ''}: ${just}`;
+      try {
+        const conc = { aut, data, just, cli: cli || null, rnc: rsel && rsel !== '__nova' ? rsel : null, at: Date.now(), by: DB.me || null };
+        await updateRecord('AV', x.key, { insp: CONC, conc });
+        logEntry('AV', x.key, 'alterado', `Lote ${x.id} · liberado sob concessão (autorizado por ${aut})`, { insp: [x.insp || null, CONC] });
+        if (conc.rnc && cw('rnc')) {
+          const r = S.model.rnc.find((o) => o.num === conc.rnc);
+          if (r) { const mr = (DB.meta.RNC || {})[r.key] || {}; await updateRecord('RNC', r.key, { info: appendInfo(mr.info, txt), lotesAV: normLotes([r.lotesAV, x.id].filter(Boolean).join(', ')) }); logEntry('RNC', r.key, 'alterado', `${r.num} · concessão do lote ${x.id}`, null); }
+        }
+        closeLayer(); toast(`${x.id} liberado sob concessão.`);
+        if (rsel === '__nova') { S.form = 'rnc'; S.editKey = null; S.prefill = { G: x.forn, I: x.nf == null ? '' : String(x.nf), K: x.pc == null ? '' : String(x.pc), J: x.pv == null ? '' : String(x.pv), AC: x.id, Z: txt }; go('cadastro'); }
+      } catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; b.textContent = 'Liberar sob concessão'; }
+    };
+  }
   /* ---------- etiqueta do lote (impressora térmica) ---------- */
   const LABEL_SIZES = [['100x50', '100 × 50 mm'], ['100x75', '100 × 75 mm'], ['60x40', '60 × 40 mm'], ['50x30', '50 × 30 mm'], ['50x25', '50 × 25 mm'], ['40x30', '40 × 30 mm'], ['100x35', '100 × 35 mm (3,5 × 10 cm)'], ['custom', 'Personalizado']];
   const LABEL_MODS = [['compacta', 'Compacta (AV + QR code)'], ['completa', 'Completa (com os dados do lote)']];
@@ -4262,9 +4395,12 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   const pubTok = (x) => ((DB.meta.AV || {})[x.key] || {}).qr || null;
   function pubData(x) {
     const s = (v) => (v == null || v === '' || E.isStar(v) ? '' : String(v).trim());
-    return { id: s(x.id), desc: s(x.desc), material: s(x.norma), diam: s(x.diam), esp: s(x.esp), liga: s(x.liga), corrida: s(x.corrida), volume: s(x.volume),
-      quant: x.quant == null || x.quant === '' ? '' : String(x.quant) + (x.und ? ' ' + x.und : ''), insp: s(x.insp), recebido: x.data != null ? fD(x.data) : '', filial: s(x.filial),
-      forn: s(x.forn), nf: s(x.nf), pc: s(x.pc), pv: s(x.pv), at: Date.now() };
+    const nc = E.low(x.insp) === 'reprovado' || E.low(x.insp) === E.low(CONC) || lotRncs(x).length > 0;
+    const o = { id: s(x.id), desc: s(x.desc), material: s(x.norma), diam: s(x.diam), esp: s(x.esp), liga: s(x.liga), corrida: s(x.corrida), volume: s(x.volume),
+      quant: x.quant == null || x.quant === '' ? '' : String(x.quant) + (x.und ? ' ' + x.und : ''), insp: s(x.insp), conf: s(x.conf), recebido: x.data != null ? fD(x.data) : '', filial: s(x.filial),
+      nf: s(x.nf), pc: s(x.pc), pv: s(x.pv), rnc: nc ? '1' : '', at: Date.now() };
+    if (nc) o.forn = s(x.forn); /* o fornecedor só vai para a página de lote com RNC */
+    return o;
   }
   async function pubWrite(x, tok) { try { await DB.db.doc('pub/' + tok).set(pubData(x)); } catch (e) { console.warn('página do lote não atualizada', e); } }
   /* garante o código da página para cada lote (cria na primeira etiqueta) e atualiza os dados públicos */
@@ -4288,6 +4424,10 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     if (!PUB() || !PUBQ.size || !cw('av')) { PUBQ.clear(); return; }
     Array.from(PUBQ).forEach((k) => { PUBQ.delete(k); const x = findRec('AV', k), tok = x && pubTok(x); if (tok) pubWrite(x, tok); });
   }
+  function pubQueueLots(mod, now, before) {
+    const ids = mod === 'RNC' ? lotTokens([now.lotesAV, before.lotesAV].filter(Boolean).join(', ')) : mod === 'RNCC' ? String([now.lotes, before.lotes].filter(Boolean).join(' ')).match(/AV-\d+(?:-\d+)?/gi) || [] : [];
+    ids.forEach((id) => { const a = avById(id); if (a) PUBQ.add(a.key); });
+  }
   function lotUrl(x, tok) { if (!PUB()) return x.id; const t = tok || pubTok(x); return t ? pubUrl(t) : x.id; }
   function qrSvg(text, mm) {
     if (typeof qrcode !== 'function') return '';
@@ -4297,26 +4437,31 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 ${n + 2} ${n + 2}" width="${mm}mm" height="${mm}mm" shape-rendering="crispEdges"><rect x="-1" y="-1" width="${n + 2}" height="${n + 2}" fill="#fff"/><path d="${d}" fill="#000"/></svg>`;
   }
   /* etiqueta compacta: só o número do lote e o QR code (deitada ou em pé, conforme o papel) */
+  /* faixa preta na etiqueta: lote reprovado ou liberado sob concessão */
+  function labelBand(x) { const s = E.low(x.insp); return s === 'reprovado' ? 'REPROVADO' : s === E.low(CONC) ? 'LIBERADO SOB CONCESSÃO' : ''; }
+  const bandHTML = (txt, wmm, fsMax) => (txt ? `<div class="bnd" style="font-size:${Math.min(fsMax, wmm / (txt.length * 0.62))}mm">${txt}</div>` : '');
   function labelHTMLc(x, W, H, tok) {
-    const pad = Math.max(1.2, Math.min(W, H) * 0.05), id = esc(String(x.id || '')), n = Math.max(6, String(x.id || '').length);
+    const pad = Math.max(1.2, Math.min(W, H) * 0.05), id = esc(String(x.id || '')), n = Math.max(6, String(x.id || '').length), bd = labelBand(x);
     if (W >= H * 1.4) {
-      const qr = Math.min(H - pad * 2, W * 0.5), gap = Math.max(1.5, W * 0.04), fs = Math.min(H * 0.34, (W - qr - pad * 2 - gap) / (n * 0.56));
-      return `<div class="lab cmp" style="width:${W}mm;height:${H}mm;padding:${pad}mm;gap:${gap}mm"><div class="id" style="font-size:${fs}mm">${id}</div><div class="qr">${qrSvg(lotUrl(x, tok), qr)}</div></div>`;
+      const qr = Math.min(H - pad * 2, W * 0.5), gap = Math.max(1.5, W * 0.04), tw = W - qr - pad * 2 - gap, fs = Math.min(H * (bd ? 0.3 : 0.34), tw / (n * 0.56));
+      return `<div class="lab cmp" style="width:${W}mm;height:${H}mm;padding:${pad}mm;gap:${gap}mm"><div class="cl"><div class="id" style="font-size:${fs}mm">${id}</div>${bandHTML(bd, tw, H * 0.13)}</div><div class="qr">${qrSvg(lotUrl(x, tok), qr)}</div></div>`;
     }
-    const fs = Math.min(H * 0.17, (W - pad * 2) / (n * 0.56)), qr = Math.min(W - pad * 2, H - pad * 2 - fs * 1.35);
-    return `<div class="lab cmp v" style="width:${W}mm;height:${H}mm;padding:${pad}mm"><div class="qr">${qrSvg(lotUrl(x, tok), qr)}</div><div class="id" style="font-size:${fs}mm">${id}</div></div>`;
+    const fs = Math.min(H * 0.15, (W - pad * 2) / (n * 0.56)), bh = bd ? Math.min(H * 0.1, (W - pad * 2) / (bd.length * 0.62)) * 1.5 : 0, qr = Math.min(W - pad * 2, H - pad * 2 - fs * 1.35 - bh);
+    return `<div class="lab cmp v" style="width:${W}mm;height:${H}mm;padding:${pad}mm"><div class="qr">${qrSvg(lotUrl(x, tok), qr)}</div><div class="id" style="font-size:${fs}mm">${id}</div>${bandHTML(bd, W - pad * 2, H * 0.1)}</div>`;
   }
   function labelHTML(x, W, H, tok, mod) {
     if (mod === 'compacta') return labelHTMLc(x, W, H, tok);
     const pad = Math.max(1.5, H * 0.05), qr = Math.min(H - pad * 2, W * 0.4), fs = H * 0.075, small = (v) => esc(String(v == null ? '' : v));
     const line = (l, v) => (E.filled(v) && !E.isStar(v) ? `<div class="ln"><span>${l}</span> ${small(v)}</div>` : '');
-    return `<div class="lab" style="width:${W}mm;height:${H}mm;padding:${pad}mm;font-size:${fs}mm"><div class="tx"><div class="id" style="font-size:${H * 0.17}mm">${small(x.id)}</div><div class="ds">${small(x.desc)}${E.filled(x.diam) ? ' ' + small(x.diam) : ''}${E.filled(x.esp) ? ' × ' + small(x.esp) : ''}</div>${line('Corrida', x.corrida)}${line('Volume', x.volume)}${line('Material', x.norma)}<div class="ln"><span>NF</span> ${small(x.nf)} · ${small(fD(x.data))}${x.quant != null && x.quant !== '' ? ' · ' + small(x.quant) + ' ' + small(x.und || '') : ''}</div><div class="ft">${small(x.forn)}</div></div><div class="qr">${qrSvg(lotUrl(x, tok), qr)}</div></div>`;
+    const bd = labelBand(x);
+    return `<div class="lab" style="width:${W}mm;height:${H}mm;padding:${pad}mm;font-size:${fs}mm"><div class="tx"><div class="id" style="font-size:${H * 0.17}mm">${small(x.id)}</div>${bandHTML(bd, (W - qr - pad * 2 - 2) * 0.95, H * 0.09)}<div class="ds">${small(x.desc)}${E.filled(x.diam) ? ' ' + small(x.diam) : ''}${E.filled(x.esp) ? ' × ' + small(x.esp) : ''}</div>${line('Corrida', x.corrida)}${line('Volume', x.volume)}${line('Material', x.norma)}<div class="ln"><span>NF</span> ${small(x.nf)} · ${small(fD(x.data))}${x.quant != null && x.quant !== '' ? ' · ' + small(x.quant) + ' ' + small(x.und || '') : ''}</div><div class="ft">${small(x.forn)}</div></div><div class="qr">${qrSvg(lotUrl(x, tok), qr)}</div></div>`;
   }
   const LABEL_CSS = (W, H) => `@page{size:${W}mm ${H}mm;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0}body{font-family:"Arial Narrow",Arial,Helvetica,sans-serif;color:#000;background:#fff}
     .lab{display:flex;gap:2mm;align-items:center;overflow:hidden;page-break-after:always;break-after:page;line-height:1.15}.lab:last-child{page-break-after:auto;break-after:auto}
     .tx{flex:1;min-width:0;display:grid;gap:.6mm}.id{font-weight:800;letter-spacing:.02em;line-height:1}.ds{font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
     .ln{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ln span{font-weight:700}.ft{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}.qr{flex:none;line-height:0}
-    .lab.cmp{justify-content:center}.lab.cmp .id{white-space:nowrap}.lab.cmp.v{flex-direction:column;gap:.6mm}`;
+    .lab.cmp{justify-content:center}.lab.cmp .id{white-space:nowrap}.lab.cmp.v{flex-direction:column;gap:.6mm}.lab.cmp .cl{display:grid;gap:1mm;justify-items:center}
+    .bnd{background:#000;color:#fff;font-weight:800;text-align:center;letter-spacing:.05em;border-radius:.5mm;padding:.3mm 1.2mm;line-height:1.15;white-space:nowrap;-webkit-print-color-adjust:exact;print-color-adjust:exact;justify-self:stretch}`;
   function printHTML(html) {
     const fr = document.createElement('iframe');
     fr.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
@@ -4454,7 +4599,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   const nNotas = (arr) => new Set(arr.filter((x) => E.filled(x.nf)).map((x) => E.key(x.forn) + '|' + E.key(x.nf))).size;
   const COLS = {
     AV: [
-      { k: 'id', l: 'ID', cls: 'mono', s: (x) => keyNum(x.id), w: 10 },
+      { k: 'id', l: 'ID', cls: 'mono', s: (x) => keyNum(x.id), w: 10, f: (x) => esc(x.id) + (lotRncAberta(x) ? ' <span class="chip warn lrnc" title="Lote com RNC aberta"><i>!</i>RNC</span>' : '') },
       { k: 'data', l: 'Entrada', f: (x) => fD(x.data), x: (x) => dateCell(x.data), w: 11 }, { k: 'filial', l: 'Filial', cls: 'clip', w: 20 },
       { k: 'corrida', l: 'Corrida', cls: 'mono' }, { k: 'desc', l: 'Descrição', cls: 'clip', w: 26 }, { k: 'diam', l: 'Diâm.' }, { k: 'esp', l: 'Esp.' }, { k: 'liga', l: 'Liga/Tipo' }, { k: 'norma', l: 'Material' }, { k: 'quant', l: 'Qtd', r: 1, f: (x) => (x.quant == null || x.quant === '' ? '' : esc(disp(x.quant)) + (x.und ? ' <span class="muted">' + esc(x.und) + '</span>' : '')), x: (x) => (x.quant == null ? '' : disp(x.quant) + (x.und ? ' ' + x.und : '')) },
       { k: 'forn', l: 'Fornecedor', cls: 'clip', w: 24 }, { k: 'nf', l: 'NF', cls: 'mono' }, { k: 'pc', l: 'Ped. compra', cls: 'mono' }, { k: 'pv', l: 'Ped. venda', cls: 'mono' },
@@ -4475,7 +4620,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       { k: 'prazoFinal', l: 'Prazo final', f: (x) => fD(x.prazoFinal), x: (x) => dateCell(x.prazoFinal), w: 11 }, { k: 'conclusao', l: 'Conclusão', f: (x) => fD(x.conclusao), x: (x) => dateCell(x.conclusao), w: 11 },
       { k: 'nf', l: 'NF venda', cls: 'mono' }, { k: 'pv', l: 'PV', cls: 'mono' }, { k: 'lotes', l: 'Lotes', cls: 'clip' }, { k: 'produto', l: 'Produto', cls: 'clip' }, { k: 'origem', l: 'Origem' }, { k: 'rncf', l: 'RNCF', cls: 'mono' }, { k: 'resp', l: 'Resp. ação', cls: 'clip' }, { k: 'filial', l: 'Filial', cls: 'clip' }],
     INS: [
-      { k: 'codigo', l: 'Código', cls: 'mono', w: 10 }, { k: 'desc', l: 'Descrição', cls: 'clip', w: 34 }, { k: 'status', l: 'Status', f: (x) => chipIns(x.status), x: (x) => x.status, w: 18 },
+      { k: 'codigo', l: 'Código', cls: 'mono', w: 10, f: (x) => esc(x.codigo) + (insCert(x).certUrl ? ` <a class="pdfmk" href="${esc(insCert(x).certUrl)}" target="_blank" rel="noopener noreferrer" title="Ver certificado (${esc(insCert(x).certArq || '')})" data-noopen="1">PDF</a>` : '') }, { k: 'desc', l: 'Descrição', cls: 'clip', w: 34 }, { k: 'status', l: 'Status', f: (x) => chipIns(x.status), x: (x) => x.status, w: 18 },
       { k: 'validade', l: 'Validade', f: (x) => fD(x.validade), x: (x) => dateCell(x.validade), w: 11 }, { k: 'dias', l: 'Dias', r: 1, f: (x) => x.dias == null ? '' : NF.format(x.dias) },
       { k: 'dataCal', l: 'Calibração', f: (x) => fD(x.dataCal), x: (x) => dateCell(x.dataCal), w: 11 }, { k: 'freq', l: 'Freq. (meses)', r: 1 }, { k: 'resultado', l: 'Resultado', f: (x) => chipRes(x.resultado), x: (x) => x.resultado },
       { k: 'depto', l: 'Departamento', cls: 'clip', w: 22 }, { k: 'resp', l: 'Responsável', cls: 'clip' }, { k: 'marca', l: 'Marca', cls: 'clip' }, { k: 'cert', l: 'Certificado', cls: 'clip', w: 24 }, { k: 'tipo', l: 'Tipo', cls: 'clip', w: 22 },
@@ -4511,7 +4656,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const M = S.model, f = S.f.av || (S.f.av = {});
     main.innerHTML = `<div class="view">${head('Lotes (AV)', 'Controle de lotes recebidos. O ID AV-xxxx é gerado em sequência na hora do lançamento.', newBtn('av', 'Novo lote', 1))}
       <div class="filters">${ftext('fa-q', 'Buscar', f.q, 'ID, corrida, NF, pedido, descrição…', 1)}${fsel('fa-filial', 'Filial', distinct(M.av, (x) => x.filial), f.filial)}${ftext('fa-forn', 'Fornecedor', f.forn, 'nome do fornecedor')}${fsel('fa-conf', 'Conferido por', distinct(M.av, (x) => x.conf), f.conf)}
-      ${fdate('fa-de', 'Entrada de', f.de)}${fdate('fa-ate', 'até', f.ate)}<label class="field"><span>Certificado</span><select id="fa-cert"><option value="">Todos</option><option value="com" ${f.cert === 'com' ? 'selected' : ''}>Com certificado</option><option value="sem" ${f.cert === 'sem' ? 'selected' : ''}>Sem certificado</option></select></label>${fsel('fa-retrab', 'Retrabalho', distinct(M.av, (x) => x.retrab), f.retrab)}${fsel('fa-insp', 'Inspeção', ['Aprovado', 'Reprovado', 'Em análise', 'Sem registro'], f.insp)}<button class="btn ghost" type="button" id="f-clear">Limpar filtros</button></div>
+      ${fdate('fa-de', 'Entrada de', f.de)}${fdate('fa-ate', 'até', f.ate)}<label class="field"><span>Certificado</span><select id="fa-cert"><option value="">Todos</option><option value="com" ${f.cert === 'com' ? 'selected' : ''}>Com certificado</option><option value="sem" ${f.cert === 'sem' ? 'selected' : ''}>Sem certificado</option></select></label>${fsel('fa-retrab', 'Retrabalho', distinct(M.av, (x) => x.retrab), f.retrab)}${fsel('fa-insp', 'Inspeção', ['Aprovado', 'Reprovado', 'Em análise', CONC, 'Sem registro'], f.insp)}<button class="btn ghost" type="button" id="f-clear">Limpar filtros</button></div>
       <div id="tbl"></div></div>`;
     const draw = () => {
       const rows = M.av.filter((x) => txtMatch(f.q, [x.id, x.corrida, x.volume, x.nf, x.pc, x.pv, x.desc, x.cert, x.liga, x.norma]) && eqL(x.filial, f.filial) && (!f.forn || E.key(x.forn).includes(E.key(f.forn))) && eqL(x.conf, f.conf) && eqL(x.retrab, f.retrab) && dateIn(x.data, f.de, f.ate) && (!f.cert || (f.cert === 'sem') === semCert(x)) && (!f.insp || (f.insp === 'Sem registro' ? !x.insp : eqL(x.insp, f.insp))));
@@ -4653,7 +4798,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       { c: 'G', l: 'Diâmetro', type: 'list', opts: lst('AV_DIAMETROS', 'AV', 'diam') }, { c: 'H', l: 'Espessura', type: 'list', opts: lst('AV_ESPESSURAS', 'AV', 'esp') },
       { c: 'I', l: 'Liga/Tipo', type: 'list', opts: lst('AV_LIGAS', 'AV', 'liga') }, { c: 'J', l: 'Material', type: 'list', opts: lst('AV_NORMAS', 'AV', 'norma') },
       { c: 'O', l: 'Certificado', type: 'text', store: 'auto', help: '* = sem certificado' }, { c: 'T', l: 'Link do certificado', type: 'text', store: 'text', ph: 'https://drive.google.com/…', w: 's2' },
-      { c: 'Q', l: 'Retrabalho', type: 'select', opts: () => cfgL('AV_RETRABALHO') }, { c: 'U', l: 'Resultado da inspeção', type: 'select', opts: () => cfgL('AV_INSPECAO'), def: () => 'Aprovado' }] }),
+      { c: 'Q', l: 'Retrabalho', type: 'select', opts: () => cfgL('AV_RETRABALHO') }, { c: 'U', l: 'Resultado da inspeção', type: 'select', opts: () => cfgL('AV_INSPECAO').filter((v) => v !== CONC), def: () => 'Aprovado', help: 'Para liberar um lote reprovado com autorização, use “Liberar sob concessão” na ficha do lote.' }] }),
     serv: () => ({ t: 'Serviço', f: [
       { c: 'A', l: 'Data de entrada', type: 'date', req: 1, def: () => E.isoDate(S.today) },
       { c: 'B', l: 'Descrição', type: 'list', opts: lst('SERV_TIPOS', 'SERV', 'desc'), req: 1, w: 's2' },
@@ -4670,7 +4815,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       { c: 'G', l: 'Fornecedor', type: 'list', opts: fornList, req: req, w: 's2' },
       { c: 'H', l: 'Cliente', type: 'list', opts: () => uniq(cfgL('GER_CLIENTES').concat(distinct(S.model.rnc, (x) => x.cliente))), w: 's2' },
       { c: 'I', l: 'Nota fiscal', type: 'text', store: 'auto' }, { c: 'J', l: 'Pedido de venda', type: 'text', store: 'auto' }, { c: 'K', l: 'Ordem de compra', type: 'text', store: 'auto' },
-      { c: 'L', l: 'Depto. responsável', type: 'select', opts: () => cfgL('RNC_DEPTOS') }, { c: 'M', l: 'Motivo', type: 'select', opts: () => cfgL('RNC_MOTIVOS'), req: req }] }),
+      { c: 'L', l: 'Depto. responsável', type: 'select', opts: () => cfgL('RNC_DEPTOS') }, { c: 'M', l: 'Motivo', type: 'select', opts: () => cfgL('RNC_MOTIVOS'), req: req },
+      { c: 'AC', l: 'Lotes afetados', type: 'text', w: 's3', help: 'Códigos AV separados por vírgula. Toque nos lotes sugeridos abaixo (mesma NF, pedido de compra ou pedido de venda) para incluir ou tirar.' }] }),
     rncAn: () => ({ t: 'Análise e disposição', f: [
       { c: 'P', l: 'Disposição', type: 'select', opts: () => cfgL('RNC_DISPOSICAO') }, { c: 'Q', l: 'Fechamento da disposição', type: 'date' },
       { c: 'R', l: 'Ação corretiva?', type: 'select', opts: () => cfgL('RNC_CORRETIVA') }, { c: 'T', l: 'Nível do prazo para fechar', type: 'select', opts: () => cfgL('RNC_NIVEL_PRAZO'), help: 'Necessário quando há ação corretiva.' },
@@ -4768,7 +4914,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       const el = $(`#ff-${f.c}`); if (!el) return;
       let v = rec ? rawToInput(f, rec.raw[f.c]) : (S.prefill && S.prefill[f.c] != null && S.prefill[f.c] !== '' ? String(S.prefill[f.c]) : (f.def ? f.def() : ''));
       if (rec && fd.fresh && fd.fresh[f.c] && !S.editKey) v = fd.fresh[f.c]();
-      if (f.type === 'select' && v && !Array.from(el.options).some((o) => o.value === v)) { const o = document.createElement('option'); o.value = v; o.textContent = v + ' (fora da lista)'; el.appendChild(o); }
+      if (f.type === 'select' && v && !Array.from(el.options).some((o) => o.value === v)) { const o = document.createElement('option'); o.value = v; o.textContent = v + (v === CONC ? '' : ' (fora da lista)'); el.appendChild(o); }
       el.value = v;
     });
   }
@@ -4933,6 +5079,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const back = $('#ed-back'); if (back) back.onclick = () => { const m = fd.mod, k = S.editKey; go(MOD[m].view); setTimeout(() => openRecord(m, k), 50); };
     setFieldValues(fd, erec);
     wireReveal(allFields(fd), (f) => 'ff-' + f.c);
+    if (fd.mod === 'RNC') updateLotSug();
     const form = $('#fx');
     let tm; form.addEventListener('input', () => { clearTimeout(tm); tm = setTimeout(preview, 140); });
     form.addEventListener('change', () => { clearTimeout(tm); tm = setTimeout(preview, 60); });
@@ -4962,6 +5109,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   };
   function buildChange() {
     const fd = FORMS[S.form], vals = readVals(), rec = currentRec(), errs = {};
+    if (fd.mod === 'RNC' && vals.AC != null) vals.AC = normLotes(vals.AC);
     const isNew = !S.editKey && !fd.pick;
     if (fd.pick && !S.editKey && !rec) return { errs: { pick: 'Escolha um registro da lista.' }, none: 1 };
     const fields = {}, changes = {}, before = {}, fm = FMAP[fd.mod];
@@ -4989,6 +5137,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       else if (S.model.rnc.some((x) => E.low(x.num) === E.low(vals.A))) errs.A = 'Esse número já existe.';
       else { const m = /^RNCF-(\d{4})-(\d+)$/.exec(vals.A); if (m && +m[2] <= +((DB.numer.rnc || {})[+m[1]] || 0)) errs.A = 'Esse número já foi usado antes da virada.'; }
     }
+    if (fd.mod === 'RNC' && vals.AC) { const bad = lotTokens(vals.AC).filter((s) => !avById(s)); if (bad.length) errs.AC = (bad.length > 1 ? 'Lotes não encontrados: ' : 'Lote não encontrado: ') + bad.slice(0, 4).join(', '); }
     if (fd.mod === 'RNC') ['AA', 'AB'].forEach((c) => { const bad = splitEm(vals[c]).filter((e) => !okEm(e)); if (bad.length) errs[c] = 'E-mail inválido: ' + bad[0]; });
     if (fd.mod === 'INS' && vals.A && S.model.ins.some((x) => E.key(x.codigo) === E.key(vals.A) && (!rec || x.key !== rec.key))) errs.A = 'Esse código já existe.';
     if (!isNew && !Object.keys(changes).length) errs._ = 'Nada foi alterado.';
@@ -5012,6 +5161,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   }
   function pvRow(k, v) { return `<div class="row"><span>${esc(k)}</span><span>${v}</span></div>`; }
   function preview() {
+    if (FORMS[S.form] && FORMS[S.form].mod === 'RNC') updateLotSug();
     const pv = $('#pv'); if (!pv) return;
     const fd = FORMS[S.form], c = buildChange();
     if (c.none) { pv.innerHTML = `<div class="pv"><h3>Prévia</h3><span class="muted">Escolha ${fd.pick === 'INS' ? 'o instrumento' : 'a RNC'} para carregar os dados atuais.</span></div>`; return; }
@@ -5083,6 +5233,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     try {
       if (c.isNew) {
         const key = await createRecord(fd.mod, c.fields);
+        pubQueueLots(fd.mod, c.fields, {});
         if (fd.mod === 'RNC' && S.linkBack) { const lb = S.linkBack; S.linkBack = null; try { await updateRecord('RNCC', lb, { rncf: key }); logEntry('RNCC', lb, 'alterado', 'Vínculo com ' + key, { rncf: [null, key] }); } catch (e) { console.warn(e); } }
         const label = fd.label(c.vals, key, null);
         logEntry(fd.mod, key, 'novo', label, null);
@@ -5095,11 +5246,13 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
         const rec = c.rec, key = rec.key;
         const label = fd.label(c.vals, recTitle(rec), rec);
         await updateRecord(fd.mod, key, c.changes);
+        pubQueueLots(fd.mod, c.changes, c.before);
         const diff = {}; Object.keys(c.changes).forEach((f) => { const bf = c.before[f], af = c.changes[f]; diff[f] = (f === 'info' && bf && af && String(af).startsWith(String(bf))) ? ['…', '+ ' + String(af).slice(String(bf).length).trim()] : [bf, af]; });
         logEntry(fd.mod, key, 'alterado', label, diff);
         toast(`${label} — salvo.`);
         if (S.editKey) { const m = fd.mod; go(MOD[m].view); setTimeout(() => openRecord(m, key), 150); }
         else { await sleep(150); S.stale = false; const pv = fd.pick === 'INS' ? rec.codigo : rec.num; render(); updateChrome(); const pk = $('#pick'); if (pk) { pk.value = pv; pk.dispatchEvent(new Event('change')); } }
+        if (S.form === 'cal' && fd.pick === 'INS' && DRIVE_URL()) setTimeout(() => { const r2 = findRec('INS', key); if (r2) confirmBox('Certificado da calibração', `Quer enviar agora o certificado de ${r2.codigo} para o Google Drive?`, 'Enviar certificado', () => certUploadDialog(r2)); }, 400);
       }
     } catch (err) {
       console.error(err);
@@ -5226,7 +5379,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
           <div class="cfg-logo"><div class="lp">${DB.logo ? `<img src="${DB.logo}" alt="Logo atual">` : '<span class="muted">sem logo</span>'}</div>${roA ? '' : `<input type="file" id="logo-file" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden><button class="btn small" type="button" id="logo-up">${DB.logo ? 'Trocar logo' : 'Enviar logo'}</button>${DB.logo ? '<button class="btn small ghost" type="button" id="logo-del">Remover logo</button>' : ''}`}</div>
         </div>
       </div></div></section>
-      <section class="sec">${band('AV', 'Lotes (AV)')}<div class="block"><div class="body"><div class="cfg">${lists('AV')}${fixed('Retrabalho', ['Sim', 'Não'], 'Sim/Não')}${fixed('Resultado da inspeção', ['Aprovado', 'Reprovado', 'Em análise'], 'lote novo já vem como Aprovado')}</div></div></div></section>
+      <section class="sec">${band('AV', 'Lotes (AV)')}<div class="block"><div class="body"><div class="cfg">${lists('AV')}${fixed('Retrabalho', ['Sim', 'Não'], 'Sim/Não')}${fixed('Resultado da inspeção', ['Aprovado', 'Reprovado', 'Em análise', CONC], 'lote novo já vem como Aprovado · a concessão é registrada pela ficha do lote')}</div></div></div></section>
       <section class="sec">${band('SERV', 'Serviços')}<div class="block"><div class="body"><div class="cfg">${lists('SERV')}</div></div></div></section>
       <section class="sec">${band('RNC', 'RNC de fornecedor')}<div class="block"><div class="body"><div class="cfg">${lists('RNC')}
         <div class="cfgitem" data-cfg="PARAMS"><b>Parâmetros de prazo</b><span class="use">Dias de cada prazo (os nomes dos níveis são fixos)</span>${CFG_PARAMS.map(([n, l]) => `<label class="field"><span>${esc(l)}</span><input id="cfgp-${n}" type="number" min="0" step="1" value="${esc(pval(c, n) == null ? '' : pval(c, n))}" ${roA ? 'disabled' : ''}></label>`).join('')}</div>
@@ -5237,6 +5390,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
         ${fixed('Gravidade', ['Baixa', 'Média', 'Alta'], 'Baixa/Média/Alta')}${fixed('Procedente?', ['Em análise', 'Sim', 'Não'], 'usadas nos indicadores')}${fixed('Origem da causa', ['Interna', 'Fornecedor', 'Transporte', 'Cliente (uso/aplicação)'], '“Fornecedor” liga a RNC de fornecedor')}${fixed('Eficácia', ['Em verificação', 'Eficaz', 'Não eficaz'], 'verificação da ação corretiva')}
       </div></div></div></section>
       <section class="sec">${band('INS', 'Calibração de instrumentos')}<div class="block"><div class="body"><div class="cfg">${lists('INS')}
+        <div class="cfgitem" data-cfg="DRIVE"><b>Certificados no Google Drive</b><span class="use">Endereço do script da conta da Central (termina em /exec). Com ele, a ficha do instrumento ganha o botão “Enviar certificado”.</span><input class="inp" id="cfg-driveurl" value="${esc((DB.cfg && DB.cfg.driveUrl) || '')}" placeholder="https://script.google.com/macros/s/…/exec" ${roA ? 'disabled' : ''}></div>
         <div class="cfgitem" data-cfg="TIPOS"><b>Tipos de equipamento e faixa</b><span class="use">Um por linha: tipo ; faixa. Critério de aceitação = faixa ÷ 3</span>${ta('cfg-TIPOS', (c.CAL_TIPOS || []).map((t) => `${t.tipo} ; ${t.faixa == null ? '' : t.faixa}`))}</div>
         ${fixed('Situação operacional', ['Em uso', 'Manutenção', 'Fora de uso'], 'controlam o status do instrumento')}
       </div></div></div></section>
@@ -5387,6 +5541,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const ccA = $('#cfg-ccatraso').value.trim().replace(/\s*[;,]\s*/g, ', ');
     ccA.split(', ').filter(Boolean).forEach((m) => { if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)) errs.push('E-mail inválido: ' + m); });
     if (ccA !== (c.RNC_CC_ATRASO || '')) up.rncCcAtraso = ccA;
+    if (!roA && has('cfg-driveurl')) { const du = $('#cfg-driveurl').value.trim(); if (du && !/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(du)) errs.push('Endereço do script inválido: ele começa com https://script.google.com/macros/s/ e termina em /exec.'); if (du !== String((DB.cfg && DB.cfg.driveUrl) || '')) up.driveUrl = du; }
     const P = readPessoas(); errs.push(...P.errs);
     const oldP = c.PESSOAS || [];
     if (!roA && JSON.stringify(P.out) !== JSON.stringify(oldP)) {
@@ -5405,7 +5560,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     try {
       const ref = DB.db.doc('cfg/main');
       if (DB.cfg) await ref.update(up); else await ref.set(up);
-      const what = [].concat(Object.keys(up.listas || {}).map((n) => (CFG_LISTS.find((l) => l[0] === n) || [n, n])[1]), up.feriados ? ['Feriados'] : [], up.tipos ? ['Tipos de equipamento'] : [], up.params ? ['Parâmetros de prazo'] : [], up.pessoas ? ['Pessoas'] : [], up.fornEmails ? ['E-mails dos fornecedores'] : [], up.setorEmails ? ['E-mails por setor'] : [], up.rncCcAtraso != null ? ['Cópia de RNC atrasada'] : []);
+      const what = [].concat(Object.keys(up.listas || {}).map((n) => (CFG_LISTS.find((l) => l[0] === n) || [n, n])[1]), up.feriados ? ['Feriados'] : [], up.tipos ? ['Tipos de equipamento'] : [], up.params ? ['Parâmetros de prazo'] : [], up.pessoas ? ['Pessoas'] : [], up.fornEmails ? ['E-mails dos fornecedores'] : [], up.setorEmails ? ['E-mails por setor'] : [], up.rncCcAtraso != null ? ['Cópia de RNC atrasada'] : [], up.driveUrl != null ? ['Certificados no Google Drive'] : []);
       logEntry('GERAL', 'cfg', 'alterado', 'Configurações: ' + what.join(', '), null);
       toast('Configurações salvas: ' + what.join(', ') + '.');
       S.cfgDirty = false; await sleep(250); S.stale = false; render(); updateChrome();
@@ -6374,7 +6529,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const tbl = (rows, cols) => rows.length ? `<div class="twrap"><table class="t"><thead><tr>${cols.map((c) => `<th class="nosort">${esc(c.l)}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr>${cols.map((c) => `<td>${c.f(r)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '<div class="empty">Nenhum registro.</div>';
     return `<div class="report" id="report">
       <div class="rephead">${DB.logo ? `<img class="replogo" src="${DB.logo}" alt="Logo da empresa">` : ''}<span class="mtag" style="--c:var(--geral)">Aços Vital · Qualidade</span><h2>Relatório mensal da Qualidade — ${MESES_L[m - 1]} de ${y}</h2><p class="muted" style="margin:6px 0 0">Gerado em ${fD(S.today)} a partir do banco da Central da Qualidade.</p></div>
-      <div class="kpis sm">${kpiHTML({ l: 'Lotes recebidos', v: NF.format(av.length), c: MOD.AV.c })}${kpiHTML({ l: 'Notas fiscais recebidas', v: NF.format(nNotas(av)), c: MOD.AV.c })}${kpiHTML({ l: 'Lotes sem certificado', v: NF.format(semC), c: MOD.AV.c, cls: semC ? 'warn' : '' })}${kpiHTML({ l: 'Serviços', v: NF.format(sv.length), c: MOD.SERV.c })}${kpiHTML({ l: 'RNC fornecedor abertas no mês', v: NF.format(rnA.length), c: MOD.RNC.c })}${kpiHTML({ l: 'RNC fornecedor concluídas', v: NF.format(rnC.length), c: MOD.RNC.c })}${kpiHTML({ l: 'Tempo médio de fechamento', v: fech.length ? NF1.format(fech.reduce((p, q) => p + q, 0) / fech.length) : '—', sub: 'dias, das concluídas no mês', c: MOD.RNC.c })}${kpiHTML({ l: 'RNC cliente abertas no mês', v: NF.format(rcA.length), c: MOD.RNCC.c })}${kpiHTML({ l: 'RNC cliente concluídas', v: NF.format(rcC.length), c: MOD.RNCC.c })}${kpiHTML({ l: 'Tempo médio de resposta', v: rcR.length ? NF1.format(rcR.reduce((p, q) => p + q.diasResposta, 0) / rcR.length) : '—', sub: 'dias, das respondidas no mês', c: MOD.RNCC.c })}${kpiHTML({ l: 'Calibrações realizadas', v: NF.format(cal.length), c: MOD.INS.c })}${kpiHTML({ l: 'Vencem no mês seguinte', v: NF.format(venceProx.length), c: MOD.INS.c })}</div>
+      <div class="kpis sm">${kpiHTML({ l: 'Lotes recebidos', v: NF.format(av.length), c: MOD.AV.c })}${kpiHTML({ l: 'Notas fiscais recebidas', v: NF.format(nNotas(av)), c: MOD.AV.c })}${(() => { const n = S.model.av.filter((x) => { const cc = ((DB.meta.AV || {})[x.key] || {}).conc; return cc && inRange(cc.data, a, b); }).length; return n ? kpiHTML({ l: 'Liberados sob concessão', v: NF.format(n), c: MOD.AV.c, cls: 'warn' }) : ''; })()}${kpiHTML({ l: 'Lotes sem certificado', v: NF.format(semC), c: MOD.AV.c, cls: semC ? 'warn' : '' })}${kpiHTML({ l: 'Serviços', v: NF.format(sv.length), c: MOD.SERV.c })}${kpiHTML({ l: 'RNC fornecedor abertas no mês', v: NF.format(rnA.length), c: MOD.RNC.c })}${kpiHTML({ l: 'RNC fornecedor concluídas', v: NF.format(rnC.length), c: MOD.RNC.c })}${kpiHTML({ l: 'Tempo médio de fechamento', v: fech.length ? NF1.format(fech.reduce((p, q) => p + q, 0) / fech.length) : '—', sub: 'dias, das concluídas no mês', c: MOD.RNC.c })}${kpiHTML({ l: 'RNC cliente abertas no mês', v: NF.format(rcA.length), c: MOD.RNCC.c })}${kpiHTML({ l: 'RNC cliente concluídas', v: NF.format(rcC.length), c: MOD.RNCC.c })}${kpiHTML({ l: 'Tempo médio de resposta', v: rcR.length ? NF1.format(rcR.reduce((p, q) => p + q.diasResposta, 0) / rcR.length) : '—', sub: 'dias, das respondidas no mês', c: MOD.RNCC.c })}${kpiHTML({ l: 'Calibrações realizadas', v: NF.format(cal.length), c: MOD.INS.c })}${kpiHTML({ l: 'Vencem no mês seguinte', v: NF.format(venceProx.length), c: MOD.INS.c })}</div>
       <div class="rgrid">
         <div style="--c:var(--av)"><h3>Recebimento · top fornecedores</h3>${barsHTML(countBy(av, (x) => x.forn), MOD.AV.c, { max: 10 })}</div>
         <div style="--c:var(--av)"><h3>Recebimento · por filial</h3>${barsHTML(countBy(av, (x) => x.filial), MOD.AV.c)}</div>
@@ -6448,11 +6603,13 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       if (a === 'msg-cal') { const em = S.model.cfg.CAL_EMAILS || []; textModal('Alerta de calibração', calMsg(), em.length ? 'Destinatários em Configurações: <span class="mono">' + esc(em.join('; ')) + '</span>' : 'A lista “E-mails de aviso” em Configurações está vazia.'); return; }
       if (a === 'msg-rncc') { const x = findRec('RNCC', key); if (x) textModal('Cobrança interna da ' + x.num, rnccMsg(x)); return; }
       if (a === 'edit-rncc') { const x = findRec('RNCC', key); S.form = 'rnccupd'; S.pickPreset = x && x.num; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); return; }
-      if (a === 'rncc-to-rncf') { const x = findRec('RNCC', key); if (!x) return; S.form = 'rnc'; S.editKey = null; S.linkBack = x.key; S.prefill = { H: x.cliente, I: x.nf ? '' : '', J: x.pv == null ? '' : String(x.pv), Z: 'Originada da ' + x.num + (x.desc ? ': ' + x.desc : '') }; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); return; }
+      if (a === 'rncc-to-rncf') { const x = findRec('RNCC', key); if (!x) return; S.form = 'rnc'; S.editKey = null; S.linkBack = x.key; S.prefill = { H: x.cliente, I: x.nf ? '' : '', J: x.pv == null ? '' : String(x.pv), AC: ((String(x.lotes || '').match(/AV-\d+(?:-\d+)?/gi) || []).map((s) => s.toUpperCase()).join(', ')), Z: 'Originada da ' + x.num + (x.desc ? ': ' + x.desc : '') }; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); return; }
       if (a === 'msg-rnc') { const x = findRec('RNC', key); if (x) rncMailDialog(x); return; }
       if (a === 'rnc-ret') { const x = findRec('RNC', key); if (x) rncRetDialog(x); return; }
       if (a === 'rnc-resumo') { rncResumoDialog(); return; }
       if (a === 'csv-zero') { csvZero(key); return; }
+      if (a === 'ins-cert') { const x = findRec('INS', key); if (x) certUploadDialog(x); return; }
+      if (a === 'av-conc') { const x = findRec('AV', key); if (x) avConcDialog(x); return; }
       if (a === 'rnc-ver') { S.f.alert = 'venc'; if (!rncOpen().some((o) => o.venc)) S.f.alert = 'h24'; closeLayer(); go('alertas'); return; }
       if (a === 'rnc-ciente') { lsSet('cq-rnc-ciente', JSON.stringify({ d: S.today, k: rncOpen().filter((o) => o.venc).map((o) => o.x.key) })); refreshBanner(); return; }
       if (a === 'av-serie') { S.avSerie = key; render(); return; }
@@ -6460,14 +6617,14 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       if (a === 'cert-mail') { const gr = S.alertGroups[+key]; if (gr) mailForn(gr); return; }
       if (a === 'av-label') { const x = findRec('AV', key); if (x) labelDialog([x]); return; }
       if (a === 'av-similar') { const x = findRec('AV', key); if (!x) return; const r = x.raw || {}; const nota = {}; 'CKLMNP'.split('').forEach((c) => { if (r[c] != null) nota[c] = String(r[c]); }); nota.B = E.isoDate(S.today); const it = {}; 'FEDRSGHIJOTQU'.split('').forEach((c) => { if (r[c] != null) it[c] = String(r[c]); }); if (!it.U) it.U = 'Aprovado'; S.avmPrefill = { nota, items: [it] }; S.form = 'av'; S.editKey = null; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); toast('Formulário preenchido com os dados de ' + x.id + '. Altere o que for diferente (corrida, certificado…).'); return; }
-      if (a === 'av-to-rncf') { const x = findRec('AV', key); if (!x) return; S.form = 'rnc'; S.editKey = null; S.prefill = { G: x.forn, I: x.nf == null ? '' : String(x.nf), K: x.pc == null ? '' : String(x.pc), J: x.pv == null ? '' : String(x.pv), Z: `Lote ${x.id} (${x.desc || ''}${E.filled(x.corrida) && !E.isStar(x.corrida) ? ', corrida ' + x.corrida : ''}) reprovado na inspeção de recebimento.` }; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); return; }
+      if (a === 'av-to-rncf') { const x = findRec('AV', key); if (!x) return; S.form = 'rnc'; S.editKey = null; S.prefill = { G: x.forn, I: x.nf == null ? '' : String(x.nf), K: x.pc == null ? '' : String(x.pc), J: x.pv == null ? '' : String(x.pv), AC: x.id, Z: `Lote ${x.id} (${x.desc || ''}${E.filled(x.corrida) && !E.isStar(x.corrida) ? ', corrida ' + x.corrida : ''}) reprovado na inspeção de recebimento.` }; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); return; }
       if (a === 'msg-cert') { const gr = S.alertGroups[+key]; if (gr) textModal('Cobrança de certificado', certMsg(gr)); return; }
       if (a === 'form') { S.form = act.dataset.form; closeLayer(); go('cadastro'); return; }
       if (a === 'edit') { S.form = FORM_FOR[act.dataset.mod]; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); S.editKey = key; render(); return; }
       if (a === 'edit-rnc') { const x = findRec('RNC', key); S.form = 'rncupd'; S.pickPreset = x && x.num; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); return; }
       if (a === 'edit-cal') { const x = findRec('INS', key); S.form = 'cal'; S.pickPreset = x && x.codigo; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); return; }
     }
-    if (op && !t.closest('button[data-act]')) { const i = op.dataset.open.indexOf(':'); openRecord(op.dataset.open.slice(0, i), op.dataset.open.slice(i + 1)); return; }
+    if (op && !t.closest('button[data-act]') && !t.closest('a[data-noopen]')) { const i = op.dataset.open.indexOf(':'); openRecord(op.dataset.open.slice(0, i), op.dataset.open.slice(i + 1)); return; }
     if (g) {
       const d = JSON.parse(g.dataset.go);
       if (['av', 'serv', 'rnc', 'cal'].includes(d.v)) { S.f[d.v] = Object.assign({}, d.f || {}); if (S.t[d.v]) S.t[d.v].page = 0; }
