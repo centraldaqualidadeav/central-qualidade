@@ -4395,7 +4395,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   const pubTok = (x) => ((DB.meta.AV || {})[x.key] || {}).qr || null;
   function pubData(x) {
     const s = (v) => (v == null || v === '' || E.isStar(v) ? '' : String(v).trim());
-    const nc = E.low(x.insp) === 'reprovado' || E.low(x.insp) === E.low(CONC) || lotRncs(x).length > 0;
+    const nc = lotNC(x);
     const o = { id: s(x.id), desc: s(x.desc), material: s(x.norma), diam: s(x.diam), esp: s(x.esp), liga: s(x.liga), corrida: s(x.corrida), volume: s(x.volume),
       quant: x.quant == null || x.quant === '' ? '' : String(x.quant) + (x.und ? ' ' + x.und : ''), insp: s(x.insp), conf: s(x.conf), recebido: x.data != null ? fD(x.data) : '', filial: s(x.filial),
       nf: s(x.nf), pc: s(x.pc), pv: s(x.pv), rnc: nc ? '1' : '', at: Date.now() };
@@ -4438,6 +4438,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   }
   /* etiqueta compacta: só o número do lote e o QR code (deitada ou em pé, conforme o papel) */
   /* faixa preta na etiqueta: lote reprovado ou liberado sob concessão */
+  /* lote com problema (reprovado, concessão ou com RNC): só nesses o fornecedor aparece na etiqueta e na página do QR */
+  function lotNC(x) { return E.low(x.insp) === 'reprovado' || E.low(x.insp) === E.low(CONC) || lotRncs(x).length > 0; }
   function labelBand(x) { const s = E.low(x.insp); return s === 'reprovado' ? 'REPROVADO' : s === E.low(CONC) ? 'LIBERADO SOB CONCESSÃO' : ''; }
   const bandHTML = (txt, wmm, fsMax) => (txt ? `<div class="bnd" style="font-size:${Math.min(fsMax, wmm / (txt.length * 0.62))}mm">${txt}</div>` : '');
   function labelHTMLc(x, W, H, tok) {
@@ -4454,7 +4456,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const pad = Math.max(1.5, H * 0.05), qr = Math.min(H - pad * 2, W * 0.4), fs = H * 0.075, small = (v) => esc(String(v == null ? '' : v));
     const line = (l, v) => (E.filled(v) && !E.isStar(v) ? `<div class="ln"><span>${l}</span> ${small(v)}</div>` : '');
     const bd = labelBand(x);
-    return `<div class="lab" style="width:${W}mm;height:${H}mm;padding:${pad}mm;font-size:${fs}mm"><div class="tx"><div class="id" style="font-size:${H * 0.17}mm">${small(x.id)}</div>${bandHTML(bd, (W - qr - pad * 2 - 2) * 0.95, H * 0.09)}<div class="ds">${small(x.desc)}${E.filled(x.diam) ? ' ' + small(x.diam) : ''}${E.filled(x.esp) ? ' × ' + small(x.esp) : ''}</div>${line('Corrida', x.corrida)}${line('Volume', x.volume)}${line('Material', x.norma)}<div class="ln"><span>NF</span> ${small(x.nf)} · ${small(fD(x.data))}${x.quant != null && x.quant !== '' ? ' · ' + small(x.quant) + ' ' + small(x.und || '') : ''}</div><div class="ft">${small(x.forn)}</div></div><div class="qr">${qrSvg(lotUrl(x, tok), qr)}</div></div>`;
+    return `<div class="lab" style="width:${W}mm;height:${H}mm;padding:${pad}mm;font-size:${fs}mm"><div class="tx"><div class="id" style="font-size:${H * 0.17}mm">${small(x.id)}</div>${bandHTML(bd, (W - qr - pad * 2 - 2) * 0.95, H * 0.09)}<div class="ds">${small(x.desc)}${E.filled(x.diam) ? ' ' + small(x.diam) : ''}${E.filled(x.esp) ? ' × ' + small(x.esp) : ''}</div>${line('Corrida', x.corrida)}${line('Volume', x.volume)}${line('Material', x.norma)}<div class="ln"><span>NF</span> ${small(x.nf)} · ${small(fD(x.data))}${x.quant != null && x.quant !== '' ? ' · ' + small(x.quant) + ' ' + small(x.und || '') : ''}</div>${lotNC(x) ? `<div class="ft">${small(x.forn)}</div>` : ''}</div><div class="qr">${qrSvg(lotUrl(x, tok), qr)}</div></div>`;
   }
   const LABEL_CSS = (W, H) => `@page{size:${W}mm ${H}mm;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0}body{font-family:"Arial Narrow",Arial,Helvetica,sans-serif;color:#000;background:#fff}
     .lab{display:flex;gap:2mm;align-items:center;overflow:hidden;page-break-after:always;break-after:page;line-height:1.15}.lab:last-child{page-break-after:auto;break-after:auto}
