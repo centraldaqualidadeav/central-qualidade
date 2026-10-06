@@ -560,6 +560,38 @@ textarea.cm-body { min-height: 260px; font-family: var(--f-mono, ui-monospace, m
 }
 @media print { .rail { display: none !important; } }
 
+/* listas: a tabela ocupa no máximo a altura da tela e rola por dentro;
+   a barra de rolar para o lado fica sempre visível e os títulos das colunas ficam fixos */
+.twrap.twin { max-height: calc(100vh - 96px); max-height: calc(100dvh - 96px); overflow: auto; }
+.twrap.twin table.t th { z-index: 2; box-shadow: 0 1px 0 var(--line); }
+@media (max-width: 860px) { .twrap.twin { max-height: calc(100dvh - 150px); } }
+@media print { .twrap.twin { max-height: none; overflow: visible; } }
+.twrap.twin::-webkit-scrollbar { width: 10px; height: 12px; }
+.twrap.twin::-webkit-scrollbar-track { background: var(--surface-2); }
+.twrap.twin::-webkit-scrollbar-thumb { background: #b5bcb4; border-radius: 6px; border: 2px solid var(--surface-2); }
+.twrap.twin::-webkit-scrollbar-thumb:hover { background: #8f978e; }
+.twrap.twin::-webkit-scrollbar-corner { background: var(--surface-2); }
+
+/* topo do menu em balão arredondado: claro para todos, escuro só para o dono */
+.railtop { margin: 10px 10px 0; border-radius: 12px; padding: 16px 14px 13px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 1px 2px rgba(20, 30, 25, .05); }
+.railtop .brand .name { color: var(--ink); }
+.railtop .dbcard .st { color: var(--ok); }
+.railtop .dbcard .dot.on { background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 22%, transparent); }
+.railtop .dbcard .dot.wait { background: var(--warn); }
+.railtop .dbcard .dot.off { background: var(--crit); }
+.railtop .raileyebrow { color: var(--ink-3); }
+.railtop .dbcard #db-stale { border-color: var(--info); color: var(--info); }
+.cq-dono .railtop { background: #1b211e; color: #fff; border-color: #1b211e; box-shadow: 0 2px 6px rgba(0, 0, 0, .12); }
+.cq-dono .railtop .brand .name { color: #fff; }
+.cq-dono .railtop .dbcard .st { color: #bfe9cf; }
+.cq-dono .railtop .dbcard .dot.on { background: #3ccf7e; box-shadow: 0 0 0 3px rgba(60, 207, 126, .2); }
+.cq-dono .railtop .dbcard .dot.wait { background: #f2b33d; }
+.cq-dono .railtop .dbcard .dot.off { background: #ff6b5e; }
+.cq-dono .railtop .raileyebrow { color: #b7bfba; }
+.cq-dono .railtop .dbcard #db-stale { border-color: #6aa9e8; color: #cfe3fa; }
+@media (max-width: 860px) { .railtop { margin: 8px 8px 0; border-radius: 10px; padding: 9px 12px; } }
+.railtop .dbcard .st { white-space: nowrap; }
+
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
 #fb-gate[hidden] { display: none; }
@@ -2510,6 +2542,7 @@ re2js/build/index.js:
     foot.appendChild(box);
     onMe(() => {
       link.hidden = !isAdmin();
+      document.body.classList.toggle('cq-dono', ME.perfil === 'dono'); /* balão escuro do topo do menu: só o dono */
       box.hidden = false;
       const ini = String(ME.nome || ME.email || '?').trim().split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
       box.innerHTML = `<span class="fbav" aria-hidden="true">${esc(ini)}</span><span class="fbwho"><b title="${esc(ME.email)}">${esc(ME.nome)}</b><span class="muted"><span class="fbperf">${esc(PERFIS[ME.perfil] || '')} · </span><button type="button" class="fbsair" id="fb-sair">Sair</button></span></span>`;
@@ -3903,7 +3936,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       if (st.page >= pages) st.page = pages - 1;
       const slice = rows.slice(st.page * size, st.page * size + size);
       host.innerHTML = `<div class="tbar"><span class="cnt"><b>${NF.format(rows.length)}</b> ${esc(cfg.noun || 'registros')}${cfg.total != null && rows.length !== cfg.total ? ` de ${NF.format(cfg.total)}` : ''}</span><span class="pager">${pages > 1 ? `<button class="btn small" type="button" data-pg="-1" ${st.page === 0 ? 'disabled' : ''}>‹ Anterior</button><span class="muted num">página ${st.page + 1} de ${pages}</span><button class="btn small" type="button" data-pg="1" ${st.page >= pages - 1 ? 'disabled' : ''}>Próxima ›</button>` : ''}${cfg.export ? '<button class="btn small" type="button" data-exp="1">Exportar lista (.xlsx)</button>' : ''}</span></div>
-      <div class="twrap"><table class="t"><thead><tr>${cfg.cols.map((c) => `<th class="${c.r ? 'r' : ''}${c.nosort ? ' nosort' : ''}" ${c.nosort ? '' : `data-sort="${c.k}"`} scope="col">${esc(c.l)}${st.sort === c.k ? `<span class="ar">${st.dir > 0 ? '▲' : '▼'}</span>` : ''}</th>`).join('')}</tr></thead>
+      <div class="twrap twin"><table class="t"><thead><tr>${cfg.cols.map((c) => `<th class="${c.r ? 'r' : ''}${c.nosort ? ' nosort' : ''}" ${c.nosort ? '' : `data-sort="${c.k}"`} scope="col">${esc(c.l)}${st.sort === c.k ? `<span class="ar">${st.dir > 0 ? '▲' : '▼'}</span>` : ''}</th>`).join('')}</tr></thead>
       <tbody>${slice.map((x) => `<tr class="${cfg.open ? 'click' : ''}" ${cfg.open ? `data-open="${x.mod}:${esc(x.key)}" tabindex="0"` : ''}>${cfg.cols.map((c) => `<td class="${c.cls || ''}${c.r ? ' r' : ''}">${c.f ? c.f(x) : esc(disp(x[c.k]))}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cfg.cols.length}" class="muted">Nenhum registro com esses filtros.</td></tr>`}</tbody></table></div>`;
       host.querySelectorAll('[data-sort]').forEach((th) => th.onclick = () => { const k = th.dataset.sort; if (st.sort === k) st.dir = -st.dir; else { st.sort = k; st.dir = 1; } draw(); });
       host.querySelectorAll('[data-pg]').forEach((b) => b.onclick = () => { st.page += +b.dataset.pg; draw(); host.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
