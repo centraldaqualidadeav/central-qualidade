@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -614,6 +614,30 @@ textarea.cm-body { min-height: 260px; font-family: var(--f-mono, ui-monospace, m
 .pfform .seg { display: inline-flex; width: max-content; }
 
 .entbtns { display: flex; gap: 8px; align-items: flex-end; margin-left: auto; flex-wrap: wrap; }
+
+/* modo escuro (dono e administradores): ajustes das peças novas */
+:root[data-theme="dark"] .nav a .sw { background: color-mix(in srgb, var(--c, var(--geral)) 20%, var(--surface)); }
+:root[data-theme="dark"] .nav a[aria-current="page"] .sw { color: #0f1211; }
+:root[data-theme="dark"] .cq-dono .railtop, :root[data-theme="dark"] .railtop { background: #232a26; border-color: #343d38; box-shadow: none; }
+:root[data-theme="dark"] .railtop .brand .name { color: #fff; }
+:root[data-theme="dark"] .railtop .dbcard .st { color: #bfe9cf; }
+:root[data-theme="dark"] .railtop .raileyebrow { color: #a7b0ab; }
+:root[data-theme="dark"] .twrap.twin::-webkit-scrollbar-thumb { background: var(--line-2); }
+:root[data-theme="dark"] .twrap.twin::-webkit-scrollbar-thumb:hover { background: var(--ink-3); }
+:root[data-theme="dark"] .pfun[aria-pressed="true"], :root[data-theme="dark"] .lchip[aria-pressed="true"] { color: #0f1211; }
+#cfg-tema .seg { display: inline-flex; width: max-content; margin-top: 8px; }
+
+/* anel de porcentagem nos cartões */
+.kpi.has-ring { padding-right: 14px; min-height: 112px; }
+.kpi.has-ring .sub { padding-right: 70px; }
+.kring { position: absolute; right: 10px; bottom: 9px; display: grid; justify-items: center; gap: 1px; max-width: 76px; pointer-events: none; }
+.kring svg { width: 40px; height: 40px; display: block; }
+.kring .tr { fill: none; stroke: var(--sunken); stroke-width: 4; }
+.kring .fg { fill: none; stroke: var(--k); stroke-width: 4; stroke-linecap: round; }
+.kring text { font: 700 12.5px var(--f-display); fill: var(--k); }
+.kring i { font: 400 10px/1.15 var(--f-body); color: var(--ink-3); font-style: normal; text-align: center; }
+.kpis.sm .kpi.has-ring { min-height: 104px; }
+@media print { .kring .tr { stroke: #e4e7e3; } }
 
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
@@ -2527,7 +2551,7 @@ re2js/build/index.js:
         ME.perfil = d.perfil === 'admin' ? 'admin' : 'usuario'; ME.acesso = acessoDe(d); ME.telas = telasDe(d); if (d.nome) ME.nome = d.nome;
       }
       names[ME.uid] = ME.nome;
-      SDK.setDoc(SDK.doc(fs, 'perfis/' + ME.uid), { nome: ME.nome, email, at: Date.now() }).catch(() => {});
+      SDK.setDoc(SDK.doc(fs, 'perfis/' + ME.uid), { nome: ME.nome, email, at: Date.now() }, { merge: true }).catch(() => {}); /* merge: mantém a escolha do modo escuro */
       started = true; hideGate(); resolveReady(); fireMe();
     } catch (e) { showGate('error', 'Erro ao verificar o acesso: ' + mapErr(e).message); }
   });
@@ -3380,7 +3404,15 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     if (COLOR_COL[k.c] && !vis(COLOR_COL[k.c])) return '';
     const tag = k.go ? 'button' : 'div';
     const go = k.go ? ` type="button" data-go="${esc(JSON.stringify(k.go))}"` : '';
-    return `<${tag} class="kpi ${k.cls || ''}"${go} style="--c:${k.c || 'var(--geral)'}"><span class="tag"></span><span class="lbl">${esc(k.l)}</span><span class="val">${k.v}</span>${k.sub ? `<span class="sub">${esc(k.sub)}</span>` : ''}</${tag}>`;
+    const ring = k.pct ? pctRing(k.pct) : '';
+    return `<${tag} class="kpi ${k.cls || ''}${ring ? ' has-ring' : ''}"${go} style="--c:${k.c || 'var(--geral)'}"><span class="tag"></span><span class="lbl">${esc(k.l)}</span><span class="val">${k.v}</span>${k.sub ? `<span class="sub">${esc(k.sub)}</span>` : ''}${ring}</${tag}>`;
+  }
+  /* anel de porcentagem no canto de baixo do cartão: [parte, total, legenda, tom] — some quando o total é zero */
+  function pctRing([n, d, lab, tone]) {
+    if (!d || d <= 0 || n == null) return '';
+    const p = Math.max(0, Math.min(100, n / d * 100)), txt = p > 0 && p < 1 ? '<1%' : Math.round(p) + '%';
+    const r = 16, c = 2 * Math.PI * r, col = { crit: 'var(--crit)', warn: 'var(--warn)', ok: 'var(--ok)' }[tone] || 'var(--ink-2)';
+    return `<span class="kring" style="--k:${col}" title="${esc(NF.format(n) + ' de ' + NF.format(d) + ' (' + txt + ') ' + lab)}"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="${r}" class="tr"/><circle cx="20" cy="20" r="${r}" class="fg" stroke-dasharray="${(c * p / 100).toFixed(2)} ${c.toFixed(2)}" transform="rotate(-90 20 20)"/><text x="20" y="24.2" text-anchor="middle">${txt}</text></svg><i>${esc(lab)}</i></span>`;
   }
   function band(mod, title, src) { return `<div class="band" data-bmod="${mod}" style="--c:${MOD[mod].c};background:${MOD[mod].c}"><h2>${esc(title)}</h2>${src ? `<span class="src">${esc(src)}</span>` : ''}</div>`; }
 
@@ -3613,6 +3645,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       try { DB.canWrite = await u.can('data.write'); } catch (e) { DB.canWrite = null; }
       try { DB.owner = !!(await u.isOwner()); } catch (e) { DB.owner = false; }
       try { DB.admin = !!(await u.canEdit()); } catch (e) { DB.admin = null; }
+      applyTheme(); loadTheme();
       try { if (typeof u.me === 'function') { const me = await u.me(); DB.meName = (me && me.name) || ''; DB.meEmail = (me && me.email) || ''; } } catch (e) { /* sem nome */ }
       updateChrome();
       if (S.model && !['cadastro', 'config'].includes(S.view)) render();
@@ -3832,6 +3865,22 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     return o;
   })();
   function navIcons() { $$('#nav a').forEach((a) => { const sw = a.querySelector('.sw'); if (sw && !sw.firstChild && NAV_ICO[a.dataset.v]) sw.innerHTML = NAV_ICO[a.dataset.v]; }); }
+  /* ---------- modo escuro: só o dono e os administradores; a escolha é de cada pessoa ---------- */
+  const canTheme = () => !!(DB.owner || DB.admin === true);
+  function applyTheme() {
+    const dark = canTheme() && (DB.tema || lsGet('cq-tema', 'claro')) === 'escuro';
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    const m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', dark ? '#111413' : '#1b211e');
+  }
+  async function loadTheme() {
+    if (!canTheme() || !DB.me || !DB.db) return;
+    try { const sn = await DB.db.doc('perfis/' + DB.me).get(); if (sn.exists) { const t = (sn.data() || {}).tema; if (t === 'escuro' || t === 'claro') { DB.tema = t; lsSet('cq-tema', t); applyTheme(); } } } catch (e) { /* fica a escolha deste aparelho */ }
+  }
+  async function setTheme(t) {
+    DB.tema = t; lsSet('cq-tema', t); applyTheme();
+    try { const ref = DB.db.doc('perfis/' + DB.me); if (typeof ref.merge === 'function') await ref.merge({ tema: t }); else { try { await ref.update({ tema: t }); } catch (e) { await ref.set({ tema: t }); } } }
+    catch (e) { toast('Modo escuro ligado só neste aparelho (não foi possível gravar na sua conta).', true); }
+  }
   function updateChrome() {
     navIcons();
     const dot = $('#db-dot'), st = $('#db-st');
@@ -4033,13 +4082,13 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     return `<section class="sec">${band('RNCC', 'Indicadores de RNC de cliente')}<div class="block"><div class="body">
       <div class="kpis sm">
         ${kpiHTML({ l: 'Total', v: NF.format(R.length), c: MOD.RNCC.c, go: goK({}) })}
-        ${kpiHTML({ l: 'Em andamento', v: NF.format(st('Em Andamento')), c: MOD.RNCC.c, go: goK({ status: ['Em Andamento'] }) })}
-        ${kpiHTML({ l: 'Pendentes', v: NF.format(st('Pendente')), sub: 'contenção ou resposta vencida', c: MOD.RNCC.c, cls: st('Pendente') ? 'warn' : '', go: goK({ status: ['Pendente'] }) })}
-        ${kpiHTML({ l: 'Atrasadas', v: NF.format(st('Atrasado')), sub: 'após o prazo final', c: MOD.RNCC.c, cls: st('Atrasado') ? 'crit' : '', go: goK({ status: ['Atrasado'] }) })}
-        ${kpiHTML({ l: 'Concluídas', v: NF.format(st('Concluida')), c: MOD.RNCC.c, go: goK({ status: ['Concluida'] }) })}
+        ${kpiHTML({ l: 'Em andamento', v: NF.format(st('Em Andamento')), c: MOD.RNCC.c, pct: [st('Em Andamento'), R.length, 'do total', ''], go: goK({ status: ['Em Andamento'] }) })}
+        ${kpiHTML({ l: 'Pendentes', v: NF.format(st('Pendente')), sub: 'contenção ou resposta vencida', c: MOD.RNCC.c, pct: [st('Pendente'), R.length, 'do total', 'warn'], cls: st('Pendente') ? 'warn' : '', go: goK({ status: ['Pendente'] }) })}
+        ${kpiHTML({ l: 'Atrasadas', v: NF.format(st('Atrasado')), sub: 'após o prazo final', c: MOD.RNCC.c, pct: [st('Atrasado'), R.length, 'do total', 'crit'], cls: st('Atrasado') ? 'crit' : '', go: goK({ status: ['Atrasado'] }) })}
+        ${kpiHTML({ l: 'Concluídas', v: NF.format(st('Concluida')), c: MOD.RNCC.c, pct: [st('Concluida'), R.length, 'do total', 'ok'], go: goK({ status: ['Concluida'] }) })}
         ${kpiHTML({ l: 'Procedentes', v: julg.length ? NF1.format(proc / julg.length * 100) + '%' : '—', sub: proc + ' de ' + julg.length + ' analisadas', c: MOD.RNCC.c, go: goK({ proc: 'Sim' }) })}
         ${kpiHTML({ l: 'Tempo médio de resposta', v: NF1.format(tr), sub: 'dias corridos até responder', c: MOD.RNCC.c })}
-        ${kpiHTML({ l: 'Reincidências', v: NF.format(R.filter((x) => x.reinc === 'Sim').length), sub: 'mesmo cliente e motivo', c: MOD.RNCC.c })}
+        ${kpiHTML({ l: 'Reincidências', v: NF.format(R.filter((x) => x.reinc === 'Sim').length), sub: 'mesmo cliente e motivo', c: MOD.RNCC.c, pct: [R.filter((x) => x.reinc === 'Sim').length, R.length, 'do total', ''] })}
       </div>
       <div class="charts">
         ${chartHTML('RNC de cliente por mês', colsHTML(ser(R, mb12), MOD.RNCC.c), 'últimos 12 meses')}
@@ -4078,24 +4127,24 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const mesAt = { de: E.isoDate(m0), ate: E.isoDate(m1 - 1) }, mesAn = { de: E.isoDate(p0), ate: E.isoDate(p1 - 1) };
     main.innerHTML = `<div class="view">${head('Painel de indicadores', `Dados ao vivo do banco da Qualidade, calculados em ${fD(t)}. Clique num número ou numa barra para abrir a lista.`)}
       <div class="kpis">
-        ${kpiHTML({ l: 'RNC fornecedor abertas', v: NF.format(abertas), sub: 'em andamento, pendentes e atrasadas', c: MOD.RNC.c, go: goR({ status: ['Em Andamento', 'Pendente', 'Atrasado'] }) })}
-        ${kpiHTML({ l: 'RNC fornecedor atrasadas', v: NF.format(st('Atrasado')), sub: 'passaram do prazo final', c: MOD.RNC.c, cls: st('Atrasado') ? 'crit' : '', go: goR({ status: ['Atrasado'] }) })}
-        ${kpiHTML({ l: 'Lotes no mês', v: NF.format(avMes.length), sub: MESES_L[o.m - 1] + ' de ' + o.y, c: MOD.AV.c, go: { v: 'av', f: mesAt } })}
+        ${kpiHTML({ l: 'RNC fornecedor abertas', v: NF.format(abertas), sub: 'em andamento, pendentes e atrasadas', c: MOD.RNC.c, pct: [abertas, M.rnc.length, 'do total', ''], go: goR({ status: ['Em Andamento', 'Pendente', 'Atrasado'] }) })}
+        ${kpiHTML({ l: 'RNC fornecedor atrasadas', v: NF.format(st('Atrasado')), sub: 'passaram do prazo final', c: MOD.RNC.c, pct: [st('Atrasado'), abertas, 'das abertas', 'crit'], cls: st('Atrasado') ? 'crit' : '', go: goR({ status: ['Atrasado'] }) })}
+        ${kpiHTML({ l: 'Lotes no mês', v: NF.format(avMes.length), sub: MESES_L[o.m - 1] + ' de ' + o.y, c: MOD.AV.c, pct: [avMes.filter(semCert).length, avMes.length, 'sem certificado', 'warn'], go: { v: 'av', f: mesAt } })}
         ${kpiHTML({ l: 'Serviços no mês', v: NF.format(svMes.length), sub: MESES_L[o.m - 1] + ' de ' + o.y, c: MOD.SERV.c, go: { v: 'serv', f: mesAt } })}
-        ${kpiHTML({ l: 'Calibrações vencidas', v: NF.format(insSt('VENCIDO')), sub: 'instrumentos em uso', c: MOD.INS.c, cls: insSt('VENCIDO') ? 'crit' : 'ok', go: goC({ status: ['VENCIDO'] }) })}
-        ${kpiHTML({ l: 'RNC cliente abertas', v: NF.format((M.rncc || []).filter((x) => x.aberta).length), sub: (M.rncc || []).filter((x) => x.status === 'Atrasado').length + ' atrasada(s)', c: MOD.RNCC.c, cls: (M.rncc || []).some((x) => x.status === 'Atrasado') ? 'crit' : '', go: { v: 'rncc', f: { status: ['Em Andamento', 'Pendente', 'Atrasado'] } } })}
-        ${kpiHTML({ l: 'Vencem em até 30 dias', v: NF.format(proxN), sub: 'atenção, próximo e hoje', c: MOD.INS.c, go: goC({ status: ['ATENÇÃO', 'PRÓXIMO DO VENCIMENTO', 'VENCE HOJE'] }) })}
+        ${kpiHTML({ l: 'Calibrações vencidas', v: NF.format(insSt('VENCIDO')), sub: 'instrumentos em uso', c: MOD.INS.c, pct: [insSt('VENCIDO'), M.ins.filter((x) => x.status !== 'FORA DE USO' && x.status !== 'MANUTENÇÃO').length, 'dos instrumentos em uso', 'crit'], cls: insSt('VENCIDO') ? 'crit' : 'ok', go: goC({ status: ['VENCIDO'] }) })}
+        ${kpiHTML({ l: 'RNC cliente abertas', v: NF.format((M.rncc || []).filter((x) => x.aberta).length), sub: (M.rncc || []).filter((x) => x.status === 'Atrasado').length + ' atrasada(s)', c: MOD.RNCC.c, pct: [(M.rncc || []).filter((x) => x.aberta).length, (M.rncc || []).length, 'do total', ''], cls: (M.rncc || []).some((x) => x.status === 'Atrasado') ? 'crit' : '', go: { v: 'rncc', f: { status: ['Em Andamento', 'Pendente', 'Atrasado'] } } })}
+        ${kpiHTML({ l: 'Vencem em até 30 dias', v: NF.format(proxN), sub: 'atenção, próximo e hoje', c: MOD.INS.c, pct: [proxN, M.ins.filter((x) => x.status !== 'FORA DE USO' && x.status !== 'MANUTENÇÃO').length, 'dos instrumentos em uso', 'warn'], go: goC({ status: ['ATENÇÃO', 'PRÓXIMO DO VENCIMENTO', 'VENCE HOJE'] }) })}
       </div>
       <section class="sec">${band('RNC', 'Indicadores de RNC de fornecedor')}<div class="block"><div class="body">
         <div class="kpis sm">
           ${kpiHTML({ l: 'Total', v: NF.format(M.rnc.length), c: MOD.RNC.c, go: goR({}) })}
-          ${kpiHTML({ l: 'Em andamento', v: NF.format(st('Em Andamento')), c: MOD.RNC.c, go: goR({ status: ['Em Andamento'] }) })}
-          ${kpiHTML({ l: 'Pendentes', v: NF.format(st('Pendente')), sub: 'após o prazo de disposição', c: MOD.RNC.c, cls: st('Pendente') ? 'warn' : '', go: goR({ status: ['Pendente'] }) })}
-          ${kpiHTML({ l: 'Atrasadas', v: NF.format(st('Atrasado')), sub: 'após o prazo final', c: MOD.RNC.c, cls: st('Atrasado') ? 'crit' : '', go: goR({ status: ['Atrasado'] }) })}
-          ${kpiHTML({ l: 'Concluídas', v: NF.format(st('Concluida')), c: MOD.RNC.c, go: goR({ status: ['Concluida'] }) })}
-          ${kpiHTML({ l: 'Canceladas', v: NF.format(st('Cancelada')), c: MOD.RNC.c, go: goR({ status: ['Cancelada'] }) })}
+          ${kpiHTML({ l: 'Em andamento', v: NF.format(st('Em Andamento')), c: MOD.RNC.c, pct: [st('Em Andamento'), M.rnc.length, 'do total', ''], go: goR({ status: ['Em Andamento'] }) })}
+          ${kpiHTML({ l: 'Pendentes', v: NF.format(st('Pendente')), sub: 'após o prazo de disposição', c: MOD.RNC.c, pct: [st('Pendente'), M.rnc.length, 'do total', 'warn'], cls: st('Pendente') ? 'warn' : '', go: goR({ status: ['Pendente'] }) })}
+          ${kpiHTML({ l: 'Atrasadas', v: NF.format(st('Atrasado')), sub: 'após o prazo final', c: MOD.RNC.c, pct: [st('Atrasado'), M.rnc.length, 'do total', 'crit'], cls: st('Atrasado') ? 'crit' : '', go: goR({ status: ['Atrasado'] }) })}
+          ${kpiHTML({ l: 'Concluídas', v: NF.format(st('Concluida')), c: MOD.RNC.c, pct: [st('Concluida'), M.rnc.length, 'do total', 'ok'], go: goR({ status: ['Concluida'] }) })}
+          ${kpiHTML({ l: 'Canceladas', v: NF.format(st('Cancelada')), c: MOD.RNC.c, pct: [st('Cancelada'), M.rnc.length, 'do total', ''], go: goR({ status: ['Cancelada'] }) })}
           ${kpiHTML({ l: 'Tempo médio de fechamento', v: NF1.format(tm), sub: 'dias corridos', c: MOD.RNC.c })}
-          ${kpiHTML({ l: 'Reincidências', v: NF.format(M.rnc.filter((x) => x.reinc === 'Sim').length), sub: 'mesmo fornecedor e motivo', c: MOD.RNC.c, go: goR({ reinc: 'Sim' }) })}
+          ${kpiHTML({ l: 'Reincidências', v: NF.format(M.rnc.filter((x) => x.reinc === 'Sim').length), sub: 'mesmo fornecedor e motivo', c: MOD.RNC.c, pct: [M.rnc.filter((x) => x.reinc === 'Sim').length, M.rnc.length, 'do total', ''], go: goR({ reinc: 'Sim' }) })}
         </div>
         <div class="charts">
           ${chartHTML('RNC abertas por mês', colsHTML(ser(M.rnc, mb12), MOD.RNC.c), 'últimos 12 meses')}
@@ -4111,11 +4160,11 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
           ${kpiHTML({ l: 'Total de lotes', v: NF.format(M.av.length), sub: NF.format(nNotas(M.av)) + ' notas fiscais', c: MOD.AV.c, go: { v: 'av', f: {} } })}
           ${kpiHTML({ l: 'Lotes no mês atual', v: NF.format(avMes.length), c: MOD.AV.c, go: { v: 'av', f: mesAt } })}
           ${kpiHTML({ l: 'Notas fiscais no mês', v: NF.format(nNotas(avMes)), sub: `${NF.format(avMes.length)} lotes · mês anterior: ${NF.format(nNotas(M.av.filter((x) => inRange(x.data, p0, p1))))} notas`, c: MOD.AV.c, go: { v: 'av', f: mesAt } })}
-          ${kpiHTML({ l: 'Lotes sem certificado', v: NF.format(semCertAV), sub: 'certificado "*" ou vazio', c: MOD.AV.c, go: { v: 'av', f: { cert: 'sem' } } })}
+          ${kpiHTML({ l: 'Lotes sem certificado', v: NF.format(semCertAV), sub: 'certificado "*" ou vazio', c: MOD.AV.c, pct: [semCertAV, M.av.length, 'do total', 'warn'], go: { v: 'av', f: { cert: 'sem' } } })}
           ${kpiHTML({ l: 'Com certificado', v: (M.av.length ? NF1.format((1 - semCertAV / M.av.length) * 100) : '0') + '%', c: MOD.AV.c })}
-          ${kpiHTML({ l: 'Com retrabalho', v: NF.format(M.av.filter((x) => E.low(x.retrab) === 'sim').length), c: MOD.AV.c, go: { v: 'av', f: { retrab: 'SIM' } } })}
+          ${kpiHTML({ l: 'Com retrabalho', v: NF.format(M.av.filter((x) => E.low(x.retrab) === 'sim').length), c: MOD.AV.c, pct: [M.av.filter((x) => E.low(x.retrab) === 'sim').length, M.av.length, 'do total', ''], go: { v: 'av', f: { retrab: 'SIM' } } })}
           ${kpiHTML({ l: 'Aprovação na inspeção', v: insp.n ? NF1.format(insp.ok / insp.n * 100) + '%' : '—', sub: insp.n ? `${NF.format(insp.rep)} reprovado(s)${concL.length ? ' (' + NF.format(concL.length) + ' sob concessão)' : ''} de ${NF.format(insp.n)} inspecionados` : 'sem resultado registrado', c: MOD.AV.c, cls: insp.rep ? 'warn' : '', go: insp.rep ? { v: 'av', f: { insp: 'Reprovado' } } : null })}
-          ${concL.length ? kpiHTML({ l: 'Liberados sob concessão', v: NF.format(concL.length), sub: `${NF.format(concMes.length)} no mês atual · reprovados usados com autorização`, c: MOD.AV.c, cls: 'warn', go: { v: 'av', f: { insp: CONC } } }) : ''}
+          ${concL.length ? kpiHTML({ l: 'Liberados sob concessão', v: NF.format(concL.length), sub: `${NF.format(concMes.length)} no mês atual · reprovados usados com autorização`, c: MOD.AV.c, pct: [concL.length, insp.rep, 'dos reprovados', 'warn'], cls: 'warn', go: { v: 'av', f: { insp: CONC } } }) : ''}
         </div>
         <div class="charts">
           <div class="chart"><h3>${S.avSerie === 'notas' ? 'Notas fiscais recebidas por mês' : 'Lotes recebidos por mês'}<small>últimos 12 meses</small><span class="seg mini" role="group" aria-label="Mostrar"><button type="button" data-act="av-serie" data-key="lotes" aria-pressed="${S.avSerie !== 'notas'}">Lotes</button><button type="button" data-act="av-serie" data-key="notas" aria-pressed="${S.avSerie === 'notas'}">Notas</button></span></h3>${colsHTML(S.avSerie === 'notas' ? mb12.map((m) => ({ label: m.label, tip: MESES_L[m.m - 1] + ' ' + m.y + ' · notas', value: nNotas(M.av.filter((x) => inRange(x.data, m.start, m.end))) })) : ser(M.av, mb12), MOD.AV.c)}</div>
@@ -4129,7 +4178,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
           ${kpiHTML({ l: 'Total de serviços', v: NF.format(M.serv.length), c: MOD.SERV.c, go: { v: 'serv', f: {} } })}
           ${kpiHTML({ l: 'No mês atual', v: NF.format(svMes.length), c: MOD.SERV.c, go: { v: 'serv', f: mesAt } })}
           ${kpiHTML({ l: 'No mês anterior', v: NF.format(M.serv.filter((x) => inRange(x.data, p0, p1)).length), c: MOD.SERV.c, go: { v: 'serv', f: mesAn } })}
-          ${kpiHTML({ l: 'Sem certificado', v: NF.format(M.serv.filter(semCert).length), sub: 'certificado "*" ou vazio', c: MOD.SERV.c, go: { v: 'serv', f: { cert: 'sem' } } })}
+          ${kpiHTML({ l: 'Sem certificado', v: NF.format(M.serv.filter(semCert).length), sub: 'certificado "*" ou vazio', c: MOD.SERV.c, pct: [M.serv.filter(semCert).length, M.serv.length, 'do total', 'warn'], go: { v: 'serv', f: { cert: 'sem' } } })}
         </div>
         <div class="charts">
           ${chartHTML('Serviços por mês', colsHTML(ser(M.serv, monthsBack(6)), MOD.SERV.c), 'últimos 6 meses')}
@@ -4139,11 +4188,11 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       <section class="sec">${band('INS', 'Indicadores de calibração')}<div class="block"><div class="body">
         <div class="kpis sm">
           ${kpiHTML({ l: 'Total de instrumentos', v: NF.format(M.ins.length), c: MOD.INS.c, go: goC({}) })}
-          ${kpiHTML({ l: 'Calibrações em dia', v: NF.format(insSt('CONFORME')), c: MOD.INS.c, cls: 'ok', go: goC({ status: ['CONFORME'] }) })}
-          ${kpiHTML({ l: 'Próximas do vencimento', v: NF.format(proxN), c: MOD.INS.c, cls: proxN ? 'warn' : '', go: goC({ status: ['ATENÇÃO', 'PRÓXIMO DO VENCIMENTO', 'VENCE HOJE'] }) })}
-          ${kpiHTML({ l: 'Vencidas', v: NF.format(insSt('VENCIDO')), c: MOD.INS.c, cls: insSt('VENCIDO') ? 'crit' : '', go: goC({ status: ['VENCIDO'] }) })}
-          ${kpiHTML({ l: 'Em manutenção', v: NF.format(insSt('MANUTENÇÃO')), c: MOD.INS.c, go: goC({ status: ['MANUTENÇÃO'] }) })}
-          ${kpiHTML({ l: 'Fora de uso', v: NF.format(insSt('FORA DE USO')), c: MOD.INS.c, go: goC({ status: ['FORA DE USO'] }) })}
+          ${kpiHTML({ l: 'Calibrações em dia', v: NF.format(insSt('CONFORME')), c: MOD.INS.c, pct: [insSt('CONFORME'), M.ins.length, 'dos instrumentos', 'ok'], cls: 'ok', go: goC({ status: ['CONFORME'] }) })}
+          ${kpiHTML({ l: 'Próximas do vencimento', v: NF.format(proxN), c: MOD.INS.c, pct: [proxN, M.ins.length, 'dos instrumentos', 'warn'], cls: proxN ? 'warn' : '', go: goC({ status: ['ATENÇÃO', 'PRÓXIMO DO VENCIMENTO', 'VENCE HOJE'] }) })}
+          ${kpiHTML({ l: 'Vencidas', v: NF.format(insSt('VENCIDO')), c: MOD.INS.c, pct: [insSt('VENCIDO'), M.ins.length, 'dos instrumentos', 'crit'], cls: insSt('VENCIDO') ? 'crit' : '', go: goC({ status: ['VENCIDO'] }) })}
+          ${kpiHTML({ l: 'Em manutenção', v: NF.format(insSt('MANUTENÇÃO')), c: MOD.INS.c, pct: [insSt('MANUTENÇÃO'), M.ins.length, 'dos instrumentos', ''], go: goC({ status: ['MANUTENÇÃO'] }) })}
+          ${kpiHTML({ l: 'Fora de uso', v: NF.format(insSt('FORA DE USO')), c: MOD.INS.c, pct: [insSt('FORA DE USO'), M.ins.length, 'dos instrumentos', ''], go: goC({ status: ['FORA DE USO'] }) })}
         </div>
         <div class="charts">
           ${chartHTML('Vencimentos nos próximos 12 meses', colsHTML(prox, MOD.INS.c), 'sem os fora de uso')}
@@ -4893,12 +4942,12 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       ${nada ? okSeal('Nenhum alerta urgente', 'Sem RNC atrasada, calibração vencida ou lote sem certificado. Tudo certo por aqui.') : ''}
       <div class="kpis">
         ${vis('rnc') && pendLots().length ? kpiHTML({ l: 'Lotes aguardando decisão', v: NF.format(pendLots().length), sub: 'reprovados e bloqueados', c: MOD.RNC.c, cls: 'crit' }) : ''}
-        ${kpiHTML({ l: 'RNC fornecedor atrasadas', v: NF.format(atras.length), sub: 'passaram do prazo final', c: MOD.RNC.c, cls: atras.length ? 'crit' : 'ok' })}
-        ${kpiHTML({ l: 'Disposição vencida', v: NF.format(dispV.length), sub: 'sem disposição após o prazo', c: MOD.RNC.c, cls: dispV.length ? 'warn' : 'ok' })}
-        ${kpiHTML({ l: 'Prazo em até 3 dias úteis', v: NF.format(soon.length), sub: 'próxima etapa da RNC', c: MOD.RNC.c })}
-        ${kpiHTML({ l: 'Calibrações vencidas', v: NF.format(lanes[0].l.length + lanes[1].l.length), sub: 'inclui as que vencem hoje', c: MOD.INS.c, cls: lanes[0].l.length + lanes[1].l.length ? 'crit' : 'ok' })}
-        ${kpiHTML({ l: 'Lotes sem certificado', v: NF.format(sem.length), sub: 'recebidos nos últimos 30 dias', c: MOD.AV.c, cls: sem.length ? 'warn' : 'ok' })}
-        ${kpiHTML({ l: 'RNC cliente: resposta vencida', v: NF.format((M.rncc || []).filter((x) => x.aberta && x.respData == null && x.prazoResp != null && S.today > x.prazoResp).length), sub: 'cliente ainda sem retorno', c: MOD.RNCC.c, cls: (M.rncc || []).some((x) => x.aberta && x.respData == null && x.prazoResp != null && S.today > x.prazoResp) ? 'crit' : 'ok' })}
+        ${kpiHTML({ l: 'RNC fornecedor atrasadas', v: NF.format(atras.length), sub: 'passaram do prazo final', c: MOD.RNC.c, pct: [atras.length, ab.length, 'das abertas', 'crit'], cls: atras.length ? 'crit' : 'ok' })}
+        ${kpiHTML({ l: 'Disposição vencida', v: NF.format(dispV.length), sub: 'sem disposição após o prazo', c: MOD.RNC.c, pct: [dispV.length, ab.length, 'das abertas', 'warn'], cls: dispV.length ? 'warn' : 'ok' })}
+        ${kpiHTML({ l: 'Prazo em até 3 dias úteis', v: NF.format(soon.length), sub: 'próxima etapa da RNC', c: MOD.RNC.c, pct: [soon.length, ab.length, 'das abertas', ''] })}
+        ${kpiHTML({ l: 'Calibrações vencidas', v: NF.format(lanes[0].l.length + lanes[1].l.length), sub: 'inclui as que vencem hoje', c: MOD.INS.c, pct: [lanes[0].l.length + lanes[1].l.length, act.length, 'dos instrumentos', 'crit'], cls: lanes[0].l.length + lanes[1].l.length ? 'crit' : 'ok' })}
+        ${kpiHTML({ l: 'Lotes sem certificado', v: NF.format(sem.length), sub: 'recebidos nos últimos 30 dias', c: MOD.AV.c, pct: [sem.length, M.av.filter((x) => x.data != null && x.data >= S.today - 30).length, 'dos lotes de 30 dias', 'warn'], cls: sem.length ? 'warn' : 'ok' })}
+        ${kpiHTML({ l: 'RNC cliente: resposta vencida', v: NF.format((M.rncc || []).filter((x) => x.aberta && x.respData == null && x.prazoResp != null && S.today > x.prazoResp).length), sub: 'cliente ainda sem retorno', c: MOD.RNCC.c, pct: [(M.rncc || []).filter((x) => x.aberta && x.respData == null && x.prazoResp != null && S.today > x.prazoResp).length, (M.rncc || []).filter((x) => x.aberta).length, 'das abertas', 'crit'], cls: (M.rncc || []).some((x) => x.aberta && x.respData == null && x.prazoResp != null && S.today > x.prazoResp) ? 'crit' : 'ok' })}
       </div>
       ${pendQueueHTML()}
       <section class="sec">${band('RNC', 'RNC de fornecedor em aberto · próxima etapa')}<div class="block"><div class="body">
@@ -5779,7 +5828,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
           <div class="twrap"><table class="t ptab"><thead><tr><th class="nosort">Setor</th><th class="nosort">E-mail(s)</th><th class="nosort"></th></tr></thead><tbody id="se-body">${Object.entries(c.SETOR_EMAILS || {}).sort((a, b) => a[0].localeCompare(b[0], 'pt-BR')).map(([n, e]) => feRow(n, e, ro, 'dl-se', 'nome do setor')).join('')}</tbody></table></div>
           <label class="field" style="max-width:640px"><span>Cópia nas cobranças de RNC atrasada (ex.: gestor)</span><input class="inp" id="cfg-ccatraso" value="${esc(c.RNC_CC_ATRASO || '')}" placeholder="gestor@acosvital.com.br" ${ro ? 'disabled' : ''}></label>
         </div></div></div></section>`)}
-      ${sec('logo', `<section class="sec">${band('GERAL', 'Logo e Drive')}<div class="block"><div class="body">
+      ${sec('logo', `<section class="sec">${band('GERAL', 'Aparência, logo e Drive')}<div class="block"><div class="body">
+        ${canTheme() ? `<div class="fsec" id="cfg-tema"><h3>Modo escuro</h3><p class="use" style="margin:0">Só para o dono e os administradores. A escolha é sua: vale para a sua conta, no computador e no celular, e não muda nada para as outras pessoas. Etiquetas, impressão e relatórios continuam brancos.</p><div class="seg" id="tema-seg" role="group" aria-label="Modo escuro"><button type="button" data-tema="escuro" aria-pressed="${document.documentElement.dataset.theme === 'dark'}">Ligado</button><button type="button" data-tema="claro" aria-pressed="${document.documentElement.dataset.theme !== 'dark'}">Desligado</button></div></div>` : ''}
         <div class="fsec" id="cfg-logo-sec"><h3>Logo da empresa</h3>
           <p class="use" style="margin:0">Aparece no menu, na tela de entrada e no cabeçalho do Relatório mensal. PNG, JPG ou SVG — a Central reduz o tamanho automaticamente. Vale na hora para toda a equipe.</p>
           <div class="cfg-logo"><div class="lp">${DB.logo ? `<img src="${DB.logo}" alt="Logo atual">` : '<span class="muted">sem logo</span>'}</div>${roA ? '' : `<input type="file" id="logo-file" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden><button class="btn small" type="button" id="logo-up">${DB.logo ? 'Trocar logo' : 'Enviar logo'}</button>${DB.logo ? '<button class="btn small ghost" type="button" id="logo-del">Remover logo</button>' : ''}`}</div>
@@ -5815,6 +5865,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const sea = $('#se-add'); if (sea) sea.onclick = () => { seb.insertAdjacentHTML('afterbegin', feRow('', '', false, 'dl-se', 'nome do setor')); dirty(seb); seb.querySelector('.fe-n').focus(); };
     $('#cfg-ccatraso').addEventListener('input', (e) => dirty(e.target));
     wireLogo();
+    $$('#tema-seg [data-tema]').forEach((b) => { b.onclick = async () => { $$('#tema-seg [data-tema]').forEach((x) => x.setAttribute('aria-pressed', x === b)); await setTheme(b.dataset.tema); toast(b.dataset.tema === 'escuro' ? 'Modo escuro ligado.' : 'Modo escuro desligado.'); }; });
     if (S.cfgFocus) { const fo = S.cfgFocus; S.cfgFocus = null; if (/^forn:/.test(fo)) setTimeout(() => entDrawer('forn', fo.slice(5), mode === 'ver'), 80); else { const el = $('#' + fo); if (el) setTimeout(() => el.scrollIntoView({ block: 'start', behavior: 'smooth' }), 60); } }
     const fg = $('#fer-gen'); if (fg) fg.onclick = () => {
       const y = +$('#fer-ano').value, ta2 = $('#cfg-FERIADOS');
@@ -5828,7 +5879,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     wireReset();
   };
   /* ---------- funcionários (cadastro único usado por todos os módulos) ---------- */
-  const CFG_TABS = [['geral', 'Geral'], ['func', 'Funcionários'], ['forn', 'Fornecedores'], ['cli', 'Clientes'], ['av', 'Lotes (AV)', 'AV'], ['serv', 'Serviços', 'SERV'], ['rnc', 'RNC Fornecedor', 'RNC'], ['rncc', 'RNC Cliente', 'RNCC'], ['cal', 'Calibração', 'INS'], ['emails', 'E-mails'], ['logo', 'Logo e Drive'], ['zero', 'Começar do zero']];
+  const CFG_TABS = [['geral', 'Geral'], ['func', 'Funcionários'], ['forn', 'Fornecedores'], ['cli', 'Clientes'], ['av', 'Lotes (AV)', 'AV'], ['serv', 'Serviços', 'SERV'], ['rnc', 'RNC Fornecedor', 'RNC'], ['rncc', 'RNC Cliente', 'RNCC'], ['cal', 'Calibração', 'INS'], ['emails', 'E-mails'], ['logo', 'Aparência, logo e Drive'], ['zero', 'Começar do zero']];
   const FUNC_COR = { conferente: 'var(--av)', emissor: 'var(--rnc)', comprador: 'var(--serv)', resp_cal: 'var(--cal)' };
   const FUNC_USO = { conferente: [['AV', 'conf']], emissor: [['RNC', 'emissor']], comprador: [['RNC', 'comprador']], resp_cal: [['INS', 'resp']] };
   const FUNC_ONDE = { conferente: 'Conferido por (lotes)', emissor: 'Emissor (RNC)', comprador: 'Comprador (RNC)', resp_cal: 'Responsável (calibração)' };
@@ -6663,9 +6714,9 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       ${info}
       <div class="kpis">
         ${kpiHTML({ l: 'Itens ativos', v: NF.format(A.length), sub: `${NF.format(pvs.size)} PVs · sem os cancelados`, c: C, go: goA({ sit: 'ativos' }) })}
-        ${kpiHTML({ l: 'Prontos', v: NF.format(R.length), sub: A.length ? NF1.format(R.length / A.length * 100) + '% dos ativos' : '', c: C, cls: 'ok', go: goA({ sit: 'pronto' }) })}
-        ${kpiHTML({ l: 'Pendentes', v: NF.format(P.length), sub: 'ainda não prontos para entrega', c: C, go: goA({ sit: 'pend' }) })}
-        ${kpiHTML({ l: 'Atrasados', v: NF.format(atras), sub: 'prazo de entrega já passou', c: C, cls: atras ? 'crit' : 'ok', go: goA({ sit: 'atras' }) })}
+        ${kpiHTML({ l: 'Prontos', v: NF.format(R.length), sub: 'prontos para entrega', c: C, pct: [R.length, A.length, 'dos ativos', 'ok'], cls: 'ok', go: goA({ sit: 'pronto' }) })}
+        ${kpiHTML({ l: 'Pendentes', v: NF.format(P.length), sub: 'ainda não prontos para entrega', c: C, pct: [P.length, A.length, 'dos ativos', ''], go: goA({ sit: 'pend' }) })}
+        ${kpiHTML({ l: 'Atrasados', v: NF.format(atras), sub: 'prazo de entrega já passou', c: C, pct: [atras, A.length, 'dos ativos', 'crit'], cls: atras ? 'crit' : 'ok', go: goA({ sit: 'atras' }) })}
         ${temVal ? kpiHTML({ l: 'Valor pendente', v: BRLC.format(valP), sub: BRL.format(valP) + ' · soma da coluna Valor dos pendentes', c: C }) : ''}
       </div>
       ${sec('Fluxo dos pedidos', `<div class="charts">
@@ -7100,8 +7151,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
         ${kpiHTML({ l: 'Mês passado', v: NF.format(sumQ(repP)), sub: `${MESES_L[(o.m + 10) % 12]} · ${nDias(repP)} dia(s) · média ${NF1.format(nDias(repP) ? sumQ(repP) / nDias(repP) : 0)}/dia`, c: C })}
         ${kpiHTML({ l: 'Em aberto', v: NF.format(aberto.length), sub: 'aguardando inspeção, acabamento, sinete ou pedido incompleto', c: C, cls: aberto.length ? 'warn' : 'ok', go: goU({ sit: 'aberto' }) })}
         ${kpiHTML({ l: 'Incompletos', v: NF.format(incomp.length), sub: incomp.length ? 'pedido incompleto, parado em média há ' + NF.format(Math.round(incomp.reduce((s, x) => s + (x.dias || 0), 0) / incomp.length)) + ' dias' : '', c: C, cls: incomp.length ? 'warn' : 'ok', go: goU({ etapa: (incomp[0] || {}).l || '' }) })}
-        ${kpiHTML({ l: 'Aprovados / liberados', v: NF.format(aprov.length), c: C, cls: 'ok', go: goU({ sit: 'aprovado' }) })}
-        ${kpiHTML({ l: 'Reprovados', v: NF.format(reprov.length), c: C, cls: reprov.length ? 'crit' : 'ok', go: goU({ sit: 'reprovado' }) })}
+        ${kpiHTML({ l: 'Aprovados / liberados', v: NF.format(aprov.length), c: C, pct: [aprov.length, aprov.length + reprov.length, 'dos inspecionados', 'ok'], cls: 'ok', go: goU({ sit: 'aprovado' }) })}
+        ${kpiHTML({ l: 'Reprovados', v: NF.format(reprov.length), c: C, pct: [reprov.length, aprov.length + reprov.length, 'dos inspecionados', 'crit'], cls: reprov.length ? 'crit' : 'ok', go: goU({ sit: 'reprovado' }) })}
       </div>
       ${sec('Produção da inspeção', `<div class="charts">
         ${chartHTML('PVs inspecionados por dia', colsHTML(serDia, C), 'relatório diário · últimos 30 dias, sem domingos')}
@@ -7201,7 +7252,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const tbl = (rows, cols) => rows.length ? `<div class="twrap"><table class="t"><thead><tr>${cols.map((c) => `<th class="nosort">${esc(c.l)}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr>${cols.map((c) => `<td>${c.f(r)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '<div class="empty">Nenhum registro.</div>';
     return `<div class="report" id="report">
       <div class="rephead">${DB.logo ? `<img class="replogo" src="${DB.logo}" alt="Logo da empresa">` : ''}<span class="mtag" style="--c:var(--geral)">Aços Vital · Qualidade</span><h2>Relatório mensal da Qualidade — ${MESES_L[m - 1]} de ${y}</h2><p class="muted" style="margin:6px 0 0">Gerado em ${fD(S.today)} a partir do banco da Central da Qualidade.</p></div>
-      <div class="kpis sm">${kpiHTML({ l: 'Lotes recebidos', v: NF.format(av.length), c: MOD.AV.c })}${kpiHTML({ l: 'Notas fiscais recebidas', v: NF.format(nNotas(av)), c: MOD.AV.c })}${(() => { const n = S.model.av.filter((x) => { const cc = lotSt(x).conc; return cc && inRange(cc.data, a, b); }).length; return n ? kpiHTML({ l: 'Liberados sob concessão', v: NF.format(n), c: MOD.AV.c, cls: 'warn' }) : ''; })()}${kpiHTML({ l: 'Lotes sem certificado', v: NF.format(semC), c: MOD.AV.c, cls: semC ? 'warn' : '' })}${kpiHTML({ l: 'Serviços', v: NF.format(sv.length), c: MOD.SERV.c })}${kpiHTML({ l: 'RNC fornecedor abertas no mês', v: NF.format(rnA.length), c: MOD.RNC.c })}${kpiHTML({ l: 'RNC fornecedor concluídas', v: NF.format(rnC.length), c: MOD.RNC.c })}${kpiHTML({ l: 'Tempo médio de fechamento', v: fech.length ? NF1.format(fech.reduce((p, q) => p + q, 0) / fech.length) : '—', sub: 'dias, das concluídas no mês', c: MOD.RNC.c })}${kpiHTML({ l: 'RNC cliente abertas no mês', v: NF.format(rcA.length), c: MOD.RNCC.c })}${kpiHTML({ l: 'RNC cliente concluídas', v: NF.format(rcC.length), c: MOD.RNCC.c })}${kpiHTML({ l: 'Tempo médio de resposta', v: rcR.length ? NF1.format(rcR.reduce((p, q) => p + q.diasResposta, 0) / rcR.length) : '—', sub: 'dias, das respondidas no mês', c: MOD.RNCC.c })}${kpiHTML({ l: 'Calibrações realizadas', v: NF.format(cal.length), c: MOD.INS.c })}${kpiHTML({ l: 'Vencem no mês seguinte', v: NF.format(venceProx.length), c: MOD.INS.c })}</div>
+      <div class="kpis sm">${kpiHTML({ l: 'Lotes recebidos', v: NF.format(av.length), c: MOD.AV.c })}${kpiHTML({ l: 'Notas fiscais recebidas', v: NF.format(nNotas(av)), c: MOD.AV.c })}${(() => { const n = S.model.av.filter((x) => { const cc = lotSt(x).conc; return cc && inRange(cc.data, a, b); }).length; return n ? kpiHTML({ l: 'Liberados sob concessão', v: NF.format(n), c: MOD.AV.c, pct: [n, av.length, 'dos lotes do mês', 'warn'], cls: 'warn' }) : ''; })()}${kpiHTML({ l: 'Lotes sem certificado', v: NF.format(semC), c: MOD.AV.c, pct: [semC, av.length, 'dos lotes do mês', 'warn'], cls: semC ? 'warn' : '' })}${kpiHTML({ l: 'Serviços', v: NF.format(sv.length), c: MOD.SERV.c })}${kpiHTML({ l: 'RNC fornecedor abertas no mês', v: NF.format(rnA.length), c: MOD.RNC.c })}${kpiHTML({ l: 'RNC fornecedor concluídas', v: NF.format(rnC.length), c: MOD.RNC.c })}${kpiHTML({ l: 'Tempo médio de fechamento', v: fech.length ? NF1.format(fech.reduce((p, q) => p + q, 0) / fech.length) : '—', sub: 'dias, das concluídas no mês', c: MOD.RNC.c })}${kpiHTML({ l: 'RNC cliente abertas no mês', v: NF.format(rcA.length), c: MOD.RNCC.c })}${kpiHTML({ l: 'RNC cliente concluídas', v: NF.format(rcC.length), c: MOD.RNCC.c })}${kpiHTML({ l: 'Tempo médio de resposta', v: rcR.length ? NF1.format(rcR.reduce((p, q) => p + q.diasResposta, 0) / rcR.length) : '—', sub: 'dias, das respondidas no mês', c: MOD.RNCC.c })}${kpiHTML({ l: 'Calibrações realizadas', v: NF.format(cal.length), c: MOD.INS.c })}${kpiHTML({ l: 'Vencem no mês seguinte', v: NF.format(venceProx.length), c: MOD.INS.c, pct: [venceProx.length, M.ins.filter((x) => x.status !== 'FORA DE USO').length, 'dos instrumentos', 'warn'] })}</div>
       <div class="rgrid">
         <div style="--c:var(--av)"><h3>Recebimento · top fornecedores</h3>${barsHTML(countBy(av, (x) => x.forn), MOD.AV.c, { max: 10 })}</div>
         <div style="--c:var(--av)"><h3>Recebimento · por filial</h3>${barsHTML(countBy(av, (x) => x.filial), MOD.AV.c)}</div>
