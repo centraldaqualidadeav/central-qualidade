@@ -592,6 +592,29 @@ textarea.cm-body { min-height: 260px; font-family: var(--f-mono, ui-monospace, m
 @media (max-width: 860px) { .railtop { margin: 8px 8px 0; border-radius: 10px; padding: 9px 12px; } }
 .railtop .dbcard .st { white-space: nowrap; }
 
+/* Configurações em abas */
+.cfgtabs { position: sticky; top: 0; z-index: 6; display: flex; gap: 4px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 5px; margin: 4px 0 14px; box-shadow: 0 1px 2px rgba(20, 30, 25, .04); }
+.cfgtab { display: inline-flex; align-items: center; gap: 6px; border: 0; background: transparent; border-radius: 7px; padding: 6px 11px; font: 500 13px/1.2 var(--f-body); color: var(--ink-2); cursor: pointer; position: relative; }
+.cfgtab i { width: 8px; height: 8px; border-radius: 2px; background: var(--c); }
+.cfgtab .k { font-size: 11px; font-weight: 600; color: var(--ink-3); }
+.cfgtab:hover { background: var(--surface-2); color: var(--ink); }
+.cfgtab[aria-selected="true"] { background: color-mix(in srgb, var(--c) 12%, var(--surface)); color: var(--ink); font-weight: 600; box-shadow: inset 0 -2px 0 var(--c); }
+.cfgtab.dirty::after { content: ""; position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--warn); }
+.cfgpane[hidden] { display: none; }
+.pft td { vertical-align: middle; }
+.pft .chip { margin: 1px 0; }
+.pfav { width: 24px; height: 24px; border-radius: 50%; background: var(--sunken); display: inline-grid; place-items: center; font: 700 10px/1 var(--f-body); color: var(--ink-2); margin-right: 8px; vertical-align: middle; }
+.pfform { display: grid; gap: 12px; }
+.pdf { display: flex; flex-wrap: wrap; gap: 6px; }
+.pfun { border: 1px solid var(--line-2); background: var(--surface); border-radius: 14px; padding: 4px 11px; font: 600 12.5px/1.3 var(--f-body); color: var(--ink-2); cursor: pointer; }
+.pfun[aria-pressed="true"] { background: var(--k); border-color: var(--k); color: #fff; }
+.pfun.add { border-style: dashed; color: var(--ink-3); }
+.pdnf { display: inline-flex; gap: 6px; align-items: center; } .pdnf .inp { width: 210px; padding: 4px 8px; }
+@media (max-width: 860px) { .cfgtabs { flex-wrap: nowrap; overflow-x: auto; } .cfgtab { white-space: nowrap; } }
+.pfform .seg { display: inline-flex; width: max-content; }
+
+.entbtns { display: flex; gap: 8px; align-items: flex-end; margin-left: auto; flex-wrap: wrap; }
+
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
 #fb-gate[hidden] { display: none; }
@@ -3398,7 +3421,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     c.CAL_TIPOS = (d.tipos || []).map((t) => ({ tipo: String(t.tipo).trim(), faixa: t.faixa, criterio: typeof t.faixa === 'number' ? Math.round(t.faixa / 3 * 100) / 100 : null }));
     /* listas únicas (Geral) e cadastro de pessoas alimentam as listas de cada módulo */
     const pes = Array.isArray(d.pessoas) ? d.pessoas : null;
-    const comF = (f, old) => (pes ? pes.filter((p) => (p.funcoes || []).includes(f)).map((p) => p.nome) : (l[old] || []).slice());
+    const comF = (f, old) => (pes ? pes.filter((p) => !p.inativo && (p.funcoes || []).includes(f)).map((p) => p.nome) : (l[old] || []).slice());
     c.PESSOAS = pes || [];
     c.GER_FILIAIS = (l.GER_FILIAIS || l.RNC_FILIAIS || l.AV_FILIAIS || []).slice();
     c.GER_SETORES = (l.GER_SETORES || l.RNC_DEPTOS || []).slice();
@@ -3413,7 +3436,10 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     c.RNCC_GRAVIDADE = ['Baixa', 'Média', 'Alta']; c.RNCC_PROCEDENTE = ['Em análise', 'Sim', 'Não']; c.RNCC_ORIGENS = ['Interna', 'Fornecedor', 'Transporte', 'Cliente (uso/aplicação)']; c.RNCC_EFICACIA = ['Em verificação', 'Eficaz', 'Não eficaz'];
     if (!l.AV_UNIDADES) c.AV_UNIDADES = ['PÇ', 'KG', 'M', 'M²', 'T', 'BARRA', 'UN'];
     c.AV_INSPECAO = ['Aprovado', 'Reprovado', 'Em análise', CONC];
-    c.FORN_EMAILS = {}; (Array.isArray(d.fornEmails) ? d.fornEmails : Object.entries(d.fornEmails || {}).map(([nome, email]) => ({ nome, email }))).forEach((o) => { if (o && o.nome) c.FORN_EMAILS[o.nome] = o.email || ''; });
+    c.FORN_EMAILS = {}; c.FORN_INFO = (Array.isArray(d.fornEmails) ? d.fornEmails : Object.entries(d.fornEmails || {}).map(([nome, email]) => ({ nome, email }))).filter((o) => o && o.nome);
+    c.FORN_INFO.forEach((o) => { if (o.email) c.FORN_EMAILS[o.nome] = o.email; });
+    c.CLI_INFO = (Array.isArray(d.cliEmails) ? d.cliEmails : []).filter((o) => o && o.nome);
+    c.CLI_EMAILS = {}; c.CLI_INFO.forEach((o) => { if (o.email) c.CLI_EMAILS[o.nome] = o.email; });
     c.SETOR_EMAILS = {}; (Array.isArray(d.setorEmails) ? d.setorEmails : []).forEach((o) => { if (o && o.nome) c.SETOR_EMAILS[o.nome] = o.email || ''; });
     c.RNC_CC_ATRASO = String(d.rncCcAtraso || '');
     c.RNC_NIVEL_PRAZO = ['Padrão', 'Estendido', 'Complexo']; c.CAL_SITUACAO = ['Em uso', 'Manutenção', 'Fora de uso']; c.CAL_RESULTADO = ['APROVADO', 'REPROVADO'];
@@ -4347,7 +4373,6 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const sug = [];
     const pc = pessoaEmail(x.comprador); if (pc) sug.push({ l: 'Comprador · ' + x.comprador, e: pc, to: 1 });
     const se = setorEmail(x.depto); if (se) sug.push({ l: 'Setor · ' + x.depto, e: se, to: 1 });
-    const fe = fornEmail(x.forn); if (fe) sug.push({ l: 'Fornecedor · ' + x.forn, e: fe, to: 1 });
     if (cc0) sug.push({ l: 'Cópia de RNC atrasada', e: cc0, to: 0 });
     const defTo = m.emPara || joinEm(splitEm(pc).concat(splitEm(se)));
     const defCc = m.emCc || (modelo === 'atrasada' ? cc0 : '');
@@ -4501,9 +4526,9 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   function mailForn(g) {
     const to = fornEmail(g.forn), m = fornMsg(g);
     if (to) { openMail(to, m.subject, m.body); return; }
-    openModal('Fornecedor sem e-mail', `<p style="margin:0">${esc(g.forn)} ainda não tem e-mail cadastrado. Cadastre em <b>Configurações › E-mails dos fornecedores</b> para o destinatário vir preenchido.</p><div class="formfoot"><button class="btn primary" type="button" id="mf-go">Abrir e-mail sem destinatário</button><button class="btn" type="button" id="mf-cfg">Cadastrar e-mail</button><button class="btn ghost" type="button" data-act="close">Cancelar</button></div>`);
+    openModal('Fornecedor sem e-mail', `<p style="margin:0">${esc(g.forn)} ainda não tem e-mail cadastrado. Cadastre na ficha do fornecedor (<b>Configurações › Fornecedores</b>) para o destinatário vir preenchido.</p><div class="formfoot"><button class="btn primary" type="button" id="mf-go">Abrir e-mail sem destinatário</button><button class="btn" type="button" id="mf-cfg">Cadastrar e-mail</button><button class="btn ghost" type="button" data-act="close">Cancelar</button></div>`);
     $('#mf-go').onclick = () => { closeLayer(); openMail('', m.subject, m.body); };
-    $('#mf-cfg').onclick = () => { closeLayer(); S.cfgFocus = 'FORN_EMAILS'; go('config'); };
+    $('#mf-cfg').onclick = () => { closeLayer(); S.cfgFocus = 'forn:' + g.forn; go('config'); };
   }
   function baixaCert(g) {
     openModal(`Baixa do certificado · NF ${g.nf}`, `<p style="margin:0">${esc(g.forn)} — marque os lotes que chegaram com este certificado.</p>
@@ -4663,7 +4688,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const opts = rncs.map((r) => `<option value="${esc(r.num)}">${esc(r.num)} · ${esc(r.status === 'Concluida' ? 'concluída' : 'aberta')}</option>`).join('')
       + '<option value="__nova">Abrir uma RNC nova depois de salvar</option><option value="">Sem RNC</option>';
     openModal('Liberar sob concessão · ' + (one ? x.id : `NF ${disp(x.nf) || '—'}`), `${one ? `<p style="margin:0">O lote <b>${esc(x.id)}</b> (${esc(x.desc || '')}) está <b>${esc(x.insp)}</b>. Registre quem autorizou o uso ou envio mesmo assim.</p>` : `<p style="margin:0">Marque os lotes liberados e registre quem autorizou o uso ou envio mesmo assim.</p>${lotChipsHTML(lots, new Set(lots.map((l) => l.key)), 'cc-lots')}`}
-      <datalist id="dl-conc-p">${optList((S.model.cfg.PESSOAS || []).map((pp) => pp.nome))}</datalist><datalist id="dl-conc-c">${optList(cfgL('GER_CLIENTES'))}</datalist>
+      <datalist id="dl-conc-p">${optList((S.model.cfg.PESSOAS || []).filter((pp) => !pp.inativo).map((pp) => pp.nome))}</datalist><datalist id="dl-conc-c">${optList(cliList())}</datalist>
       <div class="fgrid cm-grid"><label class="field"><span>Autorizado por <b>*</b></span><input id="cc-aut" list="dl-conc-p" autocomplete="off"></label>
       <label class="field"><span>Data da autorização <b>*</b></span><input id="cc-data" type="date" value="${E.isoDate(S.today)}"></label></div>
       <label class="field"><span>Justificativa <b>*</b></span><textarea id="cc-just" style="min-height:90px" placeholder="Por que o lote foi liberado mesmo reprovado"></textarea></label>
@@ -5133,7 +5158,9 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   /* ================= CADASTRO ================= */
   const cfgL = (n) => (S.model.cfg[n] || []).map(String);
   const uniq = (a) => { const s = new Set(), o = []; a.forEach((v) => { const k = E.low(v); if (v && !s.has(k)) { s.add(k); o.push(v); } }); return o; };
-  const fornList = () => uniq(cfgL('GER_FORNECEDORES').concat(distinct(S.model.av, (x) => x.forn), distinct(S.model.rnc, (x) => x.forn), distinct(S.model.serv, (x) => x.forn)));
+  const inativosDe = (info) => new Set((info || []).filter((o) => o.inativo).map((o) => E.key(o.nome)));
+  const fornList = () => { const ina = inativosDe(S.model.cfg.FORN_INFO); return uniq(cfgL('GER_FORNECEDORES').concat(distinct(S.model.av, (x) => x.forn), distinct(S.model.rnc, (x) => x.forn), distinct(S.model.serv, (x) => x.forn))).filter((n) => !ina.has(E.key(n))); };
+  const cliList = (extra) => { const ina = inativosDe(S.model.cfg.CLI_INFO); return uniq(cfgL('GER_CLIENTES').concat(extra || [])).filter((n) => !ina.has(E.key(n))); };
   const lst = (n, mod, f) => () => uniq(cfgL(n).concat(distinct(listOf(mod), (x) => x[f])));
   const SEC = {
     avNota: () => ({ t: 'Nota fiscal e recebimento', f: [
@@ -5165,7 +5192,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       { c: 'D', l: 'Comprador', type: 'select', opts: () => cfgL('RNC_COMPRADORES'), req: 1 }] }),
     rncId: (req) => ({ t: 'Identificação e rastreabilidade', f: [
       { c: 'G', l: 'Fornecedor', type: 'list', opts: fornList, req: req, w: 's2' },
-      { c: 'H', l: 'Cliente', type: 'list', opts: () => uniq(cfgL('GER_CLIENTES').concat(distinct(S.model.rnc, (x) => x.cliente))), w: 's2' },
+      { c: 'H', l: 'Cliente', type: 'list', opts: () => cliList(distinct(S.model.rnc, (x) => x.cliente)), w: 's2' },
       { c: 'I', l: 'Nota fiscal', type: 'text', store: 'auto' }, { c: 'J', l: 'Pedido de venda', type: 'text', store: 'auto' }, { c: 'K', l: 'Ordem de compra', type: 'text', store: 'auto' },
       { c: 'L', l: 'Depto. responsável', type: 'select', opts: () => cfgL('RNC_DEPTOS') }, { c: 'M', l: 'Motivo', type: 'select', opts: () => cfgL('RNC_MOTIVOS'), req: req },
       { c: 'AD', l: 'Abrangência da RNC', type: 'select', opts: () => ABR, req: req, help: 'Lote(s) do item: só os lotes marcados. Nota fiscal completa: todos os lotes da NF (inclusive os lançados depois). Sem lote: casos raros (documento ou certificado).' },
@@ -5183,7 +5210,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       { c: 'B', l: 'Data de abertura', type: 'date', store: 'dt', req: 1, def: () => E.isoDate(S.today) },
       { c: 'C', l: 'Filial', type: 'select', opts: () => cfgL('GER_FILIAIS'), req: 1 },
       { c: 'D', l: 'Emissor', type: 'select', opts: () => cfgL('RNC_EMISSORES'), req: 1 },
-      { c: 'E', l: 'Cliente', type: 'list', opts: () => uniq(cfgL('GER_CLIENTES').concat(distinct(S.model.rncc || [], (x) => x.cliente))), req: 1, w: 's2' },
+      { c: 'E', l: 'Cliente', type: 'list', opts: () => cliList(distinct(S.model.rncc || [], (x) => x.cliente)), req: 1, w: 's2' },
       { c: 'F', l: 'Contato no cliente', type: 'text', store: 'text', ph: 'nome / e-mail / telefone' }, { c: 'G', l: 'Canal', type: 'select', opts: () => cfgL('RNCC_CANAIS') }] }),
     rnccRast: () => ({ t: 'Rastreabilidade', f: [
       { c: 'H', l: 'NF de venda', type: 'text', store: 'auto' }, { c: 'I', l: 'Pedido de venda', type: 'text', store: 'auto' },
@@ -5727,70 +5754,68 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const lists = (mod) => CFG_LISTS.filter((l) => l[2] === mod).map(item).join('');
     const nm = (S.model.cfgDoc && S.model.cfgDoc.feriadosNomes) || {};
     const y0 = E.ymd(S.today).y;
-    const pes = (c.PESSOAS || []);
-    main.innerHTML = `<div class="view">${head('Configurações', 'Listas e parâmetros usados pelos formulários. Um item por linha. As mudanças valem para toda a equipe assim que você salvar.', ro ? '' : '<button class="btn primary" type="button" id="cfg-save">Salvar configurações</button>')}
-      ${ro ? '<div class="readonly">' + esc(TXT.cfgRo) + '</div>' : mode === 'edita' ? '<div class="readonly">Você pode alterar as listas, os feriados, os tipos de equipamento e os e-mails dos fornecedores e dos setores. Parâmetros de prazo, pessoas e logo só os administradores alteram.</div>' : ''}
-      <section class="sec">${band('GERAL', 'Geral — vale para todos os módulos')}<div class="block"><div class="body">
-        <div class="cfg">${lists('GERAL')}
+    const tabs = CFG_TABS.filter(([k, , mod]) => (k === 'zero' ? DB.owner : !mod || visMod(mod)));
+    let tab = S.cfgTab || lsGet('cq-cfg-tab', 'geral');
+    if (S.cfgFocus === 'FORN_EMAILS' || /^forn:/.test(S.cfgFocus || '')) tab = 'forn';
+    if (!tabs.some(([k]) => k === tab)) tab = 'geral';
+    S.cfgTab = tab;
+    const sec = (k, html) => `<div class="cfgpane" data-tab="${k}" ${k === tab ? '' : 'hidden'}>${html}</div>`;
+    main.innerHTML = `<div class="view">${head('Configurações', 'Escolha a seção nas abas. As mudanças valem para toda a equipe assim que você salvar.', ro ? '' : '<button class="btn primary" type="button" id="cfg-save">Salvar configurações</button>' + (roA ? '' : '<button class="btn primary" type="button" id="pf-new" hidden>+ Novo funcionário</button>'))}
+      ${ro ? '<div class="readonly">' + esc(TXT.cfgRo) + '</div>' : mode === 'edita' ? '<div class="readonly">Você pode alterar as listas, os feriados, os tipos de equipamento, os fornecedores, os clientes e os e-mails dos setores. Parâmetros de prazo, funcionários e logo só os administradores alteram.</div>' : ''}
+      <div class="cfgtabs" role="tablist" aria-label="Seções de Configurações">${tabs.map(([k, l, mod]) => `<button type="button" role="tab" class="cfgtab" data-ctab="${k}" aria-selected="${k === tab}" style="--c:${k === 'zero' ? 'var(--crit)' : mod ? MOD[mod].c : k === 'func' ? 'var(--ok)' : k === 'forn' ? 'var(--av)' : k === 'cli' ? 'var(--rncc)' : 'var(--geral)'}"><i></i>${esc(l)}${k === 'func' ? ` <span class="k">${(c.PESSOAS || []).filter((x) => !x.inativo).length}</span>` : k === 'forn' ? ` <span class="k">${NF.format((c.GER_FORNECEDORES || []).length)}</span>` : k === 'cli' ? ` <span class="k">${NF.format((c.GER_CLIENTES || []).length)}</span>` : ''}</button>`).join('')}</div>
+      ${sec('geral', `<section class="sec">${band('GERAL', 'Geral — vale para todos os módulos')}<div class="block"><div class="body">
+        <div class="cfg">${CFG_LISTS.filter((l) => l[2] === 'GERAL' && l[0] !== 'GER_FORNECEDORES' && l[0] !== 'GER_CLIENTES').map(item).join('')}
           <div class="cfgitem" data-cfg="FERIADOS"><b>Feriados</b><span class="use">Prazos de RNC em dias úteis · um por linha, dd/mm/aaaa</span>${ta('cfg-FERIADOS', (c.GER_FERIADOS || []).slice().sort((a, b) => a - b).map((s) => ferLine(s, nm[s])))}
             ${ro ? '' : `<div class="formfoot"><select class="inp" id="fer-ano" style="width:auto">${[y0, y0 + 1, y0 + 2].map((y) => `<option ${y === y0 + 1 ? 'selected' : ''}>${y}</option>`).join('')}</select><button class="btn small" type="button" id="fer-gen">Adicionar feriados do ano</button></div><span class="use">Nacionais, estadual de SP e aniversário de Mogi das Cruzes. Confira antes de salvar (Carnaval não entra).</span>`}</div>
-        </div>
-        <div class="fsec"><h3>Pessoas (${pes.length})</h3>
-          <p class="use" style="margin:0">Uma linha por pessoa. As funções marcadas definem em quais listas o nome aparece: Conferido por (lotes), Emissor e Comprador (RNC), Responsável pela análise (calibração). O e-mail do comprador entra no texto de cobrança da RNC.</p>
-          <div class="formfoot"><input class="inp" id="p-busca" type="search" placeholder="Buscar pessoa" style="max-width:260px">${roA ? '' : '<button class="btn small" type="button" id="p-add">Adicionar pessoa</button>'}</div>
-          <div class="twrap"><table class="t ptab"><thead><tr><th class="nosort">Nome</th><th class="nosort">Setor</th><th class="nosort">Filial</th><th class="nosort">E-mail</th>${FUNCOES.map(([, l]) => `<th class="nosort ctr">${esc(l)}</th>`).join('')}<th class="nosort"></th></tr></thead><tbody id="p-body">${pes.map((p, i) => pessoaRow(p, i, roA)).join('')}</tbody></table></div>
-        </div>
-        <div class="fsec" id="cfg-fornmail"><h3>E-mails dos fornecedores (${Object.keys(c.FORN_EMAILS || {}).length})</h3>
-          <p class="use" style="margin:0">Usados no botão “E-mail ao fornecedor” dos Alertas (lotes sem certificado). Para mais de um e-mail, separe com vírgula.</p>
-          ${ro ? '' : '<div class="formfoot"><button class="btn small" type="button" id="fe-add">Adicionar fornecedor</button></div>'}
-          <datalist id="dl-fe">${optList(fornList())}</datalist>
-          <div class="twrap"><table class="t ptab"><thead><tr><th class="nosort">Fornecedor</th><th class="nosort">E-mail(s)</th><th class="nosort"></th></tr></thead><tbody id="fe-body">${Object.entries(c.FORN_EMAILS || {}).sort((a, b) => a[0].localeCompare(b[0], 'pt-BR')).map(([n, e]) => feRow(n, e, ro)).join('')}</tbody></table></div>
-        </div>
+        </div></div></div></section>`)}
+      ${sec('func', `<section class="sec">${band('GERAL', 'Funcionários')}<div class="block"><div class="body" id="pf-host"></div></div></section>`)}
+      ${sec('forn', `<section class="sec">${band('AV', 'Fornecedores')}<div class="block"><div class="body" id="ent-forn"></div></div></section>`)}
+      ${sec('cli', `<section class="sec">${band('RNCC', 'Clientes')}<div class="block"><div class="body" id="ent-cli"></div></div></section>`)}
+      ${sec('emails', `<section class="sec">${band('GERAL', 'E-mails')}<div class="block"><div class="body">
         <div class="fsec" id="cfg-setormail"><h3>E-mails por setor (${Object.keys(c.SETOR_EMAILS || {}).length})</h3>
-          <p class="use" style="margin:0">Usados na cobrança da RNC de fornecedor: o setor responsável da RNC já sugere estes e-mails. Para mais de um e-mail, separe com vírgula.</p>
+          <p class="use" style="margin:0">Usados na cobrança interna da RNC de fornecedor: o setor responsável da RNC já sugere estes e-mails. Para mais de um e-mail, separe com vírgula.</p>
           ${ro ? '' : '<div class="formfoot"><button class="btn small" type="button" id="se-add">Adicionar setor</button></div>'}
           <datalist id="dl-se">${optList(cfgL('GER_SETORES'))}</datalist>
           <div class="twrap"><table class="t ptab"><thead><tr><th class="nosort">Setor</th><th class="nosort">E-mail(s)</th><th class="nosort"></th></tr></thead><tbody id="se-body">${Object.entries(c.SETOR_EMAILS || {}).sort((a, b) => a[0].localeCompare(b[0], 'pt-BR')).map(([n, e]) => feRow(n, e, ro, 'dl-se', 'nome do setor')).join('')}</tbody></table></div>
           <label class="field" style="max-width:640px"><span>Cópia nas cobranças de RNC atrasada (ex.: gestor)</span><input class="inp" id="cfg-ccatraso" value="${esc(c.RNC_CC_ATRASO || '')}" placeholder="gestor@acosvital.com.br" ${ro ? 'disabled' : ''}></label>
-        </div>
+        </div></div></div></section>`)}
+      ${sec('logo', `<section class="sec">${band('GERAL', 'Logo e Drive')}<div class="block"><div class="body">
         <div class="fsec" id="cfg-logo-sec"><h3>Logo da empresa</h3>
           <p class="use" style="margin:0">Aparece no menu, na tela de entrada e no cabeçalho do Relatório mensal. PNG, JPG ou SVG — a Central reduz o tamanho automaticamente. Vale na hora para toda a equipe.</p>
           <div class="cfg-logo"><div class="lp">${DB.logo ? `<img src="${DB.logo}" alt="Logo atual">` : '<span class="muted">sem logo</span>'}</div>${roA ? '' : `<input type="file" id="logo-file" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden><button class="btn small" type="button" id="logo-up">${DB.logo ? 'Trocar logo' : 'Enviar logo'}</button>${DB.logo ? '<button class="btn small ghost" type="button" id="logo-del">Remover logo</button>' : ''}`}</div>
         </div>
-      </div></div></section>
-      <section class="sec">${band('AV', 'Lotes (AV)')}<div class="block"><div class="body"><div class="cfg">${lists('AV')}${fixed('Retrabalho', ['Sim', 'Não'], 'Sim/Não')}${fixed('Resultado da inspeção', ['Aprovado', 'Reprovado', 'Em análise', CONC], 'lote novo já vem como Aprovado · a concessão é registrada pela ficha do lote')}</div></div></div></section>
-      <section class="sec">${band('SERV', 'Serviços')}<div class="block"><div class="body"><div class="cfg">${lists('SERV')}</div></div></div></section>
-      <section class="sec">${band('RNC', 'RNC de fornecedor')}<div class="block"><div class="body"><div class="cfg">${lists('RNC')}
+        ${visMod('INS') ? `<div class="fsec"><h3>Certificados de calibração no Google Drive</h3><div class="cfgitem" data-cfg="DRIVE"><span class="use">Endereço do script da conta da Central (termina em /exec). Com ele, a ficha do instrumento ganha o botão “Enviar certificado”.</span><input class="inp" id="cfg-driveurl" value="${esc((DB.cfg && DB.cfg.driveUrl) || '')}" placeholder="https://script.google.com/macros/s/…/exec" ${roA ? 'disabled' : ''}></div></div>` : ''}
+      </div></div></section>`)}
+      ${sec('av', `<section class="sec">${band('AV', 'Lotes (AV)')}<div class="block"><div class="body"><div class="cfg">${lists('AV')}${fixed('Retrabalho', ['Sim', 'Não'], 'Sim/Não')}${fixed('Resultado da inspeção', ['Aprovado', 'Reprovado', 'Em análise', CONC], 'lote novo já vem como Aprovado · reprovado fica bloqueado até a decisão da RNC')}</div></div></div></section>`)}
+      ${sec('serv', `<section class="sec">${band('SERV', 'Serviços')}<div class="block"><div class="body"><div class="cfg">${lists('SERV')}</div></div></div></section>`)}
+      ${sec('rnc', `<section class="sec">${band('RNC', 'RNC de fornecedor')}<div class="block"><div class="body"><div class="cfg">${lists('RNC')}
         <div class="cfgitem" data-cfg="PARAMS"><b>Parâmetros de prazo</b><span class="use">Dias de cada prazo (os nomes dos níveis são fixos)</span>${CFG_PARAMS.map(([n, l]) => `<label class="field"><span>${esc(l)}</span><input id="cfgp-${n}" type="number" min="0" step="1" value="${esc(pval(c, n) == null ? '' : pval(c, n))}" ${roA ? 'disabled' : ''}></label>`).join('')}</div>
         ${fixed('Nível do prazo para fechar', ['Padrão', 'Estendido', 'Complexo'], 'controlam o cálculo do prazo; os dias ficam em Parâmetros')}${fixed('Ação corretiva? · Cancelar RNC?', ['Sim', 'Não'], 'Sim/Não')}
-      </div></div></div></section>
-      <section class="sec">${band('RNCC', 'RNC de cliente — reclamações')}<div class="block"><div class="body"><div class="cfg">${lists('RNCC')}
+      </div></div></div></section>`)}
+      ${sec('rncc', `<section class="sec">${band('RNCC', 'RNC de cliente — reclamações')}<div class="block"><div class="body"><div class="cfg">${lists('RNCC')}
         <div class="cfgitem" data-cfg="PARAMS-RNCC"><b>Parâmetros de prazo</b><span class="use">Contados a partir da abertura</span>${CFG_PARAMS_RNCC.map(([n, l]) => `<label class="field"><span>${esc(l)}</span><input id="cfgp-${n}" type="number" min="0" step="1" value="${esc(c[n] == null ? '' : c[n])}" ${roA ? 'disabled' : ''}></label>`).join('')}</div>
         ${fixed('Gravidade', ['Baixa', 'Média', 'Alta'], 'Baixa/Média/Alta')}${fixed('Procedente?', ['Em análise', 'Sim', 'Não'], 'usadas nos indicadores')}${fixed('Origem da causa', ['Interna', 'Fornecedor', 'Transporte', 'Cliente (uso/aplicação)'], '“Fornecedor” liga a RNC de fornecedor')}${fixed('Eficácia', ['Em verificação', 'Eficaz', 'Não eficaz'], 'verificação da ação corretiva')}
-      </div></div></div></section>
-      <section class="sec">${band('INS', 'Calibração de instrumentos')}<div class="block"><div class="body"><div class="cfg">${lists('INS')}
-        <div class="cfgitem" data-cfg="DRIVE"><b>Certificados no Google Drive</b><span class="use">Endereço do script da conta da Central (termina em /exec). Com ele, a ficha do instrumento ganha o botão “Enviar certificado”.</span><input class="inp" id="cfg-driveurl" value="${esc((DB.cfg && DB.cfg.driveUrl) || '')}" placeholder="https://script.google.com/macros/s/…/exec" ${roA ? 'disabled' : ''}></div>
+      </div></div></div></section>`)}
+      ${sec('cal', `<section class="sec">${band('INS', 'Calibração de instrumentos')}<div class="block"><div class="body"><div class="cfg">${lists('INS')}
         <div class="cfgitem" data-cfg="TIPOS"><b>Tipos de equipamento e faixa</b><span class="use">Um por linha: tipo ; faixa. Critério de aceitação = faixa ÷ 3</span>${ta('cfg-TIPOS', (c.CAL_TIPOS || []).map((t) => `${t.tipo} ; ${t.faixa == null ? '' : t.faixa}`))}</div>
         ${fixed('Situação operacional', ['Em uso', 'Manutenção', 'Fora de uso'], 'controlam o status do instrumento')}
-      </div></div></div></section>
-      ${resetHTML()}</div>`;
-    const dirty = (el) => { const it = el.closest('.cfgitem') || el.closest('.fsec'); if (it) it.classList.add('dirty'); S.cfgDirty = true; };
-    $$('.cfgitem textarea, .cfgitem input, #p-body input, #p-body select').forEach((el) => el.addEventListener('input', () => { dirty(el); const cnt = el.closest('.cfgitem') && el.closest('.cfgitem').querySelector('.cnt'); if (cnt && el.tagName === 'TEXTAREA') cnt.textContent = el.value.split('\n').filter((s) => s.trim()).length; }));
-    $('#p-body').addEventListener('change', (e) => dirty(e.target));
-    const feb = $('#fe-body');
-    feb.addEventListener('input', (e) => dirty(e.target));
-    feb.addEventListener('click', (e) => { const b = e.target.closest('.fe-del'); if (b) { const tr = b.closest('tr'); dirty(tr.parentNode); tr.remove(); } });
-    const fea = $('#fe-add'); if (fea) fea.onclick = () => { feb.insertAdjacentHTML('afterbegin', feRow('', '', false)); dirty(feb); feb.querySelector('.fe-n').focus(); };
+      </div></div></div></section>`)}
+      ${DB.owner ? sec('zero', resetHTML()) : ''}</div>`;
+    const dirty = (el) => { const it = el.closest('.cfgitem') || el.closest('.fsec'); if (it) it.classList.add('dirty'); S.cfgDirty = true; const pn = el.closest('[data-tab]'); if (pn) { const b = $(`[data-ctab="${pn.dataset.tab}"]`); if (b) b.classList.add('dirty'); } };
+    const showTab = (k) => { S.cfgTab = k; lsSet('cq-cfg-tab', k); $$('.cfgpane').forEach((x) => { x.hidden = x.dataset.tab !== k; }); $$('[data-ctab]').forEach((b) => b.setAttribute('aria-selected', b.dataset.ctab === k)); const sv0 = $('#cfg-save'), nw = $('#pf-new'); if (sv0) sv0.hidden = ['func', 'forn', 'cli', 'zero'].includes(k); if (nw) nw.hidden = k !== 'func'; };
+    $$('[data-ctab]').forEach((b) => { b.onclick = () => showTab(b.dataset.ctab); });
+    showTab(S.cfgTab);
+    renderPessoas(roA);
+    renderEnt('forn', ro); renderEnt('cli', ro);
+    const nw0 = $('#pf-new'); if (nw0) nw0.onclick = () => pessoaDrawer(null);
+    $$('.cfgitem textarea, .cfgitem input').forEach((el) => el.addEventListener('input', () => { dirty(el); const cnt = el.closest('.cfgitem') && el.closest('.cfgitem').querySelector('.cnt'); if (cnt && el.tagName === 'TEXTAREA') cnt.textContent = el.value.split('\n').filter((s) => s.trim()).length; }));
     const seb = $('#se-body');
     seb.addEventListener('input', (e) => dirty(e.target));
     seb.addEventListener('click', (e) => { const b = e.target.closest('.fe-del'); if (b) { const tr = b.closest('tr'); dirty(tr.parentNode); tr.remove(); } });
     const sea = $('#se-add'); if (sea) sea.onclick = () => { seb.insertAdjacentHTML('afterbegin', feRow('', '', false, 'dl-se', 'nome do setor')); dirty(seb); seb.querySelector('.fe-n').focus(); };
     $('#cfg-ccatraso').addEventListener('input', (e) => dirty(e.target));
     wireLogo();
-    if (S.cfgFocus) { const el = $(S.cfgFocus === 'FORN_EMAILS' ? '#cfg-fornmail' : '#' + S.cfgFocus); S.cfgFocus = null; if (el) setTimeout(() => el.scrollIntoView({ block: 'start', behavior: 'smooth' }), 60); }
-    $('#p-body').addEventListener('click', (e) => { const b = e.target.closest('.p-del'); if (b) { const tr = b.closest('tr'); dirty(tr); tr.remove(); } });
-    const add = $('#p-add'); if (add) add.onclick = () => { const tb = $('#p-body'); tb.insertAdjacentHTML('afterbegin', pessoaRow({}, 'n', false)); dirty(tb); tb.querySelector('.p-nome').focus(); };
-    $('#p-busca').addEventListener('input', (e) => { const q = E.key(e.target.value); $$('#p-body tr').forEach((tr) => { tr.hidden = !!q && !E.key(tr.querySelector('.p-nome').value).includes(q); }); });
+    if (S.cfgFocus) { const fo = S.cfgFocus; S.cfgFocus = null; if (/^forn:/.test(fo)) setTimeout(() => entDrawer('forn', fo.slice(5), mode === 'ver'), 80); else { const el = $('#' + fo); if (el) setTimeout(() => el.scrollIntoView({ block: 'start', behavior: 'smooth' }), 60); } }
     const fg = $('#fer-gen'); if (fg) fg.onclick = () => {
       const y = +$('#fer-ano').value, ta2 = $('#cfg-FERIADOS');
       const have = new Set(ta2.value.split('\n').map((l) => { const m = /(\d{1,2}\/\d{1,2}\/\d{4})/.exec(l); return m ? E.toSerial(m[1]) : null; }).filter((v) => v != null));
@@ -5802,6 +5827,274 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const sv = $('#cfg-save'); if (sv) sv.onclick = () => saveConfig(false);
     wireReset();
   };
+  /* ---------- funcionários (cadastro único usado por todos os módulos) ---------- */
+  const CFG_TABS = [['geral', 'Geral'], ['func', 'Funcionários'], ['forn', 'Fornecedores'], ['cli', 'Clientes'], ['av', 'Lotes (AV)', 'AV'], ['serv', 'Serviços', 'SERV'], ['rnc', 'RNC Fornecedor', 'RNC'], ['rncc', 'RNC Cliente', 'RNCC'], ['cal', 'Calibração', 'INS'], ['emails', 'E-mails'], ['logo', 'Logo e Drive'], ['zero', 'Começar do zero']];
+  const FUNC_COR = { conferente: 'var(--av)', emissor: 'var(--rnc)', comprador: 'var(--serv)', resp_cal: 'var(--cal)' };
+  const FUNC_USO = { conferente: [['AV', 'conf']], emissor: [['RNC', 'emissor']], comprador: [['RNC', 'comprador']], resp_cal: [['INS', 'resp']] };
+  const FUNC_ONDE = { conferente: 'Conferido por (lotes)', emissor: 'Emissor (RNC)', comprador: 'Comprador (RNC)', resp_cal: 'Responsável (calibração)' };
+  function funcoesAll() {
+    const extra = Array.isArray(DB.cfg && DB.cfg.funcoesExtra) ? DB.cfg.funcoesExtra.filter((f) => f && f.k && f.l) : [];
+    return FUNCOES.concat(extra.map((f) => [f.k, f.l]));
+  }
+  const funcCor = (k) => FUNC_COR[k] || 'var(--acj)';
+  const iniciais = (n) => String(n || '?').trim().split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+  function renderPessoas(roA) {
+    const host = $('#pf-host'); if (!host) return;
+    const c = S.model.cfg, f = S.f.pf || (S.f.pf = { sit: 'ativos' }), FN = funcoesAll();
+    const all = (c.PESSOAS || []).slice().sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    const opt = (id, l, vals, v, todos) => `<label class="field"><span>${l}</span><select id="${id}"><option value="">${todos}</option>${vals.map(([k, t]) => `<option value="${esc(k)}" ${k === v ? 'selected' : ''}>${esc(t)}</option>`).join('')}</select></label>`;
+    host.innerHTML = `<p class="use" style="margin:0 0 10px">Cadastro único de funcionários. As funções definem em quais listas o nome aparece (Conferido por, Emissor, Comprador, Responsável…). Quem fica inativo some das listas de escolha, mas continua nos registros antigos.${roA ? ' Só administradores alteram.' : ''}</p>
+      <div class="filters" style="margin-bottom:8px"><label class="field"><span>Buscar</span><input id="pf-q" type="search" placeholder="nome ou e-mail…" value="${esc(f.q || '')}"></label>
+        ${opt('pf-set', 'Setor', uniq((c.GER_SETORES || []).concat(all.map((x) => x.setor).filter(Boolean))).map((x) => [x, x]), f.set, 'Todos')}
+        ${opt('pf-fil', 'Filial', uniq((c.GER_FILIAIS || []).concat(all.map((x) => x.filial).filter(Boolean))).map((x) => [x, x]), f.fil, 'Todas')}
+        ${opt('pf-fun', 'Função', FN, f.fun, 'Todas')}
+        <label class="field"><span>Situação</span><select id="pf-sit"><option value="ativos" ${f.sit === 'ativos' ? 'selected' : ''}>Ativos</option><option value="inativos" ${f.sit === 'inativos' ? 'selected' : ''}>Inativos</option><option value="todos" ${f.sit === 'todos' ? 'selected' : ''}>Todos</option></select></label>
+        <button class="btn" type="button" id="pf-exp" style="align-self:end">Exportar (.xlsx)</button></div>
+      <div id="pf-list"></div>`;
+    const draw = () => {
+      const q = E.key(f.q || '');
+      const rows = all.filter((x) => (f.sit === 'todos' || (f.sit === 'inativos' ? x.inativo : !x.inativo)) && (!q || E.key(x.nome).includes(q) || E.key(x.email || '').includes(q)) && (!f.set || E.low(x.setor) === E.low(f.set)) && (!f.fil || E.low(x.filial) === E.low(f.fil)) && (!f.fun || (x.funcoes || []).includes(f.fun)));
+      const lab = (k) => (FN.find((z) => z[0] === k) || [k, k])[1];
+      const dash = '<span class="muted">—</span>';
+      $('#pf-list').innerHTML = `<p class="cnt" style="margin:0 0 6px;font-size:12.5px;color:var(--ink-2)"><b>${NF.format(rows.length)}</b> ${rows.length === 1 ? 'funcionário' : 'funcionários'}${f.sit === 'ativos' ? (rows.length === 1 ? ' ativo' : ' ativos') : ''}${roA ? '' : ' · clique no nome para editar'}</p>
+        <div class="twrap twin"><table class="t pft"><thead><tr><th>Nome</th><th>Setor</th><th>Filial</th><th>Funções</th><th>E-mail</th><th>Situação</th></tr></thead><tbody>${rows.map((x) => `<tr class="click" data-pnome="${esc(x.nome)}" tabindex="0"><td><span class="pfav">${esc(iniciais(x.nome))}</span><b>${esc(x.nome)}</b></td><td>${x.setor ? esc(x.setor) : dash}</td><td>${x.filial ? esc(x.filial) : dash}</td><td>${(x.funcoes || []).map((k) => `<span class="chip" style="--k:${funcCor(k)}">${esc(lab(k))}</span>`).join(' ') || dash}</td><td>${x.email ? esc(x.email) : dash}</td><td>${x.inativo ? '<span class="chip off">Inativo</span>' : '<span class="chip ok">Ativo</span>'}</td></tr>`).join('') || `<tr><td colspan="6" class="muted">Nenhum funcionário com esses filtros.</td></tr>`}</tbody></table></div>`;
+      $$('#pf-list [data-pnome]').forEach((tr) => { const open = () => pessoaDrawer(all.find((x) => x.nome === tr.dataset.pnome) || null, roA); tr.onclick = open; tr.onkeydown = (e) => { if (e.key === 'Enter') open(); }; });
+      S.pfRows = rows;
+    };
+    $('#pf-q').addEventListener('input', (e) => { f.q = e.target.value; draw(); });
+    [['pf-set', 'set'], ['pf-fil', 'fil'], ['pf-fun', 'fun'], ['pf-sit', 'sit']].forEach(([id, k]) => { $('#' + id).onchange = (e) => { f[k] = e.target.value; draw(); }; });
+    $('#pf-exp').onclick = () => { const FN2 = funcoesAll(); exportRows('Funcionarios', [{ k: 'nome', l: 'Nome', w: 28 }, { k: 'setor', l: 'Setor', w: 18 }, { k: 'filial', l: 'Filial', w: 20 }, { k: 'f', l: 'Funções', w: 40, x: (x) => (x.funcoes || []).map((k) => (FN2.find((z) => z[0] === k) || [k, k])[1]).join(', ') }, { k: 'email', l: 'E-mail', w: 30 }, { k: 's', l: 'Situação', x: (x) => (x.inativo ? 'Inativo' : 'Ativo') }], S.pfRows || []); };
+    draw();
+  }
+  /* ---------- fornecedores e clientes: um cadastro só, usado por todos os módulos ---------- */
+  const ENT = {
+    forn: { one: 'fornecedor', Um: 'Fornecedor', plural: 'fornecedores', list: 'GER_FORNECEDORES', info: 'FORN_INFO', key: 'fornEmails', cor: 'var(--av)', mail: 'E-mail(s) para cobrança de certificados', mailCol: 'E-mail (certificados)', novo: '+ Novo fornecedor',
+      uso: [['AV', 'forn'], ['SERV', 'forn'], ['RNC', 'forn']],
+      stats: () => { const m = new Map(); S.model.av.forEach((x) => { const k = E.key(x.forn); if (!k) return; const o = m.get(k) || { a: 0, b: 0 }; o.a++; if (semCert(x)) o.b++; m.set(k, o); }); return m; },
+      cols: [['Lotes', (o) => o.a], ['Sem certificado', (o) => o.b, 'warn']] },
+    cli: { one: 'cliente', Um: 'Cliente', plural: 'clientes', list: 'GER_CLIENTES', info: 'CLI_INFO', key: 'cliEmails', cor: 'var(--rncc)', mail: 'E-mail(s) para a RNC de cliente', mailCol: 'E-mail (RNC de cliente)', novo: '+ Novo cliente',
+      uso: [['RNC', 'cliente'], ['RNCC', 'cliente']],
+      stats: () => { const m = new Map(); S.model.rnc.concat(S.model.rncc || []).forEach((x) => { const k = E.key(x.cliente); if (!k) return; const o = m.get(k) || { a: 0 }; o.a++; m.set(k, o); }); return m; },
+      cols: [['RNCs', (o) => o.a]] }
+  };
+  const entInfo = (kind, nome) => (S.model.cfg[ENT[kind].info] || []).find((o) => E.key(o.nome) === E.key(nome)) || null;
+  const okMails = (v) => String(v || '').split(/\s*[;,]\s*/).filter(Boolean).every((m) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m));
+  const normMails = (v) => String(v || '').trim().split(/\s*[;,\s]\s*/).filter(Boolean).join(', ');
+  function renderEnt(kind, ro) {
+    const host = $('#ent-' + kind); if (!host) return;
+    const D = ENT[kind], c = S.model.cfg, f = S.f['ent' + kind] || (S.f['ent' + kind] = { sit: 'ativos' });
+    const names = (c[D.list] || []).slice().sort((a, b) => String(a).localeCompare(String(b), 'pt-BR'));
+    const info = new Map((c[D.info] || []).map((o) => [E.key(o.nome), o])), st = D.stats();
+    const nwBtn = ro ? '' : `<button class="btn" type="button" id="ei-${kind}">Importar Excel</button><button class="btn primary" type="button" id="en-${kind}">${esc(D.novo)}</button>`;
+    host.innerHTML = `<p class="use" style="margin:0 0 10px">Os mesmos ${D.plural} valem para todos os módulos. ${kind === 'forn' ? 'O e-mail daqui é usado na cobrança de certificados (Alertas › lotes sem certificado).' : 'O e-mail daqui é usado no envio da RNC de cliente.'} Quem fica inativo some das listas de escolha, mas continua nos registros antigos.</p>
+      <div class="filters" style="margin-bottom:8px"><label class="field"><span>Buscar</span><input id="eq-${kind}" type="search" placeholder="nome, e-mail ou contato…" value="${esc(f.q || '')}"></label>
+        <label class="field"><span>E-mail</span><select id="em-${kind}"><option value="">Todos</option><option value="com" ${f.em === 'com' ? 'selected' : ''}>Com e-mail</option><option value="sem" ${f.em === 'sem' ? 'selected' : ''}>Sem e-mail</option></select></label>
+        <label class="field"><span>Situação</span><select id="es-${kind}"><option value="ativos" ${f.sit === 'ativos' ? 'selected' : ''}>Ativos</option><option value="inativos" ${f.sit === 'inativos' ? 'selected' : ''}>Inativos</option><option value="todos" ${f.sit === 'todos' ? 'selected' : ''}>Todos</option></select></label>
+        <div class="entbtns">${nwBtn}<button class="btn" type="button" id="ex-${kind}">Exportar (.xlsx)</button></div></div>
+      <div id="el-${kind}"></div>`;
+    const draw = () => {
+      const q = E.key(f.q || '');
+      const rows = names.map((n) => ({ nome: n, i: info.get(E.key(n)) || {}, s: st.get(E.key(n)) || {} })).filter((r) => (f.sit === 'todos' || (f.sit === 'inativos' ? r.i.inativo : !r.i.inativo)) && (!f.em || (f.em === 'com' ? !!r.i.email : !r.i.email)) && (!q || E.key(r.nome).includes(q) || E.key(r.i.email || '').includes(q) || E.key(r.i.contato || '').includes(q)));
+      const sem = rows.filter((r) => !r.i.email).length, dash = '<span class="muted">—</span>';
+      $('#el-' + kind).innerHTML = `<p style="margin:0 0 6px;font-size:12.5px;color:var(--ink-2)"><b>${NF.format(rows.length)}</b> ${rows.length === 1 ? D.one : D.plural}${sem ? ` · <b style="color:var(--warn)">${NF.format(sem)} sem e-mail</b>` : ''} · clique no nome para ${ro ? 'ver' : 'editar'}</p>
+        <div class="twrap twin"><table class="t pft"><thead><tr><th>${esc(D.Um)}</th><th>${esc(D.mailCol)}</th><th>Contato</th>${D.cols.map(([l]) => `<th class="r">${esc(l)}</th>`).join('')}<th>Situação</th></tr></thead><tbody>${rows.slice(0, 600).map((r) => `<tr class="click" data-ent="${esc(r.nome)}" tabindex="0"><td><b>${esc(r.nome)}</b></td><td>${r.i.email ? esc(r.i.email) : '<span class="chip warn">sem e-mail</span>'}</td><td>${r.i.contato ? esc(r.i.contato) : dash}</td>${D.cols.map(([, fn, cl]) => { const v = fn(r.s) || 0; return `<td class="r">${v ? (cl ? `<span class="chip ${cl}">${NF.format(v)}</span>` : NF.format(v)) : dash}</td>`; }).join('')}<td>${r.i.inativo ? '<span class="chip off">Inativo</span>' : '<span class="chip ok">Ativo</span>'}</td></tr>`).join('') || `<tr><td colspan="${4 + D.cols.length}" class="muted">Nenhum ${D.one} com esses filtros.</td></tr>`}</tbody></table></div>${rows.length > 600 ? `<p class="muted" style="font-size:12px">Mostrando 600 de ${NF.format(rows.length)}. Use a busca para achar os outros.</p>` : ''}`;
+      $$('#el-' + kind + ' [data-ent]').forEach((tr) => { const open = () => entDrawer(kind, tr.dataset.ent, ro); tr.onclick = open; tr.onkeydown = (e) => { if (e.key === 'Enter') open(); }; });
+      S['entRows' + kind] = rows;
+    };
+    $('#eq-' + kind).addEventListener('input', (e) => { f.q = e.target.value; draw(); });
+    $('#em-' + kind).onchange = (e) => { f.em = e.target.value; draw(); };
+    $('#es-' + kind).onchange = (e) => { f.sit = e.target.value; draw(); };
+    const nb = $('#en-' + kind); if (nb) nb.onclick = () => entDrawer(kind, null, ro);
+    const ib = $('#ei-' + kind); if (ib) ib.onclick = () => entImport(kind);
+    $('#ex-' + kind).onclick = () => exportRows(D.plural.charAt(0).toUpperCase() + D.plural.slice(1), [{ k: 'nome', l: D.Um, w: 34 }, { k: 'e', l: 'E-mail', w: 36, x: (r) => r.i.email || '' }, { k: 'c', l: 'Contato', w: 22, x: (r) => r.i.contato || '' }, { k: 't', l: 'Telefone', w: 16, x: (r) => r.i.tel || '' }, { k: 'o', l: 'Observação', w: 30, x: (r) => r.i.obs || '' }, { k: 's', l: 'Situação', x: (r) => (r.i.inativo ? 'Inativo' : 'Ativo') }], S['entRows' + kind] || []);
+    draw();
+  }
+  /* grava a lista de nomes e as fichas juntas (o que estiver na tela de outra pessoa não se perde: lê o atual antes) */
+  async function saveEnt(kind, fn, label) {
+    const D = ENT[kind], cfg = DB.cfg || {};
+    const names = ((cfg.listas || {})[D.list] || S.model.cfg[D.list] || []).slice();
+    const info = (Array.isArray(cfg[D.key]) ? cfg[D.key] : (S.model.cfg[D.info] || [])).map((o) => Object.assign({}, o));
+    const r = fn(names, info); if (!r) return false;
+    const up = { listas: { [D.list]: r.names }, [D.key]: r.info.filter((o) => o.email || o.contato || o.tel || o.obs || o.inativo).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')) };
+    await DB.db.doc('cfg/main').update(up);
+    logEntry('GERAL', 'cfg', 'alterado', label, null);
+    return true;
+  }
+  function entDrawer(kind, nome, ro) {
+    const D = ENT[kind], novo = !nome, i = (nome && entInfo(kind, nome)) || {}, st = nome ? (D.stats().get(E.key(nome)) || {}) : {};
+    const uso = nome ? D.uso.reduce((n, pr) => n + usageOf([pr], nome), 0) : 0;
+    const dis = ro ? 'disabled' : '';
+    openDrawer(novo ? D.novo.replace('+ ', '') : nome, D.Um, `<div class="pfform">
+      ${nome ? `<p class="muted" style="margin:0;font-size:12.5px">${D.cols.map(([l, fn]) => `${esc(l)}: <b>${NF.format(fn(st) || 0)}</b>`).join(' · ')}</p>` : ''}
+      <label class="field"><span>Nome <b>*</b></span><input id="ed-nome" value="${esc(nome || '')}" autocomplete="off" ${dis}></label>
+      <label class="field"><span>${esc(D.mail)}</span><input id="ed-email" value="${esc(i.email || '')}" placeholder="qualidade@empresa.com.br, vendas@empresa.com.br" autocomplete="off" ${dis}></label>
+      <div class="fgrid cm-grid"><label class="field"><span>Contato</span><input id="ed-contato" value="${esc(i.contato || '')}" placeholder="nome da pessoa" autocomplete="off" ${dis}></label><label class="field"><span>Telefone</span><input id="ed-tel" value="${esc(i.tel || '')}" placeholder="(11) 0000-0000" autocomplete="off" ${dis}></label></div>
+      <label class="field"><span>Observação</span><textarea id="ed-obs" style="min-height:64px" ${dis}>${esc(i.obs || '')}</textarea></label>
+      <div class="field"><span>Situação</span><div class="seg" id="ed-sit"><button type="button" data-s="1" aria-pressed="${!i.inativo}" ${dis}>Ativo</button><button type="button" data-s="0" aria-pressed="${!!i.inativo}" ${dis}>Inativo</button></div></div>
+      <div class="okbox" style="border-color:var(--info)">Para mais de um e-mail, separe com vírgula. Inativo some das listas de escolha${uso ? `, mas continua nos ${NF.format(uso)} registro(s) em que aparece` : ''}.</div>
+      ${ro ? '' : `<div class="formfoot"><button class="btn primary" type="button" id="ed-save">${novo ? 'Cadastrar' : 'Salvar'}</button><button class="btn" type="button" data-act="close">Cancelar</button>${novo ? '' : '<button class="btn ghost" type="button" id="ed-del" style="margin-left:auto;color:var(--crit)">Excluir</button>'}</div>`}
+    </div>`, D.cor);
+    if (ro) return;
+    $$('#ed-sit [data-s]').forEach((b) => { b.onclick = () => $$('#ed-sit [data-s]').forEach((x) => x.setAttribute('aria-pressed', x === b)); });
+    $('#ed-save').onclick = async () => {
+      const nn = $('#ed-nome').value.trim().replace(/\s+/g, ' '), email = normMails($('#ed-email').value);
+      if (!nn) { toast('Informe o nome.', true); $('#ed-nome').focus(); return; }
+      if (email && !okMails(email)) { toast('E-mail inválido. Para mais de um, separe com vírgula.', true); $('#ed-email').focus(); return; }
+      const ni = { nome: nn }; if (email) ni.email = email;
+      [['contato', 'ed-contato'], ['tel', 'ed-tel'], ['obs', 'ed-obs']].forEach(([k, id]) => { const v = $('#' + id).value.trim(); if (v) ni[k] = v; });
+      if ($('#ed-sit [data-s="0"]').getAttribute('aria-pressed') === 'true') ni.inativo = true;
+      const btn = $('#ed-save'); btn.disabled = true; btn.textContent = 'Salvando…';
+      try {
+        const ok = await saveEnt(kind, (names, info) => {
+          const iN = novo ? -1 : names.findIndex((x) => E.key(x) === E.key(nome));
+          if (names.some((x, j) => j !== iN && E.key(x) === E.key(nn))) { toast(`Já existe um ${D.one} com esse nome.`, true); return null; }
+          if (iN >= 0) names[iN] = nn; else names.push(nn);
+          const ii = info.findIndex((o) => E.key(o.nome) === E.key(nome || nn));
+          if (ii >= 0) info[ii] = ni; else info.push(ni);
+          return { names, info };
+        }, `${D.Um} ${novo ? 'cadastrado' : 'alterado'}: ${nn}${ni.inativo ? ' (inativo)' : ''}`);
+        if (!ok) { btn.disabled = false; btn.textContent = novo ? 'Cadastrar' : 'Salvar'; return; }
+        closeLayer(); toast(`${nn} ${novo ? 'cadastrado' : 'salvo'}.`);
+        if (!novo && E.key(nn) !== E.key(nome) && uso) toast(`Nome alterado: os registros antigos continuam com “${nome}”.`);
+        await sleep(250); S.stale = false; render();
+      } catch (err) { toast(err && (err.code === 'invalid_argument' || err.code === 'permission_denied') ? TXT.cfgDenied : 'Não foi possível salvar: ' + ((err && (err.message || err.code)) || err), true); btn.disabled = false; btn.textContent = novo ? 'Cadastrar' : 'Salvar'; }
+    };
+    const del = $('#ed-del');
+    if (del) del.onclick = () => {
+      if (uso) { toast(`Esse ${D.one} aparece em ${NF.format(uso)} registro(s). Marque como Inativo em vez de excluir.`, true); return; }
+      confirmBox(`Excluir ${D.one}?`, `${nome} sai do cadastro e das listas de escolha.`, 'Excluir', async () => {
+        try { await saveEnt(kind, (names, info) => ({ names: names.filter((x) => E.key(x) !== E.key(nome)), info: info.filter((o) => E.key(o.nome) !== E.key(nome)) }), `${D.Um} excluído: ${nome}`); toast(nome + ' excluído.'); await sleep(250); S.stale = false; render(); }
+        catch (err) { toast('Não foi possível excluir: ' + ((err && (err.message || err.code)) || err), true); }
+      }, true);
+    };
+  }
+  /* importação por Excel: mostra o que muda antes de gravar; nada é apagado */
+  function entImport(kind) {
+    const D = ENT[kind];
+    openModal(`Importar ${D.plural} (Excel)`, `<p style="margin:0">1. Baixe o modelo · 2. Preencha (Nome, E-mail, Contato, Telefone, Observação) · 3. Envie o arquivo. Nomes iguais (sem diferença de acento ou maiúscula) são atualizados; quem não está na planilha fica como está.</p>
+      <div class="formfoot"><button class="btn" type="button" id="im-model">Baixar modelo (.xlsx)</button><input type="file" id="im-file" accept=".xlsx,.xls,.csv" hidden><button class="btn primary" type="button" id="im-pick">Escolher arquivo</button></div>
+      <div id="im-res"></div>`);
+    $('#im-model').onclick = () => {
+      const c = S.model.cfg, info = new Map((c[D.info] || []).map((o) => [E.key(o.nome), o]));
+      const aoa = [[D.Um, 'E-mail', 'Contato', 'Telefone', 'Observação']].concat((c[D.list] || []).slice().sort((a, b) => String(a).localeCompare(String(b), 'pt-BR')).map((n) => { const o = info.get(E.key(n)) || {}; return [n, o.email || '', o.contato || '', o.tel || '', o.obs || '']; }));
+      const ws = XLSX.utils.aoa_to_sheet(aoa); ws['!cols'] = [{ wch: 36 }, { wch: 40 }, { wch: 22 }, { wch: 16 }, { wch: 30 }];
+      const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, D.Um);
+      saveFile(`Modelo_${D.plural}_${today8()}.xlsx`, new Blob([XLSX.write(wb, { bookType: 'xlsx', type: 'array' })], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+    };
+    $('#im-pick').onclick = () => $('#im-file').click();
+    $('#im-file').onchange = async () => {
+      const file = $('#im-file').files && $('#im-file').files[0]; $('#im-file').value = ''; if (!file) return;
+      let rows;
+      try { const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' }); rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, defval: '' }); }
+      catch (e) { toast('Não consegui ler o arquivo. Use o modelo em Excel.', true); return; }
+      const hd = (rows[0] || []).map((h) => E.key(h));
+      const col = (...ks) => hd.findIndex((h) => ks.some((k) => h === k || h.startsWith(k)));
+      const cN = col(E.key(D.Um), 'nome'), cE = col('email', 'e-mail', 'e mail'), cC = col('contato'), cT = col('telefone', 'fone'), cO = col('observacao', 'obs');
+      if (cN < 0) { $('#im-res').innerHTML = `<div class="warnbox crit">Não achei a coluna “${esc(D.Um)}” (ou “Nome”) na primeira linha. Use o modelo.</div>`; return; }
+      const c = S.model.cfg, names = (c[D.list] || []).slice(), info = new Map((c[D.info] || []).map((o) => [E.key(o.nome), Object.assign({}, o)]));
+      const novos = [], muda = [], prob = [], seen = new Set();
+      rows.slice(1).forEach((r, ix) => {
+        const g = (ci) => (ci >= 0 ? String(r[ci] == null ? '' : r[ci]).trim() : '');
+        const nm = g(cN).replace(/\s+/g, ' '); if (!nm) return;
+        const k = E.key(nm); if (seen.has(k)) { prob.push([`linha ${ix + 2}`, 'nome repetido na planilha: ' + nm]); return; } seen.add(k);
+        const em = normMails(g(cE)); if (em && !okMails(em)) { prob.push([`linha ${ix + 2}`, 'e-mail inválido: ' + em]); return; }
+        const cur = info.get(k), base = names.find((x) => E.key(x) === k);
+        const o = Object.assign({ nome: base || nm }, cur || {}), ch = [];
+        [['email', em, 'e-mail'], ['contato', g(cC), 'contato'], ['tel', g(cT), 'telefone'], ['obs', g(cO), 'observação']].forEach(([f, v, l]) => { if (v && v !== (o[f] || '')) { o[f] = v; ch.push(l); } });
+        if (!base) novos.push(o); else if (ch.length) muda.push([o, ch]);
+      });
+      S.entImp = { kind, novos, muda };
+      $('#im-res').innerHTML = `<div class="kpis sm" style="margin:6px 0">${kpiHTML({ l: 'Com alteração', v: NF.format(muda.length), c: D.cor })}${kpiHTML({ l: `${D.plural.charAt(0).toUpperCase() + D.plural.slice(1)} novos`, v: NF.format(novos.length), c: D.cor })}${kpiHTML({ l: 'Linhas com problema', v: NF.format(prob.length), c: D.cor, cls: prob.length ? 'warn' : 'ok' })}</div>
+        <div class="twrap" style="max-height:240px;overflow:auto"><table class="t"><thead><tr><th>${esc(D.Um)}</th><th>O que muda</th></tr></thead><tbody>${muda.slice(0, 200).map(([o, ch]) => `<tr><td>${esc(o.nome)}</td><td>${esc(ch.join(', '))}</td></tr>`).join('')}${novos.slice(0, 200).map((o) => `<tr><td>${esc(o.nome)}</td><td><span class="chip info">novo</span></td></tr>`).join('')}${prob.map(([l, m]) => `<tr><td><i>${esc(l)}</i></td><td><span class="chip crit">${esc(m)}</span></td></tr>`).join('')}${!muda.length && !novos.length && !prob.length ? '<tr><td colspan="2" class="muted">Nada para mudar: a planilha está igual ao cadastro.</td></tr>' : ''}</tbody></table></div>
+        <div class="formfoot"><button class="btn primary" type="button" id="im-ok" ${muda.length + novos.length ? '' : 'disabled'}>Aplicar ${NF.format(muda.length + novos.length)} ${muda.length + novos.length === 1 ? 'alteração' : 'alterações'}</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`;
+      $('#im-ok').onclick = async () => {
+        const b = $('#im-ok'); b.disabled = true; b.textContent = 'Gravando…';
+        try {
+          await saveEnt(kind, (nm2, inf2) => {
+            const byK = new Map(inf2.map((o, j) => [E.key(o.nome), j]));
+            muda.concat(novos.map((o) => [o])).forEach(([o]) => { const j = byK.get(E.key(o.nome)); if (j != null) inf2[j] = o; else { inf2.push(o); byK.set(E.key(o.nome), inf2.length - 1); } });
+            novos.forEach((o) => { if (!nm2.some((x) => E.key(x) === E.key(o.nome))) nm2.push(o.nome); });
+            return { names: nm2, info: inf2 };
+          }, `${D.Um}s importados do Excel: ${muda.length} alterados, ${novos.length} novos`);
+          closeLayer(); toast(`Importação concluída: ${muda.length} alterados, ${novos.length} novos.`); await sleep(250); S.stale = false; render();
+        } catch (err) { toast(err && (err.code === 'invalid_argument' || err.code === 'permission_denied') ? TXT.cfgDenied : 'Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; b.textContent = 'Aplicar'; }
+      };
+    };
+  }
+  /* uma pessoa por vez: grava só a lista de funcionários, sem mexer no resto das configurações */
+  async function savePessoas(fn, label) {
+    const cur = (DB.cfg && Array.isArray(DB.cfg.pessoas) ? DB.cfg.pessoas : (S.model.cfg.PESSOAS || [])).map((x) => Object.assign({}, x));
+    const out = fn(cur); if (!out) return false;
+    out.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    await DB.db.doc('cfg/main').update({ pessoas: out });
+    logEntry('GERAL', 'cfg', 'alterado', label, null);
+    return true;
+  }
+  function pessoaDrawer(p, roA) {
+    const novo = !p, c = S.model.cfg, FN = funcoesAll(); p = p || { nome: '', funcoes: [] };
+    const sel = (id, list, v) => `<select id="${id}" ${roA ? 'disabled' : ''}><option value=""></option>${uniq(list.concat(v ? [v] : [])).map((o) => `<option ${E.low(o) === E.low(v || '') ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select>`;
+    const uso = novo ? [] : (p.funcoes || []).map((k) => { const n = FUNC_USO[k] ? usageOf(FUNC_USO[k], p.nome) : 0; return n ? `${FUNC_ONDE[k] || k}: ${NF.format(n)} registro(s)` : ''; }).filter(Boolean);
+    openDrawer(novo ? 'Novo funcionário' : p.nome, 'Funcionário', `<div class="pfform">
+      <label class="field"><span>Nome <b>*</b></span><input id="pd-nome" value="${esc(p.nome || '')}" autocomplete="off" ${roA ? 'disabled' : ''}></label>
+      <div class="fgrid cm-grid"><label class="field"><span>Setor</span>${sel('pd-setor', c.GER_SETORES || [], p.setor)}</label><label class="field"><span>Filial</span>${sel('pd-filial', c.GER_FILIAIS || [], p.filial)}</label></div>
+      <label class="field"><span>E-mail</span><input id="pd-email" type="email" value="${esc(p.email || '')}" placeholder="nome@acosvital.com.br" autocomplete="off" ${roA ? 'disabled' : ''}></label>
+      <div class="field"><span>Funções (em quais listas o nome aparece)</span><div class="pdf" id="pd-fun">${FN.map(([k, l]) => `<button type="button" class="pfun" data-f="${esc(k)}" aria-pressed="${(p.funcoes || []).includes(k)}" style="--k:${funcCor(k)}" ${roA ? 'disabled' : ''}>${esc(l)}</button>`).join('')}${roA ? '' : '<button type="button" class="pfun add" id="pd-newf">+ nova função</button>'}</div></div>
+      <div class="field"><span>Situação</span><div class="seg" id="pd-sit"><button type="button" data-s="1" aria-pressed="${!p.inativo}" ${roA ? 'disabled' : ''}>Ativo</button><button type="button" data-s="0" aria-pressed="${!!p.inativo}" ${roA ? 'disabled' : ''}>Inativo</button></div></div>
+      ${uso.length ? `<div class="okbox" style="border-color:var(--info)">Aparece em registros: ${uso.map(esc).join(' · ')}. Inativo some das listas de escolha, mas continua nesses registros.</div>` : ''}
+      ${roA ? '' : `<div class="formfoot"><button class="btn primary" type="button" id="pd-save">${novo ? 'Cadastrar' : 'Salvar'}</button><button class="btn" type="button" data-act="close">Cancelar</button>${novo ? '' : '<button class="btn ghost" type="button" id="pd-del" style="margin-left:auto;color:var(--crit)">Excluir</button>'}</div>`}
+    </div>`, 'var(--ok)');
+    if (roA) return;
+    $$('#pd-fun .pfun[data-f]').forEach((b) => { b.onclick = () => b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true'); });
+    $$('#pd-sit [data-s]').forEach((b) => { b.onclick = () => $$('#pd-sit [data-s]').forEach((x) => x.setAttribute('aria-pressed', x === b)); });
+    $('#pd-newf').onclick = () => {
+      if ($('#pd-nf')) { $('#pd-nf').focus(); return; }
+      $('#pd-newf').insertAdjacentHTML('afterend', '<span class="pdnf"><input class="inp" id="pd-nf" placeholder="nome da função (ex.: Inspetor)" autocomplete="off"><button type="button" class="btn small" id="pd-nfok">Criar</button></span>');
+      $('#pd-nf').focus();
+      $('#pd-nf').onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); $('#pd-nfok').click(); } };
+      $('#pd-nfok').onclick = () => criaFuncao($('#pd-nf').value);
+    };
+    const criaFuncao = (v) => {
+      const l = String(v || '').trim().replace(/\s+/g, ' ');
+      if (!l) return;
+      if (funcoesAll().some(([, t]) => E.key(t) === E.key(l))) { toast('Essa função já existe.', true); return; }
+      const k = 'f_' + E.key(l).toLowerCase().replace(/[^a-z0-9]+/g, '_').slice(0, 24) + '_' + Date.now().toString(36).slice(-3);
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'pfun'; b.dataset.f = k; b.dataset.novo = l; b.setAttribute('aria-pressed', 'true'); b.style.setProperty('--k', funcCor(k)); b.textContent = l;
+      b.onclick = () => b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true');
+      $('#pd-newf').before(b); const nf = $('.pdnf'); if (nf) nf.remove();
+    };
+    $('#pd-save').onclick = async () => {
+      const nome = $('#pd-nome').value.trim().replace(/\s+/g, ' '), email = $('#pd-email').value.trim();
+      if (!nome) { toast('Informe o nome.', true); $('#pd-nome').focus(); return; }
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('E-mail inválido.', true); $('#pd-email').focus(); return; }
+      const np = { nome, funcoes: $$('#pd-fun .pfun[data-f][aria-pressed="true"]').map((b) => b.dataset.f) };
+      const st = $('#pd-setor').value, fi = $('#pd-filial').value;
+      if (st) np.setor = st; if (fi) np.filial = fi; if (email) np.email = email;
+      if ($('#pd-sit [data-s="0"]').getAttribute('aria-pressed') === 'true') np.inativo = true;
+      const novas = $$('#pd-fun .pfun[data-novo]').filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => ({ k: b.dataset.f, l: b.dataset.novo }));
+      const btn = $('#pd-save'); btn.disabled = true; btn.textContent = 'Salvando…';
+      try {
+        if (novas.length) { const ex = Array.isArray(DB.cfg && DB.cfg.funcoesExtra) ? DB.cfg.funcoesExtra : []; await DB.db.doc('cfg/main').update({ funcoesExtra: ex.concat(novas) }); }
+        const ok = await savePessoas((cur) => {
+          const i = novo ? -1 : cur.findIndex((x) => E.key(x.nome) === E.key(p.nome));
+          if (cur.some((x, j) => j !== i && E.key(x.nome) === E.key(nome))) { toast('Já existe um funcionário com esse nome.', true); return null; }
+          if (i >= 0) cur[i] = np; else cur.push(np);
+          return cur;
+        }, (novo ? 'Funcionário cadastrado: ' : 'Funcionário alterado: ') + nome + (np.inativo ? ' (inativo)' : ''));
+        if (!ok) { btn.disabled = false; btn.textContent = novo ? 'Cadastrar' : 'Salvar'; return; }
+        closeLayer(); toast(`${nome} ${novo ? 'cadastrado' : 'salvo'}.`);
+        if (!novo && E.key(nome) !== E.key(p.nome)) toast(`Nome alterado: os registros antigos continuam com “${p.nome}”.`);
+        await sleep(250); S.stale = false; render();
+      } catch (err) { toast(err && (err.code === 'invalid_argument' || err.code === 'permission_denied') ? 'Só administradores alteram funcionários.' : 'Não foi possível salvar: ' + ((err && (err.message || err.code)) || err), true); btn.disabled = false; btn.textContent = novo ? 'Cadastrar' : 'Salvar'; }
+    };
+    const del = $('#pd-del');
+    if (del) del.onclick = () => {
+      if (uso.length) { toast('Esse funcionário aparece em registros. Marque como Inativo em vez de excluir.', true); return; }
+      confirmBox('Excluir funcionário?', `${p.nome} sai do cadastro e das listas de escolha.`, 'Excluir', async () => {
+        try { await savePessoas((cur) => cur.filter((x) => E.key(x.nome) !== E.key(p.nome)), 'Funcionário excluído: ' + p.nome); toast(p.nome + ' excluído.'); await sleep(250); S.stale = false; render(); }
+        catch (err) { toast('Não foi possível excluir: ' + ((err && (err.message || err.code)) || err), true); }
+      }, true);
+    };
+  }
   function feRow(n, e, ro, dl, ph) { const dis = ro ? ' disabled' : ''; return `<tr><td><input class="inp fe-n" list="${dl || 'dl-fe'}" value="${esc(n)}" placeholder="${ph || 'nome do fornecedor'}"${dis}></td><td><input class="inp fe-e" value="${esc(e)}" placeholder="compras@fornecedor.com.br"${dis}></td><td>${ro ? '' : '<button class="btn small ghost fe-del" type="button" aria-label="Remover">✕</button>'}</td></tr>`; }
   function readFornEmails(body, what) {
     const out = [], errs = [], seen = new Set(), W = what || 'Fornecedor';
@@ -5897,7 +6190,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     });
     if (Object.keys(listas).length) up.listas = listas;
     const fer = [], nomes = {};
-    lines('cfg-FERIADOS').forEach((s) => { const m = /(\d{1,2}\/\d{1,2}\/\d{4})/.exec(s); const d = m ? E.toSerial(m[1]) : null; if (d == null) { errs.push('Feriado inválido: ' + s); return; } fer.push(d); const nmx = s.split('—')[1]; if (nmx && nmx.trim()) nomes[d] = nmx.trim(); });
+    (has('cfg-FERIADOS') ? lines('cfg-FERIADOS') : (c.GER_FERIADOS || []).map((d) => ferLine(d, ((S.model.cfgDoc && S.model.cfgDoc.feriadosNomes) || {})[d]))).forEach((s) => { const m = /(\d{1,2}\/\d{1,2}\/\d{4})/.exec(s); const d = m ? E.toSerial(m[1]) : null; if (d == null) { errs.push('Feriado inválido: ' + s); return; } fer.push(d); const nmx = s.split('—')[1]; if (nmx && nmx.trim()) nomes[d] = nmx.trim(); });
     fer.sort((a, b) => a - b);
     const oldNomes = (S.model.cfgDoc && S.model.cfgDoc.feriadosNomes) || {};
     if (JSON.stringify(fer) !== JSON.stringify((c.GER_FERIADOS || []).slice().sort((a, b) => a - b)) || JSON.stringify(nomes) !== JSON.stringify(oldNomes)) { up.feriados = fer; up.feriadosNomes = nomes; }
@@ -5911,17 +6204,17 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const params = {};
     CFG_PARAMS.concat(CFG_PARAMS_RNCC).forEach(([n]) => { if (!has('cfgp-' + n)) return; const s = $('#cfgp-' + n).value.trim(); const v = s === '' ? null : +s; if (s !== '' && (!isFinite(v) || v < 0)) errs.push('Parâmetro inválido: ' + n); if (/^EXP_/.test(n) && v != null && v > 24) errs.push('Horário do expediente deve ser de 0 a 24.'); if (v !== pval(c, n)) params[n] = v; });
     if (Object.keys(params).length && !roA) up.params = params;
-    const FE = readFornEmails(); errs.push(...FE.errs);
+    const FE = has('fe-body') ? readFornEmails() : { out: Object.entries(c.FORN_EMAILS || {}).map(([nome, email]) => ({ nome, email })).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')), errs: [] }; errs.push(...FE.errs);
     const oldFE = Object.entries(c.FORN_EMAILS || {}).map(([nome, email]) => ({ nome, email })).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
     if (JSON.stringify(FE.out) !== JSON.stringify(oldFE)) up.fornEmails = FE.out;
-    const SE = readFornEmails('#se-body', 'Setor'); errs.push(...SE.errs);
+    const SE = has('se-body') ? readFornEmails('#se-body', 'Setor') : { out: Object.entries(c.SETOR_EMAILS || {}).map(([nome, email]) => ({ nome, email })).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')), errs: [] }; errs.push(...SE.errs);
     const oldSE = Object.entries(c.SETOR_EMAILS || {}).map(([nome, email]) => ({ nome, email })).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
     if (JSON.stringify(SE.out) !== JSON.stringify(oldSE)) up.setorEmails = SE.out;
-    const ccA = $('#cfg-ccatraso').value.trim().replace(/\s*[;,]\s*/g, ', ');
+    const ccA = ($('#cfg-ccatraso') || { value: c.RNC_CC_ATRASO || '' }).value.trim().replace(/\s*[;,]\s*/g, ', ');
     ccA.split(', ').filter(Boolean).forEach((m) => { if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)) errs.push('E-mail inválido: ' + m); });
     if (ccA !== (c.RNC_CC_ATRASO || '')) up.rncCcAtraso = ccA;
     if (!roA && has('cfg-driveurl')) { const du = $('#cfg-driveurl').value.trim(); if (du && !/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(du)) errs.push('Endereço do script inválido: ele começa com https://script.google.com/macros/s/ e termina em /exec.'); if (du !== String((DB.cfg && DB.cfg.driveUrl) || '')) up.driveUrl = du; }
-    const P = readPessoas(); errs.push(...P.errs);
+    const P = { out: c.PESSOAS || [], errs: [] };
     const oldP = c.PESSOAS || [];
     if (!roA && JSON.stringify(P.out) !== JSON.stringify(oldP)) {
       up.pessoas = P.out;
