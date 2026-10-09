@@ -862,6 +862,120 @@ body.has-tk .toast { bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
   .cq-dono .railring .r0 { stroke: #52b592; } .cq-dono .railring .r1 { stroke: #d69d3f; } .cq-dono .railring .r2 { stroke: #ea6b62; } .cq-dono .railring .r3 { stroke: #d77fc0; } .cq-dono .railring .r4 { stroke: #72a8de; } .cq-dono .railring .r5 { stroke: #aab2ae; }
 }
 
+/* ---------- relatório de RNC (ficha) ---------- */
+.rrmon { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; border: 1px solid var(--line); background: var(--surface-2); border-radius: 10px; padding: 10px 14px; font-size: 13.5px; }
+.rrmon > b { font: 800 11.5px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.rrmon small { flex-basis: 100%; font-size: 12px; }
+.rrh { display: flex; align-items: center; gap: 10px; margin: 6px 0 -6px; }
+.rrh .n { width: 26px; height: 26px; border-radius: 50%; color: #fff; display: grid; place-items: center; font: 800 13px var(--f-body); flex: none; }
+.rrh h3 { margin: 0; font: 800 17px/1 var(--f-display); letter-spacing: .05em; text-transform: uppercase; }
+.rrh .muted { margin-left: auto; font-size: 12.5px; text-align: right; }
+.rrbox { border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 12px; }
+.rrg3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 14px; }
+@media (max-width: 700px) { .rrg3 { grid-template-columns: 1fr; } }
+.rrro { padding: 7px 0; font-size: 14px; }
+.rrchips { display: flex; flex-wrap: wrap; gap: 6px; }
+.rrfotos { display: flex; flex-wrap: wrap; gap: 8px; }
+.rrfotos figure { margin: 0; position: relative; }
+.rrfotos img { width: 104px; height: 104px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); display: block; cursor: zoom-in; }
+.rrfotos .x { position: absolute; top: 4px; right: 4px; width: 24px; height: 24px; border-radius: 50%; border: 0; background: rgba(0, 0, 0, .6); color: #fff; cursor: pointer; font-size: 12px; }
+.rradd { width: 104px; height: 104px; border-radius: 8px; border: 2px dashed var(--line-2); background: var(--surface-2); color: var(--ink-3); font: 600 13px var(--f-body); cursor: pointer; display: grid; place-content: center; text-align: center; }
+.rradd b { font-size: 26px; line-height: 1.1; }
+.rrsig { display: inline-flex; align-items: center; gap: 8px; }
+.rrsig i { width: 22px; height: 22px; border-radius: 50%; background: var(--ok); color: #fff; display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 12px; flex: none; }
+.rrwarn, .tbwarn { border-left: 5px solid var(--warn); background: color-mix(in srgb, var(--warn) 9%, var(--surface)); border-radius: 8px; padding: 10px 14px; font-size: 14px; line-height: 1.45; }
+.rrfoot, .rrsave { display: flex; gap: 8px; align-items: center; justify-content: flex-end; flex-wrap: wrap; }
+.rrfoot .muted { margin-right: auto; font-size: 12.5px; }
+
+/* ---------- tela do tablet (#rnctab) ---------- */
+body.tabmode .app { grid-template-columns: minmax(0, 1fr) !important; }
+body.tabmode .rail, body.tabmode .tk, body.tabmode .tkpill, body.tabmode .railtip { display: none !important; }
+body.tabmode .main { padding: 0 !important; }
+.tbw { min-height: 100dvh; display: flex; flex-direction: column; background: var(--bg); }
+.tbw > .tbb { flex: 1 0 auto; }
+.tbhd { background: #1b211e; color: #fff; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 14px 22px; position: sticky; top: 0; z-index: 20; }
+.tbhd .br { all: unset; cursor: pointer; display: grid; gap: 6px; justify-self: start; }
+.tbhd .br b { font: 800 22px/1 var(--f-display); letter-spacing: .03em; text-transform: uppercase; white-space: nowrap; }
+.tbhd .stp { display: flex; gap: 4px; } .tbhd .stp i { width: 28px; height: 4px; border-radius: 2px; }
+.tbhd .av { font: 500 13px var(--f-body); color: #a9b3ae; }
+.tbhd .lg { height: 66px; display: block; justify-self: center; }
+.tbhd .rt { justify-self: end; display: flex; align-items: center; gap: 12px; white-space: nowrap; }
+.tbhd .rt > div { text-align: right; display: grid; gap: 5px; }
+.tbhd .rt b { font: 700 18px var(--f-body); }
+.tbhd .rt span { font: 600 13px var(--f-body); color: #c9d0cc; }
+.tbhd .rt .on { color: #7fd8a8; } .tbhd .rt .off { color: #ff8a80; }
+.tbhd .rt i { width: 44px; height: 44px; border-radius: 50%; background: #52b592; color: #0d1a14; display: grid; place-items: center; font: 800 16px var(--f-body); font-style: normal; }
+.tbsteps { display: flex; gap: 8px; padding: 12px 22px; background: var(--surface); border-bottom: 1px solid var(--line); }
+.tbsteps > div { flex: 1; display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; font: 700 15px var(--f-body); color: var(--ink-3); background: var(--surface-2); }
+.tbsteps b { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--line); color: var(--ink-2); font-size: 14px; flex: none; }
+.tbsteps .on { background: color-mix(in srgb, var(--rnc) 10%, var(--surface)); color: var(--rnc); box-shadow: inset 0 0 0 2px var(--rnc); } .tbsteps .on b { background: var(--rnc); color: #fff; }
+.tbsteps .ok { color: var(--ok); } .tbsteps .ok b { background: var(--ok); color: #fff; }
+.tbb { padding: 18px 22px 24px; display: grid; gap: 16px; align-content: start; max-width: 1000px; width: 100%; margin: 0 auto; box-sizing: border-box; }
+.tbf { position: sticky; bottom: 0; background: var(--surface); border-top: 1px solid var(--line); padding: 12px 22px; display: flex; gap: 12px; align-items: center; z-index: 20; }
+.tbf .grow { flex: 1; }
+.tbw .btn.big { height: 60px; font-size: 18px; padding: 0 22px; border-radius: 10px; }
+.tbw .btn.red { background: var(--rnc); border-color: var(--rnc); color: #fff; }
+.tbw .btn.dk { background: #1b211e; border-color: #1b211e; color: #fff; }
+.tbrow2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tbrowq { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; }
+.tbcard { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.tbcard .ch { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--rnc); color: #fff; padding: 10px 16px; font: 800 17px var(--f-display); letter-spacing: .05em; text-transform: uppercase; }
+.tbcard .ch span { font: 500 12.5px var(--f-body); letter-spacing: 0; text-transform: none; opacity: .9; }
+.tbcard .ch .cnt { background: #fff; color: var(--rnc); border-radius: 12px; padding: 2px 10px; font-weight: 800; opacity: 1; }
+.tbcard .ch.gr { background: #5b6560; }
+.tbcard .cb { padding: 16px; display: grid; gap: 14px; }
+.tbin { height: 60px; border: 2px solid var(--line); border-radius: 10px; padding: 0 16px; font: 600 20px var(--f-body); background: var(--surface); color: var(--ink); width: 100%; box-sizing: border-box; }
+.tbin.big { height: 64px; font: 700 26px var(--f-mono); border-color: var(--rnc); }
+.tbta { min-height: 110px; font-size: 17px !important; }
+.tbw .field input, .tbw .field textarea { font-size: 17px; }
+.tbfound { border: 2px solid color-mix(in srgb, var(--av) 45%, var(--surface)); background: color-mix(in srgb, var(--av) 6%, var(--surface)); border-radius: 10px; padding: 14px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; }
+.tbfound .t { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; font: 700 15px var(--f-body); color: var(--av); }
+.tbfound .t em { margin-left: auto; font: 600 12px var(--f-body); font-style: normal; background: var(--av); color: #fff; border-radius: 10px; padding: 3px 9px; }
+.kv2 > span:first-child { display: block; font: 600 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 2px; }
+.kv2 b { font: 600 16px var(--f-body); } .kv2 b.mono { font-family: var(--f-mono); font-size: 15px; }
+.tbsl { display: flex; gap: 10px; align-items: center; font: 600 15px var(--f-body); color: var(--ink-2); }
+.tbsl input, .tbck input { width: 24px; height: 24px; }
+.tbchips { display: flex; flex-wrap: wrap; gap: 9px; } .tbchips.sm { gap: 6px; }
+.chip2 { min-height: 50px; display: inline-flex; align-items: center; gap: 8px; padding: 0 18px; border-radius: 25px; border: 2px solid var(--line); background: var(--surface); font: 600 16px var(--f-body); color: var(--ink-2); cursor: pointer; }
+.tbchips.sm .chip2 { min-height: 34px; padding: 0 12px; font-size: 14px; }
+.chip2.on { background: var(--rnc); border-color: var(--rnc); color: #fff; }
+.chip2.on2 { background: color-mix(in srgb, var(--rnc) 10%, var(--surface)); border-color: var(--rnc); color: var(--rnc); }
+.chip2 u { text-decoration: none; font: 800 10.5px var(--f-body); letter-spacing: .06em; background: rgba(255, 255, 255, .25); border-radius: 8px; padding: 2px 7px; }
+.chip2.on2 u { background: color-mix(in srgb, var(--rnc) 15%, var(--surface)); }
+.tbnum { display: grid; grid-template-columns: 60px 1fr 60px; border: 2px solid var(--crit); border-radius: 10px; overflow: hidden; height: 64px; }
+.tbnum button { border: 0; background: var(--surface-2); font: 700 26px var(--f-body); color: var(--ink-2); cursor: pointer; }
+.tbnum input { border: 0; text-align: center; font: 700 26px var(--f-mono); color: var(--crit); background: var(--surface); width: 100%; min-width: 0; }
+.tbnote { font: 500 15px/1.45 var(--f-body); color: var(--ink-3); }
+.tbfotos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.tbfotos .ft { aspect-ratio: 1; border-radius: 10px; overflow: hidden; position: relative; border: 2px solid var(--line); }
+.tbfotos .ft img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tbfotos .ft .x { position: absolute; top: 6px; right: 6px; width: 30px; height: 30px; border-radius: 50%; border: 0; background: rgba(0, 0, 0, .6); color: #fff; font-size: 14px; }
+.tbfotos .ft.add { border: 2px dashed var(--line-2); background: var(--surface-2); display: grid; place-content: center; text-align: center; color: var(--ink-3); font: 600 14px var(--f-body); cursor: pointer; }
+.tbfotos .ft.add b { display: block; font-size: 34px; line-height: 1.1; }
+.tbsum { grid-template-columns: 1fr 1fr; gap: 12px 20px; }
+.tbsig { display: flex; gap: 16px; align-items: center; border: 2px solid color-mix(in srgb, var(--ok) 40%, var(--line)); background: color-mix(in srgb, var(--ok) 6%, var(--surface)); border-radius: 12px; padding: 16px; }
+.tbsig > i { width: 48px; height: 48px; border-radius: 50%; background: var(--ok); color: #fff; display: grid; place-items: center; font: 800 24px var(--f-body); font-style: normal; flex: none; }
+.tbsig span { display: block; font: 600 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.tbsig b { display: block; font: 700 19px var(--f-body); } .tbsig small { color: var(--ink-3); font-size: 13.5px; }
+.tbck { display: flex; align-items: center; gap: 12px; font: 600 16px var(--f-body); }
+.tblr { display: flex; align-items: center; gap: 16px; padding: 14px 16px; border-top: 1px solid var(--line); }
+.tbcard .ch + .tblr { border-top: 0; }
+.tblr > div:first-child { flex: 1; display: grid; gap: 3px; min-width: 0; }
+.tblr .t { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; } .tblr .t b { font: 700 19px var(--f-mono); }
+.tblr .d { font: 600 16px var(--f-body); } .tblr .m { font: 500 14.5px var(--f-body); color: var(--ink-2); } .tblr .w { font: 500 13px var(--f-body); color: var(--ink-3); }
+.tblr .btn.red { height: 58px; min-width: 180px; font-size: 18px; }
+.tbnone { padding: 18px 16px; color: var(--ink-3); font-size: 15px; }
+.tbnet { display: inline-flex; align-items: center; gap: 7px; font: 600 13px var(--f-body); color: var(--ink-3); } .tbnet i { width: 9px; height: 9px; border-radius: 50%; background: #3ccf7e; }
+.tbdone { display: grid; justify-items: center; text-align: center; gap: 12px; padding: 24px 20px 6px; }
+.tbdone .ok { width: 110px; height: 110px; border-radius: 50%; background: var(--ok); display: grid; place-items: center; color: #fff; font-size: 62px; box-shadow: 0 0 0 12px color-mix(in srgb, var(--ok) 15%, transparent); }
+.tbdone h2 { margin: 6px 0 0; font: 800 34px/1 var(--f-display); letter-spacing: .03em; text-transform: uppercase; }
+.tbdone .n { font: 700 34px var(--f-mono); color: var(--rnc); }
+.tick { display: flex; align-items: center; gap: 12px; font: 600 16px var(--f-body); color: var(--ink-2); } .tick i { color: var(--ok); font-style: normal; font-weight: 800; font-size: 20px; }
+@media (max-width: 700px) { .tbhd { grid-template-columns: 1fr auto; } .tbhd .lg { display: none; } .tbrow2, .tbfound, .tbsum { grid-template-columns: 1fr; } .tbrowq { grid-template-columns: 1fr; } .tbfotos { grid-template-columns: repeat(3, 1fr); } }
+
+:root[data-theme="dark"] .tbw { --rnc: #a8252a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tbw { --rnc: #a8252a; } }
+
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
 #fb-gate[hidden] { display: none; }
@@ -3869,7 +3983,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     DB.last = Date.now();
     const ae = document.activeElement;
     const busy = ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName);
-    const formView = S.view === 'cadastro' || S.view === 'config' || S.view === 'historico';
+    const formView = S.view === 'cadastro' || S.view === 'config' || S.view === 'historico' || (S.view === 'rnctab' && TB.step >= 1 && TB.step <= 3);
     setTimeout(maybeMigrate, 800);
     if (!S.rendered) { S.rendered = true; render(); setTimeout(rncDailyNotice, 900); }
     else if (formView || busy || $('#layer').innerHTML) S.stale = true;
@@ -3940,7 +4054,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   /* módulos em teste: a conta dona esconde de todo mundo (inclusive administradores) até liberar.
      Sem escolha gravada, os módulos novos ou reformulados começam escondidos. */
   const TESTE_MODS = [['ins', 'Calibração', 'reformulada: EMA, histórico, envio ao laboratório, etiqueta QR, cronograma e custos'], ['sold', 'Soldagem', 'módulo novo'], ['iqf', 'Avaliação de fornecedores', 'módulo novo']];
-  const TESTE_DEF = { ins: true, sold: true, iqf: true, rncc8d: true, ticker: true };
+  const TESTE_DEF = { ins: true, sold: true, iqf: true, rncc8d: true, ticker: true, rncrel: true };
   const ocultos = () => { const o = ((DB.cfg || {}).ocultos) || {}; return Object.assign({}, TESTE_DEF, o); };
   const emTeste = (col) => !!ocultos()[col];
   const rncc8dOn = () => DB.owner || !ocultos().rncc8d;
@@ -3952,7 +4066,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   const anyLanca = () => canWrite() && Object.values(VIEW_COL).some((c) => ACC(c) === 'lanca');
   /* telas gerais (versão hospedada): Painel, Alertas, ... 've'/'nao' · Configurações 'nao'/'ver'/'edita'/'admin' · Exportar tudo 'sim'/'nao' */
   const SCR = (v) => (typeof window.CQ_SCREEN === 'function' ? window.CQ_SCREEN(v) : null);
-  const viewOk = (v) => { if (VIEW_COL[v]) return vis(VIEW_COL[v]); if (v === 'cadastro') return typeof window.CQ_ACCESS !== 'function' || anyLanca(); const s = SCR(v); return s == null || s !== 'nao'; };
+  const viewOk = (v) => { if (v === 'rnctab') return !!S.model && rncRelOn() && cw('rnc'); if (VIEW_COL[v]) return vis(VIEW_COL[v]); if (v === 'cadastro') return typeof window.CQ_ACCESS !== 'function' || anyLanca(); const s = SCR(v); return s == null || s !== 'nao'; };
   const firstView = () => $$('#nav a').map((a) => a.dataset.v).find((v) => VIEWS[v] && viewOk(v)) || null;
   const cfgMode = () => { const s = SCR('config'); if (s === 'admin' || s === 'edita' || s === 'ver') return s; return DB.admin === false ? 'ver' : 'admin'; };
   async function lock(mod) {
@@ -4393,6 +4507,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   async function openRecord(mod, key) {
     if (mod === 'SOLD') { soldFicha(key); return; }
     if (mod === 'IQF') { iqOpen(key); return; }
+    if (mod === 'RNC' && rncRelOn()) { await rncRelFicha(key); return; }
     const x = findRec(mod, key); if (!x) return;
     const m = (DB.meta[mod] || {})[key] || {};
     await resolveNames([m._cb, m._ub]);
@@ -4538,6 +4653,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       main.innerHTML = `<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--warn)">Banco vazio</span><h2>Os dados ainda não foram migrados</h2><p>Assim que os dados da planilha REV.011 forem carregados no banco, o painel aparece aqui automaticamente.</p>${VIEWS.usuarios && DB.owner ? '<button class="btn primary" type="button" data-go=\'{"v":"usuarios"}\'>Importar o backup em Usuários</button>' : ''}</div></div>`;
       return;
     }
+    document.body.classList.toggle('tabmode', S.view === 'rnctab');
     VIEWS[S.view](main);
     const bn = BANNER_VIEWS.includes(S.view) ? rncBanner() : ''; if (bn) main.insertAdjacentHTML('afterbegin', bn);
     hideInvisible(main);
@@ -5804,7 +5920,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   };
   VIEWS.rnc = (main) => {
     const M = S.model, f = S.f.rnc || (S.f.rnc = {});
-    main.innerHTML = `<div class="view">${head('RNC de fornecedor', 'Não-conformidades de fornecedores. Status e prazos recalculados hoje, com dias úteis e feriados.', newBtn('rncupd', 'Atualizar andamento') + newBtn('rnc', 'Nova RNC de fornecedor', 1))}
+    main.innerHTML = `<div class="view">${head('RNC de fornecedor', 'Não-conformidades de fornecedores. Status e prazos recalculados hoje, com dias úteis e feriados.', (rncRelOn() && cw('rnc') ? '<button class="btn" type="button" data-go=\'{"v":"rnctab"}\'>Tela do tablet</button>' : '') + newBtn('rncupd', 'Atualizar andamento') + newBtn('rnc', 'Nova RNC de fornecedor', 1))}
       ${pendQueueHTML()}
       ${multiChips('Status', [['Em Andamento', 'Em andamento'], ['Pendente', 'Pendente'], ['Atrasado', 'Atrasada'], ['Concluida', 'Concluída'], ['Cancelada', 'Cancelada']], f.status)}
       ${myPessoa() ? `<div class="mine-tg"><button class="btn small" type="button" id="fr-minhas" aria-pressed="${!!f.minhas}">Somente minhas RNCs (${NF.format(M.rnc.filter(isMine).length)})</button><span class="muted">comprador ou emissor: ${esc(myPessoa())}</span></div>` : ''}
@@ -6838,6 +6954,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
         const keepOn = $('#keep') && $('#keep').checked;
         const keepVals = {}; if (keepOn && fd.keep) fd.keep.split('').forEach((cc) => { keepVals[cc] = c.vals[cc]; });
         await sleep(120); S.stale = false; render(); updateChrome();
+        if (fd.mod === 'RNC' && rncRelOn()) setTimeout(() => openRecord('RNC', key), 450);
         if (keepOn) { Object.keys(keepVals).forEach((cc) => { const el = $(`#ff-${cc}`); if (el) el.value = keepVals[cc]; }); const nx = fd.mod === 'AV' ? $('#ff-F') : null; if (nx) nx.focus(); preview(); }
       } else {
         const rec = c.rec, key = rec.key;
@@ -6870,7 +6987,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const o = ocultos(), row = (k, l, d) => `<div class="tmrow"><div><b>${esc(l)}</b><span class="muted">${esc(d)}</span></div><button type="button" class="tmsw" data-tm="${k}" aria-pressed="${!!o[k]}"><span>${o[k] ? 'Só o dono vê' : 'Liberado'}</span></button></div>`;
     return `<section class="sec">${band('GERAL', 'Módulos em teste')}<div class="block"><div class="body">
       <p style="margin:0 0 10px">Só a conta dona vê esta aba. <b>“Só o dono vê”</b> esconde o módulo de todo mundo, inclusive dos administradores: some do menu, do Painel, dos Alertas e da Auditoria. Quando estiver pronto para apresentar, clique para <b>liberar</b> — aí cada pessoa volta a ver conforme o acesso dela em Usuários.</p>
-      <div id="tm-list" class="tmlist">${TESTE_MODS.map(([k, l, d]) => row(k, l, d)).join('')}${row('rncc8d', 'RNC de cliente em etapas (8D)', 'a ficha nova da RNC de cliente; enquanto estiver em teste, a equipe continua com a ficha antiga e o botão “Atualizar andamento”')}${row('ticker', 'Letreiro ao vivo (rodapé)', 'faixa no rodapé passando atrasos, vencimentos e novidades do dia; cada pessoa pode esconder no próprio computador')}</div>
+      <div id="tm-list" class="tmlist">${TESTE_MODS.map(([k, l, d]) => row(k, l, d)).join('')}${row('rncc8d', 'RNC de cliente em etapas (8D)', 'a ficha nova da RNC de cliente; enquanto estiver em teste, a equipe continua com a ficha antiga e o botão “Atualizar andamento”')}${row('rncrel', 'Relatório de RNC de fornecedor + tablet', 'ficha da RNC em forma de relatório (abertura do inspetor, tratamento, eficácia, aprovação, fotos e impressão) e a tela do tablet; enquanto estiver em teste, a equipe continua com a ficha antiga')}${row('ticker', 'Letreiro ao vivo (rodapé)', 'faixa no rodapé passando atrasos, vencimentos e novidades do dia; cada pessoa pode esconder no próprio computador')}</div>
       <p class="muted" style="margin:10px 0 0;font-size:12.5px">Atenção: módulo escondido some também para quem lança nele no dia a dia. Os dados continuam gravados normalmente.</p>
     </div></div></section>`;
   }
@@ -7015,7 +7132,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     $$('#tm-list [data-tm]').forEach((b) => { b.onclick = async () => {
       const k = b.dataset.tm, on = b.getAttribute('aria-pressed') !== 'true', o = Object.assign({}, ocultos(), { [k]: on });
       b.disabled = true;
-      try { await DB.db.doc('cfg/main').update({ ocultos: o }); logEntry('GERAL', 'cfg', 'alterado', `Módulos em teste: ${(TESTE_MODS.find((m) => m[0] === k) || [0, k === 'ticker' ? 'Letreiro ao vivo' : 'RNC de cliente em etapas (8D)'])[1]} ${on ? 'escondido (só o dono vê)' : 'liberado para a equipe'}`, null); toast(on ? 'Agora só você vê.' : 'Liberado para a equipe (conforme o acesso de cada um).'); b.setAttribute('aria-pressed', on); b.querySelector('span').textContent = on ? 'Só o dono vê' : 'Liberado'; b.disabled = false; setTimeout(navIcons, 300); setTimeout(tickerUpdate, 300); }
+      try { await DB.db.doc('cfg/main').update({ ocultos: o }); logEntry('GERAL', 'cfg', 'alterado', `Módulos em teste: ${(TESTE_MODS.find((m) => m[0] === k) || [0, k === 'ticker' ? 'Letreiro ao vivo' : k === 'rncrel' ? 'Relatório de RNC + tablet' : 'RNC de cliente em etapas (8D)'])[1]} ${on ? 'escondido (só o dono vê)' : 'liberado para a equipe'}`, null); toast(on ? 'Agora só você vê.' : 'Liberado para a equipe (conforme o acesso de cada um).'); b.setAttribute('aria-pressed', on); b.querySelector('span').textContent = on ? 'Só o dono vê' : 'Liberado'; b.disabled = false; setTimeout(navIcons, 300); setTimeout(tickerUpdate, 300); }
       catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; }
     }; });
     const nw0 = $('#pf-new'); if (nw0) nw0.onclick = () => pessoaDrawer(null);
@@ -9204,13 +9321,460 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     </div></div></div></section>`;
   }
 
+
+  /* ================= Relatório de RNC de fornecedor (documento) + tela do tablet =================
+     Uma RNC só, com duas vistas: o RELATÓRIO (abertura do inspetor + tratamento da Qualidade administrativa)
+     e o MONITORAMENTO (lista, prazos, cobrança e indicadores), alimentado pelas respostas do relatório.
+     Fica em "Módulos em teste" (só o dono vê) até ser liberado. */
+  const rncRelOn = () => DB.owner || !ocultos().rncrel;
+  const RN_ORIG = ['Recebimento', 'Inspeção de processo', 'Inspeção final', 'Outro'];
+  const LOGO_A = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAC1CAYAAAAa5LCBAAArkklEQVR42u1debxcRZX+Tr+XEEKAQCRAIGDYVwXEhU0FBBE3FAVxZEBcWcK44TIOMuKAII4CKjsCigso4LggiKAIkU0gIgKyBwiCISwhK+91f/NHncM7XG5339v33u56L12/X/+6X7/ue6ur6jvnO0udEvRbVxtJAeAfAEARqZd4jxqAmn8LQAMARIT9WcjepD8EXQVDvdUCJbkCgJUArAJgkr6eAGC8fmQQQF0X/DCAJQCWAngewAIACwEsbXOPAfdnow+YPkB6AYhaM61AchUA6wGYAWBDABvo32sCeAWA1QFMBDAOwECW2wJ4QYHyLID5AOYBeBTAwwAe0OeHAMwTkUZKnwZNy/QB0wdIFaCoKX2pJ/43EcBmALYBsB2ArQBsDGCqagNkBECzRVvL0dVnFSj3AJgN4DYAd4nI3JTfM6CUjMs7YGSMLlpbsI1ugoLkeABbA9gFwBsBbKvaIW0hN8wuSNgjknN+mPLag0paaKIFAP4O4EYA1wO4RUQe7WuXMQqQLgBjIAUUUwDsDGAvAG9SjZEcV7MbxIGl22PPFOAkgfs8gFsBXA3gKgC3ishwAiyNqsa3D5BqgSG2cEnuoAbxzSSliOQzypFYKKsB2B3AewHsCmCtFEAAL/dWRTd0GPFwpWmaOwFcAeCXAG6wMXAadMxrFRnlwBAANQeMrQH8jxq7MwHcrsBpFAWdvvcmAB8A8A4A6yboEkcBILIAxsYqDSy/AHCJiMxOaFUuT1plVADDuytJbkryPIZ2PskJDkC5aZRRNf17OsnPkryVL211ksMkG+69hj7q7v/DJIfcc6uHfd6+30hcv9utrv1qJN77I8lDSK7uBYoft37rHTg8MNYj+W2dRJL8SNIeyQkMcX+/huQZJOcnADCUAMCQe6+qNpwAUb0HwKm7cbY2h+QJJDcdq0CR0aQ1jE6p+/QIAJ9W/v8ogP1E5EY1JOtZubEC7kUuTXIPAEcCeLsbnyGlHzWlHs3GbVgN3fn6WIDgXn0OIai3SK/lx9+CgxMBTAawqj5PQYiJrNTifknjvxvzmUbDlgD4OYDvisjN3XCY9AGSWMTOzngXgOMBbKn/vg7AASIyl+SgN6bzeLxI7g3gswB2c4tvWBcwUrw9DwO4H8B9AO4F8AiAxwE8CWChiCwt6HRYUYGyNoBpCEHFTQFsoq+n4eWxlIYzuLsBGOo4Dbq/LwPwLRGZlSaA+gCpTmusDeBEAAe6j/wMwCEistCDKKdh/yYAXwLwVrfIagmtcB+AvwK4RZ/vAfBkMzC6YFutiYuVifFPGvaNVouK5CQA66uQeK0+tlKtk+ZNqxosplW8YX8xgBNE5PaxAJRYXbf2el+SjynvfUGfT85rbySuuYEa9Gm2w736v4NJbqk5Umk2y3ildJl/k35vgORg0iGQ8fuDac4HklNJ7knyOJLXk1ycYscMd8F28fdYRvI0kuul2ZB9DdI5OAZFZFi9Ud9Qly0Qco7GAzhWRI7Jw3NNw+h3jgRwjFIYIOQx3QbgSoQA2WwRWdLEOSBJzUFyZaU8awFYR2nRWirRp6h9saI+eztmWKXvUuXxi9VumQfgKQD/BDAXwBNK3+anaa007UlyQ4TA5d4IUf01EpolLVBYZqs7jTIPwAkAviciy0aTNpGIwTEDwAUIaRu2KAYBfF5ETso6yCZtRYQktwVwLkIKCAFcC+BXAK4QkbtSACFwOUkWdCS5DYC3KcXZUOnO6k3slTJaQ+2euQhJh3cD+BtCmsh9IrKgFWBITkUIbO4L4C3qCPDUqCoKlqRetwL4gohc3QzY/daaPtT09V4k/+ko1bC+nmkgyhLjSLhtv6JuyvtJfpnkVsnPGuVpQmEG9DM7klzShF40ErEPH9vw8Y20R7PvtXIfN5R6XkHyGJK7a+oLmlEakuuTnEnyzynUqCpXdcPNIUl+l+TkNPd6vzV3tdrro91ADrmBPdzAkcPAN1vjPJI/J7lbAjSS1Q5w4L1S+7M0EZOoktv7AORwYlyS7UmSvyZ5JMkt24BlB5Knk/xXl4Di4zf3knxrXjtyeQTHoDMyf+kWRN0tgk/nAYdb/JNJvofkq5P3zGsc6/O2XQgKdgKcZtpmGclZJL/kNSbJcYnftw7Jo0jek1jMVf1OH3A80ZwgeeZ3eQPHDiQfcIPXcIP4X50OXsJrNdCpOjfJS/KslAmOrXnA+PYCyT+Q3NVT2oT2XpHkQSRv6QJQ/HWvI7lZn3IlqI2+PojkIqfe/QL8Zh6bo51tU+D7QnJdks9GkB+VFyz1BFiWqib0cyBeAOlv3o/kTU3ct1Vok6dI7uvHvA8O8ouJCfAD9sMYJIrTckcn+jka2zJ9/kkTmySZBFoj+SGSd1YMFD+m/73c2iU6Acbnv54y4DZQ15JcodeSRPsrJCeRfNhJ5NHarP+LNE7SdBGmUK9PkXw8QZGq8nT9jORKozGwWBY4vpsCDhvwB0iuGYMEcdrjkDGgPZKU5qQsCzABlGkkv+fGoQptYv2bRXL6cmG8J8Bxdoqha5JtIcntYpEczg18a0VSs5eerydJTjEtmWEcvI2yk6azsCLBMeSE5avGNEgSNsfZTbxA9veHYhkM1+e3jiFwJBf0f+SNLblxGSD5OZLPV6RNrI/zSL5hTIIkMaBntAHHqTENgtN4l48hepUM2N1DckIWLdLCfb617jBkBTaajfmzJN885kDiOPyJTcBhA3CTZsZG4QN3rt1tUracjjUt8v5OKK2nXTpvx7j5HSoZzFRNtduYAYkbvKOaDJp5LRaQ3Dwmj0UGSjiWAPInbyN2Kkz09e4u4DtcEUh2HfUgcQts/xb81Abwk5GBw7THdAVvY4xqEE+1di46B04grqm5YMncq7JA8hxDWafRCRLH3V+j/vZ6C3D8umikvEJwf3UMa4/kPFxchpBKuISPryBmUneG+9bdEKxS8uKyraOrArgZwEZ4+RZW23r6HMK+jEfQYe2qKpwK+nJlhL0W61QxTjHJM31eBuDVInIvyVqRuaDbxKZeybMRKtT7DVRFml1nDoBdROTRon1u1coOxA1oR89UcNRT7mGA+bKIzHHfiaEN6AasDyAUhmtgbBf4Fp2jCQA+WYYw0Lkkw8a3CxE2lj2pi7qMzVF2nfUBXMawm5PRp6U4DvqRFtTEVPr1yUzSiNzS40jeMQZjH60Ch5YsODWvyzfjmtiM5N0lU1a7zi9cQFdiBYfZHRuqzzrN7jAf+RDJ7ZP+9Ihsj3cuR+BICq7Pls3rHUjWdhkJZYHECnh8I1qjnS/dqnpNCxefvXd6TF6rFJBfNQYDg1m9WfdqYqKUKY2d8JlC8oYSQeL3DR0YJUichPhSix9urtKnVJJITOrQTeDr2JuynrGAhCQ/UMVCc2M8mWGDVJkgsTy+bcpmJrWiP1orkLwewFdbeCrM2P2miPwToXBbjCVfjtAxWR4rldt8zFThVWq1ESu5JCLPAngngJsQqtQMF720Pq8E4EdqtKMsASwFwGF1lSboj92yCUAMHI8inL60EBEd7WUuQpKvRCils9IYd+22ajZXu4rItaygLA9H6pNNAfB7hOPpynABDyvgLhCRg5mjDG1VGsTKd57QAhwmmQTAN7R+k0SmPWwMPopwsmwdy+/ZjTZXRya0StmaZEBE5iOcs/IARs5ELNLsBOCDSB6ozKawnSsFpcAeAH6n6E2rem4S6WHVHot1kGLRHtbfVQDchVAdkcs5QIBQwXJbEbm7qiCcW0NbIhTwm4KXB5U76b8FoV+j665QELrW4aIiw3HGp7vrSAuJdLKILMJIIC6WZv3ZX8GxPGsPE5h1hAqRh1ZJNRUcgyLydx3/IbQ+0Tdr/wlgNQCn69x2dz6dN+Lbbdyh5g2aS3LV2DxXBnYNDM5eDl277XYcztfEw0rnLWOAudO4TuFE2NynMCnyt1ePT73FNYxenSMiz8WmPfS3EKFW7avx8vL9y7MWaSDUGj5Ix6iycVFbYVBEzgXw7ZI8W+aJ/DrJ9QE0OnX91vKvKwqAb2Lk0JRm1GpQPVbn6ndic50aWI+oyiAd5SAhgI8znOZVr1j711XKHwXgGmdwF+3/ZKX3HVOtPOU3LanwfQhl9Vu55uzHXSYij6jHKxqAqDQhQ0nSPXUw+9rj5RJ4QwDv7YIW8cdR/zvCUQ9F41GW1LgPyX3Me1YJQJxhPgEhIMgMnQOAc2KVkDoph5YgrcZ6O0IFSqPiCWmoIJ0L4CMlaXXTJCcxnMrFvJowqwYxDfAhAJu34evmCbodwCyGMzWiWYA22STXQUhr72uP5kKuAeD1AN6kwdSBikFinq0rEA5OKpoib8DeCMBnDISlAsTsB+WiX0D2OMGFCozYFp+luXwYYWPXWN/zUYadVlngsIU98hWEMyHLAslnOzHYs3zQbyJK2yGYHNABhIDgpQl7JAbtIToBk1SNsw+OtlqEAN6uAb3KNyaZp1NEXgDwMYTj6YqA02jWKgCOzmuw1zIiejzCmeTtOmk89Y8i8rBGYWMMDO4L4JUoHrldHlodwDgAh3Ur8Oao1l8BHIfiqSj2/QNJviqPwV5rI3EHdVD2RjhmOCtfv8QlM0Y12TowR/TXfW4tcgDDUdwNdmejm83VN9SeLQoSIhwAe3SZNoh1KEuswMDzPMKhmIyMXpn22B3A9ugHBvNQlAZC+sbBOoaVAyRBtWZqH4qkohjA3kPyNVm1SK3NgmowFJN+cwbtYWC6XkQej5BeIWFwNvprPzeP/xjDsQT1bqQNuczfWQinE5ehRQbU2VRYg9gAHJLRk2BguDyHfdM17aHUYBsAb8VIpL/f8nmCZgDYt+rAYVLwKqU7GuG89SJZGUYX92E4s7EtXWx2eIpojsxqCJHzdgveFtwQgKtjlNA6qYejHxgs2o5QgVPv4rzVRORJAP+j67AIM2mo02FmFqdDrQXSgLChZU20Tkr02uMuAPfqD4sCIEr16iTXBbAf4g8M1hFnXpjRm9ci7DhkFwtv1FXSn6lrrAjVMoDtT3Id2wqcFyB283/LOFn2+WvNRRcZPQDCjsFVEPeeDwNvrP2zeZ7ZA+0vIrIMIYAIFIuL1BGCxAe1Y0e1JhK3QXIDALvoBWsZbgqEnWHxrLaRwOAqGMnviTnuIWrDLUHxzUNVtEHt09v05KduuXzhJP1lAG5AsQi79flgkhPUnJCsGsTeeyeAiRkkro+e3xqZ/WGu3fcjlBKtRwoQc2HOAfBuAF9znqMYKeA4AIf2YMeebZ89NiGYO3U6bIyQzY1mtLvWZAAAYJ8ctAAA7kaoXIKIUtuN7h0eueFrC+04rcRxEoA7HB2IzRYhgA+QnNYjLXIlgOt0/dYLjDkdzWJbgFjsQunV6zNSEgPDbUrNYjlCzbTHbghV5GMNDFq6y30ALrRaYwBOjtQWMTfrZAAf7lbg0K9ZvecJJWgRAbAnyenNjPVak7/3ALBiToP25kil8xGR0b5m2uMUEVkCwE5s+hlCVY4YC9n5wOEkdClwqFpk2GmRmwtoEdPOk5TWpiqDWhO6tHdOrwsRiq5FsRCda3dLxB0YNK32T4SqgAItoSQiCwGcgWKBscqkuPZpfQDv63Lg0LRIHWEPexlt34R58XKA2MYmkqsD2DGHx0cAzFeKgEgMS5NmH0dIUIs1MGgL/wdakrOWyGH7PoCnnBCKUkMrre7mGJvG+oWuu07jIra+30ByQzUvas00yIsfBvAKZNtIZJP2AIBnFGQ9nUi3wWsNjMRxYrQ9rF9LEfKMXhxPC8KJyDwAF0SqRWxRvgbAbt0MHJrGEpGlCCdYdcpc/AFCb0tTCrUUqbtbjhvaZ+7tgbHWdOK0L/+GkWp9MRq7Zt/9VkTuS6lgaPunz0CIixRNsahSA87sAXuwe18I4FmMxGg6bXunrfuak7qmtvLQK2v/KOhRKFN71EmuoPQq5lI+Nr5npY23K2JwP4CfI06Xry3KvbRCTDe1SEO17D+VanWqRTzNmqrXlZdpEJW6awLYIsdit8/EYn8MuA1em0dMr0x7/A3A7y05tMXnT0F5h2BW8VsGMbLjsBdC8bwCAtrvd9khiYta4nlzhByVLBFSOrX/SCQAMQlyeEQOg1YTc5YCY6CJlLQzNW4FcBXiDhxmSv4rWYvYWPwZIbDaqUvcvvPmJNCSP2SLZu6uFpO8BMATvV6QboPXa/WHxh4YfAIjrt16Bi19cgw0toWhuyrC3qG89LwM1jAM4KICa9D6u2NyPpI/ZPMOLv4MgisyljYT5Zw3USVABMDZIvIM2py25STy7xHK4MSoRYxJfFRPeKp3sVC5zfOlCMc2DHQIciCcc7Oud/fWEjfZOIeUskn9l2qRXhrnVgxuBoD3In7X7tMATstRs9gCY6cgTo+cUZv10OXAobKGmjqKbs7JgJJ2yEoIJ169iIGaxS402DO9A4A8o1KulzEQk8Kf0B8Z654P69eZIvIEsp/VaBL5UgD3I+5zFHsROLRx/EUBmmXjuf1LAOI+sDqAtTvguU/3gHcmvRh25t2HneEYq/ZY4LRHpol0gbElCIcWxZgKb7R2OwC7d3nHoS3u3yJs++4krcjW/Lb+mv5kqHUQdtzlmXAPkF5JbJMeBwKYOgq0x09F5DHkr3hvWuQCpbUxahHrTzdLlcLFLu5B8Gahg7GxNbMZyfF2zZqT/OtiJDMyzwJb0EPbw9JKJiBUao+5lOiASrfTOjFgXfGC+Qh+/xjTTyxwuKdWkOmmFrHjOX5fECDTVVkAgHhaNKND1C/q5aLThfMeAJsg3lKiJnSu0XKanVa89+knixBnEmMDvQkc2r2u6ZDym8CZAGCDNICs32HHFvZy4akH4z8wOtqZRew1l37yMICLEbfLdz+S63YxcGga4y8I9bM6yV2za2zkAcKCABnqEb0y7bErwu7HmAODAwjpOL/NEBjMSi1PRdg7EpvG9IHDrhXKsNiFiDwN4LYOaZa1DT3a7SJr99IbVUClziw4GN2SbOdpenahw0yVmomIzEbYVVdDnFoEAD7S5cCh3ffPBZ0ERrFe3IM+HsAaGC3IGEkr2RohMTHWHYO+oPcPSwRy7OknBtrpAN7fxcChAeLmDoV9LaEsGvbGygh7J2Ic7FbtkwglaGLdMWjG+SUi8pg7CLUonTBefw2AmyLVItYscNgNDW/3uFNt40730Kyhrt4XjafJCJvXO2ld5f0urWQtAAcg7lKitnBPq+LaCrZTIv3tFjjcFsAeXTrj0MDwOELGQV6aZcphiuHBALKqSuJONMikbi86HYiDEHL4Y94xWANwtYjcYoUkyry+8vrLEOohxxg4TNqJlbt9nZa+pwClXUmVBjzF6jR9YWIXtYellayIUGs3Zkpo/frfKvqZ2Jd9GuJNPyGAPUhui+4EDsXRrE7beGhWiQFkhQIIX7mbA64L490IvupYS4lav64DcFUF2iOpRX4I4EnEm34yCODwLgUOfaXPvIa6CRmxdV0rIN3sO6t3S32q7SEADovceWBj8/Uq69c6LfI0QomgWGtoEcD7uxQ4tHX4EDrLrLDvT/AAKbK4p3QDII5b7gBgJ8QbGDTtcQuA31WoPZJC40z13MSWfmKBw1UcLe4GQOZiJE+QRQHSaU0hAFjdHZnQDXvgMMS9H8LadxQYVZ8rbukncxB3+gkQAoeroDuBw2dQbCv4Sr7jSzrka0AIME6oWHtYKdEZCFXnY3XtmlZ7BMBlZaSV5HRgfAdaujQyLWLu7nUB7Fdl4FAD3yIiQ2qXdQqQl2y5XewukvdiUxzNqlwCIe4dg6bVztfaugPdMEwT6SdXRKpFbG0d3oUdh7ZeChcTsQstRGdJh0Rw83ayEzGPZKyTXBUjOwZrkU7+gGrjCwpQ16KOgZMjHSPTatsA2LPiHYc2Fk+WhbTFqprzdsKCdOtVOCkmhfcDMA1xu3YFwG9E5MGy0kryaBH1Dv0B8aafdDtwOK9oXz1Alhb4wZtUyKvtlKjDMLpKifakDwrKkyMdI0s/eQvJbbuQfvJMge8u9ZO6TEHSadu8IolgaSV7qmqOvZTobAB/sKMketEPdyzAPxB34PCILtzr+QL0bLEHCN1A5lnk9v1Nc9R4ilklF+W9p7cqJdoFmmX71pci7uonFjicXlHg0H7zgg5sY3FK48UFXu+QYtnFNgTwCnOxlUSvbM/HdgDegvhLic4FcFE3XbvN+pOSfhJj4HBlVB84XFIAIIuAkfPwhgA81+GPJUK6yaYddCZLO1JVcuxnDJ6jKn0FAAMkB3vxUCGyAsKZGRcg/sDhqqgucMgOPz9k2qfmeP7DTiLm5d/ASMGtwtLA7fl4JYD3If7A4IMAviYiDRFZKiLDPX4sVWP9eDVUYw0croNqA4dDHQrtZaYwBvHS9OD3F+jMGxAiuWVMhCi9slKiw4hzS621xwEcpluXY9J0ddUkq0Vqv1HH7bzItNyzpkH8oruzQ7SZxthetym+UKROrysGZ6VEYznardVv31kfMbfYMg/M5bsNQuDwcpKDbQ4SytvGJ2hwVrr8lNnkntvf6yR1nhRtWyQbANgMofRjEe/JgJ6FfSDCiVexnqyUHNhY94QPIN5NZd5LeXkE2tf6M8+qxvuDDx9COK97egcXNmDthAIn/bjA4GgoJZqUzoPot061iAUOb1fvZVnCZmJOY90+95gJ/5rLflyEkbMGO0XyWwp+3+8YjLmUaL+V6+goO3BoQnXlnACx9nCSHtnzHR1e0CjQTiQnF9gb0hhlpUT7rRwtUlXgcOUOgfVAEiDWbu/QoLMo+pro7Bhpv2NwF4Rdg7EGBvutfHpaVeBwtQ6cLlRzAwCY3HL79wIL02jVOwv+qNhLiXaiYfut/cIEyg8cTsk5p4Kw9WOOrcEkQO5D57uw7Fp7kZxox7Jl1R5Kr7YA8A7EXQzOpF4fJOUCJBk4LKJFbG7W7OA7jzgMhE64ytgLANzVoQQ3z9UrAeys4Mj8I3VQPomQJhFrMbiktOmDpPxxPayEUqU2L2vlMBleVBIaZqj50qNeA9xWgEbYd/bPGii01HCSUwF8EHEHBq0dgBBYjbHMzmg31rfByI7D3K5zXU8N/e7UDgAy2+OhlvKBmwoYSvadd5BcPSPNMip1kHLGmM8YJIAbROQi1XZD+l5fk5Rr25Vhh66aU4PY2r3d9yUNILchpAl3kiZtHompaku0BFqilOgnSvZgVGV7fEvV7ywAxyjA6/21XaoWKbLj0MAwDVpfNyMwawjpJX9LBYiLXcxB8GYV9dZ8OMM1fGBwQ8RfSvRuAL/CSI3ZEwD8DiHQ1QdJeWNdJHBoAFkPI5F6yQAQIKRbPWJ4SJPWFou4toCKMymwc4aCxQbKI0bBxAmA00RkmWlXBfdHEe+xzKNZi3QaODQwbJJjDdtnbtH7DaAJnTEkXVWQ7pgU+FgzY90FBnfUR+xnDD4B4EeWbWzqX0QeVXpoBnvfHikuiMoIHG7RAaiuS9ostSZIugFhj0OnUtGkwP4k18RICklaOyxyb5D16/si8oyjhVZqZ1BEfoGwF6ZPtcppRQKHNv6bZzTQLea2DCNnGzZSAWLFvDQecnUBD41JgdUBHJwM/LhSohsg7lKi1q+FGDnCOQlkU8lfUA9IHyTlACT3jkPbh0RyNQAbZ9Q+tr7vBPCAuYmR4cuX6kKXglLgUJKTElKg5gz5iYi7lKgAuFhEHkkrBue0yRIEV/Vi9IOIZQqow3KUKvX2xxoZ58Dm8xqd24G0RZz6BUezWEAKrA/gg6ZFFKHDqjoPKmjrdEOSDQP4TisV76jW3wB8FnEfqjnajPVtkD1waOvo1Y7FSMbvXJHQKOkL0zqiNOv/EryuE6pFAJ8maSkkds/XImzOijVyPqz9v1KLQrcsBqegHxSRMwD8rE+1StMgQP7A4RtyMIQaQmjjxrR71Np07EcFF7AZ+Zs5LTKQuEesVMR+8ykZjT2zR2oIuyEfxogfvt+KaZG2gUPHTAZU+GZhJjY3V4rIYqXQbAsQlyJyI4BbC1IG0yJf0oj5sLv2PYizbpM/JeqarKVE7bg1EZkP4BCdgL7rt/hcZAkc+iKGm2QUajVnb7f8QCp6dVGcW4IkbqhX4RA1hMbpFt/jEXfW7qk6Bpk9bM4e+QOAr/WpVmlapF3gsObo1fgM9ofRq4cA/KkZhau1QS6UT/+rIF3wWmQ11SIDAH6iUjqmfCYbuAcAXNJhKVFz/X4NwB/7ICnUsgYOTUvvlpG621q+VESWpNGrlgBxMZH5AH6Q00hqpkXWAXCUudO0BtLnIrNHbK/HGeq6reWt8aWfp2qfQwA8jX5qfFEWQgCHpJ1x6LZMrIiwZTuL/WFC+UdZOFg7L8IZCP79IiUsDSRHktwYwBDJcSLyJwBnR2LQmkNiPoALilSsd6koD2Hk4NF+anyxtdPsjENbx9sAmJHBsWT0a5aWGmp6EnEt4yQ/oFSriBQ0mrUSgBNNyiqf/CKCq63XCX82cOeLyLxOtEcTe+QihIN1+l6tYlSr2RmHpk32yun0Obctk2orUsMCJoCtAfxFJ7lWcBEOAHiXiPzKlSt9O4BfY+SU1m4b7waEpQBepTaIFD1GTbWQAFgRwM0ISXT9el/F7MO3+1KlboxvArA9WlfjtOyIxwBsiZBGhGaCsO0kuXO470A4uaholNgkwcnKJ4eVav1GqVyvDFobuMtE5H6MHGdWTOyNuH4XATgYISmuT7WKCbEjXA1n0/JbIdspZDbP54nI82hzEnFeKXY8wjbTItLdaNQGAI61Raia6vMIR4f14jwQo4+nln1Whe0xEJFbAPwX+rsQi6wdILhyV03kTr07w7ox8CwAcHYWG7OWc4Jnqy1SVIvY92eSfLMe+j6giP4wur/Xe1j7dI2I3IQ2aSUFQfJNAFfqZA7313xuDUKEHMElusAtZLBvBrPBtMcPROSxLCwhjwax49WORdizXiRj1ThjDcCZJFdW1904EbkBwNFdlrKdpJV0aJJQAHwMofaSgaQe6SPGA0AFwI91Z+c4pUevV7uxVbFz+99iAKfoPDDrwsgiAc0W+QfC3ogytMgwQlrAtxzVGhSRExH2fndDyprh91cAV1Z5Qq3+RtFdiO9SR4AdmxbjI6bzDT09+kHCJvmQo8jSZp5/mMfGlJzizwbsFQgbTNYoQeLa0QkfFJGfkByn701Rr8QGFXt9zOPxMRE5p4JDXFLHUV3oqwLYA8DaCUFAN67DGMksbtaGStS2JlknAjgQwBsRxzEUNk/nicghzoO1GkJO39QW/TRqtlg1zcNleCibTe6APn+CoQ2zWGuQrJN8huQmeu1x+rw9yUX6/wbLb3bdOSRXJikVHSbZTNjETfjDmDyqY1TF+OddJ0Mkt9N5Gq99/GiGdTikzyf5NVzVoAnJAX3MKgkk9v1bSa5IsuZAcoD7TNmTZPc92uhdlxegjeWgG9NYHitoH7+SWGS9aDZPvzLh4sbu5jZr0MD9BMk19Hu1qifWtMi2JJeVtHhtAs63xWoLluQXKpgkG7hnSE7rysCNJnfRyCJcl+RzPdYipul31r6Z9tjN/b8duA6vXHs0AcnRJS5eu8YXjGo5kHyrZJDYdb7X1YEbXSCxOT6zh1rEFvgVDrg1ff1/bbRH3TGT8Qb6XtCD60qiWv4a+zqQ2ESdU9JEmTRcRnKLvvZoq0VerWPe6JH2qJPcya0H69MLbfpkzOaNPRGCDskbkXzaGdxlLN5FblAG3b2+XwJIDISXjBaDuZcg0edflSgE887TpQ6wJiwvbLMO7Ltn9ZQhuA7vW6IxbSB7kuTmDiSir7/nBqfR4fV7J1lGJ816Swa+X7bXqq5afquE9tiK5NIW3k17/xGSU7pKrZoMotkJXy2Rq9pE3E9yvRRNcnxiMPJKpev61CoX1criMapCe5xqQHVg/XGbdWbvvzsaAeg6//MSQWKD9HeSa6eA5KiEtMkDvPf1tUduAXhglwCS5poddLGxoRaC0fp2Ti9c9+2kTE2DS7MrMNrvSIDEAHmIGmtZ1L8N6l0kJ3QzMDjKASL6mEjygZJszSxz/tEU7XFli7VlffoHyVV6Tq1aGHQbk/xXiZzVBuNvJKenxEn2UidBO1Da/46ISrqMLlvk8xVrEbvuH3xQWu/9jhb3buj7L5DcIVp2kDDqhkuMgA876bBZCki2I/lQC3pnavtxkqv1tUfHWmQqyfluTKswzJeQ3Nppj5pq/LtaaC+b889EL/zcoj2soLepGUjmktwxBSTTSV7fBCT293F97VFY+J1cUeDQrvfFFGr1ny20h33volEzt27R/m/Jg2kDtJDku9xA2v0mOkfBsLM7GiSfJ7l+33tVmEJvqlK+zPQT710cSIBjI527NMPc26ir+Ej7aFDJA/p8WckgqbvnTydBqa9PdJ9fqs/n9j1XpWmRi0q0RYw2PUdy0xTt8dsm97J18JSj3QOjaTCNt65E8saSjTsvvU532afjXEBxP5KPOXBuY8DtL/XCANmxxMwJE5wHp4DjI03WTcPZuHuOWsHn1PI0dRGWDRKvmmek2CVrkfwlyd/4/vRbKXP6xxLmcyih3X2ca4ZmWyeplQfVx0e9TemkwZbO/TtcgXH3JMn3uPuOd6+nmFbrL/HS5vM9BV35tgb+orZjzUXtheTVTdaKzffRox4cKUb7Dso1ywaJv9a3SE5MUq5+K50+r6BZDp2AxD4/j6EUrQWbbZ18uQ04TnEaR8bKoNqP39n50ssEiefEf7GAUd+t2xVX/nAH1Pgl9oPTTG9qEkMzcJznviNjdWC3Jflgxf70ZZpAuaIb0L4NUq4DZrIGX7MGDr39cJi3O/R6a2oWblIr2Xd+6qiYjNXBNUmxjqYUlJUmn6bCSfI2knt4kPZpV6nC7rgcgu5lAVsXEqiRvCpFI9l3Lnafl7E+uAaSFUie1WHqeh4vF3Wz1frJPvRb594sXazrayCvXeAwzWPlM3W/nQI0e32hM95luRlg9/qoJtK/LG1iE/cvvddKfaCUKujOd/SpkfKwjOtLnLbw4Dg0AQgv3M7wtG555LI2yPurJKrCLkmq7btJ/nsCpAN96pUfIDqH22cY/98oY5AEOPZOGOXe2XK811Z9Pku+3gUUqygUkKRdN5J8H196pFcfKNkEW80zAZLnalrP8ww1BZaQXKzBvgtITkgRiq8juSAFGCT5uf58pINkKkeKBFS1OaeeAMoNqsEGE8Z83+v1cmAMtvj/JrofaANNatyE5JpNGMOmzgPm52MRyQP6DpUWnFZff9lRrarKztQTAPyr8uHVEsbocivFkhuX9L2JJN9o49RubJzNYeBYj+R9jvoOua0MO3mB2W9NBlNf76KLNo0eVQmUOSS/TnKLpJZbHvhwGij0/Rkkj1E6tVcyU8HFKGrJeEXCvX+nE3w2p9f7fLo+ErJ7SCaRPMkN5DCrK2KWpF5LNF1/H0tfSdgqYwYsTlMmQbGy/v7fqH14LMnJHc7lNN06bYFca+f4gG5/9XdGuXbmSMHsKmmXASXpSbtPgbpDyiIaGG2Rer60ELkk/jeZ5NtJnqH5UmQo9bmBB1RO23J9pzmWuo1vh+a9Zr81dwUPaP7P403ct6zI65V0FMxmqM21s3lnmgEmBg1jXqdmgNDPbEjyIIa6U3Pcb73TcqbyGs4OHJuTvFev94LLcHht31NVjTZZW/dGL+6CfdJKq1ghibPUC/bKNvRlMBEok5JBICn3kiafX4vk29TWmuXGki6o+imOVFPPpSETGdxzE9f+tgVrY7Y3ZDRqE4QDP4f1760A/CeAA+wjCCdSVc1jG+4+fhwXIZy+dTOAGwHcAeAhPQa6KfdPXCPrvPjj0RqtjjMmOQnhtK4tAbwO4TzxLQGslvLxIQDnAzhOROYYOLIeTadzVNODS98G4McAzGa5E8BnROQq++2VnPS0vAIkbRL0750AHIVwHLC1OsLRbdIFsNjiTAJzGOHQ+nsB3KWPBwE8inCQ58KyzkTUbccrIxzpNh3ARgA2B7Cpvp6W0r8hfR6nz5crMP7stHZL8KWAnSJCkp8A8B299gKEQ1JPFJFFea/bB0gBzwvw4gGZYChI/SkA+7jfZ8c8d8MApNNi0kKTvQDgaQXJfPf8DIDnACxFOFNvqfvOAMLZgRMATAKwKoDVEc6KnKLPUwGs0uK+dde/QTcmfwRwkohc7oDBPNLdaxmS31CBBQA/BXCsiNydVxv1W7kuSp9Xtb366hekuHC7ec5Fw913iN07Z6Pu7jec6INvV5Lcu9k4duDGnULyWpd79eaE42JUCWUZi0BJaJQNAXxQH5slJCm6RMFa2Q9MvG43R60+I4nXnv753/k8gMsAnCUis9Ioa4dj/1YApwKYC+CrInJt2pz0ARIPUMSp/AkA9lSg7KHUJBawVEXxkg6E2QAuBnCRiDxYBjD0+xOU0u4I4CfOfikMuj5AugOUmj/7nOQ6CpZ9AOyS8OQ0nP0wGgDTzua5H8BvAfwcwPVOs+a2MVqM8WQAqzvQvUQ4jea23ARmTJolF4WCZVcA71CwTGvioaKjMNKDsWOKxyzN8fACgiv1GvVI3SQii93vHVTvUaMiYTQqqdRyD5CMYJmMECPYHcDOALZGcJumNdM0SAGNdLDwkxrBv9/KA7cIwYV8O4BZCLGXexK/y7RKJW5VM7xjd9n2AVIMLEhSApLrIgTTXgVgKwAzEOILaynvbkd72Gbs82iiFwDMA/CQAuJOAH8H8A8AjyaltmoKYhTEGvoAGX1gEW+zJD4zESEQNwMhALcZgE0UOGsjxCfypk4MKQCeR4iDzAPwBIA5CogH9fVcEXm+Sb/MIG+oZuyDog+Q7mmXdhSF5DiEwN0aCB6yiQBW1GdJaBcLAC5TirRQwbEAwFIRGcoCYq+p+oDoAyQm0CTpUalGbwIE6AOhd+3/ARMdmbW6EiweAAAAAElFTkSuQmCC';
+  const rmeta = (x) => (DB.meta.RNC || {})[x.key] || {};
+  const RFOT = {};
+  async function rncFotos(key, force) {
+    if (RFOT[key] && !force) return RFOT[key];
+    try { const d = await DB.db.doc('rncfot/' + key).get(); const f = (d && d.exists && (d.data() || {}).f) || {}; RFOT[key] = Object.keys(f).filter((k) => f[k] && f[k].img).map((k) => Object.assign({ id: k }, f[k])).sort((a, b) => a.at - b.at); }
+    catch (e) { RFOT[key] = []; }
+    return RFOT[key];
+  }
+  async function rncFotosAdd(key, imgs) {
+    const f = {}; imgs.forEach((o, i) => { f['p' + Date.now().toString(36) + i] = { img: o.img, leg: o.leg || null, at: Date.now() + i, by: DB.me || null }; });
+    const ref = DB.db.doc('rncfot/' + key);
+    if (typeof ref.merge === 'function') await ref.merge({ f }); else { try { await ref.update({ f }); } catch (e) { await ref.set({ f }); } }
+    delete RFOT[key];
+  }
+  async function shrinkPhoto(file) {
+    const url = URL.createObjectURL(file);
+    try {
+      const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+      const mx = 1100, k = Math.min(1, mx / Math.max(img.naturalWidth, img.naturalHeight)), cv = document.createElement('canvas');
+      cv.width = Math.round(img.naturalWidth * k); cv.height = Math.round(img.naturalHeight * k);
+      cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+      return cv.toDataURL('image/jpeg', 0.7);
+    } finally { URL.revokeObjectURL(url); }
+  }
+  const meSig = (via) => ({ nome: myPessoa() || DB.meName || DB.meEmail || 'usuário', email: DB.meEmail || null, uid: DB.me || null, at: Date.now(), via });
+  const sigLine = (a) => (a ? `${esc(a.nome)} — assinado eletronicamente em ${dmy(a.at)} às ${hhmm(a.at)}` : '');
+  /* reincidência: RNCs do mesmo fornecedor e motivo nos últimos 6 meses */
+  function rncReincList(forn, motivo, exceptKey) {
+    if (!forn || !motivo) return [];
+    return S.model.rnc.filter((r) => r.key !== exceptKey && r.status !== 'Cancelada' && E.key(r.forn) === E.key(forn) && E.key(r.motivo) === E.key(motivo) && r.data != null && r.data >= S.today - 183).sort((a, b) => b.data - a.data);
+  }
+  const rnDate = (v) => (v == null || v === '' ? '' : E.isoDate(E.toSerial(v)));
+  const rnSel = (id, val, opts, blank) => `<select id="${id}">${blank === false ? '' : '<option value=""></option>'}${uniq(opts.concat(val && !opts.includes(val) ? [val] : [])).map((v) => `<option ${String(v) === String(val ?? '') ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select>`;
+  const rnFld = (label, ctl, span, help) => `<label class="field"${span ? ' style="grid-column:1/-1"' : ''}><span>${label}</span>${ctl}${help ? `<small class="muted">${help}</small>` : ''}</label>`;
+  const rnH = (n, t, sub, c) => `<div class="rrh"><span class="n" style="background:${c}">${n}</span><h3>${esc(t)}</h3><span class="muted">${esc(sub || '')}</span></div>`;
+  /* ---------- ficha = relatório ---------- */
+  async function rncRelFicha(key) {
+    const x = findRec('RNC', key); if (!x) return;
+    const m = rmeta(x), w = cw('rnc'), fechada = x.status === 'Concluida' || x.status === 'Cancelada';
+    await resolveNames([m._cb, m._ub]);
+    const fotos = await rncFotos(key);
+    const t = (v) => esc(disp(v)), stg = x.aberta ? rncStage(x) : null;
+    const lots = lotTokens(x.lotesAV).map((id) => { const a = avById(id); return a ? `<button class="btn small ghost mono" type="button" data-open="AV:${esc(a.key)}">${esc(a.id)}</button>` : `<span class="mono">${esc(id)}</span>`; }).join(' ');
+    const a0 = lotTokens(x.lotesAV).map(avById).find(Boolean) || {};
+    const reinc = rncReincList(x.forn, x.motivo, x.key);
+    const mon = `<div class="rrmon"><b>Monitoramento</b>${chipRnc(x.status)}${stg ? `<span>Etapa: <b>${esc(stg.t)}</b>${stg.ts != null ? ' · ' + relHTML(stg.ts) : ''}</span>` : ''}<span>Prazo final: <b>${fD(x.prazoFinal) || '—'}</b></span>${E.low(x.reinc) === 'sim' ? '<span class="chip warn"><i>↻</i>Reincidência</span>' : ''}${x.aberta && !x.comprador ? '<span class="chip crit"><i>!</i>Falta comprador</span>' : ''}<small class="muted">Calculado sozinho a partir das respostas do relatório.</small></div>`;
+    const acts = `<button class="btn primary" type="button" data-act="rr-print" data-key="${esc(key)}">Imprimir / PDF do relatório</button>${x.aberta ? `<button class="btn" type="button" data-act="msg-rnc" data-key="${esc(key)}">Cobrança</button>` : ''}${x.aberta && w ? `<button class="btn" type="button" data-act="rnc-ret" data-key="${esc(key)}">Registrar retorno</button>` : ''}${w ? `<button class="btn ghost" type="button" data-act="edit" data-mod="RNC" data-key="${esc(key)}">Editar cadastro</button>` : ''}`;
+    /* 1 · abertura */
+    const motOut = Array.isArray(m.motOutros) ? m.motOutros : [];
+    const qtd = m.qtdRep != null ? `<b style="color:var(--crit)">${NF.format(m.qtdRep)}</b> reprovada(s)${m.qtdRec != null ? ` de ${NF.format(m.qtdRec)}${m.qtdUnd ? ' ' + esc(m.qtdUnd) : ''}${m.qtdRec ? ` (${Math.round((m.qtdRep / m.qtdRec) * 100)}%)` : ''}` : ''}` : '';
+    const fotosHTML = `<div class="rrfotos">${fotos.map((o) => `<figure><img src="${o.img}" alt="">${w && !fechada ? `<button type="button" class="x" data-act="rr-fdel" data-key="${esc(key)}" data-id="${esc(o.id)}" title="Excluir foto">✕</button>` : ''}</figure>`).join('') || '<span class="muted">Sem fotos.</span>'}${w && !fechada && fotos.length < 8 ? `<button type="button" class="rradd" data-act="rr-fadd" data-key="${esc(key)}"><b>＋</b>Fotos</button>` : ''}</div>`;
+    let ab;
+    if (m.abAss || !w || fechada) {
+      ab = kv([['Lote(s) · Fornecedor', (lots || '<span class="muted">sem lote</span>') + ' · ' + t(x.forn)], ['NF · Pedido · PV', `<span class="mono">${t(x.nf)} · ${t(x.oc)} · ${t(x.pv)}</span>`], ['Material', a0.desc ? esc(lotTxt(a0)) + (E.filled(a0.corrida) ? ` · corrida <span class="mono">${esc(a0.corrida)}</span>` : '') : '<span class="muted">—</span>'],
+        ['Origem · Setor', [m.origem, x.depto].filter(Boolean).map(esc).join(' · ') || '<span class="muted">—</span>'], ['Motivo', (x.motivo ? `<span class="chip crit">${esc(x.motivo)} · principal</span> ` : '') + motOut.map((v) => `<span class="chip off">${esc(v)} · outro</span>`).join(' ')],
+        ['Não conformidade', `<span style="white-space:pre-wrap">${t(m.descNc)}</span>`], ['Quantidade', qtd], ['Fotos', fotosHTML], ['Inspetor', m.abAss ? `<span class="rrsig"><i>✓</i>${sigLine(m.abAss)}</span>` : `${t(x.emissor)} <span class="muted">(RNC anterior ao relatório)</span>`]]);
+    } else {
+      const mots = cfgL('RNC_MOTIVOS');
+      ab = `<div class="rrbox"><div class="rrg3">
+        ${rnFld('Origem', rnSel('rr-origem', m.origem || '', RN_ORIG))}${rnFld('Motivo principal', rnSel('rr-motivo', x.motivo || '', mots))}${rnFld('Setor responsável', rnSel('rr-depto', x.depto || '', cfgL('RNC_DEPTOS')))}
+        <div class="field" style="grid-column:1/-1"><span>Outros motivos</span><div class="rrchips" id="rr-mo">${mots.map((v) => `<button type="button" class="pfun" data-v="${esc(v)}" aria-pressed="${motOut.includes(v)}" style="--k:var(--rnc)">${esc(v)}</button>`).join('')}</div></div>
+        ${rnFld('Descrição da não conformidade', `<textarea id="rr-desc" style="min-height:70px">${esc(m.descNc || '')}</textarea>`, 1)}
+        ${rnFld('Quantidade reprovada', `<input id="rr-qrep" inputmode="decimal" value="${m.qtdRep ?? ''}">`)}${rnFld('Quantidade recebida', `<input id="rr-qrec" inputmode="decimal" value="${m.qtdRec ?? (a0.quant ?? '')}">`)}${rnFld('Unidade', `<input id="rr-qund" value="${esc(m.qtdUnd || a0.und || 'pç')}">`)}
+      </div>${kv([['Lote(s) · Fornecedor', (lots || '<span class="muted">sem lote</span>') + ' · ' + t(x.forn)], ['Fotos', fotosHTML]])}
+      <div class="rrfoot"><span class="muted">Ao assinar, a abertura fica registrada em seu nome e não muda mais.</span><button class="btn" type="button" data-act="rr-absave" data-key="${esc(key)}">Salvar rascunho</button><button class="btn primary" type="button" data-act="rr-absign" data-key="${esc(key)}">Salvar e assinar abertura</button></div></div>`;
+    }
+    /* 2 · tratamento · 3 · eficácia · 4 · aprovação */
+    const ro = !w || fechada;
+    const v = (id, val) => (ro ? `<div class="rrro">${val ? esc(val) : '<span class="muted">—</span>'}</div>` : id);
+    const trat = `<div class="rrbox"><div class="rrg3">
+      ${rnFld('Comprador', ro ? v(0, x.comprador) : rnSel('rr-comp', x.comprador || '', cfgL('RNC_COMPRADORES')))}${rnFld('Disposição', ro ? v(0, x.disp) : rnSel('rr-disp', x.disp || '', cfgL('RNC_DISPOSICAO')))}${rnFld('Data da disposição', ro ? v(0, fD(x.fechDisp)) : `<input type="date" id="rr-fdisp" value="${rnDate(m.fechDisp)}">`)}
+      ${rnFld('Contenção (o que foi feito)', ro ? v(0, m.contTxt) : `<input id="rr-ctxt" value="${esc(m.contTxt || '')}" placeholder="ex.: material segregado na área de bloqueio">`)}${rnFld('Responsável pela contenção', ro ? v(0, m.contResp) : `<input id="rr-cresp" value="${esc(m.contResp || '')}">`)}${rnFld('Data da contenção', ro ? v(0, fD(m.contData)) : `<input type="date" id="rr-cdata" value="${rnDate(m.contData)}">`)}
+      ${rnFld('Causa raiz (resposta do fornecedor)', ro ? `<div class="rrro" style="white-space:pre-wrap">${t(m.causa) || '<span class="muted">—</span>'}</div>` : `<textarea id="rr-causa" style="min-height:60px" placeholder="Cole ou resuma a resposta do fornecedor">${esc(m.causa || '')}</textarea>`, 1)}
+      ${rnFld('Ação corretiva necessária?', ro ? v(0, x.corretiva) : rnSel('rr-corr', x.corretiva || '', cfgL('RNC_CORRETIVA')))}${rnFld('Nível do prazo', ro ? v(0, x.nivel) : rnSel('rr-nivel', x.nivel || '', cfgL('RNC_NIVEL_PRAZO')), 0, 'Necessário quando há ação corretiva.')}${rnFld('Responsável pela ação', ro ? v(0, m.acaoResp) : `<input id="rr-aresp" value="${esc(m.acaoResp || '')}">`)}
+      ${rnFld('Ação corretiva (o que será feito)', ro ? `<div class="rrro" style="white-space:pre-wrap">${t(m.acaoTxt) || '<span class="muted">—</span>'}</div>` : `<textarea id="rr-atxt" style="min-height:60px">${esc(m.acaoTxt || '')}</textarea>`, 1)}
+    </div></div>`;
+    const efic = `<div class="rrbox"><div class="rrg3">
+      ${rnFld('Resultado', ro ? v(0, x.analise) : rnSel('rr-efic', x.analise || '', cfgL('RNC_ANALISE_CRITICA')))}${rnFld('Data da verificação', ro ? v(0, fD(m.eficData)) : `<input type="date" id="rr-edata" value="${rnDate(m.eficData)}">`)}${rnFld('Lote verificado', ro ? v(0, m.eficLote) : `<input id="rr-elote" value="${esc(m.eficLote || '')}" placeholder="ex.: AV-15610">`)}
+      ${rnFld('Observação', ro ? `<div class="rrro" style="white-space:pre-wrap">${t(m.eficObs) || '<span class="muted">—</span>'}</div>` : `<textarea id="rr-eobs" style="min-height:56px">${esc(m.eficObs || '')}</textarea>`, 1)}
+    </div></div>`;
+    const apr = m.aprAss ? `<div class="rrbox"><span class="rrsig"><i>✓</i><b>Aprovado por:</b>&nbsp;${sigLine(m.aprAss)}</span></div>`
+      : x.status === 'Cancelada' ? '<div class="rrbox muted">RNC cancelada.</div>'
+      : x.status === 'Concluida' ? `<div class="rrbox muted">Concluída em ${fD(x.conclusao)} (antes do relatório eletrônico).</div>`
+      : `<div class="rrbox" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div style="flex:1;min-width:240px"><b>Aprovar e concluir</b><br><span class="muted" style="font-size:13px">Registra “aprovado eletronicamente por você” com data e hora e conclui a RNC. Libera com a disposição respondida e, se houver ação corretiva, com a eficácia.</span></div>${w ? `<button class="btn primary" type="button" data-act="rr-aprovar" data-key="${esc(key)}">Aprovar e concluir</button>` : ''}</div>`;
+    const save = !ro ? `<div class="rrsave"><button class="btn primary" type="button" data-act="rr-save" data-key="${esc(key)}">Salvar respostas</button></div>` : '';
+    const r = related(x);
+    const rel = `<div class="fsec"><h3>Registros ligados (${r.length})</h3>${r.length ? '<div class="rel">' + r.map((o) => `<button type="button" style="--c:${MOD[o.rec.mod].c}" data-open="${o.rec.mod}:${esc(o.rec.key)}" title="${esc(o.why)}">${esc(recLabel(o.rec))} <span class="muted">· ${esc(o.why)}</span></button>`).join('') + '</div>' : '<span class="muted">Nenhum outro registro ligado.</span>'}</div>`;
+    const body = `<div class="formfoot">${acts}</div>${mon}
+      ${rnH(1, 'Abertura', m.abAss ? (m.abAss.via === 'tablet' ? 'preenchida no tablet pelo inspetor' : 'preenchida pelo inspetor') : 'parte do inspetor', 'var(--rnc)')}${ab}
+      ${reinc.length && x.aberta ? `<div class="rrwarn">↻ ${esc(x.forn)} teve ${plural(reinc.length, 'outra RNC', 'outras RNCs')} de ${esc(x.motivo)} nos últimos 6 meses: ${reinc.slice(0, 4).map((o) => `<button class="btn small ghost mono" type="button" data-open="RNC:${esc(o.key)}">${esc(o.num)}</button>`).join(' ')}</div>` : ''}
+      ${rnH(2, 'Tratamento da não conformidade', 'Qualidade administrativa responde aqui', 'var(--info)')}${trat}
+      ${rnH(3, 'Verificação de eficácia', 'no próximo recebimento do fornecedor', 'var(--ok)')}${efic}
+      ${save}
+      ${rnH(4, 'Aprovação', 'conclui a RNC', 'var(--ink)')}${apr}
+      <div class="fsec"><h3>Cobranças e retornos</h3>${await rncTimeline(x)}</div>${metaLine('RNC', key)}${rel}`;
+    openDrawer(x.num, 'Relatório de não conformidade · fornecedor', body, MOD.RNC.c);
+    const dr = $('.drawer'); if (dr) dr.classList.add('wide');
+    $$('#rr-mo .pfun').forEach((b) => { b.onclick = () => b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true'); });
+  }
+  const rv2 = (id) => { const el = $('#' + id); return el ? el.value.trim() : undefined; };
+  const rnNum = (s) => { if (s == null || s === '') return null; const n = Number(String(s).replace(',', '.')); return isFinite(n) ? n : null; };
+  async function rrSaveAbertura(key, sign) {
+    const x = findRec('RNC', key); if (!x) return; const m = rmeta(x);
+    const ch = {}, set = (f, val, cur) => { if ((val ?? null) !== (cur ?? null)) ch[f] = val; };
+    set('origem', rv2('rr-origem') || null, m.origem); set('motivo', rv2('rr-motivo') || null, m.motivo); set('depto', rv2('rr-depto') || null, m.depto);
+    const mo = $$('#rr-mo .pfun[aria-pressed="true"]').map((b) => b.dataset.v).filter((v) => v !== rv2('rr-motivo'));
+    if (JSON.stringify(mo) !== JSON.stringify(m.motOutros || [])) ch.motOutros = mo;
+    set('descNc', rv2('rr-desc') || null, m.descNc); set('qtdRep', rnNum(rv2('rr-qrep')), m.qtdRep); set('qtdRec', rnNum(rv2('rr-qrec')), m.qtdRec); set('qtdUnd', rv2('rr-qund') || null, m.qtdUnd);
+    if (sign) {
+      if (!rv2('rr-motivo')) { toast('Escolha o motivo principal.', true); return; }
+      if (!rv2('rr-desc')) { toast('Descreva a não conformidade.', true); $('#rr-desc').focus(); return; }
+      ch.abAss = meSig('central');
+    }
+    if (!Object.keys(ch).length) { toast('Nada foi alterado.'); return; }
+    try {
+      await updateRecord('RNC', key, ch);
+      logEntry('RNC', key, 'alterado', `${x.num} · ${sign ? 'abertura assinada' : 'abertura do relatório'}`, null);
+      toast(sign ? 'Abertura assinada.' : 'Rascunho da abertura salvo.'); setTimeout(() => rncRelFicha(key), 250);
+    } catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
+  }
+  async function rrSaveTratamento(key, silent) {
+    const x = findRec('RNC', key); if (!x) return null; const m = rmeta(x);
+    const ch = {}, before = {}, set = (f, val, cur) => { if (val === undefined) return; if (val === '') val = null; if (val !== (cur ?? null)) { ch[f] = val; before[f] = cur ?? null; } };
+    const dt = (id) => { const s = rv2(id); return s === undefined ? undefined : s ? E.fromIso(s) : null; };
+    set('comprador', rv2('rr-comp') ?? undefined, m.comprador); set('disp', rv2('rr-disp') ?? undefined, m.disp);
+    let fdisp = dt('rr-fdisp'); if (rv2('rr-disp') && !fdisp && !m.fechDisp) fdisp = S.today; set('fechDisp', fdisp, m.fechDisp == null ? null : E.toSerial(m.fechDisp));
+    set('contTxt', rv2('rr-ctxt') ?? undefined, m.contTxt); set('contResp', rv2('rr-cresp') ?? undefined, m.contResp); set('contData', dt('rr-cdata'), m.contData);
+    set('causa', rv2('rr-causa') ?? undefined, m.causa); set('corretiva', rv2('rr-corr') ?? undefined, m.corretiva); set('nivel', rv2('rr-nivel') ?? undefined, m.nivel);
+    set('acaoResp', rv2('rr-aresp') ?? undefined, m.acaoResp); set('acaoTxt', rv2('rr-atxt') ?? undefined, m.acaoTxt);
+    set('analise', rv2('rr-efic') ?? undefined, m.analise); set('eficData', dt('rr-edata'), m.eficData); set('eficLote', rv2('rr-elote') ?? undefined, m.eficLote); set('eficObs', rv2('rr-eobs') ?? undefined, m.eficObs);
+    const corr = rv2('rr-corr') ?? m.corretiva, niv = rv2('rr-nivel') ?? m.nivel;
+    if (E.low(corr) === 'sim' && !niv) { toast('Escolha o nível do prazo da ação corretiva.', true); const el = $('#rr-nivel'); if (el) el.focus(); return null; }
+    if (!Object.keys(ch).length) { if (!silent) toast('Nada foi alterado.'); return {}; }
+    try {
+      await updateRecord('RNC', key, ch);
+      const diff = {}; Object.keys(ch).forEach((f) => { diff[f] = [before[f], ch[f]]; });
+      logEntry('RNC', key, 'alterado', `${x.num} · tratamento no relatório`, diff);
+      if (!silent) { toast('Respostas salvas.'); setTimeout(() => rncRelFicha(key), 250); }
+      return ch;
+    } catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); return null; }
+  }
+  async function rrAprovar(key) {
+    const x = findRec('RNC', key); if (!x) return;
+    const disp0 = rv2('rr-disp') ?? x.disp, corr = rv2('rr-corr') ?? x.corretiva, ef = rv2('rr-efic') ?? x.analise;
+    if (!disp0) { toast('Responda a disposição antes de aprovar.', true); return; }
+    if (E.low(corr) === 'sim' && !ef) { toast('Há ação corretiva: registre a verificação de eficácia antes de aprovar.', true); return; }
+    const r0 = await rrSaveTratamento(key, true); if (r0 === null) return;
+    confirmBox('Aprovar e concluir ' + x.num, `A RNC será concluída hoje (${fD(S.today)}) e o relatório ficará assinado eletronicamente por ${myPessoa() || DB.meName || 'você'}.`, 'Aprovar e concluir', async () => {
+      try {
+        await updateRecord('RNC', key, { conclusao: S.today, aprAss: meSig('central') });
+        logEntry('RNC', key, 'alterado', `${x.num} · aprovada e concluída`, { conclusao: [null, fD(S.today)] });
+        toast(x.num + ' aprovada e concluída.'); setTimeout(() => rncRelFicha(key), 300);
+      } catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
+    });
+  }
+  function rrFotoAdd(key) {
+    openModal('Fotos da RNC', `<p style="margin:0">Foto do defeito, da medição, da etiqueta ou do documento. Cada imagem é diminuída automaticamente (até 8 fotos por RNC).</p>
+      <input type="file" id="rrf-f" accept="image/*" multiple hidden><div class="formfoot"><button class="btn" type="button" id="rrf-pick">Escolher fotos ou tirar com a câmera</button></div>
+      <div id="rrf-prev" class="rphs"></div><div class="formfoot"><button class="btn primary" type="button" id="rrf-ok" disabled>Salvar fotos</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    let imgs = [];
+    $('#rrf-pick').onclick = () => $('#rrf-f').click();
+    $('#rrf-f').onchange = async () => { imgs = []; for (const f of Array.from($('#rrf-f').files).slice(0, 8)) { try { imgs.push({ img: await shrinkPhoto(f) }); } catch (e) { toast('Não foi possível abrir ' + f.name, true); } } $('#rrf-prev').innerHTML = imgs.map((o) => `<img src="${o.img}" alt="">`).join(''); $('#rrf-ok').disabled = !imgs.length; };
+    $('#rrf-ok').onclick = async () => {
+      const cur = await rncFotos(key, true), tot = cur.reduce((s, o) => s + o.img.length, 0) + imgs.reduce((s, o) => s + o.img.length, 0);
+      if (cur.length + imgs.length > 8 || tot > 900000) { toast('Limite de fotos desta RNC atingido (até 8 fotos). Exclua alguma antes.', true); return; }
+      const b = $('#rrf-ok'); b.disabled = true; b.textContent = 'Gravando…';
+      try { await rncFotosAdd(key, imgs); await updateRecord('RNC', key, { nFotos: cur.length + imgs.length }); logEntry('RNC', key, 'alterado', `${(findRec('RNC', key) || {}).num || key} · ${imgs.length} foto(s)`, null); closeLayer(); toast('Fotos salvas.'); setTimeout(() => rncRelFicha(key), 200); }
+      catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; b.textContent = 'Salvar fotos'; }
+    };
+  }
+  async function rrFotoDel(key, id) {
+    confirmBox('Excluir foto', 'A foto sai do relatório desta RNC.', 'Excluir', async () => {
+      try { await DB.db.doc('rncfot/' + key).update({ f: { [id]: null } }); delete RFOT[key]; const n = (await rncFotos(key, true)).length; await updateRecord('RNC', key, { nFotos: n }); toast('Foto excluída.'); setTimeout(() => rncRelFicha(key), 200); }
+      catch (err) { toast('Não foi possível excluir: ' + ((err && (err.message || err.code)) || err), true); }
+    }, true);
+  }
+  /* ---------- relatório impresso (A4) — sem citar a Central: pode ir para o fornecedor ---------- */
+  async function rncRelPrint(key) {
+    const x = findRec('RNC', key); if (!x) return; const m = rmeta(x), fotos = await rncFotos(key);
+    const a0 = lotTokens(x.lotesAV).map(avById).find(Boolean) || {}, t = (v) => esc(disp(v)) || '—', motOut = Array.isArray(m.motOutros) ? m.motOutros : [];
+    const mots = uniq(cfgL('RNC_MOTIVOS').concat(x.motivo ? [x.motivo] : []).concat(motOut));
+    const chk = (on, l) => `<span class="chk${on ? ' on' : ''}">${esc(l)}</span>`;
+    const logo = DB.logo ? `<img src="${DB.logo}" alt="">` : '<b style="font-size:16pt">AÇOS VITAL</b>';
+    const sg = (a) => (a ? `${esc(a.nome)} — assinado eletronicamente em ${dmy(a.at)} às ${hhmm(a.at)}` : '<span style="color:#888">pendente</span>');
+    const qtd = m.qtdRep != null ? `Recebida: ${m.qtdRec != null ? NF.format(m.qtdRec) + ' ' + esc(m.qtdUnd || '') : '—'} · <b>Reprovada: ${NF.format(m.qtdRep)} ${esc(m.qtdUnd || '')}${m.qtdRec ? ` (${Math.round((m.qtdRep / m.qtdRec) * 100)}%)` : ''}</b>` : '—';
+    const efics = cfgL('RNC_ANALISE_CRITICA');
+    printHTML(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${esc(x.num)}</title><style>@page{size:A4;margin:11mm 11mm 13mm}*{box-sizing:border-box}body{margin:0;font:9.4pt/1.35 Arial,Helvetica,sans-serif;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      .hd{display:grid;grid-template-columns:52mm 1fr 48mm;border:1.4px solid #111}.hd>div{padding:3mm;display:flex;flex-direction:column;justify-content:center}.hd .lg img{max-width:100%;max-height:20mm;object-fit:contain}
+      .hd .t{border-left:1.4px solid #111;border-right:1.4px solid #111;text-align:center}.hd .t b{font-size:13.5pt;letter-spacing:.03em}.hd .t span{font-size:8.5pt;color:#444;margin-top:1mm}
+      .hd .n{gap:1.4mm}.hd .n div{display:flex;justify-content:space-between;gap:2mm;font-size:8.5pt}.hd .n b{text-align:right}.hd .rn{font:700 11pt Arial;color:#980000;justify-content:flex-end!important}
+      .sec{margin-top:3mm;border:1px solid #333;break-inside:avoid}.sh{background:#980000;color:#fff;font:700 8.8pt Arial;letter-spacing:.08em;text-transform:uppercase;padding:1.4mm 2.5mm;display:flex;justify-content:space-between}.sh span{font-weight:400;letter-spacing:0;text-transform:none}.sh.q{background:#1f4e79}.sh.l{background:#e9ebe9;color:#333}
+      table{width:100%;border-collapse:collapse}td{border:1px solid #bbb;padding:1.1mm 2mm;vertical-align:top}td.k{background:#f1f2f1;font-weight:700;font-size:7.8pt;color:#333;width:30mm;text-transform:uppercase}
+      .fot{display:grid;grid-template-columns:repeat(4,1fr);gap:2mm;padding:2mm}.fot img{width:100%;aspect-ratio:4/3;object-fit:cover;border:1px solid #999}
+      .sig{padding:2mm 2.5mm;font-size:9pt}.chk{display:inline-block;border:1px solid #777;border-radius:1mm;padding:0 1.5mm;margin:0 1.2mm .8mm 0;font-size:8.3pt}.chk.on{background:#111;color:#fff;border-color:#111}
+      .ft{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-between;font-size:7.5pt;color:#666}.pre{white-space:pre-wrap}</style></head><body>
+      <div class="hd"><div class="lg">${logo}</div><div class="t"><b>RELATÓRIO DE NÃO CONFORMIDADE</b><span>Fornecedor${m.origem ? ' · origem: ' + esc(E.low(m.origem)) : ''}</span></div><div class="n"><div class="rn">${esc(x.num)}</div><div><span>Abertura</span><b>${esc(fmtTs(x.data))}</b></div><div><span>Filial</span><b>${t(x.filial)}</b></div></div></div>
+      <div class="sec"><div class="sh">1 · Identificação</div><table>
+        <tr><td class="k">Fornecedor</td><td>${t(x.forn)}</td><td class="k">Lote(s)</td><td>${esc(lotTokens(x.lotesAV).join(', ')) || t(m.abrang)}</td></tr>
+        <tr><td class="k">Nota fiscal</td><td>${t(x.nf)}</td><td class="k">Pedido / PV</td><td>${t(x.oc)} / ${t(x.pv)}</td></tr>
+        <tr><td class="k">Material</td><td>${a0.desc ? esc(lotTxt(a0)) : '—'}</td><td class="k">Corrida</td><td>${E.filled(a0.corrida) ? esc(a0.corrida) : '—'}</td></tr>
+        <tr><td class="k">Cliente</td><td>${t(x.cliente)}</td><td class="k">Setor resp.</td><td>${t(x.depto)}</td></tr></table></div>
+      <div class="sec"><div class="sh">2 · Não conformidade</div><table>
+        <tr><td class="k">Motivo</td><td colspan="3">${mots.map((v) => chk(v === x.motivo || motOut.includes(v), v + (v === x.motivo ? ' (principal)' : ''))).join('')}</td></tr>
+        <tr><td class="k">Descrição</td><td colspan="3" class="pre">${t(m.descNc)}</td></tr>
+        <tr><td class="k">Quantidade</td><td>${qtd}</td><td class="k">Reincidência</td><td>${t(x.reinc)}</td></tr></table>
+        ${fotos.length ? `<div class="sh l">Registro fotográfico</div><div class="fot">${fotos.map((o) => `<img src="${o.img}" alt="">`).join('')}</div>` : ''}
+        <div class="sig" style="border-top:1px solid #bbb"><b>Inspetor responsável:</b> ${m.abAss ? sg(m.abAss) : t(x.emissor)}</div></div>
+      <div class="sec"><div class="sh q">3 · Tratamento da não conformidade <span>Qualidade</span></div><table>
+        <tr><td class="k">Disposição</td><td>${t(x.disp)}</td><td class="k">Data</td><td>${fD(x.fechDisp) || '—'}</td></tr>
+        <tr><td class="k">Contenção</td><td>${t(m.contTxt)}</td><td class="k">Resp. / data</td><td>${t(m.contResp)}${m.contData ? ' · ' + fD(m.contData) : ''}</td></tr>
+        <tr><td class="k">Causa raiz</td><td colspan="3" class="pre">${t(m.causa)}</td></tr>
+        <tr><td class="k">Ação corretiva</td><td colspan="3"><span class="pre">${E.low(x.corretiva) === 'não' ? 'Não necessária' : t(m.acaoTxt)}</span>${E.low(x.corretiva) === 'sim' ? `<br><span style="color:#555">Responsável: ${t(m.acaoResp)} · prazo: ${fD(x.prazoFechar) || '—'}${x.nivel ? ' (' + esc(x.nivel) + ')' : ''}</span>` : ''}</td></tr></table></div>
+      <div class="sec"><div class="sh q">4 · Verificação de eficácia</div><table>
+        <tr><td class="k">Resultado</td><td>${efics.map((v) => chk(v === x.analise, v)).join('')}</td><td class="k">Data / lote</td><td>${fD(m.eficData) || '—'}${m.eficLote ? ' · ' + esc(m.eficLote) : ''}</td></tr>
+        <tr><td class="k">Observação</td><td colspan="3" class="pre">${t(m.eficObs)}</td></tr></table></div>
+      <div class="sec"><div class="sh q">5 · Aprovação</div><div class="sig"><b>Aprovado por:</b> ${sg(m.aprAss)}${x.status === 'Concluida' ? ' · RNC concluída' + (m.aprAss ? '' : ' em ' + fD(x.conclusao)) : ''}</div></div>
+      <div class="ft"><span>Aços Vital · Qualidade · Relatório de Não Conformidade</span><span>${esc(x.num)}</span></div></body></html>`);
+  }
+
+  /* ================= TELA DO TABLET (#rnctab) ================= */
+  const TB = { step: 0, d: null, scan: null, asked: new Set() };
+  const TBK = 'cq-rnctab-rasc';
+  const tbDrafts = () => { try { return JSON.parse(localStorage.getItem(TBK) || '[]'); } catch (e) { return []; } };
+  function tbSaveDrafts(list) { try { localStorage.setItem(TBK, JSON.stringify(list)); return true; } catch (e) { return false; } }
+  let tbSaveT = null;
+  function tbPersist() {
+    clearTimeout(tbSaveT);
+    tbSaveT = setTimeout(() => {
+      if (!TB.d) return; TB.d.upd = Date.now();
+      const L = tbDrafts().filter((o) => o.id !== TB.d.id); L.unshift(TB.d);
+      if (!tbSaveDrafts(L.slice(0, 6))) { const lite = Object.assign({}, TB.d, { fotos: [] }); tbSaveDrafts([lite].concat(L.slice(1, 4))); toast('Pouco espaço no tablet: o rascunho foi salvo sem as fotos.', true); }
+    }, 350);
+  }
+  function tbDropDraft(id) { tbSaveDrafts(tbDrafts().filter((o) => o.id !== id)); }
+  const tbNew = (lotKeys) => ({ id: 'r' + Date.now().toString(36), lots: lotKeys || [], lotTxt: '', semLote: false, just: '', forn: '', origem: 'Recebimento', setor: '', motivo: '', outros: [], desc: '', qtdRep: '', fotos: [], ok: false, upd: Date.now() });
+  const tbLots = (d) => d.lots.map((k) => S.model.av.find((a) => a.key === k)).filter(Boolean);
+  function tbFindLot(txt) {
+    const s = String(txt || '').trim(); if (!s) return null;
+    const mt = /[?&]c=([A-Za-z0-9_-]+)/.exec(s);
+    if (mt) { const k = Object.keys(DB.meta.AV || {}).find((kk) => (DB.meta.AV[kk] || {}).qr === mt[1]); if (k) return S.model.av.find((a) => a.key === k) || null; }
+    const id = /AV-?\s*(\d+)/i.exec(s) ? 'AV-' + /AV-?\s*(\d+)/i.exec(s)[1] : /^\d+$/.test(s) ? 'AV-' + s : s;
+    return avById(id) || null;
+  }
+  function tbHead(title) {
+    const on = DB.state === 'on' && navigator.onLine !== false;
+    return `<div class="tbhd"><button type="button" class="br" data-act="tb-sair" title="Voltar à Central"><b>Central da Qualidade</b><span class="stp">${['#1e6b52', '#8a5a00', '#980000', '#7a2463', '#1f4e79', '#6b736f'].map((c) => `<i style="background:${c}"></i>`).join('')}</span><span class="av">Aços Vital · Qualidade</span></button>
+      <img class="lg" src="${LOGO_A}" alt=""><div class="rt"><div><b>${esc(title)}</b><span>${esc(myPessoa() || DB.meName || '')} · <span class="${on ? 'on' : 'off'}">● ${on ? 'conectado' : 'sem conexão'}</span></span></div><i>${esc(((myPessoa() || DB.meName || '?').split(/\s+/).filter(Boolean).map((p) => p[0]).slice(0, 2).join('') || '?').toUpperCase())}</i></div></div>`;
+  }
+  function tbSteps(n) { return `<div class="tbsteps">${['Material', 'Problema', 'Assinar e enviar'].map((l, i) => `<div class="${i + 1 === n ? 'on' : i + 1 < n ? 'ok' : ''}"><b>${i + 1 < n ? '✓' : i + 1}</b>${l}</div>`).join('')}</div>`; }
+  VIEWS.rnctab = (main) => {
+    if (!TB.d && TB.step >= 1 && TB.step <= 3) TB.step = 0;
+    const h = TB.step === 0 ? tbHome() : TB.step === 1 ? tbS1() : TB.step === 2 ? tbS2() : TB.step === 3 ? tbS3() : tbDone();
+    main.innerHTML = `<div class="tbw">${tbHead(TB.step === 0 ? 'RNC de fornecedor' : TB.step === 4 ? 'RNC enviada' : 'Nova RNC de fornecedor')}${TB.step >= 1 && TB.step <= 3 ? tbSteps(TB.step) : ''}<div class="tbb">${h.body}</div><div class="tbf">${h.foot}</div></div>`;
+    if (h.wire) h.wire();
+    if (TB.step === 0) { const ids = uniq(pendLots().map((a) => lotMeta(a)._ub || lotMeta(a)._cb).filter((i) => i && !DB.names[i] && !TB.asked.has(i))); if (ids.length) { ids.forEach((i) => TB.asked.add(i)); resolveNames(ids).then(() => { if (S.view === 'rnctab' && TB.step === 0) render(); }).catch(() => {}); } }
+  };
+  function tbHome() {
+    const pend = pendLots().sort((a, b) => (lotMeta(b).inspEm || lotMeta(b)._u || 0) - (lotMeta(a).inspEm || lotMeta(a)._u || 0));
+    const mine = S.model.rnc.filter((r) => { const m = rmeta(r); return m.abAss && m.abAss.uid && m.abAss.uid === DB.me; }).sort((a, b) => b.data - a.data).slice(0, 12);
+    const dr = tbDrafts();
+    const lotRow = (a) => { const lm = lotMeta(a), at = lm.inspEm || lm._u || lm._c; return `<div class="tblr"><div><div class="t"><b>${esc(a.id)}</b><span class="chip crit"><i>✕</i>Reprovado</span></div><div class="d">${esc(lotTxt(a))}</div><div class="m">${esc(a.forn || 'sem fornecedor')} · NF ${esc(disp(a.nf) || '—')}${a.quant != null ? ' · ' + esc(disp(a.quant)) + ' ' + esc(a.und || '') : ''}</div>${lm.motRep ? `<div class="w">“${esc(lm.motRep)}”</div>` : ''}<div class="w">${at ? 'reprovado ' + (dmy(at) === dmy(Date.now()) ? 'hoje' : 'em ' + dmy(at)) + ' às ' + hhmm(at) : ''}${lm._ub || lm._cb ? ' por ' + esc(who(lm._ub || lm._cb)) : ''}</div></div><button class="btn red" type="button" data-act="tb-lot" data-key="${esc(a.key)}">Abrir RNC →</button></div>`; };
+    const drRow = (o) => { const ls = (o.lots || []).map((k) => S.model.av.find((a) => a.key === k)).filter(Boolean), pendCad = !ls.length && !o.semLote && o.lotTxt; return `<div class="tblr"><div><div class="t"><b style="font-family:var(--f-body)">${pendCad ? 'Lote ' + esc(o.lotTxt) + ' ainda não cadastrado' : ls.length ? esc(ls.map((a) => a.id).join(', ')) : o.semLote ? 'Sem lote' : 'Rascunho'}</b>${pendCad ? (tbFindLot(o.lotTxt) ? '<span class="chip ok"><i>✓</i>lote cadastrado</span>' : '<span class="chip warn"><i>!</i>aguardando cadastro</span>') : ''}</div><div class="m">${esc([o.motivo, o.desc].filter(Boolean).join(' · ').slice(0, 90)) || 'sem descrição'} · ${(o.fotos || []).length} foto(s)</div><div class="w">salvo ${dmy(o.upd)} às ${hhmm(o.upd)}</div></div><div style="display:grid;gap:6px"><button class="btn" type="button" data-act="tb-cont" data-key="${esc(o.id)}">Continuar</button><button class="btn ghost small" type="button" data-act="tb-del" data-key="${esc(o.id)}">Descartar</button></div></div>`; };
+    return {
+      body: `<div class="tbrow2"><button class="btn dk big" type="button" data-act="tb-nova">▣&nbsp; Ler etiqueta e abrir RNC</button><button class="btn big" type="button" data-act="tb-mine">☰&nbsp; Minhas RNCs</button></div>
+        <div class="tbcard"><div class="ch">Lotes reprovados esperando RNC<span class="cnt">${pend.length}</span></div>${pend.length ? pend.map(lotRow).join('') : '<div class="tbnone">Nenhum lote reprovado esperando RNC. 👍</div>'}</div>
+        ${dr.length ? `<div class="tbcard"><div class="ch gr">Rascunhos neste tablet</div>${dr.map(drRow).join('')}</div>` : ''}
+        <div class="tbcard" id="tb-mine"><div class="ch gr">Minhas RNCs</div>${mine.length ? mine.map((r) => `<div class="tblr"><div><div class="t"><b>${esc(r.num)}</b>${chipRnc(r.status)}</div><div class="m">${esc(r.forn || '—')} · ${esc(r.motivo || '')}</div><div class="w">aberta em ${esc(fmtTs(r.data))}</div></div><button class="btn" type="button" data-act="rr-print" data-key="${esc(r.key)}">Imprimir</button></div>`).join('') : '<div class="tbnone">Você ainda não abriu RNC pelo tablet.</div>'}</div>`,
+      foot: `<span class="tbnet"><i></i>a lista atualiza sozinha</span>`,
+    };
+  }
+  function tbS1() {
+    const d = TB.d, ls = tbLots(d), a0 = ls[0];
+    const sug = a0 ? S.model.av.filter((a) => a.key !== a0.key && E.filled(a0.nf) && E.key(a.forn) === E.key(a0.forn) && String(a.nf) === String(a0.nf)).slice(0, 30) : [];
+    const found = a0 ? `<div class="tbfound"><div class="t">✓ Lote encontrado<em>preenchido sozinho</em></div>
+      <div class="kv2"><span>Fornecedor</span><b>${esc(a0.forn || '—')}</b></div><div class="kv2"><span>Nota fiscal</span><b class="mono">${esc(disp(a0.nf) || '—')}</b></div>
+      <div class="kv2"><span>Pedido de compra</span><b class="mono">${esc(disp(a0.pc) || '—')}</b></div><div class="kv2"><span>Corrida</span><b class="mono">${esc(disp(a0.corrida) || '—')}</b></div>
+      <div class="kv2" style="grid-column:1/-1"><span>Material</span><b>${esc(lotTxt(a0) || '—')}</b></div>
+      <div class="kv2"><span>Quantidade recebida</span><b>${a0.quant != null ? esc(disp(a0.quant)) + ' ' + esc(a0.und || '') : '—'}</b></div><div class="kv2"><span>Filial</span><b>${esc(a0.filial || '—')}</b></div>
+      ${ls.length > 1 || sug.length ? `<div class="kv2" style="grid-column:1/-1"><span>Lotes desta RNC (mesma NF)</span><div class="tbchips sm">${[a0].concat(sug).map((a) => `<button type="button" class="chip2${d.lots.includes(a.key) ? ' on' : ''}" data-act="tb-lt" data-key="${esc(a.key)}">${esc(a.id)}</button>`).join('')}</div></div>` : ''}</div>`
+      : d.semLote ? `<div class="tbwarn">RNC <b>sem lote</b> (processo, final ou documento). Informe o fornecedor e a justificativa.</div><div class="tbrow2"><label class="field"><span>Fornecedor</span><input id="tb-forn" list="tb-fl" value="${esc(d.forn)}"><datalist id="tb-fl">${optList(fornList())}</datalist></label><label class="field"><span>Por que não tem lote?</span><input id="tb-just" value="${esc(d.just)}"></label></div>`
+      : d.lotTxt ? `<div class="tbwarn">Lote <b>${esc(d.lotTxt)}</b> não encontrado na Central. Se ele ainda vai ser cadastrado, continue: a RNC fica em <b>rascunho</b> e, quando o lote aparecer, os dados entram sozinhos.</div>` : '';
+    return {
+      body: `<div class="tbcard"><div class="ch">Qual é o lote?<span>leia o QR da etiqueta ou digite</span></div><div class="cb">
+        <div class="tbrowq"><input id="tb-lot" class="tbin big" placeholder="AV-00000" value="${esc(a0 ? a0.id : d.lotTxt)}" autocomplete="off" inputmode="text"><button class="btn dk big" type="button" data-act="tb-scan" ${'BarcodeDetector' in window ? '' : 'hidden'}>▣&nbsp; Ler QR</button><button class="btn big" type="button" data-act="tb-busca">Buscar</button></div>
+        ${found}<label class="tbsl"><input type="checkbox" id="tb-sl" ${d.semLote ? 'checked' : ''}> Esta RNC não tem lote</label></div></div>
+        <div class="tbcard"><div class="ch">Onde foi encontrado?</div><div class="cb"><div class="tbchips">${RN_ORIG.map((o) => `<button type="button" class="chip2${d.origem === o ? ' on' : ''}" data-act="tb-orig" data-key="${esc(o)}">${esc(o)}</button>`).join('')}</div></div></div>
+        <div class="tbcard"><div class="ch">Setor responsável</div><div class="cb"><div class="tbchips">${cfgL('RNC_DEPTOS').map((o) => `<button type="button" class="chip2${d.setor === o ? ' on' : ''}" data-act="tb-setor" data-key="${esc(o)}">${esc(o)}</button>`).join('')}</div></div></div>`,
+      foot: `<span class="tbnet"><i></i>rascunho salvo no tablet</span><span class="grow"></span><button class="btn big" type="button" data-act="tb-home">Cancelar</button><button class="btn red big" type="button" data-act="tb-next">Próximo →</button>`,
+      wire: () => {
+        const inp = $('#tb-lot'); inp.onkeydown = (e) => { if (e.key === 'Enter') tbBusca(); };
+        $('#tb-sl').onchange = (e) => { d.semLote = e.target.checked; if (d.semLote) { d.lots = []; d.lotTxt = ''; } tbPersist(); render(); };
+        const f = $('#tb-forn'); if (f) f.oninput = () => { d.forn = f.value; tbPersist(); };
+        const j = $('#tb-just'); if (j) j.oninput = () => { d.just = j.value; tbPersist(); };
+      },
+    };
+  }
+  function tbBusca(txt) {
+    const d = TB.d, s = txt != null ? txt : ($('#tb-lot') || {}).value || '';
+    const a = tbFindLot(s);
+    if (a) { d.lots = [a.key]; d.lotTxt = ''; d.semLote = false; d.forn = a.forn || ''; }
+    else { d.lots = []; d.lotTxt = String(s).trim().toUpperCase(); }
+    tbPersist(); render();
+  }
+  function tbS2() {
+    const d = TB.d, ls = tbLots(d), a0 = ls[0], forn = a0 ? a0.forn : d.forn;
+    const reinc = rncReincList(forn, d.motivo, null), rec = ls.reduce((s, a) => s + (typeof a.quant === 'number' ? a.quant : Number(a.quant) || 0), 0), und = a0 ? a0.und || 'pç' : 'pç';
+    const pct = rec && d.qtdRep !== '' ? Math.round((Number(d.qtdRep) / rec) * 100) : null;
+    return {
+      body: `<div class="tbcard"><div class="ch">O que está errado?<span>1º toque = motivo principal · os outros ficam como “outros”</span></div><div class="cb"><div class="tbchips">${cfgL('RNC_MOTIVOS').map((o) => `<button type="button" class="chip2${d.motivo === o ? ' on' : d.outros.includes(o) ? ' on2' : ''}" data-act="tb-mot" data-key="${esc(o)}">${esc(o)}${d.motivo === o ? '<u>PRINCIPAL</u>' : d.outros.includes(o) ? '<u>outro</u>' : ''}</button>`).join('')}</div>
+        ${reinc.length ? `<div class="tbwarn">↻ ${esc(forn)} já teve <b>${plural(reinc.length, 'RNC', 'RNCs')} de ${esc(d.motivo)}</b> nos últimos 6 meses (${reinc.slice(0, 3).map((r) => esc(r.num)).join(', ')}): esta será marcada como <b>reincidência</b>.</div>` : ''}
+        <label class="field"><span>Descreva a não conformidade</span><textarea id="tb-desc" class="tbta" placeholder="O que foi encontrado, medida, quantidade de peças…">${esc(d.desc)}</textarea></label></div></div>
+        <div class="tbcard"><div class="ch">Quantidade reprovada</div><div class="cb"><div class="tbrow2" style="align-items:center"><div class="tbnum"><button type="button" data-act="tb-q" data-key="-1">−</button><input id="tb-q" inputmode="decimal" value="${esc(d.qtdRep)}"><button type="button" data-act="tb-q" data-key="1">+</button></div><div class="tbnote">${rec ? `de <b>${NF.format(rec)} ${esc(und)}</b> recebidas no lote${pct != null && isFinite(pct) ? `<br><b style="color:var(--crit)">${pct}% reprovado</b>` : ''}` : 'quantidade do lote não informada'}</div></div></div></div>
+        <div class="tbcard"><div class="ch">Fotos<span>a câmera abre direto · até 8 fotos</span></div><div class="cb"><div class="tbfotos">${d.fotos.map((f, i) => `<div class="ft"><img src="${f}" alt=""><button type="button" class="x" data-act="tb-fdel" data-key="${i}">✕</button></div>`).join('')}${d.fotos.length < 8 ? '<label class="ft add"><input type="file" id="tb-ff" accept="image/*" capture="environment" multiple hidden><b>＋</b>Tirar foto</label>' : ''}</div></div></div>`,
+      foot: `<button class="btn ghost" type="button" data-act="tb-home">Guardar e sair</button><span class="tbnet"><i></i>rascunho salvo no tablet</span><span class="grow"></span><button class="btn big" type="button" data-act="tb-back">← Voltar</button><button class="btn red big" type="button" data-act="tb-next">Próximo →</button>`,
+      wire: () => {
+        $('#tb-desc').oninput = (e) => { d.desc = e.target.value; tbPersist(); };
+        $('#tb-q').oninput = (e) => { d.qtdRep = e.target.value.replace(/[^\d.,]/g, ''); tbPersist(); };
+        const ff = $('#tb-ff'); if (ff) ff.onchange = async () => { for (const f of Array.from(ff.files).slice(0, 8 - d.fotos.length)) { try { d.fotos.push(await shrinkPhoto(f)); } catch (e) { toast('Não foi possível abrir a foto.', true); } } tbPersist(); render(); };
+      },
+    };
+  }
+  function tbS3() {
+    const d = TB.d, ls = tbLots(d), a0 = ls[0], forn = a0 ? a0.forn : d.forn, rec = ls.reduce((s, a) => s + (Number(a.quant) || 0), 0), reinc = rncReincList(forn, d.motivo, null);
+    const pendCad = !ls.length && !d.semLote;
+    return {
+      body: `<div class="tbcard"><div class="ch">Confira antes de enviar</div><div class="cb tbsum">
+        <div class="kv2"><span>Lote</span><b class="mono">${ls.length ? esc(ls.map((a) => a.id).join(', ')) : d.semLote ? 'sem lote' : esc(d.lotTxt || '—')}</b></div><div class="kv2"><span>Fornecedor</span><b>${esc(forn || '—')}</b></div>
+        <div class="kv2"><span>NF · Pedido</span><b class="mono">${a0 ? esc(disp(a0.nf) || '—') + ' · ' + esc(disp(a0.pc) || '—') : '—'}</b></div><div class="kv2"><span>Origem · Setor</span><b>${esc(d.origem || '—')} · ${esc(d.setor || '—')}</b></div>
+        <div class="kv2"><span>Motivo</span><div class="tbchips sm">${d.motivo ? `<span class="chip2 on">${esc(d.motivo)} · principal</span>` : '<b style="color:var(--crit)">falta o motivo</b>'}${d.outros.map((o) => `<span class="chip2 on2">${esc(o)} · outro</span>`).join('')}</div></div><div class="kv2"><span>Reprovado</span><b style="color:var(--crit)">${d.qtdRep !== '' ? esc(d.qtdRep) + (rec ? ` de ${NF.format(rec)} ${esc(a0.und || '')}` : '') : '—'}</b></div>
+        <div class="kv2" style="grid-column:1/-1"><span>Descrição</span><b style="font-weight:500">${esc(d.desc) || '<span style="color:var(--crit)">falta a descrição</span>'}</b></div>
+        <div class="kv2"><span>Reincidência</span><b style="color:${reinc.length ? 'var(--warn)' : 'inherit'}">${reinc.length ? 'Sim · ' + (reinc.length + 1) + 'ª de ' + esc(d.motivo) : 'Não'}</b></div><div class="kv2"><span>Fotos</span><b>${d.fotos.length}</b></div></div></div>
+        <div class="tbcard"><div class="ch">Inspetor responsável</div><div class="cb"><div class="tbsig"><i>✓</i><div><span>Assinatura eletrônica</span><b>${esc(myPessoa() || DB.meName || '')}</b><small>conta ${esc(DB.meEmail || '')} · fica registrada com data e hora ao enviar</small></div></div>
+        <label class="tbck"><input type="checkbox" id="tb-ok" ${d.ok ? 'checked' : ''}> Confirmo que as informações e fotos estão corretas</label></div></div>
+        ${pendCad ? '<div class="tbwarn">O lote ainda não foi cadastrado na Central. A RNC fica guardada como rascunho neste tablet e pode ser enviada assim que o lote aparecer.</div>' : `<div class="tbnote">O número da RNC é gerado ao enviar. O lote fica bloqueado na Central e a Qualidade administrativa recebe a RNC na hora.</div>`}
+        ${TB.err ? `<div class="tbwarn" style="border-color:var(--crit);color:var(--crit)">Não foi possível enviar: ${esc(TB.err)}. A RNC continua guardada neste tablet — toque em “Tentar de novo”.</div>` : ''}`,
+      foot: `${pendCad ? '' : '<button class="btn ghost" type="button" data-act="tb-home">Guardar e sair</button>'}<span class="grow"></span><button class="btn big" type="button" data-act="tb-back">← Voltar</button>${pendCad ? '<button class="btn big" type="button" data-act="tb-home">Guardar rascunho</button>' : `<button class="btn red big" type="button" data-act="tb-send" style="min-width:260px">${TB.err ? 'Tentar de novo' : 'Abrir RNC ✓'}</button>`}`,
+      wire: () => { $('#tb-ok').onchange = (e) => { d.ok = e.target.checked; tbPersist(); }; },
+    };
+  }
+  function tbDone() {
+    const r = TB.sent && findRec('RNC', TB.sent.key);
+    return {
+      body: `<div class="tbdone"><div class="ok">✓</div><h2>RNC aberta</h2><div class="n">${esc(TB.sent ? TB.sent.num : '')}</div></div>
+        <div class="tbcard"><div class="cb" style="gap:10px">${TB.sent && TB.sent.lots ? `<div class="tick"><i>✓</i>${esc(TB.sent.lots)} bloqueado(s) na Central</div>` : ''}<div class="tick"><i>✓</i>${TB.sent ? TB.sent.nf : 0} foto(s) salva(s)</div><div class="tick"><i>✓</i>Assinada eletronicamente por ${esc(myPessoa() || DB.meName || '')}</div><div class="tick"><i>✓</i>Qualidade administrativa já recebeu para o tratamento</div></div></div>
+        <div class="tbrow2"><button class="btn dk big" type="button" data-act="rr-print" data-key="${esc(r ? r.key : '')}" ${r ? '' : 'disabled'}>🖨&nbsp; Imprimir RNC</button><button class="btn red big" type="button" data-act="tb-nova">＋&nbsp; Nova RNC</button></div>`,
+      foot: `<span class="grow"></span><button class="btn big" type="button" data-act="tb-home">Voltar ao início</button>`,
+    };
+  }
+  async function tbSend() {
+    const d = TB.d, ls = tbLots(d), a0 = ls[0];
+    if (!d.motivo) { toast('Escolha o motivo principal (passo 2).', true); return; }
+    if (!d.desc.trim()) { toast('Descreva a não conformidade (passo 2).', true); return; }
+    if (!ls.length && !d.semLote) { toast('O lote ainda não foi cadastrado.', true); return; }
+    if (d.semLote && (!d.forn.trim() || !d.just.trim())) { toast('Sem lote: informe o fornecedor e a justificativa (passo 1).', true); return; }
+    if (!d.ok) { toast('Marque a confirmação antes de enviar.', true); return; }
+    const b = $('[data-act="tb-send"]'); if (b) { b.disabled = true; b.textContent = 'Enviando…'; }
+    TB.err = null;
+    const rec = ls.reduce((s, a) => s + (Number(a.quant) || 0), 0);
+    const base = clean({ data: Math.round(E.nowSerial() * 1e6) / 1e6, emissor: myPessoa() || DB.meName || null, filial: (a0 && a0.filial) || null, forn: a0 ? a0.forn || null : d.forn.trim(), nf: a0 && E.filled(a0.nf) ? a0.nf : null, oc: a0 && E.filled(a0.pc) ? a0.pc : null, pv: a0 && E.filled(a0.pv) ? a0.pv : null,
+      depto: d.setor || null, motivo: d.motivo, abrang: d.semLote ? ABR[2] : ABR[0], abrJust: d.semLote ? d.just.trim() : null, lotesAV: ls.map((a) => a.id).join(', ') || null,
+      origem: d.origem || null, motOutros: d.outros.filter((o) => o !== d.motivo), descNc: d.desc.trim(), qtdRep: rnNum(d.qtdRep), qtdRec: rec || null, qtdUnd: a0 ? a0.und || 'pç' : null, nFotos: d.fotos.length,
+      abAss: meSig('tablet'), info: appendInfo('', `Aberta no tablet por ${myPessoa() || DB.meName || 'inspetor'}.`) });
+    let key = null, err = null;
+    for (let i = 0; i < 4 && !key; i++) {
+      try { const f = Object.assign({}, base, { num: nextRncN(i) }); key = await createRecord('RNC', f); }
+      catch (e) { err = e; if (!/já existe/.test(String(e && e.message))) break; await sleep(400); }
+    }
+    if (!key) { TB.err = (err && (err.message || err.code)) || 'erro desconhecido'; tbPersist(); render(); return; }
+    try { if (d.fotos.length) await rncFotosAdd(key, d.fotos.map((img) => ({ img }))); } catch (e) { toast('A RNC foi aberta, mas as fotos não subiram: tente pela Central.', true); }
+    logEntry('RNC', key, 'novo', `${key} · ${base.forn || 'sem fornecedor'} · aberta no tablet`, null);
+    tbDropDraft(d.id);
+    TB.sent = { key, num: key, lots: ls.map((a) => a.id).join(', '), nf: d.fotos.length }; TB.d = null; TB.step = 4; render(); window.scrollTo(0, 0);
+  }
+  function nextRncN(i) { const y = E.ymd(S.today).y; return 'RNCF-' + y + '-' + E.pad(rncUltimo(y) + 1 + i, 5); }
+  function tbGo(step) {
+    const d = TB.d;
+    if (step === 2 && TB.step === 1) {
+      if (!d.lots.length && !d.semLote && !d.lotTxt) { toast('Informe o lote (ou marque “Esta RNC não tem lote”).', true); return; }
+      if (!d.origem) { toast('Escolha onde foi encontrado.', true); return; }
+    }
+    if (step === 3 && TB.step === 2) { if (!d.motivo) { toast('Toque no motivo principal.', true); return; } if (!d.desc.trim()) { toast('Descreva a não conformidade.', true); $('#tb-desc').focus(); return; } }
+    TB.step = step; TB.err = null; tbPersist(); render(); window.scrollTo(0, 0);
+  }
+  async function tbScan() {
+    if (!('BarcodeDetector' in window)) { toast('Este aparelho não lê QR pela câmera: digite o número do lote.', true); return; }
+    openModal('Ler QR da etiqueta', '<video id="tb-v" playsinline muted style="width:100%;border-radius:10px;background:#000;max-height:60vh"></video><p class="muted" style="margin:0">Aponte a câmera para o QR da etiqueta do lote.</p><div class="formfoot"><button class="btn" type="button" data-act="close">Cancelar</button></div>');
+    let st = null, live = true;
+    const stop = () => { live = false; if (st) st.getTracks().forEach((tr) => tr.stop()); };
+    TB.scan = stop;
+    try {
+      st = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+      const v = $('#tb-v'); if (!v) { stop(); return; } v.srcObject = st; await v.play();
+      const det = new window.BarcodeDetector({ formats: ['qr_code'] });
+      while (live && $('#tb-v')) {
+        try { const c = await det.detect(v); if (c && c.length) { stop(); closeLayer(); tbBusca(c[0].rawValue); return; } } catch (e) { /* tenta de novo */ }
+        await sleep(280);
+      }
+    } catch (e) { stop(); closeLayer(); toast('Não foi possível abrir a câmera: digite o número do lote.', true); }
+    stop();
+  }
+  function tbAct(a, key) {
+    const d = TB.d;
+    if (a === 'tb-sair') { go('rnc'); return true; }
+    if (a === 'tb-nova') { TB.d = tbNew([]); TB.step = 1; TB.err = null; tbPersist(); render(); window.scrollTo(0, 0); return true; }
+    if (a === 'tb-lot') { TB.d = tbNew([key]); const lt = S.model.av.find((x) => x.key === key); if (lt) TB.d.forn = lt.forn || ''; TB.step = 2; TB.err = null; tbPersist(); render(); window.scrollTo(0, 0); return true; }
+    if (a === 'tb-cont') { const o = tbDrafts().find((q) => q.id === key); if (!o) return true; TB.d = Object.assign(tbNew([]), o); if (!TB.d.lots.length && TB.d.lotTxt) { const lt = tbFindLot(TB.d.lotTxt); if (lt) { TB.d.lots = [lt.key]; TB.d.forn = lt.forn || ''; } } TB.step = TB.d.lots.length || TB.d.semLote ? 3 : 1; TB.err = null; render(); window.scrollTo(0, 0); return true; }
+    if (a === 'tb-del') { confirmBox('Descartar rascunho', 'O rascunho e as fotos dele saem deste tablet.', 'Descartar', () => { tbDropDraft(key); render(); }, true); return true; }
+    if (a === 'tb-home') { if (TB.scan) TB.scan(); if (d && (d.desc || d.fotos.length || d.lots.length || d.lotTxt)) tbPersist(); TB.d = null; TB.step = 0; S.stale = false; render(); return true; }
+    if (a === 'tb-mine') { const el = $('#tb-mine'); if (el) el.scrollIntoView({ behavior: 'smooth' }); return true; }
+    if (!d) return false;
+    if (a === 'tb-busca') { tbBusca(); return true; }
+    if (a === 'tb-scan') { tbScan(); return true; }
+    if (a === 'tb-lt') { if (d.lots[0] === key) return true; d.lots = d.lots.includes(key) ? d.lots.filter((k) => k !== key) : d.lots.concat([key]); tbPersist(); render(); return true; }
+    if (a === 'tb-orig') { d.origem = key; tbPersist(); render(); return true; }
+    if (a === 'tb-setor') { d.setor = d.setor === key ? '' : key; tbPersist(); render(); return true; }
+    if (a === 'tb-mot') {
+      if (d.motivo === key) { d.motivo = d.outros[0] || ''; d.outros = d.outros.slice(1); }
+      else if (d.outros.includes(key)) d.outros = d.outros.filter((o) => o !== key);
+      else if (!d.motivo) d.motivo = key; else d.outros.push(key);
+      tbPersist(); const y = window.scrollY; render(); window.scrollTo(0, y); return true;
+    }
+    if (a === 'tb-q') { const n = Math.max(0, (Number(String(d.qtdRep).replace(',', '.')) || 0) + Number(key)); d.qtdRep = String(n); tbPersist(); const y = window.scrollY; render(); window.scrollTo(0, y); return true; }
+    if (a === 'tb-fdel') { d.fotos.splice(Number(key), 1); tbPersist(); const y = window.scrollY; render(); window.scrollTo(0, y); return true; }
+    if (a === 'tb-next') { tbGo(TB.step + 1); return true; }
+    if (a === 'tb-back') { tbGo(TB.step - 1); return true; }
+    if (a === 'tb-send') { tbSend(); return true; }
+    return false;
+  }
+
   /* ================= eventos globais ================= */
   document.addEventListener('click', (e) => {
     const t = e.target;
     const act = t.closest('[data-act]'), op = t.closest('[data-open]'), g = t.closest('[data-go]');
     if (act) {
       const a = act.dataset.act, key = act.dataset.key;
-      if (a === 'close') { closeLayer(); return; }
+      if (a === 'close') { if (TB.scan) TB.scan(); closeLayer(); return; }
+      if (a && a.startsWith('tb-') && tbAct(a, key)) return;
+      if (a && a.startsWith('rr-')) {
+        if (a === 'rr-print') { if (key) rncRelPrint(key); return; }
+        if (a === 'rr-fadd') { rrFotoAdd(key); return; }
+        if (a === 'rr-fdel') { rrFotoDel(key, act.dataset.id); return; }
+        if (a === 'rr-absave') { rrSaveAbertura(key, false); return; }
+        if (a === 'rr-absign') { rrSaveAbertura(key, true); return; }
+        if (a === 'rr-save') { rrSaveTratamento(key, false); return; }
+        if (a === 'rr-aprovar') { rrAprovar(key); return; }
+      }
       if (a === 'print') { window.print(); return; }
       if (a === 'rep-dl') { downloadReport(); return; }
       if (a === 'msg-cal') { const em = S.model.cfg.CAL_EMAILS || []; textModal('Alerta de calibração', calMsg(), em.length ? 'Destinatários em Configurações: <span class="mono">' + esc(em.join('; ')) + '</span>' : 'A lista “E-mails de aviso” em Configurações está vazia.'); return; }
