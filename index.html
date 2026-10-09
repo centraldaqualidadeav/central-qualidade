@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Central da Qualidade Aços Vital</title>
+<title>Central da Qualidade</title>
 <meta name="theme-color" content="#1b211e">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -830,6 +830,38 @@ body.has-tk .toast { bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
 @media (prefers-reduced-motion: reduce) { .tktrk { animation: none; } .tkrun { overflow-x: auto; -webkit-mask-image: none; mask-image: none; } .tkset[aria-hidden] { display: none; } .tktag i, .tkpill i { animation: none; } }
 @media print { .tk, .tkpill { display: none !important; } }
 
+/* letreiro: pontas discretas + números com tendência (modelo C) */
+.tk .tktag { display: none; }
+.tkdot { display: flex; align-items: center; padding: 0 4px 0 14px; flex: none; }
+.tkdot i { width: 8px; height: 8px; border-radius: 50%; background: #ff5a4d; animation: tkpulse2 1.6s ease-in-out infinite; }
+@keyframes tkpulse2 { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 90, 77, .6); } 50% { box-shadow: 0 0 0 5px rgba(255, 90, 77, 0); } }
+.tkctl { background: transparent; gap: 2px; padding: 0 6px 0 4px; }
+.tkclk { font-size: 11.5px; color: #7f8a84; padding: 0 3px; }
+.tkb { width: 22px; height: 22px; color: #6f7a74; opacity: .75; }
+.tk:hover .tkb, .tkb:focus-visible { opacity: 1; color: #cfd6d2; }
+.tkb svg { width: 12px; height: 12px; }
+.tkn { all: unset; box-sizing: border-box; display: inline-flex; align-items: baseline; gap: 7px; cursor: pointer; padding: 6px 4px; border-radius: 5px; font-family: var(--f-mono); }
+.tkn span { color: #8f9a94; font: 600 11.5px/1 var(--f-body); letter-spacing: .06em; text-transform: uppercase; }
+.tkn b { color: #fff; font: 600 16px/1 var(--f-mono); }
+.tkn s { text-decoration: none; font: 700 12.5px/1 var(--f-mono); color: #8f9a94; }
+.tkn s.r { color: #ff6b5f; } .tkn s.g { color: #4fd18b; }
+.tkn:hover span { color: #cfd6d2; }
+.tkn:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
+@media (prefers-reduced-motion: reduce) { .tkdot i { animation: none; } }
+@media (max-width: 860px) { .tkdot { padding-left: 10px; } .tkn b { font-size: 14.5px; } }
+.tk { border-top: 1px solid rgba(255, 255, 255, .08); }
+
+/* menu recolhido: as 6 cores contornam o balão do CQ */
+.railring { display: none; }
+@media (min-width: 861px) {
+  body.railmini .railring { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  body.railmini .railring rect { width: calc(100% - 3px); height: calc(100% - 3px); }
+  body.railmini .railtop .brand { justify-items: center; padding: 0; }
+  body.railmini .railtop .brand .stamp { display: none !important; }
+  .railring .r0 { stroke: var(--av); } .railring .r1 { stroke: var(--serv); } .railring .r2 { stroke: var(--rnc); } .railring .r3 { stroke: var(--rncc); } .railring .r4 { stroke: var(--cal); } .railring .r5 { stroke: var(--geral); }
+  .cq-dono .railring .r0 { stroke: #52b592; } .cq-dono .railring .r1 { stroke: #d69d3f; } .cq-dono .railring .r2 { stroke: #ea6b62; } .cq-dono .railring .r3 { stroke: #d77fc0; } .cq-dono .railring .r4 { stroke: #72a8de; } .cq-dono .railring .r5 { stroke: #aab2ae; }
+}
+
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
 #fb-gate[hidden] { display: none; }
@@ -864,7 +896,7 @@ body.has-tk .toast { bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
 <div class="app">
   <aside class="rail" aria-label="Navegação">
     <div class="railtop">
-      <button type="button" class="railtg" id="rail-tg" title="Recolher o menu" aria-label="Recolher o menu"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11 7-5 5 5 5M18 7l-5 5 5 5"/></svg></button>
+      <svg class="railring" aria-hidden="true"><rect class="r0" x="1.5" y="1.5" rx="11" ry="11" pathLength="600" fill="none" stroke-width="3" stroke-linecap="round" stroke-dasharray="90 510" stroke-dashoffset="-18"/><rect class="r1" x="1.5" y="1.5" rx="11" ry="11" pathLength="600" fill="none" stroke-width="3" stroke-linecap="round" stroke-dasharray="90 510" stroke-dashoffset="-118"/><rect class="r2" x="1.5" y="1.5" rx="11" ry="11" pathLength="600" fill="none" stroke-width="3" stroke-linecap="round" stroke-dasharray="90 510" stroke-dashoffset="-218"/><rect class="r3" x="1.5" y="1.5" rx="11" ry="11" pathLength="600" fill="none" stroke-width="3" stroke-linecap="round" stroke-dasharray="90 510" stroke-dashoffset="-318"/><rect class="r4" x="1.5" y="1.5" rx="11" ry="11" pathLength="600" fill="none" stroke-width="3" stroke-linecap="round" stroke-dasharray="90 510" stroke-dashoffset="-418"/><rect class="r5" x="1.5" y="1.5" rx="11" ry="11" pathLength="600" fill="none" stroke-width="3" stroke-linecap="round" stroke-dasharray="90 510" stroke-dashoffset="-518"/></svg><button type="button" class="railtg" id="rail-tg" title="Recolher o menu" aria-label="Recolher o menu"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11 7-5 5 5 5M18 7l-5 5 5 5"/></svg></button>
       <div class="brand">
         <span class="name">Central da Qualidade</span>
         <span class="stamp" aria-hidden="true"><i style="background:var(--av)"></i><i style="background:var(--serv)"></i><i style="background:var(--rnc)"></i><i style="background:var(--rncc)"></i><i style="background:var(--cal)"></i><i style="background:var(--geral)"></i></span>
@@ -4257,6 +4289,34 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const out = I.map((o, i) => [o, i]).sort((a, b) => ord[a[0].lvl] - ord[b[0].lvl] || a[1] - b[1]).map((a) => a[0]).slice(0, 14);
     return out.length ? out : [{ lvl: 'ok', mod: 'GERAL', b: 'Tudo em dia', em: 'nenhuma pendência urgente agora', act: { go: { v: 'painel' } } }];
   }
+  /* números da Qualidade com tendência (▲▼ comparado a 7 dias atrás, só onde dá para recalcular o passado) */
+  function tkNums() {
+    const M = S.model, N = [], t = S.today, fl = (v) => (v == null ? null : Math.floor(v));
+    const add = (mod, l, v, d, ruim, act, tip) => N.push({ k: 'num', mod, l, v, d, ruim, act, tip });
+    try {
+      if (vis('rnc')) {
+        const R = M.rnc.filter((x) => x.status !== 'Cancelada' && x.data != null);
+        const aberta = (x, T) => fl(x.data) <= T && (x.conclusao == null || fl(x.conclusao) > T);
+        const ab = (T) => R.filter((x) => aberta(x, T)).length, at = (T) => R.filter((x) => aberta(x, T) && x.prazoFinal != null && T >= x.prazoFinal).length;
+        add('RNC', 'RNC abertas', NF.format(ab(t)), ab(t) - ab(t - 7), 1, { go: { v: 'rnc' } });
+        add('RNC', 'RNC atrasadas', NF.format(at(t)), at(t) - at(t - 7), 1, { go: { v: 'alertas' } });
+        const tm = (a, b) => { const L = R.filter((x) => x.conclusao != null && x.diasFechamento != null && fl(x.conclusao) > a && fl(x.conclusao) <= b).map((x) => x.diasFechamento); return L.length ? L.reduce((p, q) => p + q, 0) / L.length : null; };
+        const t1 = tm(t - 30, t), t0 = tm(t - 60, t - 30);
+        if (t1 != null) add('RNC', 'Tempo médio RNC', NF1.format(t1) + ' d', t0 == null ? null : Math.round((t1 - t0) * 10) / 10, 1, { go: { v: 'rnc' } }, 'fechadas nos últimos 30 dias, comparado aos 30 dias anteriores');
+      }
+      if (vis('av')) {
+        const w = (a, b) => M.av.filter((x) => x.data != null && x.data > a && x.data <= b).length, n7 = w(t - 7, t);
+        add('AV', 'Lotes na semana', NF.format(n7), n7 - w(t - 14, t - 7), 0, { go: { v: 'av' } }, 'últimos 7 dias, comparado aos 7 dias anteriores');
+        const n30 = M.av.filter((x) => x.data != null && x.data >= t - 30);
+        if (n30.length) add('AV', 'Sem certificado', Math.round((n30.filter(semCert).length / n30.length) * 100) + '%', null, 1, { go: { v: 'av', f: { cert: 'sem' } } });
+      }
+      if (vis('rncc')) add('RNCC', 'RNC cliente abertas', NF.format((M.rncc || []).filter((x) => x.aberta).length), null, 1, { go: { v: 'rncc' } });
+      if (vis('ins')) { const act = M.ins.filter((x) => x.dias != null && x.emUso); if (act.length) add('INS', 'Calibração em dia', Math.round((act.filter((x) => x.dias >= 0).length / act.length) * 100) + '%', null, 0, { go: { v: 'cal' } }); }
+      if (vis('sold') && SD.ready) { const W = soldModel().W.filter((w) => w.situacao === 'Ativo'); if (W.length) add('SOLD', 'Soldadores válidos', `${W.filter((w) => w.nVal).length}/${W.length}`, null, 0, { go: { v: 'sold' } }); }
+      if (vis('iqf') && IQ.ready && vis('av')) { const P = iqPeriod('12m'); add('IQF', 'IQF classe C', NF.format(iqCalc(P.a, P.b).filter((o) => o.cls === 'C').length), null, 1, { go: { v: 'iqf' } }); }
+    } catch (e) { console.warn(e); }
+    return N;
+  }
   let tkSig = '';
   function tkPlace() {
     const el = $('#tk'), m = $('#main'); if (!el || !m) return;
@@ -4271,7 +4331,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     pill.hidden = !hid;
     if (!el) {
       el = document.createElement('div'); el.id = 'tk'; el.className = 'tk'; el.setAttribute('role', 'region'); el.setAttribute('aria-label', 'Letreiro ao vivo');
-      el.innerHTML = `<div class="tktag"><i></i>AO VIVO</div><div class="tkrun"><div class="tktrk"></div></div><div class="tkctl"><button type="button" class="tkb" id="tk-pause" title="Pausar" aria-label="Pausar o letreiro" aria-pressed="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button><span class="tkclk" id="tk-clk"></span><button type="button" class="tkb" id="tk-hide" title="Esconder o letreiro (só neste computador)" aria-label="Esconder o letreiro"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button></div>`;
+      el.innerHTML = `<div class="tkdot" title="Ao vivo"><i></i></div><div class="tkrun"><div class="tktrk"></div></div><div class="tkctl"><button type="button" class="tkb" id="tk-pause" title="Pausar" aria-label="Pausar o letreiro" aria-pressed="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button><span class="tkclk" id="tk-clk"></span><button type="button" class="tkb" id="tk-hide" title="Esconder o letreiro (só neste computador)" aria-label="Esconder o letreiro"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button></div>`;
       document.body.appendChild(el);
       const pb = $('#tk-pause');
       pb.onclick = () => { const p = !el.classList.contains('paused'); el.classList.toggle('paused', p); pb.setAttribute('aria-pressed', p); pb.title = p ? 'Continuar' : 'Pausar'; pb.innerHTML = p ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg>' : '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>'; };
@@ -4281,9 +4341,19 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     }
     el.hidden = hid; tkPlace();
     if (hid) return;
-    const L = tkItems(), sig = JSON.stringify(L);
+    const A = tkItems(), Nn = tkNums(), L = [];
+    for (let i = 0; i < Math.max(A.length, Nn.length); i++) { if (A[i]) L.push(A[i]); if (Nn[i]) L.push(Nn[i]); }
+    const sig = JSON.stringify(L);
     if (sig === tkSig) return; tkSig = sig;
-    const one = L.map((o) => { const a = o.act.open ? `data-open="${esc(o.act.open)}"` : `data-go="${esc(JSON.stringify(o.act.go))}"`; return `<button type="button" class="tki ${o.lvl}" style="--c:${(MOD[o.mod] || MOD.GERAL).c}" ${a}><i></i><b>${esc(o.b)}</b><em>${esc(o.em)}</em></button>`; }).join('');
+    const one = L.map((o) => {
+      const a = o.act.open ? `data-open="${esc(o.act.open)}"` : `data-go="${esc(JSON.stringify(o.act.go))}"`;
+      if (o.k === 'num') {
+        const d = o.d, cls = d == null ? '' : d === 0 ? 'n' : (d > 0) === !!o.ruim ? 'r' : o.ruim === 0 ? 'n' : 'g';
+        const tr = d == null ? '' : `<s class="${o.ruim === 0 ? 'n' : cls}">${d === 0 ? '= 0' : (d > 0 ? '▲ ' : '▼ ') + NF1.format(Math.abs(d))}</s>`;
+        return `<button type="button" class="tkn" ${a} title="${esc(o.tip || (d == null ? '' : 'comparado a 7 dias atrás'))}"><span>${esc(o.l)}</span><b>${esc(o.v)}</b>${tr}</button>`;
+      }
+      return `<button type="button" class="tki ${o.lvl}" style="--c:${(MOD[o.mod] || MOD.GERAL).c}" ${a}><i></i><b>${esc(o.b)}</b><em>${esc(o.em)}</em></button>`;
+    }).join('');
     const trk = el.querySelector('.tktrk'); trk.innerHTML = `<div class="tkset">${one}</div><div class="tkset" aria-hidden="true">${one}</div>`;
     trk.querySelectorAll('.tkset[aria-hidden] button').forEach((b) => { b.tabIndex = -1; });
     requestAnimationFrame(() => { const w = trk.firstElementChild.offsetWidth || 1000; trk.style.setProperty('--tkdur', Math.max(25, Math.round(w / 45)) + 's'); trk.style.animation = 'none'; void trk.offsetWidth; trk.style.animation = ''; });
@@ -8804,11 +8874,18 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const foto = w.foto ? `<img src="${w.foto}" alt="">` : `<div class="ni">${esc(soldInit(w))}</div>`, logo = DB.logo ? `<img class="lg" src="${DB.logo}" alt="">` : '';
     const stT = (q) => (Q_ST.find((o) => o[0] === q.status) || [])[3] || '';
     if (cracha) {
-      printHTML(`<!doctype html><html><head><meta charset="utf-8"><title>Crachá ${esc(w.sinete || '')}</title><style>@page{size:86mm 54mm;margin:0}*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#000}
-        .c{width:86mm;height:54mm;padding:3mm;display:grid;grid-template-columns:22mm 1fr;gap:3mm;overflow:hidden}.c img,.ni{width:22mm;height:27.5mm;object-fit:cover;border-radius:1mm;background:#e8e8e8;display:grid;place-items:center;font:700 9mm Arial}
-        .s{font:700 7mm/1 Arial;letter-spacing:.02em}.n{font:700 2.9mm/1.2 Arial;margin:1mm 0 1.5mm}.t{font:700 2mm Arial;text-transform:uppercase;letter-spacing:.08em;color:#444}
-        ul{margin:.8mm 0 0;padding:0;list-style:none;font-size:2.35mm;line-height:1.35}li b{font-weight:700}.lg{position:absolute;right:3mm;top:3mm;max-height:6mm;max-width:20mm}</style></head><body><div class="c" style="position:relative">${logo}<div>${foto}</div><div><div class="t">Soldador qualificado</div><div class="s">${esc(w.sinete || '')}</div><div class="n">${esc(w.nome)}</div>
-        <ul>${vale.slice(0, 5).map((q) => `<li><b>${esc(soldQLabel(q))}</b>${q.eps ? ' · EPS ' + esc(q.eps) : ''} · até ${fD(q.validade)}</li>`).join('') || '<li>Sem qualificação válida</li>'}</ul></div></div></body></html>`);
+      const ok = vale.length > 0, lay = 'b';
+      const selo = ok ? SEAL.replace('class="seal"', 'class="selo"').replace(/var\(--(\w+)\)/g, (m, k) => ({ av: '#1e6b52', serv: '#8a5a00', rnc: '#980000', rncc: '#7a2463', cal: '#1f4e79', geral: '#404040' })[k] || '#404040').replace('currentColor', '#1b211e') : '';
+      const css = lay === 'a'
+        ? '.ft{display:grid;gap:2.5mm;align-content:start}.lg{display:block;width:22mm;height:auto;max-height:15mm;object-fit:contain}.selo{width:12mm;height:12mm;flex:none;margin:-.5mm -.5mm 0 0}'
+        : '.lg{display:block;width:auto;height:auto;max-height:11mm;max-width:30mm;object-fit:contain;flex:none}.selo{position:absolute;right:3mm;bottom:3mm;width:12mm;height:12mm}';
+      const hd = lay === 'a' ? `<div class="hd"><div class="t">${ok ? 'Soldador qualificado' : 'Soldador'}</div>${selo}</div>` : `<div class="hd"><div class="t">${ok ? 'Soldador qualificado' : 'Soldador'}</div>${logo}</div>`;
+      printHTML(`<!doctype html><html><head><meta charset="utf-8"><title>Crachá ${esc(w.sinete || '')}</title><style>@page{size:86mm 54mm;margin:0}*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+        .c{position:relative;width:86mm;height:54mm;padding:3mm;display:grid;grid-template-columns:22mm 1fr;gap:3mm;overflow:hidden}.ft img:not(.lg),.ft .ni{width:22mm;height:27.5mm;object-fit:cover;border-radius:1mm;background:#e8e8e8;display:grid;place-items:center;font:700 9mm Arial}
+        .info{min-width:0}.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:2mm;min-height:7mm}${css}
+        .s{font:700 7mm/1 Arial;letter-spacing:.02em;margin-top:.5mm}.n{font:700 2.9mm/1.2 Arial;margin:1mm 0 1.5mm}.t{font:700 2mm/1.3 Arial;text-transform:uppercase;letter-spacing:.08em;color:#444;padding-top:.5mm}
+        ul{margin:.8mm 0 0;padding:0;list-style:none;font-size:2.35mm;line-height:1.35}li b{font-weight:700}li.sem{color:#b3261e;font-weight:700;font-size:2.6mm;letter-spacing:.03em;border:.3mm solid #b3261e;border-radius:.8mm;padding:.6mm 1.2mm;display:inline-block}</style></head><body><div class="c"><div class="ft">${foto}${lay === 'a' ? logo : ''}</div><div class="info">${hd}<div class="s">${esc(w.sinete || '')}</div><div class="n">${esc(w.nome)}</div>
+        <ul>${ok ? vale.slice(0, 5).map((q) => `<li><b>${esc(soldQLabel(q))}</b>${q.eps ? ' · EPS ' + esc(q.eps) : ''} · até ${fD(q.validade)}</li>`).join('') : '<li class="sem">SEM QUALIFICAÇÃO VÁLIDA</li>'}</ul></div>${lay === 'b' ? selo : ''}</div></body></html>`);
       return;
     }
     const row = (l, v) => (v ? `<tr><th>${l}</th><td>${v}</td></tr>` : '');
