@@ -35,6 +35,8 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
 .card.g h3 { background: var(--geral); }
 .card.nc h3 { background: var(--crit); }
 .card.cc h3 { background: #b8860b; }
+.card.i h3 { background: #1f4e79; }
+.hero.i { border-top-color: #1f4e79; }
 .hero.cc { border-top-color: #b8860b; }
 .hero.sr { border-top-color: var(--crit); }
 .r { display: flex; justify-content: space-between; gap: 12px; padding: 9px 14px; border-top: 1px solid var(--line2); }
@@ -55,7 +57,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
       <div class="t"><b>Central da Qualidade</b><span class="st"><i style="background:#1e6b52"></i><i style="background:#8a5a00"></i><i style="background:#980000"></i><i style="background:#7a2463"></i><i style="background:#1f4e79"></i><i style="background:#404040"></i></span></div></div>
     <img id="logo" alt="Aços Vital" hidden>
   </div>
-  <div id="out"><div class="msg"><div class="spin"></div>Carregando os dados do lote…</div></div>
+  <div id="out"><div class="msg"><div class="spin"></div>Carregando os dados…</div></div>
 </div>
 <script>
 (function () {
@@ -72,8 +74,9 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
   var c = (new URLSearchParams(location.search).get('c') || '').replace(/[^a-z0-9]/gi, '');
   if (!c) { msg('Código do lote ausente. Leia novamente o QR code da etiqueta.'); return; }
   get('pub/' + c).then(function (d) {
-    if (!d || !d.fields) { msg('<b>Lote não encontrado.</b><br>Confira se o QR code está legível ou fale com a Qualidade da Aços Vital.'); return; }
+    if (!d || !d.fields) { msg('<b>' + (c.length === 17 && c.charAt(0) === 'k' ? 'Instrumento' : 'Lote') + ' não encontrado.</b><br>Confira se o QR code está legível ou fale com a Qualidade da Aços Vital.'); return; }
     var x = {}; Object.keys(d.fields).forEach(function (k) { x[k] = val(d.fields[k]); });
+    if (x.k === 'ins') { insPage(x); return; }
     var ins = String(x.insp || '').trim().toLowerCase();
     var st = ins === 'aprovado' ? ['ok', '✓ Aprovado na inspeção'] : ins === 'reprovado' ? ['crit', '✕ Reprovado na inspeção'] : (ins === 'em análise' || ins === 'em analise') ? ['warn', '! Em análise na inspeção'] : ins === 'liberado sob concessão' ? ['warn', '! Liberado sob concessão'] : null;
     /* lote reprovado, liberado sob concessão ou ligado a uma RNC: blocos em vermelho */
@@ -92,6 +95,34 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
       + '<div class="ft">Página somente para consulta. Os dados são os registrados pela Qualidade da Aços Vital.' + (at ? '<br>Atualizado em ' + at.toLocaleDateString('pt-BR') + ' às ' + at.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '') + '</div></div>';
     document.title = (x.id || 'Lote') + ' · Qualidade Aços Vital';
   }).catch(function () { msg('Não foi possível carregar os dados agora. Verifique a internet e tente de novo.'); });
+  /* instrumento de medição (etiqueta de calibração): a situação é calculada na hora, pela data de validade */
+  function insPage(x) {
+    var hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+    var pd = function (s) { if (!s) return null; var p = String(s).split('-'); return p.length === 3 ? new Date(+p[0], +p[1] - 1, +p[2]) : null; };
+    var fd = function (s) { var dd = pd(s); return dd ? dd.toLocaleDateString('pt-BR') : ''; };
+    var vd = pd(x.validade), dias = vd ? Math.round((vd - hoje) / 864e5) : null;
+    var sit = String(x.situacao || '').trim().toLowerCase(), res = String(x.resultado || '').toUpperCase(), st;
+    if (sit === 'descartado' || sit === 'fora de uso') st = ['crit', '✕ Fora de uso — não usar'];
+    else if (sit === 'enviado para calibração') st = ['warn', '◆ No laboratório (em calibração)'];
+    else if (sit === 'manutenção') st = ['warn', '◆ Em manutenção — não usar'];
+    else if (sit === 'bloqueado' || res === 'REPROVADO') st = ['crit', '■ Bloqueado — não usar'];
+    else if (dias == null) st = ['warn', '! Sem data de calibração'];
+    else if (dias < 0) st = ['crit', '✕ Calibração vencida — não usar'];
+    else if (dias <= 30) st = ['warn', '✓ Calibrado · vence ' + (dias === 0 ? 'hoje' : 'em ' + dias + ' dia(s)')];
+    else st = ['ok', '✓ Calibrado — pode usar'];
+    var resT = { APROVADO: 'Aprovado', REPROVADO: 'Reprovado', 'AGUARDANDO ANÁLISE': 'Aguardando análise do certificado', 'SEM CRITÉRIO': 'Aguardando análise do certificado' }[res] || '';
+    var row = function (l, v, mono) { return v === '' || v == null ? '' : '<div class="r"><span>' + l + '</span><b' + (mono ? ' class="mono"' : '') + '>' + esc(v) + '</b></div>'; };
+    var card = function (t, rows, g) { return rows ? '<div class="card ' + (g ? 'g' : 'i') + '"><h3>' + t + '</h3>' + rows + '</div>' : ''; };
+    var at = x.at ? new Date(Number(x.at)) : null;
+    out.innerHTML = '<div style="display:grid;gap:14px">'
+      + '<div class="hero ' + (st[0] === 'ok' ? 'i' : st[0]) + '">' + (st[0] === 'ok' ? SEAL : '') + '<span class="eb">Instrumento de medição</span><span class="code">' + esc(x.codigo) + '</span>'
+      + '<span class="desc">' + esc(x.desc || '') + '</span><span class="chip ' + st[0] + '">' + st[1] + '</span></div>'
+      + card('Calibração', row('Calibrado em', fd(x.dataCal)) + row('Válido até', fd(x.validade)) + row('Resultado', resT) + row('Laboratório', x.lab) + row('Nº do certificado', x.cert, 1))
+      + card('Instrumento', row('Tipo', x.tipo) + row('Marca', x.marca) + row('Nº de série', x.serie, 1) + row('Faixa de medição', x.faixa) + row('Resolução', x.resol))
+      + card('Onde fica', row('Setor', x.setor) + row('Local / com quem está', x.local), 1)
+      + '<div class="ft">Página somente para consulta. Os dados são os registrados pela Qualidade da Aços Vital.' + (at ? '<br>Atualizado em ' + at.toLocaleDateString('pt-BR') + ' às ' + at.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '') + '</div></div>';
+    document.title = (x.codigo || 'Instrumento') + ' · Qualidade Aços Vital';
+  }
 })();
 </script>
 </body>
