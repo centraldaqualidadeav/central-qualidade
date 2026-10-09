@@ -759,6 +759,77 @@ table.mz tbody tr[data-open] { cursor: pointer; } table.mz tbody tr[data-open]:h
 .tmsw[aria-pressed="true"] { background: var(--warn); border-color: var(--warn); color: #fff; }
 #nav a.emteste::after { content: 'TESTE'; margin-left: auto; font: 700 9.5px/1 var(--f-mono, monospace); letter-spacing: .06em; color: #fff; background: var(--warn); border-radius: 4px; padding: 3px 5px; }
 
+/* ===== Menu lateral: item aberto na cor do módulo, contadores e modo recolhido ===== */
+.nav a[aria-current="page"] { background: color-mix(in srgb, var(--c, var(--geral)) 11%, var(--surface)); box-shadow: inset 4px 0 0 var(--c, var(--geral)); color: var(--c, var(--geral)); border-radius: 4px 9px 9px 4px; }
+.nav a:not([aria-current]):hover { background: color-mix(in srgb, var(--c, var(--geral)) 7%, transparent); }
+:root[data-theme="dark"] .nav a[aria-current="page"] { background: color-mix(in srgb, var(--c, var(--geral)) 16%, var(--surface)); color: color-mix(in srgb, var(--c, var(--geral)) 70%, #fff); }
+.nav a .ct.mod { margin-left: auto; font: 700 11px/1 var(--f-body); padding: 3px 7px; border-radius: 10px; background: color-mix(in srgb, var(--c, var(--geral)) 15%, var(--surface)); color: var(--c, var(--geral)); }
+:root[data-theme="dark"] .nav a .ct.mod { color: color-mix(in srgb, var(--c, var(--geral)) 70%, #fff); }
+.nav a .ct.mod.hot { background: var(--crit); color: #fff; }
+.railtop { position: relative; }
+.railtg { position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; border-radius: 7px; border: 0; background: rgba(255, 255, 255, .1); color: inherit; display: grid; place-items: center; cursor: pointer; opacity: .75; z-index: 2; }
+.railtg:hover, .railtg:focus-visible { opacity: 1; background: rgba(255, 255, 255, .2); }
+body:not(.cq-dono) :root:not([data-theme="dark"]) .railtg { background: rgba(0, 0, 0, .06); }
+.railtip { position: fixed; z-index: 90; background: #1b211e; color: #fff; font: 600 13px/1.3 var(--f-body); padding: 7px 11px; border-radius: 7px; box-shadow: 0 8px 24px rgba(0, 0, 0, .22); pointer-events: none; max-width: 280px; }
+.railtip small { display: block; font-weight: 400; color: #b7bfba; font-size: 11.5px; margin-top: 2px; }
+.railtip[hidden] { display: none; }
+@media (min-width: 861px) {
+  body.railmini .app { grid-template-columns: 76px minmax(0, 1fr); }
+  body.railmini .railtop { padding: 44px 8px 12px; justify-items: center; }
+  body.railmini .railtg { left: 50%; right: auto; transform: translateX(-50%) rotate(180deg); top: 10px; }
+  body.railmini .railtop .brand .name { font-size: 0 !important; }
+  body.railmini .railtop .brand .name::before { content: 'CQ'; font: 800 26px/1 var(--f-display); letter-spacing: -.01em; }
+  body.railmini .railtop .brand .stamp { width: 44px; margin-top: 6px; }
+  body.railmini .railrow, body.railmini .logocard, body.railmini #exp-all { display: none !important; }
+  body.railmini .railbody { padding: 6px 6px 14px; }
+  body.railmini .nav .grp { font-size: 0; padding: 0; height: 1px; background: var(--line); margin: 10px 10px 6px; overflow: hidden; }
+  body.railmini .nav a { font-size: 0; justify-content: center; padding: 5px 0; position: relative; box-shadow: none; border-radius: 10px; }
+  body.railmini .nav a .sw { width: 40px; height: 40px; border-radius: 11px; }
+  body.railmini .nav a .sw svg { width: 19px; height: 19px; }
+  body.railmini .nav a[aria-current="page"] { background: transparent; }
+  body.railmini .nav a[aria-current="page"] .sw { box-shadow: 0 0 0 3px color-mix(in srgb, var(--c, var(--geral)) 30%, transparent); }
+  body.railmini .nav a .ct { position: absolute; top: 0; right: 6px; font-size: 9.5px; padding: 2px 5px; margin: 0; }
+  body.railmini #nav a.emteste::after { position: absolute; bottom: 1px; left: 50%; transform: translateX(-50%); font-size: 7px; padding: 1px 3px; margin: 0; }
+  body.railmini .railfoot .fbwho, body.railmini .railfoot .fbsair { display: none; }
+  body.railmini .railfoot .fbme { justify-content: center; padding: 6px; background: transparent; box-shadow: none; }
+}
+
+/* ---------- letreiro ao vivo (rodapé) ---------- */
+.tk { position: fixed; z-index: 40; left: 260px; right: 0; bottom: 0; height: 44px; display: flex; align-items: stretch; background: #151a17; color: #e8ece9; box-shadow: 0 -2px 14px rgba(0, 0, 0, .18); padding-bottom: env(safe-area-inset-bottom, 0px); box-sizing: content-box; }
+.tk[hidden] { display: none; }
+.tktag { display: flex; align-items: center; gap: 9px; padding: 0 16px; background: #d92d20; color: #fff; font: 800 15px/1 var(--f-display); letter-spacing: .08em; flex: none; }
+.tktag i, .tkpill i { width: 9px; height: 9px; border-radius: 50%; background: #fff; animation: tkpulse 1.6s ease-in-out infinite; }
+@keyframes tkpulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, .55); } 50% { box-shadow: 0 0 0 5px rgba(255, 255, 255, 0); } }
+.tkrun { flex: 1; min-width: 0; overflow: hidden; display: flex; align-items: center; -webkit-mask-image: linear-gradient(90deg, transparent, #000 2.5%, #000 97%, transparent); mask-image: linear-gradient(90deg, transparent, #000 2.5%, #000 97%, transparent); }
+.tktrk { display: flex; width: max-content; animation: tkmove var(--tkdur, 60s) linear infinite; will-change: transform; }
+@keyframes tkmove { to { transform: translateX(-50%); } }
+.tk:hover .tktrk, .tk:focus-within .tktrk, .tk.paused .tktrk { animation-play-state: paused; }
+.tkset { display: flex; gap: 34px; padding: 0 34px 0 0; white-space: nowrap; }
+.tki { all: unset; box-sizing: border-box; display: inline-flex; align-items: center; gap: 8px; font: 500 14.5px/1 var(--f-body); color: #a9b3ae; cursor: pointer; padding: 6px 4px; border-radius: 5px; }
+.tki:hover b { text-decoration: underline; text-underline-offset: 3px; }
+.tki:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
+.tki i { width: 8px; height: 8px; border-radius: 2px; background: var(--c); transform: rotate(45deg); filter: brightness(1.8) saturate(1.2); flex: none; }
+.tki b { font-weight: 700; color: #fff; }
+.tki em { font-style: normal; }
+.tki.alerta i { display: none; }
+.tki.alerta::before { content: '⚠'; color: #ff8a80; font-size: 14px; }
+.tki.alerta b { color: #ff8a80; }
+.tki.aviso b { color: #ffcf70; }
+.tki.ok b { color: #7fd8a8; }
+.tki.ok em::after { content: ' ✓'; color: #7fd8a8; }
+.tkctl { display: flex; align-items: center; gap: 4px; padding: 0 8px 0 10px; background: #232a26; flex: none; }
+.tkclk { font: 600 13px var(--f-mono); color: #cfd6d2; padding: 0 6px; }
+.tkb { width: 28px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: #aab3ae; display: grid; place-items: center; cursor: pointer; }
+.tkb:hover { background: rgba(255, 255, 255, .1); color: #fff; }
+.tkb[aria-pressed="true"] { color: #ffcf70; }
+.tkpill { position: fixed; z-index: 40; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 16px; padding: 7px 13px; background: #d92d20; color: #fff; font: 800 12.5px/1 var(--f-display); letter-spacing: .08em; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 0, 0, .22); }
+.tkpill[hidden] { display: none; }
+body.has-tk .main { padding-bottom: 108px; }
+body.has-tk .toast { bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
+@media (max-width: 860px) { .tk { left: 0 !important; height: 40px; } .tktag { padding: 0 10px; font-size: 13px; } .tkclk { display: none; } .tki { font-size: 13.5px; } body.has-tk .main { padding-bottom: 56px; } }
+@media (prefers-reduced-motion: reduce) { .tktrk { animation: none; } .tkrun { overflow-x: auto; -webkit-mask-image: none; mask-image: none; } .tkset[aria-hidden] { display: none; } .tktag i, .tkpill i { animation: none; } }
+@media print { .tk, .tkpill { display: none !important; } }
+
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
 #fb-gate[hidden] { display: none; }
@@ -793,6 +864,7 @@ table.mz tbody tr[data-open] { cursor: pointer; } table.mz tbody tr[data-open]:h
 <div class="app">
   <aside class="rail" aria-label="Navegação">
     <div class="railtop">
+      <button type="button" class="railtg" id="rail-tg" title="Recolher o menu" aria-label="Recolher o menu"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11 7-5 5 5 5M18 7l-5 5 5 5"/></svg></button>
       <div class="brand">
         <span class="name">Central da Qualidade</span>
         <span class="stamp" aria-hidden="true"><i style="background:var(--av)"></i><i style="background:var(--serv)"></i><i style="background:var(--rnc)"></i><i style="background:var(--rncc)"></i><i style="background:var(--cal)"></i><i style="background:var(--geral)"></i></span>
@@ -3836,7 +3908,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   /* módulos em teste: a conta dona esconde de todo mundo (inclusive administradores) até liberar.
      Sem escolha gravada, os módulos novos ou reformulados começam escondidos. */
   const TESTE_MODS = [['ins', 'Calibração', 'reformulada: EMA, histórico, envio ao laboratório, etiqueta QR, cronograma e custos'], ['sold', 'Soldagem', 'módulo novo'], ['iqf', 'Avaliação de fornecedores', 'módulo novo']];
-  const TESTE_DEF = { ins: true, sold: true, iqf: true, rncc8d: true };
+  const TESTE_DEF = { ins: true, sold: true, iqf: true, rncc8d: true, ticker: true };
   const ocultos = () => { const o = ((DB.cfg || {}).ocultos) || {}; return Object.assign({}, TESTE_DEF, o); };
   const emTeste = (col) => !!ocultos()[col];
   const rncc8dOn = () => DB.owner || !ocultos().rncc8d;
@@ -4065,6 +4137,156 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       $('#exp-all').hidden = SCR('exportar') === 'nao';
     }
     $('#db-stale').hidden = !S.stale;
+    navCounts();
+    tickerUpdate();
+  }
+  /* contadores de cada módulo no menu (vermelho = urgente; na cor do módulo = informativo) e resumo para o menu recolhido */
+  function navCounts() {
+    if (!S.model) return;
+    const m = S.model, C = {};
+    try {
+      if (vis('av')) { const n = m.av.filter((x) => x.data != null && x.data >= S.today - 30 && semCert(x)).length; C.av = [n, 0, `${NF.format(n)} lote(s) sem certificado nos últimos 30 dias`]; }
+      if (vis('rnc')) { const a = m.rnc.filter((x) => x.status === 'Atrasado').length, ab = m.rnc.filter((x) => x.aberta).length; C.rnc = [a, 1, `${NF.format(ab)} abertas · ${NF.format(a)} atrasadas`]; }
+      if (vis('rncc')) { const R = m.rncc || [], a = R.filter((x) => x.status === 'Atrasado' || (x.aberta && x.respData == null && x.prazoResp != null && S.today > x.prazoResp)).length; C.rncc = [a, 1, `${NF.format(R.filter((x) => x.aberta).length)} abertas · ${NF.format(a)} com prazo vencido`]; }
+      if (vis('ins')) { const v = m.ins.filter((x) => x.status === 'VENCIDO' || x.status === 'VENCE HOJE' || x.status === 'BLOQUEADO').length, b = m.ins.filter((x) => x.status === 'VENCE EM BREVE').length; C.cal = v ? [v, 1, `${NF.format(v)} vencido(s) ou bloqueado(s) · ${NF.format(b)} vencem em 30 dias`] : [b, 0, `${NF.format(b)} vencem em até 30 dias`]; }
+      if (vis('sold') && SD.ready) { const A = soldAlertData(); if (A) C.sold = A.venc.length ? [A.venc.length, 1, `${A.venc.length} qualificação(ões) vencida(s) · ${A.ren.length} para renovar`] : [A.ren.length, 0, `${A.ren.length} qualificação(ões) para renovar`]; }
+      if (vis('iqf') && IQ.ready && vis('av')) { const P = iqPeriod('12m'), n = iqCalc(P.a, P.b).filter((o) => o.cls === 'C').length; C.iqf = [n, 0, `${NF.format(n)} fornecedor(es) classe C`]; }
+    } catch (e) { console.warn(e); }
+    S.navTip = {};
+    $$('#nav a').forEach((a) => {
+      const v = a.dataset.v, c = C[v]; if (a.querySelector('[id^="ct-"]')) { const ct = a.querySelector('[id^="ct-"]'); S.navTip[v] = ct.hidden ? '' : ct.textContent + (v === 'alertas' ? ' alerta(s)' : ' ponto(s) para revisar'); return; }
+      let el = a.querySelector('.ct.mod'); if (!c || !c[0]) { if (el) el.remove(); S.navTip[v] = c ? c[2] : ''; return; }
+      if (!el) { el = document.createElement('span'); el.className = 'ct mod'; a.appendChild(el); }
+      el.textContent = c[0] > 999 ? '999+' : NF.format(c[0]); el.classList.toggle('hot', !!c[1]); S.navTip[v] = c[2];
+    });
+  }
+  /* menu recolhido (só ícones): escolha de cada pessoa, lembrada neste computador */
+  const railMini = () => lsGet('cq-rail', '') === 'mini';
+  function applyRail() {
+    const on = railMini(); document.body.classList.toggle('railmini', on);
+    const b = $('#rail-tg'); if (b) { b.title = on ? 'Abrir o menu' : 'Recolher o menu'; b.setAttribute('aria-label', b.title); b.setAttribute('aria-pressed', on); }
+    if (typeof tkPlace === 'function') setTimeout(tkPlace, 0);
+  }
+  function railInit() {
+    const b = $('#rail-tg'); if (b) b.onclick = () => { lsSet('cq-rail', railMini() ? '' : 'mini'); applyRail(); railTip(null); };
+    let tip = null;
+    window.railTip = railTip;
+    function railTip(a) {
+      if (!a || !document.body.classList.contains('railmini') || window.innerWidth <= 860) { if (tip) tip.hidden = true; return; }
+      if (!tip) { tip = document.createElement('div'); tip.className = 'railtip'; document.body.appendChild(tip); }
+      const v = a.dataset.v, name = Array.from(a.childNodes).filter((n) => n.nodeType === 3).map((n) => n.textContent).join('').trim(), sub = (S.navTip || {})[v] || '';
+      tip.innerHTML = `${esc(name)}${sub ? `<small>${esc(sub)}</small>` : ''}`; tip.hidden = false;
+      const r = a.getBoundingClientRect(); tip.style.top = Math.max(6, r.top + r.height / 2 - tip.offsetHeight / 2) + 'px'; tip.style.left = (r.right + 8) + 'px';
+    }
+    const nav = $('#nav'); if (nav) { nav.addEventListener('mouseover', (e) => { const a = e.target.closest('a'); railTip(a); }); nav.addEventListener('mouseleave', () => railTip(null)); nav.addEventListener('focusin', (e) => railTip(e.target.closest('a'))); nav.addEventListener('focusout', () => railTip(null)); }
+    applyRail();
+  }
+  setTimeout(railInit, 0);
+
+  /* ================= letreiro ao vivo (rodapé) =================
+     Faixa em loop com o que precisa de ação (atrasos, vencimentos) e as novidades do dia.
+     Fica em "Módulos em teste" (só o dono vê) até ser liberado; cada pessoa pode esconder no próprio computador. */
+  const tkOn = () => !!S.model && (DB.owner || !ocultos().ticker);
+  const tkHidden = () => lsGet('cq-tk', '') === 'off';
+  function tkItems() {
+    const M = S.model, I = [], hoje = S.today, d0 = new Date(); d0.setHours(0, 0, 0, 0);
+    const add = (lvl, mod, b, em, act) => I.push({ lvl, mod, b, em, act });
+    const fl = (v) => (v == null ? null : Math.floor(v));
+    const nome = (s, n) => { s = String(s || '').trim(); return s.length > n ? s.slice(0, n - 1) + '…' : s; };
+    try {
+      if (vis('rnc')) {
+        const ab = M.rnc.filter((x) => x.aberta), at = ab.filter((x) => x.status === 'Atrasado');
+        if (at.length) add('alerta', 'RNC', `${NF.format(at.length)} RNC de fornecedor atrasada${at.length > 1 ? 's' : ''}`, 'passaram do prazo final', { go: { v: 'alertas' } });
+        const nowA = nowS(), stg = ab.map((x) => ({ x, s: rncStage(x) }));
+        const dispHoje = stg.filter((o) => o.s.k === 'disp' && fl(o.s.due) === hoje && o.x.status !== 'Atrasado');
+        dispHoje.slice(0, 3).forEach((o) => add('alerta', 'RNC', o.x.num, `prazo de disposição vence HOJE · ${nome(o.x.forn, 28)}`, { open: 'RNC:' + o.x.key }));
+        const dispV = stg.filter((o) => !o.x.disp && o.s.ts != null && o.s.ts < nowA && o.x.status !== 'Atrasado').length;
+        if (dispV) add('alerta', 'RNC', `${NF.format(dispV)} RNC com disposição vencida`, 'ainda sem disposição após o prazo', { go: { v: 'alertas' } });
+        const pl = pendLots().length;
+        if (pl) add('alerta', 'RNC', `${NF.format(pl)} lote${pl > 1 ? 's' : ''} aguardando decisão`, 'reprovados ou bloqueados na inspeção', { go: { v: 'alertas' } });
+      }
+      if (vis('rncc')) {
+        const R = (M.rncc || []).filter((x) => x.aberta), v = R.filter((x) => x.status === 'Atrasado' || (x.respData == null && x.prazoResp != null && hoje > x.prazoResp));
+        v.slice(0, 2).forEach((x) => add('alerta', 'RNCC', x.num, `RNC de cliente com prazo vencido · ${nome(x.cliente, 26)}`, { open: 'RNCC:' + x.key }));
+        if (v.length > 2) add('alerta', 'RNCC', `+${v.length - 2} RNC de cliente com prazo vencido`, 'veja em Alertas', { go: { v: 'alertas' } });
+      }
+      let calOk = false;
+      if (vis('ins')) {
+        const act = M.ins.filter((x) => x.dias != null && x.emUso), venc = act.filter((x) => x.dias <= 0).sort((a, b) => a.dias - b.dias), sem = act.filter((x) => x.dias >= 1 && x.dias <= 7).sort((a, b) => a.dias - b.dias);
+        venc.slice(0, 3).forEach((x) => add('alerta', 'INS', x.codigo, `${nome(x.desc, 30)} · calibração ${x.dias === 0 ? 'vence HOJE' : 'vencida'}`, { open: 'INS:' + x.key }));
+        if (venc.length > 3) add('alerta', 'INS', `+${venc.length - 3} instrumentos vencidos`, 'veja em Alertas', { go: { v: 'alertas' } });
+        const imp = M.ins.filter(insImpPend).length;
+        if (imp) add('alerta', 'INS', `${NF.format(imp)} instrumento${imp > 1 ? 's' : ''} bloqueado${imp > 1 ? 's' : ''}`, 'falta a análise de impacto', { go: { v: 'alertas' } });
+        sem.slice(0, 3).forEach((x) => add('aviso', 'INS', x.codigo, `${nome(x.desc, 30)} · calibração vence em ${x.dias} dia${x.dias > 1 ? 's' : ''}`, { open: 'INS:' + x.key }));
+        calOk = act.length > 0 && !venc.length && !imp && !act.some((x) => x.dias <= 30);
+      }
+      let soldOk = false;
+      const A = soldAlertData();
+      if (A) {
+        A.venc.slice().sort((a, b) => a.dias - b.dias).slice(0, 3).forEach((q) => add('alerta', 'SOLD', `Soldador ${nome(q.nome, 26)}`, `qualificação ${soldQLabel(q)} vencida`, { open: 'SOLD:' + q.key }));
+        A.ren.slice().sort((a, b) => a.dias - b.dias).slice(0, 3).forEach((q) => add('aviso', 'SOLD', `Soldador ${nome(q.nome, 26)}`, `qualificação ${soldQLabel(q)} vence ${q.dias === 0 ? 'hoje' : `em ${q.dias} dia${q.dias > 1 ? 's' : ''}`}`, { open: 'SOLD:' + q.key }));
+        soldOk = !A.venc.length && !A.ren.length;
+      }
+      if (vis('av')) {
+        const n30 = M.av.filter((x) => x.data != null && x.data >= hoje - 30), sc = n30.filter(semCert).length;
+        if (sc) add('aviso', 'AV', `${NF.format(sc)} lote${sc > 1 ? 's' : ''} sem certificado`, `recebidos nos últimos 30 dias (${Math.round((sc / n30.length) * 100)}%)`, { go: { v: 'av', f: { cert: 'sem' } } });
+      }
+      if (vis('iqf') && IQ.ready && vis('av')) {
+        const P = iqPeriod('12m'), c = iqCalc(P.a, P.b).filter((o) => o.cls === 'C');
+        if (c.length) add('aviso', 'IQF', `${NF.format(c.length)} fornecedor${c.length > 1 ? 'es' : ''} na classe C`, c.slice(0, 2).map((o) => nome(o.nome, 22)).join(', ') + (c.length > 2 ? '…' : ''), { go: { v: 'iqf' } });
+      }
+      /* novidades de hoje */
+      const meta = (mod, x) => ((DB.meta[mod] || {})[x.key] || {});
+      if (vis('av')) {
+        const L = M.av.filter((x) => (meta('AV', x)._c || 0) >= d0.getTime()).sort((a, b) => meta('AV', b)._c - meta('AV', a)._c);
+        if (L.length) { const x = L[0]; add('novo', 'AV', L.length > 1 ? `${NF.format(L.length)} lotes lançados hoje` : 'Novo lote lançado', `${nome(x.desc, 30)} · ${nome(x.forn, 24)} · ${hhmm(meta('AV', x)._c)}`, { open: 'AV:' + x.key }); }
+      }
+      if (vis('rnc')) {
+        M.rnc.filter((x) => fl(x.data) === hoje).slice(0, 2).forEach((x) => add('novo', 'RNC', `${x.num} aberta`, `${nome(x.motivo, 16)} · ${nome(x.forn, 26)}`, { open: 'RNC:' + x.key }));
+        M.rnc.filter((x) => fl(x.conclusao) === hoje).slice(0, 2).forEach((x) => add('novo', 'RNC', `${x.num} concluída`, nome(x.forn, 30), { open: 'RNC:' + x.key }));
+      }
+      if (vis('rncc')) (M.rncc || []).filter((x) => fl(x.data) === hoje).slice(0, 2).forEach((x) => add('novo', 'RNCC', `${x.num} aberta`, `RNC de cliente · ${nome(x.cliente, 26)}`, { open: 'RNCC:' + x.key }));
+      if (vis('ins')) M.ins.filter((x) => fl(x.dataCal) === hoje).slice(0, 2).forEach((x) => add('novo', 'INS', `${x.codigo} calibrado`, `${nome(x.desc, 30)}${x.resultado ? ' · ' + E.low(x.resultado) : ''}`, { open: 'INS:' + x.key }));
+      /* o que está em dia */
+      if (vis('ins') && calOk) add('ok', 'INS', 'Calibração', 'todos os instrumentos em dia', { go: { v: 'cal' } });
+      if (A && soldOk) add('ok', 'SOLD', 'Soldagem', 'todas as qualificações em dia', { go: { v: 'sold' } });
+      if (vis('rncc') && !(M.rncc || []).some((x) => x.aberta)) add('ok', 'RNCC', 'RNC Cliente', 'nenhuma reclamação aberta', { go: { v: 'rncc' } });
+      if (vis('rnc') && !M.rnc.some((x) => x.status === 'Atrasado')) add('ok', 'RNC', 'RNC Fornecedor', 'nenhuma RNC atrasada', { go: { v: 'rnc' } });
+    } catch (e) { console.warn(e); }
+    const ord = { alerta: 0, aviso: 1, novo: 2, ok: 3 };
+    const out = I.map((o, i) => [o, i]).sort((a, b) => ord[a[0].lvl] - ord[b[0].lvl] || a[1] - b[1]).map((a) => a[0]).slice(0, 14);
+    return out.length ? out : [{ lvl: 'ok', mod: 'GERAL', b: 'Tudo em dia', em: 'nenhuma pendência urgente agora', act: { go: { v: 'painel' } } }];
+  }
+  let tkSig = '';
+  function tkPlace() {
+    const el = $('#tk'), m = $('#main'); if (!el || !m) return;
+    el.style.left = (window.innerWidth <= 860 ? 0 : Math.max(0, m.getBoundingClientRect().left)) + 'px';
+  }
+  function tickerUpdate() {
+    let el = $('#tk'), pill = $('#tk-pill');
+    const on = tkOn(), hid = tkHidden();
+    document.body.classList.toggle('has-tk', on && !hid);
+    if (!on) { if (el) el.remove(); if (pill) pill.remove(); tkSig = ''; return; }
+    if (!pill) { pill = document.createElement('button'); pill.type = 'button'; pill.id = 'tk-pill'; pill.className = 'tkpill'; pill.innerHTML = '<i></i>AO VIVO'; pill.title = 'Mostrar o letreiro'; pill.onclick = () => { lsSet('cq-tk', ''); tickerUpdate(); }; document.body.appendChild(pill); }
+    pill.hidden = !hid;
+    if (!el) {
+      el = document.createElement('div'); el.id = 'tk'; el.className = 'tk'; el.setAttribute('role', 'region'); el.setAttribute('aria-label', 'Letreiro ao vivo');
+      el.innerHTML = `<div class="tktag"><i></i>AO VIVO</div><div class="tkrun"><div class="tktrk"></div></div><div class="tkctl"><button type="button" class="tkb" id="tk-pause" title="Pausar" aria-label="Pausar o letreiro" aria-pressed="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button><span class="tkclk" id="tk-clk"></span><button type="button" class="tkb" id="tk-hide" title="Esconder o letreiro (só neste computador)" aria-label="Esconder o letreiro"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button></div>`;
+      document.body.appendChild(el);
+      const pb = $('#tk-pause');
+      pb.onclick = () => { const p = !el.classList.contains('paused'); el.classList.toggle('paused', p); pb.setAttribute('aria-pressed', p); pb.title = p ? 'Continuar' : 'Pausar'; pb.innerHTML = p ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg>' : '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>'; };
+      $('#tk-hide').onclick = () => { lsSet('cq-tk', 'off'); tickerUpdate(); toast('Letreiro escondido. Para voltar, clique em “AO VIVO” no canto de baixo.'); };
+      window.addEventListener('resize', tkPlace);
+      const clk = () => { const c = $('#tk-clk'); if (c) c.textContent = hhmm(Date.now()); }; clk(); setInterval(clk, 20000);
+    }
+    el.hidden = hid; tkPlace();
+    if (hid) return;
+    const L = tkItems(), sig = JSON.stringify(L);
+    if (sig === tkSig) return; tkSig = sig;
+    const one = L.map((o) => { const a = o.act.open ? `data-open="${esc(o.act.open)}"` : `data-go="${esc(JSON.stringify(o.act.go))}"`; return `<button type="button" class="tki ${o.lvl}" style="--c:${(MOD[o.mod] || MOD.GERAL).c}" ${a}><i></i><b>${esc(o.b)}</b><em>${esc(o.em)}</em></button>`; }).join('');
+    const trk = el.querySelector('.tktrk'); trk.innerHTML = `<div class="tkset">${one}</div><div class="tkset" aria-hidden="true">${one}</div>`;
+    trk.querySelectorAll('.tkset[aria-hidden] button').forEach((b) => { b.tabIndex = -1; });
+    requestAnimationFrame(() => { const w = trk.firstElementChild.offsetWidth || 1000; trk.style.setProperty('--tkdur', Math.max(25, Math.round(w / 45)) + 's'); trk.style.animation = 'none'; void trk.offsetWidth; trk.style.animation = ''; });
   }
 
   /* ================= camadas ================= */
@@ -6578,7 +6800,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const o = ocultos(), row = (k, l, d) => `<div class="tmrow"><div><b>${esc(l)}</b><span class="muted">${esc(d)}</span></div><button type="button" class="tmsw" data-tm="${k}" aria-pressed="${!!o[k]}"><span>${o[k] ? 'Só o dono vê' : 'Liberado'}</span></button></div>`;
     return `<section class="sec">${band('GERAL', 'Módulos em teste')}<div class="block"><div class="body">
       <p style="margin:0 0 10px">Só a conta dona vê esta aba. <b>“Só o dono vê”</b> esconde o módulo de todo mundo, inclusive dos administradores: some do menu, do Painel, dos Alertas e da Auditoria. Quando estiver pronto para apresentar, clique para <b>liberar</b> — aí cada pessoa volta a ver conforme o acesso dela em Usuários.</p>
-      <div id="tm-list" class="tmlist">${TESTE_MODS.map(([k, l, d]) => row(k, l, d)).join('')}${row('rncc8d', 'RNC de cliente em etapas (8D)', 'a ficha nova da RNC de cliente; enquanto estiver em teste, a equipe continua com a ficha antiga e o botão “Atualizar andamento”')}</div>
+      <div id="tm-list" class="tmlist">${TESTE_MODS.map(([k, l, d]) => row(k, l, d)).join('')}${row('rncc8d', 'RNC de cliente em etapas (8D)', 'a ficha nova da RNC de cliente; enquanto estiver em teste, a equipe continua com a ficha antiga e o botão “Atualizar andamento”')}${row('ticker', 'Letreiro ao vivo (rodapé)', 'faixa no rodapé passando atrasos, vencimentos e novidades do dia; cada pessoa pode esconder no próprio computador')}</div>
       <p class="muted" style="margin:10px 0 0;font-size:12.5px">Atenção: módulo escondido some também para quem lança nele no dia a dia. Os dados continuam gravados normalmente.</p>
     </div></div></section>`;
   }
@@ -6723,7 +6945,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     $$('#tm-list [data-tm]').forEach((b) => { b.onclick = async () => {
       const k = b.dataset.tm, on = b.getAttribute('aria-pressed') !== 'true', o = Object.assign({}, ocultos(), { [k]: on });
       b.disabled = true;
-      try { await DB.db.doc('cfg/main').update({ ocultos: o }); logEntry('GERAL', 'cfg', 'alterado', `Módulos em teste: ${(TESTE_MODS.find((m) => m[0] === k) || [0, 'RNC de cliente em etapas (8D)'])[1]} ${on ? 'escondido (só o dono vê)' : 'liberado para a equipe'}`, null); toast(on ? 'Agora só você vê.' : 'Liberado para a equipe (conforme o acesso de cada um).'); b.setAttribute('aria-pressed', on); b.querySelector('span').textContent = on ? 'Só o dono vê' : 'Liberado'; b.disabled = false; setTimeout(navIcons, 300); }
+      try { await DB.db.doc('cfg/main').update({ ocultos: o }); logEntry('GERAL', 'cfg', 'alterado', `Módulos em teste: ${(TESTE_MODS.find((m) => m[0] === k) || [0, k === 'ticker' ? 'Letreiro ao vivo' : 'RNC de cliente em etapas (8D)'])[1]} ${on ? 'escondido (só o dono vê)' : 'liberado para a equipe'}`, null); toast(on ? 'Agora só você vê.' : 'Liberado para a equipe (conforme o acesso de cada um).'); b.setAttribute('aria-pressed', on); b.querySelector('span').textContent = on ? 'Só o dono vê' : 'Liberado'; b.disabled = false; setTimeout(navIcons, 300); setTimeout(tickerUpdate, 300); }
       catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; }
     }; });
     const nw0 = $('#pf-new'); if (nw0) nw0.onclick = () => pessoaDrawer(null);
