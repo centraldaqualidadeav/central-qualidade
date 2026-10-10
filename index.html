@@ -2706,8 +2706,8 @@ re2js/build/index.js:
   const NIVEIS = [['nao', 'Não vê'], ['ver', 'Só consulta'], ['lanca', 'Lança']];
   const SEAL = '<svg class="seal" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke-width="10"><path d="M52.7 12.1A38 38 0 0 1 81.5 28.8" stroke="var(--av)"/><path d="M84.2 33.3A38 38 0 0 1 84.2 66.7" stroke="var(--serv)"/><path d="M81.5 71.2A38 38 0 0 1 52.7 87.9" stroke="var(--rnc)"/><path d="M47.3 87.9A38 38 0 0 1 18.5 71.2" stroke="var(--rncc)"/><path d="M15.8 66.7A38 38 0 0 1 15.8 33.3" stroke="var(--cal)"/><path d="M18.5 28.8A38 38 0 0 1 47.3 12.1" stroke="var(--geral)"/></g><path d="M35 51 L46 62 L67 39" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   let GATE_LOGO = null;
-  const MODCOLS = ['av', 'serv', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp', 'tcert', 'tusin'];
-  const MODULOS = [['av', 'Lotes (AV)'], ['serv', 'Serviços'], ['rnc', 'RNC Fornecedor'], ['rncc', 'RNC Cliente'], ['ins', 'Calibração'], ['sold', 'Soldagem'], ['iqf', 'Avaliação de fornecedores'], ['trello', 'Trello Jurong'], ['tcert', 'Trello Certificados'], ['tusin', 'Trello Usinagem'], ['acomp', 'Acompanhamento Jurong']];
+  const MODCOLS = ['av', 'serv', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp', 'tcert', 'tusin', 'rnctab'];
+  const MODULOS = [['av', 'Lotes (AV)'], ['serv', 'Serviços'], ['rnc', 'RNC Fornecedor'], ['rncc', 'RNC Cliente'], ['ins', 'Calibração'], ['sold', 'Soldagem'], ['iqf', 'Avaliação de fornecedores'], ['trello', 'Trello Jurong'], ['tcert', 'Trello Certificados'], ['tusin', 'Trello Usinagem'], ['acomp', 'Acompanhamento Jurong'], ['rnctab', 'RNC pelo tablet (inspetor)']];
   /* telas gerais: quem não tem a escolha gravada (cadastros antigos) vê tudo, consulta Configurações e exporta */
   const TELAS = [['painel', 'Painel'], ['alertas', 'Alertas'], ['rastreio', 'Rastreabilidade'], ['auditoria', 'Auditoria'], ['relatorio', 'Relatório mensal'], ['historico', 'Histórico']];
   const TELA_OPC = { config: [['nao', 'Não vê'], ['ver', 'Só consulta'], ['edita', 'Edita']], exportar: [['sim', 'Permite'], ['nao', 'Não permite']] };
@@ -2810,7 +2810,7 @@ re2js/build/index.js:
     },
     collection(c) {
       const ref = SDK.collection(fs, c);
-      const blocked = () => MODCOLS.includes(c) && lvl(c) === 'nao' && !(c === 'av' && lvl('rnc') === 'lanca'); /* quem lança RNC lê os lotes para decidir os reprovados */
+      const blocked = () => MODCOLS.includes(c) && lvl(c) === 'nao' && !(c === 'av' && (lvl('rnc') === 'lanca' || lvl('rnctab') === 'lanca')); /* quem lança RNC lê os lotes para decidir os reprovados */
       const empty = { docs: [], size: 0, empty: true };
       return {
         doc: (id) => db.doc(c + '/' + id),
@@ -2966,8 +2966,8 @@ re2js/build/index.js:
             ${podeAdmin || u.perfil === 'admin' ? `<option value="admin" ${u.perfil === 'admin' ? 'selected' : ''}>Administrador — vê e lança tudo, configurações e usuários</option>` : ''}
           </select></label>
           <div id="u-acc"><div class="acc-head"><span>Acesso por módulo</span><span class="acc-all">Marcar todos: ${NIVEIS.map(([v, l]) => `<button type="button" class="linkbtn" data-all="${v}">${l}</button>`).join(' · ')}</span></div>
-            <div class="acc-tab" role="table">${MODULOS.map(([k, l]) => `<div class="acc-row" role="row"><span role="cell">${esc(l)}</span><div class="seg" role="radiogroup" aria-label="${esc(l)}">${NIVEIS.map(([v, t]) => `<button type="button" role="radio" data-m="${k}" data-v="${v}" aria-pressed="${ac[k] === v}" aria-checked="${ac[k] === v}">${t}</button>`).join('')}</div></div>`).join('')}</div>
-            <p class="muted" style="margin:0;font-size:12px"><b>Não vê</b>: o módulo some do menu e dos painéis · <b>Só consulta</b>: vê e exporta · <b>Lança</b>: também lança, edita e importa.</p>
+            <div class="acc-tab" role="table">${MODULOS.map(([k, l]) => `<div class="acc-row" role="row"><span role="cell">${esc(l)}</span><div class="seg" role="radiogroup" aria-label="${esc(l)}">${(k === 'rnctab' ? [['nao', 'Não'], ['lanca', 'Abre RNC pelo tablet']] : NIVEIS).map(([v, t]) => `<button type="button" role="radio" data-m="${k}" data-v="${v}" aria-pressed="${ac[k] === v}" aria-checked="${ac[k] === v}">${t}</button>`).join('')}</div></div>`).join('')}</div>
+            <p class="muted" style="margin:0;font-size:12px"><b>Não vê</b>: o módulo some do menu e dos painéis · <b>Só consulta</b>: vê e exporta · <b>Lança</b>: também lança, edita e importa · <b>RNC pelo tablet</b>: para o inspetor abrir RNC no tablet sem ver o módulo RNC Fornecedor (deixe RNC Fornecedor em “Não vê”).</p>
             <div class="acc-head" style="margin-top:14px"><span>Telas gerais</span></div>
             <div class="acc-tab" role="table">${TELAS.map(([k, l]) => tRow(k, l, [['ve', 'Vê'], ['nao', 'Não vê']])).join('')}${tRow('config', 'Configurações', TELA_OPC.config)}${tRow('exportar', 'Exportar tudo (.xlsx)', TELA_OPC.exportar)}</div>
             <p class="muted" style="margin:0;font-size:12px">Se o <b>Painel</b> ficar oculto, a Central abre na primeira tela liberada · Configurações <b>Edita</b>: altera listas, feriados, tipos de equipamento e e-mails dos fornecedores e dos setores (parâmetros de prazo, pessoas e logo continuam só com os administradores) · <b>Cadastro</b> aparece sozinho para quem lança em algum módulo.</p></div>
@@ -3989,6 +3989,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     else if (formView || busy || $('#layer').innerHTML) S.stale = true;
     else render();
     updateChrome();
+    inbStart();
   }
   async function boot() {
     renderStatus('Conectando ao banco de dados da Qualidade…');
@@ -4066,8 +4067,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   const anyLanca = () => canWrite() && Object.values(VIEW_COL).some((c) => ACC(c) === 'lanca');
   /* telas gerais (versão hospedada): Painel, Alertas, ... 've'/'nao' · Configurações 'nao'/'ver'/'edita'/'admin' · Exportar tudo 'sim'/'nao' */
   const SCR = (v) => (typeof window.CQ_SCREEN === 'function' ? window.CQ_SCREEN(v) : null);
-  const viewOk = (v) => { if (v === 'rnctab') return !!S.model && rncRelOn() && cw('rnc'); if (VIEW_COL[v]) return vis(VIEW_COL[v]); if (v === 'cadastro') return typeof window.CQ_ACCESS !== 'function' || anyLanca(); const s = SCR(v); return s == null || s !== 'nao'; };
-  const firstView = () => $$('#nav a').map((a) => a.dataset.v).find((v) => VIEWS[v] && viewOk(v)) || null;
+  const viewOk = (v) => { if (v === 'rnctab') return !!S.model && rncRelOn() && (cw('rnc') || tbInsp()); if (S.model && tbOnly()) return false; if (VIEW_COL[v]) return vis(VIEW_COL[v]); if (v === 'cadastro') return typeof window.CQ_ACCESS !== 'function' || anyLanca(); const s = SCR(v); return s == null || s !== 'nao'; };
+  const firstView = () => (S.model && tbOnly() ? (viewOk('rnctab') ? 'rnctab' : null) : null) || $$('#nav a').map((a) => a.dataset.v).find((v) => VIEWS[v] && viewOk(v)) || null;
   const cfgMode = () => { const s = SCR('config'); if (s === 'admin' || s === 'edita' || s === 'ver') return s; return DB.admin === false ? 'ver' : 'admin'; };
   async function lock(mod) {
     const holder = (DB.me || 'anon') + ':' + TAB;
@@ -4343,6 +4344,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       if (vis('rnc')) {
         const ab = M.rnc.filter((x) => x.aberta), at = ab.filter((x) => x.status === 'Atrasado');
         if (at.length) add('alerta', 'RNC', `${NF.format(at.length)} RNC de fornecedor atrasada${at.length > 1 ? 's' : ''}`, 'passaram do prazo final', { go: { v: 'alertas' } });
+        const npc = cw('rnc') && rncRelOn() ? inbCorrs().length : 0;
+        if (npc) add('alerta', 'RNC', `${npc} pedido${npc > 1 ? 's' : ''} de correção de RNC`, 'enviado(s) pelo inspetor no tablet', { go: { v: 'alertas' } });
         const nowA = nowS(), stg = ab.map((x) => ({ x, s: rncStage(x) }));
         const dispHoje = stg.filter((o) => o.s.k === 'disp' && fl(o.s.due) === hoje && o.x.status !== 'Atrasado');
         dispHoje.slice(0, 3).forEach((o) => add('alerta', 'RNC', o.x.num, `prazo de disposição vence HOJE · ${nome(o.x.forn, 28)}`, { open: 'RNC:' + o.x.key }));
@@ -5751,6 +5754,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const pick = { todas: ab, venc, atras, disp: dispV, soon, h24, h48, minhas: mine || [] }[filt] || ab;
     const sA = soldAlertData(), nada = !(sA && (sA.venc.length || sA.ren.length)) && !pendLots().length && !atras.length && !dispV.length && !soon.length && !lanes.some((ln) => ln.l.length) && !lanesB.slice(0, 3).some((ln) => ln.l.length) && !sem.length && !(M.rncc || []).some((x) => x.aberta && (x.status === 'Atrasado' || (x.respData == null && x.prazoResp != null && S.today > x.prazoResp)));
     main.innerHTML = `<div class="view">${head('Alertas', 'O que precisa de ação hoje. Os prazos de RNC usam dias úteis e os feriados de Configurações.', (vis('rnc') ? '<button class="btn" type="button" data-act="rnc-resumo">Resumo das RNCs</button>' : '') + '<button class="btn" type="button" data-act="msg-cal">Texto do alerta de calibração</button>')}
+      ${cw('rnc') && rncRelOn() ? inbCorrsAlert() : ''}
       ${nada ? okSeal('Nenhum alerta urgente', 'Sem RNC atrasada, calibração vencida ou lote sem certificado. Tudo certo por aqui.') : ''}
       <div class="kpis">
         ${vis('rnc') && pendLots().length ? kpiHTML({ l: 'Lotes aguardando decisão', v: NF.format(pendLots().length), sub: 'reprovados e bloqueados', c: MOD.RNC.c, cls: 'crit' }) : ''}
@@ -9373,7 +9377,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const t = (v) => esc(disp(v)), stg = x.aberta ? rncStage(x) : null;
     const lots = lotTokens(x.lotesAV).map((id) => { const a = avById(id); return a ? `<button class="btn small ghost mono" type="button" data-open="AV:${esc(a.key)}">${esc(a.id)}</button>` : `<span class="mono">${esc(id)}</span>`; }).join(' ');
     const a0 = lotTokens(x.lotesAV).map(avById).find(Boolean) || {};
-    const reinc = rncReincList(x.forn, x.motivo, x.key);
+    const reinc = rncReincList(x.forn, x.motivo, x.key), corrs = cw('rnc') ? inbCorrs(key) : [];
     const mon = `<div class="rrmon"><b>Monitoramento</b>${chipRnc(x.status)}${stg ? `<span>Etapa: <b>${esc(stg.t)}</b>${stg.ts != null ? ' · ' + relHTML(stg.ts) : ''}</span>` : ''}<span>Prazo final: <b>${fD(x.prazoFinal) || '—'}</b></span>${E.low(x.reinc) === 'sim' ? '<span class="chip warn"><i>↻</i>Reincidência</span>' : ''}${x.aberta && !x.comprador ? '<span class="chip crit"><i>!</i>Falta comprador</span>' : ''}<small class="muted">Calculado sozinho a partir das respostas do relatório.</small></div>`;
     const acts = `<button class="btn primary" type="button" data-act="rr-print" data-key="${esc(key)}">Imprimir / PDF do relatório</button>${x.aberta ? `<button class="btn" type="button" data-act="msg-rnc" data-key="${esc(key)}">Cobrança</button>` : ''}${x.aberta && w ? `<button class="btn" type="button" data-act="rnc-ret" data-key="${esc(key)}">Registrar retorno</button>` : ''}${w ? `<button class="btn ghost" type="button" data-act="edit" data-mod="RNC" data-key="${esc(key)}">Editar cadastro</button>` : ''}`;
     /* 1 · abertura */
@@ -9381,10 +9385,11 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const qtd = m.qtdRep != null ? `<b style="color:var(--crit)">${NF.format(m.qtdRep)}</b> reprovada(s)${m.qtdRec != null ? ` de ${NF.format(m.qtdRec)}${m.qtdUnd ? ' ' + esc(m.qtdUnd) : ''}${m.qtdRec ? ` (${Math.round((m.qtdRep / m.qtdRec) * 100)}%)` : ''}` : ''}` : '';
     const fotosHTML = `<div class="rrfotos">${fotos.map((o) => `<figure><img src="${o.img}" alt="">${w && !fechada ? `<button type="button" class="x" data-act="rr-fdel" data-key="${esc(key)}" data-id="${esc(o.id)}" title="Excluir foto">✕</button>` : ''}</figure>`).join('') || '<span class="muted">Sem fotos.</span>'}${w && !fechada && fotos.length < 8 ? `<button type="button" class="rradd" data-act="rr-fadd" data-key="${esc(key)}"><b>＋</b>Fotos</button>` : ''}</div>`;
     let ab;
-    if (m.abAss || !w || fechada) {
+    if ((m.abAss && RRC.key !== key) || !w || fechada) {
       ab = kv([['Lote(s) · Fornecedor', (lots || '<span class="muted">sem lote</span>') + ' · ' + t(x.forn)], ['NF · Pedido · PV', `<span class="mono">${t(x.nf)} · ${t(x.oc)} · ${t(x.pv)}</span>`], ['Material', a0.desc ? esc(lotTxt(a0)) + (E.filled(a0.corrida) ? ` · corrida <span class="mono">${esc(a0.corrida)}</span>` : '') : '<span class="muted">—</span>'],
         ['Origem · Setor', [m.origem, x.depto].filter(Boolean).map(esc).join(' · ') || '<span class="muted">—</span>'], ['Motivo', (x.motivo ? `<span class="chip crit">${esc(x.motivo)} · principal</span> ` : '') + motOut.map((v) => `<span class="chip off">${esc(v)} · outro</span>`).join(' ')],
-        ['Não conformidade', `<span style="white-space:pre-wrap">${t(m.descNc)}</span>`], ['Quantidade', qtd], ['Fotos', fotosHTML], ['Inspetor', m.abAss ? `<span class="rrsig"><i>✓</i>${sigLine(m.abAss)}</span>` : `${t(x.emissor)} <span class="muted">(RNC anterior ao relatório)</span>`]]);
+        ['Não conformidade', `<span style="white-space:pre-wrap">${t(m.descNc)}</span>`], ['Quantidade', qtd], ['Fotos', fotosHTML], ['Inspetor', m.abAss ? `<span class="rrsig"><i>✓</i>${sigLine(m.abAss)}</span>${corrLines(m).map((l) => `<div class="muted" style="font-size:12.5px;margin-top:4px">✎ ${l}</div>`).join('')}` : `${t(x.emissor)} <span class="muted">(RNC anterior ao relatório)</span>`]]);
+      if (m.abAss && w && !fechada) ab += `<div class="rrfoot"><button class="btn ghost" type="button" data-act="rr-corr" data-key="${esc(key)}">Corrigir abertura</button></div>`;
     } else {
       const mots = cfgL('RNC_MOTIVOS');
       ab = `<div class="rrbox"><div class="rrg3">
@@ -9393,7 +9398,9 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
         ${rnFld('Descrição da não conformidade', `<textarea id="rr-desc" style="min-height:70px">${esc(m.descNc || '')}</textarea>`, 1)}
         ${rnFld('Quantidade reprovada', `<input id="rr-qrep" inputmode="decimal" value="${m.qtdRep ?? ''}">`)}${rnFld('Quantidade recebida', `<input id="rr-qrec" inputmode="decimal" value="${m.qtdRec ?? (a0.quant ?? '')}">`)}${rnFld('Unidade', `<input id="rr-qund" value="${esc(m.qtdUnd || a0.und || 'pç')}">`)}
       </div>${kv([['Lote(s) · Fornecedor', (lots || '<span class="muted">sem lote</span>') + ' · ' + t(x.forn)], ['Fotos', fotosHTML]])}
-      <div class="rrfoot"><span class="muted">Ao assinar, a abertura fica registrada em seu nome e não muda mais.</span><button class="btn" type="button" data-act="rr-absave" data-key="${esc(key)}">Salvar rascunho</button><button class="btn primary" type="button" data-act="rr-absign" data-key="${esc(key)}">Salvar e assinar abertura</button></div></div>`;
+      ${m.abAss ? `<div class="rrbox" style="border-color:var(--warn)"><div class="rrg3">${rnFld('Motivo da correção <b style="color:var(--crit)">*</b>', `<input id="rr-cmot" value="${esc(RRC.pre || '')}" placeholder="ex.: pedido do inspetor — quantidade digitada errada">`, 1)}</div>${RRC.cid && RRC.nf ? `<label class="check"><input type="checkbox" id="rr-cfot" checked> Incluir ${RRC.nf} foto(s) enviada(s) no pedido</label>` : ''}
+        <div class="rrfoot"><span class="muted">A assinatura do inspetor continua; o relatório registra o valor antigo, o novo, o motivo, quem corrigiu e quando.</span><button class="btn" type="button" data-act="rr-corrx" data-key="${esc(key)}">Cancelar</button><button class="btn primary" type="button" data-act="rr-corrsave" data-key="${esc(key)}">Salvar correção</button></div></div>`
+      : `<div class="rrfoot"><span class="muted">Ao assinar, a abertura fica registrada em seu nome e não muda mais.</span><button class="btn" type="button" data-act="rr-absave" data-key="${esc(key)}">Salvar rascunho</button><button class="btn primary" type="button" data-act="rr-absign" data-key="${esc(key)}">Salvar e assinar abertura</button></div>`}</div>`;
     }
     /* 2 · tratamento · 3 · eficácia · 4 · aprovação */
     const ro = !w || fechada;
@@ -9417,6 +9424,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const r = related(x);
     const rel = `<div class="fsec"><h3>Registros ligados (${r.length})</h3>${r.length ? '<div class="rel">' + r.map((o) => `<button type="button" style="--c:${MOD[o.rec.mod].c}" data-open="${o.rec.mod}:${esc(o.rec.key)}" title="${esc(o.why)}">${esc(recLabel(o.rec))} <span class="muted">· ${esc(o.why)}</span></button>`).join('') + '</div>' : '<span class="muted">Nenhum outro registro ligado.</span>'}</div>`;
     const body = `<div class="formfoot">${acts}</div>${mon}
+      ${corrs.map((c) => `<div class="rrwarn" style="border-left-color:var(--info)"><b>✎ Pedido de correção</b> de ${esc(c.nome || 'inspetor')} em ${dmy(c.at)} às ${hhmm(c.at)}: “${esc(c.txt)}”${c.nf ? ` · ${c.nf} foto(s) anexada(s)` : ''}${w && !fechada ? `<div class="rrfoot" style="margin-top:8px"><button class="btn ghost" type="button" data-act="rr-crec" data-key="${esc(key)}" data-uid="${esc(c.uid)}" data-id="${esc(c.cid)}">Recusar</button><button class="btn primary" type="button" data-act="rr-corr" data-key="${esc(key)}" data-uid="${esc(c.uid)}" data-id="${esc(c.cid)}">Corrigir abertura</button></div>` : ''}</div>`).join('')}
       ${rnH(1, 'Abertura', m.abAss ? (m.abAss.via === 'tablet' ? 'preenchida no tablet pelo inspetor' : 'preenchida pelo inspetor') : 'parte do inspetor', 'var(--rnc)')}${ab}
       ${reinc.length && x.aberta ? `<div class="rrwarn">↻ ${esc(x.forn)} teve ${plural(reinc.length, 'outra RNC', 'outras RNCs')} de ${esc(x.motivo)} nos últimos 6 meses: ${reinc.slice(0, 4).map((o) => `<button class="btn small ghost mono" type="button" data-open="RNC:${esc(o.key)}">${esc(o.num)}</button>`).join(' ')}</div>` : ''}
       ${rnH(2, 'Tratamento da não conformidade', 'Qualidade administrativa responde aqui', 'var(--info)')}${trat}
@@ -9535,7 +9543,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
         <tr><td class="k">Descrição</td><td colspan="3" class="pre">${t(m.descNc)}</td></tr>
         <tr><td class="k">Quantidade</td><td>${qtd}</td><td class="k">Reincidência</td><td>${t(x.reinc)}</td></tr></table>
         ${fotos.length ? `<div class="sh l">Registro fotográfico</div><div class="fot">${fotos.map((o) => `<img src="${o.img}" alt="">`).join('')}</div>` : ''}
-        <div class="sig" style="border-top:1px solid #bbb"><b>Inspetor responsável:</b> ${m.abAss ? sg(m.abAss) : t(x.emissor)}</div></div>
+        <div class="sig" style="border-top:1px solid #bbb"><b>Inspetor responsável:</b> ${m.abAss ? sg(m.abAss) : t(x.emissor)}${corrLines(m).map((l) => `<div style="font-size:8.3pt;color:#444;margin-top:1mm">✎ ${l}</div>`).join('')}</div></div>
       <div class="sec"><div class="sh q">3 · Tratamento da não conformidade <span>Qualidade</span></div><table>
         <tr><td class="k">Disposição</td><td>${t(x.disp)}</td><td class="k">Data</td><td>${fD(x.fechDisp) || '—'}</td></tr>
         <tr><td class="k">Contenção</td><td>${t(m.contTxt)}</td><td class="k">Resp. / data</td><td>${t(m.contResp)}${m.contData ? ' · ' + fD(m.contData) : ''}</td></tr>
@@ -9574,7 +9582,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   }
   function tbHead(title) {
     const on = DB.state === 'on' && navigator.onLine !== false;
-    return `<div class="tbhd"><button type="button" class="br" data-act="tb-sair" title="Voltar à Central"><b>Central da Qualidade</b><span class="stp">${['#1e6b52', '#8a5a00', '#980000', '#7a2463', '#1f4e79', '#6b736f'].map((c) => `<i style="background:${c}"></i>`).join('')}</span><span class="av">Aços Vital · Qualidade</span></button>
+    return `<div class="tbhd"><button type="button" class="br" ${tbOnly() ? 'tabindex="-1" style="cursor:default"' : 'data-act="tb-sair" title="Voltar à Central"'}><b>Central da Qualidade</b><span class="stp">${['#1e6b52', '#8a5a00', '#980000', '#7a2463', '#1f4e79', '#6b736f'].map((c) => `<i style="background:${c}"></i>`).join('')}</span><span class="av">Aços Vital · Qualidade</span></button>
       <img class="lg" src="${LOGO_A}" alt=""><div class="rt"><div><b>${esc(title)}</b><span>${esc(myPessoa() || DB.meName || '')} · <span class="${on ? 'on' : 'off'}">● ${on ? 'conectado' : 'sem conexão'}</span></span></div><i>${esc(((myPessoa() || DB.meName || '?').split(/\s+/).filter(Boolean).map((p) => p[0]).slice(0, 2).join('') || '?').toUpperCase())}</i></div></div>`;
   }
   function tbSteps(n) { return `<div class="tbsteps">${['Material', 'Problema', 'Assinar e enviar'].map((l, i) => `<div class="${i + 1 === n ? 'on' : i + 1 < n ? 'ok' : ''}"><b>${i + 1 < n ? '✓' : i + 1}</b>${l}</div>`).join('')}</div>`; }
@@ -9586,7 +9594,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     if (TB.step === 0) { const ids = uniq(pendLots().map((a) => lotMeta(a)._ub || lotMeta(a)._cb).filter((i) => i && !DB.names[i] && !TB.asked.has(i))); if (ids.length) { ids.forEach((i) => TB.asked.add(i)); resolveNames(ids).then(() => { if (S.view === 'rnctab' && TB.step === 0) render(); }).catch(() => {}); } }
   };
   function tbHome() {
-    const pend = pendLots().sort((a, b) => (lotMeta(b).inspEm || lotMeta(b)._u || 0) - (lotMeta(a).inspEm || lotMeta(a)._u || 0));
+    const sentLots = new Set(); Object.values((INB.mine || {}).s || {}).forEach((e) => { if (e && e.st === 'novo') lotTokens(e.lotesAV || '').forEach((id) => sentLots.add(E.low(id))); });
+    const pend = pendLots().filter((a) => !sentLots.has(E.low(a.id))).sort((a, b) => (lotMeta(b).inspEm || lotMeta(b)._u || 0) - (lotMeta(a).inspEm || lotMeta(a)._u || 0));
     const mine = S.model.rnc.filter((r) => { const m = rmeta(r); return m.abAss && m.abAss.uid && m.abAss.uid === DB.me; }).sort((a, b) => b.data - a.data).slice(0, 12);
     const dr = tbDrafts();
     const lotRow = (a) => { const lm = lotMeta(a), at = lm.inspEm || lm._u || lm._c; return `<div class="tblr"><div><div class="t"><b>${esc(a.id)}</b><span class="chip crit"><i>✕</i>Reprovado</span></div><div class="d">${esc(lotTxt(a))}</div><div class="m">${esc(a.forn || 'sem fornecedor')} · NF ${esc(disp(a.nf) || '—')}${a.quant != null ? ' · ' + esc(disp(a.quant)) + ' ' + esc(a.und || '') : ''}</div>${lm.motRep ? `<div class="w">“${esc(lm.motRep)}”</div>` : ''}<div class="w">${at ? 'reprovado ' + (dmy(at) === dmy(Date.now()) ? 'hoje' : 'em ' + dmy(at)) + ' às ' + hhmm(at) : ''}${lm._ub || lm._cb ? ' por ' + esc(who(lm._ub || lm._cb)) : ''}</div></div><button class="btn red" type="button" data-act="tb-lot" data-key="${esc(a.key)}">Abrir RNC →</button></div>`; };
@@ -9595,7 +9604,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       body: `<div class="tbrow2"><button class="btn dk big" type="button" data-act="tb-nova">▣&nbsp; Ler etiqueta e abrir RNC</button><button class="btn big" type="button" data-act="tb-mine">☰&nbsp; Minhas RNCs</button></div>
         <div class="tbcard"><div class="ch">Lotes reprovados esperando RNC<span class="cnt">${pend.length}</span></div>${pend.length ? pend.map(lotRow).join('') : '<div class="tbnone">Nenhum lote reprovado esperando RNC. 👍</div>'}</div>
         ${dr.length ? `<div class="tbcard"><div class="ch gr">Rascunhos neste tablet</div>${dr.map(drRow).join('')}</div>` : ''}
-        <div class="tbcard" id="tb-mine"><div class="ch gr">Minhas RNCs</div>${mine.length ? mine.map((r) => `<div class="tblr"><div><div class="t"><b>${esc(r.num)}</b>${chipRnc(r.status)}</div><div class="m">${esc(r.forn || '—')} · ${esc(r.motivo || '')}</div><div class="w">aberta em ${esc(fmtTs(r.data))}</div></div><button class="btn" type="button" data-act="rr-print" data-key="${esc(r.key)}">Imprimir</button></div>`).join('') : '<div class="tbnone">Você ainda não abriu RNC pelo tablet.</div>'}</div>`,
+        ${!cw('rnc') ? tbMineInsp() : `<div class="tbcard" id="tb-mine"><div class="ch gr">Minhas RNCs</div>${mine.length ? mine.map((r) => `<div class="tblr"><div><div class="t"><b>${esc(r.num)}</b>${chipRnc(r.status)}</div><div class="m">${esc(r.forn || '—')} · ${esc(r.motivo || '')}</div><div class="w">aberta em ${esc(fmtTs(r.data))}</div></div><button class="btn" type="button" data-act="rr-print" data-key="${esc(r.key)}">Imprimir</button></div>`).join('') : '<div class="tbnone">Você ainda não abriu RNC pelo tablet.</div>'}</div>`}`,
       foot: `<span class="tbnet"><i></i>a lista atualiza sozinha</span>`,
     };
   }
@@ -9668,12 +9677,19 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       wire: () => { $('#tb-ok').onchange = (e) => { d.ok = e.target.checked; tbPersist(); }; },
     };
   }
+  function tbMineInsp() {
+    const sx = (INB.mine || {}).s || {}, cx = (INB.mine || {}).c || {};
+    const L = Object.keys(sx).map((id) => Object.assign({ id }, sx[id])).sort((a, b) => (b.at || 0) - (a.at || 0)).slice(0, 15);
+    const pc = (e) => Object.values(cx).filter((c) => c && c.rncKey === e.key).sort((a, b) => b.at - a.at)[0];
+    return `<div class="tbcard" id="tb-mine"><div class="ch gr">Minhas RNCs</div>${INB.mine == null ? '<div class="tbnone">Carregando…</div>' : L.length ? L.map((e) => { const c = pc(e); return `<div class="tblr"><div><div class="t"><b>${esc(e.num || 'aguardando número')}</b>${e.st === 'ok' ? '<span class="chip ok"><i>✓</i>recebida pela Qualidade</span>' : '<span class="chip warn"><i>…</i>aguardando a Central numerar</span>'}</div><div class="m">${esc(e.forn || '—')} · ${esc(e.motivo || '')}${e.lotesAV ? ' · ' + esc(e.lotesAV) : ''}</div><div class="w">enviada em ${dmy(e.at)} às ${hhmm(e.at)}</div>${c ? `<div class="w">✎ correção pedida em ${dmy(c.at)}: ${c.st === 'novo' ? 'aguardando a Qualidade' : c.st === 'ok' ? 'corrigida' + (c.resp ? ' (' + esc(c.resp) + ')' : '') : 'recusada' + (c.resp ? ': ' + esc(c.resp) : '')}</div>` : ''}</div>${e.st === 'ok' ? `<button class="btn" type="button" data-act="tb-pc" data-key="${esc(e.id)}">Pedir correção</button>` : ''}</div>`; }).join('') : '<div class="tbnone">Você ainda não abriu RNC pelo tablet.</div>'}</div>`;
+  }
   function tbDone() {
-    const r = TB.sent && findRec('RNC', TB.sent.key);
+    if (TB.sent && TB.sent.pend) { const e = (((INB.mine || {}).s) || {})[TB.sent.id]; if (e && e.num) { TB.sent.num = e.num; } }
+    const r = TB.sent && TB.sent.key && findRec('RNC', TB.sent.key);
     return {
-      body: `<div class="tbdone"><div class="ok">✓</div><h2>RNC aberta</h2><div class="n">${esc(TB.sent ? TB.sent.num : '')}</div></div>
-        <div class="tbcard"><div class="cb" style="gap:10px">${TB.sent && TB.sent.lots ? `<div class="tick"><i>✓</i>${esc(TB.sent.lots)} bloqueado(s) na Central</div>` : ''}<div class="tick"><i>✓</i>${TB.sent ? TB.sent.nf : 0} foto(s) salva(s)</div><div class="tick"><i>✓</i>Assinada eletronicamente por ${esc(myPessoa() || DB.meName || '')}</div><div class="tick"><i>✓</i>Qualidade administrativa já recebeu para o tratamento</div></div></div>
-        <div class="tbrow2"><button class="btn dk big" type="button" data-act="rr-print" data-key="${esc(r ? r.key : '')}" ${r ? '' : 'disabled'}>🖨&nbsp; Imprimir RNC</button><button class="btn red big" type="button" data-act="tb-nova">＋&nbsp; Nova RNC</button></div>`,
+      body: `<div class="tbdone"><div class="ok">✓</div><h2>${TB.sent && TB.sent.pend && !TB.sent.num ? 'RNC enviada' : 'RNC aberta'}</h2><div class="n">${TB.sent && TB.sent.num ? esc(TB.sent.num) : '<span style="font:600 18px var(--f-body);color:var(--ink-3)">aguardando número… a Central numera assim que alguém da Qualidade estiver com ela aberta</span>'}</div></div>
+        <div class="tbcard"><div class="cb" style="gap:10px">${TB.sent && TB.sent.lots ? `<div class="tick"><i>✓</i>${esc(TB.sent.lots)} bloqueado(s) na Central</div>` : ''}<div class="tick"><i>✓</i>${TB.sent ? TB.sent.nf : 0} foto(s) salva(s)</div><div class="tick"><i>✓</i>Assinada eletronicamente por ${esc(myPessoa() || DB.meName || '')}</div><div class="tick"><i>✓</i>${TB.sent && TB.sent.pend ? 'Enviada para a Qualidade administrativa fazer o tratamento' : 'Qualidade administrativa já recebeu para o tratamento'}</div></div></div>
+        <div class="tbrow2">${TB.sent && TB.sent.pend ? '<div></div>' : `<button class="btn dk big" type="button" data-act="rr-print" data-key="${esc(r ? r.key : '')}" ${r ? '' : 'disabled'}>🖨&nbsp; Imprimir RNC</button>`}<button class="btn red big" type="button" data-act="tb-nova">＋&nbsp; Nova RNC</button></div>`,
       foot: `<span class="grow"></span><button class="btn big" type="button" data-act="tb-home">Voltar ao início</button>`,
     };
   }
@@ -9691,6 +9707,15 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       depto: d.setor || null, motivo: d.motivo, abrang: d.semLote ? ABR[2] : ABR[0], abrJust: d.semLote ? d.just.trim() : null, lotesAV: ls.map((a) => a.id).join(', ') || null,
       origem: d.origem || null, motOutros: d.outros.filter((o) => o !== d.motivo), descNc: d.desc.trim(), qtdRep: rnNum(d.qtdRep), qtdRec: rec || null, qtdUnd: a0 ? a0.und || 'pç' : null, nFotos: d.fotos.length,
       abAss: meSig('tablet'), info: appendInfo('', `Aberta no tablet por ${myPessoa() || DB.meName || 'inspetor'}.`) });
+    if (!cw('rnc')) {
+      const tid = DB.me + '_' + d.id;
+      try {
+        if (d.fotos.length) { const f = {}; d.fotos.forEach((img, i) => { f['p' + String(i).padStart(2, '0')] = { img, at: Date.now() + i }; }); await DB.db.doc('rncinf/' + tid).set({ f, uid: DB.me }); }
+        await DB.db.doc('rncin/' + DB.me).merge({ s: { [d.id]: Object.assign({}, base, { st: 'novo', at: Date.now() }) } });
+      } catch (e) { TB.err = (e && (e.message || e.code)) || 'erro desconhecido'; tbPersist(); render(); return; }
+      tbDropDraft(d.id);
+      TB.sent = { pend: true, id: d.id, lots: ls.map((a) => a.id).join(', '), nf: d.fotos.length }; TB.d = null; TB.step = 4; render(); window.scrollTo(0, 0); return;
+    }
     let key = null, err = null;
     for (let i = 0; i < 4 && !key; i++) {
       try { const f = Object.assign({}, base, { num: nextRncN(i) }); key = await createRecord('RNC', f); }
@@ -9731,7 +9756,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   }
   function tbAct(a, key) {
     const d = TB.d;
-    if (a === 'tb-sair') { go('rnc'); return true; }
+    if (a === 'tb-sair') { if (!tbOnly()) go(cw('rnc') ? 'rnc' : 'painel'); return true; }
+    if (a === 'tb-pc') { tbPedirCorr(key); return true; }
     if (a === 'tb-nova') { TB.d = tbNew([]); TB.step = 1; TB.err = null; tbPersist(); render(); window.scrollTo(0, 0); return true; }
     if (a === 'tb-lot') { TB.d = tbNew([key]); const lt = S.model.av.find((x) => x.key === key); if (lt) TB.d.forn = lt.forn || ''; TB.step = 2; TB.err = null; tbPersist(); render(); window.scrollTo(0, 0); return true; }
     if (a === 'tb-cont') { const o = tbDrafts().find((q) => q.id === key); if (!o) return true; TB.d = Object.assign(tbNew([]), o); if (!TB.d.lots.length && TB.d.lotTxt) { const lt = tbFindLot(TB.d.lotTxt); if (lt) { TB.d.lots = [lt.key]; TB.d.forn = lt.forn || ''; } } TB.step = TB.d.lots.length || TB.d.semLote ? 3 : 1; TB.err = null; render(); window.scrollTo(0, 0); return true; }
@@ -9758,6 +9784,127 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     return false;
   }
 
+
+  /* ---------- inspetor “só tablet”: caixa de entrada (rncin/{uid}) ----------
+     O inspetor NÃO tem acesso ao módulo RNC Fornecedor: ele só CRIA entradas na própria caixa (regras do Firebase).
+     Qualquer sessão da Central com "Lança" em RNC Fornecedor numera e cria a RNC sozinha (com trava para não duplicar). */
+  const tbInsp = () => canWrite() && ACC('rnctab') === 'lanca';
+  const tbOnly = () => tbInsp() && !['av', 'serv', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp', 'tcert', 'tusin'].some((c) => vis(c));
+  const INB = { started: false, docs: [], mine: null, busy: false, again: false };
+  const RRC = { key: null, cid: null, uid: null };
+  const INB_F = ['data', 'emissor', 'filial', 'forn', 'nf', 'oc', 'pv', 'depto', 'motivo', 'abrang', 'abrJust', 'lotesAV', 'origem', 'motOutros', 'descNc', 'qtdRep', 'qtdRec', 'qtdUnd', 'nFotos', 'abAss', 'info'];
+  function inbStart() {
+    if (INB.started || !DB.db || !S.model) return;
+    if (cw('rnc')) {
+      INB.started = true;
+      DB.db.collection('rncin').onSnapshot((q) => { INB.docs = q.docs.map((d) => ({ id: d.id, data: d.data() || {} })); inbProcess(); updateChrome(); }, () => {});
+    } else if (tbInsp() && DB.me) {
+      INB.started = true;
+      DB.db.doc('rncin/' + DB.me).onSnapshot((s) => { INB.mine = (s && s.exists && s.data()) || {}; if (S.view === 'rnctab' && (TB.step === 0 || TB.step === 4)) render(); }, () => { INB.mine = {}; });
+    }
+  }
+  async function inbProcess() {
+    if (!cw('rnc') || !S.model) return;
+    if (INB.busy) { INB.again = true; return; }
+    INB.busy = true;
+    try {
+      for (const dd of INB.docs) {
+        const s = dd.data.s || {};
+        for (const id of Object.keys(s)) {
+          const e = s[id]; if (!e || e.st !== 'novo') continue;
+          const tid = dd.id + '_' + id;
+          const ex = S.model.rnc.find((r) => rmeta(r).tbId === tid);
+          if (ex) { await DB.db.doc('rncin/' + dd.id).update({ s: { [id]: { st: 'ok', num: ex.num, key: ex.key } } }); continue; }
+          const lk = await DB.db.doc('locks/rncin-' + tid).acquire({ holder: (DB.me || 'anon') + ':' + TAB, ttlMs: 60000 });
+          if (!lk || !lk.acquired) continue;
+          const cur = await DB.db.doc('rncin/' + dd.id).get(), ce = cur.exists && ((cur.data() || {}).s || {})[id];
+          if (!ce || ce.st !== 'novo') continue;
+          const f = { tbId: tid }; INB_F.forEach((k) => { if (ce[k] !== undefined && ce[k] !== null) f[k] = ce[k]; });
+          if (f.abAss) f.abAss = Object.assign({}, f.abAss, { uid: dd.id, via: 'tablet' });
+          let key = null, err = null;
+          for (let i = 0; i < 4 && !key; i++) { try { key = await createRecord('RNC', Object.assign({}, f, { num: nextRncN(i) })); } catch (e2) { err = e2; if (!/já existe/.test(String(e2 && e2.message))) break; await sleep(300); } }
+          if (!key) { console.warn('caixa de entrada: RNC não criada', err); continue; }
+          try {
+            const fd = await DB.db.doc('rncinf/' + tid).get(), ff = fd.exists ? ((fd.data() || {}).f || {}) : {};
+            const imgs = Object.keys(ff).sort().map((k) => ff[k]).filter((o) => o && o.img).map((o) => ({ img: o.img }));
+            if (imgs.length) await rncFotosAdd(key, imgs);
+            if (fd.exists) await DB.db.doc('rncinf/' + tid).delete().catch(() => {});
+          } catch (e3) { console.warn('fotos da caixa de entrada', e3); }
+          await DB.db.doc('rncin/' + dd.id).update({ s: { [id]: { st: 'ok', num: key, key, okAt: Date.now() } } });
+          logEntry('RNC', key, 'novo', `${key} · ${f.forn || 'sem fornecedor'} · aberta no tablet por ${(f.abAss && f.abAss.nome) || 'inspetor'}`, null);
+        }
+      }
+    } catch (e) { console.warn('caixa de entrada', e); }
+    INB.busy = false;
+    if (INB.again) { INB.again = false; setTimeout(inbProcess, 60); }
+  }
+  /* pedidos de correção pendentes (para quem trata as RNCs) */
+  function inbCorrs(rncKey) {
+    const out = [];
+    INB.docs.forEach((dd) => { const c = dd.data.c || {}; Object.keys(c).forEach((cid) => { const o = c[cid]; if (o && o.st === 'novo' && (!rncKey || o.rncKey === rncKey)) out.push(Object.assign({ uid: dd.id, cid }, o)); }); });
+    return out.sort((a, b) => a.at - b.at);
+  }
+  async function inbCorrFotos(uid, cid) {
+    try { const d = await DB.db.doc('rncinf/' + uid + '_' + cid).get(); const f = d.exists ? ((d.data() || {}).f || {}) : {}; return Object.keys(f).sort().map((k) => f[k]).filter((o) => o && o.img); } catch (e) { return []; }
+  }
+  /* inspetor: pedir correção de uma RNC já enviada (não altera nada; a Qualidade decide) */
+  function tbPedirCorr(id) {
+    const e = ((INB.mine || {}).s || {})[id]; if (!e || !e.key) return;
+    openModal('Pedir correção · ' + e.num, `<p style="margin:0">Escreva o que está errado na abertura. Você não altera a RNC: a Qualidade confere e corrige, e fica registrado quem pediu e quem autorizou.</p>
+      <label class="field"><span>O que precisa ser corrigido? <b>*</b></span><textarea id="pc-txt" style="min-height:100px;font-size:16px" placeholder="ex.: a quantidade reprovada certa é 20, não 18"></textarea></label>
+      <input type="file" id="pc-f" accept="image/*" capture="environment" multiple hidden><div class="formfoot"><button class="btn" type="button" id="pc-pick">＋ Anexar foto (opcional)</button></div><div id="pc-prev" class="rphs"></div>
+      <div class="formfoot"><button class="btn primary" type="button" id="pc-ok">Enviar pedido</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    let imgs = [];
+    $('#pc-pick').onclick = () => $('#pc-f').click();
+    $('#pc-f').onchange = async () => { for (const f of Array.from($('#pc-f').files).slice(0, 4 - imgs.length)) { try { imgs.push(await shrinkPhoto(f)); } catch (er) { /* ignora */ } } $('#pc-prev').innerHTML = imgs.map((u) => `<img src="${u}" alt="">`).join(''); };
+    $('#pc-ok').onclick = async () => {
+      const txt = $('#pc-txt').value.trim(); if (!txt) { toast('Escreva o que precisa ser corrigido.', true); return; }
+      const b = $('#pc-ok'); b.disabled = true; b.textContent = 'Enviando…';
+      const cid = 'c' + Date.now().toString(36);
+      try {
+        if (imgs.length) { const f = {}; imgs.forEach((img, i) => { f['p' + i] = { img, at: Date.now() + i }; }); await DB.db.doc('rncinf/' + DB.me + '_' + cid).set({ f, uid: DB.me }); }
+        await DB.db.doc('rncin/' + DB.me).merge({ c: { [cid]: { rncKey: e.key, num: e.num, txt, nf: imgs.length, at: Date.now(), st: 'novo', nome: myPessoa() || DB.meName || '' } } });
+        closeLayer(); toast('Pedido enviado para a Qualidade.');
+      } catch (er) { toast('Não foi possível enviar: ' + ((er && (er.message || er.code)) || er), true); b.disabled = false; b.textContent = 'Enviar pedido'; }
+    };
+  }
+  /* Qualidade: recusar um pedido de correção */
+  function rrCorrRecusar(uid, cid, key) {
+    openModal('Recusar pedido de correção', `<label class="field"><span>Motivo (o inspetor vê) <b>*</b></span><textarea id="cr-t" style="min-height:80px"></textarea></label><div class="formfoot"><button class="btn primary" type="button" id="cr-ok">Recusar pedido</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    $('#cr-ok').onclick = async () => {
+      const t = $('#cr-t').value.trim(); if (!t) { toast('Escreva o motivo.', true); return; }
+      try { await DB.db.doc('rncin/' + uid).update({ c: { [cid]: { st: 'recusado', resp: t, by: myPessoa() || DB.meName || '', okAt: Date.now() } } }); closeLayer(); toast('Pedido recusado.'); setTimeout(() => rncRelFicha(key), 300); }
+      catch (er) { toast('Não foi possível gravar: ' + ((er && (er.message || er.code)) || er), true); }
+    };
+  }
+  /* Qualidade: salvar a correção da abertura (com motivo e valores antigos guardados) */
+  async function rrCorrSave(key) {
+    const x = findRec('RNC', key); if (!x) return; const m = rmeta(x);
+    const mot = rv2('rr-cmot'); if (!mot) { toast('Escreva o motivo da correção.', true); const el = $('#rr-cmot'); if (el) el.focus(); return; }
+    const ch = {}, antes = {}, set = (f, val, cur) => { if (val === '') val = null; if (JSON.stringify(val ?? null) !== JSON.stringify(cur ?? null)) { ch[f] = val; antes[f] = cur ?? null; } };
+    set('origem', rv2('rr-origem') || null, m.origem); set('motivo', rv2('rr-motivo') || null, m.motivo); set('depto', rv2('rr-depto') || null, m.depto);
+    set('motOutros', $$('#rr-mo .pfun[aria-pressed="true"]').map((b) => b.dataset.v).filter((v) => v !== rv2('rr-motivo')), m.motOutros || []);
+    set('descNc', rv2('rr-desc') || null, m.descNc); set('qtdRep', rnNum(rv2('rr-qrep')), m.qtdRep); set('qtdRec', rnNum(rv2('rr-qrec')), m.qtdRec); set('qtdUnd', rv2('rr-qund') || null, m.qtdUnd);
+    const addF = $('#rr-cfot') && $('#rr-cfot').checked;
+    if (!Object.keys(ch).length && !addF) { toast('Nada foi alterado na abertura.', true); return; }
+    try {
+      let nf = null;
+      if (addF && RRC.uid && RRC.cid) { const fs2 = await inbCorrFotos(RRC.uid, RRC.cid); if (fs2.length) { await rncFotosAdd(key, fs2.map((o) => ({ img: o.img }))); nf = (await rncFotos(key, true)).length; } }
+      const corr = (Array.isArray(m.abCorr) ? m.abCorr : []).concat([clean({ at: Date.now(), nome: myPessoa() || DB.meName || '', uid: DB.me || null, motivo: mot, antes, pedido: RRC.cid ? true : null })]);
+      await updateRecord('RNC', key, Object.assign({}, ch, { abCorr: corr }, nf != null ? { nFotos: nf } : {}));
+      const diff = {}; Object.keys(ch).forEach((f) => { diff[f] = [antes[f], ch[f]]; });
+      logEntry('RNC', key, 'alterado', `${x.num} · abertura corrigida: ${mot}`, diff);
+      if (RRC.uid && RRC.cid) await DB.db.doc('rncin/' + RRC.uid).update({ c: { [RRC.cid]: { st: 'ok', resp: mot, by: myPessoa() || DB.meName || '', okAt: Date.now() } } }).catch(() => {});
+      RRC.key = RRC.cid = RRC.uid = null;
+      toast('Abertura corrigida.'); setTimeout(() => rncRelFicha(key), 300);
+    } catch (er) { toast('Não foi possível gravar: ' + ((er && (er.message || er.code)) || er), true); }
+  }
+  function inbCorrsAlert() {
+    const L = inbCorrs(); if (!L.length) return '';
+    return `<div class="rrwarn" style="border-left-color:var(--info);margin-bottom:14px"><b>✎ ${plural(L.length, 'pedido de correção', 'pedidos de correção')} de RNC enviado${L.length > 1 ? 's' : ''} pelo tablet</b><div style="display:grid;gap:4px;margin-top:6px">${L.map((c) => `<div><button class="btn small ghost mono" type="button" data-open="RNC:${esc(c.rncKey)}">${esc(c.num || c.rncKey)}</button> ${esc(c.nome || 'inspetor')} · ${dmy(c.at)}: “${esc(c.txt)}”</div>`).join('')}</div></div>`;
+  }
+  const corrLines = (m) => (Array.isArray(m.abCorr) ? m.abCorr : []).map((c) => `Abertura corrigida por ${esc(c.nome || '')} em ${dmy(c.at)} às ${hhmm(c.at)}: ${esc(c.motivo || '')}`);
+
   /* ================= eventos globais ================= */
   document.addEventListener('click', (e) => {
     const t = e.target;
@@ -9774,6 +9921,10 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
         if (a === 'rr-absign') { rrSaveAbertura(key, true); return; }
         if (a === 'rr-save') { rrSaveTratamento(key, false); return; }
         if (a === 'rr-aprovar') { rrAprovar(key); return; }
+        if (a === 'rr-corr') { RRC.key = key; RRC.uid = act.dataset.uid || null; RRC.cid = act.dataset.id || null; const c = RRC.cid ? inbCorrs(key).find((o) => o.cid === RRC.cid) : null; RRC.nf = c ? c.nf || 0 : 0; RRC.pre = c ? 'Pedido de ' + (c.nome || 'inspetor') + ': ' + c.txt : ''; rncRelFicha(key); return; }
+        if (a === 'rr-corrx') { RRC.key = RRC.cid = RRC.uid = null; rncRelFicha(key); return; }
+        if (a === 'rr-corrsave') { rrCorrSave(key); return; }
+        if (a === 'rr-crec') { rrCorrRecusar(act.dataset.uid, act.dataset.id, key); return; }
       }
       if (a === 'print') { window.print(); return; }
       if (a === 'rep-dl') { downloadReport(); return; }
