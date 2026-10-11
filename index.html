@@ -1130,6 +1130,7 @@ html[data-theme="dark"] .btn.cqgo { color: color-mix(in srgb, var(--tcr) 55%, #f
 #cq-rg .inp { width: 100%; min-width: 160px; }
 #cq-cfg .cqwide { grid-column: 1 / -1; } #cq-rg { max-width: 900px; } #cq-rg td:nth-child(3), #cq-rg td:nth-child(4) { width: 1%; white-space: nowrap; }
 @media (max-width: 980px) { .cqgrid2 { grid-template-columns: 1fr; } .cqpanel { position: static; max-height: none; } .cqsheet iframe { height: 75vh; } }
+.cqbox.cqtop { padding: 8px 10px; } .cqbox.cqtop .btn { min-height: 0; padding: 5px 8px; font-size: 13px; }
 
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
@@ -9526,6 +9527,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       <div class="cqgrid2">
         <div class="cqsheet"><iframe id="cq-frame" src="cert.html?v=1" title="Certificado de qualidade"></iframe></div>
         <aside class="cqpanel">
+          <div class="cqbox cqtop"><div class="cq2"><button class="btn small" type="button" data-act="cq-voltar" title="Voltar para a fila (o rascunho fica salvo)">‹ Voltar</button><button class="btn small" type="button" data-act="cq-limpar" title="Apagar o que foi preenchido e começar de novo" ${w ? '' : 'disabled'}>Zerar</button></div></div>
           <div class="cqbox"><h4>Modelo</h4><div class="seg cqtipo">${['tubos', 'grades'].map((t) => `<button type="button" data-act="cq-tipo" data-key="${t}" aria-pressed="${ed.tipo === t}">${CQ_MOD[t]}</button>`).join('')}</div></div>
           <div class="cqbox"><h4>Salvar</h4><div class="cq2"><button class="btn primary" type="button" data-act="cq-btn" data-key="btnPdf" ${w ? '' : 'disabled'}>Salvar PDF</button><button class="btn primary" type="button" data-act="cq-btn" data-key="btnXlsx" ${w ? '' : 'disabled'}>Salvar Excel</button></div><button class="btn" type="button" data-act="cq-btn" data-key="btnTodos" id="cq-todos" hidden>Salvar todas as folhas…</button>
             <p class="cqhint">Ao salvar, a Central confere o nº do certificado com a fila e pergunta se o pedido pode ir para Concluídos. O arquivo sai igual ao de sempre, sem nada da Central.</p></div>
@@ -9593,6 +9595,18 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     ed.tipo = t; cqLS(CQ_KEYS.tipo, t);
     try { await soldWrite('certd/r-' + ed.key, { tipo: t, at: Date.now() }); } catch (e) { /* segue */ }
     render();
+  }
+  function cqLimpar() {
+    const app = cqApp(), ed = S.cqEd; if (!app || !ed) return;
+    const c = ed.k ? cqFind(ed.k) : null, n = (app.doc && app.doc.certs && app.doc.certs.length) || 1;
+    confirmBox('Zerar certificado', `Isso apaga ${n > 1 ? 'as ' + n + ' folhas deste certificado' : 'tudo o que foi preenchido neste certificado'}: itens, química, mecânica, tratamento térmico e informações adicionais${c ? '. Ficam só o nº, a nota fiscal, o cliente e a data do pedido' : ''}. O responsável e a assinatura continuam. Já salvou o PDF e o Excel?`, 'Apagar e começar de novo', () => {
+      const tipo = app.TIPO === 'grades' ? 'grades' : 'tubos', d = JSON.parse(cqDocInicial(tipo, c));
+      const sigRef = (app.FIELDS || []).find((f) => f.key === 'assinante'), cf = app.config || {};
+      if (sigRef && cf.assinante) d.certs[0].v[sigRef.ref] = cf.assinante;
+      app.doc = d; ed.lotes = [];
+      cqSalvarLocal(); cqDraft(true); cqPanelSync(); $$('[data-lot]').forEach((i) => { i.checked = false; });
+      toast('Certificado zerado.');
+    }, true);
   }
   /* campos do certificado aberto, por item: { n: { desc, espec, material, corrida, ... } } */
   function cqLotesPreencher() {
@@ -9713,6 +9727,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     if (a === 'cq-zoom') { const f = cqFrame(); const b = f && f.contentDocument.querySelector(`[data-zoom="${key}"]`); if (b) b.click(); return true; }
     if (a === 'cq-tipo') { cqTrocarTipo(key); return true; }
     if (a === 'cq-lotes') { cqLotesPreencher(); return true; }
+    if (a === 'cq-limpar') { cqLimpar(); return true; }
     if (!c) return false;
     if (a === 'cq-fazer') { cqAbrir(c); return true; }
     if (a === 'cq-menu') { cqMenu(c); return true; }
