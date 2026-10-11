@@ -1004,6 +1004,44 @@ body.tabmode .main { padding: 0 !important; }
 :root[data-theme="dark"] .nav a .ct.hot { color: #2a0d0b; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .nav a .sw { color: color-mix(in srgb, var(--c, var(--geral)) 62%, #fff); } :root:not([data-theme="light"]) .nav a[aria-current="page"] .sw { color: #fff; } :root:not([data-theme="light"]) .nav a .ct.hot { color: #2a0d0b; } }
 
+/* ---------- Avaliação de fornecedores: mapa, velocímetro, nota mês a mês e cartões ---------- */
+.iqmov { text-align: left; cursor: pointer; font: inherit; color: inherit; } .iqmov.on { outline: 2px solid var(--iqf); outline-offset: -2px; }
+.iqmov .val { white-space: nowrap; }
+.iqcharts { grid-template-columns: minmax(0, 1.9fr) minmax(280px, 1fr); }
+.iqmap { width: 100%; height: auto; display: block; }
+.iqax { font: 11px var(--f-body); fill: var(--ink-3); } .iqaxt { font: 600 12px var(--f-body); fill: var(--ink-2); }
+.iqq { font: 800 11.5px var(--f-body); letter-spacing: .08em; } .iqq.ok { fill: var(--ok); } .iqq.crit { fill: var(--crit); }
+.iqlab { font: 600 11.5px var(--f-body); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 3px; pointer-events: none; }
+.iqdot { cursor: pointer; } .iqdot:hover { fill-opacity: .85; stroke-width: 2; }
+.iqleg { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 11.5px; color: var(--ink-2); margin-top: 6px; } .iqleg i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+.iqprio { display: none; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; box-shadow: inset 0 3px 0 var(--crit); }
+.iqprio h3 { margin: 0 0 6px; font: 700 15px var(--f-body); } .iqprio h3 small { display: block; font-weight: 400; color: var(--ink-3); font-size: 12.5px; }
+.iqpr { display: flex; align-items: center; gap: 10px; width: 100%; margin-top: 6px; padding: 8px 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
+.iqpr .nm { flex: 1; min-width: 0; } .iqpr .nm small { display: block; color: var(--ink-3); font-size: 12px; } .iqpr b { font: 700 14px var(--f-mono); }
+.iqlt { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 7px; font: 800 15px var(--f-display); color: #fff; background: var(--off); flex: none; }
+.iqlt.cA { background: var(--ok); } .iqlt.cB { background: var(--warn); } .iqlt.cC { background: var(--crit); }
+.iqsp { display: block; } td .iqsp { display: inline-block; vertical-align: middle; }
+.iqtg { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; }
+.iqtbar { margin: 0 0 10px; } .iqtbar .cnt { margin-right: auto; }
+.iqwall { grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
+.iqcard { grid-template-columns: 112px 1fr; } .iqcard:hover { border-color: var(--iqf); }
+.iqcard.cA { --k: var(--ok); } .iqcard.cB { --k: var(--warn); } .iqcard.cC { --k: var(--crit); }
+.iqgw { display: grid; justify-items: center; gap: 4px; }
+.iqn { font: 700 14px/1.2 var(--f-body); text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.iqme { font-size: 12px; color: var(--ink-3); } .iqme2 { font: 600 10.5px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-top: 3px; }
+.iqmini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 4px; } .iqmini small { display: block; font-size: 10px; color: var(--ink-3); } .iqmini i { display: block; height: 5px; background: var(--surface-2); border-radius: 3px; overflow: hidden; } .iqmini b { display: block; height: 100%; }
+.iqcard .scb { min-width: 0; }
+.iqtop2 { align-items: center; } .iqtop2 .iqg { flex: none; }
+.iqls { margin: 10px 0 4px; } .iqls h3 { margin: 0 0 4px; font: 700 12px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.iqline { width: 100%; height: auto; display: block; }
+@media (max-width: 1100px) { .iqcharts { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .iqprio { display: block; } .iqcharts .chart:first-child { display: none; } .iqwall { grid-template-columns: 1fr; } .iqtop2 { flex-direction: column; align-items: flex-start; } .iqtop2 .iqg { width: 200px; } }
+
+/* ---------- virada do ano: avisos e backup ---------- */
+.vyaviso { margin-bottom: 12px; }
+.bkul { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 13.5px; color: var(--ink-2); }
+.bkst { margin-top: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface-2); font-size: 13.5px; line-height: 1.5; }
+
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
 #fb-gate[hidden] { display: none; }
@@ -4018,6 +4056,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     else render();
     updateChrome();
     inbStart();
+    bkLoad();
   }
   async function boot() {
     renderStatus('Conectando ao banco de dados da Qualidade…');
@@ -4299,7 +4338,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       const m = S.model;
       $('#dbcard').title = `Atualizado às ${hhmm(DB.last)} · ${NF.format(m.av.length)} lotes · ${NF.format(m.serv.length)} serviços · ${NF.format(m.rnc.length)} RNC fornecedor · ${NF.format((m.rncc || []).length)} RNC cliente · ${NF.format(m.ins.length)} instrumentos `;
       const al = (vis('rnc') ? m.rnc.filter((x) => x.status === 'Atrasado').length + pendLots().length : 0) + (vis('rncc') ? (m.rncc || []).filter((x) => x.status === 'Atrasado').length : 0) + (vis('ins') ? m.ins.filter((x) => x.status === 'VENCIDO' || x.status === 'VENCE HOJE' || insImpPend(x)).length : 0) + ((soldAlertData() || { venc: [] }).venc.length);
-      const ca = $('#ct-alertas'); ca.hidden = !al; ca.textContent = al; ca.classList.toggle('hot', al > 0);
+      const al2 = al + vyAvisos().length; const ca = $('#ct-alertas'); ca.hidden = !al2; ca.textContent = al2; ca.classList.toggle('hot', al2 > 0);
       const AU = S.audit.filter((a) => visMod(a.mod)), hi = AU.filter((a) => a.sev === 'alta').length;
       const cu = $('#ct-aud'); cu.hidden = !AU.length; cu.textContent = AU.length; cu.classList.toggle('hot', hi > 0);
     }
@@ -4369,6 +4408,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const fl = (v) => (v == null ? null : Math.floor(v));
     const nome = (s, n) => { s = String(s || '').trim(); return s.length > n ? s.slice(0, n - 1) + '…' : s; };
     try {
+      vyAvisos().forEach((a) => add('alerta', 'GERAL', a.tipo === 'fer' ? `Feriados de ${a.y} não cadastrados` : `Backup de ${a.y} pendente`, a.tipo === 'fer' ? 'prazos das RNC usam dias úteis' : 'faça a cópia do ano que terminou', { go: { v: 'alertas' } }));
       if (vis('rnc')) {
         const ab = M.rnc.filter((x) => x.aberta), at = ab.filter((x) => x.status === 'Atrasado');
         if (at.length) add('alerta', 'RNC', `${NF.format(at.length)} RNC de fornecedor atrasada${at.length > 1 ? 's' : ''}`, 'passaram do prazo final', { go: { v: 'alertas' } });
@@ -4636,10 +4676,10 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       if (st.sort) { const col = cfg.cols.find((c) => c.k === st.sort); if (col) { const f = col.s || ((x) => x[col.k]); rows.sort((a, b) => cmp(f(a), f(b)) * st.dir || (a.row - b.row)); } }
       const pages = Math.max(1, Math.ceil(rows.length / size));
       if (st.page >= pages) st.page = pages - 1;
-      const slice = rows.slice(st.page * size, st.page * size + size);
-      host.innerHTML = `<div class="tbar"><span class="cnt"><b>${NF.format(rows.length)}</b> ${esc(cfg.noun || 'registros')}${cfg.total != null && rows.length !== cfg.total ? ` de ${NF.format(cfg.total)}` : ''}</span><span class="pager">${pages > 1 ? `<button class="btn small" type="button" data-pg="-1" ${st.page === 0 ? 'disabled' : ''}>‹ Anterior</button><span class="muted num">página ${st.page + 1} de ${pages}</span><button class="btn small" type="button" data-pg="1" ${st.page >= pages - 1 ? 'disabled' : ''}>Próxima ›</button>` : ''}${cfg.export ? '<button class="btn small" type="button" data-exp="1">Exportar lista (.xlsx)</button>' : ''}</span></div>
-      <div class="twrap twin"><table class="t"><thead><tr>${cfg.cols.map((c) => `<th class="${c.r ? 'r' : ''}${c.nosort ? ' nosort' : ''}" ${c.nosort ? '' : `data-sort="${c.k}"`} scope="col">${esc(c.l)}${st.sort === c.k ? `<span class="ar">${st.dir > 0 ? '▲' : '▼'}</span>` : ''}</th>`).join('')}</tr></thead>
-      <tbody>${slice.map((x) => `<tr class="${cfg.open ? 'click' : ''}" ${cfg.open ? `data-open="${x.mod}:${esc(x.key)}" tabindex="0"` : ''}>${cfg.cols.map((c) => `<td class="${c.cls || ''}${c.r ? ' r' : ''}">${c.f ? c.f(x) : esc(disp(x[c.k]))}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cfg.cols.length}" class="muted">Nenhum registro com esses filtros.</td></tr>`}</tbody></table></div>`;
+      const slice = rows.slice(st.page * size, st.page * size + size), vcols = cfg.cols.filter((c) => !c.hide);
+      host.innerHTML = `<div class="tbar"><span class="cnt"><b>${NF.format(rows.length)}</b> ${esc(cfg.noun || 'registros')}${cfg.total != null && rows.length !== cfg.total ? ` de ${NF.format(cfg.total)}` : ''}</span>${cfg.bar || ''}<span class="pager">${pages > 1 ? `<button class="btn small" type="button" data-pg="-1" ${st.page === 0 ? 'disabled' : ''}>‹ Anterior</button><span class="muted num">página ${st.page + 1} de ${pages}</span><button class="btn small" type="button" data-pg="1" ${st.page >= pages - 1 ? 'disabled' : ''}>Próxima ›</button>` : ''}${cfg.export ? '<button class="btn small" type="button" data-exp="1">Exportar lista (.xlsx)</button>' : ''}</span></div>
+      <div class="twrap twin"><table class="t"><thead><tr>${vcols.map((c) => `<th class="${c.r ? 'r' : ''}${c.nosort ? ' nosort' : ''}" ${c.nosort ? '' : `data-sort="${c.k}"`} scope="col">${esc(c.l)}${st.sort === c.k ? `<span class="ar">${st.dir > 0 ? '▲' : '▼'}</span>` : ''}</th>`).join('')}</tr></thead>
+      <tbody>${slice.map((x) => `<tr class="${cfg.open ? 'click' : ''}" ${cfg.open ? `data-open="${x.mod}:${esc(x.key)}" tabindex="0"` : ''}>${vcols.map((c) => `<td class="${c.cls || ''}${c.r ? ' r' : ''}">${c.f ? c.f(x) : esc(disp(x[c.k]))}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${vcols.length}" class="muted">Nenhum registro com esses filtros.</td></tr>`}</tbody></table></div>`;
       host.querySelectorAll('[data-sort]').forEach((th) => th.onclick = () => { const k = th.dataset.sort; if (st.sort === k) st.dir = -st.dir; else { st.sort = k; st.dir = 1; } draw(); });
       host.querySelectorAll('[data-pg]').forEach((b) => b.onclick = () => { st.page += +b.dataset.pg; draw(); host.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
       const ex = host.querySelector('[data-exp]'); if (ex) ex.onclick = () => exportRows(cfg.export, cfg.cols.filter((c) => !c.nosort), rows);
@@ -5782,7 +5822,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const pick = { todas: ab, venc, atras, disp: dispV, soon, h24, h48, minhas: mine || [] }[filt] || ab;
     const sA = soldAlertData(), nada = !(sA && (sA.venc.length || sA.ren.length)) && !pendLots().length && !atras.length && !dispV.length && !soon.length && !lanes.some((ln) => ln.l.length) && !lanesB.slice(0, 3).some((ln) => ln.l.length) && !sem.length && !(M.rncc || []).some((x) => x.aberta && (x.status === 'Atrasado' || (x.respData == null && x.prazoResp != null && S.today > x.prazoResp)));
     main.innerHTML = `<div class="view">${head('Alertas', 'O que precisa de ação hoje. Os prazos de RNC usam dias úteis e os feriados de Configurações.', (vis('rnc') ? '<button class="btn" type="button" data-act="rnc-resumo">Resumo das RNCs</button>' : '') + '<button class="btn" type="button" data-act="msg-cal">Texto do alerta de calibração</button>')}
-      ${cw('rnc') && rncRelOn() ? inbCorrsAlert() : ''}
+      ${vyAvisosHTML()}${cw('rnc') && rncRelOn() ? inbCorrsAlert() : ''}
       ${nada ? okSeal('Nenhum alerta urgente', 'Sem RNC atrasada, calibração vencida ou lote sem certificado. Tudo certo por aqui.') : ''}
       <div class="kpis">
         ${vis('rnc') && pendLots().length ? kpiHTML({ l: 'Lotes aguardando decisão', v: NF.format(pendLots().length), sub: 'reprovados e bloqueados', c: MOD.RNC.c, cls: 'crit' }) : ''}
@@ -7375,7 +7415,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const lists = (mod) => CFG_LISTS.filter((l) => l[2] === mod).map(item).join('');
     const nm = (S.model.cfgDoc && S.model.cfgDoc.feriadosNomes) || {};
     const y0 = E.ymd(S.today).y;
-    const tabs = CFG_TABS.filter(([k, , mod]) => (k === 'zero' || k === 'teste' ? DB.owner : !mod || visMod(mod)));
+    const tabs = CFG_TABS.filter(([k, , mod]) => (k === 'zero' || k === 'teste' ? DB.owner : k === 'backup' ? bkPode() : !mod || visMod(mod)));
     let tab = S.cfgTab || lsGet('cq-cfg-tab', 'geral');
     if (S.cfgFocus === 'FORN_EMAILS' || /^forn:/.test(S.cfgFocus || '')) tab = 'forn';
     if (!tabs.some(([k]) => k === tab)) tab = 'geral';
@@ -7408,6 +7448,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
         </div>
         ${visMod('INS') ? `<div class="fsec"><h3>Certificados de calibração no Google Drive</h3><div class="cfgitem" data-cfg="DRIVE"><span class="use">Endereço do script da conta da Central (termina em /exec). Com ele, a ficha do instrumento ganha o botão “Enviar certificado”.</span><input class="inp" id="cfg-driveurl" value="${esc((DB.cfg && DB.cfg.driveUrl) || '')}" placeholder="https://script.google.com/macros/s/…/exec" ${roA ? 'disabled' : ''}></div></div>` : ''}
       </div></div></section>`)}
+      ${bkPode() ? sec('backup', `<section class="sec">${band('GERAL', 'Backup por ano')}<div class="block"><div class="body">${bkPaneHTML()}</div></div></section>`) : ''}
       ${sec('av', `<section class="sec">${band('AV', 'Lotes (AV)')}<div class="block"><div class="body"><div class="cfg">${lists('AV')}${fixed('Retrabalho', ['Sim', 'Não'], 'Sim/Não')}${fixed('Resultado da inspeção', ['Aprovado', 'Reprovado', 'Em análise', CONC], 'lote novo já vem como Aprovado · reprovado fica bloqueado até a decisão da RNC')}</div></div></div></section>`)}
       ${sec('serv', `<section class="sec">${band('SERV', 'Serviços')}<div class="block"><div class="body"><div class="cfg">${lists('SERV')}</div></div></div></section>`)}
       ${sec('rnc', `<section class="sec">${band('RNC', 'RNC de fornecedor')}<div class="block"><div class="body"><div class="cfg">${lists('RNC')}
@@ -7425,7 +7466,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       ${DB.owner ? sec('teste', testeHTML()) : ''}
       ${DB.owner ? sec('zero', resetHTML()) : ''}</div>`;
     const dirty = (el) => { const it = el.closest('.cfgitem') || el.closest('.fsec'); if (it) it.classList.add('dirty'); S.cfgDirty = true; const pn = el.closest('[data-tab]'); if (pn) { const b = $(`[data-ctab="${pn.dataset.tab}"]`); if (b) b.classList.add('dirty'); } };
-    const showTab = (k) => { S.cfgTab = k; lsSet('cq-cfg-tab', k); $$('.cfgpane').forEach((x) => { x.hidden = x.dataset.tab !== k; }); $$('[data-ctab]').forEach((b) => b.setAttribute('aria-selected', b.dataset.ctab === k)); const sv0 = $('#cfg-save'), nw = $('#pf-new'); if (sv0) sv0.hidden = ['func', 'forn', 'cli', 'zero', 'teste'].includes(k); if (nw) nw.hidden = k !== 'func'; };
+    const showTab = (k) => { S.cfgTab = k; lsSet('cq-cfg-tab', k); $$('.cfgpane').forEach((x) => { x.hidden = x.dataset.tab !== k; }); $$('[data-ctab]').forEach((b) => b.setAttribute('aria-selected', b.dataset.ctab === k)); const sv0 = $('#cfg-save'), nw = $('#pf-new'); if (sv0) sv0.hidden = ['func', 'forn', 'cli', 'zero', 'teste', 'backup'].includes(k); if (nw) nw.hidden = k !== 'func'; };
     $$('[data-ctab]').forEach((b) => { b.onclick = () => showTab(b.dataset.ctab); });
     showTab(S.cfgTab);
     renderPessoas(roA);
@@ -7454,11 +7495,15 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       ta2.value = (ta2.value.trim() ? ta2.value.trim() + '\n' : '') + add2.map(([s, n]) => ferLine(s, n)).join('\n');
       dirty(ta2); toast(add2.length + ' feriados de ' + y + ' adicionados à lista. Confira e clique em Salvar configurações.');
     };
+    if (S.cfgFerAno && fg) { const fa = $('#fer-ano'); if (fa && [...fa.options].some((o) => +o.value === S.cfgFerAno)) { fa.value = String(S.cfgFerAno); fg.click(); const it = document.querySelector('[data-cfg="FERIADOS"]'); if (it) setTimeout(() => it.scrollIntoView({ block: 'center', behavior: 'smooth' }), 80); } }
+    S.cfgFerAno = null;
+    const bkg = $('#bk-go'); if (bkg) bkg.onclick = () => bkRun(+$('#bk-ano').value, $('#bk-fotos').checked);
+    if (bkPode() && !VY.bk) bkLoad();
     const sv = $('#cfg-save'); if (sv) sv.onclick = () => saveConfig(false);
     wireReset();
   };
   /* ---------- funcionários (cadastro único usado por todos os módulos) ---------- */
-  const CFG_TABS = [['geral', 'Geral'], ['func', 'Funcionários'], ['forn', 'Fornecedores'], ['cli', 'Clientes'], ['av', 'Lotes (AV)', 'AV'], ['serv', 'Serviços', 'SERV'], ['rnc', 'RNC Fornecedor', 'RNC'], ['rncc', 'RNC Cliente', 'RNCC'], ['cal', 'Calibração', 'INS'], ['emails', 'E-mails'], ['logo', 'Aparência, logo e Drive'], ['teste', 'Módulos em teste'], ['zero', 'Começar do zero']];
+  const CFG_TABS = [['geral', 'Geral'], ['func', 'Funcionários'], ['forn', 'Fornecedores'], ['cli', 'Clientes'], ['av', 'Lotes (AV)', 'AV'], ['serv', 'Serviços', 'SERV'], ['rnc', 'RNC Fornecedor', 'RNC'], ['rncc', 'RNC Cliente', 'RNCC'], ['cal', 'Calibração', 'INS'], ['emails', 'E-mails'], ['logo', 'Aparência, logo e Drive'], ['backup', 'Backup por ano'], ['teste', 'Módulos em teste'], ['zero', 'Começar do zero']];
   const FUNC_COR = { conferente: 'var(--av)', emissor: 'var(--rnc)', comprador: 'var(--serv)', resp_cal: 'var(--cal)' };
   const FUNC_USO = { conferente: [['AV', 'conf']], emissor: [['RNC', 'emissor']], comprador: [['RNC', 'comprador']], resp_cal: [['INS', 'resp']] };
   const FUNC_ONDE = { conferente: 'Conferido por (lotes)', emissor: 'Emissor (RNC)', comprador: 'Comprador (RNC)', resp_cal: 'Responsável (calibração)' };
@@ -8862,10 +8907,13 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   }
 
   /* ================= exportar tudo ================= */
-  function exportAll() {
+  function exportAll(yr, wbOnly) {
     if (!S.model) return Promise.resolve(false);
-    if (SCR('exportar') === 'nao') { toast('Exportar tudo não está liberado para você.', true); return Promise.resolve(false); }
-    const M = S.model, wb = XLSX.utils.book_new();
+    if (yr == null && SCR('exportar') === 'nao') { toast('Exportar tudo não está liberado para você.', true); return Promise.resolve(false); }
+    const inY = (d) => yr == null || (d != null && E.ymd(Math.floor(d)).y === yr);
+    const M0 = S.model, M = yr == null ? M0 : Object.assign({}, M0, { av: M0.av.filter((x) => inY(x.data)), serv: M0.serv.filter((x) => inY(x.data)), rnc: M0.rnc.filter((x) => inY(x.data)), rncc: (M0.rncc || []).filter((x) => inY(x.data)) });
+    const wb = XLSX.utils.book_new();
+    if (yr != null) { const cp = XLSX.utils.aoa_to_sheet([['CENTRAL DA QUALIDADE · AÇOS VITAL'], ['Backup do ano', yr], ['Gerado em', new Date().toLocaleString('pt-BR')], ['Gerado por', myPessoa() || DB.meName || ''], [], ['Lotes do ano', M.av.length], ['Serviços do ano', M.serv.length], ['RNC de fornecedor abertas no ano', M.rnc.length], ['RNC de cliente abertas no ano', M.rncc.length], [], ['Lotes, serviços e RNC: pela data de entrada/abertura. Instrumentos e soldadores: cadastro completo; histórico de calibração: só o ano.'], ['A cópia de segurança completa (.json) baixada junto restaura tudo pelo Importar backup.']]); cp['!cols'] = [{ wch: 40 }, { wch: 30 }]; XLSX.utils.book_append_sheet(wb, cp, 'CAPA'); }
     const sheet = (name, title, headRow, rows, widths) => {
       const ws = XLSX.utils.aoa_to_sheet([[title], headRow].concat(rows));
       ws['!cols'] = widths.map((w) => ({ wch: w }));
@@ -8881,7 +8929,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       [16, 11, 13, 18, 20, 18, 22, 20, 11, 11, 11, 12, 14, 8, 11, 12, 11, 9, 11, 10, 11, 12, 11, 11, 9, 60]);
     if (vis('ins')) sheet('INSTRUMENTOS', 'CADASTRO E CONTROLE DE CALIBRAÇÃO', ['CÓDIGO', 'DESCRIÇÃO', 'MARCA', 'Nº DE SÉRIE', 'FAIXA', 'RESOLUÇÃO', 'Nº CERTIFICADO', 'LABORATÓRIO', 'DATA CALIBRAÇÃO', 'FREQ. (MESES)', 'VALIDADE', 'DIAS PARA VENCER', 'MAIOR ERRO', 'INCERTEZA (U)', 'EMA (±)', 'RESULTADO', 'STATUS', 'RESPONSÁVEL', 'SETOR', 'LOCAL / COM QUEM ESTÁ', 'TIPO DE EQUIPAMENTO', 'SITUAÇÃO', 'CUSTO', 'OBSERVAÇÃO'],
       M.ins.map((x) => [x.codigo, v(x.desc), v(x.marca), v(x.serie), v(x.faixa), v(x.resol), v(x.cert), v(x.lab), dateCell(x.dataCal), v(x.freq), dateCell(x.validade), v(x.dias), v(x.resCal), v(x.incert), v(x.ema), v(x.resultado), v((INS_ST.find((o) => o[0] === x.status) || [0, 0, 0, x.status])[3]), v(x.resp), v(x.depto), v(x.local), v(x.tipo), v(x.situacao), v(x.custo), v(x.obs)]), [10, 36, 14, 14, 14, 10, 18, 22, 12, 8, 12, 8, 10, 10, 10, 18, 20, 18, 22, 22, 24, 18, 10, 30]);
-    if (vis('ins')) { const H = insHistAll(); sheet('HIST. CALIBRAÇÃO', 'HISTÓRICO DOS INSTRUMENTOS', ['CÓDIGO', 'DATA', 'EVENTO', 'DETALHES', 'LANÇADO POR', 'LANÇADO EM'], H.map((h) => [h.codigo, dateCell(h.d), insEvName(h), insEvTxt(h), v(DB.names[h.by] || ''), v(new Date(h.at).toLocaleString('pt-BR'))]), [10, 12, 22, 70, 22, 18]); }
+    if (vis('ins')) { const H = insHistAll().filter((h) => inY(h.d)); sheet('HIST. CALIBRAÇÃO', 'HISTÓRICO DOS INSTRUMENTOS', ['CÓDIGO', 'DATA', 'EVENTO', 'DETALHES', 'LANÇADO POR', 'LANÇADO EM'], H.map((h) => [h.codigo, dateCell(h.d), insEvName(h), insEvTxt(h), v(DB.names[h.by] || ''), v(new Date(h.at).toLocaleString('pt-BR'))]), [10, 12, 22, 70, 22, 18]); }
     const c = M.cfg, lists = CFG_LISTS.map((l) => l[0]);
     soldExport(sheet, v);
     if (vis('rncc')) sheet('RNC CLIENTE', 'RNC de cliente — reclamações', ['Número', 'Abertura', 'Status', 'Filial', 'Emissor', 'Cliente', 'Contato', 'Canal', 'NF de venda', 'Pedido de venda', 'Lotes / corridas', 'Produto', 'Qtde afetada', 'Reclamação', 'Motivo', 'Gravidade', 'Procedente', 'Reincid.', 'Prazo contenção', 'Contenção', 'Data contenção', 'Disposição', 'Setor responsável', 'Origem', 'RNCF vinculada', 'Causa raiz', 'Ação corretiva', 'Responsável', 'Prazo ação', 'Prazo resposta', 'Resposta ao cliente', 'Eficácia', 'Data verificação', 'Prazo final', 'Conclusão', 'Cancelada', 'Histórico'],
@@ -8894,7 +8942,131 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     for (let i = 0; i < maxLen; i++) rows.push(lists.map((n) => v((c[n] || [])[i])).concat([c.GER_FERIADOS[i] != null ? dateCell(c.GER_FERIADOS[i]) : '', v((c.CAL_TIPOS[i] || {}).tipo), v((c.CAL_TIPOS[i] || {}).ema)]));
     sheet('CONFIGURAÇÕES', 'CONFIGURAÇÕES — listas e parâmetros', hd, rows, hd.map(() => 18));
     const ws = XLSX.utils.aoa_to_sheet([['Parâmetro', 'Valor']].concat(CFG_PARAMS.concat(CFG_PARAMS_RNCC).map((q) => [q[1], v(c[q[0]])]))); ws['!cols'] = [{ wch: 40 }, { wch: 10 }]; XLSX.utils.book_append_sheet(wb, ws, 'PARÂMETROS');
-    return saveFile(`CONTROLE_DA_QUALIDADE_ACOS_VITAL_${today8()}.xlsx`, new Blob([XLSX.write(wb, { bookType: 'xlsx', type: 'array' })], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+    if (yr != null && vis('iqf')) {
+      const R = []; Object.keys(IQ.docs).filter((k) => new RegExp('^m-' + yr + '-\\d{2}$').test(k)).sort().forEach((k) => { const d = IQ.docs[k] || {}; Object.values(d.rows || {}).forEach((r) => R.push([k.slice(2), v(r.nome), v(r.cls), v(r.iqf), v(r.lotes), v(r.q), v(r.r), v(r.d), v(r.a), v(r.rnc)])); });
+      if (R.length) sheet('AVAL. FORNECEDORES', 'FECHAMENTOS MENSAIS DA AVALIAÇÃO DE FORNECEDORES', ['Mês', 'Fornecedor', 'Classe', 'IQF', 'Lotes', 'Qualidade', 'Ocorrências', 'Documentação', 'Atend. RNC', 'RNC'], R, [9, 34, 8, 8, 8, 10, 12, 13, 11, 6]);
+    }
+    if (wbOnly) return wb;
+    return saveFile(yr != null ? `BACKUP_${yr}_QUALIDADE_ACOS_VITAL_${today8()}.xlsx` : `CONTROLE_DA_QUALIDADE_ACOS_VITAL_${today8()}.xlsx`, new Blob([XLSX.write(wb, { bookType: 'xlsx', type: 'array' })], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+  }
+
+  /* ---------- virada do ano: aviso dos feriados e backup por ano ----------
+     Feriados: a partir de 1º de dezembro, se o ano seguinte não tem feriado cadastrado (some com "Ciente" até 1º de janeiro);
+     se o ano atual não tem feriado nenhum, o aviso fica fixo (os prazos das RNC já estão saindo sem feriados).
+     Backup: Configurações › Backup por ano (dono e administradores). Registro em meta/backups. */
+  const VY = { bk: null, bkLoading: false };
+  const vyYr = (s) => (s == null ? null : E.ymd(Math.floor(s)).y);
+  const vyTemFer = (y) => (S.model.cfg.GER_FERIADOS || []).some((s) => vyYr(s) === y);
+  const vyCK = (k) => 'cq-ciente-' + k + '-' + (DB.me || '');
+  const vyCiente = (k) => !!lsGet(vyCK(k), '');
+  const bkPode = () => !!(DB.owner || DB.admin === true);
+  const bkFeitos = (y) => { const a = ((VY.bk || {}).anos || {})[y] || {}; return Object.keys(a).map((id) => Object.assign({ id }, a[id])).sort((p, q) => q.at - p.at); };
+  async function bkLoad(force) {
+    if (!bkPode() || !DB.db || VY.bkLoading || (VY.bk && !force)) return;
+    VY.bkLoading = true;
+    try { const d = await DB.db.doc('meta/backups').get(); VY.bk = d.exists ? d.data() || {} : {}; } catch (e) { VY.bk = VY.bk || {}; }
+    VY.bkLoading = false;
+    if (S.view === 'alertas' && !$('#layer').innerHTML) render();
+    const bh = $('#bk-hist'); if (bh) bh.innerHTML = bkHistHTML();
+    updateChrome();
+  }
+  function vyAvisos() {
+    if (!S.model) return [];
+    const t = E.ymd(S.today), out = [], cm = cfgMode();
+    if (cm === 'admin' || cm === 'edita') {
+      if (!vyTemFer(t.y)) out.push({ k: 'fer' + t.y, y: t.y, tipo: 'fer', forte: true });
+      else if (t.m === 12 && !vyTemFer(t.y + 1) && !vyCiente('fer' + (t.y + 1))) out.push({ k: 'fer' + (t.y + 1), y: t.y + 1, tipo: 'fer' });
+    }
+    if (bkPode() && t.m === 1 && !VY.bk) bkLoad();
+    if (bkPode() && t.m === 1 && VY.bk && !bkFeitos(t.y - 1).length && !vyCiente('bk' + (t.y - 1))) out.push({ k: 'bk' + (t.y - 1), y: t.y - 1, tipo: 'bk' });
+    return out;
+  }
+  function vyAvisosHTML() {
+    return vyAvisos().map((a) => (a.tipo === 'fer'
+      ? `<div class="rrwarn vyaviso" style="border-left-color:var(--${a.forte ? 'crit' : 'warn'})"><b>📅 Os feriados de ${a.y} ainda não estão cadastrados</b><div class="muted" style="margin-top:3px">${a.forte ? `Os prazos das RNC deste ano já estão sendo calculados sem os feriados. Este aviso só some quando os feriados de ${a.y} forem cadastrados.` : 'Os prazos das RNC contam dias úteis: sem os feriados, os prazos do ano que vem saem errados.'}</div><div class="rrfoot" style="margin-top:8px"><button class="btn primary" type="button" data-act="vy-fer" data-key="${a.y}">Cadastrar agora</button>${a.forte ? '' : `<button class="btn" type="button" data-act="vy-ok" data-key="${a.k}">Ciente</button>`}</div></div>`
+      : `<div class="rrwarn vyaviso" style="border-left-color:var(--info)"><b>💾 Faça o backup de ${a.y}</b><div class="muted" style="margin-top:3px">Uma cópia do ano que terminou: Excel para consulta e a cópia de segurança completa${DRIVE_URL() ? ', com cópia no Google Drive' : ''}.</div><div class="rrfoot" style="margin-top:8px"><button class="btn primary" type="button" data-act="vy-bk" data-key="${a.y}">Fazer agora</button><button class="btn" type="button" data-act="vy-ok" data-key="${a.k}">Ciente</button></div></div>`)).join('');
+  }
+  function vyAct(a, key) {
+    if (a === 'vy-ok') { lsSet(vyCK(key), String(Date.now())); render(); updateChrome(); toast('Combinado. O aviso volta se continuar faltando no ano novo.'); return true; }
+    if (a === 'vy-fer') { S.cfgTab = 'geral'; S.cfgFerAno = +key; go('config'); return true; }
+    if (a === 'vy-bk') { S.cfgTab = 'backup'; S.bkAno = +key; go('config'); return true; }
+    return false;
+  }
+  /* aba Configurações › Backup por ano */
+  function bkAnos() {
+    const ys = new Set([E.ymd(S.today).y]); const M = S.model;
+    [M.av, M.serv, M.rnc, M.rncc || []].forEach((L) => L.forEach((x) => { const y = vyYr(x.data); if (y && y > 1990) ys.add(y); }));
+    return [...ys].sort((p, q) => q - p);
+  }
+  function bkPaneHTML() {
+    if (!bkPode()) return '<p class="muted">Só o dono e os administradores fazem backup.</p>';
+    const t = E.ymd(S.today), def = S.bkAno || (t.m <= 2 ? t.y - 1 : t.y), anos = bkAnos(); S.bkAno = null;
+    return `<p style="margin:0 0 10px">Baixa uma cópia do ano escolhido. <b>Nada é apagado nem alterado</b>: é só cópia.</p>
+      <ul class="bkul"><li><b>Excel do ano</b>: uma aba por módulo, com os registros daquele ano (lotes pela data de entrada, RNC pela abertura, serviços, calibrações feitas no ano, soldagem e os fechamentos da Avaliação de fornecedores) e uma capa.</li>
+      <li><b>Cópia de segurança completa (.json)</b>: tudo da Central neste momento. É completa de propósito: é ela que o <i>Importar backup</i> aceita, sem risco de apagar outros anos.</li></ul>
+      <div class="filters" style="margin-top:10px"><label class="field"><span>Ano</span><select id="bk-ano">${anos.map((y) => `<option ${y === def ? 'selected' : ''}>${y}</option>`).join('')}</select></label>
+      <label class="check" style="align-self:end;margin-bottom:8px"><input type="checkbox" id="bk-fotos"> Incluir fotos das RNC <span class="muted">(arquivo fica maior)</span></label>
+      <button class="btn primary" type="button" id="bk-go" style="align-self:end">Baixar backup do ano</button></div>
+      <p class="muted" style="font-size:12.5px;margin:6px 0 0">${DRIVE_URL() ? 'Os dois arquivos também vão para a pasta <b>Central da Qualidade - Backups</b> no Google Drive da conta da Central (pasta privada).' : 'Cópia no Google Drive: ainda não configurada (Configurações › Aparência, logo e Drive). Enquanto isso, o backup baixa só no computador.'}</p>
+      <div id="bk-st" class="bkst" hidden></div>
+      <div class="fsec"><h3>Backups feitos</h3><div id="bk-hist">${bkHistHTML()}</div></div>`;
+  }
+  function bkHistHTML() {
+    if (!VY.bk) return '<span class="muted">Carregando…</span>';
+    const hist = bkAnos().map((y) => { const L = bkFeitos(y); return L.length ? `<tr><td class="mono nw">${y}</td><td>${L.slice(0, 3).map((b) => `${dmy(b.at)} às ${hhmm(b.at)} · ${esc(b.nome || '')}${b.drive ? ' · <span style="color:var(--ok)">✓ no Drive</span>' : ''}${b.fotos ? ' · com fotos' : ''}`).join('<br>')}</td></tr>` : ''; }).join('');
+    return hist ? `<div class="ihist"><table><tbody>${hist}</tbody></table></div>` : '<span class="muted">Nenhum backup registrado ainda.</span>';
+  }
+  async function bkLerTudo(fotos, st) {
+    const cols = ['av', 'serv', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp', 'tcert', 'tusin', 'cfg', 'meta', 'log', 'pub', 'usuarios', 'rncin'].concat(fotos ? ['rncfot', 'rnccf'] : []);
+    const docs = {}, falhas = [];
+    for (const c of cols) {
+      st(`Lendo ${c}…`);
+      try { const q = await DB.db.collection(c).get(); (q.docs || []).forEach((d) => { docs[c + '/' + d.id] = d.data(); }); }
+      catch (e) { falhas.push(c); }
+    }
+    const perfis = {}; try { const q = await DB.db.collection('perfis').get(); (q.docs || []).forEach((d) => { perfis[d.id] = d.data(); }); } catch (e) { falhas.push('perfis'); }
+    return { docs, perfis, falhas };
+  }
+  async function bkDrive(nome, tipo, blob) {
+    const token = DB.user && typeof DB.user.idToken === 'function' ? await DB.user.idToken() : null;
+    if (!token) throw new Error('login não confirmado');
+    const dados = await new Promise((res, rej) => { const r = new FileReader(); r.onerror = () => rej(new Error('falha ao ler')); r.onload = () => res(String(r.result).split(',')[1] || ''); r.readAsDataURL(blob); });
+    const r = await fetch(DRIVE_URL(), { method: 'POST', body: JSON.stringify({ token, acao: 'backup', ano: S.bkRun, nome, tipo, dados }) });
+    const j = await r.json().catch(() => null);
+    if (!j || !j.ok) throw new Error((j && j.erro) || 'o script não respondeu (confira se a versão nova do script foi publicada)');
+    return j;
+  }
+  async function bkRun(y, fotos) {
+    const stEl = $('#bk-st'), btn = $('#bk-go'), st = (t) => { if (stEl) { stEl.hidden = false; stEl.innerHTML = t; } };
+    if (btn) { btn.disabled = true; btn.textContent = 'Gerando…'; }
+    S.bkRun = y;
+    try {
+      st('Montando o Excel do ano…');
+      const wb = exportAll(y, true);
+      const xName = `BACKUP_${y}_QUALIDADE_ACOS_VITAL_${today8()}.xlsx`;
+      const xBlob = new Blob([XLSX.write(wb, { bookType: 'xlsx', type: 'array' })], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const R = await bkLerTudo(fotos, (t) => st(t));
+      const jName = `COPIA_COMPLETA_CENTRAL_${today8()}${fotos ? '_com_fotos' : ''}.json`;
+      const jBlob = new Blob([JSON.stringify({ tipo: 'backup-central', geradoEm: new Date().toISOString(), por: DB.meEmail || DB.meName || '', anoDoBackup: y, docs: R.docs, perfis: R.perfis })], { type: 'application/json' });
+      const mb = (b) => (b.size / 1048576).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' MB';
+      VY.files = [[xName, xBlob], [jName, jBlob]];
+      st(`Baixando os arquivos… <span class="muted">(se o navegador perguntar, permita baixar os 2 arquivos)</span>`);
+      await saveFile(xName, xBlob); await sleep(400); await saveFile(jName, jBlob);
+      let drive = false, dErr = '';
+      if (DRIVE_URL()) {
+        st('Enviando a cópia para o Google Drive…');
+        try { await bkDrive(xName, xBlob.type, xBlob); await bkDrive(jName, 'application/json', jBlob); drive = true; } catch (e) { dErr = (e && e.message) || String(e); }
+      }
+      const id = 'b' + Date.now().toString(36);
+      const reg = clean({ at: Date.now(), by: DB.me || null, nome: myPessoa() || DB.meName || '', fotos: !!fotos, drive, xlsx: xName, json: jName });
+      VY.bk = VY.bk || {}; VY.bk.anos = VY.bk.anos || {}; VY.bk.anos[y] = Object.assign({}, VY.bk.anos[y] || {}, { [id]: reg });
+      try { await DB.db.doc('meta/backups').merge({ anos: { [y]: { [id]: reg } } }); } catch (e) { /* registro é opcional */ }
+      logEntry('GERAL', 'backup-' + y, 'novo', `Backup de ${y} gerado${drive ? ' (com cópia no Drive)' : ''}`, null);
+      await bkLoad(true);
+      st(`<b style="color:var(--ok)">✓ Backup de ${y} pronto.</b> Excel ${mb(xBlob)} · cópia completa ${mb(jBlob)}${R.falhas.length ? ` · <span style="color:var(--warn)">não consegui ler: ${esc(R.falhas.join(', '))}</span>` : ''}<br>${drive ? '<span style="color:var(--ok)">✓ Cópia salva no Google Drive.</span>' : DRIVE_URL() ? `<span style="color:var(--warn)">A cópia no Drive não foi feita: ${esc(dErr)}.</span>` : ''}
+        <div class="formfoot" style="margin-top:6px"><span class="muted">Algum arquivo não baixou?</span><button class="btn small" type="button" data-act="bk-dl" data-key="0">Baixar o Excel</button><button class="btn small" type="button" data-act="bk-dl" data-key="1">Baixar a cópia completa</button></div>`);
+    } catch (e) { st(`<span style="color:var(--crit)">Não foi possível gerar o backup: ${esc((e && e.message) || String(e))}</span>`); }
+    if (btn) { btn.disabled = false; btn.textContent = 'Baixar backup do ano'; }
   }
 
   /* ================= Soldagem: soldadores, qualificações (RQS) e EPS =================
@@ -9482,11 +9654,75 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   }
   function iqFicha(k) { return (IQ.docs['f-' + k]) || {}; }
 
+  /* ---------- Avaliação de fornecedores: mapa, velocímetro, nota mês a mês e cartões ---------- */
+  const iqClsV = (v, cf) => (v == null ? null : v >= cf.a ? 'A' : v >= cf.b ? 'B' : 'C');
+  const IQC = { A: 'var(--ok)', B: 'var(--warn)', C: 'var(--crit)' };
+  const IQM = { model: null, cf: null, v: null };
+  function iqMonths() {
+    const cfs = JSON.stringify(iqCfg());
+    if (IQM.model === S.model && IQM.cf === cfs && IQM.today === S.today) return IQM.v;
+    const ms = monthsBack(12, S.today);
+    IQM.model = S.model; IQM.cf = cfs; IQM.today = S.today; IQM.v = { ms, m: ms.map((m) => new Map(iqCalc(m.start, m.end).map((o) => [o.key, o]))) };
+    return IQM.v;
+  }
+  const iqSerie = (k) => iqMonths().m.map((mm) => { const o = mm.get(k); return o && o.iqf != null ? o.iqf : null; });
+  function iqSpark(k, w, h) {
+    const cf = iqCfg(), vals = iqSerie(k), x = (i) => 3 + i * (w - 6) / 11, y = (v) => h - 3 - (v / 100) * (h - 6);
+    let d = '', on = false; vals.forEach((v, i) => { if (v == null) { on = false; return; } d += (on ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1); on = true; });
+    const last = vals.map((v, i) => [v, i]).filter((p) => p[0] != null).pop();
+    if (!last) return '<span class="muted">—</span>';
+    return `<svg class="iqsp" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true"><rect x="0" y="${y(100)}" width="${w}" height="${y(cf.a) - y(100)}" fill="var(--ok)" opacity=".12"/><rect x="0" y="${y(cf.a)}" width="${w}" height="${y(cf.b) - y(cf.a)}" fill="var(--warn)" opacity=".12"/><rect x="0" y="${y(cf.b)}" width="${w}" height="${y(0) - y(cf.b)}" fill="var(--crit)" opacity=".08"/><path d="${d}" fill="none" stroke="var(--iqf)" stroke-width="1.6" stroke-linejoin="round"/>${vals.map((v, i) => (v == null ? '' : `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${i === last[1] ? 2.6 : 1.3}" fill="${i === last[1] ? IQC[iqClsV(v, cf)] : 'var(--iqf)'}"/>`)).join('')}</svg>`;
+  }
+  function iqGauge(v, w) {
+    const cf = iqCfg(), R = 40, cx = 50, cy = 48, a = (t) => Math.PI * (1 - t / 100), pt = (t, r) => [(cx + r * Math.cos(a(t))).toFixed(2), (cy - r * Math.sin(a(t))).toFixed(2)];
+    const arc = (t0, t1, col) => { const [x0, y0] = pt(t0, R), [x1, y1] = pt(t1, R); return `<path d="M${x0} ${y0}A${R} ${R} 0 0 1 ${x1} ${y1}" stroke="${col}" stroke-width="9" fill="none"/>`; };
+    const nv = v == null ? 0 : Math.max(0, Math.min(100, v)), [nx, ny] = pt(nv, R - 14);
+    return `<svg class="iqg" viewBox="0 0 100 63" width="${w}" role="img" aria-label="IQF ${v == null ? 'sem nota' : NF1.format(v)}">${arc(0, cf.b, 'var(--crit)')}${arc(cf.b, cf.a, 'var(--warn)')}${arc(cf.a, 100, 'var(--ok)')}${v == null ? '' : `<line x1="${cx}" y1="${cy}" x2="${nx}" y2="${ny}" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="4" fill="var(--ink)"/>`}<text x="${cx}" y="62" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ink)">${v == null ? '—' : NF1.format(v)}</text></svg>`;
+  }
+  function iqLine(k) {
+    const cf = iqCfg(), { ms } = iqMonths(), vals = iqSerie(k), W = 560, H = 150, ml = 30, pw = W - ml - 10, ph = H - 34, x = (i) => ml + 8 + i * (pw - 16) / 11, y = (v) => 8 + (1 - v / 100) * ph;
+    let s = `<svg class="iqline" viewBox="0 0 ${W} ${H}" role="img" aria-label="Nota mês a mês"><rect x="${ml}" y="${y(100)}" width="${pw}" height="${y(cf.a) - y(100)}" fill="var(--ok)" opacity=".1"/><rect x="${ml}" y="${y(cf.a)}" width="${pw}" height="${y(cf.b) - y(cf.a)}" fill="var(--warn)" opacity=".12"/><rect x="${ml}" y="${y(cf.b)}" width="${pw}" height="${y(0) - y(cf.b)}" fill="var(--crit)" opacity=".08"/>`;
+    [0, cf.b, cf.a, 100].forEach((v) => { s += `<text x="${ml - 4}" y="${y(v) + 3}" text-anchor="end" class="iqax">${v}</text>`; });
+    let d = '', on = false; vals.forEach((v, i) => { if (v == null) { on = false; return; } d += (on ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1); on = true; });
+    s += `<path d="${d}" fill="none" stroke="var(--iqf)" stroke-width="2.4" stroke-linejoin="round"/>`;
+    s += vals.map((v, i) => (v == null ? `<text x="${x(i)}" y="${y(50)}" text-anchor="middle" class="iqax">·</text>` : `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3.6" fill="${IQC[iqClsV(v, cf)]}" stroke="var(--surface)" stroke-width="1.2"><title>${esc(MESES_L[ms[i].m - 1])} ${ms[i].y} · IQF ${NF1.format(v)}</title></circle>`)).join('');
+    return s + ms.map((m, i) => `<text x="${x(i)}" y="${H - 6}" text-anchor="middle" class="iqax">${esc(m.label)}</text>`).join('') + '</svg>';
+  }
+  const iqP75 = (aval) => { const xs = aval.map((o) => o.lotes).sort((p, q) => p - q); return xs.length ? xs[Math.floor(xs.length * 0.75)] : 0; };
+  function iqMapa(aval) {
+    const cf = iqCfg(); if (aval.length < 3) return '<p class="muted">Poucos fornecedores avaliados no período para montar o mapa.</p>';
+    const W = 760, H = 380, ml = 46, mr = 12, mt = 12, mb = 40, pw = W - ml - mr, ph = H - mt - mb;
+    const xs = aval.map((o) => o.lotes), lmin = Math.log10(Math.max(1, Math.min(cf.min, ...xs))), lmax = Math.log10(Math.max(...xs) * 1.15);
+    const ymin = Math.max(0, Math.floor(Math.min(...aval.map((o) => o.iqf)) / 10) * 10 - 5), X = (v) => ml + (Math.log10(Math.max(1, v)) - lmin) / ((lmax - lmin) || 1) * pw, Y = (v) => mt + (1 - (v - ymin) / ((100 - ymin) || 1)) * ph;
+    const med = iqP75(aval);
+    let s = `<svg class="iqmap" viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa de fornecedores: lotes recebidos por nota">`;
+    s += `<rect x="${ml}" y="${Y(100)}" width="${pw}" height="${Y(cf.a) - Y(100)}" fill="var(--ok)" opacity=".09"/><rect x="${ml}" y="${Y(cf.a)}" width="${pw}" height="${Y(cf.b) - Y(cf.a)}" fill="var(--warn)" opacity=".1"/>`;
+    if (ymin < cf.b) s += `<rect x="${ml}" y="${Y(cf.b)}" width="${pw}" height="${Y(ymin) - Y(cf.b)}" fill="var(--crit)" opacity=".07"/><rect x="${X(med)}" y="${Y(cf.b)}" width="${ml + pw - X(med)}" height="${Y(ymin) - Y(cf.b)}" fill="var(--crit)" opacity=".08"/>`;
+    [ymin, cf.b, cf.a, 100].filter((v, i, a) => a.indexOf(v) === i && v >= ymin).forEach((v) => { s += `<text x="${ml - 7}" y="${Y(v) + 4}" text-anchor="end" class="iqax">${v}</text><line x1="${ml}" x2="${ml + pw}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/>`; });
+    [1, 3, 5, 10, 20, 50, 100, 200, 500, 1000, 2000].filter((v) => Math.log10(v) >= lmin - 0.001 && Math.log10(v) <= lmax).forEach((v) => { s += `<text x="${X(v)}" y="${H - mb + 16}" text-anchor="middle" class="iqax">${v}</text>`; });
+    s += `<text x="${ml + pw / 2}" y="${H - 6}" text-anchor="middle" class="iqaxt">lotes recebidos no período →</text><text transform="translate(12 ${mt + ph / 2}) rotate(-90)" text-anchor="middle" class="iqaxt">IQF</text>`;
+    s += `<line x1="${X(med)}" x2="${X(med)}" y1="${mt}" y2="${mt + ph}" stroke="var(--ink-3)" stroke-width="1.1" stroke-dasharray="6 4"/>`;
+    s += `<text x="${ml + pw - 8}" y="${mt + 16}" text-anchor="end" class="iqq ok">PARCEIROS-CHAVE</text><text x="${ml + pw - 8}" y="${mt + ph - 8}" text-anchor="end" class="iqq crit">PRIORIDADE</text>`;
+    aval.slice().sort((p, q) => q.rnc - p.rnc).forEach((o) => { const r = 3.2 + Math.min(10, Math.sqrt(o.rnc) * 2.4); s += `<circle class="iqdot" data-open="IQF:${esc(o.key)}" cx="${X(o.lotes).toFixed(1)}" cy="${Y(o.iqf).toFixed(1)}" r="${r.toFixed(1)}" fill="${IQC[o.cls]}" fill-opacity=".45" stroke="${IQC[o.cls]}" stroke-width="1.1"><title>${esc(o.nome)} · IQF ${NF1.format(o.iqf)} · ${o.lotes} lote(s) · ${o.rnc} RNC</title></circle>`; });
+    const pr = aval.filter((o) => o.lotes >= med && o.cls === 'C').sort((p, q) => p.iqf - q.iqf).slice(0, 4), big = aval.slice().sort((p, q) => q.lotes - p.lotes).slice(0, 3), placed = [];
+    pr.concat(big).forEach((o) => { if (placed.some((p) => p.k === o.key)) return; const x = X(o.lotes), y = Y(o.iqf); if (placed.some((p) => Math.abs(p.y - y) < 15 && Math.abs(p.x - x) < 170)) return; placed.push({ k: o.key, x, y }); const rt = x > W - 190; s += `<text x="${(rt ? x - 12 : x + 10).toFixed(1)}" y="${(y + 4).toFixed(1)}" ${rt ? 'text-anchor="end"' : ''} class="iqlab">${esc(String(o.nome).slice(0, 24))}</text>`; });
+    return s + `</svg><div class="iqleg"><span><i style="background:var(--ok)"></i>A</span><span><i style="background:var(--warn)"></i>B</span><span><i style="background:var(--crit)"></i>C</span><span>bolinha maior = mais RNC</span><span>área vermelha à direita = muito volume e nota baixa</span></div>`;
+  }
+  function iqPrioHTML(aval) {
+    const med = iqP75(aval), pr = aval.filter((o) => o.lotes >= med && o.cls !== 'A').sort((p, q) => p.iqf - q.iqf).slice(0, 5);
+    return `<div class="iqprio"><h3>Prioridade<small>muito volume e nota baixa</small></h3>${pr.length ? pr.map((o) => `<button type="button" class="iqpr" data-open="IQF:${esc(o.key)}"><span class="iqlt c${o.cls}">${o.cls}</span><span class="nm">${esc(o.nome)}<small>${NF.format(o.lotes)} lote(s) · ${o.rnc} RNC</small></span><b>${NF1.format(o.iqf)}</b></button>`).join('') : '<p class="muted">Nenhum fornecedor de muito volume com nota baixa no período. 👍</p>'}</div>`;
+  }
+  const iqTrend = (o) => (o.iqf == null || o.prev == null ? '' : Math.abs(o.iqf - o.prev) < 1 ? '<span class="muted">= estável</span>' : o.iqf > o.prev ? `<span style="color:var(--ok)">▲ ${NF1.format(o.iqf - o.prev)}</span>` : `<span style="color:var(--crit)">▼ ${NF1.format(o.prev - o.iqf)}</span>`);
+  function iqCardsHTML(rows) {
+    const cf = iqCfg(), n = S.iqN || 60, sl = rows.slice(0, n);
+    const mini = (o) => `<span class="iqmini">${[['q', 'Qual.'], ['r', 'Ocorr.'], ['d', 'Doc.'], ['a', 'RNC']].map(([c, l]) => `<span><small>${l}</small><i><b style="width:${o[c] == null ? 0 : o[c]}%;background:${o[c] == null ? 'transparent' : IQC[iqClsV(o[c], cf)]}"></b></i></span>`).join('')}</span>`;
+    return `<div class="swall iqwall">${sl.map((o) => { const tr = iqTrend(o); return `<button type="button" class="scard iqcard${o.cls ? ' c' + o.cls : ''}" data-open="IQF:${esc(o.key)}"><span class="iqgw">${iqGauge(o.cls ? o.iqf : null, 104)}<span class="iqlt ${o.cls ? 'c' + o.cls : ''}">${o.cls || '–'}</span></span><span class="scb"><b class="iqn">${esc(o.nome)}</b><span class="iqme">${NF.format(o.lotes)} lote(s) · ${o.rnc} RNC${tr ? ' · ' + tr : ''}${o.cls ? '' : ' · poucos dados'}</span><span class="iqme2">nota mês a mês</span>${iqSpark(o.key, 180, 30)}${mini(o)}</span></button>`; }).join('')}</div>${rows.length > n ? `<div class="formfoot" style="justify-content:center;margin-top:12px"><button class="btn" type="button" data-act="iq-more">Mostrar mais ${NF.format(Math.min(60, rows.length - n))} (de ${NF.format(rows.length - n)} restantes)</button></div>` : ''}`;
+  }
   VIEWS.iqf = (main) => {
     const f = S.f.iqf || (S.f.iqf = {}), per = f.per || '12m', cf = iqCfg(), P = iqPeriod(per);
     const len = P.b - P.a, prevL = iqCalc(P.a - len, P.a), prev = new Map(prevL.map((o) => [o.key, o]));
-    const L = iqCalc(P.a, P.b).map((o) => { const p = prev.get(o.key); o.prev = p && p.lotes >= cf.min ? p.iqf : null; o.sit = iqFicha(o.key).sit || ''; return o; });
-    const aval = L.filter((o) => o.cls), nA = aval.filter((o) => o.cls === 'A').length, nB = aval.filter((o) => o.cls === 'B').length, nC = aval.filter((o) => o.cls === 'C').length;
+    const L = iqCalc(P.a, P.b).map((o) => { const p = prev.get(o.key); o.prev = p && p.lotes >= cf.min ? p.iqf : null; o.pcls = iqClsV(o.prev, cf); o.sit = iqFicha(o.key).sit || ''; return o; });
+    const aval = L.filter((o) => o.cls), mudou = (o) => o.cls && o.pcls && o.pcls !== o.cls, nUp = aval.filter((o) => mudou(o) && o.pcls > o.cls).length, nDn = aval.filter((o) => mudou(o) && o.pcls < o.cls).length, nA = aval.filter((o) => o.cls === 'A').length, nB = aval.filter((o) => o.cls === 'B').length, nC = aval.filter((o) => o.cls === 'C').length;
     const totL = aval.reduce((s, o) => s + o.lotes, 0), media = totL ? Math.round(aval.reduce((s, o) => s + o.iqf * o.lotes, 0) / totL * 10) / 10 : null;
     const semAcesso = !vis('av') || !vis('rnc');
     const meses = Object.keys(IQ.docs).filter((k) => /^m-\d{4}-\d{2}$/.test(k)).sort().reverse();
@@ -9501,21 +9737,33 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
         ${kpiHTML({ l: 'Classe A', v: NF.format(nA), c: MOD.IQF.c, pct: [nA, aval.length, 'dos avaliados', 'ok'], cls: 'ok' })}
         ${kpiHTML({ l: 'Classe B', v: NF.format(nB), sub: 'atenção', c: MOD.IQF.c, pct: [nB, aval.length, 'dos avaliados', 'warn'], cls: nB ? 'warn' : '' })}
         ${kpiHTML({ l: 'Classe C', v: NF.format(nC), sub: 'pedir plano de ação', c: MOD.IQF.c, pct: [nC, aval.length, 'dos avaliados', 'crit'], cls: nC ? 'crit' : '' })}
+        <button type="button" class="kpi iqmov${f.mov ? ' on' : ''}" data-act="iq-mov" style="--c:${MOD.IQF.c}" aria-pressed="${!!f.mov}"><span class="tag"></span><span class="lbl">Mudaram de classe</span><span class="val"><span style="color:var(--ok)">▲${NF.format(nUp)}</span> <span style="color:var(--crit)">▼${NF.format(nDn)}</span></span><span class="sub">${f.mov ? 'mostrando só esses · toque para ver todos' : 'em relação ao período anterior · toque para ver'}</span></button>
       </div>
-      <div class="charts">${chartHTML('Piores notas', barsHTML(aval.slice().sort((p, q) => p.iqf - q.iqf).slice(0, 10).map((o) => ({ label: o.nome, value: o.iqf })), MOD.IQF.c, { suf: '' }), 'os 10 menores IQF do período')}
+      ${iqPrioHTML(aval)}
+      <div class="charts iqcharts">${chartHTML('Mapa de fornecedores', iqMapa(aval), 'volume × nota · toque numa bolinha para abrir a ficha')}
         ${chartHTML('Composição da nota (média dos avaliados)', barsHTML(IQ_CRIT.map(([c, l]) => { const v = aval.filter((o) => o[c] != null); return { label: l + ' (peso ' + cf.pesos[c] + ')', value: v.length ? Math.round(v.reduce((s, o) => s + o[c], 0) / v.length) : 0 }; }), MOD.IQF.c), '0 a 100')}</div>
       <div id="iq-tbl"></div></div>`;
     const draw = () => {
-      const rows = L.filter((o) => txtMatch(f.q, [o.nome]) && (!f.cls || o.cls === f.cls));
+      const rows = L.filter((o) => txtMatch(f.q, [o.nome]) && (!f.cls || o.cls === f.cls) && (!f.mov || mudou(o)));
       const num = (v) => (v == null ? '<span class="muted">—</span>' : NF1.format(v));
-      mountTable($('#iq-tbl'), { id: 'iqf', rows, total: L.length, noun: 'fornecedores', open: true, sort: 'iqf', dir: 1, export: 'Avaliacao_Fornecedores', cols: [
+      const vista = lsGet('cq-iqf-vista', window.matchMedia && window.matchMedia('(max-width: 760px)').matches ? 'cartoes' : 'lista');
+      const tog = `<div class="eqtog" role="group" aria-label="Mostrar como"><button type="button" data-act="iq-vista" data-key="cartoes" aria-pressed="${vista === 'cartoes'}">▦ Cartões</button><button type="button" data-act="iq-vista" data-key="lista" aria-pressed="${vista !== 'cartoes'}">☰ Lista</button></div>`;
+      const movTag = f.mov ? '<button class="btn small" type="button" data-act="iq-mov">Só quem mudou de classe ✕</button>' : '';
+      const cols = [
         { k: 'nome', l: 'Fornecedor', cls: 'clip', w: 30 }, { k: 'cls', l: 'Classe', f: (o) => chipCls(o.cls), x: (o) => o.cls || 'poucos dados' },
         { k: 'iqf', l: 'IQF', r: 1, s: (o) => (o.cls ? o.iqf : 1000 - o.lotes), f: (o) => (o.iqf == null ? '—' : `<b>${NF1.format(o.iqf)}</b>`) },
         { k: 'tend', l: 'Tendência', s: (o) => (o.iqf != null && o.prev != null ? o.iqf - o.prev : -999), f: (o) => (o.iqf != null && o.prev != null ? (Math.abs(o.iqf - o.prev) < 1 ? '<span class="muted">= estável</span>' : o.iqf > o.prev ? `<span style="color:var(--ok)">▲ ${NF1.format(o.iqf - o.prev)}</span>` : `<span style="color:var(--crit)">▼ ${NF1.format(o.prev - o.iqf)}</span>`) : '<span class="muted">—</span>'), x: (o) => (o.iqf != null && o.prev != null ? o.iqf - o.prev : '') },
-        { k: 'lotes', l: 'Lotes', r: 1 }, { k: 'q', l: 'Qualidade', r: 1, f: (o) => num(o.q) }, { k: 'r', l: 'Ocorrências', r: 1, f: (o) => num(o.r) }, { k: 'd', l: 'Documentação', r: 1, f: (o) => num(o.d) }, { k: 'a', l: 'Atend. RNC', r: 1, f: (o) => num(o.a) },
-        { k: 'rnc', l: 'RNC', r: 1 }, { k: 'rep', l: 'Reprovados', r: 1 }, { k: 'sit', l: 'Situação', f: (o) => (o.sit ? `<span class="chip ${o.sit === 'Suspenso' ? 'crit' : o.sit === 'Em desenvolvimento' ? 'warn' : 'ok'}"><i>•</i>${esc(o.sit)}</span>` : '') }] });
+        { k: 'm12', l: '12 meses', nosort: 1, f: (o) => iqSpark(o.key, 96, 24) },
+        { k: 'lotes', l: 'Lotes', r: 1 }, { k: 'q', l: 'Qualidade', r: 1, f: (o) => num(o.q) }, { k: 'r', l: 'Ocorrências', r: 1, f: (o) => num(o.r), hide: 1 }, { k: 'd', l: 'Documentação', r: 1, f: (o) => num(o.d), hide: 1 }, { k: 'a', l: 'Atend. RNC', r: 1, f: (o) => num(o.a), hide: 1 },
+        { k: 'rnc', l: 'RNC', r: 1 }, { k: 'rep', l: 'Reprovados', r: 1, hide: 1 }, { k: 'sit', l: 'Situação', f: (o) => (o.sit ? `<span class="chip ${o.sit === 'Suspenso' ? 'crit' : o.sit === 'Em desenvolvimento' ? 'warn' : 'ok'}"><i>•</i>${esc(o.sit)}</span>` : '') }];
+      if (vista !== 'cartoes') { mountTable($('#iq-tbl'), { id: 'iqf', rows, total: L.length, noun: 'fornecedores', open: true, sort: 'iqf', dir: 1, export: 'Avaliacao_Fornecedores', bar: `<span class="iqtg">${movTag}${tog}</span>`, cols }); return; }
+      const st = S.t.iqf || (S.t.iqf = { sort: 'iqf', dir: 1, page: 0 }), sc = cols.find((c) => c.k === st.sort), sf = sc ? sc.s || ((x) => x[sc.k]) : null;
+      const R = rows.slice(); if (sf) R.sort((p, q) => cmp(sf(p), sf(q)) * st.dir || (p.lotes - q.lotes));
+      $('#iq-tbl').innerHTML = `<div class="tbar iqtbar"><span class="cnt"><b>${NF.format(R.length)}</b> fornecedores${R.length !== L.length ? ` de ${NF.format(L.length)}` : ''}</span><span class="iqtg">${movTag}${tog}</span><button class="btn small" type="button" id="iq-exp">Exportar lista (.xlsx)</button></div>${R.length ? iqCardsHTML(R) : '<div class="empty">Nenhum fornecedor com esses filtros.</div>'}`;
+      $('#iq-exp').onclick = () => exportRows('Avaliacao_Fornecedores', cols.filter((c) => !c.nosort), R);
     };
-    wireFilters('iqf', [['iq-q', 'q'], ['iq-cls', 'cls']], draw);
+    S.iqDraw = draw;
+    wireFilters('iqf', [['iq-q', 'q'], ['iq-cls', 'cls']], () => { S.iqN = 60; draw(); });
     const ps = $('#iq-per'); if (ps) ps.onchange = () => { f.per = ps.value || '12m'; render(); };
     const ms = $('#iq-mes'); if (ms) ms.onchange = () => { if (ms.value) iqMesDialog('m-' + ms.value); ms.value = ''; };
     draw();
@@ -9526,15 +9774,14 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const o = iqCalc(P.a, P.b).find((x) => x.key === k); if (!o) return;
     const fi = iqFicha(k), H = Object.keys(fi.h || {}).map((id) => Object.assign({ id }, fi.h[id])).sort((p, q) => q.at - p.at);
     await resolveNames(H.map((h) => h.by));
-    const mb = monthsBack(12, S.today).map((m) => { const r = iqCalc(m.start, m.end).find((x) => x.key === k); return { label: m.label, tip: MESES_L[m.m - 1] + ' ' + m.y + (r ? ` · IQF ${r.iqf ?? '—'} · ${r.lotes} lote(s)` : ' · sem entregas'), value: r && r.iqf != null ? r.iqf : 0 }; });
     const bar = (c, l, d) => { const v = o[c]; return `<div class="iqb"><span class="iql">${l} <small class="muted">peso ${cf.pesos[c]} · ${d}</small></span><span class="iqbar"><i style="width:${v == null ? 0 : v}%;background:${v == null ? 'transparent' : v >= cf.a ? 'var(--ok)' : v >= cf.b ? 'var(--warn)' : 'var(--crit)'}"></i></span><b>${v == null ? '<span class="muted">sem dado</span>' : NF1.format(v)}</b></div>`; };
     const abertas = o.rncs.filter((x) => x.aberta), w = cw('iqf');
     const EVN = { sit: 'Situação alterada', acao: 'Ação com o fornecedor', nota: 'Anotação' };
-    openDrawer(o.nome, 'Avaliação de fornecedor', `<div class="iqtop"><div class="iqscore ${o.cls ? 'c' + o.cls : ''}"><span>${o.iqf == null ? '—' : NF1.format(o.iqf)}</span><small>IQF</small></div><div style="display:grid;gap:6px">${chipCls(o.cls)}<span class="muted" style="font-size:12.5px">${esc(P.l)} · ${o.lotes} lote(s) · ${o.insp} inspecionado(s) · ${o.rnc} RNC</span>${fi.sit ? `<span>Situação: <b>${esc(fi.sit)}</b></span>` : ''}</div></div>
+    openDrawer(o.nome, 'Avaliação de fornecedor', `<div class="iqtop iqtop2">${iqGauge(o.iqf, 230)}<div style="display:grid;gap:6px">${chipCls(o.cls)}<span class="muted" style="font-size:12.5px">${esc(P.l)} · ${o.lotes} lote(s) · ${o.insp} inspecionado(s) · ${o.rnc} RNC</span>${fi.sit ? `<span>Situação: <b>${esc(fi.sit)}</b></span>` : ''}</div></div>
+      <div class="iqls"><h3>Nota mês a mês</h3>${iqLine(k)}</div>
       <div class="formfoot">${w ? `<button class="btn primary" type="button" data-act="iq-acao" data-key="${esc(k)}">Registrar ação / situação</button>` : ''}<button class="btn" type="button" data-act="iq-print" data-key="${esc(k)}">Relatório de desempenho</button><button class="btn ghost" type="button" data-act="iq-cad" data-key="${esc(o.nome)}">Cadastro do fornecedor</button></div>
       <div class="fsec"><h3>Composição da nota</h3>${IQ_CRIT.map(([c, l, d]) => bar(c, l, d)).join('')}<p class="muted" style="font-size:12px;margin:4px 0 0">Critério sem dado no período não entra na conta.</p></div>
       <div class="fsec"><h3>Números do período</h3><div class="d8g">${[['Lotes recebidos', o.lotes], ['Com certificado', o.cert], ['Aprovados', o.aprov], ['Concessão', o.conc], ['Reprovados', o.rep], ['RNC', o.rnc], ['RNC no prazo', o.rncAval ? o.rncPrazo + ' de ' + o.rncAval : '—']].map(([a, b]) => `<div><b>${a}</b><span>${b}</span></div>`).join('')}</div></div>
-      <div class="fsec"><h3>IQF mês a mês</h3>${colsHTML(mb, MOD.IQF.c)}</div>
       ${o.rncs.length ? `<div class="fsec"><h3>RNC do período (${o.rncs.length})${abertas.length ? ' · ' + abertas.length + ' aberta(s)' : ''}</h3><div class="rel">${o.rncs.slice().reverse().map((x) => `<button type="button" style="--c:${MOD.RNC.c}" data-open="RNC:${esc(x.key)}">${esc(x.num)} <span class="muted">· ${esc(x.motivo || '')} · ${esc(x.status === 'Concluida' ? 'concluída' : x.status === 'Atrasado' ? 'atrasada' : x.status.toLowerCase())}</span></button>`).join('')}</div></div>` : ''}
       <div class="fsec"><h3>Histórico com o fornecedor</h3>${H.length ? `<div class="ihist"><table><tbody>${H.map((h) => `<tr><td class="nw">${fD(h.d)}</td><td><b>${esc(EVN[h.t] || h.t)}</b>${h.sit ? ' · ' + esc(h.sit) : ''}<div class="muted">${esc(h.txt || '')}</div></td><td class="muted nw">${esc(who(h.by))}</td></tr>`).join('')}</tbody></table></div>` : '<span class="muted">Nenhum registro. Use “Registrar ação / situação” para anotar visitas, planos de ação pedidos, suspensões…</span>'}</div>`, MOD.IQF.c);
   }
@@ -10210,6 +10457,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       const a = act.dataset.act, key = act.dataset.key;
       if (a === 'close') { if (TB.scan) TB.scan(); closeLayer(); return; }
       if (a && a.startsWith('tb-') && tbAct(a, key)) return;
+      if (a && a.startsWith('vy-') && vyAct(a, key)) return;
+      if (a === 'bk-dl') { const f = (VY.files || [])[+key]; if (f) saveFile(f[0], f[1]); return; }
       if (a && a.startsWith('rr-')) {
         if (a === 'rr-print') { if (key) rncRelPrint(key); return; }
         if (a === 'rr-fadd') { rrFotoAdd(key); return; }
@@ -10270,6 +10519,9 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       if (a === 'sold-print') { soldPrint(key, false); return; }
       if (a === 'sold-cracha') { soldPrint(key, true); return; }
       if (a === 'cal-sub') { S.calSub = key; lsSet('cq-cal-sub', key); render(); return; }
+      if (a === 'iq-vista') { lsSet('cq-iqf-vista', key); S.iqN = 60; if (S.iqDraw) S.iqDraw(); return; }
+      if (a === 'iq-more') { S.iqN = (S.iqN || 60) + 60; if (S.iqDraw) S.iqDraw(); return; }
+      if (a === 'iq-mov') { const fq = S.f.iqf || (S.f.iqf = {}); fq.mov = !fq.mov; S.iqN = 60; if (S.t.iqf) S.t.iqf.page = 0; render(); return; }
       if (a === 'cal-vista') { lsSet('cq-cal-vista', key); S.calN = 60; if (S.calDraw) S.calDraw(); return; }
       if (a === 'cal-more') { S.calN = (S.calN || 60) + 60; if (S.calDraw) S.calDraw(); return; }
       if (['ins-env', 'ins-imp', 'ins-ver', 'ins-baixa', 'ins-lib', 'ins-etq'].includes(a)) { const x = findRec('INS', key); if (!x) return; ({ 'ins-env': insEnvDialog, 'ins-imp': insImpDialog, 'ins-ver': insVerDialog, 'ins-baixa': insBaixaDialog, 'ins-lib': insLibDialog, 'ins-etq': insLabelDialog })[a](x); return; }
