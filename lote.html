@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;600&display=swap">
 <style>
-:root { --bg: #eef0ed; --surface: #fff; --line: #d3d8d2; --line2: #edf0ec; --ink: #1b211e; --ink2: #48514c; --ink3: #737d77; --av: #1e6b52; --ok: #1d7446; --crit: #b3261e; --warn: #9a6400; --geral: #404040;
+:root { --bg: #eef0ed; --surface: #fff; --line: #d3d8d2; --line2: #edf0ec; --ink: #1b211e; --ink2: #48514c; --ink3: #737d77; --av: #378267; --ok: #1d7446; --crit: #b3261e; --warn: #9a6400; --geral: #6c7772;
   --fb: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif; --fd: "Barlow Condensed", "Arial Narrow", sans-serif; --fm: "IBM Plex Mono", ui-monospace, monospace; }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(--fb); }
@@ -35,8 +35,8 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
 .card.g h3 { background: var(--geral); }
 .card.nc h3 { background: var(--crit); }
 .card.cc h3 { background: #b8860b; }
-.card.i h3 { background: #1f4e79; }
-.hero.i { border-top-color: #1f4e79; }
+.card.i h3 { background: #2d77c1; }
+.hero.i { border-top-color: #2d77c1; }
 .hero.cc { border-top-color: #b8860b; }
 .hero.sr { border-top-color: var(--crit); }
 .r { display: flex; justify-content: space-between; gap: 12px; padding: 9px 14px; border-top: 1px solid var(--line2); }
@@ -45,7 +45,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
 .mono { font-family: var(--fm); font-size: 14px; }
 .ft { font-size: 12px; color: var(--ink3); text-align: center; line-height: 1.5; }
 .msg { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 22px 16px; text-align: center; color: var(--ink2); }
-.spin { width: 30px; height: 30px; border-radius: 50%; margin: 0 auto 10px; background: conic-gradient(#1e6b52 0 60deg, #8a5a00 0 120deg, #980000 0 180deg, #7a2463 0 240deg, #1f4e79 0 300deg, #404040 0); -webkit-mask: radial-gradient(circle, transparent 54%, #000 56%); mask: radial-gradient(circle, transparent 54%, #000 56%); animation: sp 1s linear infinite; }
+.spin { width: 30px; height: 30px; border-radius: 50%; margin: 0 auto 10px; background: conic-gradient(#378267 0 60deg, #996c21 0 120deg, #d9362a 0 180deg, #825ddc 0 240deg, #2d77c1 0 300deg, #6c7772 0); -webkit-mask: radial-gradient(circle, transparent 54%, #000 56%); mask: radial-gradient(circle, transparent 54%, #000 56%); animation: sp 1s linear infinite; }
 @keyframes sp { to { transform: rotate(360deg); } }
 @media (max-width: 380px) { .st { width: 96px; } .code { font-size: 34px; } }
 </style>
@@ -53,8 +53,8 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
 <body>
 <div class="pg" id="pg">
   <div class="top">
-    <div class="cq"><svg viewBox="0 0 512 512" aria-hidden="true"><path d="M60 40 H392 L476 124 V452 Q476 476 452 476 H60 Q36 476 36 452 V64 Q36 40 60 40 Z" fill="#1b211e"/><circle cx="404" cy="108" r="20" fill="#eef0ed"/><text x="256" y="330" text-anchor="middle" style="font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:800;font-size:250px;letter-spacing:-6px" fill="#fff">CQ</text><rect x="110" y="362" width="36.7" height="22" rx="11" fill="#1e6b52"/><rect x="154.7" y="362" width="36.7" height="22" rx="11" fill="#8a5a00"/><rect x="199.3" y="362" width="36.7" height="22" rx="11" fill="#980000"/><rect x="244" y="362" width="36.7" height="22" rx="11" fill="#7a2463"/><rect x="288.7" y="362" width="36.7" height="22" rx="11" fill="#1f4e79"/><rect x="333.3" y="362" width="36.7" height="22" rx="11" fill="#6b6b6b"/></svg>
-      <div class="t"><b>Central da Qualidade</b><span class="st"><i style="background:#1e6b52"></i><i style="background:#8a5a00"></i><i style="background:#980000"></i><i style="background:#7a2463"></i><i style="background:#1f4e79"></i><i style="background:#404040"></i></span></div></div>
+    <div class="cq"><svg viewBox="0 0 512 512" aria-hidden="true"><path d="M60 40 H392 L476 124 V452 Q476 476 452 476 H60 Q36 476 36 452 V64 Q36 40 60 40 Z" fill="#1b211e"/><circle cx="404" cy="108" r="20" fill="#eef0ed"/><text x="256" y="330" text-anchor="middle" style="font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:800;font-size:250px;letter-spacing:-6px" fill="#fff">CQ</text><rect x="110" y="362" width="36.7" height="22" rx="11" fill="#378267"/><rect x="154.7" y="362" width="36.7" height="22" rx="11" fill="#996c21"/><rect x="199.3" y="362" width="36.7" height="22" rx="11" fill="#d9362a"/><rect x="244" y="362" width="36.7" height="22" rx="11" fill="#825ddc"/><rect x="288.7" y="362" width="36.7" height="22" rx="11" fill="#2d77c1"/><rect x="333.3" y="362" width="36.7" height="22" rx="11" fill="#6b6b6b"/></svg>
+      <div class="t"><b>Central da Qualidade</b><span class="st"><i style="background:#378267"></i><i style="background:#996c21"></i><i style="background:#d9362a"></i><i style="background:#825ddc"></i><i style="background:#2d77c1"></i><i style="background:#6c7772"></i></span></div></div>
     <img id="logo" alt="Aços Vital" hidden>
   </div>
   <div id="out"><div class="msg"><div class="spin"></div>Carregando os dados…</div></div>
@@ -63,7 +63,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
 (function () {
   var PID = 'centraldaqualidade-av', KEY = 'AIzaSyDqEDlxnXfFvhcBcX3A_upZ56sGkZ9ckwU';
   var BASE = 'https://firestore.googleapis.com/v1/projects/' + PID + '/databases/(default)/documents/';
-  var SEAL = '<svg class="seal" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke-width="10"><path d="M52.7 12.1A38 38 0 0 1 81.5 28.8" stroke="#1e6b52"/><path d="M84.2 33.3A38 38 0 0 1 84.2 66.7" stroke="#8a5a00"/><path d="M81.5 71.2A38 38 0 0 1 52.7 87.9" stroke="#980000"/><path d="M47.3 87.9A38 38 0 0 1 18.5 71.2" stroke="#7a2463"/><path d="M15.8 66.7A38 38 0 0 1 15.8 33.3" stroke="#1f4e79"/><path d="M18.5 28.8A38 38 0 0 1 47.3 12.1" stroke="#404040"/></g><path d="M35 51 L46 62 L67 39" fill="none" stroke="#1b211e" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var SEAL = '<svg class="seal" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke-width="10"><path d="M52.7 12.1A38 38 0 0 1 81.5 28.8" stroke="#378267"/><path d="M84.2 33.3A38 38 0 0 1 84.2 66.7" stroke="#996c21"/><path d="M81.5 71.2A38 38 0 0 1 52.7 87.9" stroke="#d9362a"/><path d="M47.3 87.9A38 38 0 0 1 18.5 71.2" stroke="#825ddc"/><path d="M15.8 66.7A38 38 0 0 1 15.8 33.3" stroke="#2d77c1"/><path d="M18.5 28.8A38 38 0 0 1 47.3 12.1" stroke="#6c7772"/></g><path d="M35 51 L46 62 L67 39" fill="none" stroke="#1b211e" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   var out = document.getElementById('out');
   function val(f) { if (!f) return ''; if ('stringValue' in f) return f.stringValue; if ('integerValue' in f) return Number(f.integerValue); if ('doubleValue' in f) return f.doubleValue; return ''; }

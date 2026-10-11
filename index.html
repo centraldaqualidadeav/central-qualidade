@@ -22,18 +22,18 @@
   --ink: #1b211e;
   --ink-2: #48514c;
   --ink-3: #737d77;
-  --geral: #404040;
-  --av: #1e6b52;
-  --serv: #8a5a00;
-  --rnc: #980000;
-  --rncc: #7a2463;
-  --cal: #1f4e79;
-  --jur: #0e6e78;
-  --acj: #4a4f9e;
-  --tcr: #5e6b12;
-  --usi: #3d5a6c;
-  --sold: #a3480f;
-  --iqf: #5e3b96;
+  --geral: #6c7772;
+  --av: #378267;
+  --serv: #996c21;
+  --rnc: #d9362a;
+  --rncc: #825ddc;
+  --cal: #2d77c1;
+  --jur: #2e7f87;
+  --acj: #5f67e3;
+  --tcr: #707a2c;
+  --usi: #497a98;
+  --sold: #be5615;
+  --iqf: #986b3e;
   --ok: #1d7446;
   --warn: #9a6400;
   --serious: #b9500e;
@@ -50,8 +50,8 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
-    --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #aab2ae;
-    --av: #52b592; --serv: #d69d3f; --rnc: #ea6b62; --rncc: #d77fc0; --cal: #72a8de; --jur: #4fb9c3; --acj: #9da2ee; --tcr: #b6c45a; --usi: #8fb3c9; --sold: #ec8d52; --iqf: #b39be8;
+    --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #6c7772;
+    --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e;
     --ok: #5dcb8d; --warn: #e3ad48; --serious: #ef8a4c; --crit: #ff6f63; --info: #72a8de; --off: #9aa39f; --focus: #72a8de;
     --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
     color-scheme: dark;
@@ -59,8 +59,8 @@
 }
 :root[data-theme="dark"] {
   --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
-  --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #aab2ae;
-  --av: #52b592; --serv: #d69d3f; --rnc: #ea6b62; --rncc: #d77fc0; --cal: #72a8de; --jur: #4fb9c3; --acj: #9da2ee; --tcr: #b6c45a; --usi: #8fb3c9; --sold: #ec8d52; --iqf: #b39be8;
+  --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #6c7772;
+  --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e;
   --ok: #5dcb8d; --warn: #e3ad48; --serious: #ef8a4c; --crit: #ff6f63; --info: #72a8de; --off: #9aa39f; --focus: #72a8de;
   --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
   color-scheme: dark;
@@ -144,8 +144,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .sec { display: grid; gap: 0; }
 .sec > .block { border-top: 0; border-radius: 0 0 var(--r) var(--r); }
 :root[data-theme="dark"] .band, .band { color: #fff; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .band { color: #0f1211; } }
-:root[data-theme="dark"] .band { color: #0f1211; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .band { color: #fff; } }
+:root[data-theme="dark"] .band { color: #fff; }
 
 /* ---------- KPIs ---------- */
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 10px; }
@@ -626,7 +626,7 @@ textarea.cm-body { min-height: 260px; font-family: var(--f-mono, ui-monospace, m
 :root[data-theme="dark"] .railtop .raileyebrow { color: #a7b0ab; }
 :root[data-theme="dark"] .twrap.twin::-webkit-scrollbar-thumb { background: var(--line-2); }
 :root[data-theme="dark"] .twrap.twin::-webkit-scrollbar-thumb:hover { background: var(--ink-3); }
-:root[data-theme="dark"] .pfun[aria-pressed="true"], :root[data-theme="dark"] .lchip[aria-pressed="true"] { color: #0f1211; }
+
 #cfg-tema .seg { display: inline-flex; width: max-content; margin-top: 8px; }
 
 /* anel de porcentagem nos cartões */
@@ -859,7 +859,7 @@ body.has-tk .toast { bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
   body.railmini .railtop .brand { justify-items: center; padding: 0; }
   body.railmini .railtop .brand .stamp { display: none !important; }
   .railring .r0 { stroke: var(--av); } .railring .r1 { stroke: var(--serv); } .railring .r2 { stroke: var(--rnc); } .railring .r3 { stroke: var(--rncc); } .railring .r4 { stroke: var(--cal); } .railring .r5 { stroke: var(--geral); }
-  .cq-dono .railring .r0 { stroke: #52b592; } .cq-dono .railring .r1 { stroke: #d69d3f; } .cq-dono .railring .r2 { stroke: #ea6b62; } .cq-dono .railring .r3 { stroke: #d77fc0; } .cq-dono .railring .r4 { stroke: #72a8de; } .cq-dono .railring .r5 { stroke: #aab2ae; }
+  .cq-dono .railring .r0 { stroke: #378267; } .cq-dono .railring .r1 { stroke: #996c21; } .cq-dono .railring .r2 { stroke: #d9362a; } .cq-dono .railring .r3 { stroke: #825ddc; } .cq-dono .railring .r4 { stroke: #2d77c1; } .cq-dono .railring .r5 { stroke: #6c7772; }
 }
 
 /* ---------- relatório de RNC (ficha) ---------- */
@@ -973,8 +973,36 @@ body.tabmode .main { padding: 0 !important; }
 .tick { display: flex; align-items: center; gap: 12px; font: 600 16px var(--f-body); color: var(--ink-2); } .tick i { color: var(--ok); font-style: normal; font-weight: 800; font-size: 20px; }
 @media (max-width: 700px) { .tbhd { grid-template-columns: 1fr auto; } .tbhd .lg { display: none; } .tbrow2, .tbfound, .tbsum { grid-template-columns: 1fr; } .tbrowq { grid-template-columns: 1fr; } .tbfotos { grid-template-columns: repeat(3, 1fr); } }
 
-:root[data-theme="dark"] .tbw { --rnc: #a8252a; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tbw { --rnc: #a8252a; } }
+
+/* ---------- Calibração: cartões com o desenho do instrumento ---------- */
+.eqtog { display: inline-flex; } .eqtog button { font: 600 13px var(--f-body); padding: 5px 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); cursor: pointer; }
+.eqtog button:first-child { border-radius: 6px 0 0 6px; } .eqtog button:last-child { border-radius: 0 6px 6px 0; border-left: 0; }
+.eqtog button[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.eqtogbar { display: flex; justify-content: flex-end; margin: 0 0 8px; }
+.eqbar { margin: 0 0 10px; } .eqbar .cnt { margin-right: auto; }
+.eqwall { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+.eqcard { grid-template-columns: 118px 1fr; } .eqcard:hover { border-color: var(--cal); } .eqcard .scs { color: var(--cal); }
+.eqcard.st-ok { --k: var(--ok); } .eqcard.st-warn { --k: var(--warn); } .eqcard.st-crit { --k: var(--crit); } .eqcard.st-info { --k: var(--info); } .eqcard.st-off { --k: var(--off); }
+.eqbox { width: 118px; height: 86px; border-radius: 6px; border: 1px solid var(--line); display: grid; place-items: center; overflow: hidden; background: radial-gradient(120% 90% at 50% 30%, #ffffff 0%, #eef1f3 60%, #e2e7ea 100%); }
+.eqbox svg { width: 108px; height: auto; display: block; }
+.eqbox.apag svg { filter: grayscale(1); opacity: .5; }
+.eqmeta { font-size: 12px; color: var(--ink-3); line-height: 1.45; margin-top: 4px; } .eqmeta b { color: var(--ink-2); font-weight: 600; }
+.eqfh { display: grid; grid-template-columns: 300px 1fr; gap: 16px; align-items: start; margin: 0 0 14px; }
+.eqfh .eqbox { width: 300px; height: 200px; } .eqfh .eqbox svg { width: 280px; }
+.eqfh .scs { color: var(--cal); font: 700 14px var(--f-mono); } .eqfh h3 { margin: 2px 0 6px; font: 700 18px/1.25 var(--f-display); text-transform: uppercase; }
+.eqfh .eqmeta { font-size: 13px; margin-top: 8px; }
+:root[data-theme="dark"] .eqbox { background: radial-gradient(120% 90% at 50% 30%, #4a535b 0%, #343b41 60%, #2a3035 100%); }
+:root[data-theme="dark"] .eqcota rect { fill: #454e55; } :root[data-theme="dark"] .eqcota text { fill: #9cc3ea; } :root[data-theme="dark"] .eqcota path { stroke: #9cc3ea; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .eqbox { background: radial-gradient(120% 90% at 50% 30%, #4a535b 0%, #343b41 60%, #2a3035 100%); }
+  :root:not([data-theme="light"]) .eqcota rect { fill: #454e55; } :root:not([data-theme="light"]) .eqcota text { fill: #9cc3ea; } :root:not([data-theme="light"]) .eqcota path { stroke: #9cc3ea; } }
+@media (max-width: 560px) { .eqwall { grid-template-columns: 1fr; } .eqfh { grid-template-columns: 1fr; } .eqfh .eqbox { width: 100%; } .eqbar .muted { display: none; } }
+@media print { .eqbox { background: none; } }
+
+/* cores de tom único: leitura no modo escuro (ícones do menu mais claros, número de alerta legível) */
+:root[data-theme="dark"] .nav a .sw { color: color-mix(in srgb, var(--c, var(--geral)) 62%, #fff); }
+:root[data-theme="dark"] .nav a[aria-current="page"] .sw { color: #fff; }
+:root[data-theme="dark"] .nav a .ct.hot { color: #2a0d0b; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .nav a .sw { color: color-mix(in srgb, var(--c, var(--geral)) 62%, #fff); } :root:not([data-theme="light"]) .nav a[aria-current="page"] .sw { color: #fff; } :root:not([data-theme="light"]) .nav a .ct.hot { color: #2a0d0b; } }
 
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
@@ -4580,7 +4608,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
         + (x.status !== 'DESCARTADO' ? bt('ins-etq', 'Etiqueta QR') : '')
         + bt('ins-cert', ic.certUrl ? 'Enviar novo certificado' : 'Enviar certificado')
         + editBtn + (x.status !== 'DESCARTADO' ? bt('ins-baixa', 'Dar baixa') : '') : '';
-      extra += '';
+      extra += eqFichaHTML(x);
       S.insHist = insHistHTML(x);
     }
     let rel = '';
@@ -5939,6 +5967,268 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     draw();
     const vw = $('.view', main); if (vw) vw.insertAdjacentHTML('beforeend', rncIndicadores(M));
   };
+  /* ---------- desenho dos instrumentos (Calibração): escolhido sozinho pela descrição ---------- */
+  const EQD = (function () {
+  const r1 = (n) => Math.round(n * 10) / 10;
+  const rr = (x, y, w, h, r) => `M${x + r} ${y}H${x + w - r}Q${x + w} ${y} ${x + w} ${y + r}V${y + h - r}Q${x + w} ${y + h} ${x + w - r} ${y + h}H${x + r}Q${x} ${y + h} ${x} ${y + h - r}V${y + r}Q${x} ${y} ${x + r} ${y}Z`;
+  const rc = (x, y, w, h) => `M${x} ${y}H${x + w}V${y + h}H${x}Z`;
+  const circ = (cx, cy, r) => `M${cx - r} ${cy}A${r} ${r} 0 1 0 ${cx + r} ${cy}A${r} ${r} 0 1 0 ${cx - r} ${cy}Z`;
+  // marcas de escala: de x0 a x1 na linha y, passo st, tamanho len (para baixo se len>0), longas a cada 'ev'
+  const ticks = (x0, x1, y, st, len, ev = 5, lk = 1.8) => { let s = '', i = 0; for (let x = x0; x <= x1 + 0.01; x += st, i++) { const L = i % ev === 0 ? len * lk : len; s += `M${r1(x)} ${y}V${r1(y + L)}`; } return s; };
+  const rot = (cx, cy, ang, pts) => { const a = ang * Math.PI / 180, c = Math.cos(a), s = Math.sin(a); return pts.map(([x, y]) => [r1(cx + x * c - y * s), r1(cy + x * s + y * c)]); };
+  const poly = (pts) => 'M' + pts.map((p) => p.join(' ')).join('L') + 'Z';
+  const arcTicks = (cx, cy, r0, r1_, a0, a1, n, ev) => { let s = ''; for (let i = 0; i <= n; i++) { const a = (a0 + (a1 - a0) * i / n) * Math.PI / 180, rI = i % ev === 0 ? r0 - 2 : r0; s += `M${r1(cx + rI * Math.cos(a))} ${r1(cy + rI * Math.sin(a))}L${r1(cx + r1_ * Math.cos(a))} ${r1(cy + r1_ * Math.sin(a))}`; } return s; };
+
+  const F = {};
+  F.paq = (dig) => {
+    const sw = dig ? 70 : 58;
+    const P = [
+      { k: 'steel', d: rc(6, 30, 110, 10) },
+      { k: 'steel', d: rc(116, 34, 3, 2) },
+      { k: 'steel', d: 'M6 40V62Q6 70 13 74H20V40Z' },
+      { k: 'steel', d: 'M8 30V20L12 13H16V30Z' },
+      { k: dig ? 'steelDark' : 'steel', d: rr(24, 24, sw - 24, 22, 2.5) },
+      { k: dig ? 'steelDark' : 'steel', d: 'M22 46V74H29Q36 70 36 62V46Z' },
+      { k: dig ? 'steelDark' : 'steel', d: 'M18 24V13H22L26 19V24Z' },
+      { k: 'steelDark', d: circ(sw - 12, 50, 3.5) },
+      { k: 'steelDark', d: rc(sw - 20, 20, 6, 4) },
+    ];
+    const D = [{ d: ticks(sw + 2, 114, 30, 2, 2.6, 5, 1.7) }, { d: ticks(sw + 2, 114, 40, 2, -2, 5, 1.6), o: 0.45 }];
+    const T = [];
+    if (dig) {
+      P.push({ k: 'lcd', d: rr(30, 27, 30, 11, 1.5) });
+      P.push({ k: 'black', d: circ(34, 42, 1.6) }, { k: 'black', d: circ(41, 42, 1.6) }, { k: 'black', d: circ(48, 42, 1.6) });
+      T.push({ t: '150.00', x: 45, y: 35.6, s: 7.2, k: 'lcd' });
+    } else {
+      D.push({ d: rc(28, 31, sw - 34, 8) }, { d: ticks(29, sw - 7, 39, 2.4, -2.2, 5, 1.5) });
+    }
+    return { P, D, T };
+  };
+  F.trena = (dig) => {
+    const P = [
+      { k: 'tape', d: rc(66, 59, 44, 8) },
+      { k: 'steel', d: rc(109, 55, 4, 14) },
+      { k: 'yellow', d: rr(12, 10, 62, 60, 13) },
+      { k: 'black', d: rc(46, 6, 16, 5) },
+    ];
+    const D = [{ d: ticks(70, 106, 59, 2, 2.4, 5, 1.7) }], T = [];
+    if (dig) {
+      P.push({ k: 'black', d: rr(19, 18, 48, 34, 6) }, { k: 'lcd', d: rr(24, 23, 38, 15, 2) }, { k: 'steelDark', d: circ(31, 45, 2.4) }, { k: 'steelDark', d: circ(43, 45, 2.4) }, { k: 'steelDark', d: circ(55, 45, 2.4) });
+      T.push({ t: '3.250', x: 43, y: 34.4, s: 9, k: 'lcd' });
+    } else {
+      P.push({ k: 'black', d: circ(43, 40, 20) }, { k: 'steel', d: circ(43, 40, 9) }, { k: 'steelDark', d: circ(43, 40, 2.6) });
+    }
+    return { P, D, T };
+  };
+  F.laser = () => ({
+    P: [
+      { k: 'yellow', d: rr(8, 16, 70, 48, 9) },
+      { k: 'black', d: rr(14, 22, 44, 36, 5) },
+      { k: 'lcd', d: rr(18, 26, 36, 15, 2) },
+      { k: 'steelDark', d: circ(25, 49, 2.6) }, { k: 'steelDark', d: circ(36, 49, 2.6) }, { k: 'steelDark', d: circ(47, 49, 2.6) },
+      { k: 'black', d: rr(76, 33, 6, 14, 1.5) },
+    ],
+    D: [{ d: 'M84 40H110', c: 'needle', w: 1.2, dash: '3 2' }, { d: circ(112, 40, 2), c: 'needle', fill: 1 }],
+    T: [{ t: '3.250', x: 36, y: 37.4, s: 9, k: 'lcd' }],
+  });
+  F.micro = () => ({
+    P: [
+      { k: 'enamel', d: 'M8 26H22V44Q22 60 42 60Q62 60 62 44V28H76V44Q76 73 42 73Q8 73 8 44Z' },
+      { k: 'black', d: rr(33, 63, 18, 7, 2) },
+      { k: 'steel', d: rc(22, 30, 9, 7) },
+      { k: 'steel', d: rc(40, 30, 22, 7) },
+      { k: 'steel', d: rc(76, 29, 20, 9) },
+      { k: 'steel', d: rr(96, 26, 14, 15, 1.5) },
+      { k: 'steel', d: rr(110, 29, 8, 9, 1.2) },
+      { k: 'steelDark', d: rc(64, 20, 6, 8) },
+    ],
+    D: [{ d: 'M76 33.5H96' }, { d: ticks(78, 94, 33.5, 2, -2.4, 5, 1.4) }, { d: 'M99 26V41M102 26V41M105 26V41M108 26V41', o: 0.6 }, { d: 'M112 29V38M114 29V38M116 29V38', o: 0.6 }],
+    T: [],
+  });
+  F.esq = () => ({
+    P: [{ k: 'steel', d: rc(28, 58, 86, 8) }, { k: 'steelDark', d: rc(12, 10, 17, 60) }, { k: 'steel', d: circ(20.5, 22, 2.2) }, { k: 'steel', d: circ(20.5, 38, 2.2) }, { k: 'steel', d: circ(20.5, 54, 2.2) }],
+    D: [{ d: ticks(32, 112, 58, 2, 2.2, 5, 1.8) }],
+    T: [],
+  });
+  F.escala = () => {
+    let num = []; for (let i = 1; i <= 9; i++) num.push({ t: String(i), x: 6 + i * 10.6, y: 44.6, s: 4.4, k: 'mark' });
+    return {
+      P: [{ k: 'steel', d: 'M4 34H112Q117 34 117 40Q117 46 112 46H4Z' }],
+      D: [{ d: ticks(6, 108, 34, 1.06, 2, 10, 2.2) }, { d: circ(112, 40, 1.8) }],
+      T: num,
+    };
+  };
+  F.transf = () => {
+    const blade = poly(rot(60, 62, -48, [[-7, -3], [58, -3], [58, 3], [-7, 3]]));
+    return {
+      P: [
+        { k: 'steel', d: 'M14 62A46 46 0 0 1 106 62ZM88 62A28 28 0 0 0 32 62Z' },
+        { k: 'steelDark', d: rc(6, 62, 108, 7) },
+        { k: 'steel', d: blade },
+        { k: 'steelDark', d: circ(60, 62, 4.5) },
+      ],
+      D: [{ d: arcTicks(60, 62, 42, 46, 180, 360, 18, 3) }],
+      T: [],
+    };
+  };
+  F.bal = () => ({
+    P: [
+      { k: 'steelDark', d: rc(10, 62, 74, 7) },
+      { k: 'steel', d: 'M10 62L22 50H96L84 62Z' },
+      { k: 'black', d: rc(14, 69, 6, 3) }, { k: 'black', d: rc(74, 69, 6, 3) },
+      { k: 'steelDark', d: rc(92, 26, 5, 26) },
+      { k: 'plastic', d: rr(78, 6, 36, 24, 3) },
+      { k: 'lcd', d: rr(82, 10, 28, 11, 1.5) },
+      { k: 'blue', d: circ(86, 25.5, 1.8) }, { k: 'blue', d: circ(92, 25.5, 1.8) }, { k: 'blue', d: circ(98, 25.5, 1.8) },
+    ],
+    D: [{ d: 'M30 52L22 60M46 52L38 60M62 52L54 60M78 52L70 60M94 52L86 60', o: 0.45 }],
+    T: [{ t: '2500', x: 96, y: 18.6, s: 7.6, k: 'lcd' }],
+  });
+  F.mano = () => {
+    const a = (200) * Math.PI / 180 + 0; const ang = -30 * Math.PI / 180;
+    return {
+      P: [
+        { k: 'brass', d: rc(50, 62, 10, 6) }, { k: 'brass', d: rc(46, 67, 18, 6) }, { k: 'brass', d: rc(51, 72, 8, 7) },
+        { k: 'steel', d: circ(55, 35, 29) },
+        { k: 'white', d: circ(55, 35, 24.5) },
+      ],
+      D: [{ d: arcTicks(55, 35, 19.5, 22.5, 135, 405, 20, 5) }, { d: `M55 35L${r1(55 + 18 * Math.cos(ang))} ${r1(35 + 18 * Math.sin(ang))}`, c: 'needle', w: 1.6 }, { d: circ(55, 35, 2.4), c: 'needle', fill: 1 }, { d: 'M51 74H59M51 76.5H59', o: 0.6 }],
+      T: [{ t: 'kgf/cm²', x: 55, y: 50, s: 3.6, k: 'mark' }],
+    };
+  };
+  F.ultra = () => ({
+    P: [
+      { k: 'steel', d: rc(66, 66, 48, 6) },
+      { s: 1, w: 2.4, d: 'M32 72C32 82 74 82 80 60' },
+      { k: 'black', d: rr(75, 38, 12, 22, 3) }, { k: 'steel', d: rc(77, 60, 8, 6) },
+      { k: 'orange', d: rr(12, 6, 40, 66, 7) },
+      { k: 'lcd', d: rr(17, 12, 30, 20, 2) },
+      ...[0, 1, 2].flatMap((r) => [0, 1, 2].map((c) => ({ k: 'black', d: circ(22 + c * 10, 42 + r * 9, 2.7) }))),
+    ],
+    D: [],
+    T: [{ t: '12.7', x: 32, y: 23.6, s: 8.6, k: 'lcd' }, { t: 'mm', x: 41, y: 29.8, s: 3.6, k: 'lcd' }],
+  });
+  F.camada = () => ({
+    P: [
+      { k: 'steelDark', d: rc(64, 68, 50, 5) }, { k: 'paint', d: rc(64, 64, 50, 4) },
+      { s: 1, w: 2.4, d: 'M38 50C38 66 70 60 86 34' },
+      { k: 'black', d: rr(82, 22, 10, 36, 4) }, { k: 'steel', d: rc(84.5, 58, 5, 6) },
+      { k: 'blue', d: rr(8, 12, 60, 38, 6) },
+      { k: 'lcd', d: rr(14, 18, 34, 16, 2) },
+      { k: 'plastic', d: circ(57, 21, 3) }, { k: 'plastic', d: circ(57, 31, 3) }, { k: 'plastic', d: circ(57, 41, 3) },
+      { k: 'plastic', d: rr(16, 39, 12, 6, 2) }, { k: 'plastic', d: rr(32, 39, 12, 6, 2) },
+    ],
+    D: [],
+    T: [{ t: '85 µm', x: 31, y: 29.4, s: 8, k: 'lcd' }],
+  });
+  F.lupa = () => {
+    const h = poly(rot(64, 52, 36, [[4, -4.5], [42, -5.5], [42, 5.5], [4, 4.5]]));
+    return {
+      P: [{ k: 'black', d: h }, { k: 'steel', d: circ(46, 36, 25) }, { k: 'glass', d: circ(46, 36, 20.5) }],
+      D: [{ d: 'M30 38H62' }, { d: ticks(30, 62, 38, 1.6, -2.2, 5, 1.6) }],
+      T: [{ t: '0', x: 30, y: 31.5, s: 4, k: 'mark' }, { t: '5', x: 46, y: 31.5, s: 4, k: 'mark' }, { t: '10', x: 62, y: 31.5, s: 4, k: 'mark' }],
+    };
+  };
+  F.gen = () => ({
+    P: [{ k: 'steelDark', d: rr(16, 44, 34, 26, 1.5) }, { k: 'steel', d: rr(46, 30, 28, 40, 1.5) }, { k: 'steel', d: rr(70, 16, 34, 54, 1.5) }],
+    D: [{ d: 'M76 24H98M76 30H92', o: 0.5 }],
+    T: [],
+  });
+
+  const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase();
+  function fam(desc) {
+    const d = norm(desc);
+    if (/PAQUIMETRO/.test(d)) return /DIGITAL/.test(d) ? 'paqd' : 'paq';
+    if (/LASER/.test(d)) return 'laser';
+    if (/TRENA/.test(d)) return /DIGITAL/.test(d) ? 'trenad' : 'trena';
+    if (/MICROMETRO/.test(d)) return 'micro';
+    if (/ESQUADRO/.test(d)) return 'esq';
+    if (/ESCALA|REGUA/.test(d)) return 'escala';
+    if (/TRANSFERIDOR|GONIOMETRO/.test(d)) return 'transf';
+    if (/BALANCA/.test(d)) return 'bal';
+    if (/MANOMETRO/.test(d)) return 'mano';
+    if (/CAMADA/.test(d)) return 'camada';
+    if (/ULTRASS|ESPESSURA/.test(d)) return 'ultra';
+    if (/LUPA/.test(d)) return 'lupa';
+    return 'gen';
+  }
+  const geo = (f) => (f === 'paqd' ? F.paq(true) : f === 'paq' ? F.paq(false) : f === 'trenad' ? F.trena(true) : f === 'trena' ? F.trena(false) : (F[f] || F.gen)());
+
+  // materiais do estilo B: [claro, médio, escuro, lateral]
+  const MAT = {
+    steel: ['#f6f8fa', '#c3cbd2', '#8f9aa4', '#5c6670'],
+    steelDark: ['#b4bdc5', '#7d8892', '#55606a', '#3a424a'],
+    yellow: ['#ffe27a', '#f6be14', '#c98f00', '#8a6200'],
+    tape: ['#fff1a8', '#f7d23a', '#e0b100', '#9c7b00'],
+    black: ['#5a6168', '#33383d', '#1d2124', '#0d0f11'],
+    lcd: ['#dfe9cb', '#c3d3a4', '#a9bc87', null],
+    white: ['#ffffff', '#f3f5f7', '#dde2e6', '#8f98a0'],
+    orange: ['#ffb27a', '#ef7d34', '#c25816', '#7d3510'],
+    blue: ['#6f9bc8', '#2f6295', '#1d4670', '#102a45'],
+    enamel: ['#8796a3', '#5d6c79', '#3e4a55', '#28313a'],
+    brass: ['#fbe39a', '#d6ac3c', '#9c7616', '#5e4608'],
+    plastic: ['#f7f8f9', '#d9dee2', '#b3bbc2', '#7f8890'],
+    paint: ['#f08a7e', '#d1453a', '#a12c23', '#6b1c16'],
+    glass: ['#f2f9ff', '#cfe4f6', '#9cc4e6', null],
+  };
+  let N = 0;
+  function svg(f, style, opt = {}) {
+    const g = geo(f), id = 'eq' + (++N), B = style === 'B';
+    const used = new Set(g.P.filter((p) => p.k).map((p) => p.k));
+    let defs = '';
+    if (B) {
+      used.forEach((k) => { const m = MAT[k]; defs += k === 'glass' ? `<radialGradient id="${id}${k}" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="${m[0]}"/><stop offset=".6" stop-color="${m[1]}"/><stop offset="1" stop-color="${m[2]}"/></radialGradient>` : `<linearGradient id="${id}${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${m[0]}"/><stop offset=".45" stop-color="${m[1]}"/><stop offset="1" stop-color="${m[2]}"/></linearGradient>`; });
+      defs += `<filter id="${id}sh" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>`;
+    }
+    let s = `<svg class="eqi eq${style}" viewBox="0 0 120 80" role="img" aria-label="${opt.label || ''}"${opt.w ? ` width="${opt.w}"` : ''}><defs>${defs}</defs>`;
+    if (B) s += `<ellipse cx="62" cy="76" rx="50" ry="2.8" fill="#000" opacity=".16" filter="url(#${id}sh)"/>`;
+    g.P.forEach((p) => {
+      if (p.s) { s += B ? `<path d="${p.d}" fill="none" stroke="#23272b" stroke-width="${p.w}" stroke-linecap="round"/><path d="${p.d}" fill="none" stroke="#6a7178" stroke-width="${p.w * 0.35}" stroke-linecap="round" transform="translate(-.4 -.5)"/>` : `<path d="${p.d}" fill="none" stroke="currentColor" stroke-width="${p.w * 0.7}" stroke-linecap="round"/>`; return; }
+      if (B) {
+        const m = MAT[p.k];
+        if (m[3]) s += `<path d="${p.d}" fill="${m[3]}" fill-rule="evenodd" transform="translate(1.4 2)"/>`;
+        s += `<path d="${p.d}" fill="url(#${id}${p.k})" fill-rule="evenodd" stroke="rgba(0,0,0,.38)" stroke-width=".45" stroke-linejoin="round"/>`;
+        if (p.k !== 'lcd' && p.k !== 'glass') s += `<path d="${p.d}" fill="none" stroke="rgba(255,255,255,.55)" stroke-width=".5" fill-rule="evenodd" transform="translate(-.35 -.45)" clip-path="none"/>`;
+        if (p.k === 'glass') s += `<path d="M34 26Q40 18 50 18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".8"/>`;
+      } else {
+        s += `<path d="${p.d}" class="${p.k === 'lcd' ? 'eqlcd' : p.k === 'glass' ? 'eqgl' : 'eqp'}" fill-rule="evenodd"/>`;
+      }
+    });
+    g.D.forEach((d) => {
+      const col = d.c === 'needle' ? (B ? '#c62828' : 'var(--crit)') : B ? '#20262b' : 'currentColor';
+      s += `<path d="${d.d}" fill="${d.fill ? col : 'none'}" stroke="${col}" stroke-width="${d.w || (B ? 0.5 : 0.6)}"${d.dash ? ` stroke-dasharray="${d.dash}"` : ''} opacity="${d.o || (B ? 0.85 : 0.8)}" stroke-linecap="round"/>`;
+    });
+    g.T.forEach((t) => { s += `<text x="${t.x}" y="${t.y}" font-size="${t.s}" text-anchor="middle" font-family="ui-monospace,Consolas,monospace" font-weight="700" fill="${B ? (t.k === 'lcd' ? '#1e2b16' : '#20262b') : 'currentColor'}">${t.t}</text>`; });
+    if (opt.faixa) {
+      // cota: faixa de medição
+      s += `<g class="eqcota"><path d="M8 4H112M8 1.5V6.5M112 1.5V6.5" stroke="${B ? '#2d77c1' : 'currentColor'}" stroke-width=".6" fill="none"/><rect x="40" y="0" width="40" height="8" fill="${B ? '#fff' : 'var(--eq-bg,#fff)'}"/><text x="60" y="6" font-size="5.4" text-anchor="middle" font-family="ui-monospace,Consolas,monospace" font-weight="700" fill="${B ? '#2d77c1' : 'currentColor'}">${opt.faixa}</text></g>`;
+    }
+    return s + '</svg>';
+  }
+  function faixa(desc) {
+    const d = norm(desc).replace(/,/g, '.'); const m = d.match(/(\d+(?:\.\d+)?)\s*A\s*(\d+(?:\.\d+)?)\s*(MM|M|KG|KGF|G|°|GRAUS?)?/);
+    if (m) return `${m[1]}–${m[2]} ${(m[3] || 'mm').toLowerCase().replace('graus', '°').replace('grau', '°')}`;
+    const k = d.match(/(\d+)\s*(KGF|KG)/); if (k) return `até ${k[1]} ${k[2].toLowerCase()}`;
+    return '';
+  }
+  return { fam, svg, faixa };
+  })();
+  const insCls = (x) => { const o = INS_ST.find((s) => s[0] === x.status); return o ? o[1] : 'off'; };
+  const insApag = (x) => x.status === 'FORA DE USO' || x.status === 'DESCARTADO';
+  const insDiasTxt = (x) => (x.dias != null && x.emUso ? (x.dias < 0 ? 'vencido há ' + NF.format(-x.dias) + ' dia(s)' : x.dias === 0 ? 'vence hoje' : 'faltam ' + NF.format(x.dias) + ' dia(s)') : '');
+  const insFaixa = (x) => EQD.faixa(x.faixa) || EQD.faixa(x.desc) || String(x.faixa || '').trim();
+  const eqBox = (x, big) => `<span class="eqbox${insApag(x) ? ' apag' : ''}" aria-hidden="true">${EQD.svg(EQD.fam(x.desc), 'B', big ? { faixa: insFaixa(x) } : {})}</span>`;
+  function calCardsHTML(rows) {
+    const n = S.calN || 60, sl = rows.slice(0, n);
+    return `<div class="swall eqwall">${sl.map((x) => {
+      const dt = insDiasTxt(x), lab = x.status === 'NO LABORATÓRIO' && x.lab ? 'no laboratório ' + esc(x.lab) : '';
+      return `<button type="button" class="scard eqcard st-${insCls(x)}" data-open="INS:${esc(x.key)}">${eqBox(x)}<span class="scb"><span class="scs mono">${esc(x.codigo || '—')}</span><b>${esc(x.desc || 'Instrumento')}</b><span>${chipIns(x.status)}</span><span class="eqmeta"><b>Validade</b> ${fD(x.validade) || '—'}${dt ? ' · ' + dt : ''}<br>${lab || esc([x.depto, x.resp].filter(Boolean).join(' · ') || '—')}</span></span></button>`;
+    }).join('')}</div>${rows.length > n ? `<div class="formfoot" style="justify-content:center;margin-top:12px"><button class="btn" type="button" data-act="cal-more">Mostrar mais ${NF.format(Math.min(60, rows.length - n))} (de ${NF.format(rows.length - n)} restantes)</button></div>` : ''}`;
+  }
+  function eqFichaHTML(x) {
+    const fx = insFaixa(x);
+    return `<div class="eqfh">${eqBox(x, 1)}<div><span class="scs">${esc(x.codigo || '')}</span><h3>${esc(x.desc || 'Instrumento')}</h3>${chipIns(x.status)}<div class="eqmeta">${fx || x.resol ? `<b>Faixa</b> ${esc(fx || '—')}${x.resol ? ' · <b>Resolução</b> ' + esc(x.resol) : ''}<br>` : ''}<b>Validade</b> ${fD(x.validade) || '—'}${insDiasTxt(x) ? ' · ' + insDiasTxt(x) : ''}<br><b>Setor</b> ${esc(x.depto || '—')}${x.resp ? ' · <b>Responsável</b> ' + esc(x.resp) : ''}</div></div></div>`;
+  }
   VIEWS.cal = (main) => {
     const M = S.model, f = S.f.cal || (S.f.cal = {}), sub = S.calSub || 'lista';
     const subBar = `<div class="seg calsub" role="group" aria-label="Ver">${[['lista', 'Instrumentos'], ['crono', 'Cronograma 12 meses'], ['custos', 'Custos e indicadores']].map(([k, l]) => `<button type="button" data-act="cal-sub" data-key="${k}" aria-pressed="${sub === k}">${l}</button>`).join('')}</div>`;
@@ -5951,9 +6241,16 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       <div class="filters">${ftext('fc-q', 'Buscar', f.q, 'código, descrição, nº de série, certificado…', 1)}${fsel('fc-depto', 'Setor', distinct(M.ins, (x) => x.depto), f.depto)}${fsel('fc-resp', 'Responsável', distinct(M.ins, (x) => x.resp), f.resp)}${fsel('fc-tipo', 'Tipo de equipamento', distinct(M.ins, (x) => x.tipo), f.tipo)}${fsel('fc-res', 'Resultado', ['APROVADO', 'AGUARDANDO ANÁLISE', 'SEM CRITÉRIO', 'REPROVADO'], f.res)}<button class="btn ghost" type="button" id="f-clear">Limpar filtros</button></div><div id="tbl"></div></div>`;
     const draw = () => {
       const rows = M.ins.filter((x) => (f.status && f.status.length ? f.status.includes(x.status) : x.status !== 'DESCARTADO') && txtMatch(f.q, [x.codigo, x.desc, x.cert, x.marca, x.serie, x.local, x.lab]) && eqL(x.depto, f.depto) && eqL(x.resp, f.resp) && eqL(x.tipo, f.tipo) && (!f.res || x.resultado === f.res));
-      mountTable($('#tbl'), { id: 'cal', rows, total: M.ins.filter(insVivo).length, noun: 'instrumentos', open: true, sort: 'dias', dir: 1, cols: COLS.INS, export: 'Instrumentos' });
+      const vista = lsGet('cq-cal-vista', 'cartoes'), tog = `<div class="eqtog" role="group" aria-label="Mostrar como"><button type="button" data-act="cal-vista" data-key="cartoes" aria-pressed="${vista === 'cartoes'}">▦ Cartões</button><button type="button" data-act="cal-vista" data-key="lista" aria-pressed="${vista !== 'cartoes'}">☰ Lista</button></div>`;
+      if (vista !== 'cartoes') { $('#tbl').innerHTML = `<div class="eqtogbar">${tog}</div><div id="tbl2"></div>`; mountTable($('#tbl2'), { id: 'cal', rows, total: M.ins.filter(insVivo).length, noun: 'instrumentos', open: true, sort: 'dias', dir: 1, cols: COLS.INS, export: 'Instrumentos' }); return; }
+      const st = S.t.cal || (S.t.cal = { sort: 'dias', dir: 1, page: 0 }), col = COLS.INS.find((c) => c.k === st.sort), sf = col ? col.s || ((x) => x[col.k]) : null;
+      const R = rows.slice(); if (sf) R.sort((a, b) => cmp(sf(a), sf(b)) * st.dir || (a.row - b.row));
+      const tot = M.ins.filter(insVivo).length;
+      $('#tbl').innerHTML = `<div class="tbar eqbar"><span class="cnt"><b>${NF.format(R.length)}</b> instrumentos${R.length !== tot ? ` de ${NF.format(tot)}` : ''} <span class="muted">· toque no cartão para abrir a ficha</span></span>${tog}<button class="btn small" type="button" id="cal-exp">Exportar lista (.xlsx)</button></div>${R.length ? calCardsHTML(R) : '<div class="empty">Nenhum instrumento com esses filtros.</div>'}`;
+      $('#cal-exp').onclick = () => exportRows('Instrumentos', COLS.INS.filter((c) => !c.nosort), R);
     };
-    wireFilters('cal', [['fc-q', 'q'], ['fc-depto', 'depto'], ['fc-resp', 'resp'], ['fc-tipo', 'tipo'], ['fc-res', 'res']], draw);
+    S.calDraw = draw;
+    wireFilters('cal', [['fc-q', 'q'], ['fc-depto', 'depto'], ['fc-resp', 'resp'], ['fc-tipo', 'tipo'], ['fc-res', 'res']], () => { S.calN = 60; draw(); });
     draw();
   };
   /* cronograma: o que vence em cada um dos próximos 12 meses (para juntar os envios ao laboratório) */
@@ -8996,7 +9293,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const stT = (q) => (Q_ST.find((o) => o[0] === q.status) || [])[3] || '';
     if (cracha) {
       const ok = vale.length > 0, lay = 'b';
-      const selo = ok ? SEAL.replace('class="seal"', 'class="selo"').replace(/var\(--(\w+)\)/g, (m, k) => ({ av: '#1e6b52', serv: '#8a5a00', rnc: '#980000', rncc: '#7a2463', cal: '#1f4e79', geral: '#404040' })[k] || '#404040').replace('currentColor', '#1b211e') : '';
+      const selo = ok ? SEAL.replace('class="seal"', 'class="selo"').replace(/var\(--(\w+)\)/g, (m, k) => ({ av: '#378267', serv: '#996c21', rnc: '#d9362a', rncc: '#825ddc', cal: '#2d77c1', geral: '#6c7772' })[k] || '#6c7772').replace('currentColor', '#1b211e') : '';
       const css = lay === 'a'
         ? '.ft{display:grid;gap:2.5mm;align-content:start}.lg{display:block;width:22mm;height:auto;max-height:15mm;object-fit:contain}.selo{width:12mm;height:12mm;flex:none;margin:-.5mm -.5mm 0 0}'
         : '.lg{display:block;width:auto;height:auto;max-height:11mm;max-width:30mm;object-fit:contain;flex:none}.selo{position:absolute;right:3mm;bottom:3mm;width:12mm;height:12mm}';
@@ -9582,7 +9879,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   }
   function tbHead(title) {
     const on = DB.state === 'on' && navigator.onLine !== false;
-    return `<div class="tbhd"><button type="button" class="br" ${tbOnly() ? 'tabindex="-1" style="cursor:default"' : 'data-act="tb-sair" title="Voltar à Central"'}><b>Central da Qualidade</b><span class="stp">${['#1e6b52', '#8a5a00', '#980000', '#7a2463', '#1f4e79', '#6b736f'].map((c) => `<i style="background:${c}"></i>`).join('')}</span><span class="av">Aços Vital · Qualidade</span></button>
+    return `<div class="tbhd"><button type="button" class="br" ${tbOnly() ? 'tabindex="-1" style="cursor:default"' : 'data-act="tb-sair" title="Voltar à Central"'}><b>Central da Qualidade</b><span class="stp">${['#378267', '#996c21', '#d9362a', '#825ddc', '#2d77c1', '#6c7772'].map((c) => `<i style="background:${c}"></i>`).join('')}</span><span class="av">Aços Vital · Qualidade</span></button>
       <img class="lg" src="${LOGO_A}" alt=""><div class="rt"><div><b>${esc(title)}</b><span>${esc(myPessoa() || DB.meName || '')} · <span class="${on ? 'on' : 'off'}">● ${on ? 'conectado' : 'sem conexão'}</span></span></div><i>${esc(((myPessoa() || DB.meName || '?').split(/\s+/).filter(Boolean).map((p) => p[0]).slice(0, 2).join('') || '?').toUpperCase())}</i></div></div>`;
   }
   function tbSteps(n) { return `<div class="tbsteps">${['Material', 'Problema', 'Assinar e enviar'].map((l, i) => `<div class="${i + 1 === n ? 'on' : i + 1 < n ? 'ok' : ''}"><b>${i + 1 < n ? '✓' : i + 1}</b>${l}</div>`).join('')}</div>`; }
@@ -9973,6 +10270,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       if (a === 'sold-print') { soldPrint(key, false); return; }
       if (a === 'sold-cracha') { soldPrint(key, true); return; }
       if (a === 'cal-sub') { S.calSub = key; lsSet('cq-cal-sub', key); render(); return; }
+      if (a === 'cal-vista') { lsSet('cq-cal-vista', key); S.calN = 60; if (S.calDraw) S.calDraw(); return; }
+      if (a === 'cal-more') { S.calN = (S.calN || 60) + 60; if (S.calDraw) S.calDraw(); return; }
       if (['ins-env', 'ins-imp', 'ins-ver', 'ins-baixa', 'ins-lib', 'ins-etq'].includes(a)) { const x = findRec('INS', key); if (!x) return; ({ 'ins-env': insEnvDialog, 'ins-imp': insImpDialog, 'ins-ver': insVerDialog, 'ins-baixa': insBaixaDialog, 'ins-lib': insLibDialog, 'ins-etq': insLabelDialog })[a](x); return; }
       if (a === 'av-conc') { const x = findRec('AV', key); if (x) avConcDialog(x); return; }
       if (a === 'av-lib') { const x = findRec('AV', key); if (x) libDialog([x]); return; }
