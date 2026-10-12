@@ -33,7 +33,7 @@
   --tcr: #707a2c;
   --usi: #497a98;
   --sold: #be5615;
-  --iqf: #986b3e;
+  --iqf: #986b3e; --rif: #1B3A6B;
   --ok: #1d7446;
   --warn: #9a6400;
   --serious: #b9500e;
@@ -51,7 +51,7 @@
   :root:not([data-theme="light"]) {
     --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
     --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #6c7772;
-    --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e;
+    --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2;
     --ok: #5dcb8d; --warn: #e3ad48; --serious: #ef8a4c; --crit: #ff6f63; --info: #72a8de; --off: #9aa39f; --focus: #72a8de;
     --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
     color-scheme: dark;
@@ -60,7 +60,7 @@
 :root[data-theme="dark"] {
   --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
   --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #6c7772;
-  --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e;
+  --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2;
   --ok: #5dcb8d; --warn: #e3ad48; --serious: #ef8a4c; --crit: #ff6f63; --info: #72a8de; --off: #9aa39f; --focus: #72a8de;
   --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
   color-scheme: dark;
@@ -1132,6 +1132,94 @@ html[data-theme="dark"] .btn.cqgo { color: color-mix(in srgb, var(--tcr) 55%, #f
 @media (max-width: 980px) { .cqgrid2 { grid-template-columns: 1fr; } .cqpanel { position: static; max-height: none; } .cqsheet iframe { height: 75vh; } }
 .cqbox.cqtop { padding: 8px 10px; } .cqbox.cqtop .btn { min-height: 0; padding: 5px 8px; font-size: 13px; }
 
+/* ===== Ficha do fornecedor (IQF) · anel + onde perdeu pontos ===== */
+.iqvtop { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.iqring { flex: none; }
+.iqring .tr { stroke: color-mix(in srgb, var(--ink) 13%, transparent); }
+.iqring .vv { fill: var(--ink); font: 800 26px var(--f-display); }
+.iqring .vs { fill: var(--ink-3); font: 600 8px var(--f-body); }
+.iqverd { display: grid; gap: 6px; align-content: center; min-width: 0; flex: 1 1 220px; }
+.iqvt { display: flex; gap: 10px; align-items: center; }
+.iqverd .big { font: 700 22px/1.1 var(--f-display); text-transform: uppercase; }
+.iqverd .why { font-size: 13px; color: var(--ink-2); line-height: 1.4; }
+.iqcls { display: inline-grid; place-items: center; flex: none; width: 30px; height: 30px; border-radius: 8px; font: 800 17px/1 var(--f-display); color: #fff; background: var(--k); }
+:root[data-theme="dark"] .iqcls { color: #111; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .iqcls { color: #111; } }
+.iqvh { font: 600 11px/1.25 var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 8px; }
+.iqstack { display: flex; height: 14px; gap: 2px; }
+.iqstack i { display: block; height: 100%; }
+.iqstack .kept { background: var(--k); border-radius: 7px 0 0 7px; }
+.iqstack .kept:last-child { border-radius: 7px; }
+.iqstack .lost { box-sizing: border-box; border-radius: 0 7px 7px 0; background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--crit) 55%, transparent) 0 3px, transparent 3px 6px); border: 1px solid color-mix(in srgb, var(--crit) 55%, transparent); }
+.iqsl { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-3); margin-top: 5px; }
+.iqlost .r { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 9px 0; border-top: 1px solid var(--line); }
+.iqlost .r:first-child { border-top: 0; }
+.iqlost .t { font-weight: 700; font-size: 14px; }
+.iqlost .t small { font-weight: 500; color: var(--ink-3); font-size: 11.5px; margin-left: 6px; }
+.iqlost .p { font: 700 16px var(--f-body); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.iqlost .p.z { color: var(--ok); } .iqlost .p.m { color: var(--crit); } .iqlost .p.n { color: var(--ink-3); font-weight: 500; font-size: 13px; }
+.iqlost .d { grid-column: 1 / -1; font-size: 13px; color: var(--ink-2); }
+.iqms { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; }
+.iqms > div { display: grid; gap: 3px; justify-items: center; }
+.iqms .sq { width: 100%; aspect-ratio: 1 / 1; border-radius: 6px; display: grid; place-items: center; font: 700 11.5px var(--f-body); font-variant-numeric: tabular-nums; color: var(--k); background: color-mix(in srgb, var(--k) 18%, transparent); border: 1px solid color-mix(in srgb, var(--k) 45%, transparent); }
+.iqms .sq.no { --k: var(--ink-3); background: transparent; border: 1px dashed var(--line-2); font-weight: 500; }
+.iqms small { font-size: 10.5px; color: var(--ink-3); }
+.iqleg { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--ink-3); margin-top: 8px; }
+.iqleg i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; background: var(--k); margin-right: 4px; vertical-align: -1px; }
+@media (max-width: 480px) { .iqms { grid-template-columns: repeat(6, 1fr); } .iqring { width: 112px; } }
+
+/* ===== Inspeção final · RIF ===== */
+.rfbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: space-between; margin: 0 0 12px; }
+.rfmini { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; font-size: 13px; color: var(--ink-2); }
+.rfmini b { font: 800 18px var(--f-display); color: var(--ink); margin-right: 4px; }
+.rfbusca input { width: 280px; max-width: 100%; }
+.rfk { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; align-items: start; }
+.rfcol { background: color-mix(in srgb, var(--ink) 4%, var(--bg)); border: 1px solid var(--line); border-radius: 10px; padding: 8px; display: grid; gap: 8px; min-width: 0; }
+.rfcol > h3 { margin: 0; display: flex; align-items: center; gap: 8px; font: 800 12px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); padding: 4px 4px 2px; }
+.rfcol > h3 i { width: 10px; height: 10px; border-radius: 3px; background: var(--k); flex: none; }
+.rfcol > h3 b { margin-left: auto; font: 800 12px var(--f-body); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1px 8px; color: var(--ink); }
+.rfcol > h3 small { display: block; font: 500 10.5px var(--f-body); letter-spacing: 0; text-transform: none; color: var(--ink-3); }
+.rfvazio { text-align: center; color: var(--ink-3); font-size: 12px; padding: 6px; }
+.rfc { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px 10px; display: grid; gap: 5px; box-shadow: inset 3px 0 0 var(--k); cursor: pointer; min-width: 0; }
+.rfc:hover { border-color: color-mix(in srgb, var(--k) 50%, var(--line)); }
+.rfc .cqtag { background: var(--k); }
+.rfc .cqs span { white-space: nowrap; }
+.rfit { display: grid; gap: 3px; margin: 2px 0; }
+.rfit > div { display: grid; grid-template-columns: 8px minmax(0, 1fr); column-gap: 6px; align-items: baseline; font-size: 11.5px; line-height: 1.3; }
+.rfit > div i { width: 8px; height: 8px; border-radius: 50%; background: var(--k); flex: none; transform: translateY(-1px); }
+.rfit > div span { min-width: 0; }
+.rfit > div em { grid-column: 2; font-style: normal; font-weight: 700; color: var(--k); font-size: 11px; }
+.rfacts .btn { white-space: nowrap; }
+#rf-addit { justify-self: start; width: auto; }
+.rfpb { font-size: 11.5px; background: color-mix(in srgb, var(--warn) 10%, var(--surface)); border: 1px solid color-mix(in srgb, var(--warn) 40%, var(--line)); border-radius: 6px; padding: 5px 7px; }
+.rfpb b { color: var(--warn); }
+.rfmore { border: 0; background: none; font-size: 12px; color: var(--ink-2); text-align: center; padding: 4px; cursor: pointer; text-decoration: underline; }
+.rftop { margin-bottom: 10px; } .rftop .cqpv { font-size: 21px; } .rftop .clip { max-width: 360px; }
+.rfsheet iframe { width: 100%; height: calc(100vh - 140px); min-height: 640px; border: 1px solid var(--line); border-radius: 8px; display: block; background: #F1F4F8; }
+.rfdh .chip { --k: var(--ink-3); color: var(--k); background: color-mix(in srgb, var(--k) 13%, transparent); }
+.rftab { width: 100%; border-collapse: collapse; font-size: 13px; }
+.rftab th { text-align: left; font: 700 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); padding: 6px; border-bottom: 1px solid var(--line); }
+.rftab td { padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.rftab td b { display: block; } .rftab td .muted { display: block; font-size: 12px; }
+.rfacts { text-align: right; } .rfacts .btn { margin: 0 0 4px 4px; }
+.rfh { display: grid; } .rfh > div { display: grid; grid-template-columns: 96px 1fr; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 13px; } .rfh > div:first-child { border-top: 0; } .rfh > div > span { color: var(--ink-3); }
+.rfitrow { display: grid; grid-template-columns: 1fr 80px auto; gap: 6px; margin-bottom: 6px; }
+.rfmots { display: grid; gap: 8px; margin: 10px 0; }
+.vtab { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.vtab th { text-align: left; font: 700 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); padding: 8px; border-bottom: 1px solid var(--line); }
+.vtab td { padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.vtab tr.on td { background: color-mix(in srgb, var(--rif) 9%, var(--surface)); }
+.rfhh { margin: 18px 0 8px; font: 700 12px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.vtl { border: 1px solid var(--line); border-radius: 10px; padding: 4px 14px; background: var(--surface); }
+.vtl .e { display: grid; grid-template-columns: 24px 1fr; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); }
+.vtl .e:first-child { border-top: 0; }
+.vtl .e > i { width: 12px; height: 12px; border-radius: 50%; background: var(--k); margin-top: 4px; }
+.vtl .e p { margin: 2px 0 0; font-size: 13px; color: var(--ink-2); }
+.vtl .e code { font: 600 12.5px var(--f-mono); background: color-mix(in srgb, var(--ink) 7%, transparent); padding: 1px 5px; border-radius: 4px; }
+@media (max-width: 1280px) { .rfk { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .rfk { grid-template-columns: 1fr 1fr; } .rfsheet iframe { height: 80vh; } }
+@media (max-width: 560px) { .rfk { grid-template-columns: 1fr; } .rfh > div { grid-template-columns: 1fr; gap: 2px; } .rfitrow { grid-template-columns: 1fr 64px auto; } }
+
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
 #fb-gate[hidden] { display: none; }
@@ -1195,8 +1283,8 @@ html[data-theme="dark"] .btn.cqgo { color: color-mix(in srgb, var(--tcr) 55%, #f
       <a href="#cal" data-v="cal" style="--c:var(--cal)"><span class="sw"></span>Calibração</a>
       <a href="#sold" data-v="sold" style="--c:var(--sold)"><span class="sw"></span>Soldagem</a>
       <a href="#iqf" data-v="iqf" style="--c:var(--iqf)"><span class="sw"></span>Avaliação de fornecedores</a>
+      <a href="#rif" data-v="rif" style="--c:var(--rif)"><span class="sw"></span>Inspeção final · RIF</a>
       <span class="grp">Ferramentas</span>
-      <a href="#cadastro" data-v="cadastro" style="--c:var(--ok)"><span class="sw"></span>Cadastro</a>
       <a href="#auditoria" data-v="auditoria" style="--c:var(--warn)"><span class="sw"></span>Auditoria<span class="ct" id="ct-aud" hidden></span></a>
       <a href="#relatorio" data-v="relatorio" style="--c:var(--geral)"><span class="sw"></span>Relatório mensal</a>
       <a href="#trello" data-v="trello" style="--c:var(--jur)"><span class="sw"></span>Trello Jurong</a>
@@ -2863,8 +2951,8 @@ re2js/build/index.js:
   const NIVEIS = [['nao', 'Não vê'], ['ver', 'Só consulta'], ['lanca', 'Lança']];
   const SEAL = '<svg class="seal" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke-width="10"><path d="M52.7 12.1A38 38 0 0 1 81.5 28.8" stroke="var(--av)"/><path d="M84.2 33.3A38 38 0 0 1 84.2 66.7" stroke="var(--serv)"/><path d="M81.5 71.2A38 38 0 0 1 52.7 87.9" stroke="var(--rnc)"/><path d="M47.3 87.9A38 38 0 0 1 18.5 71.2" stroke="var(--rncc)"/><path d="M15.8 66.7A38 38 0 0 1 15.8 33.3" stroke="var(--cal)"/><path d="M18.5 28.8A38 38 0 0 1 47.3 12.1" stroke="var(--geral)"/></g><path d="M35 51 L46 62 L67 39" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   let GATE_LOGO = null;
-  const MODCOLS = ['av', 'serv', 'certq', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp', 'tcert', 'tusin', 'rnctab'];
-  const MODULOS = [['av', 'Lotes (AV)'], ['serv', 'Serviços'], ['certq', 'Certificados'], ['rnc', 'RNC Fornecedor'], ['rncc', 'RNC Cliente'], ['ins', 'Calibração'], ['sold', 'Soldagem'], ['iqf', 'Avaliação de fornecedores'], ['trello', 'Trello Jurong'], ['tcert', 'Trello Certificados'], ['tusin', 'Trello Usinagem'], ['acomp', 'Acompanhamento Jurong'], ['rnctab', 'RNC pelo tablet (inspetor)']];
+  const MODCOLS = ['av', 'serv', 'certq', 'rif', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp', 'tcert', 'tusin', 'rnctab'];
+  const MODULOS = [['av', 'Lotes (AV)'], ['serv', 'Serviços'], ['certq', 'Certificados'], ['rif', 'Inspeção final (RIF)'], ['rnc', 'RNC Fornecedor'], ['rncc', 'RNC Cliente'], ['ins', 'Calibração'], ['sold', 'Soldagem'], ['iqf', 'Avaliação de fornecedores'], ['trello', 'Trello Jurong'], ['tcert', 'Trello Certificados'], ['tusin', 'Trello Usinagem'], ['acomp', 'Acompanhamento Jurong'], ['rnctab', 'RNC pelo tablet (inspetor)']];
   /* telas gerais: quem não tem a escolha gravada (cadastros antigos) vê tudo, consulta Configurações e exporta */
   const TELAS = [['painel', 'Painel'], ['alertas', 'Alertas'], ['rastreio', 'Rastreabilidade'], ['auditoria', 'Auditoria'], ['relatorio', 'Relatório mensal'], ['historico', 'Histórico']];
   const TELA_OPC = { config: [['nao', 'Não vê'], ['ver', 'Só consulta'], ['edita', 'Edita']], exportar: [['sim', 'Permite'], ['nao', 'Não permite']] };
@@ -3791,6 +3879,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     SOLD: { c: 'var(--sold)', name: 'Soldagem', one: 'Soldador', view: 'sold', col: 'sold' },
     IQF: { c: 'var(--iqf)', name: 'Avaliação de fornecedores', one: 'Fornecedor', view: 'iqf', col: 'iqf' },
     CERTQ: { c: 'var(--tcr)', name: 'Certificados', one: 'Pedido', view: 'certq', col: 'certq' },
+    RIF: { c: 'var(--rif)', name: 'Inspeção final · RIF', one: 'Pedido', view: 'rif', col: 'rif' },
     GERAL: { c: 'var(--geral)', name: 'Geral', one: '', view: 'painel', col: 'cfg' }
   };
   /* campos gravados no banco (nome) ↔ coluna usada pelo motor de cálculo */
@@ -4192,8 +4281,22 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); CQF.docs = o; CQF.ready = true; CQF.ver++;
       if (!S.model) return;
       updateChrome();
-      if (S.view === 'certq') { if (S.cqSub === 'ed') { cqPanelSync(); return; } const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
+      if (S.view === 'certq' || S.view === 'painel') { if (S.view === 'certq' && S.cqSub === 'ed') { cqPanelSync(); return; } const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
     }, () => { CQF.ready = true; });
+    db.collection('rifp').onSnapshot((snap) => {
+      const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RFI.ped = o; RFI.pedReady = true;
+      if (!S.model) return;
+      updateChrome();
+      if (S.view === 'rif' && !(S.rif && S.rif.sub)) {
+        if ($('#layer .drawer [data-rfk]')) { rfDrawerSync(); render(); }
+        else if ($('#layer').innerHTML) S.stale = true;
+        else { const busca = document.activeElement && document.activeElement.id === 'rf-q'; render(); if (busca) { const i = $('#rf-q'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } } }
+      }
+    }, () => { RFI.pedReady = true; });
+    db.collection('rifv').onSnapshot((snap) => {
+      const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RFI.val = o; RFI.valReady = true;
+      if (S.view === 'rif' && S.rif && S.rif.sub === 'cfg' && S.rif.tab === 'quem') render();
+    }, () => { RFI.valReady = true; });
     db.collection('tusin').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); TU.docs = o; tuAssemble(); TU.ready = true;
       if (S.view === 'tusin' && S.model && !TU.busy) { const ae = document.activeElement; if (!(ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName)) && !$('#layer').innerHTML) render(); }
@@ -4219,15 +4322,15 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   /* acesso por módulo (versão hospedada): 'nao' = não vê, 'ver' = só consulta, 'lanca' = lança */
   /* módulos em teste: a conta dona esconde de todo mundo (inclusive administradores) até liberar.
      Sem escolha gravada, os módulos novos ou reformulados começam escondidos. */
-  const TESTE_MODS = [['ins', 'Calibração', 'reformulada: EMA, histórico, envio ao laboratório, etiqueta QR, cronograma e custos'], ['sold', 'Soldagem', 'módulo novo'], ['iqf', 'Avaliação de fornecedores', 'módulo novo'], ['certq', 'Certificados', 'módulo novo: fila de pedidos do Omie e emissão do certificado de qualidade']];
-  const TESTE_DEF = { ins: true, sold: true, iqf: true, certq: true, rncc8d: true, ticker: true, rncrel: true };
+  const TESTE_MODS = [['ins', 'Calibração', 'reformulada: EMA, histórico, envio ao laboratório, etiqueta QR, cronograma e custos'], ['sold', 'Soldagem', 'módulo novo'], ['iqf', 'Avaliação de fornecedores', 'módulo novo'], ['certq', 'Certificados', 'módulo novo: fila de pedidos do Omie e emissão do certificado de qualidade'], ['rif', 'Inspeção final · RIF', 'módulo novo: quadro da usinagem e relatório de inspeção final (substitui o Trello Usinagem)']];
+  const TESTE_DEF = { ins: true, sold: true, iqf: true, certq: true, rif: true, rncc8d: true, ticker: true, rncrel: true };
   const ocultos = () => { const o = ((DB.cfg || {}).ocultos) || {}; return Object.assign({}, TESTE_DEF, o); };
   const emTeste = (col) => !!ocultos()[col];
   const rncc8dOn = () => DB.owner || !ocultos().rncc8d;
   const ACC = (col) => (!DB.owner && emTeste(col) ? 'nao' : typeof window.CQ_ACCESS === 'function' ? window.CQ_ACCESS(col) : 'lanca');
   const vis = (col) => ACC(col) !== 'nao';
   const cw = (col) => canWrite() && ACC(col) === 'lanca';
-  const VIEW_COL = { av: 'av', serv: 'serv', certq: 'certq', rnc: 'rnc', rncc: 'rncc', cal: 'ins', sold: 'sold', iqf: 'iqf', trello: 'trello', acomp: 'acomp', tcert: 'tcert', tusin: 'tusin' };
+  const VIEW_COL = { av: 'av', serv: 'serv', certq: 'certq', rif: 'rif', rnc: 'rnc', rncc: 'rncc', cal: 'ins', sold: 'sold', iqf: 'iqf', trello: 'trello', acomp: 'acomp', tcert: 'tcert', tusin: 'tusin' };
   const visMod = (m) => !MOD[m] || m === 'GERAL' || vis(MOD[m].col);
   const anyLanca = () => canWrite() && Object.values(VIEW_COL).some((c) => ACC(c) === 'lanca');
   /* telas gerais (versão hospedada): Painel, Alertas, ... 've'/'nao' · Configurações 'nao'/'ver'/'edita'/'admin' · Exportar tudo 'sim'/'nao' */
@@ -4404,10 +4507,11 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
       medal: '<circle cx="12" cy="15" r="5"/><path d="M8.5 11 6 3h4l2 5 2-5h4l-2.5 8"/><path d="m12 13 .9 1.8 2 .3-1.4 1.4.3 2-1.8-1-1.8 1 .3-2-1.4-1.4 2-.3z"/>',
       flame: '<path d="M12 3c1 3.5 4.5 5.2 4.5 9.5A4.5 4.5 0 0 1 12 17a4.5 4.5 0 0 1-4.5-4.5c0-2 1-3.2 2-4.2.3 1.6 1.2 2.4 2 2.7C11 9 11 6 12 3z"/><path d="M4 21h16M8 21l1.5-3h5L16 21"/>',
+      rifi: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9z"/><path d="m9 13.5 2 2 4-4"/>',
       cert: '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><circle cx="12" cy="13" r="2.6"/><path d="m10.6 15.2-1 4 2.4-1.2 2.4 1.2-1-4"/>',
       gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>'
     };
-    const V = { painel: 'grid', alertas: 'bell', rastreio: 'route', av: 'tag', serv: 'wrench', certq: 'cert', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', trello: 'board', tcert: 'board', tusin: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
+    const V = { painel: 'grid', alertas: 'bell', rastreio: 'route', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', trello: 'board', tcert: 'board', tusin: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
     const o = {}; Object.keys(V).forEach((v) => { o[v] = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[V[v]]}</svg>`; });
     return o;
   })();
@@ -4463,6 +4567,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       if (vis('rncc')) { const R = m.rncc || [], a = R.filter((x) => x.status === 'Atrasado' || (x.aberta && x.respData == null && x.prazoResp != null && S.today > x.prazoResp)).length; C.rncc = [a, 1, `${NF.format(R.filter((x) => x.aberta).length)} abertas · ${NF.format(a)} com prazo vencido`]; }
       if (vis('ins')) { const v = m.ins.filter((x) => x.status === 'VENCIDO' || x.status === 'VENCE HOJE' || x.status === 'BLOQUEADO').length, b = m.ins.filter((x) => x.status === 'VENCE EM BREVE').length; C.cal = v ? [v, 1, `${NF.format(v)} vencido(s) ou bloqueado(s) · ${NF.format(b)} vencem em 30 dias`] : [b, 0, `${NF.format(b)} vencem em até 30 dias`]; }
       if (vis('sold') && SD.ready) { const A = soldAlertData(); if (A) C.sold = A.venc.length ? [A.venc.length, 1, `${A.venc.length} qualificação(ões) vencida(s) · ${A.ren.length} para renovar`] : [A.ren.length, 0, `${A.ren.length} qualificação(ões) para renovar`]; }
+      if (vis('rif') && RFI.pedReady) { const P = rfPeds().filter((p) => ['ag', 'pd', 'rp'].includes(rfEtapa(p))); C.rif = [P.length, 0, `${NF.format(P.length)} pedido(s) aguardando inspeção, com pendência ou reprovados`]; }
       if (vis('certq') && CQF.ready) { const P = cqCards().filter((c) => c.st === 'p'), pd = P.filter((c) => c.pend).length; C.certq = [P.length, 0, `${NF.format(P.length)} pedido(s) na fila${pd ? ' · ' + NF.format(pd) + ' com pendência' : ''}`]; }
       if (vis('iqf') && IQ.ready && vis('av')) { const P = iqPeriod('12m'), n = iqCalc(P.a, P.b).filter((o) => o.cls === 'C').length; C.iqf = [n, 0, `${NF.format(n)} fornecedor(es) classe C`]; }
     } catch (e) { console.warn(e); }
@@ -4678,6 +4783,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   async function openRecord(mod, key) {
     if (mod === 'SOLD') { soldFicha(key); return; }
     if (mod === 'IQF') { iqOpen(key); return; }
+    if (mod === 'RIF') { if (RFI.ped[key]) { if (S.view !== 'rif') go('rif'); setTimeout(() => rfOpen(key), 80); } return; }
     if (mod === 'CERTQ') { const c = cqCards().find((o) => cqNum(o) === String(key) || o.k === key); if (c) cqVer(c); return; }
     if (mod === 'RNC' && rncRelOn()) { await rncRelFicha(key); return; }
     const x = findRec(mod, key); if (!x) return;
@@ -4798,6 +4904,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
 
   /* ================= navegação ================= */
   const VIEWS = {};
+  const navOf = (v) => (v === 'cadastro' && FORMS[S.form] ? MOD[FORMS[S.form].mod].view : v);
   function go(v, replace) {
     if (!VIEWS[v] || !viewOk(v)) {
       if (S.model && v !== S.view && VIEWS[S.view] && viewOk(S.view)) { toast('Essa tela não está liberada para você.'); return; }
@@ -4806,7 +4913,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     if (v !== 'cadastro') S.editKey = null;
     S.view = v; S.stale = false;
     try { if (replace) history.replaceState(null, '', '#' + v); else history.pushState(null, '', '#' + v); } catch (e) { /* sem histórico */ }
-    $$('#nav a').forEach((a) => { if (a.dataset.v === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+    $$('#nav a').forEach((a) => { if (a.dataset.v === navOf(v)) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     render(); updateChrome();
     window.scrollTo(0, 0);
   }
@@ -4981,6 +5088,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       </div></div></section>
       ${soldPainelHTML()}
       ${iqPainelHTML()}
+      ${cqPainelHTML()}
     </div>`;
     mountTable($('#p-urg'), { id: 'p-urg', rows: urg, size: 20, noun: 'instrumentos', open: true, sort: 'dias', dir: 1, cols: [
       { k: 'codigo', l: 'Código', cls: 'mono' }, { k: 'desc', l: 'Descrição', cls: 'clip' }, { k: 'depto', l: 'Setor', cls: 'clip' }, { k: 'status', l: 'Status', f: (x) => chipIns(x.status) }, { k: 'validade', l: 'Validade', f: (x) => fD(x.validade), r: 1 }, { k: 'dias', l: 'Dias p/ vencer', r: 1, f: (x) => NF.format(x.dias) }] });
@@ -7093,9 +7201,9 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       return `<label class="field ${f.w || ''}"><span>${esc(f.l)}${req}</span>${ctl}<span class="errmsg" hidden></span></label>`;
     };
     const nx = avUltimo() + 1;
-    main.innerHTML = `<div class="view">${head('Cadastro', 'Cada lançamento é gravado na hora no banco da Qualidade e aparece para toda a equipe.')}
+    main.innerHTML = `<div class="view">${head(MOD.AV.name, 'Cada lançamento é gravado na hora no banco da Qualidade e aparece para toda a equipe.')}
       ${roBanner()}
-      <div class="seg" role="tablist" aria-label="Tipo de cadastro">${formTabs().map(([k, l]) => `<button type="button" role="tab" data-form="${k}" aria-pressed="${S.form === k}">${esc(l)}</button>`).join('')}</div>
+      <div class="formfoot"><button class="btn" type="button" id="avm-back">‹ Voltar</button></div>
       ${st.last ? `<div class="okbox avm-done"><b>${st.last.length} lote(s) gravado(s):</b> ${st.last.map((k) => `<button class="btn small ghost mono" type="button" data-open="AV:${esc(k)}">${esc(k)}</button>`).join(' ')} <button class="btn small" type="button" id="avm-labels">Imprimir etiquetas (${st.last.length})</button> <button class="btn small ghost" type="button" id="avm-done-x">Fechar</button></div>` : ''}
       <section class="sec">${band('AV', 'Novo lançamento de lotes (AV)')}<div class="block"><div class="body">
         <div class="formwrap"><form id="fx" novalidate>${dl}
@@ -7105,7 +7213,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
           <div class="formfoot"><button class="btn primary" type="submit" id="fx-save" ${cw('av') ? '' : 'disabled'}>Gravar lotes</button><label class="check"><input type="checkbox" id="keep" checked> Manter os dados da nota para o próximo lançamento</label><button class="btn ghost" type="button" id="avm-clear">Limpar</button></div>
         </form><aside class="preview" id="pv" aria-live="polite"></aside></div>
       </div></div></section></div>`;
-    $$('[data-form]', main).forEach((b) => b.onclick = () => { S.form = b.dataset.form; S.editKey = null; render(); });
+    { const bk0 = $('#avm-back', main); if (bk0) bk0.onclick = () => go('av'); }
     nota.f.forEach((f) => { const el = $(`#ff-${f.c}`); if (el) el.value = st.nota && st.nota[f.c] != null ? st.nota[f.c] : (f.def ? f.def() : ''); });
     const box = $('#avm-items');
     const readItems = () => $$('.avitem', box).map((el) => { const o = {}; $$('[data-ic]', el).forEach((c) => { o[c.dataset.ic] = c.value.trim(); }); return o; });
@@ -7183,17 +7291,16 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   VIEWS.cadastro = (main) => {
     const fd = FORMS[S.form], editing = !!S.editKey, erec = editing ? findRec(fd.mod, S.editKey) : null;
     if (!S.editKey && typeof window.CQ_ACCESS === 'function' && !formTabs().some(([k]) => k === S.form)) {
-      const ok = formTabs(); if (!ok.length) { main.innerHTML = `<div class="view">${head('Cadastro', '')}<div class="readonly">${esc(TXT.ro)}</div></div>`; return; }
-      S.form = ok[0][0]; VIEWS.cadastro(main); return;
+      const m0 = MOD[fd.mod]; toast(`Você não tem permissão para lançar em ${m0.name}.`, true); go(viewOk(m0.view) ? m0.view : (firstView() || 'painel'), true); return;
     }
     if (S.form === 'av' && !S.editKey) { renderAvMulti(main); return; }
     if (editing && !erec) { S.editKey = null; toast('Esse registro não existe mais.', true); VIEWS.cadastro(main); return; }
     const title = editing ? `${fd.et} ${fd.mod === 'SERV' ? '' : recTitle(erec)}` : fd.t;
     const pickList = fd.pick === 'RNCC' ? (S.model.rncc || []).slice().sort((a, b) => (b.aberta - a.aberta) || (b.row - a.row)).map((x) => ({ v: x.num, key: x.key, d: `${x.status || 'sem status'} · ${x.cliente || 'sem cliente'}` })) : fd.pick === 'RNC' ? S.model.rnc.slice().sort((a, b) => (b.aberta - a.aberta) || (b.row - a.row)).map((x) => ({ v: x.num, key: x.key, d: `${x.status || 'sem status'} · ${x.forn || 'sem fornecedor'}` }))
       : fd.pick === 'INS' ? S.model.ins.slice().sort((a, b) => (a.dias == null ? 1e9 : a.dias) - (b.dias == null ? 1e9 : b.dias)).map((x) => ({ v: x.codigo, key: x.key, d: `${x.desc} · ${x.status ? x.status.toLowerCase() : 'sem data'}` })) : [];
-    main.innerHTML = `<div class="view">${head('Cadastro', 'Cada lançamento é gravado na hora no banco da Qualidade e aparece para toda a equipe.')}
+    main.innerHTML = `<div class="view">${head(MOD[fd.mod].name, 'Cada lançamento é gravado na hora no banco da Qualidade e aparece para toda a equipe.')}
       ${roBanner()}
-      ${editing ? `<div class="formfoot"><button class="btn" type="button" id="ed-back">‹ Voltar</button><span class="muted">Editando um registro existente.</span></div>` : `<div class="seg" role="tablist" aria-label="Tipo de cadastro">${formTabs().map(([k, l]) => `<button type="button" role="tab" data-form="${k}" aria-pressed="${S.form === k}">${esc(l)}</button>`).join('')}</div>`}
+      <div class="formfoot"><button class="btn" type="button" id="ed-back">‹ Voltar</button>${editing ? '<span class="muted">Editando um registro existente.</span>' : ''}</div>
       <section class="sec">${band(fd.mod, title)}<div class="block"><div class="body">
         <div class="formwrap"><form id="fx" novalidate>
           ${fd.pick && !editing ? `<div class="fsec"><h3>Escolha ${fd.pick === 'INS' ? 'o instrumento' : 'a RNC'}</h3><div class="fgrid"><label class="field s2"><span>${fd.pick === 'INS' ? 'Instrumento' : fd.pick === 'RNCC' ? 'RNC de cliente' : 'RNC de fornecedor'} <b>*</b></span><input id="pick" list="dl-pick" autocomplete="off" placeholder="digite o ${fd.pick === 'INS' ? 'código' : 'número'}"><datalist id="dl-pick">${pickList.map((o) => `<option value="${esc(o.v)}">${esc(o.d)}</option>`).join('')}</datalist><span class="errmsg" hidden></span></label></div></div>` : ''}
@@ -7203,8 +7310,8 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       </div></div></section></div>`;
     S.pickRec = null;
     if (S.prefill) { const pf = S.prefill; setTimeout(() => { if (S.prefill === pf) S.prefill = null; }, 0); }
-    $$('[data-form]', main).forEach((b) => b.onclick = () => { S.form = b.dataset.form; S.editKey = null; render(); });
-    const back = $('#ed-back'); if (back) back.onclick = () => { const m = fd.mod, k = S.editKey; go(MOD[m].view); setTimeout(() => openRecord(m, k), 50); };
+    { const bk0 = $('#avm-back', main); if (bk0) bk0.onclick = () => go('av'); }
+    const back = $('#ed-back'); if (back) back.onclick = () => { const m = fd.mod, k = S.editKey; go(MOD[m].view); if (k) setTimeout(() => openRecord(m, k), 50); };
     setFieldValues(fd, erec);
     wireReveal(allFields(fd), (f) => 'ff-' + f.c);
     if (fd.mod === 'RNC') updateLotSug();
@@ -8952,7 +9059,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       const day = dmy(e.at);
       if (day !== lastDay) { html += (lastDay ? '</ul>' : '') + `<div class="dayhead">${day}</div><ul class="hist">`; lastDay = day; }
       const ch = e.campos ? Object.entries(e.campos).map(([n, [a, b]]) => `${esc(FLABEL[n] || n)}: <del>${esc(fmtv(n, a))}</del> → <ins>${esc(fmtv(n, b))}</ins>`).join(' · ') : '';
-      const canOpen = (MODS.includes(e.mod) && e.act !== 'excluído' && findRec(e.mod, e.key)) || (e.mod === 'SOLD' && e.act !== 'excluído' && SD.ready && !!soldW(e.key)) || (e.mod === 'CERTQ' && CQF.ready && cqCards().some((o) => cqNum(o) === String(e.key))) || (e.mod === 'IQF' && /^[a-z0-9_]+$/i.test(e.key) && e.key !== 'cfg' && !/^m-/.test(e.key));
+      const canOpen = (MODS.includes(e.mod) && e.act !== 'excluído' && findRec(e.mod, e.key)) || (e.mod === 'SOLD' && e.act !== 'excluído' && SD.ready && !!soldW(e.key)) || (e.mod === 'RIF' && e.act !== 'excluído' && !!RFI.ped[e.key]) || (e.mod === 'CERTQ' && CQF.ready && cqCards().some((o) => cqNum(o) === String(e.key))) || (e.mod === 'IQF' && /^[a-z0-9_]+$/i.test(e.key) && e.key !== 'cfg' && !/^m-/.test(e.key));
       html += `<li style="--c:${(MOD[e.mod] || MOD.GERAL).c}" ${canOpen ? `data-open="${e.mod}:${esc(e.key)}" tabindex="0"` : ''}><span class="h">${hhmm(e.at)}</span><span class="dot"></span><div><div class="t1"><b>${esc(who(e.by))}</b> ${esc(e.act === 'novo' ? 'lançou' : e.act === 'excluído' ? 'excluiu' : 'alterou')} · ${esc(e.label || e.key)}</div>${ch ? `<div class="t2">${ch}</div>` : ''}</div></li>`;
     });
     out.innerHTML = html + '</ul>';
@@ -9120,7 +9227,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     return hist ? `<div class="ihist"><table><tbody>${hist}</tbody></table></div>` : '<span class="muted">Nenhum backup registrado ainda.</span>';
   }
   async function bkLerTudo(fotos, st) {
-    const cols = ['av', 'serv', 'certq', 'certd', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp', 'tcert', 'tusin', 'cfg', 'meta', 'log', 'pub', 'usuarios', 'rncin'].concat(fotos ? ['rncfot', 'rnccf'] : []);
+    const cols = ['av', 'serv', 'certq', 'certd', 'rifp', 'rif', 'rifv', 'rifn', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp', 'tcert', 'tusin', 'cfg', 'meta', 'log', 'pub', 'usuarios', 'rncin'].concat(fotos ? ['rncfot', 'rnccf'] : []);
     const docs = {}, falhas = [];
     for (const c of cols) {
       st(`Lendo ${c}…`);
@@ -9339,15 +9446,14 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     if (S.cqSub === 'ed' && S.cqEd) { cqEditor(main); return; }
     const adm = cqAdm(), w = cw('certq'), L = cqCards();
     const pend = L.filter((c) => c.st === 'p'), npd = pend.filter((c) => c.pend).length;
-    let sub = S.cqSub || 'pend'; if (sub === 'ind' && !adm) sub = 'pend'; if (sub === 'ed') sub = 'pend'; S.cqSub = sub;
+    let sub = S.cqSub || 'pend'; if (sub === 'ind' || sub === 'ed') sub = 'pend'; S.cqSub = sub;
     const tab = (k, l) => `<button type="button" role="tab" data-act="cq-sub" data-key="${k}" aria-pressed="${sub === k}">${l}</button>`;
     let body = '';
     if (!CQF.ready) body = '<div class="empty">Carregando a fila…</div>';
     else if (sub === 'pend' || sub === 'aguard') body = cqPendHTML(pend, sub === 'aguard');
-    else if (sub === 'conc') body = cqConcHTML(L);
-    else body = cqIndHTML(L);
+    else body = cqConcHTML(L);
     main.innerHTML = `<div class="view">${head('Certificados de qualidade', 'Os pedidos faturados entram pelo arquivo do Omie, saem da fila quando o certificado é salvo e vão para Concluídos.', w ? '<button class="btn" type="button" data-act="cq-avulso">Certificado avulso</button><button class="btn primary" type="button" data-act="cq-imp">Importar lista do Omie (.xlsx)</button>' : '')}
-      <div class="seg cqtabs" role="tablist">${tab('pend', `Pendentes <b>${NF.format(pend.length)}</b>`)}${tab('aguard', `Aguardando solução <b class="${npd ? 'am' : ''}">${NF.format(npd)}</b>`)}${tab('conc', 'Concluídos')}${adm ? tab('ind', '🔒 Indicadores') : ''}</div>
+      <div class="seg cqtabs" role="tablist">${tab('pend', `Pendentes <b>${NF.format(pend.length)}</b>`)}${tab('aguard', `Aguardando solução <b class="${npd ? 'am' : ''}">${NF.format(npd)}</b>`)}${tab('conc', 'Concluídos')}</div>
       ${body}</div>`;
     main.dataset.cqed = '';
     const q2 = $('#cq-q2'); if (q2) { let tm; q2.oninput = () => { clearTimeout(tm); tm = setTimeout(() => { S.cqQ2 = q2.value; const p = q2.selectionStart; render(); const q3 = $('#cq-q2'); if (q3) { q3.focus(); try { q3.setSelectionRange(p, p); } catch (e) { /* ok */ } } }, 250); }; }
@@ -9403,8 +9509,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     const O = Object.values(ops).sort((a, b) => b.w[W.length - 1].i - a.w[W.length - 1].i || cmp(a.nome, b.nome));
     const sum = (o, f) => o.w.reduce((s, x) => s + x[f], 0), mx = Math.max(1, ...O.map((o) => Math.max(...o.w.map((x) => x.i))));
     const eqN = O.reduce((s, o) => s + o.w[W.length - 1].n, 0), eqI = O.reduce((s, o) => s + o.w[W.length - 1].i, 0), eqOk = O.reduce((s, o) => s + o.ok, 0), eqT = O.reduce((s, o) => s + o.tot, 0);
-    return `<div class="cqlock">🔒 Só você e os administradores veem esta aba. Os operadores não têm acesso aos indicadores.</div>
-      <div class="kpis">
+    return `<div class="kpis sm">
         ${k({ l: 'Pendentes', v: NF.format(pend.length), sub: 'pedidos faturados sem certificado', c: CC, pct: [pend.filter((c) => c.porEm).length, pend.length, 'com operador definido', ''] })}
         ${k({ l: 'Aguardando solução', v: NF.format(npd), sub: 'pedidos com pendência registrada', c: CC, pct: [npd, pend.length, 'dos pendentes', 'warn'], cls: npd ? 'warn' : '' })}
         ${k({ l: 'Concluídos no mês', v: NF.format(CM.length), sub: `${NF.format(itensM)} itens · ${NF.format(CMc.length)} certificados · ${NF.format(CMn.length)} sem necessidade`, c: CC, pct: [noPz, base, `no prazo de ${cqCfg().prazo} dia(s) útil(eis)`, 'ok'] })}
@@ -9415,6 +9520,13 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       ${O.length ? `<div class="chart"><h3>Produção por operador<small>últimas 4 semanas · itens, com o nº de certificados embaixo</small></h3><div class="twrap"><table class="t cqsem"><thead><tr><th>Operador</th>${W.map((x) => `<th class="r">sem. ${esc(x.l)}</th>`).join('')}<th class="r cqtot">4 semanas</th><th class="r">Itens / cert.</th></tr></thead><tbody>
         ${O.map((o) => `<tr><td>${esc(o.nome)}</td>${o.w.map((x) => `<td class="r"><span class="cqbar"><i style="width:${Math.round(x.i / mx * 100)}%;background:${cqTom(o.em)}"></i></span><b>${NF.format(x.i)}</b><small>${NF.format(x.n)} cert.</small></td>`).join('')}<td class="r cqtot"><b>${NF.format(sum(o, 'i'))}</b> itens<small>${NF.format(sum(o, 'n'))} certificados</small></td><td class="r"><b>${sum(o, 'n') ? NF1.format(sum(o, 'i') / sum(o, 'n')) : '—'}</b></td></tr>`).join('')}
       </tbody></table></div><p class="muted" style="margin:8px 0 0;font-size:12px">A barra mede os itens: um certificado de 30 itens pesa mais que um de 1 item.</p></div>` : ''}`;
+  }
+
+  /* indicadores de certificados no Painel: só o dono e os administradores (os operadores não veem) */
+  function cqPainelHTML() {
+    if (!cqAdm() || !vis('certq') || !CQF.ready) return '';
+    const L = cqCards(); if (!L.length) return '';
+    return `<section class="sec">${band('CERTQ', 'Indicadores de certificados', 'só dono e administradores')}<div class="block"><div class="body">${cqIndHTML(L)}</div></div></section>`;
   }
 
   /* ---------- ações nos cartões ---------- */
@@ -9805,6 +9917,477 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     }).catch(() => {});
   }
 
+
+  /* ================= INSPEÇÃO FINAL · RIF (usinagem) =================
+     Substitui o quadro INSPEÇÃO USINAGEM do Trello. O relatório é o RIF original (rif.html, aberto dentro da Central);
+     a Central guarda os dados e cuida do quadro de pedidos.
+     rifp/p-<pv>        pedido { pv, cli, vend, obs, at, by, nome, itens: { <id>: item }, pend, h }
+                        item { d, q, o, rif, st ('r' rascunho | 'a' aprovado | 'x' reprovado), num, prog, desc, fin, qf, ins, ant: [{ rif, num, st }] }
+     rif/<id>           relatório (o mesmo objeto do RIF original, sem as fotos) + ped: { k, it }
+     riff/<id>_<foto>   { d: foto em dataURL }
+     rifv/<chave>       validação da combinação de norma { chave, atual, h: { <ts>: evento }, uso, rifs }
+     rifn/<ano>         { ultimo } — numeração RIF-AAAA-NNNNN
+     cfg/main.rif       { codigo, pecas, checklist, produtos, motivos } */
+  const RFI = { ped: {}, pedReady: false, val: {}, valReady: false, fotos: {}, rels: {}, busca: '', todosOk: false };
+  window.__CQ_RIF = RFI; /* consulta nos testes */
+  const RF_ETAPAS = [['ag', 'Aguardando inspeção', 'chegou, sem RIF', 'var(--ink-3)'], ['em', 'Em inspeção', 'RIF em rascunho', 'var(--rif)'], ['pd', 'Pendência', 'motivo escolhido pelo inspetor', 'var(--warn)'], ['rp', 'Reprovado', 'RIF reprovado', 'var(--crit)'], ['ok', 'Aprovado / liberado', 'todos os itens aprovados', 'var(--ok)']];
+  const RF_COR = Object.fromEntries(RF_ETAPAS.map((e) => [e[0], e[3]]));
+  const RF_CHECK = ['Marcação conforme (fabricante, norma, classe, tamanho, material e corrida)', 'Acabamento da face de vedação ranhurado (Ra 3,2 a 6,3 µm)', 'Face de vedação sem riscos radiais ou imperfeições acima do permitido', 'Furação equidistante e fora das linhas de centro', 'Sem trincas, dobras, porosidades ou rebarbas', 'Chanfro de solda conforme (Welding Neck)', 'Rosca conforme e protegida (Roscado)', 'Proteção anticorrosiva / pintura', 'Identificação e embalagem'];
+  const RF_MOTIVOS = ['Acabamento / retrabalho', 'Aguardando sinete', 'Incompleto'];
+  const rfCfg = () => (DB.cfg && DB.cfg.rif) || {};
+  const rfMotivos = () => (Array.isArray(rfCfg().motivos) && rfCfg().motivos.length ? rfCfg().motivos : RF_MOTIVOS);
+  const rfMe = () => myPessoa() || DB.meName || DB.meEmail || 'usuário';
+  const rfAdm = () => bkPode();
+  const rfClone = (o) => JSON.parse(JSON.stringify(o));
+  const rfDig = (v) => String(v == null ? '' : v).replace(/\D/g, '');
+  const rfPid = (pv) => 'p-' + rfDig(pv);
+  const rfVid = (ch) => 'v-' + String(ch).replace(/[^A-Za-z0-9_.-]/g, (c) => '~' + c.charCodeAt(0).toString(16));
+  const rfUid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  const rfIso = () => { const d = new Date(); return d.getFullYear() + '-' + E.pad(d.getMonth() + 1, 2) + '-' + E.pad(d.getDate(), 2); };
+  const rfStamp = () => ({ _u: Date.now(), _ub: DB.me || null });
+  const rfH = (t) => ({ [Date.now() + '-' + TAB]: { t, by: DB.me || null, nome: rfMe(), at: Date.now() } });
+  const rfPeds = () => Object.keys(RFI.ped).map((id) => Object.assign({ id }, RFI.ped[id])).filter((p) => p && p.pv && !p.del);
+  const rfItens = (p) => Object.keys((p && p.itens) || {}).map((id) => Object.assign({ id }, p.itens[id])).filter((i) => !i.del).sort((a, b) => (a.o || 0) - (b.o || 0));
+  function rfEtapa(p) {
+    const it = rfItens(p);
+    if (p.pend) return 'pd';
+    if (it.some((i) => i.st === 'x')) return 'rp';
+    if (it.length && it.every((i) => i.st === 'a')) return 'ok';
+    if (it.some((i) => i.st === 'r')) return 'em';
+    return 'ag';
+  }
+  const rfFim = (p) => Math.max(0, ...rfItens(p).map((i) => i.fin || 0));
+  const rfDH = (ms) => (ms ? (dmy(ms) === dmy(Date.now()) ? 'hoje ' : dmy(ms).slice(0, 5) + ' ') + hhmm(ms) : '');
+  const rfItTxt = (i) => i.desc || i.d || 'item sem descrição';
+  function rfItSt(i) {
+    if (i.st === 'a') return ['ok', (i.num || 'RIF') + ' ✓'];
+    if (i.st === 'x') return ['rp', (i.num || 'RIF') + ' ✕'];
+    if (i.st === 'r') return ['em', i.prog ? i.prog + ' cotas' : 'em inspeção'];
+    return ['ag', 'aguardando'];
+  }
+  async function rfWrite(path, patch) { await soldWrite(path, patch); }
+
+  /* ---------- ponte com o RIF (rif.html) ---------- */
+  function rfInstr() {
+    return ((S.model && S.model.ins) || []).filter((x) => x.codigo && x.emUso && x.status !== 'BLOQUEADO')
+      .map((x) => ({ id: x.key, codigo: x.codigo, descricao: x.desc || '', validade: x.validade != null ? E.isoDate(x.validade) : '' }))
+      .sort((a, b) => a.codigo.localeCompare(b.codigo));
+  }
+  function rfProg(rel) {
+    const cs = (rel.cotas || []).filter((c) => c.sitManual !== 'na');
+    const ok = cs.filter((c) => c.sitManual === 'ok' || c.sitManual === 'nc' || ((c.medidas || []).length && (c.medidas || []).every((m) => String(m == null ? '' : m).trim() !== ''))).length;
+    return cs.length ? ok + ' de ' + cs.length : '';
+  }
+  async function rfFotosSync(rel) {
+    const tem = RFI.fotos[rel.id] || (RFI.fotos[rel.id] = new Set());
+    const atuais = new Set();
+    for (const f of rel.fotos || []) {
+      atuais.add(f.id);
+      if (f.dataUrl && !tem.has(f.id)) { await DB.db.doc('riff/' + rel.id + '_' + f.id).set({ d: f.dataUrl }); tem.add(f.id); }
+    }
+    for (const id of Array.from(tem)) if (!atuais.has(id)) { try { await DB.db.doc('riff/' + rel.id + '_' + id).delete(); } catch (e) { /* já saiu */ } tem.delete(id); }
+    rel.fotos = (rel.fotos || []).map((f) => ({ id: f.id, legenda: f.legenda || '' }));
+  }
+  async function rfSyncItem(rel, fin) {
+    const pk = rel.ped && rel.ped.k, it = rel.ped && rel.ped.it, p = pk && RFI.ped[pk];
+    if (!p || !it) return;
+    const cur = (p.itens || {})[it] || {};
+    const sum = { rif: rel.id, st: fin ? (rel.resultado === 'aprovado' ? 'a' : 'x') : 'r', desc: (rel.produto && rel.produto.descricao) || null, prog: rfProg(rel) || null, num: rel.numero || null, ins: rfMe() };
+    if (fin) { sum.fin = Date.now(); sum.qf = +rfDig(rel.ident && rel.ident.quantidade) || cur.q || null; }
+    if (!fin && ['rif', 'st', 'desc', 'prog', 'num'].every((k) => (cur[k] == null ? null : cur[k]) === sum[k])) return;
+    const patch = Object.assign({ itens: { [it]: sum } }, rfStamp());
+    if (fin) patch.h = rfH(`${rel.numero} ${rel.resultado === 'aprovado' ? 'aprovado' : 'reprovado'} · ${rfItTxt(Object.assign({}, cur, sum))}`);
+    await rfWrite('rifp/' + pk, patch);
+  }
+  async function rfRelGet(id) {
+    const s = await DB.db.doc('rif/' + id).get();
+    if (!s.exists) return null;
+    const r = s.data();
+    RFI.fotos[id] = new Set();
+    for (const f of r.fotos || []) {
+      try { const fs = await DB.db.doc('riff/' + id + '_' + f.id).get(); if (fs.exists) { f.dataUrl = fs.data().d; RFI.fotos[id].add(f.id); } } catch (e) { /* foto não lida */ }
+    }
+    r.fotos = (r.fotos || []).filter((f) => f.dataUrl);
+    RFI.rels[id] = { status: r.status, ped: r.ped || null };
+    return r;
+  }
+  async function rfRelSave(rel0) {
+    const rel = rfClone(rel0), cur = RFI.rels[rel.id];
+    if (cur && cur.status === 'finalizado') throw new Error('Relatório finalizado não pode ser alterado.');
+    if (!cw('rif')) throw new Error('Seu acesso ao RIF é só de consulta.');
+    await rfFotosSync(rel);
+    await DB.db.doc('rif/' + rel.id).set(rel);
+    RFI.rels[rel.id] = { status: rel.status, ped: rel.ped || null };
+    await rfSyncItem(rel, false);
+  }
+  async function rfRelDel(id) {
+    const cur = RFI.rels[id] || {};
+    if (cur.status === 'finalizado') throw new Error('Relatório finalizado não pode ser excluído.');
+    for (const fid of Array.from(RFI.fotos[id] || [])) { try { await DB.db.doc('riff/' + id + '_' + fid).delete(); } catch (e) { /* já saiu */ } }
+    await DB.db.doc('rif/' + id).delete();
+    const pk = cur.ped && cur.ped.k, it = cur.ped && cur.ped.it, p = pk && RFI.ped[pk], item = p && (p.itens || {})[it];
+    if (item && item.rif === id) {
+      const ant = (item.ant || []).slice(), volta = ant.pop();
+      await rfWrite('rifp/' + pk, Object.assign({ itens: { [it]: volta ? { rif: volta.rif, st: volta.st, num: volta.num, prog: null, ant } : { rif: null, st: null, num: null, prog: null, desc: null } }, h: rfH('Rascunho de RIF excluído · ' + rfItTxt(item)) }, rfStamp()));
+    }
+    delete RFI.rels[id];
+  }
+  async function rfRelFin(rel0) {
+    if (!cw('rif')) throw new Error('Seu acesso ao RIF é só de consulta.');
+    const rel = rfClone(rel0);
+    if ((RFI.rels[rel.id] || {}).status === 'finalizado') throw new Error('Este relatório já foi finalizado.');
+    await lock('RIF');
+    const ano = new Date().getFullYear(), nref = DB.db.doc('rifn/' + ano), ns = await nref.get();
+    const seq = (ns.exists ? +(ns.data().ultimo || 0) : 0) + 1;
+    await nref.set({ ano, ultimo: seq, _u: Date.now(), _ub: DB.me || null });
+    const agora = new Date().toISOString();
+    Object.assign(rel, { status: 'finalizado', ano, seq, numero: 'RIF-' + ano + '-' + E.pad(seq, 5), finalizadoEm: agora, atualizadoEm: agora, inspetor: rfMe().toLocaleUpperCase('pt-BR'), assinEletr: { nome: rfMe(), uid: DB.me || null, email: DB.meEmail || '', em: agora } });
+    const comFotos = rfClone(rel);
+    await rfFotosSync(rel);
+    await DB.db.doc('rif/' + rel.id).set(rel);
+    RFI.rels[rel.id] = { status: 'finalizado', ped: rel.ped || null };
+    const ch = rel.produto && rel.produto.chave, v = ch && RFI.val[rfVid(ch)];
+    if (v && v.atual) { try { await rfWrite('rifv/' + rfVid(ch), { uso: (v.uso || 0) + 1, rifs: { [rel.numero]: Date.now() } }); } catch (e) { /* contagem de uso não gravada */ } }
+    await rfSyncItem(rel, true);
+    logEntry('RIF', rel.ped ? rel.ped.k : rel.id, 'alterado', `${rel.numero} ${rel.resultado} · PV ${rfDig(rel.ident && rel.ident.pv)} · ${(rel.produto && rel.produto.descricao) || ''}`, null);
+    return comFotos;
+  }
+  function rfCfgGet(k) {
+    const c = rfCfg();
+    if (k === 'empresa') return { nome: 'Aços Vital', sigla: 'AV', logo: DB.logo || null, codigoFormulario: c.codigo || '' };
+    if (k === 'pecasPadrao') return c.pecas || 3;
+    if (k === 'instrumentos') return rfInstr();
+    if (k === 'inspetores') return [];
+    if (k === 'checklist') return Array.isArray(c.checklist) ? rfClone(c.checklist) : null;
+    if (k === 'produtos') return Array.isArray(c.produtos) ? rfClone(c.produtos) : null;
+    if (k === 'senhaHash') return 'central';
+    if (k === 'numeracao') { const ano = new Date().getFullYear(); return DB.db.doc('rifn/' + ano).get().then((s) => (s.exists ? { ano, ultimo: +(s.data().ultimo || 0) } : null)).catch(() => null); }
+    return null;
+  }
+  async function rfCfgSet(k, v) {
+    const m = { checklist: 'checklist', produtos: 'produtos', pecasPadrao: 'pecas' }, val = v == null ? null : rfClone(v);
+    let patch = null;
+    if (m[k]) patch = { [m[k]]: val };
+    else if (k === 'empresa') patch = { codigo: (val && val.codigoFormulario) || '' };
+    if (!patch) return;
+    if (!rfAdm()) { if (k === 'checklist' || k === 'produtos') return; throw new Error('Só dono e administradores alteram as configurações do RIF.'); }
+    await DB.db.doc('cfg/main').update({ rif: patch });
+    logEntry('GERAL', 'cfg', 'alterado', 'Configurações do RIF: ' + k, null);
+  }
+  async function rfValSave(ch, info0) {
+    if (!cw('rif')) throw new Error('Seu acesso ao RIF é só de consulta.');
+    const info = rfClone(info0 || {}), id = rfVid(ch), cur = RFI.val[id] || {}, ts = Date.now();
+    const ev = { acao: info.correcoes ? 'corrigiu' : 'validou', by: DB.me || null, nome: rfMe(), em: ts, motivo: info.motivo || '', correcoes: info.correcoes || null, orig: info.orig || null, antes: cur.atual ? (cur.atual.correcoes || null) : null };
+    const atual = { responsavel: rfMe().toLocaleUpperCase('pt-BR'), data: info.data || dmy(ts), em: info.em || new Date(ts).toISOString(), motivo: info.motivo || '', correcoes: info.correcoes || null, by: DB.me || null };
+    const ref = DB.db.doc('rifv/' + id);
+    await ref.merge({ chave: ch, atual: null });
+    await ref.merge({ atual, h: { [ts + '-' + TAB]: ev } });
+    logEntry('RIF', id, 'alterado', `Norma ${ev.acao === 'corrigiu' ? 'corrigida' : 'validada'}: ${ch.split('|').join(' · ')}`, null);
+  }
+  async function rfValDel(ch) {
+    if (!rfAdm()) throw new Error('Só dono e administradores podem desfazer uma validação.');
+    const id = rfVid(ch), cur = RFI.val[id] || {}, ts = Date.now();
+    await DB.db.doc('rifv/' + id).merge({ chave: ch, atual: null, h: { [ts + '-' + TAB]: { acao: 'desfez', by: DB.me || null, nome: rfMe(), em: ts, antes: cur.atual ? (cur.atual.correcoes || null) : null } } });
+    logEntry('RIF', id, 'alterado', `Validação desfeita: ${ch.split('|').join(' · ')}`, null);
+  }
+  window.CQ_RIF_HOST = {
+    me: () => ({ nome: rfMe(), uid: DB.me || null, email: DB.meEmail || '', admin: rfAdm() }),
+    relGet: rfRelGet, relSave: rfRelSave, relDel: rfRelDel, relFin: rfRelFin,
+    cfgGet: rfCfgGet, cfgSet: rfCfgSet,
+    valList: () => { const o = {}; Object.values(RFI.val).forEach((v) => { if (v && v.atual && v.chave) o[v.chave] = Object.assign({ chave: v.chave }, v.atual); }); return o; },
+    valSave: rfValSave, valDel: rfValDel,
+    evento: (t) => { if (t === 'lista') setTimeout(rfVoltar, 0); }
+  };
+
+  /* ---------- relatório novo (mesmo formato do RIF original) ---------- */
+  function rfNovoRel(p, item, base) {
+    const c = rfCfg(), check = Array.isArray(c.checklist) ? c.checklist : RF_CHECK.map((t) => ({ id: rfUid(), texto: t }));
+    const rel = {
+      id: rfUid(), status: 'rascunho', numero: null, criadoEm: new Date().toISOString(), dataInspecao: rfIso(),
+      produto: { modo: 'norma', normaId: 'ASME_B16_5', sel: {}, descricao: '' },
+      ident: { cliente: (p.cli || '').toLocaleUpperCase('pt-BR'), material: '', quantidade: item.q ? String(item.q) : '', pv: rfDig(p.pv), vendedor: (p.vend || '').toLocaleUpperCase('pt-BR'), lote: '', corrida: '', desenho: '', sinete: '' },
+      pecas: c.pecas || 3, cotas: [], visual: check.map((i) => ({ id: i.id || rfUid(), texto: i.texto, resp: null })), instrumentos: [], fotos: [],
+      resultado: null, observacoes: '', inspetor: rfMe().toLocaleUpperCase('pt-BR'), assinatura: null, ped: { k: p.id, it: item.id }
+    };
+    if (base) { /* reinspeção: mesmo produto e identificação, medições em branco */
+      rel.produto = rfClone(base.produto || rel.produto); delete rel.produto.validacao;
+      rel.ident = Object.assign(rfClone(base.ident || {}), { pv: rel.ident.pv });
+      rel.pecas = base.pecas || rel.pecas;
+      rel.cotas = (base.cotas || []).map((x) => Object.assign(rfClone(x), { id: rfUid(), medidas: new Array(rel.pecas).fill(''), sitManual: x.sitManual === 'na' ? 'na' : null, just: null }));
+      rel.instrumentos = rfClone(base.instrumentos || []);
+      rel.visual = rel.visual.concat((base.visual || []).filter((v) => v.origem === 'norma').map((v) => ({ id: rfUid(), texto: v.texto, resp: null, origem: 'norma' })));
+      rel.reinspecao = base.numero || null;
+    }
+    return rel;
+  }
+  async function rfFazer(pk, it, reinsp) {
+    const p = Object.assign({ id: pk }, RFI.ped[pk] || {}), item = Object.assign({ id: it }, (p.itens || {})[it] || {});
+    if (!p.pv || !item) return;
+    if (!cw('rif')) { toast('Seu acesso ao RIF é só de consulta.', true); return; }
+    try {
+      let base = null;
+      if (reinsp && item.rif) base = await rfRelGet(item.rif);
+      const rel = rfNovoRel(p, item, base);
+      await DB.db.doc('rif/' + rel.id).set(rel);
+      RFI.rels[rel.id] = { status: 'rascunho', ped: rel.ped };
+      const ant = (item.ant || []).slice(); if (reinsp && item.rif) ant.push({ rif: item.rif, num: item.num || null, st: item.st || null });
+      await rfWrite('rifp/' + pk, Object.assign({ itens: { [it]: { rif: rel.id, st: 'r', num: null, prog: null, fin: null, ant } }, h: rfH((reinsp ? 'Reinspeção iniciada · ' : 'RIF iniciado · ') + rfItTxt(item)) }, rfStamp()));
+      rfEditar(pk, it, rel.id);
+    } catch (err) { toast('Não foi possível começar o RIF: ' + ((err && (err.message || err.code)) || err), true); }
+  }
+  function rfEditar(pk, it, relId) {
+    closeLayer();
+    S.rif = { sub: 'ed', k: pk, it, rel: relId };
+    if (S.view !== 'rif') go('rif'); else render();
+  }
+  function rfVoltar() {
+    const k = S.rif && S.rif.k;
+    S.rif = null;
+    if (S.view === 'rif') render(); else go('rif');
+    if (k && RFI.ped[k]) setTimeout(() => rfOpen(k), 60);
+  }
+  function rfSair() {
+    const fr = $('#rif-frame');
+    try { if (fr && fr.contentWindow && fr.contentWindow.RIF && fr.contentWindow.RIF.app) { const cur = S.rif; fr.contentWindow.location.hash = '#/relatorios'; setTimeout(() => { if (S.rif && S.rif === cur) rfVoltar(); }, 2500); return; } } catch (e) { /* sem acesso ao quadro */ }
+    rfVoltar();
+  }
+
+  /* ---------- quadro ---------- */
+  function rfCardHTML(p) {
+    const et = rfEtapa(p), it = rfItens(p), q = it.reduce((s, i) => s + (+i.q || 0), 0);
+    const quando = et === 'ok' ? 'liberado ' + rfDH(rfFim(p)) : et === 'ag' ? 'chegou ' + rfDH(p.at) : et === 'em' ? '' : rfDH(p._u || p.at);
+    const tag = p.pend ? `<span class="cqtag">${esc((p.pend.m || 'pendência').split('/')[0].trim().split(' ').pop().toLowerCase())}</span>` : '';
+    const ins = it.map((i) => i.ins).filter(Boolean).pop() || p.nome || '';
+    return `<div class="rfc" style="--k:${RF_COR[et]}" data-act="rf-ped" data-key="${esc(p.id)}" role="button" tabindex="0">
+      <div class="cqh"><b class="cqpv">${esc(rfDig(p.pv))}</b>${tag}</div>
+      <div class="cqs muted"><span>${it.length} ${it.length === 1 ? 'item' : 'itens'}${q ? ' · ' + NF.format(q) + ' pç' : ''}</span>${quando ? `<span>${esc(quando)}</span>` : ''}</div>
+      <div class="cqcli">${esc(p.cli || '—')}</div>
+      <div class="rfit">${it.map((i) => { const [s, t] = rfItSt(i); return `<div style="--k:${RF_COR[s]}"><i></i><span>${esc(rfItTxt(i))}${i.q ? ' · ' + esc(String(i.q)) + ' pç' : ''}</span><em>${esc(t)}</em></div>`; }).join('') || '<div class="muted">sem itens</div>'}</div>
+      ${p.pend ? `<div class="rfpb"><b>${esc(p.pend.m || 'Pendência')}</b>${p.pend.j ? ' · ' + esc(p.pend.j) : ''}</div>` : ''}
+      <div class="cqf">${ins ? `<span class="cqwho st" style="--q:var(--rif)"><i>${esc(ins.split(/\s+/).map((x) => x[0]).slice(0, 2).join('').toUpperCase())}</i>${esc(ins.split(/\s+/)[0])}</span>` : '<span></span>'}<button class="btn small" type="button" data-act="rf-ped" data-key="${esc(p.id)}">Abrir</button></div></div>`;
+  }
+  function rfConta() {
+    const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+    const seg = new Date(hoje); seg.setDate(seg.getDate() - ((seg.getDay() + 6) % 7));
+    let h = 0, s = 0;
+    rfPeds().forEach((p) => rfItens(p).forEach((i) => { if (i.fin && (i.st === 'a' || i.st === 'x')) { const q = +i.qf || +i.q || 0; if (i.fin >= hoje.getTime()) h += q; if (i.fin >= seg.getTime()) s += q; } }));
+    return { h, s };
+  }
+  VIEWS.rif = (main) => {
+    S.rif = S.rif || null;
+    if (!(S.rif && S.rif.sub)) main.dataset.rifed = '';
+    if (S.rif && S.rif.sub === 'ed') { rfEdHTML(main); return; }
+    if (S.rif && S.rif.sub === 'cfg') { rfCfgHTML(main); return; }
+    const w = cw('rif');
+    if (!RFI.pedReady) { main.innerHTML = `<div class="view">${head('Inspeção final · RIF', '')}<div class="loading"><span class="spin"></span><span>Carregando os pedidos…</span></div></div>`; return; }
+    const q = E.key(RFI.busca || ''), P = rfPeds().filter((p) => !q || E.key([p.pv, p.cli, p.vend, ...rfItens(p).map((i) => rfItTxt(i) + ' ' + (i.num || ''))].join(' ')).includes(q));
+    const por = {}; RF_ETAPAS.forEach(([k]) => { por[k] = []; });
+    P.forEach((p) => por[rfEtapa(p)].push(p));
+    const lim = Date.now() - 30 * 864e5;
+    por.ok = por.ok.filter((p) => q || RFI.todosOk || rfFim(p) >= lim).sort((a, b) => rfFim(b) - rfFim(a));
+    ['ag', 'em', 'pd', 'rp'].forEach((k) => por[k].sort((a, b) => (a.at || 0) - (b.at || 0)));
+    const okTot = P.filter((p) => rfEtapa(p) === 'ok').length, c = rfConta(), abertos = P.filter((p) => rfEtapa(p) !== 'ok').length;
+    const acts = (w ? '<button class="btn" type="button" data-act="rf-novo" data-key="chegada">+ Registrar chegada</button><button class="btn primary" type="button" data-act="rf-novo" data-key="rif">Novo RIF</button>' : '') + `<button class="btn ghost" type="button" data-act="rf-cfg">${rfAdm() ? 'Configurações' : 'Normas'}</button>`;
+    main.innerHTML = `<div class="view">${head('Inspeção final · RIF', 'Pedidos fabricados na usinagem: chegada, inspeção e liberação. O relatório (RIF) é feito item por item.', acts)}
+      <div class="rfbar"><div class="rfmini"><span><b>${NF.format(c.h)}</b>peças inspecionadas hoje</span><span><b>${NF.format(c.s)}</b>na semana</span><span><b>${NF.format(abertos)}</b>pedido(s) em aberto</span></div>
+      <label class="rfbusca"><input id="rf-q" type="search" placeholder="PV, cliente, peça ou RIF…" value="${esc(RFI.busca || '')}" autocomplete="off"></label></div>
+      <div class="rfk">${RF_ETAPAS.map(([k, t, sub, cor]) => `<div class="rfcol" style="--k:${cor}"><h3><i></i><span>${t}<small>${sub}</small></span><b>${por[k].length}</b></h3>${por[k].map(rfCardHTML).join('') || '<div class="rfvazio">—</div>'}${k === 'ok' && !q && okTot > por.ok.length ? `<button class="rfmore" type="button" data-act="rf-todos">ver todos (${NF.format(okTot)})</button>` : k === 'ok' && RFI.todosOk && !q ? '<button class="rfmore" type="button" data-act="rf-todos">só os últimos 30 dias</button>' : ''}</div>`).join('')}</div></div>`;
+    const inp = $('#rf-q'); if (inp) { inp.oninput = () => { RFI.busca = inp.value; clearTimeout(RFI.tq); RFI.tq = setTimeout(() => { render(); const i2 = $('#rf-q'); if (i2) { i2.focus(); i2.setSelectionRange(i2.value.length, i2.value.length); } }, 250); }; }
+  };
+  function rfEdHTML(main) {
+    if (main.dataset.rifed === 'ed:' + S.rif.rel && $('#rif-frame', main)) return; /* não recarrega o RIF quando outra parte da Central atualiza a tela */
+    main.dataset.rifed = 'ed:' + S.rif.rel;
+    const p = RFI.ped[S.rif.k] || {}, item = (p.itens || {})[S.rif.it] || {};
+    main.innerHTML = `<div class="view rfed"><div class="cqfrom rftop"><button class="btn small" type="button" data-act="rf-sair">‹ Voltar ao quadro</button><b class="cqpv">PV ${esc(rfDig(p.pv))}</b><span class="clip">${esc(p.cli || '')}</span><span class="muted clip">${esc(rfItTxt(item))}${item.q ? ' · ' + esc(String(item.q)) + ' pç' : ''}</span></div>
+      <div class="rfsheet"><iframe id="rif-frame" src="rif.html?v=1#/rif/${esc(S.rif.rel)}" title="Relatório de inspeção final"></iframe></div></div>`;
+  }
+  function rfCfgHTML(main) {
+    const tab = S.rif.tab || 'normas', adm = rfAdm();
+    if (tab === 'normas' && main.dataset.rifed === 'cfg' && $('#rif-frame', main)) return;
+    main.dataset.rifed = tab === 'normas' ? 'cfg' : '';
+    const tabs = [['normas', 'Normas, inspeção visual e produtos'], ['quem', 'Quem validou as normas']].concat(adm ? [['pend', 'Motivos de pendência']] : []);
+    let body = '';
+    if (tab === 'normas') body = `<div class="rfsheet"><iframe id="rif-frame" src="rif.html?v=1#/config" title="Configurações do RIF"></iframe></div>`;
+    else if (tab === 'quem') body = rfQuemHTML();
+    else body = `<section class="sec">${band('RIF', 'Motivos de pendência')}<div class="block"><div class="body"><p class="muted" style="margin:0 0 8px">Um motivo por linha. Aparecem para o inspetor em “Marcar pendência”.</p><textarea id="rf-mot" rows="6" style="width:100%">${esc(rfMotivos().join('\n'))}</textarea><div class="formfoot"><button class="btn primary" type="button" data-act="rf-motsave">Salvar motivos</button></div></div></div></section>`;
+    main.innerHTML = `<div class="view rfed"><div class="cqfrom rftop"><button class="btn small" type="button" data-act="rf-sair">‹ Voltar ao quadro</button><b>Inspeção final · ${adm ? 'Configurações' : 'Normas'}</b></div>
+      <div class="seg" role="tablist" style="margin-bottom:12px">${tabs.map(([k, l]) => `<button type="button" role="tab" data-act="rf-cfgtab" data-key="${k}" aria-pressed="${tab === k}">${esc(l)}</button>`).join('')}</div>${body}</div>`;
+  }
+  function rfQuemHTML() {
+    const L = Object.keys(RFI.val).map((id) => Object.assign({ id }, RFI.val[id])).filter((v) => v.chave).sort((a, b) => ((b.atual && Date.parse(b.atual.em)) || 0) - ((a.atual && Date.parse(a.atual.em)) || 0));
+    if (!L.length) return '<div class="readonly">Nenhuma combinação validada ainda. A validação é feita em “Normas, inspeção visual e produtos” › Validar combinação, ou no próprio RIF.</div>';
+    const sel = S.rif.val || L[0].id, v = L.find((x) => x.id === sel) || L[0];
+    const SIG = { ASME_B16_5: 'ASME B16.5', ASME_B16_36: 'ASME B16.36', ASME_B16_47: 'ASME B16.47', EN_1092_1: 'DIN EN 1092-1', AWWA_C207: 'AWWA C207', NBR_7675: 'ABNT NBR 7675', JIS_B2220: 'JIS B 2220' };
+    const nm = (ch) => { const a = String(ch).split('|'); a[0] = SIG[a[0]] || a[0].replace(/_/g, ' '); return esc(a.join(' · ')); };
+    const nC = (c) => (c ? Object.keys(c).length : 0);
+    const H = Object.keys(v.h || {}).map((k) => v.h[k]).sort((a, b) => b.em - a.em);
+    const nv = (x) => (x == null || x === '' ? '—' : String(x).replace('.', ','));
+    const vt = (x) => `${nv(x.nominal)}${x.tolSup != null || x.tolInf != null ? ` (+${nv(x.tolSup == null ? 0 : x.tolSup)} / −${nv(x.tolInf == null ? 0 : x.tolInf)})` : ''}`;
+    const fmtC = (c, antes) => (c ? Object.keys(c).map((col) => { const a = antes && antes[col]; return `<code>${esc(col)}</code> ${a ? esc(vt(a)) + ' → ' : ''}${esc(vt(c[col] || {}))}`; }).join(' · ') : '');
+    return `<section class="sec">${band('RIF', 'Combinações validadas', 'registro automático pelo login · nada é apagado')}<div class="block"><div class="body">
+      <table class="vtab"><thead><tr><th>Combinação</th><th>Situação</th><th>Por</th><th>Quando</th><th>Correções</th><th>RIFs que usaram</th></tr></thead><tbody>
+      ${L.map((x) => `<tr class="${x.id === v.id ? 'on' : ''}" data-act="rf-val" data-key="${esc(x.id)}" style="cursor:pointer"><td><b>${nm(x.chave)}</b></td><td>${x.atual ? '<span class="chip ok"><i>✓</i>validada</span>' : '<span class="chip off"><i>–</i>desfeita</span>'}</td><td>${esc(x.atual ? x.atual.responsavel : '—')}</td><td class="nw">${x.atual ? esc(x.atual.data) : '—'}</td><td>${x.atual && nC(x.atual.correcoes) ? `<span class="chip warn"><i>!</i>${nC(x.atual.correcoes)} valor(es)</span>` : '<span class="muted">nenhuma</span>'}</td><td>${NF.format(x.uso || 0)}</td></tr>`).join('')}
+      </tbody></table>
+      <h3 class="rfhh">Histórico · ${nm(v.chave)}</h3>
+      <div class="vtl">${H.map((e) => `<div class="e" style="--k:${e.acao === 'corrigiu' ? 'var(--warn)' : e.acao === 'desfez' ? 'var(--crit)' : 'var(--ok)'}"><i></i><div><b>${esc(e.nome || who(e.by))} ${e.acao === 'corrigiu' ? 'validou com correção' : e.acao === 'desfez' ? 'desfez a validação' : 'validou'}</b> · ${esc(dmy(e.em))} ${esc(hhmm(e.em))}${e.acao === 'corrigiu' ? `<p>${fmtC(e.correcoes, Object.assign({}, e.orig || {}, e.antes || {}))}${e.motivo ? ' · motivo: “' + esc(e.motivo) + '”' : ''}</p>` : e.acao === 'desfez' ? '<p>Os RIFs novos voltam a usar os valores do arquivo da norma.</p>' : '<p>Conferida com a norma física, sem correção.</p>'}</div></div>`).join('')}
+        <div class="e" style="--k:var(--ink-3)"><i></i><div><b>Valores do arquivo da norma</b><p>Como transcrito no RIF original.</p></div></div></div>
+      ${v.rifs ? `<p class="muted" style="font-size:12.5px;margin:10px 0 0">RIFs que usaram esta combinação validada: ${Object.keys(v.rifs).sort().map(esc).join(', ')}</p>` : ''}
+      </div></div></section>`;
+  }
+
+  /* ---------- ficha do pedido ---------- */
+  function rfOpen(pk) {
+    const p0 = RFI.ped[pk]; if (!p0) return;
+    const p = Object.assign({ id: pk }, p0), et = rfEtapa(p), w = cw('rif'), it = rfItens(p);
+    const etL = RF_ETAPAS.find((e) => e[0] === et);
+    const algumFin = it.some((i) => i.st === 'a' || i.st === 'x' || (i.ant || []).length);
+    const linha = (i) => {
+      const [s, t] = rfItSt(i);
+      let b = '';
+      if (w && !i.rif) b = `<button class="btn small primary" type="button" data-act="rf-fazer" data-key="${esc(pk)}" data-it="${esc(i.id)}">Fazer RIF</button>`;
+      else if (i.st === 'r') b = `<button class="btn small primary" type="button" data-act="rf-abrir" data-key="${esc(pk)}" data-it="${esc(i.id)}">Continuar RIF</button>`;
+      else if (i.rif) b = `<button class="btn small" type="button" data-act="rf-abrir" data-key="${esc(pk)}" data-it="${esc(i.id)}">Ver ${esc(i.num || 'RIF')}</button>` + (w && i.st === 'x' ? `<button class="btn small" type="button" data-act="rf-reinsp" data-key="${esc(pk)}" data-it="${esc(i.id)}">Reinspecionar</button>` : '');
+      if (w && !i.rif) b += `<button class="btn small ghost" type="button" data-act="rf-item" data-key="${esc(pk)}" data-it="${esc(i.id)}">Editar</button>`;
+      const chip = s === 'ok' ? '<span class="chip ok"><i>✓</i>Aprovado</span>' : s === 'rp' ? '<span class="chip crit"><i>✕</i>Reprovado</span>' : s === 'em' ? `<span class="chip info"><i>✎</i>${esc(t)}</span>` : '<span class="chip off"><i>·</i>aguardando</span>';
+      const ant = (i.ant || []).filter((a) => a.num).map((a) => esc(a.num) + (a.st === 'x' ? ' ✕' : '')).join(', ');
+      return `<tr><td><b>${esc(rfItTxt(i))}</b>${i.desc && i.d && E.key(i.desc) !== E.key(i.d) ? `<span class="muted">anotado na chegada: ${esc(i.d)}</span>` : ''}${ant ? `<span class="muted">inspeções anteriores: ${ant}</span>` : ''}</td><td class="nw">${i.q ? esc(String(i.q)) + ' pç' : '—'}</td><td>${chip}</td><td class="rfacts">${b}</td></tr>`;
+    };
+    const H = Object.keys(p.h || {}).map((k) => p.h[k]).sort((a, b) => a.at - b.at);
+    openDrawer('PV ' + rfDig(p.pv), 'Inspeção final · pedido', `<div class="rfdh" data-rfk="${esc(pk)}"><div class="muted">${esc(p.cli || 'cliente não informado')}${p.vend ? ' · vendedor ' + esc(p.vend) : ''} · chegou ${esc(dmy(p.at))} ${esc(hhmm(p.at))}${p.nome ? ' (' + esc(p.nome) + ')' : ''}</div>
+        <div style="margin-top:6px"><span class="chip" style="--k:${RF_COR[et]}"><i>●</i>${esc(etL[1])}${p.pend ? ' · ' + esc(p.pend.m) : ''}</span></div>${p.obs ? `<p style="margin:8px 0 0">${esc(p.obs)}</p>` : ''}</div>
+      ${p.pend ? `<div class="rfpb" style="font-size:13px"><b>${esc(p.pend.m)}</b>${p.pend.j ? ' · ' + esc(p.pend.j) : ''}<br><span class="muted">desde ${esc(dmy(p.pend.at))} ${esc(hhmm(p.pend.at))} · ${esc(p.pend.nome || '')}</span></div>` : ''}
+      <div class="fsec"><h3>Itens do pedido</h3><table class="rftab"><thead><tr><th>Item</th><th>Qtd</th><th>Situação</th><th></th></tr></thead><tbody>${it.map(linha).join('') || '<tr><td colspan="4" class="muted">Nenhum item. Use “+ Item”.</td></tr>'}</tbody></table></div>
+      ${w ? `<div class="formfoot"><button class="btn" type="button" data-act="rf-item" data-key="${esc(pk)}">+ Item</button><button class="btn" type="button" data-act="rf-pend" data-key="${esc(pk)}">${p.pend ? 'Resolver pendência' : 'Marcar pendência'}</button><button class="btn ghost" type="button" data-act="rf-editped" data-key="${esc(pk)}">Editar dados</button>${rfAdm() && !algumFin ? `<button class="btn ghost" type="button" data-act="rf-delped" data-key="${esc(pk)}">Excluir pedido</button>` : ''}</div>` : ''}
+      <div class="fsec"><h3>Histórico do pedido</h3><div class="rfh">${H.map((e) => `<div><span>${esc(dmy(e.at).slice(0, 5))} ${esc(hhmm(e.at))}</span><p style="margin:0">${esc(e.t)}${e.nome ? ' · ' + esc(e.nome) : ''}</p></div>`).join('') || '<span class="muted">—</span>'}</div></div>`, 'var(--rif)');
+  }
+  function rfDrawerSync() {
+    const d = $('#layer .drawer [data-rfk]');
+    if (d && RFI.ped[d.dataset.rfk]) { const sc = $('#layer .drawer .dbody'), top = sc ? sc.scrollTop : 0; rfOpen(d.dataset.rfk); const s2 = $('#layer .drawer .dbody'); if (s2) s2.scrollTop = top; }
+  }
+
+  /* ---------- chegada / novo RIF / item / pendência ---------- */
+  function rfCqCli(pv) {
+    try { if (typeof cqCards === 'function' && CQF.ready) { const c = cqCards().find((o) => rfDig(o.pv) === rfDig(pv)); return c ? c.cli : ''; } } catch (e) { /* fila indisponível */ }
+    return '';
+  }
+  function rfPedDialog(modo, pk) {
+    const ed = modo === 'editar', p = ed ? Object.assign({ id: pk }, RFI.ped[pk]) : { pv: '', cli: '', vend: '', obs: '' };
+    const linhaIt = (d, q) => `<div class="rfitrow"><input class="rfit-d inp" placeholder='ex.: FLANGE WN 6" CL 150 RF' value="${esc(d || '')}" autocomplete="off"><input class="rfit-q inp" inputmode="numeric" placeholder="qtd" value="${esc(q || '')}"><button class="btn small ghost" type="button" data-rmit>✕</button></div>`;
+    openModal(ed ? 'Editar dados do pedido' : modo === 'rif' ? 'Novo RIF' : 'Registrar chegada', `<div class="fgrid cm-grid">
+      <label class="field"><span>Pedido de venda (PV) <b>*</b></span><input id="rf-pv" inputmode="numeric" value="${esc(rfDig(p.pv))}" ${ed ? 'disabled' : ''} placeholder="digite o PV da folha impressa" autocomplete="off"><small class="muted" id="rf-pvmsg"></small></label>
+      <label class="field"><span>Cliente</span><input id="rf-cli" list="rf-clis" value="${esc(p.cli || '')}" autocomplete="off"><datalist id="rf-clis">${optList(cliList())}</datalist></label>
+      <label class="field"><span>Vendedor</span><input id="rf-vend" value="${esc(p.vend || '')}" autocomplete="off"></label>
+      <label class="field"><span>Observação</span><input id="rf-obs" value="${esc(p.obs || '')}" placeholder="opcional" autocomplete="off"></label></div>
+      ${ed ? '' : `<div class="fsec"><h3>Itens (um RIF por item)</h3><div id="rf-its">${linhaIt('', '')}</div><button class="btn small" type="button" id="rf-addit">+ Outro item</button></div>`}
+      <div class="formfoot">${ed ? '<button class="btn primary" type="button" id="rf-ok" data-m="salvar">Salvar</button>' : modo === 'rif' ? '<button class="btn primary" type="button" id="rf-ok" data-m="rif">Inspecionar agora →</button><button class="btn" type="button" id="rf-ok2" data-m="chegada">Só registrar a chegada</button>' : '<button class="btn primary" type="button" id="rf-ok" data-m="chegada">Registrar chegada</button><button class="btn" type="button" id="rf-ok2" data-m="rif">Inspecionar agora →</button>'}<button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    const pv = $('#rf-pv'), msg = $('#rf-pvmsg');
+    const checa = () => {
+      const v = rfDig(pv.value); pv.value = v;
+      const ex = v && RFI.ped[rfPid(v)];
+      if (ex && !ex.del) { msg.innerHTML = `Este PV já está no quadro (${esc(RF_ETAPAS.find((e) => e[0] === rfEtapa(Object.assign({ id: rfPid(v) }, ex)))[1])}). Os itens novos entram nele.`; if (!$('#rf-cli').value) $('#rf-cli').value = ex.cli || ''; if (!$('#rf-vend').value) $('#rf-vend').value = ex.vend || ''; return; }
+      const cli = v.length >= 4 ? rfCqCli(v) : '';
+      if (cli) { msg.textContent = '✓ PV encontrado na fila de Certificados: cliente preenchido.'; if (!$('#rf-cli').value) $('#rf-cli').value = cli; } else msg.textContent = '';
+    };
+    if (!ed) { pv.oninput = checa; setTimeout(() => pv.focus(), 30); }
+    const its = $('#rf-its');
+    if (its) {
+      $('#rf-addit').onclick = () => { its.insertAdjacentHTML('beforeend', linhaIt('', '')); its.lastElementChild.querySelector('.rfit-d').focus(); };
+      its.onclick = (e) => { const b = e.target.closest('[data-rmit]'); if (b && its.children.length > 1) b.closest('.rfitrow').remove(); };
+      its.oninput = (e) => { if (e.target.classList.contains('rfit-q')) e.target.value = rfDig(e.target.value); };
+    }
+    const salvar = async (m, btn) => {
+      const v = ed ? rfDig(p.pv) : rfDig(pv.value);
+      if (!v || v.length < 3) { toast('Digite o número do PV.', true); pv.focus(); return; }
+      const dados = { cli: $('#rf-cli').value.trim(), vend: $('#rf-vend').value.trim(), obs: $('#rf-obs').value.trim() };
+      btn.disabled = true;
+      try {
+        if (ed) {
+          await rfWrite('rifp/' + pk, Object.assign({}, dados, { h: rfH('Dados do pedido alterados') }, rfStamp()));
+          closeLayer(); toast('Pedido salvo.'); setTimeout(() => rfOpen(pk), 200); return;
+        }
+        const itens = Array.from(its.children).map((r) => ({ d: r.querySelector('.rfit-d').value.trim().toLocaleUpperCase('pt-BR'), q: +rfDig(r.querySelector('.rfit-q').value) || null })).filter((x) => x.d || x.q);
+        if (!itens.length) itens.push({ d: '', q: null });
+        const id = rfPid(v), ex = RFI.ped[id], base = Object.keys((ex && ex.itens) || {}).length;
+        const novos = {}; itens.forEach((x, i) => { novos[rfUid() + i] = { d: x.d || null, q: x.q, o: base + i + 1, rif: null, st: null }; });
+        const patch = Object.assign({ pv: v, itens: novos, h: rfH(ex && !ex.del ? `${itens.length} item(ns) acrescentado(s)` : `Chegada registrada · ${itens.length} item(ns)${itens.some((x) => x.q) ? ', ' + itens.reduce((s, x) => s + (x.q || 0), 0) + ' peças' : ''}`) }, rfStamp());
+        Object.keys(dados).forEach((k) => { if (dados[k] || !(ex && ex[k])) patch[k] = dados[k] || (ex && ex[k]) || ''; });
+        if (!ex || ex.del) Object.assign(patch, { at: Date.now(), by: DB.me || null, nome: rfMe(), del: false, pend: null });
+        await rfWrite('rifp/' + id, patch);
+        RFI.ped[id] = Object.assign({}, ex && !ex.del ? ex : {}, patch, { itens: Object.assign({}, (ex && !ex.del && ex.itens) || {}, novos) });
+        logEntry('RIF', id, ex && !ex.del ? 'alterado' : 'criado', `PV ${v} · ${ex && !ex.del ? 'itens acrescentados' : 'chegada registrada'} na inspeção final`, null);
+        closeLayer();
+        if (m === 'rif') { const first = Object.keys(novos)[0]; await rfFazer(id, first, false); }
+        else { toast('Chegada registrada: PV ' + v + '.'); render(); setTimeout(() => rfOpen(id), 200); }
+      } catch (err) { btn.disabled = false; toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
+    };
+    ['#rf-ok', '#rf-ok2'].forEach((s) => { const b = $(s); if (b) b.onclick = () => salvar(b.dataset.m, b); });
+  }
+  function rfItemDialog(pk, it) {
+    const p = RFI.ped[pk]; if (!p) return;
+    const item = it ? (p.itens || {})[it] || {} : {};
+    openModal(it ? 'Editar item' : 'Novo item · PV ' + rfDig(p.pv), `<div class="fgrid cm-grid"><label class="field" style="grid-column:1/-1"><span>Descrição <b>*</b></span><input id="rfi-d" value="${esc(item.d || '')}" placeholder='ex.: FLANGE CEGO 6" CL 150 RF' autocomplete="off"></label>
+      <label class="field"><span>Quantidade</span><input id="rfi-q" inputmode="numeric" value="${esc(item.q || '')}"></label></div>
+      <div class="formfoot"><button class="btn primary" type="button" id="rfi-ok">Salvar</button>${it && !item.rif ? '<button class="btn ghost" type="button" id="rfi-del">Remover item</button>' : ''}<button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    $('#rfi-q').oninput = (e) => { e.target.value = rfDig(e.target.value); };
+    setTimeout(() => $('#rfi-d').focus(), 30);
+    $('#rfi-ok').onclick = async () => {
+      const d = $('#rfi-d').value.trim().toLocaleUpperCase('pt-BR'), q = +rfDig($('#rfi-q').value) || null;
+      if (!d) { toast('Descreva o item.', true); return; }
+      const id = it || rfUid(), o = it ? item.o : Object.keys(p.itens || {}).length + 1;
+      try { await rfWrite('rifp/' + pk, Object.assign({ itens: { [id]: { d, q, o, rif: item.rif || null, st: item.st || null } }, h: rfH((it ? 'Item alterado · ' : 'Item acrescentado · ') + d) }, rfStamp())); closeLayer(); setTimeout(() => rfOpen(pk), 200); }
+      catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
+    };
+    const del = $('#rfi-del');
+    if (del) del.onclick = async () => { try { await rfWrite('rifp/' + pk, Object.assign({ itens: { [it]: { del: true } }, h: rfH('Item removido · ' + (item.d || '')) }, rfStamp())); closeLayer(); setTimeout(() => rfOpen(pk), 200); } catch (err) { toast('Não foi possível remover: ' + ((err && (err.message || err.code)) || err), true); } };
+  }
+  function rfPendDialog(pk) {
+    const p = RFI.ped[pk]; if (!p) return;
+    if (p.pend) {
+      openModal('Resolver pendência · PV ' + rfDig(p.pv), `<p style="margin:0"><b>${esc(p.pend.m)}</b>${p.pend.j ? ' · ' + esc(p.pend.j) : ''}</p><label class="field"><span>Como foi resolvida (opcional)</span><input id="rfp-r" autocomplete="off"></label>
+        <div class="formfoot"><button class="btn primary" type="button" id="rfp-ok">Pendência resolvida</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+      $('#rfp-ok').onclick = async () => { const r = $('#rfp-r').value.trim(); try { await rfWrite('rifp/' + pk, Object.assign({ pend: null, h: rfH(`Pendência resolvida: ${p.pend.m}${r ? ' — ' + r : ''}`) }, rfStamp())); closeLayer(); setTimeout(() => rfOpen(pk), 200); } catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); } };
+      return;
+    }
+    openModal('Marcar pendência · PV ' + rfDig(p.pv), `<p style="margin:0">O pedido fica em <b>Pendência</b> até alguém resolver.</p><div class="rfmots">${rfMotivos().map((m, i) => `<label class="tbck"><input type="radio" name="rfp-m" value="${esc(m)}" ${i === 0 ? 'checked' : ''}> ${esc(m)}</label>`).join('')}</div>
+      <label class="field"><span>Detalhe (opcional)</span><input id="rfp-j" placeholder="ex.: cego sem gravação" autocomplete="off"></label>
+      <div class="formfoot"><button class="btn primary" type="button" id="rfp-ok">Marcar pendência</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    $('#rfp-ok').onclick = async () => {
+      const m = (document.querySelector('input[name="rfp-m"]:checked') || {}).value, j = $('#rfp-j').value.trim();
+      if (!m) return;
+      try { await rfWrite('rifp/' + pk, Object.assign({ pend: { m, j: j || null, at: Date.now(), by: DB.me || null, nome: rfMe() }, h: rfH(`Pendência: ${m}${j ? ' — ' + j : ''}`) }, rfStamp())); closeLayer(); setTimeout(() => rfOpen(pk), 200); }
+      catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
+    };
+  }
+  function rfAct(a, key, el) {
+    if (a === 'rf-ped') { rfOpen(key); return true; }
+    if (a === 'rf-novo') { rfPedDialog(key === 'rif' ? 'rif' : 'chegada'); return true; }
+    if (a === 'rf-editped') { rfPedDialog('editar', key); return true; }
+    if (a === 'rf-item') { rfItemDialog(key, el.dataset.it || null); return true; }
+    if (a === 'rf-pend') { rfPendDialog(key); return true; }
+    if (a === 'rf-fazer') { rfFazer(key, el.dataset.it, false); return true; }
+    if (a === 'rf-reinsp') { confirmBox('Reinspecionar', 'Começa um RIF novo para este item, com o mesmo produto e as medições em branco. O RIF reprovado continua guardado no histórico do item.', 'Começar reinspeção', () => rfFazer(key, el.dataset.it, true)); return true; }
+    if (a === 'rf-abrir') { const p = RFI.ped[key], i = p && (p.itens || {})[el.dataset.it]; if (i && i.rif) rfEditar(key, el.dataset.it, i.rif); return true; }
+    if (a === 'rf-sair') { rfSair(); return true; }
+    if (a === 'rf-todos') { RFI.todosOk = !RFI.todosOk; render(); return true; }
+    if (a === 'rf-cfg') { S.rif = { sub: 'cfg', tab: 'normas' }; render(); return true; }
+    if (a === 'rf-cfgtab') { S.rif = Object.assign({}, S.rif, { tab: key }); render(); return true; }
+    if (a === 'rf-val') { S.rif = Object.assign({}, S.rif, { val: key }); render(); return true; }
+    if (a === 'rf-delped') {
+      const p = RFI.ped[key]; if (!p) return true;
+      confirmBox('Excluir pedido', `O PV ${rfDig(p.pv)} sai do quadro da inspeção final. Use só para pedido lançado por engano.`, 'Excluir', async () => {
+        try { await rfWrite('rifp/' + key, Object.assign({ del: true, h: rfH('Pedido excluído') }, rfStamp())); logEntry('RIF', key, 'excluído', 'PV ' + rfDig(p.pv) + ' · inspeção final', null); toast('Pedido excluído.'); }
+        catch (err) { toast('Não foi possível excluir: ' + ((err && (err.message || err.code)) || err), true); }
+      }, true);
+      return true;
+    }
+    if (a === 'rf-motsave') {
+      const L = uniq(($('#rf-mot').value || '').split('\n').map((s) => s.trim()).filter(Boolean));
+      if (!L.length) { toast('Deixe ao menos um motivo.', true); return true; }
+      DB.db.doc('cfg/main').update({ rif: { motivos: L } }).then(() => { logEntry('GERAL', 'cfg', 'alterado', 'Motivos de pendência do RIF', null); toast('Motivos salvos.'); }).catch((err) => toast('Não foi possível salvar: ' + ((err && (err.message || err.code)) || err), true));
+      return true;
+    }
+    return false;
+  }
 
   /* ================= Soldagem: soldadores, qualificações (RQS) e EPS =================
      sold/w-ID  soldador { sinete, nome, rg, setor, filial, admissao, situacao, obs, q: { qid: qualificação }, h: { id: acontecimento } }
@@ -10506,19 +11089,44 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
     draw();
   };
   /* ficha do fornecedor no IQF */
+  /* ficha do fornecedor (opção B): anel com a nota + onde perdeu pontos */
+  function iqRing(o) {
+    const r = 42, c = 2 * Math.PI * r, v = o.iqf == null ? 0 : Math.max(0, Math.min(100, o.iqf)), k = o.cls ? IQC[o.cls] : 'var(--ink-3)';
+    return `<svg class="iqring" viewBox="0 0 100 100" width="132" role="img" aria-label="IQF ${o.iqf == null ? 'sem nota' : NF1.format(o.iqf)} de 100"><circle cx="50" cy="50" r="${r}" class="tr" stroke-width="10" fill="none"/>${v > 0 ? `<circle cx="50" cy="50" r="${r}" stroke="${k}" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="${(c * v / 100).toFixed(2)} ${c.toFixed(2)}" transform="rotate(-90 50 50)"/>` : ''}<text class="vv" x="50" y="55" text-anchor="middle">${o.iqf == null ? '—' : NF1.format(o.iqf)}</text><text class="vs" x="50" y="68" text-anchor="middle">de 100</text></svg>`;
+  }
+  function iqCrits(o, cf) {
+    const tot = IQ_CRIT.filter(([c]) => o[c] != null && cf.pesos[c] > 0).reduce((s, [c]) => s + cf.pesos[c], 0);
+    const txt = {
+      q: o.insp ? `${NF.format(o.aprov)} de ${NF.format(o.insp)} lotes inspecionados aprovados${o.conc ? ' · ' + NF.format(o.conc) + ' em concessão' : ''}` : 'Nenhum lote inspecionado no período',
+      r: o.rnc ? `${NF.format(o.rnc)} RNC em ${NF.format(o.lotes)} lotes recebidos` : `Nenhuma RNC em ${NF.format(o.lotes)} lotes recebidos`,
+      d: `${NF.format(o.cert)} de ${NF.format(o.lotes)} lotes chegaram com certificado`,
+      a: o.rncAval ? `${NF.format(o.rncPrazo)} de ${NF.format(o.rncAval)} RNC tratadas no prazo` : 'Nenhuma RNC para avaliar no período',
+    };
+    return IQ_CRIT.map(([c, l]) => { const conta = o[c] != null && cf.pesos[c] > 0 && tot > 0; return { c, l, d: txt[c], peso: cf.pesos[c], conta, semDado: o[c] == null, lost: conta ? cf.pesos[c] * (100 - o[c]) / tot : null }; });
+  }
+  function iqMesesHTML(k) {
+    const cf = iqCfg(), { ms } = iqMonths(), vals = iqSerie(k);
+    return `<div class="iqv"><h3 class="iqvh">Nota mês a mês</h3><div class="iqms">${vals.map((v, i) => { const lb = `${MESES_L[ms[i].m - 1]} ${ms[i].y}`; return `<div><span class="sq${v == null ? ' no' : ''}"${v == null ? '' : ` style="--k:${IQC[iqClsV(v, cf)]}"`} title="${esc(lb + (v == null ? ' · sem lotes' : ' · IQF ' + NF1.format(v)))}">${v == null ? '—' : Math.round(v)}</span><small>${esc(ms[i].label)}</small></div>`; }).join('')}</div><div class="iqleg"><span><i style="--k:var(--ok)"></i>A</span><span><i style="--k:var(--warn)"></i>B</span><span><i style="--k:var(--crit)"></i>C</span><span>— sem lotes no mês</span></div></div>`;
+  }
+  function iqFichaTopo(o, P, cf, fi) {
+    const k = o.cls ? IQC[o.cls] : 'var(--ink-3)';
+    const V = { A: ['Fornecedor bom', `Classe A · nota ${cf.a} ou mais`], B: ['Precisa de atenção', `Classe B · nota de ${cf.b} a ${cf.a}`], C: ['Abaixo do esperado', `Classe C · nota abaixo de ${cf.b}`] }[o.cls] || ['Poucos dados', `Menos de ${cf.min} lote(s) no período · ainda não classifica`];
+    const lost = o.iqf == null ? null : Math.max(0, 100 - o.iqf);
+    const rows = iqCrits(o, cf).sort((p, q) => (q.lost == null ? -1 : q.lost) - (p.lost == null ? -1 : p.lost)).map((x) => `<div class="r"><span class="t">${esc(x.l)}<small>peso ${x.peso}</small></span><span class="p ${!x.conta ? 'n' : x.lost < 0.05 ? 'z' : 'm'}">${!x.conta ? 'não conta' : x.lost < 0.05 ? 'sem perda' : '−' + NF1.format(x.lost) + ' pts'}</span><span class="d">${esc(x.d)}${x.semDado ? ' — sem dado, fica fora da conta' : !x.conta ? ' — peso 0, fica fora da conta' : ''}</span></div>`).join('');
+    return `<div class="iqvtop">${iqRing(o)}<div class="iqverd"><div class="iqvt"><span class="iqcls" style="--k:${k}">${o.cls || '–'}</span><span class="big" style="color:${k}">${V[0]}</span></div><span class="why">${esc(V[1])}<br>${esc(P.l)} · ${NF.format(o.lotes)} lote(s) recebido(s)</span>${fi.sit ? `<span class="why">Situação: <b>${esc(fi.sit)}</b></span>` : ''}</div></div>
+      ${lost == null ? '' : `<div class="iqv"><h3 class="iqvh">De 100 pontos, onde ele perdeu</h3><div class="iqstack" style="--k:${k}"><i class="kept" style="width:${o.iqf}%"></i>${lost > 0 ? `<i class="lost" style="width:${lost}%"></i>` : ''}</div><div class="iqsl"><span>ficou com <b style="color:${k}">${NF1.format(o.iqf)}</b></span><span>perdeu <b style="color:var(--crit)">${NF1.format(lost)}</b></span></div></div>`}
+      <div class="iqlost">${rows}</div>`;
+  }
   async function iqOpen(k) {
     const f = S.f.iqf || {}, P = iqPeriod(f.per || '12m'), cf = iqCfg();
     const o = iqCalc(P.a, P.b).find((x) => x.key === k); if (!o) return;
     const fi = iqFicha(k), H = Object.keys(fi.h || {}).map((id) => Object.assign({ id }, fi.h[id])).sort((p, q) => q.at - p.at);
     await resolveNames(H.map((h) => h.by));
-    const bar = (c, l, d) => { const v = o[c]; return `<div class="iqb"><span class="iql">${l} <small class="muted">peso ${cf.pesos[c]} · ${d}</small></span><span class="iqbar"><i style="width:${v == null ? 0 : v}%;background:${v == null ? 'transparent' : v >= cf.a ? 'var(--ok)' : v >= cf.b ? 'var(--warn)' : 'var(--crit)'}"></i></span><b>${v == null ? '<span class="muted">sem dado</span>' : NF1.format(v)}</b></div>`; };
     const abertas = o.rncs.filter((x) => x.aberta), w = cw('iqf');
     const EVN = { sit: 'Situação alterada', acao: 'Ação com o fornecedor', nota: 'Anotação' };
-    openDrawer(o.nome, 'Avaliação de fornecedor', `<div class="iqtop iqtop2">${iqGauge(o.iqf, 230)}<div style="display:grid;gap:6px">${chipCls(o.cls)}<span class="muted" style="font-size:12.5px">${esc(P.l)} · ${o.lotes} lote(s) · ${o.insp} inspecionado(s) · ${o.rnc} RNC</span>${fi.sit ? `<span>Situação: <b>${esc(fi.sit)}</b></span>` : ''}</div></div>
-      <div class="iqls"><h3>Nota mês a mês</h3>${iqLine(k)}</div>
+    openDrawer(o.nome, 'Avaliação de fornecedor', `${iqFichaTopo(o, P, cf, fi)}
       <div class="formfoot">${w ? `<button class="btn primary" type="button" data-act="iq-acao" data-key="${esc(k)}">Registrar ação / situação</button>` : ''}<button class="btn" type="button" data-act="iq-print" data-key="${esc(k)}">Relatório de desempenho</button><button class="btn ghost" type="button" data-act="iq-cad" data-key="${esc(o.nome)}">Cadastro do fornecedor</button></div>
-      <div class="fsec"><h3>Composição da nota</h3>${IQ_CRIT.map(([c, l, d]) => bar(c, l, d)).join('')}<p class="muted" style="font-size:12px;margin:4px 0 0">Critério sem dado no período não entra na conta.</p></div>
-      <div class="fsec"><h3>Números do período</h3><div class="d8g">${[['Lotes recebidos', o.lotes], ['Com certificado', o.cert], ['Aprovados', o.aprov], ['Concessão', o.conc], ['Reprovados', o.rep], ['RNC', o.rnc], ['RNC no prazo', o.rncAval ? o.rncPrazo + ' de ' + o.rncAval : '—']].map(([a, b]) => `<div><b>${a}</b><span>${b}</span></div>`).join('')}</div></div>
+      ${iqMesesHTML(k)}
       ${o.rncs.length ? `<div class="fsec"><h3>RNC do período (${o.rncs.length})${abertas.length ? ' · ' + abertas.length + ' aberta(s)' : ''}</h3><div class="rel">${o.rncs.slice().reverse().map((x) => `<button type="button" style="--c:${MOD.RNC.c}" data-open="RNC:${esc(x.key)}">${esc(x.num)} <span class="muted">· ${esc(x.motivo || '')} · ${esc(x.status === 'Concluida' ? 'concluída' : x.status === 'Atrasado' ? 'atrasada' : x.status.toLowerCase())}</span></button>`).join('')}</div></div>` : ''}
       <div class="fsec"><h3>Histórico com o fornecedor</h3>${H.length ? `<div class="ihist"><table><tbody>${H.map((h) => `<tr><td class="nw">${fD(h.d)}</td><td><b>${esc(EVN[h.t] || h.t)}</b>${h.sit ? ' · ' + esc(h.sit) : ''}<div class="muted">${esc(h.txt || '')}</div></td><td class="muted nw">${esc(who(h.by))}</td></tr>`).join('')}</tbody></table></div>` : '<span class="muted">Nenhum registro. Use “Registrar ação / situação” para anotar visitas, planos de ação pedidos, suspensões…</span>'}</div>`, MOD.IQF.c);
   }
@@ -10808,7 +11416,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       .hd{display:grid;grid-template-columns:52mm 1fr 48mm;border:1.4px solid #111}.hd>div{padding:3mm;display:flex;flex-direction:column;justify-content:center}.hd .lg img{max-width:100%;max-height:20mm;object-fit:contain}
       .hd .t{border-left:1.4px solid #111;border-right:1.4px solid #111;text-align:center}.hd .t b{font-size:13.5pt;letter-spacing:.03em}.hd .t span{font-size:8.5pt;color:#444;margin-top:1mm}
       .hd .n{gap:1.4mm}.hd .n div{display:flex;justify-content:space-between;gap:2mm;font-size:8.5pt}.hd .n b{text-align:right}.hd .rn{font:700 11pt Arial;color:#980000;justify-content:flex-end!important}
-      .sec{margin-top:3mm;border:1px solid #333;break-inside:avoid}.sh{background:#980000;color:#fff;font:700 8.8pt Arial;letter-spacing:.08em;text-transform:uppercase;padding:1.4mm 2.5mm;display:flex;justify-content:space-between}.sh span{font-weight:400;letter-spacing:0;text-transform:none}.sh.q{background:#1f4e79}.sh.l{background:#e9ebe9;color:#333}
+      .sec{margin-top:3mm;border:1px solid #333;break-inside:avoid}.sh{background:#980000;color:#fff;font:700 8.8pt Arial;letter-spacing:.08em;text-transform:uppercase;padding:1.4mm 2.5mm;display:flex;justify-content:space-between}.sh span{font-weight:400;letter-spacing:0;text-transform:none}.sh.q{background:#5b6560}.sh.l{background:#e9ebe9;color:#333}
       table{width:100%;border-collapse:collapse}td{border:1px solid #bbb;padding:1.1mm 2mm;vertical-align:top}td.k{background:#f1f2f1;font-weight:700;font-size:7.8pt;color:#333;width:30mm;text-transform:uppercase}
       .fot{display:grid;grid-template-columns:repeat(4,1fr);gap:2mm;padding:2mm}.fot img{width:100%;aspect-ratio:4/3;object-fit:cover;border:1px solid #999}
       .sig{padding:2mm 2.5mm;font-size:9pt}.chk{display:inline-block;border:1px solid #777;border-radius:1mm;padding:0 1.5mm;margin:0 1.2mm .8mm 0;font-size:8.3pt}.chk.on{background:#111;color:#fff;border-color:#111}
@@ -11070,7 +11678,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
      O inspetor NÃO tem acesso ao módulo RNC Fornecedor: ele só CRIA entradas na própria caixa (regras do Firebase).
      Qualquer sessão da Central com "Lança" em RNC Fornecedor numera e cria a RNC sozinha (com trava para não duplicar). */
   const tbInsp = () => canWrite() && ACC('rnctab') === 'lanca';
-  const tbOnly = () => tbInsp() && !['av', 'serv', 'certq', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp', 'tcert', 'tusin'].some((c) => vis(c));
+  const tbOnly = () => tbInsp() && !['av', 'serv', 'certq', 'rif', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp', 'tcert', 'tusin'].some((c) => vis(c));
   const INB = { started: false, docs: [], mine: null, busy: false, again: false };
   const RRC = { key: null, cid: null, uid: null };
   const INB_F = ['data', 'emissor', 'filial', 'forn', 'nf', 'oc', 'pv', 'depto', 'motivo', 'abrang', 'abrJust', 'lotesAV', 'origem', 'motOutros', 'descNc', 'qtdRep', 'qtdRec', 'qtdUnd', 'nFotos', 'abAss', 'info'];
@@ -11196,6 +11804,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
       if (a && a.startsWith('tb-') && tbAct(a, key)) return;
       if (a && a.startsWith('vy-') && vyAct(a, key)) return;
       if (a && a.startsWith('cq-') && cqAct(a, key, act)) return;
+      if (a && a.startsWith('rf-') && rfAct(a, key, act)) return;
       if (a === 'bk-dl') { const f = (VY.files || [])[+key]; if (f) saveFile(f[0], f[1]); return; }
       if (a && a.startsWith('rr-')) {
         if (a === 'rr-print') { if (key) rncRelPrint(key); return; }
@@ -11305,12 +11914,12 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
   /* ponto de extensão: a versão hospedada fora do Claude acrescenta telas (ex.: Usuários) */
   if (typeof window.CQ_PLUGIN === 'function') { try { window.CQ_PLUGIN({ VIEWS, S, DB, head, esc, toast, render, go, openModal, confirmBox, closeLayer, kpiHTML, updateChrome, $, $$, NF, dmy, hhmm }); } catch (e) { console.error('plugin', e); } }
   $$('#nav a').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); if (!S.model) { toast('Aguarde o carregamento dos dados.'); return; } go(a.dataset.v); }));
-  window.addEventListener('popstate', () => { const v = location.hash.replace('#', ''); if (S.model && VIEWS[v]) { S.view = v; $$('#nav a').forEach((a) => { if (a.dataset.v === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }); render(); } });
+  window.addEventListener('popstate', () => { const v = location.hash.replace('#', ''); if (S.model && VIEWS[v]) { S.view = v; $$('#nav a').forEach((a) => { if (a.dataset.v === navOf(v)) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }); render(); } });
   $('#db-stale').onclick = () => { S.stale = false; updateChrome(); render(); };
   $('#exp-all').onclick = exportAll;
   const startV = location.hash.replace('#', '');
   if (startV && VIEWS[startV]) S.view = startV;
-  $$('#nav a').forEach((a) => { if (a.dataset.v === S.view) a.setAttribute('aria-current', 'page'); });
+  $$('#nav a').forEach((a) => { if (a.dataset.v === navOf(S.view)) a.setAttribute('aria-current', 'page'); });
   setInterval(() => { if (S.model && E.todaySerial() !== S.today) scheduleRebuild(); else refreshBanner(); }, 60000);
   boot();
   window.__CQ = { S, DB, go, openRecord, lotSt };
