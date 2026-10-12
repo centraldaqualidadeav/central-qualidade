@@ -1361,6 +1361,39 @@ table.t tbody tr.sel td { background: color-mix(in srgb, var(--rif) 9%, var(--su
 #eq-form.pfform { gap: 18px; }
 .org .orgroots { display: flex; gap: 36px; margin: 0 auto; width: max-content; justify-content: center; align-items: flex-start; min-width: max-content; }
 .org .orgroots > ul { padding-top: 0; }
+/* níveis da hierarquia (só no cadastro) */
+.nvbody { display: grid; gap: 10px; }
+.nvhint { font-size: 12.5px; color: var(--ink-2); margin: 0; }
+.nvlist { display: grid; gap: 6px; }
+.nvrow { display: grid; grid-template-columns: 54px 1fr auto auto; gap: 10px; align-items: center; border: 1px solid var(--line); border-radius: var(--r); padding: 7px 10px; background: var(--surface); box-shadow: inset 3px 0 0 var(--ink-2); }
+.nvrow.sub { margin-left: 34px; box-shadow: inset 3px 0 0 var(--line-2); }
+.nvrow .nvn { font: 800 16px var(--f-display); color: var(--ink); text-align: center; background: var(--surface-2); border-radius: 6px; padding: 3px 0; }
+.nvrow.sub .nvn { font-size: 14px; color: var(--ink-2); }
+.nvrow input { font: 600 13.5px var(--f-body); border: 1px solid transparent; background: transparent; padding: 4px 6px; border-radius: 6px; color: var(--ink); width: 100%; min-width: 0; }
+.nvrow input:hover:not(:disabled) { border-color: var(--line); }
+.nvrow input:focus { border-color: var(--info); background: var(--surface); outline: none; }
+.nvrow .cnt { font-size: 12px; color: var(--ink-3); white-space: nowrap; }
+.nvacts { display: flex; gap: 4px; }
+.nvacts button { border: 1px solid var(--line); background: var(--surface); border-radius: 6px; width: 30px; height: 28px; cursor: pointer; color: var(--ink-2); font-size: 13px; }
+.nvacts button:hover { border-color: var(--ink-3); color: var(--ink); }
+.nvacts button.del { color: var(--crit); }
+.nvadd { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.nvsubadd { margin-left: 34px; }
+.nvpick { display: grid; gap: 6px; }
+.nvpick .ln { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.nvpick .ln.sub { margin-left: 22px; }
+.nvpick .ln.sub::before { content: '↳'; color: var(--ink-3); font-size: 13px; }
+.pfun.nv { --k: var(--ink); }
+.field .nvsm { font-size: 12px; font-weight: 400; }
+@media (max-width: 560px) { .nvrow { grid-template-columns: 40px 1fr auto; } .nvrow .cnt { display: none; } .nvrow.sub, .nvsubadd { margin-left: 16px; } }
+/* quadro do RIF: faixa colorida no topo de cada etapa, tudo centralizado (nome numa linha, número grande, descrição) */
+.rfcol { container-type: inline-size; border-top: 4px solid var(--k); }
+.rfcol > h3 { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 2px; text-align: center; padding: 6px 4px 2px; }
+.rfcol > h3 i { display: none; }
+.rfcol > h3 .rft { grid-row: 1; grid-column: 1; justify-self: center; max-width: 100%; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .03em; font-size: clamp(10.5px, 5.8cqi, 12px); }
+.rfcol > h3 b { grid-row: 2; grid-column: 1; justify-self: center; margin: 0; background: none; border: 0; padding: 0; font: 800 26px/1.05 var(--f-display); color: var(--k); }
+.rfcol > h3 small { grid-row: 3; grid-column: 1; justify-self: center; text-align: center; line-height: 1.25; min-height: 1.25em; }
+.rfcol > h3 small { max-width: 100%; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
@@ -7795,7 +7828,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
           <div class="cfgitem" data-cfg="FERIADOS"><b>Feriados</b><span class="use">Prazos de RNC em dias úteis · um por linha, dd/mm/aaaa</span>${ta('cfg-FERIADOS', (c.GER_FERIADOS || []).slice().sort((a, b) => a - b).map((s) => ferLine(s, nm[s])))}
             ${ro ? '' : `<div class="formfoot"><select class="inp" id="fer-ano" style="width:auto">${[y0, y0 + 1, y0 + 2].map((y) => `<option ${y === y0 + 1 ? 'selected' : ''}>${y}</option>`).join('')}</select><button class="btn small" type="button" id="fer-gen">Adicionar feriados do ano</button></div><span class="use">Nacionais, estadual de SP e aniversário de Mogi das Cruzes. Confira antes de salvar (Carnaval não entra).</span>`}</div>
         </div></div></div></section>`)}
-      ${sec('func', `<section class="sec">${band('GERAL', 'Funcionários')}<div class="block"><div class="body" id="pf-host"></div></div></section>`)}
+      ${sec('func', `<section class="sec">${band('GERAL', 'Níveis da hierarquia', 'vale para todas as áreas')}<div class="block"><div class="body nvbody" id="nv-host"></div></div></section><section class="sec">${band('GERAL', 'Funcionários')}<div class="block"><div class="body" id="pf-host"></div></div></section>`)}
       ${sec('forn', `<section class="sec">${band('AV', 'Fornecedores')}<div class="block"><div class="body" id="ent-forn"></div></div></section>`)}
       ${sec('cli', `<section class="sec">${band('RNCC', 'Clientes')}<div class="block"><div class="body" id="ent-cli"></div></div></section>`)}
       ${sec('emails', `<section class="sec">${band('GERAL', 'E-mails')}<div class="block"><div class="body">
@@ -7838,6 +7871,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     $$('[data-ctab]').forEach((b) => { b.onclick = () => showTab(b.dataset.ctab); });
     showTab(S.cfgTab);
     renderPessoas(roA);
+    eqNivRender(roA);
     renderEnt('forn', ro); renderEnt('cli', ro);
     $$('#tm-list [data-tm]').forEach((b) => { b.onclick = async () => {
       const k = b.dataset.tm, on = b.getAttribute('aria-pressed') !== 'true', o = Object.assign({}, ocultos(), { [k]: on });
@@ -11224,7 +11258,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     main.innerHTML = `<div class="view">${head(MOD.RIF.full, 'RIF · pedidos fabricados na usinagem: chegada, inspeção e liberação. O relatório é feito item por item.', acts)}
       <div class="rfbar"><div class="rfmini"><span><b>${NF.format(c.h)}</b>peças inspecionadas hoje</span><span><b>${NF.format(c.s)}</b>na semana</span><span><b>${NF.format(abertos)}</b>pedido(s) em aberto</span></div>
       <label class="rfbusca"><input id="rf-q" type="search" placeholder="PV, cliente, peça ou RIF…" value="${esc(RFI.busca || '')}" autocomplete="off"></label></div>
-      <div class="rfk">${RF_ETAPAS.map(([k, t, sub, cor]) => `<div class="rfcol" style="--k:${cor}"><h3><i></i><span>${t}<small>${sub}</small></span><b>${por[k].length}</b></h3>${por[k].map(rfCardHTML).join('') || '<div class="rfvazio">—</div>'}${k === 'ok' && !q && okTot > por.ok.length ? `<button class="rfmore" type="button" data-act="rf-todos">ver todos (${NF.format(okTot)})</button>` : k === 'ok' && RFI.todosOk && !q ? '<button class="rfmore" type="button" data-act="rf-todos">só os últimos 30 dias</button>' : ''}</div>`).join('')}</div></div>`;
+      <div class="rfk">${RF_ETAPAS.map(([k, t, sub, cor]) => `<div class="rfcol" style="--k:${cor}"><h3><i></i><span class="rft">${t}</span><small>${sub}</small><b>${por[k].length}</b></h3>${por[k].map(rfCardHTML).join('') || '<div class="rfvazio">—</div>'}${k === 'ok' && !q && okTot > por.ok.length ? `<button class="rfmore" type="button" data-act="rf-todos">ver todos (${NF.format(okTot)})</button>` : k === 'ok' && RFI.todosOk && !q ? '<button class="rfmore" type="button" data-act="rf-todos">só os últimos 30 dias</button>' : ''}</div>`).join('')}</div></div>`;
     const inp = $('#rf-q'); if (inp) { inp.oninput = () => { RFI.busca = inp.value; clearTimeout(RFI.tq); RFI.tq = setTimeout(() => { render(); const i2 = $('#rf-q'); if (i2) { i2.focus(); i2.setSelectionRange(i2.value.length, i2.value.length); } }, 250); }; }
   };
 
@@ -11418,6 +11452,60 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       && (!f.set || E.key(p.setor || '') === E.key(f.set)) && (!f.fil || E.key(p.filial || '') === E.key(f.fil)));
   }
 
+  /* ---------- níveis da hierarquia (só no cadastro: não aparecem na ficha, nos cartões nem no organograma) ----------
+     cfg/main.niveis = [{ id, nome, sub: [{ id, nome }] }] na ordem; o número (1, 2, 2.1…) sai da posição. Pessoa: nivel = id. */
+  const EQ_NIV_DEF = [{ id: 'dir', nome: 'Direção', sub: [] }, { id: 'ger', nome: 'Gerência', sub: [{ id: 'coo', nome: 'Coordenação' }, { id: 'sup', nome: 'Supervisão' }, { id: 'lid', nome: 'Liderança' }] }, { id: 'ope', nome: 'Operacional', sub: [] }];
+  const eqNiveis = () => { const n = DB.cfg && DB.cfg.niveis; return Array.isArray(n) ? n : EQ_NIV_DEF; };
+  function eqNivFlat(L) { const o = []; (L || eqNiveis()).forEach((n, i) => { o.push({ id: n.id, nome: n.nome, num: String(i + 1), sub: false }); (n.sub || []).forEach((s2, j) => o.push({ id: s2.id, nome: s2.nome, num: (i + 1) + '.' + (j + 1), sub: true, pai: n.id })); }); return o; }
+  const eqNiv = (id) => (id ? eqNivFlat().find((x) => x.id === id) || null : null);
+  const eqNivRank = (id) => eqNivFlat().findIndex((x) => x.id === id);
+  const eqNivTxt = (id) => { const n = eqNiv(id); return n ? n.num + ' · ' + n.nome : ''; };
+  const eqNivId = () => 'nv-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+  /* Configurações › Funcionários › Níveis */
+  const NV = { L: null, sujo: false };
+  function eqNivRender(roA) {
+    const host = $('#nv-host'); if (!host) return;
+    if (!NV.L || !NV.sujo) NV.L = JSON.parse(JSON.stringify(eqNiveis()));
+    const L = NV.L, cnt = (id) => eqAll().filter((p) => p.nivel === id).length, ct = (id) => { const n = cnt(id); return n ? n + (n === 1 ? ' pessoa' : ' pessoas') : '—'; };
+    const acts = (i, j) => roA ? '' : `<span class="nvacts"><button type="button" data-nv="up" data-i="${i}" data-j="${j}" title="Subir" aria-label="Subir">↑</button><button type="button" data-nv="down" data-i="${i}" data-j="${j}" title="Descer" aria-label="Descer">↓</button><button type="button" class="del" data-nv="del" data-i="${i}" data-j="${j}" title="Apagar" aria-label="Apagar">✕</button></span>`;
+    const row = (num, x, i, j) => `<div class="nvrow${j >= 0 ? ' sub' : ''}"><span class="nvn">${num}</span><input value="${esc(x.nome)}" data-nvi="${i}" data-nvj="${j}" aria-label="Nome do nível ${num}" maxlength="40" ${roA ? 'disabled' : ''}><span class="cnt">${ct(x.id)}</span>${acts(i, j)}</div>`;
+    host.innerHTML = `<p class="nvhint">${roA ? 'Só administradores alteram os níveis.' : 'Clique no nome para renomear. ↑ ↓ mudam a ordem (o número acompanha sozinho). “+ Sub-nível” cria um degrau dentro do nível.'} O nível de cada pessoa se escolhe em Editar dados (Equipe) e aparece só no cadastro.</p>
+      <div class="nvlist">${L.map((n, i) => row(i + 1, n, i, -1) + (n.sub || []).map((s2, j) => row((i + 1) + '.' + (j + 1), s2, i, j)).join('') + (roA ? '' : `<div class="nvsubadd"><button class="btn small" type="button" data-nv="addsub" data-i="${i}">+ Sub-nível em ${i + 1} · ${esc(n.nome)}</button></div>`)).join('')}</div>
+      ${roA ? '' : `<div class="nvadd"><button class="btn" type="button" data-nv="add">+ Nível</button><button class="btn primary" type="button" id="nv-save" ${NV.sujo ? '' : 'disabled'}>Salvar níveis</button>${NV.sujo ? '<button class="btn ghost" type="button" data-nv="undo">Desfazer</button><span class="muted" style="font-size:12.5px;align-self:center">alterações não salvas</span>' : ''}</div>`}`;
+    if (roA) return;
+    const muda = () => { NV.sujo = true; eqNivRender(roA); };
+    host.oninput = (e) => { const t = e.target; if (t.dataset.nvi == null) return; const i = +t.dataset.nvi, j = +t.dataset.nvj; (j >= 0 ? L[i].sub[j] : L[i]).nome = t.value; if (!NV.sujo) { NV.sujo = true; const sv = $('#nv-save'); if (sv) sv.disabled = false; } };
+    host.onclick = (e) => {
+      const b = e.target.closest('[data-nv]'); if (!b) return;
+      const a = b.dataset.nv, i = +b.dataset.i, j = b.dataset.j == null ? -1 : +b.dataset.j;
+      const arr = j >= 0 ? L[i].sub : L, k = j >= 0 ? j : i;
+      if (a === 'add') { L.push({ id: eqNivId(), nome: 'Novo nível', sub: [] }); muda(); setTimeout(() => { const x = $$('#nv-host input[data-nvj="-1"]').pop(); if (x) { x.focus(); x.select(); } }, 30); }
+      else if (a === 'addsub') { L[i].sub = L[i].sub || []; L[i].sub.push({ id: eqNivId(), nome: 'Novo sub-nível' }); muda(); setTimeout(() => { const x = $$(`#nv-host input[data-nvi="${i}"]`).pop(); if (x) { x.focus(); x.select(); } }, 30); }
+      else if (a === 'up' && k > 0) { [arr[k - 1], arr[k]] = [arr[k], arr[k - 1]]; muda(); }
+      else if (a === 'down' && k < arr.length - 1) { [arr[k + 1], arr[k]] = [arr[k], arr[k + 1]]; muda(); }
+      else if (a === 'undo') { NV.sujo = false; eqNivRender(roA); }
+      else if (a === 'del') {
+        const it = arr[k], ids = [it.id].concat(j < 0 ? (it.sub || []).map((x) => x.id) : []), n = eqAll().filter((p) => ids.includes(p.nivel)).length;
+        const fim = () => { arr.splice(k, 1); muda(); };
+        if (!n && !(j < 0 && (it.sub || []).length)) { fim(); return; }
+        confirmBox('Apagar nível', `“${it.nome}”${j < 0 && (it.sub || []).length ? ' e os sub-níveis dele' : ''} sai${j < 0 && (it.sub || []).length ? 'em' : ''} da lista.${n ? ` ${n} ${n === 1 ? 'pessoa fica' : 'pessoas ficam'} sem nível ao salvar.` : ''}`, 'Apagar', fim, true);
+      }
+    };
+    $('#nv-save').onclick = async () => {
+      const b = $('#nv-save'), limpa = (x) => String(x || '').trim().replace(/\s+/g, ' ');
+      const out = L.map((n) => ({ id: n.id, nome: limpa(n.nome), sub: (n.sub || []).map((s2) => ({ id: s2.id, nome: limpa(s2.nome) })) }));
+      if (eqNivFlat(out).some((x) => !x.nome)) { toast('Há nível sem nome.', true); return; }
+      const ok = new Set(eqNivFlat(out).map((x) => x.id)), orf = eqAll().filter((p) => p.nivel && !ok.has(p.nivel));
+      b.disabled = true; b.textContent = 'Salvando…';
+      try {
+        await DB.db.doc('cfg/main').update({ niveis: out });
+        if (orf.length) await savePessoas((cur) => cur.map((x) => { if (x.nivel && !ok.has(x.nivel)) { const y = Object.assign({}, x); delete y.nivel; return y; } return x; }), `Níveis apagados: ${orf.length} pessoa(s) ficaram sem nível`);
+        logEntry('GERAL', 'cfg', 'alterado', 'Níveis da hierarquia: ' + eqNivFlat(out).map((x) => x.num + ' ' + x.nome).join(', '), null);
+        NV.sujo = false; toast('Níveis salvos.'); await sleep(300); eqNivRender(roA);
+      } catch (err) { toast(err && (err.code === 'invalid_argument' || err.code === 'permission_denied') ? 'Só administradores alteram os níveis.' : 'Não foi possível salvar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; b.textContent = 'Salvar níveis'; }
+    };
+  }
+
   /* ---------- tela ---------- */
   VIEWS.equipe = (main) => {
     const modo = EQ.modo || lsGet('cq-eq-modo', 'cards'), all = eqAll().sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')), ativos = all.filter((p) => !p.inativo);
@@ -11522,7 +11610,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (!eqAdm()) { toast('Só administradores alteram funcionários.', true); return; }
     const p0 = id ? eqBy(id) : null, novo = !p0, p = p0 || { nome: '', funcoes: [] }, c = S.model.cfg, FN = funcoesAll();
     const desc = novo ? new Set() : eqDescendentes(p.id);
-    const gestores = eqAll().filter((x) => !x.inativo && x.id !== p.id && !desc.has(x.id)).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    const rk = (x) => { const r = eqNivRank(x.nivel); return r < 0 ? 999 : r; };
+    const gestores = eqAll().filter((x) => !x.inativo && x.id !== p.id && !desc.has(x.id)).sort((a, b) => rk(a) - rk(b) || a.nome.localeCompare(b.nome, 'pt-BR'));
+    const NVL = eqNiveis(), nvAtual = eqNiv(p.nivel) ? p.nivel : '';
+    const nvB = (id, txt) => `<button type="button" class="pfun nv" data-nv="${esc(id)}" aria-pressed="${id === nvAtual}">${esc(txt)}</button>`;
+    const nvHTML = `<div class="field s2"><span>Nível</span><div class="nvpick" id="eq-nivel">${NVL.map((n, i) => `<div class="ln">${nvB(n.id, (i + 1) + ' · ' + n.nome)}</div>${(n.sub || []).length ? `<div class="ln sub">${n.sub.map((s2, j) => nvB(s2.id, (i + 1) + '.' + (j + 1) + ' · ' + s2.nome)).join('')}</div>` : ''}`).join('')}</div>
+        <small class="muted nvsm">Toque para escolher (toque de novo para tirar). Os nomes e a ordem se mudam em Configurações › Funcionários › Níveis. O nível aparece só aqui no cadastro.</small></div>`;
     const sel = (id2, list, v) => `<select id="${id2}"><option value=""></option>${uniq(list.concat(v ? [v] : [])).map((o) => `<option ${E.low(o) === E.low(v || '') ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select>`;
     let foto = null, fotoTirar = false;
     openDrawer(novo ? 'Novo funcionário' : p.nome, novo ? 'Novo funcionário' : 'Editar funcionário', `<div class="pfform" id="eq-form">
@@ -11532,8 +11625,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${soFoto ? '' : `<div class="fsec"><h3>Dados</h3><div class="fgrid">
         <label class="field s2"><span>Nome completo <b>*</b></span><input id="eq-nome" value="${esc(p.nome || '')}" autocomplete="off"></label>
         <label class="field"><span>Cargo</span><input id="eq-cargo" value="${esc(p.cargo || '')}" placeholder="ex.: Inspetor de qualidade" autocomplete="off"></label>
+        ${nvHTML}
         <label class="field"><span>Setor</span>${sel('eq-setor', c.GER_SETORES || [], p.setor)}</label><label class="field"><span>Filial</span>${sel('eq-filial', c.GER_FILIAIS || [], p.filial)}</label>
-        <label class="field s2"><span>Responde a</span><select id="eq-gestor"><option value="">— ninguém (topo da hierarquia) —</option>${gestores.map((x) => `<option value="${esc(x.id)}" ${x.id === p.gestor ? 'selected' : ''}>${esc(x.nome)}${x.cargo ? ' · ' + esc(x.cargo) : ''}</option>`).join('')}</select></label>
+        <label class="field s2"><span>Responde a</span><select id="eq-gestor"><option value="">— ninguém (topo da hierarquia) —</option>${gestores.map((x) => `<option value="${esc(x.id)}" ${x.id === p.gestor ? 'selected' : ''}>${esc(x.nome)}${eqNiv(x.nivel) ? ' · nível ' + esc(eqNivTxt(x.nivel)) : x.cargo ? ' · ' + esc(x.cargo) : ''}</option>`).join('')}</select><small class="muted nvsm">Os nomes aparecem com o nível. Se o escolhido for do mesmo nível ou abaixo, aparece um aviso para conferir.</small></label>
+        <div class="warnbox s2" id="eq-nvw" hidden></div>
         <label class="field s2"><span>E-mail</span><input id="eq-email" type="email" value="${esc(p.email || '')}" placeholder="nome@acosvital.com.br" autocomplete="off"></label>
         <label class="field"><span>Telefone</span><input id="eq-tel" value="${esc(p.tel || '')}" inputmode="tel" autocomplete="off"></label><label class="field"><span>Ramal</span><input id="eq-ramal" value="${esc(p.ramal || '')}" inputmode="numeric" autocomplete="off"></label>
         <label class="field"><span>Admissão</span><input id="eq-adm" type="date" value="${esc(p.admissao || '')}"></label></div></div>
@@ -11565,6 +11660,15 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         catch (err) { toast('Não foi possível excluir: ' + ((err && (err.message || err.code)) || err), true); }
       }, true);
     };
+    const nvAviso = () => {
+      const w = $('#eq-nvw'); if (!w) return;
+      const nb = $('#eq-nivel [aria-pressed="true"]'), mi = nb ? nb.dataset.nv : '', g = eqBy($('#eq-gestor').value);
+      const r1 = eqNivRank(mi), r2 = g ? eqNivRank(g.nivel) : -1;
+      w.hidden = !(r1 >= 0 && r2 >= 0 && r2 >= r1);
+      if (!w.hidden) w.innerHTML = `<b>Confira:</b> ${esc(g.nome)} é nível <b>${esc(eqNivTxt(g.nivel))}</b>, ${r2 === r1 ? 'o mesmo nível' : 'abaixo do nível'} escolhido aqui (<b>${esc(eqNivTxt(mi))}</b>). Pode salvar assim, se for isso mesmo.`;
+    };
+    $$('#eq-nivel [data-nv]').forEach((b) => { b.onclick = () => { const on = b.getAttribute('aria-pressed') !== 'true'; $$('#eq-nivel [data-nv]').forEach((x) => x.setAttribute('aria-pressed', 'false')); b.setAttribute('aria-pressed', String(on)); nvAviso(); }; });
+    if ($('#eq-gestor')) { $('#eq-gestor').addEventListener('change', nvAviso); nvAviso(); }
     $$('#eq-sitb [data-s]').forEach((b) => { b.onclick = () => $$('#eq-sitb [data-s]').forEach((x) => x.setAttribute('aria-pressed', x === b)); });
     $('#eq-ok').onclick = async () => {
       const btn = $('#eq-ok');
@@ -11582,11 +11686,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const pid = p.id || eqSlug(nome);
       const np = Object.assign({}, p0 ? (S.model.cfg.PESSOAS || []).find((x) => E.key(x.nome) === E.key(p0.nome)) || {} : {});
       Object.assign(np, { id: pid, nome, funcoes: $$('#pd-fun .pfun[data-f][aria-pressed="true"]').map((b) => b.dataset.f) });
-      const campos = { cargo: v('#eq-cargo'), setor: $('#eq-setor').value, filial: $('#eq-filial').value, gestor: $('#eq-gestor').value, email, tel: v('#eq-tel'), ramal: v('#eq-ramal'), admissao: $('#eq-adm').value };
+      const campos = { cargo: v('#eq-cargo'), setor: $('#eq-setor').value, filial: $('#eq-filial').value, gestor: $('#eq-gestor').value, email, tel: v('#eq-tel'), ramal: v('#eq-ramal'), admissao: $('#eq-adm').value, nivel: (($('#eq-nivel [aria-pressed="true"]') || {}).dataset || {}).nv || '' };
       Object.keys(campos).forEach((k) => { if (campos[k]) np[k] = campos[k]; else delete np[k]; });
       if ($('#eq-sitb [data-s="0"]').getAttribute('aria-pressed') === 'true') np.inativo = true; else delete np.inativo;
-      const mud = []; const rot = { nome: 'Nome', cargo: 'Cargo', setor: 'Setor', filial: 'Filial', gestor: 'Responde a', email: 'E-mail', tel: 'Telefone', ramal: 'Ramal', admissao: 'Admissão' };
-      if (p0) Object.keys(rot).forEach((k) => { const a = k === 'gestor' ? (eqBy(p0[k]) || {}).nome : p0[k], b = k === 'gestor' ? (eqBy(np[k]) || {}).nome : np[k]; if ((a || '') !== (b || '')) mud.push(`${rot[k]}: ${a || '—'} → ${b || '—'}`); });
+      const mud = []; const rot = { nome: 'Nome', cargo: 'Cargo', setor: 'Setor', filial: 'Filial', gestor: 'Responde a', email: 'E-mail', tel: 'Telefone', ramal: 'Ramal', admissao: 'Admissão', nivel: 'Nível' };
+      if (p0) Object.keys(rot).forEach((k) => { const a = k === 'gestor' ? (eqBy(p0[k]) || {}).nome : k === 'nivel' ? eqNivTxt(p0[k]) : p0[k], b = k === 'gestor' ? (eqBy(np[k]) || {}).nome : k === 'nivel' ? eqNivTxt(np[k]) : np[k]; if ((a || '') !== (b || '')) mud.push(`${rot[k]}: ${a || '—'} → ${b || '—'}`); });
       if (p0 && !!p0.inativo !== !!np.inativo) mud.push(np.inativo ? 'Desligado (inativo)' : 'Reativado');
       if (p0 && (p0.funcoes || []).slice().sort().join() !== np.funcoes.slice().sort().join()) mud.push('Funções alteradas');
       const novas = $$('#pd-fun .pfun[data-novo]').filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => ({ k: b.dataset.f, l: b.dataset.novo }));
