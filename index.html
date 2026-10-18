@@ -1448,6 +1448,32 @@ table.t tbody tr.sel td { background: color-mix(in srgb, var(--rif) 9%, var(--su
 .tbw.rirt .rires .seg button { padding: 12px 16px; font-size: 15px; }
 .tbw.rirt .lchip { font-size: 14px; }
 @media (max-width: 700px) { .tbw.rirt .rirow { grid-template-columns: minmax(0, 1fr); } .tbw.rirt .tbf { flex-wrap: wrap; padding: 10px 14px; gap: 8px; } .tbw.rirt .tbf .grow { display: none; } .tbw.rirt .tbf .btn.big { height: 50px; font-size: 16px; padding: 0 14px; flex: 1 1 auto; } .tbw.rirt .tbf .chip { order: -1; flex-basis: 100%; } }
+/* ================= Manual da Qualidade ================= */
+.mwrap { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 16px; align-items: start; }
+.mlist { display: grid; gap: 6px; position: sticky; top: 12px; }
+.mitem { text-align: left; display: grid; gap: 3px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font: inherit; cursor: pointer; }
+.mitem:hover { border-color: var(--line-2); } .mitem.on { border-color: var(--ink); box-shadow: inset 3px 0 0 var(--ink); }
+.mitem .mcod { font: 600 11.5px var(--f-mono); color: var(--ink-3); } .mitem b { font-size: 13.5px; line-height: 1.3; } .mitem .chip { justify-self: start; }
+.mread { min-width: 0; } .mbtns { justify-content: flex-end; margin-bottom: 8px; } .mav1 { margin-bottom: 10px; }
+.mdoc { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 22px; max-width: 920px; }
+.mdoc .mcab { display: grid; grid-template-columns: 150px 1fr 190px; border: 1.5px solid var(--ink); margin-bottom: 16px; }
+.mdoc .mcab > div { padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; }
+.mdoc .mlg img { max-width: 100%; max-height: 52px; object-fit: contain; } .mdoc .mav { font: 800 18px var(--f-display); }
+.mdoc .mtt { border-left: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); text-align: center; }
+.mdoc .mtt span { font: 600 11px var(--f-body); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); } .mdoc .mtt b { font: 700 17px/1.25 var(--f-body); margin-top: 3px; text-wrap: balance; }
+.mdoc .mnr { gap: 4px; } .mdoc .mnr div { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; } .mdoc .mnr span { color: var(--ink-3); }
+.mdoc .msec { margin: 0 0 18px; } .mdoc .msec h3 { margin: 0 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--line); font: 700 13px var(--f-body); letter-spacing: .05em; text-transform: uppercase; }
+.mdoc .msec p { margin: 0 0 8px; max-width: 80ch; line-height: 1.55; } .mdoc ol, .mdoc ul { margin: 0 0 8px; padding-left: 22px; } .mdoc li { margin: 0 0 6px; line-height: 1.5; max-width: 82ch; }
+.mdoc table.mt { width: 100%; border-collapse: collapse; margin: 4px 0 10px; font-size: 13px; } .mdoc table.mt th, .mdoc table.mt td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; } .mdoc table.mt th { background: var(--surface-2); font-weight: 600; }
+.mdoc .mnota { border-left: 3px solid var(--line-2); background: var(--surface-2); padding: 6px 10px; border-radius: 0 6px 6px 0; }
+.mdoc .mflux { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 4px 0 12px; }
+.mdoc .mflux div { border: 1px solid var(--line-2); border-radius: 8px; padding: 6px 8px; width: 134px; display: grid; gap: 1px; background: var(--surface-2); }
+.mdoc .mflux i { font: 700 11px var(--f-mono); font-style: normal; color: var(--ink-3); } .mdoc .mflux b { font-size: 12.5px; } .mdoc .mflux span, .mdoc .mflux small { font-size: 11px; color: var(--ink-3); } .mdoc .mflux em { font-style: normal; color: var(--ink-3); }
+.mdoc .mass { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 6px; margin: 6px 0 16px; } .mdoc .mass div { padding: 8px 10px; display: grid; gap: 2px; } .mdoc .mass div + div { border-left: 1px solid var(--line); }
+.mdoc .mass span { font: 600 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.mdoc.minuta { background-image: repeating-linear-gradient(-45deg, transparent 0 22px, color-mix(in srgb, var(--warn) 6%, transparent) 22px 44px); }
+.tbw .mwrap { grid-template-columns: 260px minmax(0, 1fr); } .tbw .mdoc { font-size: 15.5px; }
+@media (max-width: 900px) { .mwrap, .tbw .mwrap { grid-template-columns: 1fr; } .mlist { position: static; } .mdoc { padding: 14px; } .mdoc .mcab { grid-template-columns: 1fr; } .mdoc .mtt { border-left: 0; border-right: 0; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); } .mdoc .mass { grid-template-columns: 1fr; } .mdoc .mass div + div { border-left: 0; border-top: 1px solid var(--line); } .mdoc table.mt { display: block; overflow-x: auto; } }
 .rtk { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .rtk div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; box-shadow: inset 0 4px 0 var(--k); }
 .rtk b { display: block; font: 800 30px/1.1 var(--f-display); color: var(--k); } .rtk span { font: 600 13.5px var(--f-body); color: var(--ink-2); }
@@ -1604,6 +1630,7 @@ body.cq-ver .tbhd { top: 36px; }
       <span class="grp">Ferramentas</span>
       <a href="#auditoria" data-v="auditoria" style="--c:var(--warn)"><span class="sw"></span>Auditoria<span class="ct" id="ct-aud" hidden></span></a>
       <a href="#relatorio" data-v="relatorio" style="--c:var(--geral)"><span class="sw"></span>Relatório mensal</a>
+      <a href="#manual" data-v="manual" style="--c:var(--geral)"><span class="sw"></span>Manual</a>
       <a href="#trello" data-v="trello" style="--c:var(--jur)"><span class="sw"></span>Trello Jurong</a>
       <a href="#acomp" data-v="acomp" style="--c:var(--acj)"><span class="sw"></span>Acompanhamento Jurong</a>
       <a href="#historico" data-v="historico" style="--c:var(--geral)"><span class="sw"></span>Histórico</a>
@@ -3421,6 +3448,8 @@ re2js/build/index.js:
     Object.keys(TELA_DEF).forEach((k) => { const ok = k === 'config' ? ['nao', 'ver', 'edita'] : k === 'exportar' ? ['sim', 'nao'] : k === 'equipe' ? ['tudo', 'org', 'nao'] : ['ve', 'nao']; out[k] = ok.includes(t[k]) ? t[k] : TELA_DEF[k]; });
     return out;
   }
+  /* nome de pessoa no padrão da Qualidade: Maria da Silva */
+  const nomeP = (v) => String(v || '').replace(/\s+/g, ' ').trim().toLocaleLowerCase('pt-BR').split(' ').map((w, i) => (i > 0 && /^(da|de|do|das|dos|e)$/.test(w) ? w : w.replace(/(^|[-'’])(\p{L})/gu, (m, a, b) => a + b.toLocaleUpperCase('pt-BR')))).join(' ');
   /* onde a pessoa trabalha: Central (administrativo) ou só no tablet (inspetor), com as ferramentas do tablet liberadas */
   function tipoDe(d) {
     if (!d || d.perfil === 'admin') return { so: false, tools: {} };
@@ -3634,7 +3663,7 @@ re2js/build/index.js:
           acesso.rnctab = ac.rnctab === 'lanca' && tp.so !== true ? 'lanca' : 'nao'; /* cadastro antigo da Central com "RNC pelo tablet": continua */
           Object.keys(TELA_DEF).forEach((k) => { const on = accBox.querySelector(`[data-t="${k}"][aria-pressed="true"]`); telas[k] = on ? on.dataset.v : TELA_DEF[k]; });
         }
-        const d = { pessoaId: pesSel.value || null, nome: document.getElementById('u-nome').value.trim(), perfil: adm ? 'admin' : 'usuario', tipo: adm ? null : tipo, acesso, telas, ativo: document.getElementById('u-ativo').checked, _u: Date.now(), _ub: ME.email };
+        const d = { pessoaId: pesSel.value || null, nome: nomeP(document.getElementById('u-nome').value), perfil: adm ? 'admin' : 'usuario', tipo: adm ? null : tipo, acesso, telas, ativo: document.getElementById('u-ativo').checked, _u: Date.now(), _ub: ME.email };
         try { await SDK.setDoc(SDK.doc(fs, 'usuarios/' + email), d); A.closeLayer(); A.toast(novo ? 'Usuário liberado: ' + email : 'Usuário atualizado. A pessoa vê a mudança ao recarregar a página.'); }
         catch (e) { A.toast(mapErr(e).message, true); }
       };
@@ -4195,10 +4224,35 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     RNC: (key) => { const m = /^RNCF?-(\d{4})-(\d+)$/.exec(key); return m ? m[1] + '-c' + E.pad(Math.floor(+m[2] / CHUNK.RNC), 3) : 'x'; },
     RNCC: (key) => { const m = /^(?:RNCC|RND)-(\d{4})-(\d+)$/.exec(key); return m ? m[1] + '-c' + E.pad(Math.floor(+m[2] / CHUNK.RNCC), 3) : 'x'; }
   };
+  /* ---------- padrão de escrita da Qualidade (aplicado sozinho ao gravar) ----------
+     códigos, números de documento, fornecedores, clientes, ligas, materiais, unidades e laboratórios: MAIÚSCULAS;
+     descrições e itens de lista: primeira letra maiúscula (o resto como digitado, para não estragar siglas);
+     nomes de pessoas: Maria da Silva; diâmetros, espessuras e textos livres: como digitados. */
+  const upTxt = (v) => (typeof v === 'string' ? v.replace(/\s+/g, ' ').trim().toLocaleUpperCase('pt-BR') : v);
+  const capTxt = (v) => { if (typeof v !== 'string') return v; const t = v.replace(/\s+/g, ' ').trim(); return t ? t.charAt(0).toLocaleUpperCase('pt-BR') + t.slice(1) : t; };
+  const NOME_PART = new Set(['da', 'de', 'do', 'das', 'dos', 'e']);
+  const nomeProprio = (v) => { if (typeof v !== 'string') return v; const t = v.replace(/\s+/g, ' ').trim(); return t.toLocaleLowerCase('pt-BR').split(' ').map((w, i) => (i > 0 && NOME_PART.has(w) ? w : w.replace(/(^|[-'’])(\p{L})/gu, (m, a, b) => a + b.toLocaleUpperCase('pt-BR')))).join(' '); };
+  const LIST_UP = new Set(['GER_FORNECEDORES', 'GER_CLIENTES', 'AV_LIGAS', 'AV_NORMAS', 'AV_UNIDADES', 'CAL_LABS']);
+  const LIST_KEEP = new Set(['AV_DIAMETROS', 'AV_ESPESSURAS', 'CAL_FREQUENCIAS', 'CAL_EMAILS']);
+  const listCase = (n, v) => (typeof v !== 'string' || LIST_KEEP.has(n) ? v : LIST_UP.has(n) ? upTxt(v) : capTxt(v));
+  const listNorm = (n, arr) => { const seen = new Set(), out = []; (arr || []).forEach((v) => { const x = listCase(n, v); const k = typeof x === 'string' ? E.key(x) : String(x); if (x === '' || x == null || seen.has(k)) return; seen.add(k); out.push(x); }); return out; };
+  const CASE_UP = { AV: ['corrida', 'volume', 'liga', 'norma', 'forn', 'nf', 'pc', 'pv', 'cert', 'und'], SERV: ['nf', 'forn', 'pc', 'pv', 'cert'], RNC: ['forn', 'cliente', 'nf', 'pv', 'oc', 'lotesAV'], RNCC: ['cliente', 'nf', 'pv', 'lotes'], INS: ['codigo', 'marca', 'cert', 'serie', 'lab'] };
+  const CASE_CAP = { AV: ['desc'], SERV: ['desc'], RNC: ['motivo', 'depto'], RNCC: ['produto'], INS: ['desc', 'local'] };
+  /* campo que vem de uma lista: se o valor já está na lista (sem diferença de acento ou maiúscula), grava como está na lista */
+  const CASE_LST = { AV: { desc: 'AV_DESCRICOES', liga: 'AV_LIGAS', norma: 'AV_NORMAS', und: 'AV_UNIDADES', diam: 'AV_DIAMETROS', esp: 'AV_ESPESSURAS' }, SERV: { desc: 'SERV_TIPOS' }, RNC: { motivo: 'RNC_MOTIVOS', depto: 'GER_SETORES' }, RNCC: { motivo: 'RNCC_MOTIVOS' }, INS: { lab: 'CAL_LABS', depto: 'GER_SETORES' } };
+  function caseVal(mod, k, v) {
+    if (typeof v !== 'string' || !v.trim() || v.trim() === '*') return v;
+    const ln = (CASE_LST[mod] || {})[k];
+    if (ln && S.model) { const kk = E.key(v), hit = (S.model.cfg[ln] || []).find((o) => E.key(o) === kk); if (hit != null && hit !== '') return String(hit); }
+    if ((CASE_UP[mod] || []).includes(k)) return upTxt(v);
+    if ((CASE_CAP[mod] || []).includes(k)) return capTxt(v);
+    return v;
+  }
+  function caseNorm(mod, f) { if (f) Object.keys(f).forEach((k) => { f[k] = caseVal(mod, k, f[k]); }); return f; }
   function cfgFromDoc(d) {
     d = d || {};
     const c = Object.assign({}, d.params || {});
-    const l = d.listas || {};
+    const l = {}; Object.keys(d.listas || {}).forEach((k) => { l[k] = listNorm(k, d.listas[k]); });
     Object.keys(l).forEach((k) => { c[k] = (l[k] || []).slice(); });
     c.GER_FERIADOS = (d.feriados || []).map(Math.floor);
     c.CAL_TIPOS = (d.tipos || []).map((t) => ({ tipo: String(t.tipo).trim(), faixa: t.faixa, ema: typeof t.ema === 'number' ? t.ema : null, criterio: typeof t.ema === 'number' ? t.ema : null }));
@@ -4219,9 +4273,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     c.RNCC_GRAVIDADE = ['Baixa', 'Média', 'Alta']; c.RNCC_PROCEDENTE = ['Em análise', 'Sim', 'Não']; c.RNCC_ORIGENS = ['Interna', 'Fornecedor', 'Transporte', 'Cliente (uso/aplicação)']; c.RNCC_EFICACIA = ['Em verificação', 'Eficaz', 'Não eficaz'];
     if (!l.AV_UNIDADES) c.AV_UNIDADES = ['PÇ', 'KG', 'M', 'M²', 'T', 'BARRA', 'UN'];
     c.AV_INSPECAO = ['Aprovado', 'Reprovado', 'Em análise', CONC];
-    c.FORN_EMAILS = {}; c.FORN_INFO = (Array.isArray(d.fornEmails) ? d.fornEmails : Object.entries(d.fornEmails || {}).map(([nome, email]) => ({ nome, email }))).filter((o) => o && o.nome);
+    const entUp = (o) => Object.assign({}, o, { nome: upTxt(String(o.nome)) }, Array.isArray(o.apelidos) ? { apelidos: o.apelidos.map((a) => upTxt(String(a))) } : {});
+    c.FORN_EMAILS = {}; c.FORN_INFO = (Array.isArray(d.fornEmails) ? d.fornEmails : Object.entries(d.fornEmails || {}).map(([nome, email]) => ({ nome, email }))).filter((o) => o && o.nome).map(entUp);
     c.FORN_INFO.forEach((o) => { if (o.email) c.FORN_EMAILS[o.nome] = o.email; });
-    c.CLI_INFO = (Array.isArray(d.cliEmails) ? d.cliEmails : []).filter((o) => o && o.nome);
+    c.CLI_INFO = (Array.isArray(d.cliEmails) ? d.cliEmails : []).filter((o) => o && o.nome).map(entUp);
     c.CLI_EMAILS = {}; c.CLI_INFO.forEach((o) => { if (o.email) c.CLI_EMAILS[o.nome] = o.email; });
     c.SETOR_EMAILS = {}; (Array.isArray(d.setorEmails) ? d.setorEmails : []).forEach((o) => { if (o && o.nome) c.SETOR_EMAILS[o.nome] = o.email || ''; });
     c.RNC_CC_ATRASO = String(d.rncCcAtraso || '');
@@ -4514,6 +4569,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (v === 'riftab') return !!S.model && (tbOnly() ? tbTool('rif') && cw('rif') : vis('rif'));
     if (v === 'rirtab') return !!S.model && rirOn() && cw('rir') && (!tbOnly() || tbTool('rir'));
     if (v === 'rnctab') return !!S.model && rncRelOn() && (tbOnly() ? tbTool('rnc') && (tbInsp() || cw('rnc')) : (cw('rnc') || tbInsp()));
+    if (v === 'manual') return !!S.model && (!tbOnly() || manLista().length > 0);
     if (S.model && tbOnly()) return false; if (VIEW_COL[v]) return vis(VIEW_COL[v]); if (v === 'cadastro') return typeof window.CQ_ACCESS !== 'function' || anyLanca(); const s = SCR(v); return s == null || s !== 'nao'; };
   const firstView = () => (S.model && tbOnly() ? ['rirtab', 'rnctab', 'riftab'].find((v) => viewOk(v)) || null : null) || $$('#nav a').map((a) => a.dataset.v).find((v) => VIEWS[v] && viewOk(v)) || null;
   const cfgMode = () => { const s = SCR('config'); if (s === 'admin' || s === 'edita' || s === 'ver') return s; return DB.admin === false ? 'ver' : 'admin'; };
@@ -4540,7 +4596,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     return mx;
   }
   async function createRecord(mod, fields) {
-    entStamp(mod, fields);
+    entStamp(mod, fields); caseNorm(mod, fields);
     await lock(mod);
     let key;
     if (mod === 'AV') { const mx = await freshMax('AV', (k) => /^AV-\d+$/.test(k)); key = 'AV-' + (mx + 1); fields.id = avIdFmt(mx + 1); }
@@ -4558,7 +4614,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   async function updateRecord(mod, key, changes) {
     const docId = DB.where[mod][key]; if (!docId) throw new Error('Registro não encontrado. Atualize a tela.');
-    entStamp(mod, changes);
+    entStamp(mod, changes); caseNorm(mod, changes);
     if (mod === 'AV' && !('qr' in changes)) PUBQ.add(key);
     if (mod === 'INS' && !('qr' in changes)) INSQ.add(key);
     await DB.db.doc(MOD[mod].col + '/' + docId).update({ items: { [key]: clean(Object.assign({}, changes, { _u: Date.now(), _ub: DB.me || null })) } });
@@ -4709,6 +4765,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       plus: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/>',
       check: '<path d="M9 6h11M9 12h11M9 18h11"/><path d="M3 6l1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"/>',
       doc: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 13h6M9 17h6"/>',
+      book: '<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3M9 7h6M9 10.5h6"/>',
       board: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 8v7M12 8v4M16 8v9"/>',
       flow: '<rect x="3" y="4" width="7" height="5" rx="1"/><rect x="14" y="15" width="7" height="5" rx="1"/><path d="M6.5 9v4a2 2 0 0 0 2 2H14"/>',
       clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
@@ -4720,7 +4777,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       org: '<rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M6 16v-4h12v4"/>',
       gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>'
     };
-    const V = { painel: 'grid', alertas: 'bell', rastreio: 'route', equipe: 'org', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rir: 'rirc', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', trello: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
+    const V = { painel: 'grid', alertas: 'bell', rastreio: 'route', equipe: 'org', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rir: 'rirc', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', manual: 'book', trello: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
     const o = {}; Object.keys(V).forEach((v) => { o[v] = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[V[v]]}</svg>`; });
     return o;
   })();
@@ -5183,7 +5240,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       main.innerHTML = `<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--info)">Banco novo</span><h2>Preparando a Central</h2><p>${DB.admin === true ? 'Criando a configuração inicial… se esta tela não sumir em alguns segundos, recarregue a página.' : 'A configuração inicial ainda não foi criada. Peça a um administrador para abrir a Central uma vez.'}</p></div></div>`;
       return;
     }
-    document.body.classList.toggle('tabmode', S.view === 'rnctab' || S.view === 'riftab' || S.view === 'rirtab');
+    document.body.classList.toggle('tabmode', S.view === 'rnctab' || S.view === 'riftab' || S.view === 'rirtab' || (S.view === 'manual' && tbOnly()));
     VIEWS[S.view](main);
     const bn = BANNER_VIEWS.includes(S.view) ? rncBanner() : ''; if (bn) main.insertAdjacentHTML('afterbegin', bn);
     hideInvisible(main);
@@ -5965,7 +6022,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function readB64(file) { return new Promise((res, rej) => { const r = new FileReader(); r.onerror = () => rej(new Error('Não consegui ler o arquivo.')); r.onload = () => res(String(r.result).split(',')[1] || ''); r.readAsDataURL(file); }); }
   function certUploadDialog(x) {
     if (!DRIVE_URL()) {
-      openModal('Envio de certificados', `<p style="margin:0">O envio para o Google Drive ainda não foi configurado. ${DB.admin ? 'Cole o endereço do script em <b>Configurações › Calibração › Certificados no Google Drive</b>.' : 'Peça a um administrador para configurar em Configurações.'}</p><div class="formfoot">${DB.admin ? '<button class="btn primary" type="button" id="up-cfg">Abrir Configurações</button>' : ''}<button class="btn" type="button" data-act="close">Fechar</button></div>`);
+      openModal('Envio de certificados', `<p style="margin:0">O envio para o Google Drive ainda não foi configurado. ${DB.admin ? 'Cole o endereço do script em <b>Configurações › Aparência, logo e Drive</b>.' : 'Peça a um administrador para configurar em Configurações.'}</p><div class="formfoot">${DB.admin ? '<button class="btn primary" type="button" id="up-cfg">Abrir Configurações</button>' : ''}<button class="btn" type="button" data-act="close">Fechar</button></div>`);
       const b = $('#up-cfg'); if (b) b.onclick = () => { closeLayer(); go('config'); };
       return;
     }
@@ -7555,7 +7612,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const el = $(`#ff-${f.c}`); if (!el) return;
       let v = rec ? rawToInput(f, rec.raw[f.c]) : (S.prefill && S.prefill[f.c] != null && S.prefill[f.c] !== '' ? String(S.prefill[f.c]) : (f.def ? f.def() : ''));
       if (rec && fd.fresh && fd.fresh[f.c] && !S.editKey) v = fd.fresh[f.c]();
-      if (f.type === 'select' && v && !Array.from(el.options).some((o) => o.value === v)) { const o = document.createElement('option'); o.value = v; o.textContent = v + (v === CONC ? '' : ' (fora da lista)'); el.appendChild(o); }
+      if (f.type === 'select' && v && !Array.from(el.options).some((o) => o.value === v)) { const m = Array.from(el.options).find((o) => o.value && E.key(o.value) === E.key(v)); if (m) v = m.value; else { const o = document.createElement('option'); o.value = v; o.textContent = v + (v === CONC ? '' : ' (fora da lista)'); el.appendChild(o); } }
       el.value = v;
     });
   }
@@ -7628,7 +7685,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const readNota = () => { const o = {}; nota.f.forEach((f) => { const el = $(`#ff-${f.c}`); o[f.c] = el ? el.value.trim() : ''; }); return o; };
     const drawItems = () => {
       box.innerHTML = st.items.map((it, i) => `<div class="avitem" data-i="${i}"><header><b>Lote ${i + 1}</b><span class="mono muted">→ ${avIdFmt(nx + i)}</span><span class="sp"></span><button class="btn small ghost" type="button" data-it-dup="${i}">Duplicar</button>${st.items.length > 1 ? `<button class="btn small ghost" type="button" data-it-del="${i}" aria-label="Remover lote ${i + 1}">Remover</button>` : ''}</header><div class="fgrid">${itf.map((f) => itField(f, i)).join('')}</div></div>`).join('');
-      st.items.forEach((it, i) => itf.forEach((f) => { const el = $(`#it${i}-${f.c}`); if (!el) return; const v = it[f.c] != null ? String(it[f.c]) : ''; if (f.type === 'select' && v && !Array.from(el.options).some((o) => o.value === v)) { const o = document.createElement('option'); o.value = v; o.textContent = v + ' (fora da lista)'; el.appendChild(o); } el.value = v; }));
+      st.items.forEach((it, i) => itf.forEach((f) => { const el = $(`#it${i}-${f.c}`); if (!el) return; let v = it[f.c] != null ? String(it[f.c]) : ''; if (f.type === 'select' && v && !Array.from(el.options).some((o) => o.value === v)) { const m = Array.from(el.options).find((o) => o.value && E.key(o.value) === E.key(v)); if (m) v = m.value; else { const o = document.createElement('option'); o.value = v; o.textContent = v + ' (fora da lista)'; el.appendChild(o); } } el.value = v; }));
       st.items.forEach((it, i) => { wireReveal(itf, (f) => `it${i}-${f.c}`); wireMotivo($(`#it${i}-U`), $(`#it${i}-V`)); });
       $('#avm-n').textContent = `(${st.items.length})`;
       avmPreview();
@@ -7715,7 +7772,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         <div class="formwrap"><form id="fx" novalidate>
           ${fd.pick && !editing ? `<div class="fsec"><h3>Escolha ${fd.pick === 'INS' ? 'o instrumento' : 'a RNC'}</h3><div class="fgrid"><label class="field s2"><span>${fd.pick === 'INS' ? 'Instrumento' : fd.pick === 'RNCC' ? 'RND' : 'RNC de fornecedor'} <b>*</b></span><input id="pick" list="dl-pick" autocomplete="off" placeholder="digite o ${fd.pick === 'INS' ? 'código' : 'número'}"><datalist id="dl-pick">${pickList.map((o) => `<option value="${esc(o.v)}">${esc(o.d)}</option>`).join('')}</datalist><span class="errmsg" hidden></span></label></div></div>` : ''}
           <div id="fx-fields" ${fd.pick && !editing ? 'hidden' : ''}>${secsOf(fd).map((s) => `<div class="fsec"><h3>${esc(s.t)}</h3><div class="fgrid">${s.f.map((f) => fieldHTML(f, editing && (f.lock || inspLocked(fd, f, erec)))).join('')}</div></div>`).join('')}
-          <div class="formfoot">${allFields(fd).some((f) => f.c === 'Z' || f.c === 'AF') && (editing || fd.pick) ? '<button class="btn" type="button" id="addlog">Acrescentar registro de hoje</button>' : ''}<button class="btn primary" type="submit" id="fx-save" ${cw(MOD[fd.mod].col) ? '' : 'disabled'}>${esc(editing ? 'Salvar alterações' : fd.btn)}</button>${fd.keep && !editing ? `<label class="check"><input type="checkbox" id="keep" checked> Manter ${fd.mod === 'AV' ? 'os dados da nota (data, filial, fornecedor, NF, pedido de compra, conferente)' : 'a data'} para o próximo</label>` : ''}<button class="btn ghost" type="button" id="fx-reset">Desfazer edição</button>${editing && cw(MOD[fd.mod].col) ? '<button class="btn ghost" type="button" id="fx-del" style="color:var(--crit);margin-left:auto">Excluir registro</button>' : ''}</div></div>
+          <div class="formfoot">${(fd.mod === 'RNC' || fd.mod === 'RNCC') && allFields(fd).some((f) => f.c === 'Z' || f.c === 'AF') && (editing || fd.pick) ? /* só RNC e RND têm campo de histórico (no instrumento, Z é o laboratório) */ '<button class="btn" type="button" id="addlog">Acrescentar registro de hoje</button>' : ''}<button class="btn primary" type="submit" id="fx-save" ${cw(MOD[fd.mod].col) ? '' : 'disabled'}>${esc(editing ? 'Salvar alterações' : fd.btn)}</button>${fd.keep && !editing ? `<label class="check"><input type="checkbox" id="keep" checked> Manter ${fd.mod === 'AV' ? 'os dados da nota (data, filial, fornecedor, NF, pedido de compra, conferente)' : 'a data'} para o próximo</label>` : ''}<button class="btn ghost" type="button" id="fx-reset">Desfazer edição</button>${editing && cw(MOD[fd.mod].col) ? '<button class="btn ghost" type="button" id="fx-del" style="color:var(--crit);margin-left:auto">Excluir registro</button>' : ''}</div></div>
         </form><aside class="preview" id="pv" aria-live="polite"></aside></div>
       </div></div></section></div>`;
     S.pickRec = null;
@@ -7769,10 +7826,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (f.type === 'date' && s && E.fromIso(s) == null) errs[f.c] = 'Data inválida.';
       if (f.store === 'num' && s && !isFinite(Number(String(s).replace(',', '.')))) errs[f.c] = 'Use só números (ex.: 0,05).';
       const name = fm[f.c];
-      if (isNew) { const v = toVal(f, s); if (v != null) fields[name] = v; }
+      if (isNew) { const v = caseVal(fd.mod, name, toVal(f, s)); if (v != null) fields[name] = v; }
       else {
-        const prev = rawToInput(f, rec.raw[f.c]);
-        if (s !== prev) { changes[name] = toVal(f, s); before[name] = rec.raw[f.c] == null ? null : rec.raw[f.c]; }
+        const prev = rawToInput(f, rec.raw[f.c]), nv = caseVal(fd.mod, name, toVal(f, s));
+        /* só maiúscula/minúscula diferente (padrão de escrita) não conta como alteração */
+        const igual = s === prev || (typeof nv === 'string' && nv === rec.raw[f.c]) || (f.type === 'select' && E.key(s) === E.key(prev));
+        if (!igual) { changes[name] = nv; before[name] = rec.raw[f.c] == null ? null : rec.raw[f.c]; }
       }
     });
     if (S.form === 'rncc' && isNew && vals.A) {
@@ -8152,6 +8211,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         </div>
         ${visMod('INS') ? `<div class="fsec"><h3>Certificados de calibração no Google Drive</h3><div class="cfgitem" data-cfg="DRIVE"><span class="use">Endereço do script da conta da Central (termina em /exec). Com ele, a ficha do instrumento ganha o botão “Enviar certificado”.</span><input class="inp" id="cfg-driveurl" value="${esc((DB.cfg && DB.cfg.driveUrl) || '')}" placeholder="https://script.google.com/macros/s/…/exec" ${roA ? 'disabled' : ''}></div></div>` : ''}
       </div></div></section>`)}
+      ${sec('manual', manCfgHTML())}
       ${bkPode() ? sec('backup', `<section class="sec">${band('GERAL', 'Backup por ano')}<div class="block"><div class="body">${bkPaneHTML()}</div></div></section>`) : ''}
       ${sec('av', `<section class="sec">${band('AV', 'Lotes (AV)')}<div class="block"><div class="body"><div class="cfg">${lists('AV')}${fixed('Retrabalho', ['Sim', 'Não'], 'Sim/Não')}${fixed('Resultado da inspeção', ['Aprovado', 'Reprovado', 'Em análise', CONC], 'lote novo já vem como Aprovado · reprovado fica bloqueado até a decisão da RNC')}</div></div></div></section>`)}
       ${sec('serv', `<section class="sec">${band('SERV', 'Serviços')}<div class="block"><div class="body"><div class="cfg">${lists('SERV')}</div></div></div></section>`)}
@@ -8213,7 +8273,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     wireReset();
   };
   /* ---------- funcionários (cadastro único usado por todos os módulos) ---------- */
-  const CFG_TABS = [['geral', 'Geral'], ['func', 'Funcionários'], ['forn', 'Fornecedores'], ['cli', 'Clientes'], ['av', 'Lotes (AV)', 'AV'], ['serv', 'Serviços', 'SERV'], ['rnc', 'RNC', 'RNC'], ['rncc', 'RND', 'RNCC'], ['cal', 'Calibração', 'INS'], ['certq', 'Certificados', 'CERTQ'], ['rir', 'RIR', 'RIR'], ['rif', 'RIF', 'RIF'], ['emails', 'E-mails'], ['logo', 'Aparência, logo e Drive'], ['backup', 'Backup por ano'], ['teste', 'Módulos em teste'], ['zero', 'Começar do zero']];
+  const CFG_TABS = [['geral', 'Geral'], ['func', 'Funcionários'], ['forn', 'Fornecedores'], ['cli', 'Clientes'], ['av', 'Lotes (AV)', 'AV'], ['serv', 'Serviços', 'SERV'], ['rnc', 'RNC', 'RNC'], ['rncc', 'RND', 'RNCC'], ['cal', 'Calibração', 'INS'], ['certq', 'Certificados', 'CERTQ'], ['rir', 'RIR', 'RIR'], ['rif', 'RIF', 'RIF'], ['emails', 'E-mails'], ['logo', 'Aparência, logo e Drive'], ['manual', 'Manual da Qualidade'], ['backup', 'Backup por ano'], ['teste', 'Módulos em teste'], ['zero', 'Começar do zero']];
   const FUNC_COR = { conferente: 'var(--av)', emissor: 'var(--rnc)', comprador: 'var(--serv)', resp_cal: 'var(--cal)' };
   const FUNC_USO = { conferente: [['AV', 'conf']], emissor: [['RNC', 'emissor']], comprador: [['RNC', 'comprador']], resp_cal: [['INS', 'resp']] };
   const FUNC_ONDE = { conferente: 'Conferido por (lotes)', emissor: 'Emissor (RNC)', comprador: 'Comprador (RNC)', resp_cal: 'Responsável (calibração)' };
@@ -8337,6 +8397,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const names = ((cfg.listas || {})[D.list] || S.model.cfg[D.list] || []).slice();
     const info = (Array.isArray(cfg[D.key]) ? cfg[D.key] : (S.model.cfg[D.info] || [])).map((o) => Object.assign({}, o));
     const r = fn(names, info); if (!r) return false;
+    /* padrão de escrita: fornecedor e cliente sempre em MAIÚSCULAS (nome oficial e apelidos) */
+    r.names = r.names.map((n) => upTxt(String(n))).filter((n, j, a) => n && a.findIndex((x) => E.key(x) === E.key(n)) === j);
+    r.info.forEach((o) => { o.nome = upTxt(String(o.nome || '')); if (Array.isArray(o.apelidos)) o.apelidos = o.apelidos.map((a) => upTxt(String(a))); });
     /* toda ficha tem id (mesmo sem e-mail): é o que liga os registros a ela */
     r.names.forEach((n) => { if (!r.info.some((o) => E.key(o.nome) === E.key(n))) r.info.push({ nome: n }); });
     r.info = r.info.filter((o) => r.names.some((n) => E.key(n) === E.key(o.nome)));
@@ -8365,11 +8428,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (ro) return;
     $$('#ed-sit [data-s]').forEach((b) => { b.onclick = () => $$('#ed-sit [data-s]').forEach((x) => x.setAttribute('aria-pressed', x === b)); });
     $('#ed-save').onclick = async () => {
-      const nn = $('#ed-nome').value.trim().replace(/\s+/g, ' '), email = normMails($('#ed-email').value);
+      const nn = upTxt($('#ed-nome').value), email = normMails($('#ed-email').value);
       if (!nn) { toast('Informe o nome.', true); $('#ed-nome').focus(); return; }
       if (email && !okMails(email)) { toast('E-mail inválido. Para mais de um, separe com vírgula.', true); $('#ed-email').focus(); return; }
       const ni = { nome: nn }; if (email) ni.email = email;
-      const apel = $('#ed-apel').value.split(/\s*[;,]\s*/).map((s) => s.trim().replace(/\s+/g, ' ')).filter(Boolean);
+      const apel = $('#ed-apel').value.split(/\s*[;,]\s*/).map((s) => upTxt(s)).filter(Boolean);
       if (!novo && E.key(nn) !== E.key(nome)) apel.push(nome);
       if (apel.length) ni.apelidos = apel.filter((a, j) => apel.findIndex((b) => E.key(b) === E.key(a)) === j);
       const outro = (S.model.cfg[D.info] || []).find((o) => E.key(o.nome) !== E.key(nome || '') && [o.nome].concat(o.apelidos || []).some((a) => [nn].concat(ni.apelidos || []).some((b) => E.key(a) === E.key(b))));
@@ -8429,7 +8492,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const novos = [], muda = [], prob = [], seen = new Set();
       rows.slice(1).forEach((r, ix) => {
         const g = (ci) => (ci >= 0 ? String(r[ci] == null ? '' : r[ci]).trim() : '');
-        const nm = g(cN).replace(/\s+/g, ' '); if (!nm) return;
+        const nm = upTxt(g(cN)); if (!nm) return;
         const k = E.key(nm); if (seen.has(k)) { prob.push([`linha ${ix + 2}`, 'nome repetido na planilha: ' + nm]); return; } seen.add(k);
         const em = normMails(g(cE)); if (em && !okMails(em)) { prob.push([`linha ${ix + 2}`, 'e-mail inválido: ' + em]); return; }
         const cur = info.get(k), base = names.find((x) => E.key(x) === k);
@@ -8537,7 +8600,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (!has('cfg-' + n)) return;
       let v = lines('cfg-' + n);
       if (n === 'CAL_FREQUENCIAS') v = v.map((s) => (/^\d+$/.test(s) ? +s : s));
-      const seen = new Set(); v = v.filter((s) => { const k = E.low(s); if (seen.has(k)) return false; seen.add(k); return true; });
+      v = listNorm(n, v); /* padrão de escrita + sem repetidos */
       if (JSON.stringify(v) !== JSON.stringify(c[n] || [])) {
         listas[n] = v;
         const now = new Set(v.map((s) => E.low(s)));
@@ -11740,7 +11803,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const salvar = async (m, btn) => {
       const v = ed ? rfDig(p.pv) : rfDig(pv.value);
       if (!v || v.length < 3) { toast('Digite o número do PV.', true); pv.focus(); return; }
-      const dados = { cli: $('#rf-cli').value.trim(), vend: $('#rf-vend').value.trim(), obs: $('#rf-obs').value.trim() };
+      const cliT = $('#rf-cli').value.trim(), cliO = cliT ? entResolve('cli', cliT) : null;
+      const dados = { cli: cliO ? cliO.nome : upTxt(cliT), vend: nomeProprio($('#rf-vend').value), obs: $('#rf-obs').value.trim() };
       btn.disabled = true;
       try {
         if (ed) {
@@ -12508,7 +12572,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         return;
       }
       const v = (s) => ($(s).value || '').trim().replace(/\s+/g, ' ');
-      const nome = v('#eq-nome'), email = v('#eq-email');
+      const nome = nomeProprio(v('#eq-nome')), email = v('#eq-email').toLowerCase();
       if (!nome) { toast('Informe o nome.', true); $('#eq-nome').focus(); return; }
       if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('E-mail inválido.', true); $('#eq-email').focus(); return; }
       const pid = p.id || eqSlug(nome);
@@ -13738,6 +13802,471 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       rodape: 'Aços Vital · Qualidade · Relatório de Não Conformidade', rodNum: esc(x.num) }));
   }
 
+  /* ================= MANUAL DA QUALIDADE (documentos controlados ISO 9001) =================
+     O texto de cada documento vive aqui e muda junto com a Central. A aprovação fica no banco:
+     cfg/main.manual.docs[id] = { cod, rev, data, elab, aprov: assinatura, cv, desc }  (cv = impressão digital do texto aprovado)
+     meta/man-<id>          = cópia do texto vigente (o que todos leem e imprimem)
+     meta/man-<id>-r<NN>    = cópia de cada revisão (fica guardada como obsoleta)
+     Quando o texto daqui muda (nova versão da Central), o documento fica "em revisão" até um administrador aprovar. */
+  const MP = (t) => `<p>${t}</p>`;
+  const MOL = (L) => `<ol>${L.map((x) => `<li>${x}</li>`).join('')}</ol>`;
+  const MUL = (L) => `<ul>${L.map((x) => `<li>${x}</li>`).join('')}</ul>`;
+  const MTB = (h, rows) => `<table class="mt"><thead><tr>${h.map((x) => `<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((x) => `<td>${x}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  const MNOTA = (t) => `<p class="mnota">${t}</p>`;
+  const MREG = (rows) => MTB(['Registro', 'Identificação', 'Onde fica', 'Retenção'], rows.map((r) => r.concat(r.length < 4 ? ['Na Central, sem exclusão; cópia anual em Configurações › Backup por ano'] : [])));
+  const MRESP = (rows) => MTB(['Quem', 'O que faz'], rows);
+  const MREF = (L) => MUL(L);
+  /* funções que aparecem em vários documentos */
+  const M_PAPEIS = {
+    qual: '<b>Qualidade (administrativo)</b>: usuário que trabalha na Central da Qualidade com “Lança” nos módulos da Qualidade',
+    insr: '<b>Inspetor de recebimento</b>: usuário “Só tablet” com as ferramentas RIR e RNC (ou usuário da Central com “Lança” em RIR)',
+    insu: '<b>Inspetor de usinagem</b>: usuário “Só tablet” com a ferramenta RIF (ou usuário da Central com “Lança” em RIF)',
+    conf: '<b>Conferente</b>: pessoa com a função “Conferente” na Equipe; confere o material recebido e lança os lotes',
+    comp: '<b>Comprador</b>: pessoa com a função “Comprador” na Equipe; trata a não conformidade com o fornecedor',
+    adm: '<b>Administrador da Central</b>: perfil Administrador ou a conta dona (centraldaqualidade.av@gmail.com)'
+  };
+  const MAN_DOCS = [
+    /* ---------------------------------------------------------------- PR-QUA-01 */
+    { id: 'pr01', cod: 'PR-QUA-01', tipo: 'Procedimento', tit: 'Processo integrado da Qualidade', cols: null, sec: [
+      ['Objetivo', MP('Descrever o processo de controle da qualidade da Aços Vital do recebimento do material até a entrega ao cliente e o atendimento de reclamações, mostrando como cada etapa é registrada na Central da Qualidade e como as etapas se ligam umas às outras.')],
+      ['Aplicação', MP('Aplica-se a todo material comprado (lotes AV), aos serviços terceirizados, aos produtos usinados, aos certificados de qualidade emitidos aos clientes, às reclamações de clientes e aos recursos de apoio: instrumentos de medição, soldadores e avaliação de fornecedores. Vale para a matriz e as filiais.')],
+      ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 7.1.5 Recursos de monitoramento e medição; 7.2 Competência; 7.5 Informação documentada; 8.4 Controle de processos, produtos e serviços providos externamente; 8.5.2 Identificação e rastreabilidade; 8.6 Liberação de produtos e serviços; 8.7 Controle de saídas não conformes; 9.1 Monitoramento, medição, análise e avaliação; 10.2 Não conformidade e ação corretiva', 'IT-QUA-01 a IT-QUA-11 (instruções de trabalho de cada módulo da Central)'])],
+      ['Definições', MTB(['Termo', 'Significado'], [
+        ['Central da Qualidade', 'Sistema na internet onde todos os registros da Qualidade são feitos e guardados. O acesso é com a conta Google de cada pessoa.'],
+        ['Lote (AV)', 'Cada material recebido numa nota fiscal, identificado como AV-AA-NNNNN (AA = ano do lançamento; NNNNN = sequência que nunca recomeça).'],
+        ['Corrida', 'Número da fusão do aço dado pela usina; liga o lote ao certificado da usina (análise química e propriedades mecânicas).'],
+        ['NF · PC · PV', 'Nota fiscal · Pedido de compra (ao fornecedor) · Pedido de venda (do cliente).'],
+        ['RIR', 'Relatório de Inspeção de Recebimento: checklist da nota recebida, com o resultado de cada lote.'],
+        ['RNC', 'Relatório de Não Conformidade de fornecedor.'],
+        ['RND', 'Relatório de Não Conformidade e Devolução: reclamação de cliente tratada em etapas (8D).'],
+        ['RIF', 'Relatório de Inspeção Final: inspeção dimensional e visual da peça usinada, um por item do pedido.'],
+        ['IQF', 'Índice de Qualidade do Fornecedor: nota de 0 a 100 calculada pela Central; classes A, B e C.'],
+        ['Concessão', 'Liberação autorizada de material reprovado, com justificativa e responsável.'],
+        ['Contenção', 'Bloqueio preventivo de lotes ligados a uma reclamação de cliente (mesma corrida).'],
+        ['Assinatura eletrônica', 'Registro do nome, e-mail, data e hora de quem assinou, gravado pela Central no momento da assinatura.'],
+        ['AP · RP · N/A', 'Aprovado · Reprovado · Não aplicável (marcas dos checklists do RIR e do RIF).']
+      ])],
+      ['Responsabilidades', MRESP([
+        [M_PAPEIS.adm, 'Libera o acesso das pessoas (Usuários), mantém as configurações, aprova os documentos deste manual e guarda as cópias de segurança.'],
+        [M_PAPEIS.qual, 'Lança e acompanha lotes, RNC, RND, certificados, calibração, soldagem e avaliação de fornecedores; decide o destino do material reprovado; acompanha os Alertas.'],
+        [M_PAPEIS.conf, 'Confere a nota e o material e lança os lotes; imprime e cola as etiquetas.'],
+        [M_PAPEIS.insr, 'Faz o RIR de cada nota recebida e abre a RNC dos lotes reprovados, pelo tablet.'],
+        [M_PAPEIS.insu, 'Faz o RIF de cada item usinado, pelo tablet.'],
+        [M_PAPEIS.comp, 'Recebe as cobranças da RNC e trata com o fornecedor a disposição e a ação corretiva.']
+      ])],
+      ['Visão geral do processo', `<div class="mflux">${[['1', 'Recebimento', 'Lotes (AV) · etiqueta', 'IT-QUA-01'], ['2', 'Inspeção de recebimento', 'RIR no tablet', 'IT-QUA-02'], ['3', 'Não conformidade', 'RNC e destino do lote', 'IT-QUA-03'], ['4', 'Produção e usinagem', 'chegada da peça no RIF', 'IT-QUA-05'], ['5', 'Inspeção final', 'RIF no tablet', 'IT-QUA-05'], ['6', 'Certificado de qualidade', 'Certificados', 'IT-QUA-06'], ['7', 'Entrega ao cliente', 'NF de venda', '—'], ['8', 'Reclamação do cliente', 'RND (8D)', 'IT-QUA-04']].map(([n, a, b, c]) => `<div><i>${n}</i><b>${a}</b><span>${b}</span><small>${c}</small></div>`).join('<em>→</em>')}</div>`
+        + MP('Apoio a todas as etapas: <b>Calibração</b> (IT-QUA-07) garante que os instrumentos usados no RIR e no RIF estão válidos; <b>Soldagem</b> (IT-QUA-08) garante que o soldador informado no RIF está qualificado; a <b>Avaliação de fornecedores</b> (IT-QUA-09) dá a nota de cada fornecedor a partir dos lotes e das RNC; <b>Serviços</b> (IT-QUA-10) registra os serviços terceirizados; a <b>Administração da Central</b> (IT-QUA-11) cuida de acessos, configurações e cópias de segurança.')],
+      ['Descrição das etapas', MOL([
+        '<b>Recebimento</b> (Conferente · Lotes AV). Conferir a NF com o material e lançar um lote AV para cada material da nota, com corrida, quantidade e certificado da usina. Imprimir a etiqueta com QR code e colar no material. Lançar os dados da corrida (química e mecânica) do certificado da usina. Saída: lotes “aguardando RIR”.',
+        '<b>Inspeção de recebimento</b> (Inspetor de recebimento · RIR). Fazer o checklist da nota no tablet, marcando AP, RP ou N/A, anotando medidas com instrumento calibrado e tirando fotos. Concluir e assinar. Saída: cada lote Aprovado ou Reprovado; o reprovado fica bloqueado e entra na fila da RNC.',
+        '<b>Não conformidade</b> (Inspetor + Qualidade · RNC). O inspetor abre a RNC do lote reprovado no tablet; a Qualidade numera, trata com o fornecedor (disposição, causa, ação corretiva), registra o destino do lote (devolvido, retrabalhado ou sucateado) e conclui após a verificação de eficácia. A liberação sob concessão é decidida na fila de reprovados, antes de abrir a RNC.',
+        '<b>Produção e usinagem</b>. A chegada das peças para inspeção é registrada no quadro do RIF (pedido de venda e itens).',
+        '<b>Inspeção final</b> (Inspetor de usinagem · RIF). Medir as cotas da norma ou do desenho, fazer a inspeção visual, informar instrumentos e soldador e assinar. Saída: RIF-AAAA-NNNNN aprovado ou reprovado; item reprovado é reinspecionado.',
+        '<b>Certificado de qualidade</b> (Qualidade · Certificados). Os pedidos faturados entram na fila pela lista do Omie. O certificado puxa os lotes do pedido e os dados da corrida e confere o RIF. Lote bloqueado só entra com justificativa. Saída: certificado emitido e revisão guardada.',
+        '<b>Entrega ao cliente</b> com a NF de venda e o certificado.',
+        '<b>Reclamação do cliente</b> (Qualidade · RND). Registrar a reclamação, decidir a procedência, conter os lotes da mesma corrida, analisar a causa (5 porquês), definir ações, responder ao cliente, verificar a eficácia e encerrar. Se a causa for do fornecedor, abrir a RNC de fornecedor ligada à RND.'
+      ])],
+      ['Ligações automáticas entre os módulos', MTB(['Quando acontece', 'O que a Central faz sozinha'], [
+        ['Lote é lançado', 'Fica “aguardando RIR”; se faltar certificado da usina, entra em Alertas › Lotes sem certificado (lotes recebidos nos últimos 30 dias); avisa se o fornecedor está suspenso no IQF.'],
+        ['Nota sem RIR há 2 dias úteis', 'Aparece em Alertas.'],
+        ['RIR concluído', 'Grava o resultado em cada lote; o reprovado fica bloqueado e entra na fila “Lotes reprovados aguardando decisão”; registra o uso de cada instrumento.'],
+        ['RNC aberta (Central ou tablet)', 'Liga a RNC aos lotes, bloqueia os lotes e calcula os prazos em dias úteis; a RNC do tablet é numerada pela primeira Central aberta por quem lança RNC.'],
+        ['Destino registrado', 'O lote sai das pendências; a RNC recebe a disposição e o histórico; a etiqueta e a página do QR mostram a situação.'], ['Concessão registrada', 'O lote fica liberado sob concessão; a RNC vinculada recebe o registro no histórico.'],
+        ['Calibração reprovada', 'Bloqueia o instrumento e abre a análise de impacto com os RIR e RIF que usaram o instrumento.'],
+        ['Soldador sem qualificação válida', 'O RIF não pode ser assinado com esse soldador.'],
+        ['Certificado concluído', 'Liga o certificado aos lotes do pedido e guarda uma revisão congelada; pede justificativa para lote bloqueado e para item usinado sem RIF aprovado.'],
+        ['RND com contenção', 'Trava os lotes da mesma corrida (certificado só com justificativa; etiqueta e QR mostram “em contenção”) até o encerramento.'],
+        ['Lotes e RNC do fornecedor', 'Recalculam a nota do IQF. Fornecedor Suspenso é avisado no recebimento, no RIR e na RNC; Em desenvolvimento aparece no RIR.']
+      ])],
+      ['Rotinas periódicas', MTB(['Quando', 'O que fazer', 'Quem', 'Onde'], [
+        ['Todo dia', 'Ver os Alertas: notas sem RIR, lotes aguardando decisão, RNC e RND com prazo vencendo, calibrações e qualificações vencendo', 'Qualidade', 'Alertas'],
+        ['Toda semana', 'Cobrar retornos de fornecedores e de laboratórios; conferir certificados pendentes', 'Qualidade', 'Alertas · RNC · Certificados'],
+        ['Todo mês', 'Fechar o mês do IQF; fazer a cópia de segurança do mês; tirar o relatório mensal', 'Qualidade · Administrador', 'Avaliação de fornecedores › Fechar mês · Configurações › Backup por ano · Relatório mensal'],
+        ['Todo ano', 'Baixar o backup do ano anterior em janeiro; cadastrar os feriados do ano seguinte em dezembro; revisar este manual', 'Administrador', 'Configurações']
+      ])],
+      ['Padrão de escrita dos registros', MTB(['O que', 'Como fica gravado', 'Exemplo'], [
+        ['Códigos e números (NF, pedidos, corrida, certificado, código do instrumento)', 'MAIÚSCULAS', 'NF 45871 · C-12AB · PQ 001'],
+        ['Fornecedores, clientes e laboratórios', 'MAIÚSCULAS, com o nome oficial do cadastro', 'TUBOS ALFA LTDA'],
+        ['Liga, material e unidade', 'MAIÚSCULAS', 'ASTM A106 · INOX 304 · KG'],
+        ['Descrições e itens das listas', 'Primeira letra maiúscula (siglas ficam como digitadas)', 'Tubo sem costura · Flange WN'],
+        ['Nomes de pessoas', 'Iniciais maiúsculas; da, de, do, das, dos, e em minúsculas', 'Maria da Silva'],
+        ['Diâmetros, espessuras e textos livres', 'Como digitados', '6 mm · SCH 40 · observações']
+      ]) + MP('A Central aplica esse padrão sozinha ao gravar; quem digita não precisa se preocupar com maiúsculas. A busca e os filtros não diferenciam maiúscula, minúscula nem acento.')],
+      ['Registros', MREG([
+        ['Lote recebido e decisões do lote', 'AV-AA-NNNNN', 'Lotes (AV)'], ['Inspeção de recebimento', 'RIR-AAAA-NNNNN', 'RIR'], ['Não conformidade de fornecedor', 'RNC-AAAA-NNNNN', 'RNC'],
+        ['Reclamação de cliente', 'RND-AAAA-NNNNN', 'RND'], ['Inspeção final', 'RIF-AAAA-NNNNN', 'RIF'], ['Certificado de qualidade', 'Nº do PV (e parte)', 'Certificados'],
+        ['Calibração de instrumento', 'Código do instrumento', 'Calibração'], ['Qualificação de soldador', 'Sinete e Nº do RQS', 'Soldagem'], ['Avaliação de fornecedor', 'Fechamento mensal', 'Avaliação de fornecedores'],
+        ['Histórico de alterações', 'Data, pessoa e campos alterados', 'Histórico']
+      ])],
+      ['Controle deste manual', MP('Os documentos deste manual ficam na Central da Qualidade, menu <b>Manual</b>, e são aprovados eletronicamente por um administrador. A versão vigente é sempre a que está na Central; cada revisão aprovada fica guardada como obsoleta, com o histórico de revisões no fim de cada documento. Cópias impressas não são controladas: confira a revisão na Central antes de usar.')]
+    ] },
+    /* ---------------------------------------------------------------- IT-QUA-01 */
+    { id: 'it01', cod: 'IT-QUA-01', tipo: 'Instrução de trabalho', tit: 'Recebimento e identificação de lotes (AV)', cols: ['av'], sec: [
+      ['Objetivo', MP('Registrar todo material recebido como lote AV, com identificação física (etiqueta com QR code) e rastreabilidade até a corrida da usina.')],
+      ['Aplicação', MP('Todo material comprado que chega com nota fiscal, em qualquer filial.')],
+      ['Responsabilidades', MRESP([[M_PAPEIS.conf, 'Confere a NF e o material, lança os lotes, imprime e cola as etiquetas, lança os dados da corrida.'], [M_PAPEIS.qual, 'Cobra os certificados que faltam e decide sobre lotes reprovados (IT-QUA-03).']])],
+      ['Lançar os lotes de uma nota', MOL([
+        'Menu <b>Lotes (AV)</b> › <b>Novo lote</b>.',
+        'Em <b>Nota fiscal e recebimento</b>, preencher: Data de entrada, Filial, Fornecedor, Nota fiscal, Pedido de compra, Pedido(s) de venda (separados por vírgula) e Conferido por.',
+        'Em <b>Lotes desta nota</b>, preencher um bloco por material: Descrição, Corrida (use * quando não houver), Quantidade e Unidade, Diâmetro, Espessura, Liga/Tipo, Material, Certificado (* = sem certificado) e Link do certificado. Use <b>+ Adicionar lote</b> ou <b>Duplicar</b> para os outros materiais da nota.',
+        'Conferir os avisos (nota já lançada, possível duplicidade, fornecedor suspenso no IQF, lote sem certificado) e clicar em <b>Gravar lotes</b>.',
+        'Na tela seguinte, clicar em <b>Imprimir etiquetas</b> e colar cada etiqueta no material correspondente.'
+      ]) + MNOTA('O número do lote (AV-AA-NNNNN) é gerado na hora de gravar. A sequência nunca recomeça e número excluído não é reaproveitado.')],
+      ['Lançar um lote parecido', MP('Na ficha de um lote, <b>Lançar parecido</b> abre o formulário já preenchido com a nota e o material. Alterar o que for diferente (corrida, certificado…) e gravar.')],
+      ['Dados da corrida', MOL(['Na ficha do lote, no bloco “Corrida · certificado da usina”, clicar em <b>Lançar dados da corrida</b>.', 'Preencher Usina / fabricante, Nº do certificado da usina, a análise química (%) e as propriedades mecânicas.', 'Clicar em <b>Salvar dados da corrida</b>. Os dados valem para todos os lotes da mesma corrida e do mesmo fornecedor e são usados no certificado de qualidade.'])],
+      ['Etiqueta e página do QR', MOL(['Na ficha do lote, clicar em <b>Etiqueta</b>.', 'Escolher o modelo (Compacta: AV + QR; Completa: com os dados do lote) e o tamanho da etiqueta.', 'Clicar em <b>Imprimir etiqueta</b>.']) + MP('O QR code abre uma página só de consulta com a situação do lote (aprovado, reprovado, em análise, liberado sob concessão ou em contenção). Etiqueta de lote reprovado ou liberado sob concessão sai com faixa preta indicando a situação.')],
+      ['Certificado da usina que falta', MP('Lotes sem certificado recebidos nos últimos 30 dias aparecem em <b>Alertas › Lotes sem certificado</b>, agrupados por fornecedor e NF. Ao receber o certificado, usar <b>Dar baixa</b> (Nº do certificado e link). <b>E-mail ao fornecedor</b> monta a cobrança com o e-mail cadastrado em Configurações › Fornecedores.')],
+      ['Situações do lote', MTB(['Situação', 'Significado'], [['Aguardando RIR', 'Lançado; o resultado sai do RIR (IT-QUA-02).'], ['Aprovado', 'Pode ser usado.'], ['Reprovado · bloqueado', 'Aguardando decisão da RNC; só entra em certificado com justificativa (IT-QUA-06) e não pode ser excluído.'], ['Em análise', 'Não bloqueado; pode ser liberado sob concessão.'], ['Liberado sob concessão', 'Uso autorizado com justificativa.'], ['Devolvido · Retrabalhado · Sucateado', 'Destino físico registrado.'], ['Em contenção', 'Travado por uma RND até a liberação.']])],
+      ['Registros', MREG([['Lote recebido', 'AV-AA-NNNNN', 'Lotes (AV)'], ['Decisões do lote', 'Data, pessoa e justificativa', 'Ficha do lote › Decisões da RNC'], ['Dados da corrida', 'Corrida + fornecedor', 'Ficha do lote'], ['Histórico de alterações', 'Data e pessoa', 'Histórico']])],
+      ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 8.4 e 8.5.2', 'PR-QUA-01 · IT-QUA-02 · IT-QUA-03'])]
+    ] },
+    /* ---------------------------------------------------------------- IT-QUA-02 */
+    { id: 'it02', cod: 'IT-QUA-02', tipo: 'Instrução de trabalho', tit: 'Inspeção de recebimento (RIR)', cols: ['rir'], sec: [
+      ['Objetivo', MP('Inspecionar cada nota fiscal recebida com um checklist padronizado e dar o resultado de cada lote antes do uso.')],
+      ['Aplicação', MP('Todos os lotes AV lançados. Um RIR por nota fiscal; o resultado é dado lote a lote.')],
+      ['Responsabilidades', MRESP([[M_PAPEIS.insr, 'Faz, conclui e assina o RIR.'], [M_PAPEIS.adm, 'Mantém o checklist em Configurações › RIR.'], [M_PAPEIS.qual, 'Acompanha as notas atrasadas em Alertas.']])],
+      ['Fazer o RIR', MOL([
+        'No tablet, abrir <b>RIR</b> (ou na Central: menu <b>RIR</b> › <b>Tela do tablet</b>). A lista mostra as notas aguardando inspeção e os RIR em andamento.',
+        'Tocar em <b>Fazer RIR</b> na nota. Se já houver rascunho da nota, a Central abre o rascunho.',
+        'Responder cada item com <b>AP</b> (aprovado), <b>RP</b> (reprovado) ou <b>N/A</b> (não aplicável). Itens da “nota inteira” são respondidos uma vez; os demais, para cada lote. Tocar de novo apaga a marcação; <b>todos AP</b> marca os lotes ainda não respondidos.',
+        'Nos itens de medida, anotar o valor medido. Em todo item RP, descrever o que foi encontrado.',
+        'Em <b>Instrumentos usados nas medidas</b>, adicionar o instrumento pelo código. Só aparecem instrumentos em uso e com calibração válida.',
+        'Em <b>Fotos</b>, tirar as fotos do material (até 12).',
+        'Em <b>Resultado por lote</b>, conferir o resultado sugerido (algum RP = Reprovado; tudo respondido sem RP = Aprovado) e o motivo da reprovação, que vai para a RNC.',
+        'Tocar em <b>Concluir e assinar</b> e confirmar. O RIR recebe o número e não pode mais ser alterado.'
+      ]) + MNOTA('O rascunho é salvo sozinho a cada alteração. Se o RIR for concluído em outro aparelho, o rascunho desta tela não é gravado.')],
+      ['O que impede concluir', MUL(['Item sem resposta.', 'Item de medida sem valor (exceto N/A).', 'Item RP sem descrição.', 'Medida feita sem instrumento informado, ou instrumento vencido ou bloqueado.', 'Lote sem resultado, ou reprovado sem motivo.'])],
+      ['Depois de concluir', MUL(['Cada lote passa a ter o resultado do RIR.', 'Lote reprovado fica bloqueado e entra na fila “Lotes reprovados aguardando decisão”; a RNC é aberta conforme IT-QUA-03.', 'Lote “Em análise” não fica bloqueado e pode ser liberado sob concessão.', 'O uso de cada instrumento fica registrado no histórico dele (análise de impacto, IT-QUA-07).', '<b>Imprimir</b> gera o relatório em A4 com checklist, instrumentos, as 8 primeiras fotos e assinatura (todas as fotos ficam no RIR).'])],
+      ['Prazo', MP('Nota sem RIR há 2 dias úteis ou mais aparece em Alertas.')],
+      ['Checklist', MP('O checklist padrão tem Documentação, Identificação, Quantidade e embalagem, Visual e Dimensional (diâmetro, espessura e comprimento). Ele é mantido em Configurações › RIR, uma linha por item no formato “Seção ; item ; nf ou lote ; medida”. Os RIR já começados guardam a lista do dia em que foram abertos.')],
+      ['Registros', MREG([['Relatório de inspeção de recebimento', 'RIR-AAAA-NNNNN', 'RIR › Concluídos'], ['Resultado de cada lote', 'Nº do RIR na ficha do lote', 'Lotes (AV)'], ['Fotos', 'Dentro do RIR', 'RIR']])],
+      ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 8.4.2, 8.6 e 7.1.5', 'IT-QUA-01 · IT-QUA-03 · IT-QUA-07'])]
+    ] },
+    /* ---------------------------------------------------------------- IT-QUA-03 */
+    { id: 'it03', cod: 'IT-QUA-03', tipo: 'Instrução de trabalho', tit: 'Não conformidade de fornecedor (RNC) e destino do lote', cols: ['rnc', 'rnctab'], sec: [
+      ['Objetivo', MP('Registrar e tratar a não conformidade de material de fornecedor, decidir o destino do material reprovado e verificar a eficácia da ação corretiva, dentro dos prazos.')],
+      ['Aplicação', MP('Lotes reprovados no recebimento, na inspeção de processo ou na inspeção final, e não conformidades de fornecedor sem lote (com justificativa).')],
+      ['Responsabilidades', MRESP([[M_PAPEIS.insr, 'Abre a RNC do lote reprovado pelo tablet, com descrição e fotos, e assina a abertura.'], [M_PAPEIS.qual, 'Numera e trata a RNC (disposição, contenção, causa, ação corretiva, eficácia), decide o destino do lote e aprova.'], [M_PAPEIS.comp, 'Recebe as cobranças e obtém do fornecedor a disposição e a causa raiz.']])],
+      ['Abrir a RNC pelo tablet (inspetor)', MOL([
+        'No tablet, abrir <b>RNC</b>. O cartão “Lotes reprovados esperando RNC” lista os lotes reprovados; tocar em <b>Abrir RNC →</b>. Para outro lote, usar <b>Ler etiqueta e abrir RNC</b> (QR) ou digitar o número (AV-26-20000 ou só 20000).',
+        '<b>Material</b>: conferir o lote encontrado e marcar os outros lotes da mesma NF, se houver. Escolher onde foi encontrado e o setor responsável. Sem lote: marcar “Esta RNC não tem lote” e justificar.',
+        '<b>Problema</b>: tocar no motivo principal (e nos outros, se houver), descrever a não conformidade, informar a quantidade reprovada e tirar as fotos (até 8).',
+        '<b>Assinar e enviar</b>: conferir, marcar “Confirmo que as informações e fotos estão corretas” e tocar em <b>Abrir RNC ✓</b>.'
+      ]) + MNOTA('A RNC do tablet ganha número quando alguém com “Lança” em RNC está com a Central aberta (se o próprio inspetor tem “Lança” em RNC, o número sai ao enviar). O lote fica bloqueado. O inspetor acompanha em “Minhas RNCs” e pode pedir correção com <b>Pedir correção</b>.')],
+      ['Abrir a RNC pela Central', MOL([
+        'Pela fila “Lotes reprovados aguardando decisão” (tela RNC ou Alertas) ou pela ficha do lote, clicar em <b>Abrir RNC</b>, escolher a abrangência (lotes do item ou nota fiscal completa) e <b>Continuar para a RNC</b>. Também é possível usar <b>Nova RNC de fornecedor</b>.',
+        'Preencher Emissor, Filial, Comprador, Fornecedor, Motivo e a abrangência; conferir os lotes afetados e clicar em <b>Abrir RNC</b>.',
+        'Na ficha da RNC, preencher a parte 1 <b>Abertura</b> (origem, motivos, descrição, quantidades, fotos) e clicar em <b>Salvar e assinar abertura</b>. Depois de assinada, a abertura só muda por <b>Corrigir abertura</b>, com motivo.'
+      ])],
+      ['Tratar a RNC (Qualidade)', MOL([
+        'Parte 2 <b>Tratamento da não conformidade</b>: comprador, disposição e data, contenção (o que foi feito, responsável, data), causa raiz (resposta do fornecedor), se precisa de ação corretiva, nível do prazo e a ação. Clicar em <b>Salvar respostas</b>.',
+        'Para cobrar, usar <b>Cobrança</b> (modelos Lembrete, Cobrança ou Atrasada; abrir no Outlook ou copiar) e registrar a cobrança. Ao receber a resposta do fornecedor, usar <b>Registrar retorno</b>.',
+        'Parte 3 <b>Verificação de eficácia</b>, no próximo recebimento do fornecedor: resultado, data, lote verificado e observação.',
+        'Parte 4 <b>Aprovação</b>: <b>Aprovar e concluir</b>. Só libera com a disposição respondida e, quando houver ação corretiva, com o resultado da eficácia.',
+        '<b>Imprimir / PDF do relatório</b> gera o relatório para enviar ao fornecedor.'
+      ])],
+      ['Decidir o destino do lote reprovado', MTB(['Decisão', 'Como', 'Campos obrigatórios'], [
+        ['Devolvido · Retrabalhado · Sucateado', 'Ficha do lote ou da RNC › <b>Registrar destino</b>', 'Tipo e data; NF de devolução (devolvido); observação com o resultado da nova inspeção (retrabalhado)'],
+        ['Liberado sob concessão', 'Fila de reprovados ou ficha do lote (antes de abrir a RNC, ou lote “Em análise”) › <b>Liberar sob concessão</b>', 'Autorizado por, data da autorização, justificativa; cliente que aceitou e RNC vinculada quando houver'],
+        ['Desbloquear (erro)', 'Fila ou ficha do lote › <b>Desbloquear (erro)</b>', 'Novo resultado (Aprovado ou Em análise) e justificativa. Só para lote reprovado por engano.']
+      ]) + MNOTA('Concluir a RNC não libera o lote: o lote continua na RNC até o destino (devolvido, retrabalhado ou sucateado) ser registrado. A concessão só é possível pela fila de reprovados, antes de abrir a RNC. RNC cancelada devolve o lote reprovado à fila “Lotes reprovados aguardando decisão” (continua bloqueado); lotes que só entraram pela “nota fiscal completa” voltam ao resultado original.')],
+      ['Prazos (dias úteis, com feriados)', MTB(['Etapa', 'Prazo padrão'], [['Disposição', '48 horas a partir da abertura, contando só dias úteis (o relógio para no fim de semana e feriado e volta às 7 h); se vencer depois das 17 h, vence às 17 h'], ['Tomar a ação corretiva', '10 dias úteis depois do prazo da disposição'], ['Fechar a ação', 'Prazo da ação + 10 (Padrão), 20 (Estendido) ou 30 (Complexo) dias úteis'], ['Prazo final', '20 dias úteis da abertura, ou o fechamento da ação se for depois']]) + MP('Os prazos são definidos em Configurações › RNC. A Central mostra o status (Em andamento, Pendente, Atrasada, Concluída, Cancelada), avisa uma vez por dia e lista as RNC vencendo em Alertas.')],
+      ['Registros', MREG([['Relatório de não conformidade', 'RNC-AAAA-NNNNN', 'RNC'], ['Assinaturas da abertura e da aprovação', 'Nome, e-mail, data e hora', 'Ficha da RNC'], ['Cobranças e retornos', 'Data e destinatários', 'Ficha da RNC'], ['Decisões e destino dos lotes', 'Data, pessoa e justificativa', 'Ficha do lote'], ['Correções da abertura', 'Valor antigo, motivo, pessoa', 'Histórico da RNC']])],
+      ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 8.7 e 10.2', 'IT-QUA-01 · IT-QUA-02 · IT-QUA-09'])]
+    ] },
+    /* ---------------------------------------------------------------- IT-QUA-04 */
+    { id: 'it04', cod: 'IT-QUA-04', tipo: 'Instrução de trabalho', tit: 'Reclamação e devolução de cliente (RND)', cols: ['rncc'], sec: [
+      ['Objetivo', MP('Tratar as reclamações e devoluções de clientes em etapas (8D), conter o material suspeito, eliminar a causa e responder ao cliente dentro do prazo.')],
+      ['Aplicação', MP('Toda reclamação ou devolução de cliente sobre material ou serviço entregue pela Aços Vital, recebida por qualquer canal.')],
+      ['Responsabilidades', MRESP([[M_PAPEIS.qual, 'Registra a RND, conduz as etapas, responde ao cliente e encerra.'], ['<b>Equipe da RND</b> (D1)', 'Participa da análise de causa e executa as ações sob sua responsabilidade.'], [M_PAPEIS.comp, 'Trata com o fornecedor quando a causa é do fornecedor (RNC ligada).']])],
+      ['Abrir a RND', MOL(['Menu <b>RND</b> › <b>Nova RND</b>.', '<b>Abertura</b>: número (sugerido), data, filial, emissor, cliente, contato e canal.', '<b>Rastreabilidade</b>: NF de venda, pedido de venda, lotes / corridas citados, produto e quantidade afetada.', '<b>Reclamação</b>: descrição, motivo, gravidade (Baixa, Média, Alta) e procedência (Em análise).', 'Clicar em <b>Abrir RND</b> e abrir a RND pela lista para continuar.', 'Enviar ao cliente o <b>E-mail de recebimento ao cliente</b>.'])],
+      ['Etapas da RND', MTB(['Etapa', 'O que fazer'], [
+        ['D1 Equipe', '<b>Definir</b> as pessoas que vão trabalhar na reclamação.'],
+        ['D2 Reclamação', 'Pôr fotos com legenda; <b>Ligar à reclamação</b> os lotes do mesmo pedido. O quadro “Enviado ao cliente” mostra os certificados e RIF do pedido.'],
+        ['Procedência', '<b>Decidir</b> se procede (justificativa obrigatória quando não procede). Improcedente vai direto para a resposta e o encerramento.'],
+        ['D3 Contenção', '<b>Registrar</b> a ação e a data. Em “Material para conter” aparecem os lotes citados e os da mesma corrida e fornecedor: <b>Pôr em contenção</b>.'],
+        ['D4 Causa raiz', 'Setor responsável, origem da causa (Interna, Fornecedor, Transporte, Cliente), categoria 6M e os 5 porquês. O último preenchido é a causa raiz.'],
+        ['D5·D6 Plano de ação', '<b>Nova ação</b>: o que será feito, tipo (Corretiva, Preventiva, Melhoria), responsável e prazo. Ao terminar, <b>Concluir</b> com data e evidência.'],
+        ['Resposta ao cliente', 'Enviar o <b>E-mail de resposta ao cliente</b> com o <b>Relatório 8D</b> em anexo e registrar o retorno do cliente (Aceita, Contestada, Sem retorno).'],
+        ['Custos', '<b>Lançar</b> os custos da não qualidade (frete, retrabalho, reposição, crédito, outros).'],
+        ['D7 Verificação de eficácia', '<b>Verificar</b> na data prevista: resultado (Eficaz, Não eficaz), data e evidência.'],
+        ['D8 Encerrar', 'Conferir o que falta e <b>Encerrar</b> com data e observação. O encerramento libera a contenção dos lotes.']
+      ]) + MNOTA('Quando a origem da causa é Fornecedor, usar <b>Abrir RNC de fornecedor</b>: a RNC já vem preenchida e fica ligada à RND (IT-QUA-03).')],
+      ['Prazos', MTB(['Etapa', 'Prazo padrão (da abertura)'], [['Contenção', '1 dia útil'], ['Resposta ao cliente', '5 dias úteis'], ['Prazo final', '30 dias úteis, ou o prazo da última ação se for depois'], ['Verificação de eficácia', '30 dias corridos depois da última ação']]) + MP('Prazos definidos em Configurações › RND. Status: Em andamento, Pendente (contenção ou resposta fora do prazo), Atrasada, Concluída, Cancelada.')],
+      ['Registros', MREG([['Reclamação de cliente', 'RND-AAAA-NNNNN', 'RND'], ['Relatório 8D', 'Nº da RND', 'RND › Relatório 8D'], ['Contenção dos lotes', 'Nº da RND na ficha do lote', 'Lotes (AV)'], ['Ações e evidências', 'Dentro da RND', 'RND']])],
+      ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 8.2.1, 8.7, 9.1.2 e 10.2', 'IT-QUA-03 · IT-QUA-06'])]
+    ] },
+    /* ---------------------------------------------------------------- IT-QUA-05 */
+    { id: 'it05', cod: 'IT-QUA-05', tipo: 'Instrução de trabalho', tit: 'Inspeção final da usinagem (RIF)', cols: ['rif'], sec: [
+      ['Objetivo', MP('Inspecionar cada item usinado (dimensional e visual) antes da liberação ao cliente e registrar o resultado com assinatura.')],
+      ['Aplicação', MP('Todos os itens dos pedidos de venda produzidos na usinagem. Um RIF por item do pedido.')],
+      ['Responsabilidades', MRESP([[M_PAPEIS.insu, 'Faz e assina o RIF; marca pendências.'], [M_PAPEIS.qual, 'Registra a chegada dos pedidos.'], [M_PAPEIS.adm, 'Mantém itens visuais, produtos manuais, motivos de pendência e o código do formulário em Configurações › RIF (as tabelas das normas vêm prontas na Central).']])],
+      ['Registrar a chegada', MOL(['Menu <b>RIF</b> › <b>+ Registrar chegada</b>.', 'Informar o pedido de venda (PV), cliente, vendedor e os itens (um RIF por item).', 'Clicar em <b>Registrar chegada</b> (ou <b>Inspecionar agora →</b>). O pedido entra em “Aguardando inspeção” e aparece no tablet do inspetor.'])],
+      ['Fazer o RIF no tablet', MOL([
+        '<b>Peça</b>: buscar o pedido (QR ou PV/cliente), escolher o item e a norma com seus seletores (tipo, classe, NPS/DN, face…) ou o modo manual (descrição e referência). Preencher a identificação: material, corrida e lote da matéria-prima (os lotes recebidos para o PV aparecem para tocar), nº do desenho, sinete e soldador quando há solda.',
+        '<b>Medidas</b>: medir as cotas nas peças (padrão 3). A Central compara com a tolerância e marca AP ou RP. Cota sem tolerância: marcar AP ou RP; desvio grande pede justificativa. Usar N/A para cota que não se aplica.',
+        '<b>Visual e fotos</b>: marcar AP, RP ou N/A em cada item visual (RP exige descrição), informar os instrumentos usados e tirar as fotos.',
+        '<b>Resultado</b>: conferir a <b>Prévia</b>, escolher Aprovado ou Reprovado, escrever a observação e tocar em <b>Assinar e finalizar</b>.'
+      ]) + MNOTA('O RIF recebe o número RIF-AAAA-NNNNN na assinatura e não pode mais ser alterado. Item reprovado: usar <b>Reinspecionar</b>, que abre um RIF novo com as mesmas cotas.')],
+      ['O que impede assinar', MUL(['Peça não escolhida ou sem cotas; nominal ou medida faltando.', 'Cota sem tolerância sem AP/RP; desvio sem justificativa.', 'Item visual sem marcação ou RP sem descrição.', 'Resultado Aprovado com cota ou item RP sem observação.', 'Nenhum instrumento, ou instrumento vencido ou bloqueado (IT-QUA-07).', 'Soldador sem qualificação válida na Soldagem (IT-QUA-08).'])],
+      ['Pendência e validação', MUL(['<b>Marcar pendência</b> (acabamento/retrabalho, aguardando sinete, incompleto…) tira o pedido da inspeção até <b>Pendência resolvida</b>.', '<b>Validar combinação</b>: qualquer pessoa com “Lança” em RIF confere a tabela da norma para uma combinação e corrige valores com motivo (fica registrado quem, quando e por quê). Correções entram sozinhas nos rascunhos abertos; RIF assinado não muda. A falta de validação não impede a assinatura, mas fica registrada no RIF.'])],
+      ['Registros', MREG([['Relatório de inspeção final', 'RIF-AAAA-NNNNN', 'RIF'], ['Pedido e histórico do pedido', 'Nº do PV', 'RIF › quadro'], ['Validação de combinação', 'Norma e combinação', 'Configurações › RIF']])],
+      ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 8.5.1, 8.6 e 7.1.5', 'IT-QUA-06 · IT-QUA-07 · IT-QUA-08'])]
+    ] },
+    /* ---------------------------------------------------------------- IT-QUA-06 */
+    { id: 'it06', cod: 'IT-QUA-06', tipo: 'Instrução de trabalho', tit: 'Emissão do certificado de qualidade', cols: ['certq'], sec: [
+      ['Objetivo', MP('Emitir o certificado de qualidade de cada pedido faturado com os dados rastreáveis do material (lote, corrida, química e mecânica) e a inspeção final.')],
+      ['Aplicação', MP('Pedidos de venda faturados que precisam de certificado, recebidos pela lista do Omie, e certificados avulsos.')],
+      ['Responsabilidades', MRESP([[M_PAPEIS.qual + ' (operador de certificados)', 'Importa a fila, emite e conclui os certificados, registra pendências.'], [M_PAPEIS.adm, 'Define operadores, distribuição automática, clientes que não precisam de certificado e prazo em Configurações › Certificados.']])],
+      ['Fila de pedidos', MOL(['No Omie: Pedido de Venda › Exportar › Excel.', 'Menu <b>Certificados</b> › <b>Importar lista do Omie (.xlsx)</b>. Conferir o resumo (novos, atualizados, repetidos, sem NF) e gravar.', 'Reimportar a lista atualiza a fila: pedido cancelado no Omie sai da fila; NF cancelada vai para “Aguardando solução”; NF trocada é atualizada.'])],
+      ['Emitir o certificado', MOL([
+        'No cartão do pedido, <b>Pegar</b> e <b>Fazer certificado</b>.',
+        'Usar <b>Puxar dos lotes (AV)</b> e <b>Preencher os itens marcados</b>: descrição, material, corrida e, quando lançados, a química e a mecânica da usina. Os campos preenchidos sozinhos ficam amarelos até serem conferidos.',
+        'Conferir o <b>RIF do pedido</b>.',
+        'Salvar o PDF (ou Excel) e responder <b>Sim, concluir</b> para concluir o pedido na fila.'
+      ])],
+      ['Bloqueios e justificativas', MUL(['Lote reprovado, com RNC aberta, em contenção, com destino registrado ou em análise: o certificado só segue com justificativa (mínimo 10 caracteres).', 'Item usinado do pedido sem RIF aprovado: justificativa obrigatória.', 'Lote liberado sob concessão, sem resultado de inspeção ou sem certificado do fornecedor: só aviso.'])],
+      ['Pendências', MP('No menu do cartão (⋯): <b>Registrar pendência</b> (motivo, nº da OC, justificativa), <b>Pendência resolvida</b>, <b>Passar para outra pessoa</b>, <b>Marcar como concluído (feito fora da Central)</b> e <b>Não precisa de certificado</b>. O prazo padrão é 2 dias úteis.')],
+      ['Registros', MREG([['Certificado de qualidade', 'Nº do PV (e parte; folhas de continuação com letra)', 'Certificados › Concluídos'], ['Revisão congelada do certificado', 'Lotes, situação dos lotes e justificativas no momento da conclusão', 'Banco da Central e backup'], ['Lotes do certificado', 'Ficha do lote › Certificados emitidos', 'Lotes (AV)']])],
+      ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 8.5.2, 8.6 e 7.5', 'IT-QUA-01 · IT-QUA-05'])]
+    ] },
+    /* ---------------------------------------------------------------- IT-QUA-07 */
+    { id: 'it07', cod: 'IT-QUA-07', tipo: 'Instrução de trabalho', tit: 'Controle de instrumentos de medição (Calibração)', cols: ['ins'], sec: [
+      ['Objetivo', MP('Garantir que os instrumentos de medição estejam calibrados, aprovados pelo critério de aceitação e identificados, e avaliar o impacto quando um instrumento reprova.')],
+      ['Aplicação', MP('Todos os instrumentos usados para aceitar ou rejeitar produto (RIR, RIF e processo).')],
+      ['Responsabilidades', MRESP([['<b>Responsável pela calibração</b> (função na Equipe, com “Lança” em Calibração)', 'Cadastra os instrumentos, envia ao laboratório, registra as calibrações e verificações, faz a análise de impacto e libera ou dá baixa.'], [M_PAPEIS.insr + ' / ' + M_PAPEIS.insu, 'Só usam instrumento em uso e com calibração válida; a Central não aceita outro.']])],
+      ['Critério de aceitação', MP('O instrumento é <b>aprovado</b> quando |maior erro encontrado| + incerteza ≤ EMA (erro máximo admissível). O EMA vem do instrumento ou, se vazio, do tipo de equipamento (Configurações › Calibração). Validade = data da calibração + frequência.')],
+      ['Atividades', MOL([
+        '<b>Novo instrumento</b>: código, descrição, tipo, marca, nº de série, faixa, resolução, setor, local, situação e, se houver, a calibração atual e a verificação intermediária.',
+        '<b>Etiqueta QR</b>: imprimir e fixar no instrumento. A página do QR mostra se pode usar.',
+        '<b>Enviar para calibração</b>: data do envio, laboratório e previsão de retorno.',
+        '<b>Registrar calibração</b> no retorno: data, laboratório, nº do certificado, frequência, maior erro e incerteza. A Central calcula o resultado e a validade. Enviar o certificado (PDF) para o Google Drive quando perguntado.',
+        '<b>Verificação intermediária</b> nos instrumentos que têm intervalo definido: resultado OK ou Não OK.',
+        'Calibração <b>reprovada</b> ou verificação <b>Não OK</b>: o instrumento é bloqueado e a <b>análise de impacto</b> abre com os RIR e RIF que usaram o instrumento no período. Conferir as peças e os lotes, registrar a conclusão (sem impacto, reavaliado sem problema ou com problema — abrir RNC) e o destino do instrumento.',
+        'Instrumento reprovado na calibração só volta ao uso com nova calibração aprovada. <b>Liberar para uso</b> (com justificativa) vale para o bloqueio por verificação Não OK ou bloqueio manual, depois da análise de impacto. Para retirar de vez: <b>Dar baixa</b> (data e motivo).'
+      ])],
+      ['Situações', MTB(['Status', 'Significado'], [['Em dia', 'Mais de 30 dias para vencer'], ['Vence em até 30 dias / Vence hoje', 'Programar o envio'], ['Vencido', 'Não usar'], ['No laboratório', 'Enviado para calibração'], ['Bloqueado', 'Reprovado ou bloqueado: não usar'], ['Manutenção · Fora de uso · Descartado', 'Fora de uso']]) + MP('Vencimentos e ações pendentes aparecem em Alertas; o Cronograma 12 meses mostra o que vence em cada mês e o custo previsto.')],
+      ['Registros', MREG([['Cadastro e calibrações do instrumento', 'Código do instrumento', 'Calibração'], ['Histórico do instrumento (calibração, envio, verificação, análise de impacto, uso em inspeção, baixa)', 'Código + data', 'Ficha do instrumento'], ['Certificado de calibração', 'Nome do arquivo = código', 'Google Drive']])],
+      ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 7.1.5', 'IT-QUA-02 · IT-QUA-05'])]
+    ] },
+    /* ---------------------------------------------------------------- IT-QUA-08 */
+    { id: 'it08', cod: 'IT-QUA-08', tipo: 'Instrução de trabalho', tit: 'Qualificação de soldadores', cols: ['sold'], sec: [
+      ['Objetivo', MP('Manter os soldadores qualificados conforme as normas aplicáveis e impedir o uso de soldador sem qualificação válida.')],
+      ['Aplicação', MP('Todos os soldadores que executam soldas em produtos e as EPS usadas.')],
+      ['Responsabilidades', MRESP([[M_PAPEIS.qual + ' (com “Lança” em Soldagem)', 'Cadastra soldadores, EPS e qualificações; registra continuidade e requalificação.'], [M_PAPEIS.insu, 'Informa o soldador no RIF quando há solda.']])],
+      ['Atividades', MOL([
+        '<b>Novo soldador</b>: sinete (único), nome, RG, admissão, setor, filial, situação e ligação com a ficha da Equipe.',
+        '<b>Nova EPS</b>: EPS e revisão, RQPS e revisão, norma, processo, material e grupo.',
+        '<b>Nova qualificação</b>: EPS, nº do RQS, norma, processo, posições, faixas de espessura e diâmetro, consumível, data do teste, inspetor e link do RQS.',
+        '<b>Registrar continuidade</b> sempre que o soldador soldar com o processo (data e comprovação, ex.: OS ou RIF). Continuidade em data posterior ao vencimento é recusada: precisa requalificar. <b>Continuidade em lote</b> registra para vários soldadores.',
+        '<b>Requalificar</b>, <b>Cancelar</b> (com motivo) ou <b>Reativar</b> uma qualificação quando necessário.'
+      ]) + MP('Validade = data do teste ou da última continuidade + meses da norma (padrão 6 meses, conforme ASME IX QW-322 / AWS D1.1).')],
+      ['Controle no RIF', MP('O RIF lista os soldadores não desligados com o status de cada um. Soldador sem qualificação válida bloqueia a assinatura do RIF.')],
+      ['Registros', MREG([['Ficha do soldador e qualificações', 'Sinete · nº do RQS', 'Soldagem'], ['Continuidades e requalificações', 'Data e comprovação', 'Ficha do soldador'], ['EPS', 'Nº da EPS e revisão', 'Soldagem › EPS']])],
+      ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 7.2 e 8.5.1', 'ASME IX · AWS D1.1 · AWS D1.6 · NORSOK', 'IT-QUA-05'])]
+    ] },
+    /* ---------------------------------------------------------------- IT-QUA-09 */
+    { id: 'it09', cod: 'IT-QUA-09', tipo: 'Instrução de trabalho', tit: 'Avaliação de fornecedores (IQF)', cols: ['iqf'], sec: [
+      ['Objetivo', MP('Avaliar o desempenho dos fornecedores de forma contínua e objetiva e definir ações conforme a classe.')],
+      ['Aplicação', MP('Todos os fornecedores com lotes recebidos no período.')],
+      ['Responsabilidades', MRESP([[M_PAPEIS.qual + ' (com “Lança” em Avaliação de fornecedores)', 'Acompanha as notas, fecha o mês, registra ações e a situação do fornecedor.'], [M_PAPEIS.comp, 'Conduz o plano de ação com fornecedores classe C e consulta a situação antes de comprar.']])],
+      ['Como a nota é calculada', MTB(['Critério', 'Peso padrão', 'Cálculo'], [['Qualidade', '40', '(lotes aprovados + 0,5 × concessões) ÷ lotes inspecionados'], ['Ocorrências', '25', '100 × (1 − RNC ÷ lotes), incluindo RND com causa no fornecedor sem RNC'], ['Documentação', '20', 'lotes com certificado ÷ lotes'], ['Atendimento às RNC', '15', 'RNC com retorno do fornecedor dentro do prazo de disposição ÷ RNC com retorno registrado ou com prazo de disposição vencido']]) + MP('Classes: <b>A</b> ≥ 90 (aprovado) · <b>B</b> ≥ 75 (atenção) · <b>C</b> abaixo de 75 (crítico). Com menos de 3 lotes no período: “poucos dados”. Pesos e limites em <b>Pesos e classes</b>.')],
+      ['Atividades', MOL([
+        'Acompanhar a tela pelo período (padrão: últimos 12 meses): classes, “Mudaram de classe”, prioridade (muito volume e nota baixa) e mapa de fornecedores.',
+        'Na ficha do fornecedor, ver onde ele perdeu pontos e as RNC do período. <b>Relatório de desempenho</b> gera o documento para enviar ao fornecedor (classe C: plano de ação em até 15 dias).',
+        '<b>Registrar ação / situação</b>: data, situação (Aprovado, Em desenvolvimento, Suspenso) e o que foi feito. Fornecedor Suspenso é avisado no recebimento, no RIR e na RNC; Em desenvolvimento aparece no RIR.',
+        'Todo mês, <b>Fechar mês</b> para guardar a nota de todos os fornecedores como evidência.'
+      ])],
+      ['Registros', MREG([['Fechamento mensal do IQF', 'Mês (AAAA-MM)', 'Avaliação de fornecedores › Fechamentos'], ['Ações e situação do fornecedor', 'Data e pessoa', 'Ficha do fornecedor no IQF'], ['Relatório de desempenho', 'Fornecedor e período', 'Impresso / PDF']])],
+      ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 8.4.1 e 9.1.3', 'IT-QUA-01 · IT-QUA-03'])]
+    ] },
+    /* ---------------------------------------------------------------- IT-QUA-10 */
+    { id: 'it10', cod: 'IT-QUA-10', tipo: 'Instrução de trabalho', tit: 'Serviços terceirizados', cols: ['serv'], sec: [
+      ['Objetivo', MP('Registrar os serviços feitos por terceiros (galvanização, pintura, mão de obra…) com nota fiscal, pedidos e certificado, para rastreabilidade.')],
+      ['Aplicação', MP('Todo serviço terceirizado recebido com nota fiscal.')],
+      ['Responsabilidades', MRESP([[M_PAPEIS.qual + ' (com “Lança” em Serviços)', 'Lança e corrige os serviços.']])],
+      ['Atividades', MOL(['Menu <b>Serviços</b> › <b>Novo serviço</b>.', 'Preencher data de entrada, descrição (tipo de serviço), fornecedor, nota fiscal, pedido de compra, pedido de venda e nº do certificado (* = sem certificado).', 'Clicar em <b>Gravar serviço</b>. A Central gera o número SV-NNNN e liga o serviço aos lotes e RNC com a mesma NF ou pedido.'])],
+      ['Registros', MREG([['Serviço terceirizado', 'SV-NNNN', 'Serviços']])],
+      ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 8.4 e 8.5.2'])]
+    ] },
+    /* ---------------------------------------------------------------- IT-QUA-11 */
+    { id: 'it11', cod: 'IT-QUA-11', tipo: 'Instrução de trabalho', tit: 'Administração da Central (acessos, configurações e cópias de segurança)', cols: 'admin', sec: [
+      ['Objetivo', MP('Controlar quem acessa a Central e o que cada pessoa pode fazer, manter as configurações e garantir as cópias de segurança dos registros.')],
+      ['Aplicação', MP('Todos os usuários da Central da Qualidade e dos tablets.')],
+      ['Responsabilidades', MRESP([[M_PAPEIS.adm, 'Libera e retira acessos, mantém as configurações, aprova os documentos do Manual e faz os backups. Só a conta dona cria administradores, libera módulos em teste e zera a Central.']])],
+      ['Liberar acesso', MOL([
+        '<b>Usuários</b> › <b>Liberar novo usuário</b>: e-mail Google da pessoa, ficha da Equipe e nome.',
+        'Escolher onde a pessoa trabalha: <b>Central da Qualidade</b> (administrativo) ou <b>Só tablet</b> (inspetor).',
+        'Só tablet: marcar as ferramentas (RIR, RNC, RIF). Central: definir cada módulo como Não vê, Só consulta ou Lança, e as telas gerais (Equipe, Configurações, Exportar…).',
+        'Salvar e usar <b>Ver como</b> para conferir o que a pessoa vê antes de entregar o acesso.',
+        'Ao desligar um funcionário, usar <b>Desligar</b> na ficha da Equipe: o acesso é bloqueado. <b>Remover</b> em Usuários tira o acesso; os registros da pessoa continuam.'
+      ])],
+      ['Configurações', MP('Listas de cada módulo, feriados (cadastrar os do ano seguinte em dezembro), fornecedores e clientes com apelidos (como o nome vem na NF), e-mails dos setores, parâmetros de prazo, checklist do RIR, regras dos certificados, normas do RIF e logo. Quem tem Configurações “Edita” altera listas, feriados, tipos, fornecedores, clientes e e-mails; o resto é só para administradores. Toda alteração fica no Histórico.')],
+      ['Cópias de segurança', MOL(['Todo mês, quando a Central lembrar em Alertas: <b>Configurações › Backup por ano</b> › <b>Baixar backup do ano</b> (Excel + cópia completa .json).', 'Guardar os arquivos fora do computador (e no Google Drive, se configurado).', 'Em janeiro, fazer o backup do ano anterior.', 'Restaurar só pela conta dona, em <b>Usuários › Restaurar backup</b>: junta com o banco sem apagar nada.'])],
+      ['Manual da Qualidade', MP('Os documentos deste manual ficam em <b>Manual</b>. Quando uma versão nova da Central muda o texto de um documento, ele aparece para os administradores como “revisão NN aguardando aprovação”: conferir a minuta, clicar em <b>Aprovar revisão</b>, descrever o que mudou e <b>Aprovar e assinar</b>. Documento novo começa como minuta e é emitido com <b>Aprovar emissão (rev. 00)</b>. A revisão anterior fica guardada como obsoleta. Cópias impressas não são controladas.')],
+      ['Registros', MREG([['Usuários e acessos', 'E-mail da pessoa', 'Usuários'], ['Histórico de alterações', 'Data, pessoa e campos', 'Histórico'], ['Backups', 'Ano e data', 'Configurações › Backup por ano'], ['Aprovação dos documentos', 'Código e revisão', 'Manual']])],
+      ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 7.5.3', 'PR-QUA-01'])]
+    ] }
+  ];
+  /* ---------- controle dos documentos ---------- */
+  const MAN = { sel: null, ver: 'vig', snap: {}, cv: {} };
+  const manDocs = () => ((DB.cfg || {}).manual || {}).docs || {};
+  const man2 = (n) => String(n).padStart(2, '0');
+  function manHash(s) { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0; return h.toString(16).padStart(8, '0'); }
+  const manCorpo = (d) => d.sec.map(([t, h], i) => `<section class="msec"><h3>${i + 1}. ${t}</h3>${h}</section>`).join('');
+  const manCv = (d) => (MAN.cv[d.id] || (MAN.cv[d.id] = manHash(manCorpo(d))));
+  const manAdm = () => DB.admin === true || !!DB.owner;
+  /* quem vê cada documento: o processo integrado vale para todos; os outros seguem os módulos da pessoa */
+  function manVis(d) {
+    if (!d.cols) return true;
+    if (tbOnly()) { const k = { rir: 'rir', rnc: 'rnc', rnctab: 'rnc', rif: 'rif' }; return Array.isArray(d.cols) && d.cols.some((c) => k[c] && tbTool(k[c])); }
+    if (d.cols === 'admin') return manAdm() || ['edita', 'admin'].includes(cfgMode());
+    return d.cols.some((c) => (c === 'rnctab' ? tbInsp() : vis(c)));
+  }
+  const manLista = () => MAN_DOCS.filter(manVis);
+  function manSit(d) {
+    const c = manDocs()[d.id];
+    if (!c || c.rev == null) return { st: 'minuta', c: null, txt: 'Minuta · não aprovado', cls: 'warn' };
+    if (c.cv !== manCv(d)) return { st: 'rev', c, txt: `Rev. ${man2(c.rev)} vigente · revisão ${man2(c.rev + 1)} aguardando aprovação`, cls: 'info' };
+    return { st: 'vig', c, txt: `Rev. ${man2(c.rev)} · vigente`, cls: 'ok' };
+  }
+  async function manSnap(id) {
+    const c = manDocs()[id]; if (!c || c.rev == null) return null;
+    const o = MAN.snap[id]; if (o && o.rev === c.rev) return o;
+    try { const s = await DB.db.doc('meta/man-' + id).get(); MAN.snap[id] = s.exists ? s.data() : null; } catch (e) { MAN.snap[id] = null; }
+    return MAN.snap[id];
+  }
+  /* o que a pessoa lê: a revisão vigente (cópia aprovada); a minuta só para administradores ou enquanto nada foi aprovado */
+  function manTexto(d, sit, snap, verMinuta) {
+    if (sit.st === 'minuta') return { html: manCorpo(d), minuta: true };
+    if (sit.st === 'rev' && verMinuta && manAdm()) return { html: manCorpo(d), minuta: true };
+    return { html: snap ? snap.html : manCorpo(d), minuta: false, semCopia: !snap };
+  }
+  const manAss = (a) => (a ? `${esc(a.nome)} — assinado eletronicamente em ${dmy(a.at)} às ${hhmm(a.at)}` : '—');
+  function manHist(c) {
+    const L = (c && c.hist) || []; if (!L.length) return '';
+    return `<section class="msec"><h3>Histórico de revisões</h3><table class="mt"><thead><tr><th>Rev.</th><th>Data</th><th>O que mudou</th><th>Elaborado por</th><th>Aprovado por</th></tr></thead><tbody>${L.slice().reverse().map((h) => `<tr><td>${man2(h.rev)}</td><td>${esc(dmy(h.at))}</td><td>${esc(h.desc || '')}</td><td>${esc(h.elab || '')}</td><td>${esc(h.aprov || '')}</td></tr>`).join('')}</tbody></table></section>`;
+  }
+  /* cabeçalho de documento controlado (tela e impressão) */
+  function manCab(d, c, minuta, logo) {
+    const rev = minuta ? (c && c.rev != null ? man2(c.rev + 1) : '00') : man2(c ? c.rev : 0), data = minuta ? '—' : c ? dmy(c.at || 0) : '—';
+    return `<div class="mcab"><div class="mlg">${logo}</div><div class="mtt"><span>${esc(d.tipo)}</span><b>${esc(d.tit)}</b></div><div class="mnr"><div><span>Código</span><b>${esc((c && c.cod) || d.cod)}</b></div><div><span>Revisão</span><b>${rev}${minuta ? ' (minuta)' : ''}</b></div><div><span>Data</span><b>${esc(data)}</b></div></div></div>`;
+  }
+  const manLogo = () => (DB.logo ? `<img src="${DB.logo}" alt="">` : '<b class="mav">AÇOS VITAL</b>');
+
+  /* ---------- tela ---------- */
+  VIEWS.manual = (main) => {
+    const L = manLista(), tab = tbOnly(), adm = manAdm();
+    if (!MAN.sel || !L.some((d) => d.id === MAN.sel)) MAN.sel = (L[0] || {}).id || null;
+    const d = L.find((x) => x.id === MAN.sel);
+    const pend = adm ? L.filter((x) => manSit(x).st !== 'vig').length : 0;
+    const lista = `<div class="mlist" role="list">${L.map((x) => { const s = manSit(x); return `<button type="button" class="mitem${x.id === MAN.sel ? ' on' : ''}" data-act="man-sel" data-key="${x.id}" role="listitem"><span class="mcod">${esc((s.c && s.c.cod) || x.cod)}</span><b>${esc(x.tit)}</b><span class="chip ${s.st === 'vig' || (s.st === 'rev' && !adm) ? 'ok' : s.cls}"><i>${s.st === 'vig' ? '✓' : '!'}</i>${adm || s.st === 'minuta' ? esc(s.txt) : esc('Rev. ' + man2(s.c.rev) + ' · vigente')}</span></button>`; }).join('') || '<div class="empty">Nenhum documento para os módulos que você usa.</div>'}</div>`;
+    const acts = `${adm ? '<button class="btn" type="button" data-act="man-mestra">Lista mestra</button>' : ''}<button class="btn" type="button" data-act="man-tudo">Imprimir manual${adm ? ' completo' : ''}</button>`;
+    const corpo = `<div class="mwrap">${lista}<div class="mread" id="man-read">${d ? '<div class="loading"><span class="spin"></span><span>Abrindo o documento…</span></div>' : ''}</div></div>`;
+    main.innerHTML = tab
+      ? `<div class="tbw">${tbHead('Manual da Qualidade')}<div class="tbb"><div class="rrfoot" style="justify-content:flex-start">${acts}</div>${corpo}</div></div>`
+      : `<div class="view">${head('Manual da Qualidade', 'Procedimento e instruções de trabalho da Central, controlados conforme a ISO 9001 (7.5). A versão vigente é sempre a que está aqui; cópia impressa não é controlada.' + (adm && pend ? ` <b>${pend} documento(s) aguardando aprovação.</b>` : ''), acts)}${corpo}</div>`;
+    if (d) manLer(d);
+  };
+  async function manLer(d) {
+    const sit = manSit(d), adm = manAdm(), snap = await manSnap(d.id);
+    const el = $('#man-read'); if (!el || MAN.sel !== d.id) return;
+    const verMin = sit.st === 'minuta' || (sit.st === 'rev' && adm && MAN.ver === 'min');
+    const T = manTexto(d, sit, snap, verMin), c = sit.c;
+    let aviso = '';
+    if (sit.st === 'minuta') aviso = `<div class="warnbox mav1"><b>Minuta — documento ainda não aprovado.</b> ${adm ? 'Leia e aprove para ele virar a revisão 00.' : 'Ainda não vale como documento controlado.'}</div>`;
+    else if (sit.st === 'rev' && adm) aviso = `<div class="rrwarn mav1" style="border-left-color:var(--info)"><b>O texto mudou na versão nova da Central.</b> A revisão ${man2(c.rev)} continua vigente até você aprovar a revisão ${man2(c.rev + 1)}.<div class="rrfoot" style="justify-content:flex-start;margin-top:6px"><span class="seg"><button type="button" data-act="man-ver" data-key="vig" aria-pressed="${!verMin}">Vigente (rev. ${man2(c.rev)})</button><button type="button" data-act="man-ver" data-key="min" aria-pressed="${verMin}">Minuta (rev. ${man2(c.rev + 1)})</button></span></div></div>`;
+    else if (T.semCopia) aviso = '<div class="warnbox mav1">A cópia aprovada não foi encontrada no banco; mostrando o texto atual.</div>';
+    const ass = !T.minuta && c ? `<div class="mass"><div><span>Elaborado por</span><b>${esc(c.elab || '—')}</b></div><div><span>Aprovado por</span><b>${manAss(c.aprov)}</b></div></div>` : '';
+    const btns = `<button class="btn" type="button" data-act="man-print" data-key="${d.id}">Imprimir${T.minuta ? ' minuta' : ''}</button>${adm && sit.st !== 'vig' ? `<button class="btn primary" type="button" data-act="man-aprovar" data-key="${d.id}">${sit.st === 'minuta' ? 'Aprovar emissão (rev. 00)' : 'Aprovar revisão ' + man2(c.rev + 1)}</button>` : ''}`;
+    el.innerHTML = `<div class="rrfoot mbtns">${btns}</div>${aviso}<article class="mdoc${T.minuta ? ' minuta' : ''}">${manCab(d, c, T.minuta, manLogo())}<div class="mtxt">${T.html}</div>${ass}${manHist(c)}</article>`;
+  }
+  function manAct(a, key) {
+    if (a === 'man-sel') { MAN.sel = key; MAN.ver = 'vig'; render(); window.scrollTo(0, 0); return true; }
+    if (a === 'man-ver') { MAN.ver = key; const d = MAN_DOCS.find((x) => x.id === MAN.sel); if (d) manLer(d); return true; }
+    if (a === 'man-print') { manImprimir([key], MAN.ver === 'min'); return true; }
+    if (a === 'man-tudo') { manImprimir(manLista().map((d) => d.id), false); return true; }
+    if (a === 'man-mestra') { manMestra(); return true; }
+    if (a === 'man-aprovar') { manAprovar(key); return true; }
+    return false;
+  }
+  /* ---------- aprovação (administradores) ---------- */
+  function manAprovar(id) {
+    const d = MAN_DOCS.find((x) => x.id === id); if (!d || !manAdm()) return;
+    const sit = manSit(d), c = sit.c, rev = c && c.rev != null ? c.rev + 1 : 0, nomes = ((S.model.cfg.PESSOAS || []).filter((p) => !p.inativo).map((p) => p.nome));
+    openModal(`Aprovar ${esc((c && c.cod) || d.cod)} · revisão ${man2(rev)}`, `<p style="margin:0">${esc(d.tit)}. A aprovação fica com a sua assinatura eletrônica (${esc(myPessoa() || DB.meName || 'você')}) e a revisão anterior é guardada como obsoleta.</p>
+      <div class="fgrid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))"><label class="field"><span>Código do documento</span><input id="ma-cod" value="${esc((c && c.cod) || d.cod)}" autocomplete="off"></label>
+      <label class="field"><span>Elaborado por <b>*</b></span><input id="ma-elab" list="ma-dl" value="${esc((c && c.elab) || myPessoa() || DB.meName || '')}" autocomplete="off"><datalist id="ma-dl">${nomes.map((n) => `<option value="${esc(n)}">`).join('')}</datalist></label></div>
+      <label class="field"><span>O que mudou nesta revisão <b>*</b></span><textarea id="ma-desc" class="inp" style="min-height:64px">${rev === 0 ? 'Emissão inicial.' : ''}</textarea></label>
+      <label class="check"><input type="checkbox" id="ma-ok"> Li a minuta e aprovo este documento.</label>
+      <div class="formfoot"><button class="btn primary" type="button" id="ma-go">Aprovar e assinar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    $('#ma-go').onclick = async () => {
+      const cod = $('#ma-cod').value.trim(), elab = $('#ma-elab').value.trim(), desc = $('#ma-desc').value.trim();
+      if (!cod || !elab || !desc) { toast('Preencha o código, quem elaborou e o que mudou.', true); return; }
+      if (!$('#ma-ok').checked) { toast('Marque que leu e aprova o documento.', true); return; }
+      const b = $('#ma-go'); b.disabled = true; b.textContent = 'Gravando…';
+      try {
+        const html = manCorpo(d), cv = manHash(html), at = Date.now(), aprov = meSig('central');
+        const snap = { id, cod, tit: d.tit, tipo: d.tipo, rev, cv, html, at, aprov, elab, desc };
+        await DB.db.doc('meta/man-' + id + '-r' + man2(rev)).set(snap);
+        await DB.db.doc('meta/man-' + id).set(snap);
+        const hist = ((c && c.hist) || []).concat([{ rev, at, desc, elab, aprov: aprov.nome }]);
+        await DB.db.doc('cfg/main').update({ manual: { docs: { [id]: { cod, rev, at, elab, aprov, cv, desc, hist } } } });
+        MAN.snap[id] = snap; MAN.ver = 'vig';
+        logEntry('GERAL', 'manual', 'alterado', `${cod} · ${d.tit} · revisão ${man2(rev)} aprovada: ${desc}`, null);
+        closeLayer(); toast(`${cod} revisão ${man2(rev)} aprovada.`);
+        await sleep(300); render();
+      } catch (err) { toast('Não foi possível aprovar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; b.textContent = 'Aprovar e assinar'; }
+    };
+  }
+  /* ---------- impressão (cópia não controlada) ----------
+     marca d'água escolhida pela Qualidade: meio selo da Central saindo pela margem direita + selo pequeno no rodapé */
+  const MAN_SEAL = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke-width="10"><path d="M52.7 12.1A38 38 0 0 1 81.5 28.8" stroke="#378267"/><path d="M84.2 33.3A38 38 0 0 1 84.2 66.7" stroke="#996c21"/><path d="M81.5 71.2A38 38 0 0 1 52.7 87.9" stroke="#d9362a"/><path d="M47.3 87.9A38 38 0 0 1 18.5 71.2" stroke="#825ddc"/><path d="M15.8 66.7A38 38 0 0 1 15.8 33.3" stroke="#2d77c1"/><path d="M18.5 28.8A38 38 0 0 1 47.3 12.1" stroke="#6c7772"/></g><path d="M35 51 L46 62 L67 39" fill="none" stroke="#1b211e" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const MAN_WM = `<div class="cqwm">${MAN_SEAL}</div>`;
+  const MAN_CSS = `@page{size:A4;margin:10mm 12mm 11mm}*{box-sizing:border-box}body{margin:0;font:9.6pt/1.42 Arial,Helvetica,sans-serif;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    table.pg{width:100%;border-collapse:collapse}table.pg>thead td,table.pg>tfoot td{padding:0}.doc{break-after:page}.doc:last-child{break-after:auto}
+    .mcab{display:grid;grid-template-columns:44mm 1fr 52mm;border:1.4px solid #111;margin-bottom:4mm}.mcab>div{padding:2.5mm 3mm;display:flex;flex-direction:column;justify-content:center}
+    .mlg img{max-width:100%;max-height:16mm;object-fit:contain}.mav{font-size:14pt}.mtt{border-left:1.4px solid #111;border-right:1.4px solid #111;text-align:center}.mtt span{font-size:8pt;letter-spacing:.1em;text-transform:uppercase;color:#444}.mtt b{font-size:12.5pt;margin-top:1mm}
+    .mnr{gap:1mm}.mnr div{display:flex;justify-content:space-between;gap:2mm;font-size:8.6pt}.mnr span{color:#444}
+    .msec{margin:0 0 3.2mm;break-inside:auto}.msec h3{break-after:avoid;page-break-after:avoid;font-size:10.4pt;margin:0 0 1.5mm;padding-bottom:.8mm;border-bottom:1px solid #999;text-transform:uppercase;letter-spacing:.03em}
+    .msec p{margin:0 0 1.6mm}.msec ol,.msec ul{margin:0 0 1.6mm;padding-left:6mm}.msec li{margin:0 0 1mm}
+    table.mt{width:100%;border-collapse:collapse;margin:1mm 0 2mm;font-size:8.8pt}table.mt th,table.mt td{border:1px solid #aaa;padding:1.2mm 1.8mm;text-align:left;vertical-align:top}table.mt th{background:#eceeec}
+    .mnota{border-left:2.5px solid #777;padding:1mm 2.5mm;background:#f3f4f3}
+    .mflux{display:flex;flex-wrap:wrap;align-items:center;gap:1.5mm;margin:1mm 0 2.5mm}.mflux div{border:1px solid #777;border-radius:1.5mm;padding:1.5mm 2mm;width:30mm;display:grid;gap:.3mm}.mflux i{font-style:normal;font-weight:700;font-size:8pt;color:#555}.mflux b{font-size:8.6pt}.mflux span,.mflux small{font-size:7.6pt;color:#444}.mflux em{font-style:normal;color:#555}
+    .mass{display:grid;grid-template-columns:1fr 1fr;border:1px solid #aaa;margin-top:3mm}.mass div{padding:2mm 3mm;display:grid}.mass div+div{border-left:1px solid #aaa}.mass span{font-size:7.8pt;color:#444;text-transform:uppercase;letter-spacing:.06em}
+    .rod{border-top:1px solid #999;margin-top:3mm;padding-top:1.2mm;font-size:7.4pt;color:#444;display:flex;justify-content:space-between;gap:4mm}
+    .minuta .mtxt{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='760'%3E%3Ctext x='300' y='400' transform='rotate(-24 300 380)' text-anchor='middle' font-family='Arial' font-weight='700' font-size='118' fill='rgba(180,0,0,0.13)'%3EMINUTA%3C/text%3E%3C/svg%3E") center top/100% auto repeat-y}
+    .cqwm{position:fixed;right:-31mm;top:50%;width:92mm;height:92mm;transform:translateY(-50%);opacity:.09;pointer-events:none;z-index:0}.cqwm svg{width:100%;height:100%}.doc,table.pg{position:relative;z-index:1}
+    .rod{align-items:center}.rod .cqs{display:inline-flex;align-items:center;gap:1.4mm;font-weight:700;color:#333;white-space:nowrap}.rod .cqs svg{width:5mm;height:5mm}`;
+  async function manImprimir(ids, minutaAdm) {
+    const docs = ids.map((id) => MAN_DOCS.find((x) => x.id === id)).filter(Boolean); if (!docs.length) return;
+    const quem = myPessoa() || DB.meName || '', agora = `${dmy(Date.now())} ${hhmm(Date.now())}`, logo = manLogo();
+    const partes = [];
+    for (const d of docs) {
+      const sit = manSit(d), snap = await manSnap(d.id), T = manTexto(d, sit, snap, minutaAdm && ids.length === 1), c = sit.c;
+      const ass = !T.minuta && c ? `<div class="mass"><div><span>Elaborado por</span><b>${esc(c.elab || '—')}</b></div><div><span>Aprovado por</span><b>${manAss(c.aprov)}</b></div></div>` : '';
+      partes.push(`<div class="doc${T.minuta ? ' minuta' : ''}"><table class="pg"><thead><tr><td>${manCab(d, c, T.minuta, logo)}</td></tr></thead><tfoot><tr><td><div class="rod"><span><span class="cqs">${MAN_SEAL} Central da Qualidade</span> · ${T.minuta ? '<b>MINUTA — não aprovado, sem validade.</b> ' : ''}Cópia impressa não controlada; a versão vigente está no Manual da Central.</span><span>Impresso em ${esc(agora)}${quem ? ' por ' + esc(quem) : ''}</span></div></td></tr></tfoot><tbody><tr><td><div class="mtxt">${T.html}</div>${ass}${manHist(c)}</td></tr></tbody></table></div>`);
+    }
+    printHTML(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${docs.length > 1 ? 'Manual da Qualidade' : esc(((manSit(docs[0]).c || {}).cod) || docs[0].cod)}</title><style>${MAN_CSS}</style></head><body>${MAN_WM}${partes.join('')}</body></html>`);
+  }
+  async function manMestra() {
+    const L = MAN_DOCS, agora = `${dmy(Date.now())} ${hhmm(Date.now())}`;
+    const rows = L.map((d) => { const s = manSit(d), c = s.c; return `<tr><td>${esc((c && c.cod) || d.cod)}</td><td>${esc(d.tit)}</td><td>${esc(d.tipo)}</td><td>${c ? man2(c.rev) : '—'}</td><td>${c ? esc(dmy(c.at)) : '—'}</td><td>${s.st === 'vig' ? 'Vigente' : s.st === 'rev' ? 'Vigente · revisão pendente' : 'Minuta'}</td><td>${c && c.aprov ? esc(c.aprov.nome) : '—'}</td></tr>`; }).join('');
+    const d0 = { tipo: 'Lista mestra', tit: 'Lista mestra de documentos da Qualidade' };
+    printHTML(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Lista mestra de documentos</title><style>${MAN_CSS}</style></head><body>${MAN_WM}<table class="pg"><thead><tr><td><div class="mcab"><div class="mlg">${manLogo()}</div><div class="mtt"><span>${d0.tipo}</span><b>${d0.tit}</b></div><div class="mnr"><div><span>Emitida em</span><b>${esc(agora)}</b></div><div><span>Documentos</span><b>${L.length}</b></div></div></div></td></tr></thead><tbody><tr><td>
+      <table class="mt"><thead><tr><th>Código</th><th>Título</th><th>Tipo</th><th>Rev.</th><th>Data</th><th>Situação</th><th>Aprovado por</th></tr></thead><tbody>${rows}</tbody></table>
+      <p style="font-size:8.6pt;color:#444">Distribuição: eletrônica, pela Central da Qualidade › Manual (cada pessoa vê os documentos dos módulos que usa). Revisões anteriores ficam guardadas na Central como obsoletas.</p></td></tr></tbody></table></body></html>`);
+  }
+  /* Configurações › Manual da Qualidade: impressão e situação dos documentos */
+  function manCfgHTML() {
+    const L = manLista(), adm = manAdm();
+    return `<section class="sec">${band('GERAL', 'Manual da Qualidade', 'documentos controlados · ISO 9001 7.5')}<div class="block"><div class="body">
+      <p style="margin:0 0 10px;max-width:80ch">Procedimento e instruções de trabalho de cada módulo. Leia e aprove em <b>Manual</b> (no menu); aqui você imprime. A cópia impressa sai com o cabeçalho do documento controlado e o aviso de cópia não controlada.</p>
+      <div class="formfoot" style="justify-content:flex-start;margin-bottom:10px"><button class="btn primary" type="button" data-act="man-tudo">Imprimir manual${adm ? ' completo' : ''}</button>${adm ? '<button class="btn" type="button" data-act="man-mestra">Imprimir lista mestra</button>' : ''}<button class="btn ghost" type="button" data-go='{"v":"manual"}'>Abrir o Manual</button></div>
+      <div class="twrap"><table class="t"><thead><tr><th class="nosort">Código</th><th class="nosort">Documento</th><th class="nosort">Situação</th><th class="nosort"></th></tr></thead><tbody>${L.map((d) => { const s = manSit(d); return `<tr><td class="mono">${esc((s.c && s.c.cod) || d.cod)}</td><td>${esc(d.tit)}</td><td><span class="chip ${s.cls}"><i>${s.st === 'vig' ? '✓' : '!'}</i>${esc(s.txt)}</span></td><td class="nw"><button class="btn small" type="button" data-act="man-print" data-key="${d.id}">Imprimir</button></td></tr>`; }).join('')}</tbody></table></div>
+    </div></div></section>`;
+  }
+
   /* ================= TELA DO TABLET (#rnctab) ================= */
   const TB = { step: 0, d: null, scan: null, asked: new Set() };
   const TBK = 'cq-rnctab-rasc';
@@ -13768,6 +14297,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (viewOk('rirtab')) L.push(['rirtab', 'RIR', 'Inspeção de recebimento', 'checklist da nota recebida e resultado de cada lote', 'var(--rir)']);
     if (viewOk('rnctab')) L.push(['rnctab', 'RNC', 'Não conformidade', 'abrir RNC pelo tablet ou acompanhar as suas', 'var(--rnc)']);
     if (viewOk('riftab')) L.push(['riftab', 'RIF', 'Inspeção final', 'medir, fotografar e assinar o RIF pelo tablet', 'var(--rif)']);
+    if (tbOnly() && viewOk('manual')) L.push(['manual', 'MQ', 'Manual', 'como fazer: instruções das suas ferramentas', 'var(--geral)']);
     if (!tbOnly()) L.push(['central', 'CQ', 'Central completa', 'menu com todos os módulos liberados para você', 'var(--geral)']);
     return L;
   }
@@ -14127,6 +14657,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (a && a.startsWith('cq-') && cqAct(a, key, act)) return;
       if (a && a.startsWith('rf-') && rfAct(a, key, act)) return;
       if (a && a.startsWith('ri-') && riAct(a, key, act)) return;
+      if (a && a.startsWith('man-') && manAct(a, key)) return;
       if (a && a.startsWith('rt-') && rtAct(a, key, act)) return;
       if (a && a.startsWith('eq-') && eqAct(a, key)) return;
       if (a === 'bk-dl') { const f = (VY.files || [])[+key]; if (f) saveFile(f[0], f[1]); return; }
@@ -14250,7 +14781,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   $$('#nav a').forEach((a) => { if (a.dataset.v === navOf(S.view)) a.setAttribute('aria-current', 'page'); });
   setInterval(() => { if (S.model && E.todaySerial() !== S.today) scheduleRebuild(); else refreshBanner(); }, 60000);
   boot();
-  window.__CQ = { S, DB, go, openRecord, lotSt, T: { avFind, normLotes, avIdFmt,  cqPlano, iqCalc, fornSit, cqConcluir, cqResumoDoc, cqApp, cqFind, lotCertAviso, numMax, insImpPend, nextRnc, nextRncc, createRecord, updateRecord, deleteRecord, addDecisions, addInsEvent, FT, docMatch, docList, entResolve, entPropagate, saveEnt, pesPropagate, corrGet, corrId, rncFotos, findRec, related, destDialog, cfgSeed } };
+  window.__CQ = { S, DB, go, openRecord, lotSt, T: { avFind, normLotes, avIdFmt, caseVal, nomeProprio, listNorm, cqPlano, iqCalc, fornSit, cqConcluir, cqResumoDoc, cqApp, cqFind, lotCertAviso, numMax, insImpPend, nextRnc, nextRncc, createRecord, updateRecord, deleteRecord, addDecisions, addInsEvent, FT, docMatch, docList, entResolve, entPropagate, saveEnt, pesPropagate, corrGet, corrId, rncFotos, findRec, related, destDialog, cfgSeed } };
 })();
 
 </script>
