@@ -82,6 +82,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
     /* lote reprovado, liberado sob concessão ou ligado a uma RNC: blocos em vermelho */
     var cc = ins === 'liberado sob concessão'; /* concessão: blocos em amarelo */
     var nc = !cc && (x.rnc === '1' || ins === 'reprovado');
+    if (x.bloq) { st = ['crit', '⛔ ' + x.bloq]; nc = true; cc = false; } /* contenção pedida por reclamação de cliente */
     var row = function (l, v, mono) { return v === '' || v == null ? '' : '<div class="r"><span>' + l + '</span><b' + (mono ? ' class="mono"' : '') + '>' + esc(v) + '</b></div>'; };
     var card = function (t, rows, g) { return rows ? '<div class="card' + (g ? ' g' : cc ? ' cc' : nc ? ' nc' : '') + '"><h3>' + t + '</h3>' + rows + '</div>' : ''; };
     var dim = [x.diam, x.esp].filter(Boolean).join(' × ');
@@ -90,7 +91,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
       + '<div class="hero ' + (cc ? 'cc' : nc ? 'crit' : st ? st[0] : '') + '">' + (st && st[0] === 'ok' ? SEAL : '') + '<span class="eb">Lote rastreado pela Qualidade</span><span class="code">' + esc(x.id) + '</span>'
       + '<span class="desc">' + esc([x.desc, dim].filter(Boolean).join(' · ')) + '</span>' + (st ? '<span class="chip ' + st[0] + '">' + st[1] + '</span>' : '') + '</div>'
       + card('Material', row('Descrição', x.desc) + row('Material', x.material) + row('Diâmetro', x.diam) + row('Espessura', x.esp) + row('Liga / tipo', x.liga) + row('Corrida', x.corrida, 1) + row('Volume', x.volume, 1) + row('Quantidade', x.quant || '—'))
-      + card('Inspeção', row('Resultado da inspeção', x.insp) + row('Inspetor', x.conf || '—') + row('Recebido em', x.recebido) + row('Filial', x.filial))
+      + card('Inspeção', row('Resultado da inspeção', x.insp) + row('Destino do material', x.dest) + row('Inspetor', x.conf || '—') + row('Recebido em', x.recebido) + row('Filial', x.filial))
       + card('Origem', row('Fornecedor', x.forn) + row('Nota fiscal', x.nf, 1) + row('Pedido de compra', x.pc, 1) + row('Pedido de venda', x.pv, 1), 1)
       + '<div class="ft">Página somente para consulta. Os dados são os registrados pela Qualidade da Aços Vital.' + (at ? '<br>Atualizado em ' + at.toLocaleDateString('pt-BR') + ' às ' + at.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '') + '</div></div>';
     document.title = (x.id || 'Lote') + ' · Qualidade Aços Vital';
@@ -108,7 +109,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
     else if (sit === 'bloqueado' || res === 'REPROVADO') st = ['crit', '■ Bloqueado — não usar'];
     else if (dias == null) st = ['warn', '! Sem data de calibração'];
     else if (dias < 0) st = ['crit', '✕ Calibração vencida — não usar'];
-    else if (dias <= 30) st = ['warn', '✓ Calibrado · vence ' + (dias === 0 ? 'hoje' : 'em ' + dias + ' dia(s)')];
+    else if (dias <= (Number(x.aviso) || 30)) st = ['warn', '✓ Calibrado · vence ' + (dias === 0 ? 'hoje' : 'em ' + dias + ' dia(s)')];
     else st = ['ok', '✓ Calibrado — pode usar'];
     var resT = { APROVADO: 'Aprovado', REPROVADO: 'Reprovado', 'AGUARDANDO ANÁLISE': 'Aguardando análise do certificado', 'SEM CRITÉRIO': 'Aguardando análise do certificado' }[res] || '';
     var row = function (l, v, mono) { return v === '' || v == null ? '' : '<div class="r"><span>' + l + '</span><b' + (mono ? ' class="mono"' : '') + '>' + esc(v) + '</b></div>'; };
