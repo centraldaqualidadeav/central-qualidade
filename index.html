@@ -33,7 +33,7 @@
   --tcr: #707a2c;
   --usi: #497a98;
   --sold: #be5615;
-  --iqf: #986b3e; --rif: #1B3A6B; --rir: #9a3c6e;
+  --iqf: #986b3e; --rif: #1B3A6B; --rir: #4b6320;
   --ok: #1d7446;
   --warn: #9a6400;
   --serious: #b9500e;
@@ -51,7 +51,7 @@
   :root:not([data-theme="light"]) {
     --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
     --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #6c7772;
-    --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --rir: #d0679f;
+    --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --rir: #8fb35a;
     --ok: #5dcb8d; --warn: #e3ad48; --serious: #ef8a4c; --crit: #ff6f63; --info: #72a8de; --off: #9aa39f; --focus: #72a8de;
     --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
     color-scheme: dark;
@@ -60,7 +60,7 @@
 :root[data-theme="dark"] {
   --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
   --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #6c7772;
-  --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --rir: #d0679f;
+  --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --rir: #8fb35a;
   --ok: #5dcb8d; --warn: #e3ad48; --serious: #ef8a4c; --crit: #ff6f63; --info: #72a8de; --off: #9aa39f; --focus: #72a8de;
   --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
   color-scheme: dark;
@@ -740,7 +740,9 @@ table.mz tbody tr[data-open] { cursor: pointer; } table.mz tbody tr[data-open]:h
 .ricard.em { border-top-color: var(--info, var(--cal)); }
 .ricard .rih { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; } .ricard .rih b { font-size: 15px; }
 .ricard .rif { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.rils { display: flex; flex-wrap: wrap; gap: 6px; }
+.rils { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.rils .lchip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); }
+.rils .lchip.sel { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 10%, var(--surface)); cursor: default; }
 .rils .lchip .x { border: 0; background: none; cursor: pointer; font-size: 15px; line-height: 1; margin-left: 4px; color: var(--ink-3); }
 .rist { font-size: 15px; margin: 4px 0 10px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; } .rist b { color: var(--rir); } .rist small { font-weight: 400; color: var(--ink-3); font-size: 12.5px; }
 .riv .fsec { max-width: 980px; }
@@ -992,6 +994,7 @@ body.tabmode .main { padding: 0 !important; }
 .tbdone h2 { margin: 6px 0 0; font: 800 34px/1 var(--f-display); letter-spacing: .03em; text-transform: uppercase; }
 .tbdone .n { font: 700 34px var(--f-mono); color: var(--rnc); }
 .tick { display: flex; align-items: center; gap: 12px; font: 600 16px var(--f-body); color: var(--ink-2); } .tick i { color: var(--ok); font-style: normal; font-weight: 800; font-size: 20px; }
+@media (max-width: 560px) { .tbhd { grid-template-columns: minmax(0, 1fr) auto auto !important; padding: 10px 14px; gap: 10px; } .tbhd .br b { font-size: 16px; } .tbhd .br .av { display: none; } .tbhd .rt > div { display: none; } .tbhd .swbtn { padding: 8px 10px; font-size: 14px; } .tbb { padding: 14px 12px 20px; } .tblr { flex-wrap: wrap; } .tblr .btn.big, .tblr .btn.red { width: 100%; min-width: 0 !important; } .rtk { grid-template-columns: 1fr 1fr 1fr; gap: 6px; } .rtk b { font-size: 22px; } }
 @media (max-width: 700px) { .tbhd { grid-template-columns: 1fr auto; } .tbhd .lg { display: none; } .tbrow2, .tbfound, .tbsum { grid-template-columns: 1fr; } .tbrowq { grid-template-columns: 1fr; } .tbfotos { grid-template-columns: repeat(3, 1fr); } }
 
 
@@ -1427,6 +1430,24 @@ table.t tbody tr.sel td { background: color-mix(in srgb, var(--rif) 9%, var(--su
 .tbw.rift .btn:disabled { opacity: .45; }
 .tbw.rift .tblr .btn.big { min-width: 170px; }
 .tbw.rift .tbf .chip { font-size: 13px; }
+/* ================= RIR no tablet (#rirtab): mesma tela de tablet, no verde musgo do RIR ================= */
+.tbw.rirt .tbcard .ch { background: var(--rir); }
+.tbw.rirt .tbcard .ch .cnt { color: var(--rir); }
+.tbw.rirt .tbcard .ch.gr { background: #5b6560; }
+.tbw .btn.rirb { background: var(--rir); border-color: var(--rir); color: #fff; }
+.tbw.rirt .btn:disabled { opacity: .45; }
+.tbw.rirt .tblr .btn.big { min-width: 170px; }
+.tbw.rirt .riv { display: grid; gap: 14px; }
+.tbw.rirt .riv .fsec { max-width: none; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.tbw.rirt .riv .fsec > h3 { font: 800 15px/1 var(--f-display); letter-spacing: .07em; color: var(--rir); }
+.tbw.rirt .cqfrom { font-size: 16px; }
+.tbw.rirt .riit { padding: 10px 12px; } .tbw.rirt .riit .rit { font-size: 16px; }
+.tbw.rirt .riseg button { padding: 12px 16px; min-width: 78px; font-size: 16px; font-weight: 700; }
+.tbw.rirt .rirow { grid-template-columns: minmax(80px, 130px) auto minmax(110px, 160px) minmax(0, 1fr); padding: 8px 0; }
+.tbw.rirt .rirow .inp, .tbw.rirt .rires .inp, .tbw.rirt .field select { height: 46px; font-size: 16px; }
+.tbw.rirt .rires .seg button { padding: 12px 16px; font-size: 15px; }
+.tbw.rirt .lchip { font-size: 14px; }
+@media (max-width: 700px) { .tbw.rirt .rirow { grid-template-columns: minmax(0, 1fr); } .tbw.rirt .tbf { flex-wrap: wrap; padding: 10px 14px; gap: 8px; } .tbw.rirt .tbf .grow { display: none; } .tbw.rirt .tbf .btn.big { height: 50px; font-size: 16px; padding: 0 14px; flex: 1 1 auto; } .tbw.rirt .tbf .chip { order: -1; flex-basis: 100%; } }
 .rtk { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .rtk div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; box-shadow: inset 0 4px 0 var(--k); }
 .rtk b { display: block; font: 800 30px/1.1 var(--f-display); color: var(--k); } .rtk span { font: 600 13.5px var(--f-body); color: var(--ink-2); }
@@ -1515,6 +1536,28 @@ table.t tbody tr.sel td { background: color-mix(in srgb, var(--rif) 9%, var(--su
 .acc-row > span { font-size: 13.5px; font-weight: 500; }
 .acc-row .seg button { padding: 5px 10px; font-size: 12.5px; }
 .accsum { font-size: 12.5px; line-height: 1.45; }
+/* Usuários: Central x Só tablet e ferramentas do tablet */
+.utipo { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.utipo button { display: grid; gap: 3px; text-align: left; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); font: inherit; cursor: pointer; }
+.utipo button b { font-size: 14px; } .utipo button small { font-size: 12px; color: var(--ink-3); line-height: 1.35; }
+.utipo button[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); background: color-mix(in srgb, var(--ink) 5%, var(--surface)); }
+.utools { display: grid; gap: 8px; margin-bottom: 8px; }
+.utool { display: grid; grid-template-columns: 44px 1fr 26px; gap: 12px; align-items: center; text-align: left; padding: 9px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); font: inherit; cursor: pointer; }
+.utool i { width: 44px; height: 44px; border-radius: 10px; background: var(--surface-2); color: var(--ink-3); display: grid; place-items: center; font: 800 15px var(--f-display); font-style: normal; letter-spacing: .04em; }
+.utool b { display: block; font-size: 14px; } .utool small { display: block; font-size: 12px; color: var(--ink-3); line-height: 1.35; }
+.utool em { width: 24px; height: 24px; border-radius: 6px; border: 1.5px solid var(--line-2); display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 13px; color: transparent; }
+.utool[aria-pressed="true"] { border-color: var(--k); box-shadow: inset 4px 0 0 var(--k); }
+.utool[aria-pressed="true"] i { background: var(--k); color: #fff; }
+.utool[aria-pressed="true"] em { background: var(--k); border-color: var(--k); color: #fff; }
+@media (max-width: 560px) { .utipo { grid-template-columns: 1fr; } }
+/* "Ver como" */
+.cqver { position: fixed; top: 0; left: 0; right: 0; z-index: 55; height: 36px; display: flex; align-items: center; justify-content: center; gap: 14px; padding: 0 12px; background: #7a4a06; color: #fff; font: 500 13px var(--f-body); box-sizing: border-box; }
+.cqver > span { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cqver-x { flex: none; }
+.cqver b { font-weight: 700; } .cqver-x { background: #fff; color: #7a4a06; border: 0; border-radius: 6px; padding: 4px 12px; font: 700 12.5px var(--f-body); cursor: pointer; }
+body.cq-ver { padding-top: 36px; }
+body.cq-ver .rail { top: 36px; height: calc(100dvh - 36px); }
+body.cq-ver .tbhd { top: 36px; }
+@media (max-width: 860px) { body.cq-ver .rail { height: auto; } .cqver-em { display: none; } }
 #fb-gate .gtop { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
 #fb-gate .gtop .seal { width: 88px; height: 88px; }
 #fb-gate .glogo { max-height: 64px; max-width: 200px; object-fit: contain; }
@@ -3223,11 +3266,17 @@ re2js/build/index.js:
   const SEAL = '<svg class="seal" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke-width="10"><path d="M52.7 12.1A38 38 0 0 1 81.5 28.8" stroke="var(--av)"/><path d="M84.2 33.3A38 38 0 0 1 84.2 66.7" stroke="var(--serv)"/><path d="M81.5 71.2A38 38 0 0 1 52.7 87.9" stroke="var(--rnc)"/><path d="M47.3 87.9A38 38 0 0 1 18.5 71.2" stroke="var(--rncc)"/><path d="M15.8 66.7A38 38 0 0 1 15.8 33.3" stroke="var(--cal)"/><path d="M18.5 28.8A38 38 0 0 1 47.3 12.1" stroke="var(--geral)"/></g><path d="M35 51 L46 62 L67 39" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   let GATE_LOGO = null;
   const MODCOLS = ['av', 'rir', 'serv', 'certq', 'rif', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp', 'rnctab'];
-  const MODULOS = [['av', 'Lotes (AV)'], ['rir', 'RIR · Relatório de Inspeção de Recebimento'], ['serv', 'Serviços'], ['certq', 'Certificados'], ['rif', 'RIF · Relatório de Inspeção Final'], ['rnc', 'RNC · Relatório de Não Conformidade'], ['rncc', 'RND · Relatório de Não Conformidade e Devolução'], ['ins', 'Calibração'], ['sold', 'Soldagem'], ['iqf', 'Avaliação de fornecedores'], ['trello', 'Trello Jurong'], ['acomp', 'Acompanhamento Jurong'], ['rnctab', 'RNC pelo tablet (inspetor)']];
+  const MODULOS = [['av', 'Lotes (AV)'], ['rir', 'RIR · Relatório de Inspeção de Recebimento'], ['serv', 'Serviços'], ['certq', 'Certificados'], ['rif', 'RIF · Relatório de Inspeção Final'], ['rnc', 'RNC · Relatório de Não Conformidade'], ['rncc', 'RND · Relatório de Não Conformidade e Devolução'], ['ins', 'Calibração'], ['sold', 'Soldagem'], ['iqf', 'Avaliação de fornecedores'], ['trello', 'Trello Jurong'], ['acomp', 'Acompanhamento Jurong']];
+  /* inspetor "só tablet": ferramentas do tablet e o módulo do banco que cada uma usa (RNC pelo tablet só cria a entrada na caixa do tablet) */
+  const TAB_FERR = [['rir', 'RIR', 'Inspeção de recebimento', 'checklist da nota recebida e resultado de cada lote'], ['rnc', 'RNC', 'Não conformidade', 'abre a RNC do lote reprovado; a Qualidade numera e acompanha na Central'], ['rif', 'RIF', 'Inspeção final', 'mede, fotografa e assina o RIF da peça']];
+  const TAB_COL = { rir: 'rir', rnc: 'rnctab', rif: 'rif' };
   /* telas gerais: quem não tem a escolha gravada (cadastros antigos) vê tudo, consulta Configurações e exporta */
   const TELAS = [['painel', 'Painel'], ['alertas', 'Alertas'], ['rastreio', 'Rastreabilidade'], ['auditoria', 'Auditoria'], ['relatorio', 'Relatório mensal'], ['historico', 'Histórico']];
-  const TELA_OPC = { config: [['nao', 'Não vê'], ['ver', 'Só consulta'], ['edita', 'Edita']], exportar: [['sim', 'Permite'], ['nao', 'Não permite']] };
-  const TELA_DEF = { painel: 've', alertas: 've', rastreio: 've', auditoria: 've', relatorio: 've', historico: 've', config: 'ver', exportar: 'sim' };
+  const TELA_OPC = { config: [['nao', 'Não vê'], ['ver', 'Só consulta'], ['edita', 'Edita']], exportar: [['sim', 'Permite'], ['nao', 'Não permite']], equipe: [['tudo', 'Fichas e organograma'], ['org', 'Só organograma'], ['nao', 'Não vê']] };
+  const TELA_DEF = { painel: 've', alertas: 've', rastreio: 've', equipe: 'tudo', auditoria: 've', relatorio: 've', historico: 've', config: 'ver', exportar: 'sim' };
+  /* "Ver como": a conta dona ou um administrador abre a Central com o acesso de outra pessoa (nada é gravado) */
+  const VER = String(new URLSearchParams(location.search).get('vercomo') || '').trim().toLowerCase();
+  let PREV = null;
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   window.CQ_TEXT = {
@@ -3283,6 +3332,7 @@ re2js/build/index.js:
     if (c === 'permission-denied' || c === 'firestore/permission-denied') return { code: 'permission_denied', message: 'Sem permissão para gravar aqui. Fale com o administrador da Central.' };
     if (c === 'not-found' || c === 'not_found') return { code: 'not_found', message: 'Documento não existe.' };
     if (c === 'unavailable') return { code: 'unavailable', message: 'Sem conexão com o banco. Verifique a internet.' };
+    if (c === 'preview') return { code: 'preview', message: 'Modo “Ver como”: nada é gravado.' };
     return { code: c || 'erro', message: (e && e.message) || String(e) };
   }
   const w = (p) => p.catch((e) => { throw mapErr(e); });
@@ -3298,6 +3348,8 @@ re2js/build/index.js:
   }
   const wrapDoc = (s) => ({ id: s.id, exists: s.exists(), data: () => s.data() });
   const wrapQ = (q) => ({ docs: q.docs.map(wrapDoc), size: q.size, empty: q.empty });
+  /* no "Ver como" nada vai para o banco */
+  const ro = (f) => (PREV ? Promise.reject(mapErr({ code: 'preview' })) : f());
 
   /* ---------- banco: mesma interface do Claude (doc/collection, get/set/update/delete/onSnapshot/acquire) ---------- */
   const db = {
@@ -3306,39 +3358,39 @@ re2js/build/index.js:
       return {
         id: path.split('/').pop(),
         get: () => w(SDK.getDoc(ref).then(wrapDoc)),
-        set: (d) => w(SDK.setDoc(ref, d)),
+        set: (d) => ro(() => w(SDK.setDoc(ref, d))),
         /* junta campos aninhados sem precisar ler o documento antes (usado no histórico) */
-        merge: (d) => w(SDK.setDoc(ref, d, { merge: true })),
+        merge: (d) => ro(() => w(SDK.setDoc(ref, d, { merge: true }))),
         /* "update" do Claude junta objetos aninhados; aqui é feito numa transação para não perder alterações de outras pessoas */
         /* grava o documento inteiro só se a condição valer para o que está no banco agora (mesma transação) */
-        setIf: (d, ok) => w(SDK.runTransaction(fs, async (tx) => {
+        setIf: (d, ok) => ro(() => w(SDK.runTransaction(fs, async (tx) => {
           const s = await tx.get(ref);
           if (!ok(s.exists() ? s.data() : null)) throw { code: 'failed-precondition', message: 'O documento mudou no banco (outra pessoa já finalizou).' };
           tx.set(ref, d);
-        })),
-        update: (patch) => w(SDK.runTransaction(fs, async (tx) => {
+        }))),
+        update: (patch) => ro(() => w(SDK.runTransaction(fs, async (tx) => {
           const s = await tx.get(ref);
           if (!s.exists()) throw { code: 'not-found' };
           tx.set(ref, deepMerge(s.data(), patch));
-        })),
-        delete: () => w(SDK.deleteDoc(ref)),
+        }))),
+        delete: () => ro(() => w(SDK.deleteDoc(ref))),
         onSnapshot: (cb, err) => SDK.onSnapshot(ref, (s) => cb(wrapDoc(s)), (e) => { if (err) err(mapErr(e)); }),
-        acquire: ({ holder, ttlMs }) => w(SDK.runTransaction(fs, async (tx) => {
+        acquire: ({ holder, ttlMs }) => ro(() => w(SDK.runTransaction(fs, async (tx) => {
           const s = await tx.get(ref), now = Date.now(), d = s.exists() ? s.data() : null;
           if (!d || !(d.until > now) || d.holder === holder) { tx.set(ref, { holder, until: now + (ttlMs || 8000) }); return { acquired: true }; }
           return { acquired: false };
-        }))
+        })))
       };
     },
     collection(c) {
       const ref = SDK.collection(fs, c);
       /* exceções: cada módulo lê o que precisa para se ligar aos outros (os lotes para RNC, RIR, RIF, certificado e RND;
          os instrumentos para RIF e RIR; os soldadores para o RIF; os certificados para a RND) */
-      const blocked = () => MODCOLS.includes(c) && lvl(c) === 'nao'
+      const blocked = () => (c === 'pes' ? !isAdmin() && ME.telas.equipe === 'nao' && lvl('sold') === 'nao' : MODCOLS.includes(c) && lvl(c) === 'nao'
         && !(c === 'av' && ['rnc', 'rnctab', 'certq', 'rir', 'rif'].some((m) => lvl(m) === 'lanca' || (m === 'rif' && lvl(m) === 'ver')) || (c === 'av' && lvl('rncc') !== 'nao'))
         && !(c === 'ins' && (lvl('rif') === 'lanca' || lvl('rir') === 'lanca'))
         && !(c === 'sold' && lvl('rif') !== 'nao')
-        && !(c === 'certq' && lvl('rncc') !== 'nao'); /* quem lança RNC lê os lotes para decidir os reprovados; quem faz certificado lê os lotes do pedido */
+        && !(c === 'certq' && lvl('rncc') !== 'nao')); /* quem lança RNC lê os lotes para decidir os reprovados; quem faz certificado lê os lotes do pedido */
       const empty = { docs: [], size: 0, empty: true };
       return {
         doc: (id) => db.doc(c + '/' + id),
@@ -3349,7 +3401,7 @@ re2js/build/index.js:
   };
 
   /* ---------- quem está usando ---------- */
-  const ME = { uid: null, email: '', nome: '', perfil: null, acesso: {}, telas: Object.assign({}, TELA_DEF) };
+  const ME = { uid: null, email: '', nome: '', perfil: null, acesso: {}, telas: Object.assign({}, TELA_DEF), tab: { so: false, tools: {} } };
   const names = {};
   const isAdmin = () => ME.perfil === 'admin' || ME.perfil === 'dono';
   const lvl = (c) => (isAdmin() ? 'lanca' : (ME.acesso[c] || 'nao'));
@@ -3365,12 +3417,25 @@ re2js/build/index.js:
   window.CQ_ACCESS = (c) => (MODCOLS.includes(c) ? lvl(c) : 'lanca');
   function telasDe(d) {
     const t = d && d.telas && typeof d.telas === 'object' ? d.telas : {}, out = {};
-    Object.keys(TELA_DEF).forEach((k) => { const ok = k === 'config' ? ['nao', 'ver', 'edita'] : k === 'exportar' ? ['sim', 'nao'] : ['ve', 'nao']; out[k] = ok.includes(t[k]) ? t[k] : TELA_DEF[k]; });
+    Object.keys(TELA_DEF).forEach((k) => { const ok = k === 'config' ? ['nao', 'ver', 'edita'] : k === 'exportar' ? ['sim', 'nao'] : k === 'equipe' ? ['tudo', 'org', 'nao'] : ['ve', 'nao']; out[k] = ok.includes(t[k]) ? t[k] : TELA_DEF[k]; });
     return out;
   }
+  /* onde a pessoa trabalha: Central (administrativo) ou só no tablet (inspetor), com as ferramentas do tablet liberadas */
+  function tipoDe(d) {
+    if (!d || d.perfil === 'admin') return { so: false, tools: {} };
+    const a = acessoDe(d), tools = {};
+    if (d.tipo === 'tablet') { Object.keys(TAB_COL).forEach((k) => { tools[k] = a[TAB_COL[k]] === 'lanca'; }); return { so: true, tools }; }
+    if (d.tipo === 'central') return { so: false, tools: {} };
+    /* cadastros antigos (sem "tipo"): a Central decide pela regra antiga (só "RNC pelo tablet" e nenhum módulo visível,
+       contando os módulos ainda em teste como invisíveis); aqui só a ferramenta é informada */
+    return { so: undefined, tools: { rnc: a.rnctab === 'lanca' }, legado: a.rnctab === 'lanca' && MODCOLS.every((c) => c === 'rnctab' || a[c] !== 'lanca') };
+  }
+  const pareceTablet = (tp) => tp.so === true || (tp.so === undefined && tp.legado);
+  window.CQ_TABLET = () => (isAdmin() ? { so: false, tools: {} } : ME.tab);
+  window.CQ_PREVIEW = null;
   window.CQ_SCREEN = (v) => {
     if (v === 'usuarios') return isAdmin() ? 've' : 'nao';
-    if (isAdmin()) return v === 'config' ? 'admin' : v === 'exportar' ? 'sim' : 've';
+    if (isAdmin()) return v === 'config' ? 'admin' : v === 'exportar' ? 'sim' : v === 'equipe' ? 'tudo' : 've';
     return v in ME.telas ? ME.telas[v] : null;
   };
   const userApi = {
@@ -3380,7 +3445,7 @@ re2js/build/index.js:
     isOwner: async () => ME.perfil === 'dono',
     canEdit: async () => isAdmin(),
     /* token do login, para o script do Google Drive conferir quem está enviando */
-    idToken: async () => { const u = auth.currentUser; return u && typeof u.getIdToken === 'function' ? u.getIdToken() : (window.__FAKE_TOKEN || null); },
+    idToken: async () => { if (PREV) throw mapErr({ code: 'preview' }); const u = auth.currentUser; return u && typeof u.getIdToken === 'function' ? u.getIdToken() : (window.__FAKE_TOKEN || null); },
     profiles: async (ids) => {
       const out = {};
       await Promise.all((ids || []).filter(Boolean).map(async (id) => {
@@ -3416,10 +3481,19 @@ re2js/build/index.js:
         const s = await SDK.getDoc(SDK.doc(fs, 'usuarios/' + email)).catch(() => null);
         const d = s && s.exists() ? s.data() : null;
         if (!d || d.ativo === false) { showGate('denied', email); return; }
-        ME.perfil = d.perfil === 'admin' ? 'admin' : 'usuario'; ME.acesso = acessoDe(d); ME.telas = telasDe(d); if (d.nome) ME.nome = d.nome; ME.pessoaId = d.pessoaId || null;
+        ME.perfil = d.perfil === 'admin' ? 'admin' : 'usuario'; ME.acesso = acessoDe(d); ME.telas = telasDe(d); ME.tab = tipoDe(d); if (d.nome) ME.nome = d.nome; ME.pessoaId = d.pessoaId || null;
       }
-      names[ME.uid] = ME.nome;
-      SDK.setDoc(SDK.doc(fs, 'perfis/' + ME.uid), { nome: ME.nome, email, at: Date.now() }, { merge: true }).catch(() => {}); /* merge: mantém a escolha do modo escuro */
+      /* "Ver como": só a conta dona e os administradores; a Central abre com o acesso da pessoa escolhida e nada é gravado */
+      if (VER && VER !== email && isAdmin()) {
+        const s2 = await SDK.getDoc(SDK.doc(fs, 'usuarios/' + VER)).catch(() => null), d2 = s2 && s2.exists() ? s2.data() : null;
+        if (d2 && d2.perfil !== 'admin') {
+          PREV = { email: VER, nome: d2.nome || VER, inativo: d2.ativo === false, quem: ME.nome };
+          ME.perfil = d2.perfil === 'admin' ? 'admin' : 'usuario'; ME.acesso = acessoDe(d2); ME.telas = telasDe(d2); ME.tab = tipoDe(d2); ME.pessoaId = d2.pessoaId || null; ME.nome = d2.nome || VER;
+          window.CQ_PREVIEW = { email: PREV.email, nome: PREV.nome };
+        }
+      }
+      names[ME.uid] = PREV ? PREV.quem : ME.nome;
+      if (!PREV) SDK.setDoc(SDK.doc(fs, 'perfis/' + ME.uid), { nome: ME.nome, email, at: Date.now() }, { merge: true }).catch(() => {}); /* merge: mantém a escolha do modo escuro */
       started = true; hideGate(); resolveReady(); fireMe();
     } catch (e) { showGate('error', 'Erro ao verificar o acesso: ' + mapErr(e).message); }
   });
@@ -3460,10 +3534,19 @@ re2js/build/index.js:
       document.body.classList.toggle('cq-dono', ME.perfil === 'dono'); /* balão escuro do topo do menu: só o dono */
       box.hidden = false;
       const ini = String(ME.nome || ME.email || '?').trim().split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
-      box.innerHTML = `<span class="fbav" aria-hidden="true">${esc(ini)}</span><span class="fbwho"><b title="${esc(ME.email)}">${esc(ME.nome)}</b><span class="muted"><span class="fbperf">${esc(PERFIS[ME.perfil] || '')} · </span><button type="button" class="fbsair" id="fb-sair">Sair</button></span></span>`;
-      window.CQ_SAIR = () => SDK.signOut(auth);
-      document.getElementById('fb-sair').onclick = () => A.confirmBox('Sair da Central', 'Você vai sair da sua conta Google nesta página.', 'Sair', () => SDK.signOut(auth));
+      box.innerHTML = `<span class="fbav" aria-hidden="true">${esc(ini)}</span><span class="fbwho"><b title="${esc(PREV ? PREV.email : ME.email)}">${esc(ME.nome)}</b><span class="muted"><span class="fbperf">${esc(PREV ? 'Ver como' : PERFIS[ME.perfil] || '')} · </span><button type="button" class="fbsair" id="fb-sair">${PREV ? 'Fechar' : 'Sair'}</button></span></span>`;
+      /* "Ver como": faixa no topo; Sair só fecha a visualização (a conta de quem está olhando continua entrada) */
+      const fechaVer = () => { try { window.close(); } catch (e) { /* aba aberta à mão */ } setTimeout(() => { location.href = location.pathname; }, 250); };
+      if (PREV && !document.querySelector('.cqver')) {
+        document.body.classList.add('cq-ver');
+        const bar = document.createElement('div'); bar.className = 'cqver'; bar.setAttribute('role', 'status');
+        bar.innerHTML = `<span>Vendo como <b>${esc(PREV.nome)}</b><span class="cqver-em"> · ${esc(PREV.email)}</span>${PREV.inativo ? ' · <b>acesso bloqueado</b>: hoje essa pessoa não entra' : ''} · é o que essa pessoa vê · <b>nada é gravado</b></span><button type="button" class="cqver-x">Fechar</button>`;
+        document.body.appendChild(bar); bar.querySelector('button').onclick = fechaVer;
+      }
+      window.CQ_SAIR = PREV ? fechaVer : () => SDK.signOut(auth);
+      document.getElementById('fb-sair').onclick = PREV ? fechaVer : () => A.confirmBox('Sair da Central', 'Você vai sair da sua conta Google nesta página.', 'Sair', () => SDK.signOut(auth));
       if (A.S.view === 'usuarios' && !isAdmin()) A.go('painel', true);
+      if (VER && !PREV && isAdmin()) A.toast('“Ver como” não vale para administradores (eles veem tudo). Esta aba está com a sua conta.', true);
     });
 
     let users = null, unsub = null;
@@ -3471,20 +3554,26 @@ re2js/build/index.js:
       if (unsub) return;
       unsub = SDK.onSnapshot(SDK.collection(fs, 'usuarios'), (q) => { users = q.docs.map((d) => Object.assign({ email: d.id }, d.data())); if (A.S.view === 'usuarios' && !document.getElementById('layer').innerHTML) A.render(); }, (e) => { users = []; A.toast('Não foi possível ler os usuários (' + mapErr(e).message + ').', true); });
     }
+    const ferrTxt = (tp) => TAB_FERR.filter(([k]) => tp.tools[k]).map(([, sg]) => sg).join(', ') || 'nenhuma ferramenta marcada';
     const resumo = (u) => {
       if (u.perfil === 'admin') return '<b>Tudo</b> (administrador)';
+      const tp = tipoDe(u);
+      if (pareceTablet(tp)) return `<div><b>Só tablet</b> <span class="muted">(inspetor${tp.so ? '' : ', cadastro antigo'})</span>: ${esc(ferrTxt(tp))}</div>`;
       const a = acessoDe(u), g = { lanca: [], ver: [] };
       MODULOS.forEach(([k, l]) => { if (a[k] === 'lanca') g.lanca.push(l); else if (a[k] === 'ver') g.ver.push(l); });
       const part = (t, l) => (l.length ? `<div><span class="muted">${t}:</span> ${esc(l.length === MODULOS.length ? 'todos os módulos' : l.join(', '))}</div>` : '');
       const tl = telasDe(u), off = TELAS.filter(([k]) => tl[k] === 'nao').map(([, l]) => l), extra = [];
+      if (tl.equipe === 'nao') off.push('Equipe'); else if (tl.equipe === 'org') extra.push('Equipe só organograma');
       if (tl.config === 'nao') off.push('Configurações'); else if (tl.config === 'edita') extra.push('edita Configurações');
       if (tl.exportar === 'nao') extra.push('sem Exportar tudo');
       const telas = off.length || extra.length ? `<div><span class="muted">Telas:</span> ${esc([off.length ? 'não vê ' + off.join(', ') : ''].concat(extra).filter(Boolean).join(' · '))}</div>` : '';
-      return (part('Lança', g.lanca) + part('Só consulta', g.ver) || '<span class="muted">nenhum módulo</span>') + telas;
+      const tabAntigo = a.rnctab === 'lanca' ? '<div><span class="muted">Também:</span> RNC pelo tablet</div>' : '';
+      return (part('Lança', g.lanca) + part('Só consulta', g.ver) || '<span class="muted">nenhum módulo</span>') + tabAntigo + telas;
     };
     function form(u) {
-      const novo = !u; u = u || { email: '', nome: '', perfil: 'usuario', acesso: Object.fromEntries(MODCOLS.map((c) => [c, 'ver'])), telas: Object.assign({}, TELA_DEF), ativo: true };
-      const podeAdmin = ME.perfil === 'dono', ac = acessoDe(u), tl = telasDe(u);
+      const novo = !u; u = u || { email: '', nome: '', perfil: 'usuario', tipo: 'central', acesso: Object.fromEntries(MODCOLS.map((c) => [c, c === 'rnctab' ? 'nao' : 'ver'])), telas: Object.assign({}, TELA_DEF), ativo: true };
+      const podeAdmin = ME.perfil === 'dono', ac = acessoDe(u), tl = telasDe(u), tp = tipoDe(u);
+      let tipo = pareceTablet(tp) ? 'tablet' : 'central';
       const PES = ((A.S.model && A.S.model.cfg.PESSOAS) || []).filter((p) => p.id && (!p.inativo || p.id === u.pessoaId)).sort((a, b) => String(a.nome).localeCompare(String(b.nome), 'pt-BR'));
       const tRow = (k, l, opc) => `<div class="acc-row" role="row"><span role="cell">${esc(l)}</span><div class="seg" role="radiogroup" aria-label="${esc(l)}">${opc.map(([v, t]) => `<button type="button" role="radio" data-t="${k}" data-v="${v}" aria-pressed="${tl[k] === v}" aria-checked="${tl[k] === v}">${t}</button>`).join('')}</div></div>`;
       A.openModal(novo ? 'Liberar novo usuário' : 'Editar usuário', `
@@ -3493,21 +3582,32 @@ re2js/build/index.js:
           <label class="field"><span>Funcionário (Equipe)</span><select id="u-pes"><option value="">— não ligado —</option>${PES.map((p) => `<option value="${esc(p.id)}" ${u.pessoaId === p.id ? 'selected' : ''}>${esc(p.nome)}${p.email ? ' · ' + esc(p.email) : ''}</option>`).join('')}</select></label>
           <label class="field"><span>Nome</span><input id="u-nome" value="${esc(u.nome || '')}" placeholder="como aparece no histórico"></label>
           <label class="field"><span>Perfil</span><select id="u-perfil">
-            <option value="usuario" ${u.perfil !== 'admin' ? 'selected' : ''}>Usuário — acesso definido por módulo</option>
+            <option value="usuario" ${u.perfil !== 'admin' ? 'selected' : ''}>Usuário — acesso definido abaixo</option>
             ${podeAdmin || u.perfil === 'admin' ? `<option value="admin" ${u.perfil === 'admin' ? 'selected' : ''}>Administrador — vê e lança tudo, configurações e usuários</option>` : ''}
           </select></label>
+          <div id="u-tipo"><div class="acc-head"><span>Onde a pessoa trabalha</span></div>
+            <div class="utipo" role="radiogroup" aria-label="Onde a pessoa trabalha">
+              <button type="button" role="radio" data-tipo="central" aria-pressed="${tipo === 'central'}" aria-checked="${tipo === 'central'}"><b>Central da Qualidade</b><small>administrativo: menu com os módulos e telas liberados abaixo</small></button>
+              <button type="button" role="radio" data-tipo="tablet" aria-pressed="${tipo === 'tablet'}" aria-checked="${tipo === 'tablet'}"><b>Só tablet</b><small>inspetor: entra direto no tablet e não vê a Central</small></button>
+            </div></div>
+          <div id="u-tab"><div class="acc-head"><span>Ferramentas do tablet</span><span class="acc-all">marque uma ou mais</span></div>
+            <div class="utools">${TAB_FERR.map(([k, sg, n, d]) => `<button type="button" class="utool" data-tool="${k}" aria-pressed="${!!tp.tools[k]}" style="--k:var(--${k})"><i>${sg}</i><span><b>${esc(n)}</b><small>${esc(d)}</small></span><em aria-hidden="true">✓</em></button>`).join('')}</div>
+            <p class="muted" style="margin:0;font-size:12px">O inspetor entra direto na tela do tablet com as ferramentas marcadas: não vê o menu, o Painel, os Alertas nem os outros módulos. A Qualidade administrativa (quem tem esses módulos na Central) acompanha tudo pela Central. RIR e RIF precisam estar liberados em Configurações › Módulos em teste.</p></div>
           <div id="u-acc"><div class="acc-head"><span>Acesso por módulo</span><span class="acc-all">Marcar todos: ${NIVEIS.map(([v, l]) => `<button type="button" class="linkbtn" data-all="${v}">${l}</button>`).join(' · ')}</span></div>
-            <div class="acc-tab" role="table">${MODULOS.map(([k, l]) => `<div class="acc-row" role="row"><span role="cell">${esc(l)}</span><div class="seg" role="radiogroup" aria-label="${esc(l)}">${(k === 'rnctab' ? [['nao', 'Não'], ['lanca', 'Abre RNC pelo tablet']] : NIVEIS).map(([v, t]) => `<button type="button" role="radio" data-m="${k}" data-v="${v}" aria-pressed="${ac[k] === v}" aria-checked="${ac[k] === v}">${t}</button>`).join('')}</div></div>`).join('')}</div>
-            <p class="muted" style="margin:0;font-size:12px"><b>Não vê</b>: o módulo some do menu e dos painéis · <b>Só consulta</b>: vê e exporta · <b>Lança</b>: também lança, edita e importa · <b>RNC pelo tablet</b>: para o inspetor abrir RNC no tablet sem ver o módulo RNC Fornecedor (deixe RNC Fornecedor em “Não vê”).</p>
+            <div class="acc-tab" role="table">${MODULOS.map(([k, l]) => `<div class="acc-row" role="row"><span role="cell">${esc(l)}</span><div class="seg" role="radiogroup" aria-label="${esc(l)}">${NIVEIS.map(([v, t]) => `<button type="button" role="radio" data-m="${k}" data-v="${v}" aria-pressed="${ac[k] === v}" aria-checked="${ac[k] === v}">${t}</button>`).join('')}</div></div>`).join('')}</div>
+            <p class="muted" style="margin:0;font-size:12px"><b>Não vê</b>: o módulo some do menu e dos painéis · <b>Só consulta</b>: vê e exporta · <b>Lança</b>: também lança, edita e importa. Quem lança RNC, RIR ou RIF também pode abrir a tela do tablet desses módulos e voltar para a Central.</p>
             <div class="acc-head" style="margin-top:14px"><span>Telas gerais</span></div>
-            <div class="acc-tab" role="table">${TELAS.map(([k, l]) => tRow(k, l, [['ve', 'Vê'], ['nao', 'Não vê']])).join('')}${tRow('config', 'Configurações', TELA_OPC.config)}${tRow('exportar', 'Exportar tudo (.xlsx)', TELA_OPC.exportar)}</div>
-            <p class="muted" style="margin:0;font-size:12px">Se o <b>Painel</b> ficar oculto, a Central abre na primeira tela liberada · Configurações <b>Edita</b>: altera listas, feriados, tipos de equipamento e e-mails dos fornecedores e dos setores (parâmetros de prazo, pessoas e logo continuam só com os administradores) · <b>Cadastro</b> aparece sozinho para quem lança em algum módulo.</p></div>
+            <div class="acc-tab" role="table">${TELAS.slice(0, 3).map(([k, l]) => tRow(k, l, [['ve', 'Vê'], ['nao', 'Não vê']])).join('')}${tRow('equipe', 'Equipe (fichas e organograma)', TELA_OPC.equipe)}${TELAS.slice(3).map(([k, l]) => tRow(k, l, [['ve', 'Vê'], ['nao', 'Não vê']])).join('')}${tRow('config', 'Configurações', TELA_OPC.config)}${tRow('exportar', 'Exportar tudo (.xlsx)', TELA_OPC.exportar)}</div>
+            <p class="muted" style="margin:0;font-size:12px">Se o <b>Painel</b> ficar oculto, a Central abre na primeira tela liberada · Equipe <b>Só organograma</b>: vê a hierarquia com nome, cargo e foto, sem abrir as fichas (contato e histórico) · Configurações <b>Edita</b>: altera listas, feriados, tipos de equipamento e e-mails dos fornecedores e dos setores (parâmetros de prazo, pessoas e logo continuam só com os administradores) · <b>Cadastro</b> aparece sozinho para quem lança em algum módulo.</p></div>
           <label class="check"><input type="checkbox" id="u-ativo" ${u.ativo !== false ? 'checked' : ''}> Acesso ativo</label>
         </div>
         <div class="formfoot"><button class="btn primary" type="button" id="u-save">Salvar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
       const pf = document.getElementById('u-perfil'), accBox = document.getElementById('u-acc'), pesSel = document.getElementById('u-pes');
+      const tipoBox = document.getElementById('u-tipo'), tabBox = document.getElementById('u-tab');
       pesSel.onchange = () => { const p = PES.find((x) => x.id === pesSel.value); if (!p) return; document.getElementById('u-nome').value = p.nome; const em = document.getElementById('u-email'); if (novo && !em.value && p.email) em.value = p.email; };
-      const sync = () => { accBox.hidden = pf.value === 'admin'; }; pf.onchange = sync; sync();
+      const sync = () => { const adm = pf.value === 'admin'; tipoBox.hidden = adm; tabBox.hidden = adm || tipo !== 'tablet'; accBox.hidden = adm || tipo === 'tablet'; }; pf.onchange = sync; sync();
+      tipoBox.addEventListener('click', (e) => { const b = e.target.closest('[data-tipo]'); if (!b) return; tipo = b.dataset.tipo; tipoBox.querySelectorAll('[data-tipo]').forEach((x) => { const on = x === b; x.setAttribute('aria-pressed', on); x.setAttribute('aria-checked', on); }); sync(); });
+      tabBox.addEventListener('click', (e) => { const b = e.target.closest('[data-tool]'); if (b) b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true'); });
       const setLvl = (m, v) => accBox.querySelectorAll(`[data-m="${m}"]`).forEach((b) => { const on = b.dataset.v === v; b.setAttribute('aria-pressed', on); b.setAttribute('aria-checked', on); });
       accBox.addEventListener('click', (e) => {
         const b = e.target.closest('[data-m]'); if (b) { setLvl(b.dataset.m, b.dataset.v); return; }
@@ -3515,18 +3615,31 @@ re2js/build/index.js:
         const a = e.target.closest('[data-all]'); if (a) MODCOLS.forEach((m) => setLvl(m, a.dataset.all));
       });
       document.getElementById('u-save').onclick = async () => {
+        if (PREV) { A.toast(mapErr({ code: 'preview' }).message, true); return; }
         const email = String(document.getElementById('u-email').value || '').trim().toLowerCase();
         if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { A.toast('Informe um e-mail válido.', true); return; }
         if (email === OWNER) { A.toast('Essa é a conta dona da Central; ela já tem acesso total.', true); return; }
         if (novo && (users || []).some((x) => x.email === email)) { A.toast('Esse e-mail já está cadastrado.', true); return; }
-        const acesso = {}; MODCOLS.forEach((m) => { const on = accBox.querySelector(`[data-m="${m}"][aria-pressed="true"]`); acesso[m] = on ? on.dataset.v : 'nao'; });
-        const telas = {}; Object.keys(TELA_DEF).forEach((k) => { const on = accBox.querySelector(`[data-t="${k}"][aria-pressed="true"]`); telas[k] = on ? on.dataset.v : TELA_DEF[k]; });
-        const d = { pessoaId: pesSel.value || null, nome: document.getElementById('u-nome').value.trim(), perfil: pf.value === 'admin' ? 'admin' : 'usuario', acesso, telas, ativo: document.getElementById('u-ativo').checked, _u: Date.now(), _ub: ME.email };
+        const adm = pf.value === 'admin', soTab = !adm && tipo === 'tablet';
+        let acesso = {}, telas = {};
+        if (soTab) {
+          /* só tablet: o banco libera apenas o que as ferramentas marcadas usam; todas as telas da Central ficam fechadas */
+          const ferr = TAB_FERR.map(([k]) => k).filter((k) => tabBox.querySelector(`[data-tool="${k}"]`).getAttribute('aria-pressed') === 'true');
+          if (!ferr.length) { A.toast('Marque pelo menos uma ferramenta do tablet (RIR, RNC ou RIF).', true); return; }
+          MODCOLS.forEach((m) => { acesso[m] = 'nao'; }); ferr.forEach((k) => { acesso[TAB_COL[k]] = 'lanca'; });
+          Object.keys(TELA_DEF).forEach((k) => { telas[k] = 'nao'; });
+        } else {
+          MODCOLS.forEach((m) => { const on = accBox.querySelector(`[data-m="${m}"][aria-pressed="true"]`); acesso[m] = on ? on.dataset.v : 'nao'; });
+          acesso.rnctab = ac.rnctab === 'lanca' && tp.so !== true ? 'lanca' : 'nao'; /* cadastro antigo da Central com "RNC pelo tablet": continua */
+          Object.keys(TELA_DEF).forEach((k) => { const on = accBox.querySelector(`[data-t="${k}"][aria-pressed="true"]`); telas[k] = on ? on.dataset.v : TELA_DEF[k]; });
+        }
+        const d = { pessoaId: pesSel.value || null, nome: document.getElementById('u-nome').value.trim(), perfil: adm ? 'admin' : 'usuario', tipo: adm ? null : tipo, acesso, telas, ativo: document.getElementById('u-ativo').checked, _u: Date.now(), _ub: ME.email };
         try { await SDK.setDoc(SDK.doc(fs, 'usuarios/' + email), d); A.closeLayer(); A.toast(novo ? 'Usuário liberado: ' + email : 'Usuário atualizado. A pessoa vê a mudança ao recarregar a página.'); }
         catch (e) { A.toast(mapErr(e).message, true); }
       };
     }
     async function importBackup(file) {
+      if (PREV) { A.toast(mapErr({ code: 'preview' }).message, true); return; }
       let data;
       try { data = JSON.parse(await file.text()); } catch (e) { A.toast('Arquivo de backup inválido.', true); return; }
       const docs = data && data.docs ? data.docs : null;
@@ -3566,21 +3679,22 @@ re2js/build/index.js:
         <div class="kpis">${A.kpiHTML({ l: 'Com acesso', v: A.NF.format(L.filter((u) => u.ativo !== false).length + 1), sub: 'inclui a conta dona' })}${A.kpiHTML({ l: 'Administradores', v: A.NF.format(cnt('admin')) })}${A.kpiHTML({ l: 'Usuários', v: A.NF.format(cnt('usuario')), sub: 'acesso definido por módulo' })}</div>
         <div class="twrap"><table class="t"><thead><tr><th class="nosort">Nome</th><th class="nosort">E-mail</th><th class="nosort">Perfil</th><th class="nosort">Acesso</th><th class="nosort">Situação</th><th class="nosort"></th></tr></thead><tbody>
           <tr><td><b>Conta dona</b></td><td class="mono">${esc(OWNER)}</td><td>Dono</td><td>Tudo</td><td><span class="chip ok"><i>✓</i>Ativo</span></td><td></td></tr>
-          ${users == null ? '<tr><td colspan="6" class="muted">Carregando…</td></tr>' : L.map((u) => `<tr><td>${esc(u.nome || '—')}</td><td class="mono">${esc(u.email)}</td><td>${esc(PERFIS[u.perfil] || u.perfil)}</td><td class="accsum">${resumo(u)}</td><td>${u.ativo === false ? '<span class="chip off"><i>–</i>Bloqueado</span>' : '<span class="chip ok"><i>✓</i>Ativo</span>'}</td><td style="white-space:nowrap">${u.perfil === 'admin' && ME.perfil !== 'dono' ? '' : `<button class="btn small" type="button" data-u-edit="${esc(u.email)}">Editar</button> <button class="btn small ghost" type="button" data-u-del="${esc(u.email)}">Remover</button>`}</td></tr>`).join('') || '<tr><td colspan="6" class="muted">Nenhum usuário liberado ainda. Clique em “Liberar novo usuário”.</td></tr>'}
+          ${users == null ? '<tr><td colspan="6" class="muted">Carregando…</td></tr>' : L.map((u) => `<tr><td>${esc(u.nome || '—')}</td><td class="mono">${esc(u.email)}</td><td>${esc(PERFIS[u.perfil] || u.perfil)}</td><td class="accsum">${resumo(u)}</td><td>${u.ativo === false ? '<span class="chip off"><i>–</i>Bloqueado</span>' : '<span class="chip ok"><i>✓</i>Ativo</span>'}</td><td style="white-space:nowrap">${u.perfil === 'admin' ? '' : `<button class="btn small ghost" type="button" data-u-ver="${esc(u.email)}" title="Abre a Central numa nova aba do jeito que essa pessoa vê (nada é gravado)">Ver como</button>`}${u.perfil === 'admin' && ME.perfil !== 'dono' ? '' : ` <button class="btn small" type="button" data-u-edit="${esc(u.email)}">Editar</button> <button class="btn small ghost" type="button" data-u-del="${esc(u.email)}">Remover</button>`}</td></tr>`).join('') || '<tr><td colspan="6" class="muted">Nenhum usuário liberado ainda. Clique em “Liberar novo usuário”.</td></tr>'}
         </tbody></table></div>
-        <div class="readonly"><b>Como funciona:</b> para cada <b>Usuário</b> você escolhe, módulo por módulo, se ele <b>não vê</b>, vê <b>só para consulta</b> ou <b>lança</b>, e quais telas gerais (Painel, Histórico, Configurações…) ele vê. O <b>Administrador</b> vê e lança tudo, altera Configurações e libera usuários · só a <b>conta dona</b> cria administradores e zera o banco.</div>
+        <div class="readonly"><b>Como funciona:</b> para cada <b>Usuário</b> você escolhe onde ele trabalha. Na <b>Central</b> (administrativo), módulo por módulo, se ele <b>não vê</b>, vê <b>só para consulta</b> ou <b>lança</b>, e quais telas gerais (Painel, Equipe, Histórico, Configurações…) ele vê. <b>Só tablet</b> (inspetor): ele entra direto no tablet, só com as ferramentas marcadas (RIR, RNC, RIF), sem acesso à Central · <b>Ver como</b> abre a Central do jeito que a pessoa vê, para conferir antes de entregar o tablet. O <b>Administrador</b> vê e lança tudo, altera Configurações e libera usuários · só a <b>conta dona</b> cria administradores e zera o banco.</div>
         ${ME.perfil === 'dono' ? `<section class="sec"><div class="band" style="--c:var(--geral);background:var(--geral)"><h2>Restaurar backup</h2></div><div class="block"><div class="body"><p style="margin:0">Use a cópia de segurança completa (.json) baixada em Configurações › Backup. Restaurar junta com o que está no banco: nada é apagado. Só a conta dona vê esta opção.</p><div><input type="file" id="u-imp" accept=".json,application/json" hidden><button class="btn" type="button" id="u-imp-b">Restaurar backup (.json)</button> <span id="u-imp-st" class="muted"></span></div></div></div></section>` : ''}
       </div>`;
       document.getElementById('u-new').onclick = () => form(null);
       main.querySelectorAll('[data-u-edit]').forEach((b) => b.onclick = () => form(L.find((u) => u.email === b.dataset.uEdit)));
-      main.querySelectorAll('[data-u-del]').forEach((b) => b.onclick = () => A.confirmBox('Remover usuário', `${b.dataset.uDel} perde o acesso à Central. Os registros que essa pessoa lançou continuam.`, 'Remover', async () => { try { await SDK.deleteDoc(SDK.doc(fs, 'usuarios/' + b.dataset.uDel)); A.toast('Acesso removido.'); } catch (e) { A.toast(mapErr(e).message, true); } }, true));
+      main.querySelectorAll('[data-u-ver]').forEach((b) => b.onclick = () => { const w2 = window.open(location.pathname + '?vercomo=' + encodeURIComponent(b.dataset.uVer), '_blank'); if (!w2) A.toast('O navegador bloqueou a nova aba. Libere pop-ups para esta página.', true); });
+      main.querySelectorAll('[data-u-del]').forEach((b) => b.onclick = () => A.confirmBox('Remover usuário', `${b.dataset.uDel} perde o acesso à Central. Os registros que essa pessoa lançou continuam.`, 'Remover', async () => { try { if (PREV) throw mapErr({ code: 'preview' }); await SDK.deleteDoc(SDK.doc(fs, 'usuarios/' + b.dataset.uDel)); A.toast('Acesso removido.'); } catch (e) { A.toast(mapErr(e).message, true); } }, true));
       const ib = document.getElementById('u-imp-b'); if (ib) { const inp = document.getElementById('u-imp'); ib.onclick = () => inp.click(); inp.onchange = () => { const f = inp.files && inp.files[0]; inp.value = ''; if (f) importBackup(f); }; }
     };
     A.VIEWS.usuarios.always = true;
     /* para a Equipe: situação do acesso de cada funcionário e bloqueio ao desligar (só administradores) */
     window.CQ_USERS = {
       list: async () => { if (!isAdmin()) return null; if (users) return users; const q = await SDK.getDocs(SDK.collection(fs, 'usuarios')); return q.docs.map((d) => Object.assign({ email: d.id }, d.data())); },
-      block: async (email) => { if (!isAdmin()) throw mapErr({ code: 'permission-denied' }); await SDK.setDoc(SDK.doc(fs, 'usuarios/' + email), { ativo: false, _u: Date.now(), _ub: ME.email }, { merge: true }); }
+      block: async (email) => { if (PREV) throw mapErr({ code: 'preview' }); if (!isAdmin()) throw mapErr({ code: 'permission-denied' }); await SDK.setDoc(SDK.doc(fs, 'usuarios/' + email), { ativo: false, _u: Date.now(), _ub: ME.email }, { merge: true }); }
     };
   };
 })();
@@ -4265,9 +4379,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     rncHours(S.model);
     S.model.rnc.forEach((x) => { x.lotesAV = normLotes((x.raw && x.raw.AC) || ''); });
     buildLotLinks();
-    setTimeout(pubSync, 0);
-    setTimeout(insPubSync, 0);
-    setTimeout(rncDecSync, 400);
+    if (!PREVIEW()) { setTimeout(pubSync, 0); setTimeout(insPubSync, 0); setTimeout(rncDecSync, 400); }
     S.model.serv.forEach((x) => { x.sv = svOf(x.key); });
     S.model.rncc = computeRncc(DB.rnccItems || [], S.model.cfg, S.today, S.model.hol);
     const sevO = { alta: 0, media: 1, baixa: 2 };
@@ -4277,12 +4389,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const ae = document.activeElement;
     const busy = ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName);
     const formView = S.view === 'cadastro' || S.view === 'config' || S.view === 'historico' || (S.view === 'rnctab' && TB.step >= 1 && TB.step <= 3) || (S.view === 'riftab' && RT.step >= 1 && RT.step <= 4);
-    if (!DB.cfg) setTimeout(cfgSeed, 300);
+    if (!DB.cfg && !PREVIEW()) setTimeout(cfgSeed, 300);
     if (!S.rendered) { S.rendered = true; render(); setTimeout(rncDailyNotice, 900); }
     else if (formView || busy || $('#layer').innerHTML) S.stale = true;
     else render();
     updateChrome();
-    inbStart();
+    if (!PREVIEW()) inbStart();
     bkLoad();
   }
   async function boot() {
@@ -4314,7 +4426,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     });
     db.collection('iqf').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); IQ.docs = o; IQ.ready = true; IQ.ver++;
-      setTimeout(iqSitSync, 2000);
+      if (!PREVIEW()) setTimeout(iqSitSync, 2000);
       if (!S.model) return;
       if (['iqf', 'painel'].includes(S.view)) { const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
     }, () => { IQ.ready = true; });
@@ -4351,7 +4463,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RI.docs = o; RI.ready = true;
       if (!S.model) return;
       updateChrome();
-      if (S.view === 'rir' && RI.sub !== 'ed' && !$('#layer').innerHTML) render();
+      const ae = document.activeElement, digitando = ae && ae.id === 'rit-q';
+      if ((S.view === 'rir' || S.view === 'rirtab') && RI.sub !== 'ed' && !$('#layer').innerHTML && !digitando) render();
     }, () => { RI.ready = true; });
     db.doc('iqf/sit').onSnapshot((snap) => { IQSIT.s = (snap.exists && (snap.data() || {}).s) || {}; }, () => {});
     db.collection('rifv').onSnapshot((snap) => {
@@ -4374,6 +4487,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     setTimeout(() => { if (!allReady()) renderStatus('Carregando os dados… A primeira abertura pode levar alguns segundos.'); }, 2500);
   }
   function canWrite() { return DB.canWrite !== false && !!DB.db; }
+  /* "Ver como" (versão hospedada): a Central mostra o que a pessoa vê, mas as rotinas automáticas que gravam no banco ficam paradas */
+  const PREVIEW = () => !!window.CQ_PREVIEW;
   /* acesso por módulo (versão hospedada): 'nao' = não vê, 'ver' = só consulta, 'lanca' = lança */
   /* módulos em teste: a conta dona esconde de todo mundo (inclusive administradores) até liberar.
      Sem escolha gravada, os módulos novos ou reformulados começam escondidos. */
@@ -4389,8 +4504,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const anyLanca = () => canWrite() && Object.values(VIEW_COL).some((c) => ACC(c) === 'lanca');
   /* telas gerais (versão hospedada): Painel, Alertas, ... 've'/'nao' · Configurações 'nao'/'ver'/'edita'/'admin' · Exportar tudo 'sim'/'nao' */
   const SCR = (v) => (typeof window.CQ_SCREEN === 'function' ? window.CQ_SCREEN(v) : null);
-  const viewOk = (v) => { if (v === 'riftab') return !!S.model && vis('rif') && !tbOnly(); if (v === 'rnctab') return !!S.model && rncRelOn() && (cw('rnc') || tbInsp()); if (S.model && tbOnly()) return false; if (VIEW_COL[v]) return vis(VIEW_COL[v]); if (v === 'cadastro') return typeof window.CQ_ACCESS !== 'function' || anyLanca(); const s = SCR(v); return s == null || s !== 'nao'; };
-  const firstView = () => (S.model && tbOnly() ? (viewOk('rnctab') ? 'rnctab' : null) : null) || $$('#nav a').map((a) => a.dataset.v).find((v) => VIEWS[v] && viewOk(v)) || null;
+  /* telas do tablet: o inspetor "só tablet" usa só as ferramentas marcadas para ele; quem trabalha na Central abre o tablet dos módulos em que lança */
+  const viewOk = (v) => {
+    if (v === 'riftab') return !!S.model && (tbOnly() ? tbTool('rif') && cw('rif') : vis('rif'));
+    if (v === 'rirtab') return !!S.model && rirOn() && cw('rir') && (!tbOnly() || tbTool('rir'));
+    if (v === 'rnctab') return !!S.model && rncRelOn() && (tbOnly() ? tbTool('rnc') && (tbInsp() || cw('rnc')) : (cw('rnc') || tbInsp()));
+    if (S.model && tbOnly()) return false; if (VIEW_COL[v]) return vis(VIEW_COL[v]); if (v === 'cadastro') return typeof window.CQ_ACCESS !== 'function' || anyLanca(); const s = SCR(v); return s == null || s !== 'nao'; };
+  const firstView = () => (S.model && tbOnly() ? ['rirtab', 'rnctab', 'riftab'].find((v) => viewOk(v)) || null : null) || $$('#nav a').map((a) => a.dataset.v).find((v) => VIEWS[v] && viewOk(v)) || null;
   const cfgMode = () => { const s = SCR('config'); if (s === 'admin' || s === 'edita' || s === 'ver') return s; return DB.admin === false ? 'ver' : 'admin'; };
   async function lock(mod) {
     const holder = (DB.me || 'anon') + ':' + TAB;
@@ -5029,7 +5149,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (!S.model) return;
     if (!viewOk(S.view)) {
       const fv = firstView();
-      if (!fv) { main.innerHTML = '<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--warn)">Sem telas liberadas</span><h2>Nenhuma tela liberada para você</h2><p>Peça ao administrador da Central para liberar as telas que você usa, na tela Usuários.</p></div></div>'; return; }
+      if (!fv) { document.body.classList.toggle('tabmode', false); main.innerHTML = tbOnly() ? '<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--warn)">Tablet</span><h2>Nenhuma ferramenta do tablet liberada</h2><p>Peça ao administrador da Central: em <b>Usuários</b>, marque as ferramentas do tablet (RIR, RNC ou RIF) para você. RIR e RIF também precisam estar liberados em Configurações › Módulos em teste.</p></div></div>' : '<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--warn)">Sem telas liberadas</span><h2>Nenhuma tela liberada para você</h2><p>Peça ao administrador da Central para liberar as telas que você usa, na tela Usuários.</p></div></div>'; return; }
       S.view = fv;
       try { history.replaceState(null, '', '#' + fv); } catch (e) { /* sem histórico */ }
       $$('#nav a').forEach((a) => { if (a.dataset.v === fv) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
@@ -5039,7 +5159,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       main.innerHTML = `<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--info)">Banco novo</span><h2>Preparando a Central</h2><p>${DB.admin === true ? 'Criando a configuração inicial… se esta tela não sumir em alguns segundos, recarregue a página.' : 'A configuração inicial ainda não foi criada. Peça a um administrador para abrir a Central uma vez.'}</p></div></div>`;
       return;
     }
-    document.body.classList.toggle('tabmode', S.view === 'rnctab' || S.view === 'riftab');
+    document.body.classList.toggle('tabmode', S.view === 'rnctab' || S.view === 'riftab' || S.view === 'rirtab');
     VIEWS[S.view](main);
     const bn = BANNER_VIEWS.includes(S.view) ? rncBanner() : ''; if (bn) main.insertAdjacentHTML('afterbegin', bn);
     hideInvisible(main);
@@ -7909,7 +8029,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (!g) return;
     if (lsGet('cq-geracao', '') === String(g)) return;
     try {
-      const del = []; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k === TBK || /^certificado-acos-vital\//.test(k) || /^cq-cert/.test(k)) del.push(k); }
+      const del = []; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k === TBK || k === TBK + '-vercomo' || /^certificado-acos-vital\//.test(k) || /^cq-cert/.test(k)) del.push(k); }
       del.forEach((k) => localStorage.removeItem(k));
     } catch (e) { /* sem armazenamento */ }
     lsSet('cq-geracao', String(g));
@@ -10261,6 +10381,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   ];
   const RI = { docs: {}, ready: false, ed: null, saveT: null, salvo: 0, sub: 'ag', q: '' };
   const RI_RES = ['Aprovado', 'Reprovado', 'Em análise'];
+  const RI_MARCA = { C: 'AP', NC: 'RP', NA: 'N/A' };
   /* RIR ligado = módulo liberado em Módulos em teste (vale para todos, inclusive quem lança lotes sem ver o RIR);
      enquanto está em teste, só os lançamentos da conta dona passam pelo RIR */
   const rirOn = () => !emTeste('rir') || !!DB.owner;
@@ -10329,6 +10450,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   async function riNovo(lots) {
     if (!cw('rir')) { toast('Seu acesso ao RIR é só de consulta.', true); return; }
     if (!lots.length) return;
+    const ja = riCards().find((c) => c.st === 'r' && (c.lotes || []).some((k) => lots.some((l) => l.key === k)));
+    if (ja) { toast(`Esta nota já tem um RIR em andamento${ja.nome ? ' (' + ja.nome + ')' : ''}. Abrindo o rascunho.`); riAbrir(ja.id); return; }
     const x0 = lots[0], id = 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), at = Date.now();
     const res = { nf: x0.nf == null ? null : String(x0.nf), forn: x0.forn || null, fornId: lotEnt(x0) || null, pc: x0.pc == null ? null : String(x0.pc), lotes: lots.map((l) => l.key), ids: lots.map((l) => l.id), st: 'r', at, by: DB.me || null, nome: myPessoa() || DB.meName || '' };
     const rel = Object.assign({ id, mes: mesId(at), status: 'rascunho', itens: rirItensCfg().map((o) => Object.assign({}, o)), ck: {}, lotRes: {}, ins: [], obs: '', nFotos: 0 }, res);
@@ -10337,7 +10460,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       await soldWrite('rir/m-' + rel.mes, { items: { [id]: res } });
       logEntry('RIR', id, 'novo', `RIR iniciado · NF ${res.nf || '—'} · ${res.forn || ''} · ${res.ids.join(', ')}`, null);
       RI.ed = { rel, ro: false, fotos: null }; RI.salvo = Date.now(); RI.sub = 'ed'; closeLayer();
-      if (S.view !== 'rir') go('rir'); else render();
+      if (S.view !== 'rir' && S.view !== 'rirtab') go('rir'); else { render(); window.scrollTo(0, 0); }
     } catch (err) { toast('Não foi possível começar o RIR: ' + ((err && (err.message || err.code)) || err), true); }
   }
   async function riAbrir(id) {
@@ -10345,7 +10468,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const s = await DB.db.doc('rird/' + id).get(); if (!s.exists) { toast('RIR não encontrado.', true); return; }
       const rel = s.data();
       RI.ed = { rel, ro: rel.status === 'finalizado' || !cw('rir'), fotos: null }; RI.salvo = 0; RI.sub = 'ed'; closeLayer();
-      if (S.view !== 'rir') go('rir'); else render();
+      if (S.view !== 'rir' && S.view !== 'rirtab') go('rir'); else { render(); window.scrollTo(0, 0); }
     } catch (err) { toast('Não foi possível abrir: ' + ((err && (err.message || err.code)) || err), true); }
   }
   function riAgendar() { clearTimeout(RI.saveT); riSalvoTxt('salvando…'); RI.saveT = setTimeout(() => { riGravar().catch((e) => { riSalvoTxt('não salvo'); toast('Não foi possível salvar o rascunho: ' + ((e && (e.message || e.code)) || e), true); }); }, 800); }
@@ -10369,7 +10492,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         const ano = new Date().getFullYear(), nref = DB.db.doc('rir/n-' + ano), ns = await nref.get(), seq = (ns.exists ? +(ns.data().ultimo || 0) : 0) + 1;
         const numero = 'RIR-' + ano + '-' + E.pad(seq, 5), at = Date.now();
         const lotRes = {}; rel.lotes.forEach((k) => { const r = riRes(rel, k), o = (rel.lotRes || {})[k] || {}; lotRes[k] = clean({ res: r, mot: r === 'Reprovado' ? String(o.mot || riMotSug(rel, k)).trim() : null, man: o.man || null }); });
-        const fin = Object.assign(JSON.parse(JSON.stringify(rel)), { status: 'finalizado', numero, ano, seq, lotRes, fin: at, inspetor: myPessoa() || DB.meName || '', assin: meSig('central') });
+        const fin = Object.assign(JSON.parse(JSON.stringify(rel)), { status: 'finalizado', numero, ano, seq, lotRes, fin: at, inspetor: myPessoa() || DB.meName || '', assin: meSig(S.view === 'rirtab' ? 'tablet' : 'central') });
         await DB.db.doc('rird/' + rel.id).setIf(fin, (cur) => !cur || cur.status !== 'finalizado');
         await nref.set({ ano, ultimo: seq, _u: at, _ub: DB.me || null });
         const res = {}; rel.lotes.forEach((k) => { res[k] = lotRes[k].res; });
@@ -10401,7 +10524,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
 
   /* ---------- tela: lista ---------- */
   VIEWS.rir = (main) => {
-    if (RI.sub === 'ed' && RI.ed) { riEdView(main); return; }
+    const noTablet = S.view === 'rirtab';
+    if (RI.sub === 'ed' && RI.ed) { riEdView(main, noTablet); return; }
+    if (noTablet) { riTabHome(main); return; }
     const w = cw('rir'), C = riCards(), P = riPend(), ras = C.filter((c) => c.st === 'r'), q = E.key(RI.q || '');
     const mes = mesId(Date.now()), doMes = C.filter((c) => c.st === 'f' && mesId(c.fin || c.at) === mes);
     const lotM = doMes.reduce((s, c) => s + Object.keys(c.res || {}).length, 0), repM = doMes.reduce((s, c) => s + Object.values(c.res || {}).filter((r) => r === 'Reprovado').length, 0);
@@ -10428,27 +10553,54 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
           return `<tr class="click" data-act="ri-abrir" data-key="${esc(c.id)}"><td class="mono">${esc(c.num || '')}</td><td class="nw">${esc(dmy(c.fin || c.at))}</td><td class="mono">${esc(c.nf || '—')}</td><td>${esc(c.forn || '')}</td><td class="mono">${esc((c.ids || []).join(', '))}</td><td>${nr ? `<span class="chip crit"><i>✕</i>${nr} reprovado(s)</span>` : '<span class="chip ok"><i>✓</i>aprovado</span>'}</td><td>${esc(c.nome || '')}</td></tr>`;
         }).join('')}</tbody></table></div>` : '<div class="empty">Nenhum RIR concluído' + (q ? ' com essa busca' : '') + '.</div>'}`;
     }
-    main.innerHTML = `<div class="view">${head(MOD.RIR.full, 'RIR · checklist da nota fiscal recebida, com o resultado de cada lote. Lote reprovado aqui vai sozinho para a fila da RNC.')}
+    main.innerHTML = `<div class="view">${head(MOD.RIR.full, 'RIR · checklist da nota fiscal recebida, com o resultado de cada lote. Lote reprovado aqui vai sozinho para a fila da RNC.', w ? '<button class="btn" type="button" data-go=\'{"v":"rirtab"}\'>Tela do tablet</button>' : '')}
       <div class="kpis sm">${kpiHTML({ l: 'Notas aguardando RIR', v: NF.format(P.length), c: MOD.RIR.c, cls: P.length ? 'warn' : 'ok' })}${kpiHTML({ l: 'RIR no mês', v: NF.format(doMes.length), sub: NF.format(lotM) + ' lote(s) inspecionado(s)', c: MOD.RIR.c })}${kpiHTML({ l: 'Reprovados no recebimento', v: lotM ? NF1.format(repM / lotM * 100) + '%' : '—', sub: `${repM} de ${lotM} lote(s) no mês`, c: MOD.RIR.c, cls: repM ? 'crit' : '' })}</div>
       <div class="seg" role="group" aria-label="Ver" style="margin:6px 0 12px">${tab('ag', `Aguardando e em andamento <b>${P.length + ras.length}</b>`)}${tab('conc', 'Concluídos')}</div>${body}</div>`;
     const qi = $('#ri-q'); if (qi) { let tm; qi.oninput = () => { clearTimeout(tm); tm = setTimeout(() => { RI.q = qi.value; const p = qi.selectionStart; render(); const q2 = $('#ri-q'); if (q2) { q2.focus(); try { q2.setSelectionRange(p, p); } catch (e) { /* ok */ } } }, 250); }; }
   };
 
+  /* ---------- tela do tablet (#rirtab): mesma lista em formato de tablet, no verde do RIR ---------- */
+  VIEWS.rirtab = (main) => VIEWS.rir(main);
+  function riTabHome(main) {
+    const w = cw('rir'), C = riCards(), P = riPend(), ras = C.filter((c) => c.st === 'r'), q = E.key(RI.tq || '');
+    RI.pend = P;
+    const hoje = dmy(Date.now()), eu = E.key(myPessoa() || DB.meName || '');
+    const nHoje = C.filter((c) => c.st === 'f' && c.fin && dmy(c.fin) === hoje).reduce((s0, c) => s0 + Object.keys(c.res || {}).length, 0);
+    const meus = C.filter((c) => c.st === 'f' && (c.by === DB.me || (eu && E.key(c.nome || '') === eu))).sort((a, b) => (b.fin || 0) - (a.fin || 0)).slice(0, 10);
+    const bate = (txt) => !q || E.key(txt).includes(q);
+    const lotTx = (L) => L.map((x) => x.id + (lotTxt(x) ? ' · ' + lotTxt(x) : '')).join(' — ');
+    const agRow = (g, i) => `<div class="tblr"><div><div class="t"><b>NF ${esc(disp(g.nf) || '—')}</b>${riSitForn(g.forn)}</div><div class="d">${esc(g.forn || 'sem fornecedor')}</div><div class="m">${g.lots.length} ${g.lots.length === 1 ? 'lote' : 'lotes'}: ${esc(lotTx(g.lots))}</div><div class="w">recebido ${esc(fD(g.data))}${g.pc ? ' · pedido de compra ' + esc(disp(g.pc)) : ''}</div></div><button class="btn rirb big" type="button" data-act="ri-novo" data-key="${i}" ${w ? '' : 'disabled'}>Fazer RIR</button></div>`;
+    const rasRow = (c) => `<div class="tblr"><div><div class="t"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>em andamento</span></div><div class="d">${esc(c.forn || 'sem fornecedor')}</div><div class="m">${esc((c.ids || []).join(', '))}</div><div class="w">${esc(c.nome || '')} · começado ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${w ? 'Continuar' : 'Ver'}</button></div>`;
+    const finRow = (c) => { const nr = Object.values(c.res || {}).filter((r) => r === 'Reprovado').length; return `<div class="tblr"><div><div class="t"><b>${esc(c.num || 'RIR')}</b>${nr ? `<span class="chip crit"><i>✕</i>${nr} reprovado(s)</span>` : '<span class="chip ok"><i>✓</i>aprovado</span>'}</div><div class="d">NF ${esc(c.nf || '—')} · ${esc(c.forn || '')}</div><div class="m">${esc((c.ids || []).join(', '))}</div><div class="w">concluído ${esc(dmy(c.fin || c.at))} às ${esc(hhmm(c.fin || c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">Ver</button></div>`; };
+    const ag = P.map((g, i) => [g, i]).filter(([g]) => bate([g.nf, g.forn, g.pc, g.lots.map((x) => x.id).join(' ')].join(' ')));
+    const rs = ras.filter((c) => bate([c.nf, c.forn, (c.ids || []).join(' ')].join(' ')));
+    const body = !RI.ready ? '<div class="loading"><span class="spin"></span><span>Carregando…</span></div>' : `
+      <div class="tbrowq" style="grid-template-columns:1fr auto"><input id="rit-q" class="tbin" placeholder="Buscar NF, fornecedor ou lote" value="${esc(RI.tq || '')}" autocomplete="off"><button class="btn big" type="button" data-act="ri-tlimpa" ${RI.tq ? '' : 'disabled'}>Limpar</button></div>
+      ${w ? '' : '<div class="tbwarn">Seu acesso ao RIR é só de consulta: dá para ver as notas, mas não para inspecionar.</div>'}
+      <div class="rtk"><div style="--k:var(--rir)"><b>${NF.format(P.length)}</b><span>notas aguardando RIR</span></div><div style="--k:var(--info)"><b>${NF.format(ras.length)}</b><span>em andamento</span></div><div style="--k:var(--ok)"><b>${NF.format(nHoje)}</b><span>lotes inspecionados hoje</span></div></div>
+      ${rs.length ? `<div class="tbcard"><div class="ch">Em andamento<span class="cnt">${rs.length}</span></div>${rs.map(rasRow).join('')}</div>` : ''}
+      <div class="tbcard"><div class="ch">Notas aguardando inspeção<span class="cnt">${ag.length}</span></div>${ag.length ? ag.map(([g, i]) => agRow(g, i)).join('') : `<div class="tbnone">${q ? 'Nenhuma nota com essa busca.' : 'Nenhuma nota aguardando inspeção de recebimento. 👍'}</div>`}</div>
+      ${meus.length && !q ? `<div class="tbcard"><div class="ch gr">Seus RIR concluídos</div>${meus.map(finRow).join('')}</div>` : ''}`;
+    main.innerHTML = `<div class="tbw rirt">${tbHead('RIR · Inspeção de recebimento')}<div class="tbb">${body}</div><div class="tbf"><span class="tbnet"><i></i>a lista atualiza sozinha</span></div></div>`;
+    const qi = $('#rit-q'); if (qi) qi.oninput = () => { RI.tq = qi.value; clearTimeout(RI.tqT); RI.tqT = setTimeout(() => { render(); const j = $('#rit-q'); if (j) { j.focus(); j.setSelectionRange(j.value.length, j.value.length); } }, 250); };
+  }
+
   /* ---------- tela: relatório ---------- */
-  function riEdView(main) {
+  function riEdView(main, tab) {
     const ed = RI.ed, rel = ed.rel, ro = ed.ro, lots = rel.lotes.map((k) => findRec('AV', k)).filter(Boolean);
     const lotId = (k) => ((findRec('AV', k) || {}).id || (rel.ids || [])[rel.lotes.indexOf(k)] || k);
     const secs = []; rel.itens.forEach((it) => { if (!secs.includes(it.sec)) secs.push(it.sec); });
-    const rbtn = (it, sc) => { const a = riAns(rel, it, sc); return `<div class="seg riseg" role="group">${['C', 'NC', 'NA'].map((v) => `<button type="button" ${ro ? 'disabled' : ''} data-act="ri-r" data-key="${esc(it.id)}" data-sc="${esc(sc)}" data-v="${v}" aria-pressed="${a.r === v}" class="r${v}">${v === 'C' ? 'Conforme' : v === 'NC' ? 'Não conf.' : 'N.A.'}</button>`).join('')}</div>`; };
+    /* AP = aprovado · RP = reprovado · N/A = não aplicável (gravado como C / NC / NA) */
+    const rbtn = (it, sc) => { const a = riAns(rel, it, sc); return `<div class="seg riseg" role="group">${['C', 'NC', 'NA'].map((v) => `<button type="button" ${ro ? 'disabled' : ''} data-act="ri-r" data-key="${esc(it.id)}" data-sc="${esc(sc)}" data-v="${v}" aria-pressed="${a.r === v}" class="r${v}" title="${v === 'C' ? 'Aprovado' : v === 'NC' ? 'Reprovado' : 'Não aplicável'}">${RI_MARCA[v]}</button>`).join('')}</div>`; };
     const linha = (it, sc) => {
       const a = riAns(rel, it, sc), lab = sc === 'nf' ? '<span class="muted">nota inteira</span>' : `<b class="mono">${esc(lotId(sc))}</b>`;
       return `<div class="rirow${a.r === 'NC' ? ' nc' : ''}"><div class="ril">${lab}</div>${rbtn(it, sc)}
         ${it.med ? `<input class="inp rimed mono" ${ro ? 'disabled' : ''} data-riv="${esc(it.id)}" data-sc="${esc(sc)}" value="${esc(a.v || '')}" placeholder="medida" inputmode="decimal" autocomplete="off">` : ''}
         ${a.r === 'NC' || a.o ? `<input class="inp rio" ${ro ? 'disabled' : ''} data-rio="${esc(it.id)}" data-sc="${esc(sc)}" value="${esc(a.o || '')}" placeholder="o que foi encontrado" autocomplete="off">` : ''}</div>`;
     };
-    const item = (it) => `<div class="riit"><div class="rit"><span>${esc(it.t)}</span>${it.med ? '<small>medida</small>' : ''}${!ro && it.esc !== 'nf' && rel.lotes.length > 1 ? `<button class="btn small ghost" type="button" data-act="ri-todos" data-key="${esc(it.id)}">todos conformes</button>` : ''}</div>${riEscopos(rel, it).map((sc) => linha(it, sc)).join('')}</div>`;
+    const item = (it) => `<div class="riit"><div class="rit"><span>${esc(it.t)}</span>${it.med ? '<small>medida</small>' : ''}${!ro && it.esc !== 'nf' && rel.lotes.length > 1 ? `<button class="btn small ghost" type="button" data-act="ri-todos" data-key="${esc(it.id)}">todos AP</button>` : ''}</div>${riEscopos(rel, it).map((sc) => linha(it, sc)).join('')}</div>`;
     const insSel = new Set((rel.ins || []).map((i) => i.id)), insL = rfInstr();
-    const insHTML = `${(rel.ins || []).map((i) => { const x = insL.find((y) => y.id === i.id); return `<span class="lchip" aria-pressed="true">${esc(i.codigo)} <small>${esc(i.desc || '')}${!x ? ' · <b style="color:var(--crit)">bloqueado/sem uso</b>' : x.venc ? ' · <b style="color:var(--crit)">vencido</b>' : ' · val. ' + esc(fD(E.fromIso(x.val)))}</small>${ro ? '' : `<button type="button" class="x" data-act="ri-ins" data-key="${esc(i.id)}" aria-label="Tirar">×</button>`}</span>`; }).join('') || '<span class="muted">Nenhum instrumento informado.</span>'}
+    const insHTML = `${(rel.ins || []).map((i) => { const x = insL.find((y) => y.id === i.id); return `<span class="lchip sel">${esc(i.codigo)} <small>${esc(i.desc || '')}${!x ? ' · <b style="color:var(--crit)">bloqueado/sem uso</b>' : x.venc ? ' · <b style="color:var(--crit)">vencido</b>' : ' · val. ' + esc(fD(E.fromIso(x.val)))}</small>${ro ? '' : `<button type="button" class="x" data-act="ri-ins" data-key="${esc(i.id)}" aria-label="Tirar">×</button>`}</span>`; }).join('') || '<span class="muted">Nenhum instrumento informado.</span>'}
       ${ro ? '' : `<div class="field" style="margin-top:8px"><span>Adicionar instrumento</span><select id="ri-insadd"><option value="">— escolha pelo código —</option>${insL.filter((x) => !insSel.has(x.id) && !x.venc).map((x) => `<option value="${esc(x.id)}">${esc(x.codigo)} · ${esc(x.desc)}</option>`).join('')}</select></div>`}`;
     const resHTML = rel.lotes.map((k) => {
       const x = findRec('AV', k), r = riRes(rel, k), o = (rel.lotRes || {})[k] || {}, sug = riSug(rel, k), mot = o.mot != null ? o.mot : (r === 'Reprovado' ? riMotSug(rel, k) : '');
@@ -10457,10 +10609,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         ${r === 'Reprovado' ? `<input class="inp" ${ro ? 'disabled' : ''} data-rimot="${esc(k)}" value="${esc(mot)}" placeholder="motivo da reprovação (vai para a RNC)" autocomplete="off">` : ''}</div>`;
     }).join('');
     const falta = ro ? [] : riFalta(rel);
-    main.innerHTML = `<div class="view riv" id="rix">
-      <div class="cqfrom"><button class="btn ghost small" type="button" data-act="ri-voltar">‹ RIR</button><b class="cqpv">${esc(rel.numero || 'RIR em andamento')}</b><span class="cqnf mono">NF ${esc(rel.nf || '—')}</span><span class="clip">${esc(rel.forn || '')}</span>${riSitForn(rel.forn)}${ro ? '' : '<span class="chip ok" id="rie-salvo">rascunho</span>'}</div>
+    /* no tablet do inspetor (sem acesso aos Lotes) o lote aparece sem abrir a ficha */
+    const lotBtn = (k, inner) => (tab && !vis('av') ? `<span class="lchip">${inner}</span>` : `<button type="button" class="lchip" data-open="AV:${esc(k)}">${inner}</button>`);
+    const corpo = `
+      <div class="cqfrom">${tab ? '' : '<button class="btn ghost small" type="button" data-act="ri-voltar">‹ RIR</button>'}<b class="cqpv">${esc(rel.numero || 'RIR em andamento')}</b><span class="cqnf mono">NF ${esc(rel.nf || '—')}</span><span class="clip">${esc(rel.forn || '')}</span>${riSitForn(rel.forn)}${ro || tab ? '' : '<span class="chip ok" id="rie-salvo">rascunho</span>'}</div>
       ${rel.status === 'finalizado' ? `<div class="okbox" style="margin:8px 0">Concluído em ${esc(dmy(rel.fin))} às ${esc(hhmm(rel.fin))} · ${sigLine(rel.assin)}</div>` : ''}
-      <div class="fsec"><h3>Lotes desta nota</h3><div class="rils">${rel.lotes.map((k) => { const x = findRec('AV', k); return x ? `<button type="button" class="lchip" data-open="AV:${esc(k)}">${esc(x.id)} <small>${esc(lotTxt(x))}${E.filled(x.corrida) ? ' · corrida ' + esc(x.corrida) : ''}${x.quant != null && x.quant !== '' ? ' · ' + esc(x.quant) + ' ' + esc(x.und || '') : ''}</small></button>` : `<span class="lchip">${esc(lotId(k))}</span>`; }).join('')}</div>
+      <div class="fsec"><h3>Lotes desta nota</h3><div class="rils">${rel.lotes.map((k) => { const x = findRec('AV', k); return x ? lotBtn(k, `${esc(x.id)} <small>${esc(lotTxt(x))}${E.filled(x.corrida) ? ' · corrida ' + esc(x.corrida) : ''}${x.quant != null && x.quant !== '' ? ' · ' + esc(x.quant) + ' ' + esc(x.und || '') : ''}</small>`) : `<span class="lchip">${esc(lotId(k))}</span>`; }).join('')}</div>
         ${rel.pc ? `<p class="muted" style="margin:6px 0 0;font-size:12.5px">Pedido de compra <span class="mono">${esc(rel.pc)}</span></p>` : ''}</div>
       ${secs.map((s) => `<div class="fsec"><h3>${esc(s)}</h3>${rel.itens.filter((it) => it.sec === s).map(item).join('')}</div>`).join('')}
       <div class="fsec"><h3>Instrumentos usados nas medidas</h3><div class="rils" id="ri-ins">${insHTML}</div></div>
@@ -10469,7 +10623,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <div class="fsec"><h3>Resultado por lote</h3>${resHTML}</div>
       <div class="fsec"><h3>Observações</h3><textarea class="inp" id="ri-obs" ${ro ? 'disabled' : ''} style="min-height:70px;width:100%" placeholder="opcional">${esc(rel.obs || '')}</textarea></div>
       ${falta.length ? `<div class="warnbox" style="margin-top:10px"><b>Falta para concluir:</b> ${esc(falta.join('; '))}.</div>` : ''}
-      <div class="formfoot rifoot">${ro ? '' : `<button class="btn primary big" type="button" data-act="ri-fin" ${falta.length ? 'disabled' : ''}>Concluir e assinar</button>`}<button class="btn" type="button" data-act="ri-print">Imprimir</button>${ro ? '' : '<button class="btn ghost" type="button" data-act="ri-del" style="margin-left:auto;color:var(--crit)">Excluir rascunho</button>'}</div></div>`;
+      ${tab ? (ro ? '' : '<div class="formfoot rifoot"><button class="btn ghost" type="button" data-act="ri-del" style="margin-left:auto;color:var(--crit)">Excluir rascunho</button></div>') : `<div class="formfoot rifoot">${ro ? '' : `<button class="btn primary big" type="button" data-act="ri-fin" ${falta.length ? 'disabled' : ''}>Concluir e assinar</button>`}<button class="btn" type="button" data-act="ri-print">Imprimir</button>${ro ? '' : '<button class="btn ghost" type="button" data-act="ri-del" style="margin-left:auto;color:var(--crit)">Excluir rascunho</button>'}</div>`}`;
+    main.innerHTML = tab
+      ? `<div class="tbw rirt">${tbHead(rel.numero || 'RIR · NF ' + (rel.nf || '—'))}<div class="tbb"><div class="riv" id="rix">${corpo}</div></div><div class="tbf"><button class="btn big" type="button" data-act="ri-voltar">← Notas</button>${ro ? '' : '<span class="chip ok" id="rie-salvo">rascunho</span>'}<span class="grow"></span><button class="btn big" type="button" data-act="ri-print">Imprimir</button>${ro ? '' : `<button class="btn rirb big" type="button" data-act="ri-fin" ${falta.length ? 'disabled' : ''}>Concluir e assinar</button>`}</div></div>`
+      : `<div class="view riv" id="rix">${corpo}</div>`;
     if (!ro) riSalvoTxt();
     const box = $('#rix');
     box.addEventListener('input', (e) => {
@@ -10508,15 +10665,15 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   async function riPrint() {
     const ed = RI.ed; if (!ed) return; const rel = ed.rel, fotos = ed.fotos || await FT.list('rirf', rel.id), t = (v) => esc(disp(v)) || '—';
     const lotId = (k) => ((findRec('AV', k) || {}).id || (rel.ids || [])[rel.lotes.indexOf(k)] || k);
-    const cel = (a) => (a.r ? `<b>${a.r === 'C' ? 'C' : a.r === 'NC' ? '<span style="color:#b3261e">NC</span>' : 'N.A.'}</b>${a.v ? ' ' + esc(a.v) : ''}${a.o ? `<div style="font-size:7.5pt">${esc(a.o)}</div>` : ''}` : '<span style="color:#999">—</span>');
+    const cel = (a) => (a.r ? `<b>${a.r === 'NC' ? '<span style="color:#b3261e">RP</span>' : RI_MARCA[a.r]}</b>${a.v ? ' ' + esc(a.v) : ''}${a.o ? `<div style="font-size:7.5pt">${esc(a.o)}</div>` : ''}` : '<span style="color:#999">—</span>');
     const cols = rel.lotes;
     const ckRows = rel.itens.map((it) => `<tr><td>${esc(it.sec)} · ${esc(it.t)}</td>${it.esc === 'nf' ? `<td colspan="${cols.length}" style="text-align:center">${cel(riAns(rel, it, 'nf'))}</td>` : cols.map((k) => `<td style="text-align:center">${cel(riAns(rel, it, k))}</td>`).join('')}</tr>`).join('');
     const res = (k) => { const o = (rel.lotRes || {})[k] || {}, r = rel.status === 'finalizado' ? o.res : riRes(rel, k); return r ? `<b${r === 'Reprovado' ? ' style="color:#b3261e"' : ''}>${esc(r)}</b>${o.mot ? ' · ' + esc(o.mot) : ''}` : '—'; };
-    printHTML(relDocHTML({ titulo: esc(rel.numero || 'RIR-rascunho'), cor: '#7a2f57', nome: 'RELATÓRIO DE INSPEÇÃO DE RECEBIMENTO', sub: 'Checklist da nota fiscal · resultado por lote', num: esc(rel.numero || 'RASCUNHO'),
+    printHTML(relDocHTML({ titulo: esc(rel.numero || 'RIR-rascunho'), cor: '#3f541b', nome: 'RELATÓRIO DE INSPEÇÃO DE RECEBIMENTO', sub: 'Checklist da nota fiscal · resultado por lote', num: esc(rel.numero || 'RASCUNHO'),
       linhas: `<div><span>Data</span><b>${esc(dmy(rel.fin || rel.at))}</b></div><div><span>NF</span><b>${t(rel.nf)}</b></div>`,
       corpo: `<div class="sec"><div class="sh">1 · Identificação</div><table><tr><td class="k">Fornecedor</td><td>${t(rel.forn)}</td><td class="k">Nota fiscal</td><td>${t(rel.nf)}</td></tr><tr><td class="k">Pedido de compra</td><td>${t(rel.pc)}</td><td class="k">Lotes</td><td>${esc((rel.ids || []).join(', '))}</td></tr></table></div>
         <div class="sec"><div class="sh">2 · Lotes e resultado</div><table><tr><td class="k">Lote</td><td class="k" style="width:auto">Material</td><td class="k" style="width:auto">Corrida</td><td class="k" style="width:auto">Resultado</td></tr>${cols.map((k) => { const x = findRec('AV', k) || {}; return `<tr><td class="mono">${esc(lotId(k))}</td><td>${esc(lotTxt(x) || '—')}</td><td>${E.filled(x.corrida) ? esc(x.corrida) : '—'}</td><td>${res(k)}</td></tr>`; }).join('')}</table></div>
-        <div class="sec"><div class="sh">3 · Checklist <span>C = conforme · NC = não conforme · N.A. = não se aplica</span></div><table><tr><td class="k" style="width:auto">Item</td>${cols.map((k) => `<td class="k" style="width:auto;text-align:center">${esc(lotId(k))}</td>`).join('')}</tr>${ckRows}</table></div>
+        <div class="sec"><div class="sh">3 · Checklist <span>AP = aprovado · RP = reprovado · N/A = não aplicável</span></div><table><tr><td class="k" style="width:auto">Item</td>${cols.map((k) => `<td class="k" style="width:auto;text-align:center">${esc(lotId(k))}</td>`).join('')}</tr>${ckRows}</table></div>
         <div class="sec"><div class="sh">4 · Instrumentos</div><table><tr><td>${(rel.ins || []).map((i) => esc(i.codigo + ' · ' + (i.desc || '') + (i.val ? ' · validade ' + fD(E.fromIso(i.val)) : ''))).join('<br>') || '—'}</td></tr></table></div>
         ${fotos.length ? `<div class="sec"><div class="sh">5 · Fotos</div><div class="fot">${fotos.slice(0, 8).map((f) => `<img src="${f.img}" alt="">`).join('')}</div></div>` : ''}
         <div class="sec"><div class="sh">${fotos.length ? 6 : 5} · Observações e assinatura</div><div class="sig pre">${esc(rel.obs || '—')}</div><div class="sig">Inspetor: ${rel.assin ? sigLine(rel.assin) : '<span style="color:#888">pendente</span>'}</div></div>`,
@@ -10524,6 +10681,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   function riAct(a, key, el) {
     if (a === 'ri-sub') { RI.sub = key; render(); return true; }
+    if (a === 'ri-tlimpa') { RI.tq = ''; render(); return true; }
     if (a === 'ri-voltar') { if (RI.saveT) riGravar().catch(() => {}); RI.ed = null; RI.sub = 'ag'; render(); return true; }
     if (a === 'ri-novo') { const g = (RI.pend || [])[+key]; if (g) riNovo(g.lots); return true; }
     if (a === 'ri-lote') {
@@ -12126,19 +12284,22 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
 
   /* ---------- tela ---------- */
+  /* Usuários › Equipe: 'tudo' = fichas e organograma · 'org' = só o organograma, sem abrir fichas */
+  const eqNivel = () => { const s0 = SCR('equipe'); return s0 === 'org' || s0 === 'nao' ? s0 : 'tudo'; };
   VIEWS.equipe = (main) => {
-    const modo = EQ.modo || lsGet('cq-eq-modo', 'cards'), all = eqAll().sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')), ativos = all.filter((p) => !p.inativo);
+    const soOrg = eqNivel() === 'org';
+    const modo = soOrg ? 'org' : EQ.modo || lsGet('cq-eq-modo', 'cards'), all = eqAll().sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')), ativos = all.filter((p) => !p.inativo);
     const c = S.model.cfg, f = EQ.f, adm = eqAdm();
     const sel = (id, l, vals, v, todos) => `<label class="field"><span>${l}</span><select id="${id}"><option value="">${todos}</option>${vals.map((x) => `<option ${E.key(x) === E.key(v || '') ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select></label>`;
-    const acts = '<button class="btn" type="button" data-act="eq-exp">Exportar (.xlsx)</button>' + (adm ? '<button class="btn primary" type="button" data-act="eq-novo">+ Novo funcionário</button>' : '');
+    const acts = soOrg ? '' : '<button class="btn" type="button" data-act="eq-exp">Exportar (.xlsx)</button>' + (adm ? '<button class="btn primary" type="button" data-act="eq-novo">+ Novo funcionário</button>' : '');
     const semFoto = ativos.filter((p) => !eqFoto(p)).length;
     const filtros = modo === 'org' ? '<span></span>' : `<div class="filters"><label class="field"><span>Buscar</span><input id="eq-q" type="search" placeholder="nome, cargo, e-mail…" value="${esc(f.q || '')}" autocomplete="off"></label>
       ${sel('eq-set', 'Setor', eqSetores(), f.set, 'Todos')}${sel('eq-fil', 'Filial', uniq((c.GER_FILIAIS || []).concat(all.map((p) => p.filial).filter(Boolean))), f.fil, 'Todas')}
       <label class="field"><span>Situação</span><select id="eq-sit"><option value="ativos" ${f.sit === 'ativos' ? 'selected' : ''}>Ativos</option><option value="inativos" ${f.sit === 'inativos' ? 'selected' : ''}>Inativos</option><option value="todos" ${f.sit === 'todos' ? 'selected' : ''}>Todos</option></select></label></div>`;
-    main.innerHTML = `<div class="view">${head('Equipe', 'Funcionários da Aços Vital: ficha com foto, cargo, setor e a quem cada um responde. As funções definem em quais listas o nome aparece na Central.' + (adm ? '' : ' Só administradores alteram.'), acts)}
-      <div class="eqk"><span><b>${NF.format(ativos.length)}</b>ativos</span><span><b>${NF.format(uniq(ativos.map((p) => p.setor).filter(Boolean)).length)}</b>${uniq(ativos.map((p) => p.setor).filter(Boolean)).length === 1 ? 'setor' : 'setores'}</span><span><b>${NF.format(uniq(ativos.map((p) => p.filial).filter(Boolean)).length)}</b>${uniq(ativos.map((p) => p.filial).filter(Boolean)).length === 1 ? 'filial' : 'filiais'}</span><span><b>${NF.format(semFoto)}</b>sem foto</span></div>
-      <div class="pbar">${filtros}<span class="seg">${[['cards', 'Cartões'], ['lista', 'Lista'], ['org', 'Organograma']].map(([k, l]) => `<button type="button" data-act="eq-modo" data-key="${k}" aria-pressed="${modo === k}">${l}</button>`).join('')}</span></div>
-      <div id="eq-body">${!all.length ? '<div class="readonly">Nenhum funcionário cadastrado ainda.' + (adm ? ' Use “+ Novo funcionário”.' : '') + '</div>' : modo === 'org' ? eqOrgHTML(ativos) : modo === 'lista' ? eqListaHTML(eqFiltra(all)) : eqCardsHTML(eqFiltra(all))}</div></div>`;
+    main.innerHTML = `<div class="view">${head(soOrg ? 'Organograma' : 'Equipe', soOrg ? 'Quem responde a quem na Aços Vital, montado pelo campo “Responde a” de cada funcionário.' : 'Funcionários da Aços Vital: ficha com foto, cargo, setor e a quem cada um responde. As funções definem em quais listas o nome aparece na Central.' + (adm ? '' : ' Só administradores alteram.'), acts)}
+      <div class="eqk"><span><b>${NF.format(ativos.length)}</b>ativos</span><span><b>${NF.format(uniq(ativos.map((p) => p.setor).filter(Boolean)).length)}</b>${uniq(ativos.map((p) => p.setor).filter(Boolean)).length === 1 ? 'setor' : 'setores'}</span><span><b>${NF.format(uniq(ativos.map((p) => p.filial).filter(Boolean)).length)}</b>${uniq(ativos.map((p) => p.filial).filter(Boolean)).length === 1 ? 'filial' : 'filiais'}</span>${soOrg ? '' : `<span><b>${NF.format(semFoto)}</b>sem foto</span>`}</div>
+      ${soOrg ? '' : `<div class="pbar">${filtros}<span class="seg">${[['cards', 'Cartões'], ['lista', 'Lista'], ['org', 'Organograma']].map(([k, l]) => `<button type="button" data-act="eq-modo" data-key="${k}" aria-pressed="${modo === k}">${l}</button>`).join('')}</span></div>`}
+      <div id="eq-body">${!all.length ? '<div class="readonly">Nenhum funcionário cadastrado ainda.' + (adm ? ' Use “+ Novo funcionário”.' : '') + '</div>' : modo === 'org' ? eqOrgHTML(ativos, soOrg) : modo === 'lista' ? eqListaHTML(eqFiltra(all)) : eqCardsHTML(eqFiltra(all))}</div></div>`;
     const redraw = () => { const b = $('#eq-body'); if (b) b.innerHTML = EQ.modo === 'lista' || (!EQ.modo && lsGet('cq-eq-modo', 'cards') === 'lista') ? eqListaHTML(eqFiltra(all)) : eqCardsHTML(eqFiltra(all)); };
     const q = $('#eq-q'); if (q) q.oninput = () => { f.q = q.value; redraw(); };
     [['eq-set', 'set'], ['eq-fil', 'fil'], ['eq-sit', 'sit']].forEach(([id, k]) => { const el = $('#' + id); if (el) el.onchange = () => { f[k] = el.value; redraw(); }; });
@@ -12157,10 +12318,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${L.map((p) => { const g = eqBy(p.gestor); return `<tr class="click" data-act="eq-ver" data-key="${esc(p.id)}"><td class="nw"><span class="eqav">${eqFoto(p) ? `<img src="${eqFoto(p)}" alt="">` : esc(eqIni(p.nome))}</span><b>${esc(p.nome)}</b></td><td>${p.cargo ? esc(p.cargo) : d}</td><td>${p.setor ? esc(p.setor) : d}</td><td>${p.filial ? esc(p.filial) : d}</td><td>${g ? esc(g.nome) : d}</td><td>${(p.funcoes || []).map((k) => esc(fl(k))).join(', ') || d}</td><td>${p.email ? esc(p.email) : d}</td><td class="nw">${[p.tel, p.ramal ? 'ramal ' + p.ramal : ''].filter(Boolean).map(esc).join(' · ') || d}</td><td>${p.inativo ? '<span class="chip off"><i>–</i>inativo</span>' : '<span class="chip ok"><i>✓</i>ativo</span>'}</td></tr>`; }).join('')}</tbody></table></div>`;
   }
   /* organograma: monta sozinho pelo "Responde a" */
-  function eqOrgHTML(L) {
+  function eqOrgHTML(L, soOrg) {
     const ids = new Set(L.map((p) => p.id)), filhos = {}; L.forEach((p) => { const g = p.gestor && ids.has(p.gestor) && p.gestor !== p.id ? p.gestor : '_'; (filhos[g] = filhos[g] || []).push(p); });
     Object.values(filhos).forEach((a) => a.sort((x, y) => (filhos[y.id] ? 1 : 0) - (filhos[x.id] ? 1 : 0) || x.nome.localeCompare(y.nome, 'pt-BR')));
-    const node = (p) => `<button type="button" class="onode" style="--k:${eqCor(p.setor)}" data-act="eq-ver" data-key="${esc(p.id)}">${eqFoto(p) ? `<img src="${eqFoto(p)}" alt="">` : `<span class="oi">${esc(eqIni(p.nome))}</span>`}<span><em>${esc(p.setor || 'sem setor')}</em><b>${esc(p.nome)}</b><span>${esc(p.cargo || '')}</span></span></button>`;
+    const node = (p) => `<${soOrg ? 'div' : 'button type="button"'} class="onode" style="--k:${eqCor(p.setor)}${soOrg ? ';cursor:default' : ''}" ${soOrg ? '' : `data-act="eq-ver" data-key="${esc(p.id)}"`}>${eqFoto(p) ? `<img src="${eqFoto(p)}" alt="">` : `<span class="oi">${esc(eqIni(p.nome))}</span>`}<span><em>${esc(p.setor || 'sem setor')}</em><b>${esc(p.nome)}</b><span>${esc(p.cargo || '')}</span></span></${soOrg ? 'div' : 'button'}>`;
     const seen = new Set();
     const tree = (p) => {
       if (seen.has(p.id)) return ''; seen.add(p.id);
@@ -12175,7 +12336,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <div class="orgleg">${setores.map((s) => `<span style="--k:${eqCor(s)}"><i></i>${esc(s)}</span>`).join('')}</div>
       ${chefes.length ? `<div class="org"><div class="orgroots">${chefes.map((p) => `<ul>${tree(p)}</ul>`).join('')}</div></div>` : ''}
       ${soltos.length ? `<div class="fsec"><h3>Sem “Responde a” preenchido (${soltos.length})</h3><div class="orgsolto">${soltos.map(node).join('')}</div></div>` : ''}
-      <span class="muted" style="font-size:12.5px">Toque numa pessoa para abrir a ficha. Para montar a hierarquia, preencha “Responde a” na ficha de cada um.</span></div></div></section>`;
+      ${soOrg ? '' : '<span class="muted" style="font-size:12.5px">Toque numa pessoa para abrir a ficha. Para montar a hierarquia, preencha “Responde a” na ficha de cada um.</span>'}</div></div></section>`;
   }
 
   /* ---------- ficha ---------- */
@@ -12190,6 +12351,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   function eqCaminho(p) { const L = []; let g = eqBy(p.gestor), lim = 0; while (g && lim++ < 12) { L.unshift(g); g = g.gestor && g.gestor !== g.id ? eqBy(g.gestor) : null; } return L; }
   async function eqFicha(id) {
+    if (eqNivel() !== 'tudo') { toast('A ficha do funcionário não está liberada para você (Usuários › Equipe).', true); return; }
     const p = eqBy(id); if (!p) { toast('Funcionário não encontrado.', true); return; }
     const adm = eqAdm(), g = eqBy(p.gestor), eq = eqAll().filter((x) => x.gestor === p.id && !x.inativo).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
     const FN = funcoesAll(), fl = (k) => (FN.find((z) => z[0] === k) || [k, k])[1], w = eqSold(p), onde = eqOnde(p), cam = eqCaminho(p);
@@ -12410,7 +12572,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       { k: 'email', l: 'E-mail', w: 30 }, { k: 'tel', l: 'Telefone', w: 16 }, { k: 'ramal', l: 'Ramal', w: 8 }, { k: 'a', l: 'Admissão', w: 12, x: (x) => eqDia(x.admissao) }, { k: 'f', l: 'Funções', w: 34, x: (x) => (x.funcoes || []).map((k) => (FN.find((z) => z[0] === k) || [k, k])[1]).join(', ') }, { k: 's', l: 'Situação', x: (x) => (x.inativo ? 'Inativo' : 'Ativo') }], L);
   }
   function eqAct(a, key) {
-    if (a === 'eq-ver') { eqFicha(key); return true; }
+    if (a === 'eq-ver') { if (eqNivel() === 'tudo') eqFicha(key); return true; }
     if (a === 'eq-novo') { eqEditar(null); return true; }
     if (a === 'eq-ed') { eqEditar(key); return true; }
     if (a === 'eq-foto') { eqEditar(key, true); return true; }
@@ -12603,7 +12765,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const act = w.quals.filter((q) => q.status !== 'CANCELADA'), canc = w.quals.filter((q) => q.status === 'CANCELADA');
     const body = `<div class="sfh">${soldFotoHTML(w, 'sfph')}<div class="sfi"><span class="mono scs">${esc(w.sinete || 'sem sinete')}</span><h3>${esc(w.nome)}</h3><div>${chipW(w.st)}${w.situacao !== 'Ativo' ? ` <span class="chip off"><i>–</i>${esc(w.situacao)}</span>` : ''}</div>
         <div class="muted" style="font-size:12.5px">${[w.rg ? 'RG ' + esc(w.rg) : '', esc(w.setor || ''), esc(w.filial || ''), w.admissao ? 'admissão ' + fD(w.admissao) : ''].filter(Boolean).join(' · ') || '&nbsp;'}</div>
-        ${w.prox ? `<div style="font-size:12.5px">Próximo vencimento: <b>${fD(w.prox)}</b></div>` : ''}${w.pid ? `<div><button type="button" class="plink" data-act="eq-ver" data-key="${esc(w.pid)}">Ficha de funcionário (Equipe)</button></div>` : ''}</div></div>
+        ${w.prox ? `<div style="font-size:12.5px">Próximo vencimento: <b>${fD(w.prox)}</b></div>` : ''}${w.pid && eqNivel() === 'tudo' ? `<div><button type="button" class="plink" data-act="eq-ver" data-key="${esc(w.pid)}">Ficha de funcionário (Equipe)</button></div>` : ''}</div></div>
       ${ed ? `<div class="formfoot">${bt('sold-qnova', 'Nova qualificação', '', 'primary')}${act.length ? bt('sold-cont', 'Registrar continuidade') : ''}${bt('sold-foto', w.foto ? 'Trocar foto' : 'Pôr foto')}${bt('sold-ed', 'Editar dados')}${bt('sold-print', 'Imprimir ficha')}${bt('sold-cracha', 'Crachá')}${bt('sold-del', 'Excluir', ' style="margin-left:auto"', 'ghost')}</div>` : `<div class="formfoot">${bt('sold-print', 'Imprimir ficha')}${bt('sold-cracha', 'Crachá')}</div>`}
       ${w.st === 'PENDENTE' ? '<div class="warnbox crit"><b>Qualificação vencida:</b> o soldador não pode soldar com esse processo até registrar a continuidade (se ele soldou nos últimos meses, com comprovação) ou requalificar com novo teste.</div>' : w.st === 'ATENÇÃO' ? `<div class="warnbox">Há qualificação vencendo em até ${soldCfg().aviso} dias. Se o soldador está usando o processo, registre a continuidade (ex.: OS ou relatório de inspeção da solda).</div>` : ''}
       <div class="fsec"><h3>Qualificações (${act.length})</h3>${act.length ? `<div class="sqlist">${act.map(qCard).join('')}</div>` : '<span class="muted">Nenhuma qualificação ativa.</span>'}</div>
@@ -13527,8 +13689,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* ================= TELA DO TABLET (#rnctab) ================= */
   const TB = { step: 0, d: null, scan: null, asked: new Set() };
   const TBK = 'cq-rnctab-rasc';
-  const tbDrafts = () => { try { return JSON.parse(localStorage.getItem(TBK) || '[]'); } catch (e) { return []; } };
-  function tbSaveDrafts(list) { try { localStorage.setItem(TBK, JSON.stringify(list)); return true; } catch (e) { return false; } }
+  const tbKey = () => TBK + (PREVIEW() ? '-vercomo' : ''); /* rascunhos feitos no "Ver como" não se misturam com os do aparelho */
+  const tbDrafts = () => { try { return JSON.parse(localStorage.getItem(tbKey()) || '[]'); } catch (e) { return []; } };
+  function tbSaveDrafts(list) { try { localStorage.setItem(tbKey(), JSON.stringify(list)); return true; } catch (e) { return false; } }
   let tbSaveT = null;
   function tbPersist() {
     clearTimeout(tbSaveT);
@@ -13551,6 +13714,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* para onde o inspetor pode ir a partir do tablet (só o que está liberado para ele) */
   function tbDestinos() {
     const L = [];
+    if (viewOk('rirtab')) L.push(['rirtab', 'RIR', 'Inspeção de recebimento', 'checklist da nota recebida e resultado de cada lote', 'var(--rir)']);
     if (viewOk('rnctab')) L.push(['rnctab', 'RNC', 'Não conformidade', 'abrir RNC pelo tablet ou acompanhar as suas', 'var(--rnc)']);
     if (viewOk('riftab')) L.push(['riftab', 'RIF', 'Inspeção final', 'medir, fotografar e assinar o RIF pelo tablet', 'var(--rif)']);
     if (!tbOnly()) L.push(['central', 'CQ', 'Central completa', 'menu com todos os módulos liberados para você', 'var(--geral)']);
@@ -13669,7 +13833,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const sx = (INB.mine || {}).s || {}, cx = (INB.mine || {}).c || {};
     const L = Object.keys(sx).map((id) => Object.assign({ id }, sx[id])).sort((a, b) => (b.at || 0) - (a.at || 0)).slice(0, 15);
     const pc = (e) => Object.values(cx).filter((c) => c && c.rncKey === e.key).sort((a, b) => b.at - a.at)[0];
-    return `<div class="tbcard" id="tb-mine"><div class="ch gr">Minhas RNCs</div>${INB.mine == null ? '<div class="tbnone">Carregando…</div>' : L.length ? L.map((e) => { const c = pc(e); return `<div class="tblr"><div><div class="t"><b>${esc(e.num || 'aguardando número')}</b>${e.st === 'ok' ? '<span class="chip ok"><i>✓</i>recebida pela Qualidade</span>' : '<span class="chip warn"><i>…</i>aguardando a Central numerar</span>'}</div><div class="m">${esc(e.forn || '—')} · ${esc(e.motivo || '')}${e.lotesAV ? ' · ' + esc(e.lotesAV) : ''}</div><div class="w">enviada em ${dmy(e.at)} às ${hhmm(e.at)}</div>${c ? `<div class="w">✎ correção pedida em ${dmy(c.at)}: ${c.st === 'novo' ? 'aguardando a Qualidade' : c.st === 'ok' ? 'corrigida' + (c.resp ? ' (' + esc(c.resp) + ')' : '') : 'recusada' + (c.resp ? ': ' + esc(c.resp) : '')}</div>` : ''}</div>${e.st === 'ok' ? `<button class="btn" type="button" data-act="tb-pc" data-key="${esc(e.id)}">Pedir correção</button>` : ''}</div>`; }).join('') : '<div class="tbnone">Você ainda não abriu RNC pelo tablet.</div>'}</div>`;
+    return `<div class="tbcard" id="tb-mine"><div class="ch gr">Minhas RNCs</div>${PREVIEW() ? '<div class="tbnone">No “Ver como” as RNCs enviadas por esta pessoa não aparecem aqui.</div>' : INB.mine == null ? '<div class="tbnone">Carregando…</div>' : L.length ? L.map((e) => { const c = pc(e); return `<div class="tblr"><div><div class="t"><b>${esc(e.num || 'aguardando número')}</b>${e.st === 'ok' ? '<span class="chip ok"><i>✓</i>recebida pela Qualidade</span>' : '<span class="chip warn"><i>…</i>aguardando a Central numerar</span>'}</div><div class="m">${esc(e.forn || '—')} · ${esc(e.motivo || '')}${e.lotesAV ? ' · ' + esc(e.lotesAV) : ''}</div><div class="w">enviada em ${dmy(e.at)} às ${hhmm(e.at)}</div>${c ? `<div class="w">✎ correção pedida em ${dmy(c.at)}: ${c.st === 'novo' ? 'aguardando a Qualidade' : c.st === 'ok' ? 'corrigida' + (c.resp ? ' (' + esc(c.resp) + ')' : '') : 'recusada' + (c.resp ? ': ' + esc(c.resp) : '')}</div>` : ''}</div>${e.st === 'ok' ? `<button class="btn" type="button" data-act="tb-pc" data-key="${esc(e.id)}">Pedir correção</button>` : ''}</div>`; }).join('') : '<div class="tbnone">Você ainda não abriu RNC pelo tablet.</div>'}</div>`;
   }
   function tbDone() {
     if (TB.sent && TB.sent.pend) { const e = (((INB.mine || {}).s) || {})[TB.sent.id]; if (e && e.num) { TB.sent.num = e.num; } }
@@ -13745,6 +13909,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function tbAct(a, key) {
     const d = TB.d;
     if (a === 'tb-sair' && S.view === 'riftab') { rtSalvaAntes().catch(() => {}).then(() => { RFI.ed = null; RT.pk = RT.it = RT.rel = null; RT.step = 0; go('rif'); }); return true; }
+    if (a === 'tb-sair' && S.view === 'rirtab') { if (!tbOnly()) { if (RI.saveT) riGravar().catch(() => {}); RI.ed = null; RI.sub = 'ag'; go('rir'); } return true; }
     if (a === 'tb-sair') { if (!tbOnly()) go(cw('rnc') ? 'rnc' : 'painel'); return true; }
     if (a === 'tb-trocar') { tbTrocar(); return true; }
     if (a === 'tb-conta') { tbConta(); return true; }
@@ -13781,7 +13946,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
      O inspetor NÃO tem acesso ao módulo RNC: ele só CRIA entradas na própria caixa (regras do Firebase).
      Qualquer sessão da Central com "Lança" em RNC numera e cria a RNC sozinha (com trava para não duplicar). */
   const tbInsp = () => canWrite() && ACC('rnctab') === 'lanca';
-  const tbOnly = () => tbInsp() && !['av', 'rir', 'serv', 'certq', 'rif', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp'].some((c) => vis(c));
+  /* "só tablet": definido em Usuários (versão hospedada); sem essa informação vale a regra antiga (só "RNC pelo tablet" e nenhum outro módulo) */
+  const TBC = () => (typeof window.CQ_TABLET === 'function' ? window.CQ_TABLET() || {} : {});
+  const tbOnly = () => { const t = TBC(); if (typeof t.so === 'boolean') return t.so; return tbInsp() && !['av', 'rir', 'serv', 'certq', 'rif', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp'].some((c) => vis(c)); };
+  const tbTool = (k) => { const t = TBC(); return t.tools ? !!t.tools[k] : k === 'rnc'; };
   const INB = { started: false, docs: [], mine: null, busy: false, again: false };
   const RRC = { key: null, cid: null, uid: null };
   const INB_F = ['data', 'emissor', 'filial', 'forn', 'nf', 'oc', 'pv', 'depto', 'motivo', 'abrang', 'abrJust', 'lotesAV', 'origem', 'motOutros', 'descNc', 'qtdRep', 'qtdRec', 'qtdUnd', 'nFotos', 'abAss', 'info'];
