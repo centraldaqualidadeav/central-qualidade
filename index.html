@@ -10678,10 +10678,33 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (S.view !== 'rir' && S.view !== 'rirtab') go('rir'); else { render(); window.scrollTo(0, 0); }
     } catch (err) { toast('Não foi possível começar o RIR: ' + ((err && (err.message || err.code)) || err), true); }
   }
-  async function riAbrir(id) {
+  /* RIR concluído: ficha de dados (igual à do lote), só leitura; o checklist completo e o relatório ficam a um clique */
+  function riFicha(rel) {
+    const lotId = (k) => ((findRec('AV', k) || {}).id || (rel.ids || [])[rel.lotes.indexOf(k)] || k), t = (v) => esc(disp(v)) || '';
+    const res = (k) => { const o = (rel.lotRes || {})[k] || {}; return o.res || riRes(rel, k) || ''; };
+    const nRep = rel.lotes.filter((k) => res(k) === 'Reprovado').length;
+    const ck = []; rel.itens.filter((it) => !it.med).forEach((it) => (it.esc === 'nf' ? ['nf'] : rel.lotes).forEach((sc) => ck.push([it, sc, riAns(rel, it, sc)])));
+    const rp = ck.filter(([, , a]) => a.r === 'NC'), nAp = ck.filter(([, , a]) => a.r === 'C').length, nNa = ck.filter(([, , a]) => a.r === 'NA').length;
+    const med = rel.itens.filter((it) => it.med);
+    const lotes = rel.lotes.map((k) => { const x = findRec('AV', k) || {}, r = res(k), mot = ((rel.lotRes || {})[k] || {}).mot;
+      return `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:2px 0"><button type="button" class="lchip" data-open="AV:${esc(k)}">${esc(lotId(k))}${x.desc ? ` <small>${esc(lotTxt(x))}</small>` : ''}</button>${r ? `<span class="chip ${r === 'Reprovado' ? 'crit' : r === 'Aprovado' ? 'ok' : 'warn'}">${esc(r)}</span>` : ''}${mot ? `<span class="muted" style="font-size:12.5px">${esc(mot)}</span>` : ''}</div>`; }).join('');
+    const ckTxt = `${rp.length ? `<span class="chip crit">${rp.length} RP</span> ` : ''}<b>${NF.format(nAp)} AP</b>${nNa ? ` · ${NF.format(nNa)} N/A` : ''} <span class="muted">de ${NF.format(ck.length)} respostas</span>`
+      + rp.map(([it, sc, a]) => `<div style="margin-top:4px;font-size:12.5px"><b style="color:var(--crit)">RP</b> ${esc(it.t)}${sc === 'nf' ? '' : ' · ' + esc(lotId(sc))}${a.o ? ' — ' + esc(a.o) : ''}</div>`).join('');
+    const medTxt = med.length ? rel.lotes.map((k) => `${rel.lotes.length > 1 ? `<span class="mono">${esc(lotId(k))}</span>: ` : ''}${med.map((it) => { const a = riAns(rel, it, k); return `${esc(it.t)} <b>${a.v ? esc(a.v) : '—'}</b>${a.r ? ` <span style="color:${a.r === 'NC' ? 'var(--crit)' : 'var(--ok)'};font-size:12px">${RI_MARCA[a.r]}</span>` : ''}`; }).join(' · ')}`).join('<br>') : '';
+    const pairs = [['Número', `<span class="mono">${esc(rel.numero || '')}</span>`],
+      ['Resultado', nRep ? `<span class="chip crit">${nRep === rel.lotes.length ? 'Reprovado' : nRep + ' de ' + rel.lotes.length + ' lote(s) reprovado(s)'}</span>` : '<span class="chip ok">✓ Aprovado</span>'],
+      ['Assinatura', rel.assin ? esc(sigLine(rel.assin)) : ''], ['Nota fiscal', t(rel.nf)], ['Fornecedor', t(rel.forn)], ['Pedido de compra', t(rel.pc)],
+      ['Lotes', lotes], ['Checklist', ckTxt], med.length ? ['Medidas', medTxt] : null,
+      ['Instrumentos', (rel.ins || []).map((i) => esc(i.codigo + ' · ' + (i.desc || '') + (i.val ? ' · validade ' + fD(E.fromIso(i.val)) : ''))).join('<br>')],
+      ['Fotos', rel.nFotos ? `${NF.format(rel.nFotos)} foto(s) · aparecem no relatório` : ''], rel.obs ? ['Observações', `<span style="white-space:pre-wrap">${esc(rel.obs)}</span>`] : null];
+    const acts = `<button class="btn primary" type="button" data-act="ri-print">Imprimir relatório</button><button class="btn" type="button" data-act="ri-full" data-key="${esc(rel.id)}">Ver checklist completo</button>`;
+    openDrawer(rel.numero || 'RIR', MOD.RIR.name, `<div class="formfoot">${acts}</div>` + kv(pairs), MOD.RIR.c);
+  }
+  async function riAbrir(id, full) {
     try {
       const s = await DB.db.doc('rird/' + id).get(); if (!s.exists) { toast('RIR não encontrado.', true); return; }
       const rel = s.data();
+      if (!full && rel.status === 'finalizado') { RI.ed = { rel, ro: true, fotos: null }; riFicha(rel); return; }
       RI.ed = { rel, ro: rel.status === 'finalizado' || !cw('rir'), fotos: null }; RI.salvo = 0; RI.sub = 'ed'; closeLayer();
       if (S.view !== 'rir' && S.view !== 'rirtab') go('rir'); else { render(); window.scrollTo(0, 0); }
     } catch (err) { toast('Não foi possível abrir: ' + ((err && (err.message || err.code)) || err), true); }
@@ -10905,6 +10928,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const g = riPend().find((o) => o.lots.includes(x)); riNovo(g ? g.lots : [x]); return true;
     }
     if (a === 'ri-abrir') { riAbrir(key); return true; }
+    if (a === 'ri-full') { riAbrir(key, true); return true; }
     const ed = RI.ed, rel = ed && ed.rel; if (!rel) return false;
     if (a === 'ri-print') { riPrint(); return true; }
     if (ed.ro) return a.startsWith('ri-');
