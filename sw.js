@@ -1,6 +1,6 @@
 /* Central da Qualidade · service worker
    Sempre busca a versão mais nova da página na internet; a cópia guardada só é usada se estiver sem conexão. */
-const CACHE = 'central-cq-v16'; /* v16: RIR concluído abre ficha de dados (Mapa 3D em espera) */
+const CACHE = 'central-cq-v18'; /* v18: conta dona exclui lote bloqueado com motivo (Mapa 3D em espera) */
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).catch(() => {})); self.skipWaiting(); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });

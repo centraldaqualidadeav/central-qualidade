@@ -6880,7 +6880,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   VIEWS.cal = (main) => {
     const M = S.model, f = S.f.cal || (S.f.cal = {}), sub = S.calSub || 'lista';
     const subBar = `<div class="seg calsub" role="group" aria-label="Ver">${[['lista', 'Instrumentos'], ['crono', 'Cronograma 12 meses'], ['custos', 'Custos e indicadores']].map(([k, l]) => `<button type="button" data-act="cal-sub" data-key="${k}" aria-pressed="${sub === k}">${l}</button>`).join('')}</div>`;
-    const acts = newBtn('ins', 'Novo instrumento') + newBtn('cal', 'Registrar calibração', 1);
+    const acts = (cw('ins') ? '<button class="btn" type="button" data-act="cal-imp">Importar planilha</button>' : '') + newBtn('ins', 'Novo instrumento') + newBtn('cal', 'Registrar calibração', 1);
     const desc = 'Instrumentos de medição. Validade = data da calibração + frequência. Aprovado quando |maior erro| + incerteza ≤ EMA (Erro Máximo Admissível).';
     if (sub === 'crono') { main.innerHTML = `<div class="view">${head('Calibração', desc, acts)}${subBar}${calCronoHTML(M)}</div>`; return; }
     if (sub === 'custos') { main.innerHTML = `<div class="view">${head('Calibração', desc, acts)}${subBar}${calCustoHTML(M)}</div>`; return; }
@@ -7829,7 +7829,26 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     form.onsubmit = (e) => { e.preventDefault(); submitForm(); };
     $('#fx-reset').onclick = () => { setFieldValues(fd, currentRec()); wireReveal(allFields(fd), (f) => 'ff-' + f.c); if (fd.mod === 'AV') wireMotivo($('#ff-U'), $('#ff-V')); if (fd.mod === 'RNC') wireAbr(); preview(); };
     let del = $('#fx-del');
-    if (del && fd.mod === 'AV' && erec && lotSt(erec).lock) { del.insertAdjacentHTML('afterend', '<span class="muted">🔒 Lote reprovado: não pode ser excluído.</span>'); del.remove(); del = null; }
+    if (del && fd.mod === 'AV' && erec && lotSt(erec).lock) {
+      if (!DB.owner) { del.insertAdjacentHTML('afterend', '<span class="muted">🔒 Lote reprovado: não pode ser excluído.</span>'); del.remove(); del = null; }
+      else {
+        /* conta dona: pode excluir lote bloqueado (ex.: lote de teste), com motivo, desde que nenhuma RNC aberta aponte para ele */
+        del.textContent = 'Excluir lote (conta dona)';
+        del.onclick = () => {
+          const abertas = (lotSt(erec).rncs || []).filter((n) => { const r = S.model.rnc.find((x) => x.num === n); return r && r.status !== 'Cancelada'; });
+          if (abertas.length) { toast(`Cancele antes a RNC ${abertas.join(', ')} (status Cancelada). Depois exclua o lote.`, true); return; }
+          openModal('Excluir lote bloqueado', `<p style="margin:0"><b>${esc(recTitle(erec))}</b> está bloqueado (reprovado / com RNC). Só a conta dona pode excluir. O lote sai das listas e dos indicadores; a exclusão e o motivo ficam no Histórico.</p>
+            <label class="field"><span>Motivo <b>*</b></span><textarea id="dl-mot" placeholder="ex.: lote de teste lançado no treinamento"></textarea></label>
+            <div class="formfoot"><button class="btn primary" type="button" id="dl-ok" style="background:var(--crit);border-color:var(--crit)">Excluir lote</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+          $('#dl-ok').onclick = async () => {
+            const mot = $('#dl-mot').value.trim(); if (mot.length < 5) { toast('Escreva o motivo da exclusão.', true); $('#dl-mot').focus(); return; }
+            try { const k = S.editKey, lb = recTitle(erec); await deleteRecord('AV', k); logEntry('AV', k, 'excluído', `${lb} · lote bloqueado excluído pela conta dona · motivo: ${mot}`, null); closeLayer(); toast(lb + ' excluído.'); go('av'); }
+            catch (err) { toast('Não foi possível excluir: ' + (err.message || err.code || err), true); }
+          };
+        };
+        del = null;
+      }
+    }
     if (del) del.onclick = () => confirmBox('Excluir registro?', `${recTitle(erec)} sai das listas e dos indicadores. A exclusão fica registrada no Histórico.`, 'Excluir', async () => {
       try { const m = fd.mod, k = S.editKey, lb = recTitle(erec); await deleteRecord(m, k); logEntry(m, k, 'excluído', lb, null); toast(lb + ' excluído.'); go(MOD[m].view); } catch (err) { toast('Não foi possível excluir: ' + (err.message || err.code || err), true); }
     }, true);
@@ -13253,6 +13272,53 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
 
   /* ---------- importar a planilha CONTROLE DE SOLDAGEM ---------- */
+  /* ---------- importar a planilha "Controle de Calibração de Instrumentos" (aba INSTRUMENTOS) ----------
+     Cria só os instrumentos que ainda não existem (pelo código); os que já estão na Central ficam como estão. */
+  function calImport() {
+    openModal('Importar planilha de calibração', `<p style="margin:0">Escolha a planilha <b>Controle de Calibração de Instrumentos</b> (.xlsx). A Central lê a aba de instrumentos: código, descrição, marca, certificado, data da calibração, frequência, responsável, departamento, observação, tipo de equipamento e situação operacional. Validade, dias para vencer e status são calculados pela Central. <b>Instrumento que já existe (mesmo código) não é alterado.</b></p>
+      <div class="formfoot"><input type="file" id="ci-file" accept=".xlsx,.xls" hidden><button class="btn primary" type="button" id="ci-pick">Escolher planilha</button></div><div id="ci-res"></div>`);
+    $('#ci-pick').onclick = () => $('#ci-file').click();
+    $('#ci-file').onchange = async () => {
+      const file = $('#ci-file').files && $('#ci-file').files[0]; $('#ci-file').value = ''; if (!file) return;
+      let wb; try { wb = XLSX.read(await file.arrayBuffer(), { type: 'array' }); } catch (e) { toast('Não consegui ler a planilha.', true); return; }
+      let rows = null, hi = -1;
+      for (const nm of wb.SheetNames) { const r = XLSX.utils.sheet_to_json(wb.Sheets[nm], { header: 1, defval: '', raw: true }); const i = r.slice(0, 15).findIndex((l) => l.some((c) => E.key(c) === 'codigo')); if (i >= 0) { rows = r; hi = i; break; } }
+      if (!rows) { $('#ci-res').innerHTML = '<div class="warnbox crit">Não achei a coluna “CÓDIGO” na planilha.</div>'; return; }
+      const hd = rows[hi].map((h) => E.key(h).replace(/\s+/g, ' '));
+      const col = (...ks) => hd.findIndex((h) => ks.some((k) => h.startsWith(k)));
+      const C = { codigo: col('codigo'), desc: col('descricao'), marca: col('marca'), cert: col('certif'), dataCal: col('data calibr', 'data da calibr'), freq: col('freq'), resp: col('respons'), depto: col('departamento', 'setor'), obs: col('observ'), tipo: col('tipo de equip', 'tipo'), situacao: col('situacao oper', 'situacao') };
+      const txt = (r, k) => (C[k] >= 0 ? String(r[C[k]] == null ? '' : r[C[k]]).trim() : '');
+      const data = (v) => { if (typeof v === 'number' && v > 20000) return Math.floor(v); const m = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/.exec(String(v || '').trim()); if (m) { const y = +m[3] < 100 ? 2000 + +m[3] : +m[3]; return E.fromIso(`${y}-${E.pad(+m[2], 2)}-${E.pad(+m[1], 2)}`); } return null; };
+      const sitOf = (v) => { const k = E.key(v); if (!k) return 'Em uso'; return CAL_SIT.find((x) => E.key(x) === k) || (k.includes('fora') ? 'Fora de uso' : k.includes('descart') ? 'Descartado' : k.includes('manut') ? 'Manutenção' : k.includes('bloq') ? 'Bloqueado' : 'Em uso'); };
+      const ja = new Set(S.model.ins.map((x) => E.key(x.codigo))), novos = [], jaTem = [], prob = [], visto = new Set();
+      rows.slice(hi + 1).forEach((r, i) => {
+        const cod = upTxt(txt(r, 'codigo')); if (!cod) return;
+        const k = E.key(cod);
+        if (visto.has(k)) { prob.push(`linha ${hi + i + 2}: código ${cod} repetido na planilha`); return; } visto.add(k);
+        if (ja.has(k)) { jaTem.push(cod); return; }
+        const f = { codigo: cod, desc: txt(r, 'desc'), marca: txt(r, 'marca'), cert: txt(r, 'cert'), freq: Number(r[C.freq]) || null, resp: txt(r, 'resp'), depto: txt(r, 'depto'), obs: txt(r, 'obs'), tipo: txt(r, 'tipo'), situacao: sitOf(txt(r, 'situacao')) };
+        const dc = C.dataCal >= 0 ? data(r[C.dataCal]) : null; if (dc != null) f.dataCal = dc;
+        Object.keys(f).forEach((q) => { if (f[q] === '' || f[q] == null) delete f[q]; });
+        novos.push(f);
+      });
+      $('#ci-res').innerHTML = `<div class="kpis sm" style="margin:8px 0">${kpiHTML({ l: 'Novos para cadastrar', v: NF.format(novos.length), c: MOD.INS.c })}${kpiHTML({ l: 'Já existem (ficam como estão)', v: NF.format(jaTem.length), c: MOD.INS.c })}${kpiHTML({ l: 'Linhas com problema', v: NF.format(prob.length), c: MOD.INS.c, cls: prob.length ? 'warn' : 'ok' })}</div>
+        ${prob.length ? `<div class="warnbox">${prob.slice(0, 8).map(esc).join('<br>')}</div>` : ''}
+        ${jaTem.length ? `<p class="muted" style="font-size:12.5px;margin:4px 0">Já cadastrados: ${esc(jaTem.slice(0, 30).join(', '))}${jaTem.length > 30 ? '…' : ''}</p>` : ''}
+        <p class="muted" style="font-size:12.5px;margin:4px 0">Depois de importar, os instrumentos com data de calibração aparecem como <b>Aguardando análise</b> até alguém lançar o maior erro do certificado (é a prova da aprovação).</p>
+        <div class="formfoot"><button class="btn primary" type="button" id="ci-ok" ${novos.length ? '' : 'disabled'}>Cadastrar ${NF.format(novos.length)} instrumento(s)</button><button class="btn" type="button" data-act="close">Cancelar</button><span class="muted" id="ci-st"></span></div>`;
+      const ok = $('#ci-ok'); if (!ok) return;
+      ok.onclick = async () => {
+        ok.disabled = true; let n = 0; const erros = [];
+        for (const f of novos) {
+          try { await createRecord('INS', Object.assign({}, f)); n++; } catch (e) { erros.push(f.codigo + ': ' + ((e && (e.message || e.code)) || e)); }
+          const st = $('#ci-st'); if (st) st.textContent = `Cadastrando… ${n + erros.length} de ${novos.length}`;
+        }
+        logEntry('INS', null, 'criado', `Planilha de calibração importada: ${n} instrumento(s)`, null);
+        closeLayer(); toast(`${NF.format(n)} instrumento(s) cadastrado(s).${erros.length ? ` ${erros.length} não entraram: ${erros.slice(0, 3).join('; ')}` : ''}`, !!erros.length);
+        await sleep(300); S.stale = false; render();
+      };
+    };
+  }
   function soldImport() {
     openModal('Importar planilha de soldagem', `<p style="margin:0">Escolha a planilha <b>CONTROLE_DE_SOLDAGEM.xlsx</b>. A Central lê os soldadores (sinete, RG, nome), as qualificações dos blocos ASME IX, AWS D1.1, AWS D1.6 e NORSOK (EPS, RQS, data do RQS e data de requalificação) e a aba LISTA DE EPS. Nada é apagado: só acrescenta o que ainda não existe.</p>
       <input type="file" id="si-file" accept=".xlsx,.xls" hidden><div class="formfoot"><button class="btn primary" type="button" id="si-pick">Escolher planilha</button><button class="btn" type="button" data-act="close">Cancelar</button></div><div id="si-prev"></div>`);
@@ -14880,6 +14946,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (a === 'sold-novo') { soldWDialog(null); return; }
       if (a === 'sold-ed') { soldWDialog(key); return; }
       if (a === 'sold-imp') { soldImport(); return; }
+      if (a === 'cal-imp') { calImport(); return; }
       if (a === 'sold-cfg') { soldCfgDialog(); return; }
       if (a === 'sold-lote') { soldLoteDialog(); return; }
       if (a === 'sold-eps') { soldEpsDialog(key || null); return; }
