@@ -10191,7 +10191,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (c) { v.A10 = c.cli || ''; v.M10 = cqNum(c); if (c.nf) v.G12 = c.nf; }
     v.M12 = dmy(Date.now());
     const s = tipo === 'grades' ? { itens: 1, inicio: 1, comps: 1, corrs: 1, opt: { galv: true }, v, cb: {} } : { itens: 1, inicio: 1, v, cb: {} };
-    return JSON.stringify({ certs: [s], atual: 0, syncExtras: true });
+    return JSON.stringify(tipo === 'grades' ? { certs: [s], atual: 0, syncExtras: true } : { certs: [s], atual: 0, syncExtras: true, mec: 2 });
   }
   const cqLS = (k, v) => { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { /* sem armazenamento */ } };
   const cqLG = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
@@ -14562,7 +14562,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         'Pedido com O.C. do cliente (PDF): <b>Importar O.C. (PDF)</b>. Informar o <b>Nº do pedido (PV)</b> (vindo da fila, já aparece preenchido): as folhas saem numeradas PV, PV A, PV B… A descrição sai padronizada (produto, medidas, SCH/classe, face ou pontas); a norma e a NACE MR0175 vão em <b>Especificação</b> e o material com o grau completo (ex.: F316/316L) em <b>Material</b>, em amarelo para conferir. O texto completo da O.C. fica em “ver a descrição da O.C.”.',
         'Usar <b>Puxar dos lotes (AV)</b> e <b>Preencher os itens marcados</b>: descrição, material, corrida e, quando lançados, a química e a mecânica da usina. Os campos preenchidos sozinhos ficam amarelos até serem conferidos.',
         'Conferir o <b>RIF do pedido</b>.',
-        'Salvar o PDF (ou Excel) e responder <b>Sim, concluir</b> para concluir o pedido na fila.'
+        'Salvar o PDF (ou Excel) e responder <b>Sim, concluir</b> para concluir o pedido na fila. O arquivo sai com o nome <b>CQ + Nº do pedido</b> (ex.: CQ 25940; folhas seguintes CQ 25940A, CQ 25940B…).'
       ])],
       ['Bloqueios e justificativas', MUL(['Lote reprovado, com NCF aberta, em contenção, com destino registrado ou em análise: o certificado só segue com justificativa (mínimo 10 caracteres).', 'Item usinado do pedido sem RIF aprovado: justificativa obrigatória.', 'Lote liberado sob concessão, sem resultado de inspeção ou sem certificado do fornecedor: só aviso.'])],
       ['Pendências', MP('No menu do cartão (⋯): <b>Registrar pendência</b> (motivo, nº da OC, justificativa), <b>Pendência resolvida</b>, <b>Passar para outra pessoa</b>, <b>Marcar como concluído (feito fora da Central)</b> e <b>Não precisa de certificado</b>. O prazo padrão é 2 dias úteis.')],
