@@ -616,6 +616,10 @@ textarea.cm-body { min-height: 260px; font-family: var(--f-mono, ui-monospace, m
 .pfform .seg { display: inline-flex; width: max-content; }
 
 .entbtns { display: flex; gap: 8px; align-items: flex-end; margin-left: auto; flex-wrap: wrap; }
+/* ficha de fornecedor/cliente: código (só leitura) e aviso do CNPJ */
+.entcod { min-height: 34px; display: flex; align-items: center; padding: 0 10px; border: 1px dashed var(--line-2); border-radius: 5px; font: 600 14px var(--f-mono); letter-spacing: .03em; background: var(--surface-2, transparent); }
+.entcod .muted { font: 400 13px var(--f-body); letter-spacing: 0; }
+.cjm { display: block; min-height: 15px; margin-top: 3px; font-size: 12px; color: var(--ink-3); } .cjm.ok { color: var(--ok); } .cjm.bad { color: var(--crit); }
 
 /* modo escuro (dono e administradores): ajustes das peças novas */
 :root[data-theme="dark"] .nav a .sw { background: color-mix(in srgb, var(--c, var(--geral)) 20%, var(--surface)); }
@@ -915,6 +919,12 @@ body.tabmode .app { grid-template-columns: minmax(0, 1fr) !important; }
 body.tabmode .rail, body.tabmode .tk, body.tabmode .tkpill, body.tabmode .railtip { display: none !important; }
 body.tabmode .main { padding: 0 !important; }
 .tbw { min-height: 100dvh; display: flex; flex-direction: column; background: var(--bg); }
+/* Mapa de processos 3D */
+.m3view { max-width: none; gap: 14px; }
+.m3wrap { position: relative; height: 70vh; min-height: 420px; border-radius: 16px; overflow: hidden; background: #07090b; border: 1px solid var(--line); }
+.m3wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.m3tb { flex: 1 0 auto; display: flex; flex-direction: column; } .m3tb .m3wrap { flex: 1; border-radius: 0; border: 0; }
+@media (max-width: 860px) { .m3view .vhead p { display: none; } .m3wrap { border-radius: 12px; } }
 .tbw > .tbb { flex: 1 0 auto; }
 .tbhd { background: #0F1112; color: #F1F0EB; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 14px 22px; position: sticky; top: 0; z-index: 20; }
 .tbhd .br { all: unset; cursor: pointer; display: grid; gap: 6px; justify-self: start; }
@@ -1617,6 +1627,7 @@ body.cq-ver .tbhd { top: 36px; }
       <a href="#alertas" data-v="alertas" style="--c:var(--crit)"><span class="sw"></span>Alertas<span class="ct" id="ct-alertas" hidden></span></a>
       <a href="#rastreio" data-v="rastreio" style="--c:var(--geral)"><span class="sw"></span>Rastreabilidade</a>
       <a href="#equipe" data-v="equipe" style="--c:var(--geral)"><span class="sw"></span>Equipe</a>
+      <a href="#mapa3d" data-v="mapa3d" title="Mapa de processos 3D: o caminho do material no galpão, etapa por etapa" style="--c:var(--geral)"><span class="sw"></span>Mapa 3D</a>
       <span class="grp">Módulos</span>
       <a href="#av" data-v="av" style="--c:var(--av)"><span class="sw"></span>Lotes (AV)</a>
       <a href="#rir" data-v="rir" title="Relatório de Inspeção de Recebimento" style="--c:var(--rir)"><span class="sw"></span>RIR</a>
@@ -4450,6 +4461,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const busy = ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName);
     const formView = S.view === 'cadastro' || S.view === 'config' || S.view === 'historico' || (S.view === 'rnctab' && TB.step >= 1 && TB.step <= 3) || (S.view === 'riftab' && RT.step >= 1 && RT.step <= 4);
     if (!DB.cfg && !PREVIEW()) setTimeout(cfgSeed, 300);
+    else if (!S.codRun) setTimeout(entCodigos, 1500);
     if (!S.rendered) { S.rendered = true; render(); setTimeout(rncDailyNotice, 900); }
     else if (formView || busy || $('#layer').innerHTML) S.stale = true;
     else render();
@@ -4475,7 +4487,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       try { if (typeof u.me === 'function') { const me = await u.me(); DB.meName = (me && me.name) || ''; DB.meEmail = (me && me.email) || ''; DB.mePes = (me && me.pessoaId) || null; } } catch (e) { /* sem nome */ }
       updateChrome();
       if (S.model && !['cadastro', 'config'].includes(S.view)) render();
-      setTimeout(cfgSeed, 300);
+      setTimeout(cfgSeed, 300); setTimeout(entCodigos, 1500);
     }).catch(() => {});
     MODS.forEach((mod) => {
       db.collection(MOD[mod].col).onSnapshot((snap) => {
@@ -4567,6 +4579,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const SCR = (v) => (typeof window.CQ_SCREEN === 'function' ? window.CQ_SCREEN(v) : null);
   /* telas do tablet: o inspetor "só tablet" usa só as ferramentas marcadas para ele; quem trabalha na Central abre o tablet dos módulos em que lança */
   const viewOk = (v) => {
+    if (v === 'mapa3d') return !!S.model; /* o mapa 3D é para todos que entram na Central (inclusive quem usa só o tablet) */
     if (v === 'riftab') return !!S.model && (tbOnly() ? tbTool('rif') && cw('rif') : vis('rif'));
     if (v === 'rirtab') return !!S.model && rirOn() && cw('rir') && (!tbOnly() || tbTool('rir'));
     if (v === 'rnctab') return !!S.model && rncRelOn() && (tbOnly() ? tbTool('rnc') && (tbInsp() || cw('rnc')) : (cw('rnc') || tbInsp()));
@@ -4750,6 +4763,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function applyLogo() {
     const c = $('#logocard'), im = $('#logo-img'); if (!c || !im) return;
     if (DB.logo) { if (im.getAttribute('src') !== DB.logo) im.src = DB.logo; c.hidden = false; } else { c.hidden = true; im.removeAttribute('src'); }
+    /* cópia no aparelho para a placa da parede do Mapa 3D */
+    try { if (DB.logo) { if (localStorage.getItem('cq-logo') !== DB.logo) localStorage.setItem('cq-logo', DB.logo); } else localStorage.removeItem('cq-logo'); } catch (e) { /* sem armazenamento ou logo grande demais: a placa mostra o espaço reservado */ }
   }
   /* ícones do menu lateral (um por tela, na cor do módulo) */
   const NAV_ICO = (() => {
@@ -4776,9 +4791,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       rirc: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9z"/><path d="m8.5 11 1.2 1.2 2-2"/><path d="M13.5 11.5H16"/><path d="m8.5 16 1.2 1.2 2-2"/><path d="M13.5 16.5H16"/>',
       cert: '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><circle cx="12" cy="13" r="2.6"/><path d="m10.6 15.2-1 4 2.4-1.2 2.4 1.2-1-4"/>',
       org: '<rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M6 16v-4h12v4"/>',
-      gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>'
+      gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>',
+      cube: '<path d="M12 2.8 4 7.2v9.6l8 4.4 8-4.4V7.2z"/><path d="M4 7.2 12 11.6l8-4.4M12 11.6v9.6"/>'
     };
-    const V = { painel: 'grid', alertas: 'bell', rastreio: 'route', equipe: 'org', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rir: 'rirc', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', manual: 'book', trello: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
+    const V = { painel: 'grid', alertas: 'bell', rastreio: 'route', equipe: 'org', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rir: 'rirc', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', manual: 'book', mapa3d: 'cube', trello: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
     const o = {}; Object.keys(V).forEach((v) => { o[v] = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[V[v]]}</svg>`; });
     return o;
   })();
@@ -5241,7 +5257,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       main.innerHTML = `<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--info)">Banco novo</span><h2>Preparando a Central</h2><p>${DB.admin === true ? 'Criando a configuração inicial… se esta tela não sumir em alguns segundos, recarregue a página.' : 'A configuração inicial ainda não foi criada. Peça a um administrador para abrir a Central uma vez.'}</p></div></div>`;
       return;
     }
-    document.body.classList.toggle('tabmode', S.view === 'rnctab' || S.view === 'riftab' || S.view === 'rirtab' || (S.view === 'manual' && tbOnly()));
+    document.body.classList.toggle('tabmode', S.view === 'rnctab' || S.view === 'riftab' || S.view === 'rirtab' || ((S.view === 'manual' || S.view === 'mapa3d') && tbOnly()));
     VIEWS[S.view](main);
     const bn = BANNER_VIEWS.includes(S.view) ? rncBanner() : ''; if (bn) main.insertAdjacentHTML('afterbegin', bn);
     hideInvisible(main);
@@ -8323,6 +8339,25 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       stats: () => { const m = new Map(); S.model.rnc.concat(S.model.rncc || []).forEach((x) => { const k = E.key(x.cliente); if (!k) return; const o = m.get(k) || { a: 0 }; o.a++; m.set(k, o); }); return m; },
       cols: [['RNCs', (o) => o.a]] }
   };
+  /* ---------- código de cadastro, CNPJ e tipo do fornecedor ---------- */
+  const ENT_PREF = { forn: 'F', cli: 'C' };
+  const FORN_TIPOS = [['mp', 'Matéria-prima'], ['serv', 'Serviço'], ['lab', 'Laboratório']];
+  const tipoNome = (t) => (FORN_TIPOS.find(([k]) => k === t) || [])[1] || '';
+  /* texto da planilha → tipo ('' = vazio, null = não reconhecido) */
+  const tipoDe = (txt) => { const k = E.key(txt).replace(/[^a-z]/g, ''); if (!k) return ''; if (/^(mp|mat)/.test(k)) return 'mp'; if (/^serv/.test(k)) return 'serv'; if (/^lab/.test(k)) return 'lab'; return null; };
+  const cnpjRaw = (v) => String(v || '').toUpperCase().replace(/[^0-9A-Z]/g, '');
+  /* 00.000.000/0000-00 enquanto digita; aceita o CNPJ novo da Receita, com letras nas 12 primeiras posições */
+  function cnpjFmt(v) { const x = cnpjRaw(v).slice(0, 14); let o = x.slice(0, 2); if (x.length > 2) o += '.' + x.slice(2, 5); if (x.length > 5) o += '.' + x.slice(5, 8); if (x.length > 8) o += '/' + x.slice(8, 12); if (x.length > 12) o += '-' + x.slice(12, 14); return o; }
+  /* dígitos verificadores (no CNPJ com letras, cada caractere vale o código dele menos 48, regra da Receita) */
+  function cnpjOk(v) {
+    const x = cnpjRaw(v); if (!/^[0-9A-Z]{12}[0-9]{2}$/.test(x) || /^(.)\1{13}$/.test(x)) return false;
+    const P = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+    const dv = (n) => { const w = P.slice(13 - n); let t = 0; for (let i = 0; i < n; i++) t += (x.charCodeAt(i) - 48) * w[i]; const r = t % 11; return r < 2 ? 0 : 11 - r; };
+    return dv(12) === +x[12] && dv(13) === +x[13];
+  }
+  /* CNPJ vindo do Excel como número perde os zeros da frente: devolve os 14 dígitos */
+  const cnpjPlan = (v) => { const x = cnpjRaw(v); return /^\d{11,13}$/.test(x) ? x.padStart(14, '0') : x; };
+  const entCodNum = (c) => { const m = /^[A-Z]-(\d+)$/.exec(String(c || '')); return m ? +m[1] : 0; };
   const entInfo = (kind, nome) => (S.model.cfg[ENT[kind].info] || []).find((o) => E.key(o.nome) === E.key(nome)) || null;
   /* ---------- identidade: cada ficha tem um id fixo e apelidos (outras grafias, ex.: como vem na NF) ----------
      Os registros guardam o nome e o id (fornId / cliId). Renomear a ficha atualiza o nome nos registros,
@@ -8370,26 +8405,29 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const info = new Map((c[D.info] || []).map((o) => [E.key(o.nome), o])), st = D.stats();
     const nwBtn = ro ? '' : `<button class="btn" type="button" id="ei-${kind}">Importar Excel</button><button class="btn primary" type="button" id="en-${kind}">${esc(D.novo)}</button>`;
     host.innerHTML = `<p class="use" style="margin:0 0 10px">Os mesmos ${D.plural} valem para todos os módulos. ${kind === 'forn' ? 'O e-mail daqui é usado na cobrança de certificados (Alertas › lotes sem certificado).' : 'O e-mail daqui é usado no envio da RND.'} Quem fica inativo some das listas de escolha, mas continua nos registros antigos.</p>
-      <div class="filters" style="margin-bottom:8px"><label class="field"><span>Buscar</span><input id="eq-${kind}" type="search" placeholder="nome, e-mail ou contato…" value="${esc(f.q || '')}"></label>
+      <div class="filters" style="margin-bottom:8px"><label class="field"><span>Buscar</span><input id="eq-${kind}" type="search" placeholder="nome, código, CNPJ, e-mail ou contato…" value="${esc(f.q || '')}"></label>
+        ${kind === 'forn' ? `<label class="field"><span>Tipo</span><select id="et-${kind}"><option value="">Todos</option>${FORN_TIPOS.map(([k, l]) => `<option value="${k}" ${f.tp === k ? 'selected' : ''}>${l}</option>`).join('')}<option value="sem" ${f.tp === 'sem' ? 'selected' : ''}>Sem tipo</option></select></label>` : ''}
         <label class="field"><span>E-mail</span><select id="em-${kind}"><option value="">Todos</option><option value="com" ${f.em === 'com' ? 'selected' : ''}>Com e-mail</option><option value="sem" ${f.em === 'sem' ? 'selected' : ''}>Sem e-mail</option></select></label>
         <label class="field"><span>Situação</span><select id="es-${kind}"><option value="ativos" ${f.sit === 'ativos' ? 'selected' : ''}>Ativos</option><option value="inativos" ${f.sit === 'inativos' ? 'selected' : ''}>Inativos</option><option value="todos" ${f.sit === 'todos' ? 'selected' : ''}>Todos</option></select></label>
         <div class="entbtns">${nwBtn}<button class="btn" type="button" id="ex-${kind}">Exportar (.xlsx)</button></div></div>
       <div id="el-${kind}"></div>`;
     const draw = () => {
-      const q = E.key(f.q || '');
-      const rows = names.map((n) => ({ nome: n, i: info.get(E.key(n)) || {}, s: st.get(E.key(n)) || {} })).filter((r) => (f.sit === 'todos' || (f.sit === 'inativos' ? r.i.inativo : !r.i.inativo)) && (!f.em || (f.em === 'com' ? !!r.i.email : !r.i.email)) && (!q || E.key(r.nome).includes(q) || E.key(r.i.email || '').includes(q) || E.key(r.i.contato || '').includes(q)));
-      const sem = rows.filter((r) => !r.i.email).length, dash = '<span class="muted">—</span>';
-      $('#el-' + kind).innerHTML = `<p style="margin:0 0 6px;font-size:12.5px;color:var(--ink-2)"><b>${NF.format(rows.length)}</b> ${rows.length === 1 ? D.one : D.plural}${sem ? ` · <b style="color:var(--warn)">${NF.format(sem)} sem e-mail</b>` : ''} · clique no nome para ${ro ? 'ver' : 'editar'}</p>
-        <div class="twrap twin"><table class="t pft"><thead><tr><th>${esc(D.Um)}</th><th>${esc(D.mailCol)}</th><th>Contato</th>${D.cols.map(([l]) => `<th class="r">${esc(l)}</th>`).join('')}<th>Situação</th></tr></thead><tbody>${rows.slice(0, 600).map((r) => `<tr class="click" data-ent="${esc(r.nome)}" tabindex="0"><td><b>${esc(r.nome)}</b></td><td>${r.i.email ? esc(r.i.email) : '<span class="chip warn">sem e-mail</span>'}</td><td>${r.i.contato ? esc(r.i.contato) : dash}</td>${D.cols.map(([, fn, cl]) => { const v = fn(r.s) || 0; return `<td class="r">${v ? (cl ? `<span class="chip ${cl}">${NF.format(v)}</span>` : NF.format(v)) : dash}</td>`; }).join('')}<td>${r.i.inativo ? '<span class="chip off">Inativo</span>' : '<span class="chip ok">Ativo</span>'}</td></tr>`).join('') || `<tr><td colspan="${4 + D.cols.length}" class="muted">Nenhum ${D.one} com esses filtros.</td></tr>`}</tbody></table></div>${rows.length > 600 ? `<p class="muted" style="font-size:12px">Mostrando 600 de ${NF.format(rows.length)}. Use a busca para achar os outros.</p>` : ''}`;
+      const q = E.key(f.q || ''), qa = cnpjRaw(f.q || '');
+      const rows = names.map((n) => ({ nome: n, i: info.get(E.key(n)) || {}, s: st.get(E.key(n)) || {} })).filter((r) => (f.sit === 'todos' || (f.sit === 'inativos' ? r.i.inativo : !r.i.inativo)) && (!f.em || (f.em === 'com' ? !!r.i.email : !r.i.email)) && (kind !== 'forn' || !f.tp || (f.tp === 'sem' ? !r.i.tipo : r.i.tipo === f.tp))
+        && (!q || E.key(r.nome).includes(q) || E.key(r.i.email || '').includes(q) || E.key(r.i.contato || '').includes(q) || E.key(r.i.cod || '').includes(q) || (qa.length >= 3 && cnpjRaw(r.i.cnpj).includes(qa))));
+      const sem = rows.filter((r) => !r.i.email).length, semCj = rows.filter((r) => !r.i.cnpj && !r.i.estrangeiro).length, semTp = kind === 'forn' ? rows.filter((r) => !r.i.tipo).length : 0, dash = '<span class="muted">—</span>';
+      $('#el-' + kind).innerHTML = `<p style="margin:0 0 6px;font-size:12.5px;color:var(--ink-2)"><b>${NF.format(rows.length)}</b> ${rows.length === 1 ? D.one : D.plural}${sem ? ` · <b style="color:var(--warn)">${NF.format(sem)} sem e-mail</b>` : ''}${semCj ? ` · <b style="color:var(--warn)">${NF.format(semCj)} sem CNPJ</b>` : ''}${semTp ? ` · <b style="color:var(--warn)">${NF.format(semTp)} sem tipo</b>` : ''} · clique no nome para ${ro ? 'ver' : 'editar'}</p>
+        <div class="twrap twin"><table class="t pft"><thead><tr><th>Código</th><th>${esc(D.Um)}</th><th>CNPJ</th>${kind === 'forn' ? '<th>Tipo</th>' : ''}<th>${esc(D.mailCol)}</th><th>Contato</th>${D.cols.map(([l]) => `<th class="r">${esc(l)}</th>`).join('')}<th>Situação</th></tr></thead><tbody>${rows.slice(0, 600).map((r) => `<tr class="click" data-ent="${esc(r.nome)}" tabindex="0"><td class="mono">${r.i.cod ? esc(r.i.cod) : dash}</td><td><b>${esc(r.nome)}</b></td><td class="mono">${r.i.cnpj ? esc(r.i.cnpj) : r.i.estrangeiro ? '<span class="chip info">estrangeiro</span>' : dash}</td>${kind === 'forn' ? `<td>${r.i.tipo ? esc(tipoNome(r.i.tipo)) : '<span class="chip warn">sem tipo</span>'}</td>` : ''}<td>${r.i.email ? esc(r.i.email) : '<span class="chip warn">sem e-mail</span>'}</td><td>${r.i.contato ? esc(r.i.contato) : dash}</td>${D.cols.map(([, fn, cl]) => { const v = fn(r.s) || 0; return `<td class="r">${v ? (cl ? `<span class="chip ${cl}">${NF.format(v)}</span>` : NF.format(v)) : dash}</td>`; }).join('')}<td>${r.i.inativo ? '<span class="chip off">Inativo</span>' : '<span class="chip ok">Ativo</span>'}</td></tr>`).join('') || `<tr><td colspan="${(kind === 'forn' ? 7 : 6) + D.cols.length}" class="muted">Nenhum ${D.one} com esses filtros.</td></tr>`}</tbody></table></div>${rows.length > 600 ? `<p class="muted" style="font-size:12px">Mostrando 600 de ${NF.format(rows.length)}. Use a busca para achar os outros.</p>` : ''}`;
       $$('#el-' + kind + ' [data-ent]').forEach((tr) => { const open = () => entDrawer(kind, tr.dataset.ent, ro); tr.onclick = open; tr.onkeydown = (e) => { if (e.key === 'Enter') open(); }; });
       S['entRows' + kind] = rows;
     };
     $('#eq-' + kind).addEventListener('input', (e) => { f.q = e.target.value; draw(); });
     $('#em-' + kind).onchange = (e) => { f.em = e.target.value; draw(); };
     $('#es-' + kind).onchange = (e) => { f.sit = e.target.value; draw(); };
+    const tsel = $('#et-' + kind); if (tsel) tsel.onchange = (e) => { f.tp = e.target.value; draw(); };
     const nb = $('#en-' + kind); if (nb) nb.onclick = () => entDrawer(kind, null, ro);
     const ib = $('#ei-' + kind); if (ib) ib.onclick = () => entImport(kind);
-    $('#ex-' + kind).onclick = () => exportRows(D.plural.charAt(0).toUpperCase() + D.plural.slice(1), [{ k: 'nome', l: D.Um, w: 34 }, { k: 'e', l: 'E-mail', w: 36, x: (r) => r.i.email || '' }, { k: 'c', l: 'Contato', w: 22, x: (r) => r.i.contato || '' }, { k: 't', l: 'Telefone', w: 16, x: (r) => r.i.tel || '' }, { k: 'o', l: 'Observação', w: 30, x: (r) => r.i.obs || '' }, { k: 's', l: 'Situação', x: (r) => (r.i.inativo ? 'Inativo' : 'Ativo') }], S['entRows' + kind] || []);
+    $('#ex-' + kind).onclick = () => exportRows(D.plural.charAt(0).toUpperCase() + D.plural.slice(1), [{ k: 'cod', l: 'Código', w: 10, x: (r) => r.i.cod || '' }, { k: 'nome', l: D.Um, w: 34 }, { k: 'cj', l: 'CNPJ', w: 21, x: (r) => r.i.cnpj || (r.i.estrangeiro ? 'Estrangeiro' : '') }].concat(kind === 'forn' ? [{ k: 'tp', l: 'Tipo', w: 15, x: (r) => tipoNome(r.i.tipo) }] : []).concat([{ k: 'e', l: 'E-mail', w: 36, x: (r) => r.i.email || '' }, { k: 'c', l: 'Contato', w: 22, x: (r) => r.i.contato || '' }, { k: 't', l: 'Telefone', w: 16, x: (r) => r.i.tel || '' }, { k: 'o', l: 'Observação', w: 30, x: (r) => r.i.obs || '' }, { k: 's', l: 'Situação', x: (r) => (r.i.inativo ? 'Inativo' : 'Ativo') }]), S['entRows' + kind] || []);
     draw();
   }
   /* grava a lista de nomes e as fichas juntas (o que estiver na tela de outra pessoa não se perde: lê o atual antes) */
@@ -8405,19 +8443,41 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     r.names.forEach((n) => { if (!r.info.some((o) => E.key(o.nome) === E.key(n))) r.info.push({ nome: n }); });
     r.info = r.info.filter((o) => r.names.some((n) => E.key(n) === E.key(o.nome)));
     r.info.forEach((o) => { if (!o.id) o.id = entNovoId(kind); if (Array.isArray(o.apelidos)) o.apelidos = o.apelidos.filter((a) => E.filled(a) && E.key(a) !== E.key(o.nome)); if (o.apelidos && !o.apelidos.length) delete o.apelidos; });
+    /* código de cadastro (F-0001 / C-0001): gerado pela Central na ordem de cadastro e não muda depois */
+    const pf = ENT_PREF[kind] + '-', usados = new Set(); let mx = 0;
+    r.info.forEach((o) => { if (o.cod && String(o.cod).startsWith(pf) && entCodNum(o.cod) && !usados.has(o.cod)) { usados.add(o.cod); mx = Math.max(mx, entCodNum(o.cod)); } else delete o.cod; });
+    r.info.filter((o) => !o.cod).sort((p2, q2) => String(p2.nome).localeCompare(String(q2.nome), 'pt-BR')).forEach((o) => { mx++; o.cod = pf + String(mx).padStart(4, '0'); });
     const up = { listas: { [D.list]: r.names }, [D.key]: r.info.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')) };
     S.entUlt = r.info;
     await DB.db.doc('cfg/main').update(up);
     logEntry('GERAL', 'cfg', 'alterado', label, null);
     return true;
   }
+  /* fichas antigas ganham código uma vez (só quem administra; nunca no "Ver como") */
+  async function entCodigos() {
+    if (S.codRun || !S.model || !DB.db || !DB.cfg || PREVIEW() || !(DB.owner || DB.admin === true)) return;
+    S.codRun = true;
+    for (const kind of ['forn', 'cli']) {
+      const D = ENT[kind], L = S.model.cfg[D.info] || [];
+      const falta = (S.model.cfg[D.list] || []).some((n) => { const o = L.find((x) => E.key(x.nome) === E.key(n)); return !o || !o.cod; });
+      if (!falta) continue;
+      try { await saveEnt(kind, (n, i) => ({ names: n, info: i }), `Códigos de cadastro criados para os ${D.plural} (${ENT_PREF[kind]}-0001 em diante)`); }
+      catch (e) { S.codRun = false; /* tenta de novo na próxima carga */ }
+    }
+  }
   function entDrawer(kind, nome, ro) {
     const D = ENT[kind], novo = !nome, i = (nome && entInfo(kind, nome)) || {}, st = nome ? (D.stats().get(E.key(nome)) || {}) : {};
     const uso = nome ? D.uso.reduce((n, pr) => n + usageOf([pr], nome), 0) : 0;
     const dis = ro ? 'disabled' : '';
+    /* tipo do fornecedor: sem tipo ainda, sugere pelo que já foi registrado (lotes = matéria-prima; serviços = serviço) */
+    const sug = kind === 'forn' && !i.tipo && nome ? (st.a ? 'mp' : usageOf([['SERV', 'forn']], nome) ? 'serv' : '') : '', tp = i.tipo || sug;
     openDrawer(novo ? D.novo.replace('+ ', '') : nome, D.Um, `<div class="pfform">
       ${nome ? `<p class="muted" style="margin:0;font-size:12.5px">${D.cols.map(([l, fn]) => `${esc(l)}: <b>${NF.format(fn(st) || 0)}</b>`).join(' · ')}</p>` : ''}
+      <div class="fgrid cm-grid"><div class="field"><span>Código</span><div class="entcod">${i.cod ? esc(i.cod) : '<span class="muted">gerado ao cadastrar</span>'}</div></div>
+        <label class="field"><span>CNPJ</span><input id="ed-cnpj" value="${esc(i.cnpj || '')}" placeholder="00.000.000/0000-00" maxlength="18" autocomplete="off" autocapitalize="characters" spellcheck="false" inputmode="text" ${ro || i.estrangeiro ? 'disabled' : ''}><small class="cjm" id="ed-cnpj-m"></small></label></div>
+      <label class="check"><input type="checkbox" id="ed-estr" ${i.estrangeiro ? 'checked' : ''} ${dis}> Sem CNPJ (empresa estrangeira)</label>
       <label class="field"><span>Nome <b>*</b></span><input id="ed-nome" value="${esc(nome || '')}" autocomplete="off" ${dis}></label>
+      ${kind === 'forn' ? `<div class="field"><span>Tipo <b>*</b>${sug ? ' <small class="muted">· sugerido pelos registros</small>' : ''}</span><div class="seg" id="ed-tipo">${FORN_TIPOS.map(([k, l]) => `<button type="button" data-t="${k}" aria-pressed="${tp === k}" ${dis}>${l}</button>`).join('')}</div></div>` : ''}
       <label class="field"><span>${esc(D.mail)}</span><input id="ed-email" value="${esc(i.email || '')}" placeholder="qualidade@empresa.com.br, vendas@empresa.com.br" autocomplete="off" ${dis}></label>
       <div class="fgrid cm-grid"><label class="field"><span>Contato</span><input id="ed-contato" value="${esc(i.contato || '')}" placeholder="nome da pessoa" autocomplete="off" ${dis}></label><label class="field"><span>Telefone</span><input id="ed-tel" value="${esc(i.tel || '')}" placeholder="(11) 0000-0000" autocomplete="off" ${dis}></label></div>
       <label class="field"><span>Apelidos (outras grafias)</span><input id="ed-apel" value="${esc((i.apelidos || []).join(', '))}" placeholder="ex.: como vem na nota fiscal, nome antigo" autocomplete="off" ${dis}></label>
@@ -8428,11 +8488,24 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     </div>`, D.cor);
     if (ro) return;
     $$('#ed-sit [data-s]').forEach((b) => { b.onclick = () => $$('#ed-sit [data-s]').forEach((x) => x.setAttribute('aria-pressed', x === b)); });
+    $$('#ed-tipo [data-t]').forEach((b) => { b.onclick = () => $$('#ed-tipo [data-t]').forEach((x) => x.setAttribute('aria-pressed', x === b)); });
+    const cjIn = $('#ed-cnpj'), cjM = $('#ed-cnpj-m');
+    const cjMsg = () => { const v = cjIn.value, n = cnpjRaw(v).length; cjM.className = 'cjm'; cjM.textContent = '';
+      if (cjIn.disabled || !n) return; if (n < 14) { cjM.textContent = `${n} de 14`; return; }
+      if (cnpjOk(v)) { cjM.textContent = 'CNPJ válido'; cjM.classList.add('ok'); } else { cjM.textContent = 'CNPJ inválido: confira os números'; cjM.classList.add('bad'); } };
+    cjIn.addEventListener('input', () => { const a = cjIn.value, f2 = cnpjFmt(a); if (f2 !== a) cjIn.value = f2; cjMsg(); });
+    $('#ed-estr').onchange = (e) => { cjIn.disabled = e.target.checked; if (e.target.checked) cjIn.value = ''; cjMsg(); };
+    cjMsg();
     $('#ed-save').onclick = async () => {
       const nn = upTxt($('#ed-nome').value), email = normMails($('#ed-email').value);
+      const estr = $('#ed-estr').checked, cj = estr ? '' : cnpjFmt(cjIn.value);
+      if (cj && !cnpjOk(cj)) { toast('CNPJ inválido: confira os números.', true); cjIn.focus(); return; }
+      if (cj) { const dup = (S.model.cfg[D.info] || []).find((o) => E.key(o.nome) !== E.key(nome || '') && o.cnpj && cnpjRaw(o.cnpj) === cnpjRaw(cj)); if (dup) { toast(`Esse CNPJ já está na ficha de ${dup.nome}${dup.cod ? ' (' + dup.cod + ')' : ''}. Se for a mesma empresa, use aquela ficha e ponha este nome como apelido.`, true); cjIn.focus(); return; } }
+      const tipo = kind === 'forn' ? (($('#ed-tipo [aria-pressed="true"]') || {}).dataset || {}).t || '' : '';
+      if (kind === 'forn' && !tipo) { toast('Escolha o tipo do fornecedor: matéria-prima, serviço ou laboratório.', true); return; }
       if (!nn) { toast('Informe o nome.', true); $('#ed-nome').focus(); return; }
       if (email && !okMails(email)) { toast('E-mail inválido. Para mais de um, separe com vírgula.', true); $('#ed-email').focus(); return; }
-      const ni = { nome: nn }; if (email) ni.email = email;
+      const ni = { nome: nn }; if (email) ni.email = email; if (cj) ni.cnpj = cj; if (estr) ni.estrangeiro = true; if (tipo) ni.tipo = tipo;
       const apel = $('#ed-apel').value.split(/\s*[;,]\s*/).map((s) => upTxt(s)).filter(Boolean);
       if (!novo && E.key(nn) !== E.key(nome)) apel.push(nome);
       if (apel.length) ni.apelidos = apel.filter((a, j) => apel.findIndex((b) => E.key(b) === E.key(a)) === j);
@@ -8447,12 +8520,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
           if (names.some((x, j) => j !== iN && E.key(x) === E.key(nn))) { toast(`Já existe um ${D.one} com esse nome.`, true); return null; }
           if (iN >= 0) names[iN] = nn; else names.push(nn);
           const ii = info.findIndex((o) => E.key(o.nome) === E.key(nome || nn));
-          if (ii >= 0) { ni.id = info[ii].id; info[ii] = ni; } else info.push(ni);
+          if (ii >= 0) { ni.id = info[ii].id; if (info[ii].cod) ni.cod = info[ii].cod; info[ii] = ni; } else info.push(ni);
           return { names, info };
         }, `${D.Um} ${novo ? 'cadastrado' : 'alterado'}: ${nn}${ni.inativo ? ' (inativo)' : ''}`);
         if (!ok) { btn.disabled = false; btn.textContent = novo ? 'Cadastrar' : 'Salvar'; return; }
-        closeLayer(); toast(`${nn} ${novo ? 'cadastrado' : 'salvo'}.`);
         const fic = (S.entUlt || []).find((o) => E.key(o.nome) === E.key(nn));
+        closeLayer(); toast(`${nn} ${novo ? 'cadastrado' : 'salvo'}${fic && fic.cod ? ' · código ' + fic.cod : ''}.`);
         if (fic) { try { const n = await entPropagate(kind, fic, nome ? [nome] : []); if (n) toast(`${NF.format(n)} registro(s) ligados a ${nn}.`); } catch (e) { toast('Ficha salva, mas os registros não foram atualizados: ' + ((e && (e.message || e.code)) || e), true); } }
         await sleep(250); S.stale = false; render();
       } catch (err) { toast(err && (err.code === 'invalid_argument' || err.code === 'permission_denied') ? TXT.cfgDenied : 'Não foi possível salvar: ' + ((err && (err.message || err.code)) || err), true); btn.disabled = false; btn.textContent = novo ? 'Cadastrar' : 'Salvar'; }
@@ -8469,13 +8542,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* importação por Excel: mostra o que muda antes de gravar; nada é apagado */
   function entImport(kind) {
     const D = ENT[kind];
-    openModal(`Importar ${D.plural} (Excel)`, `<p style="margin:0">1. Baixe o modelo · 2. Preencha (Nome, E-mail, Contato, Telefone, Observação) · 3. Envie o arquivo. Nomes iguais (sem diferença de acento ou maiúscula) são atualizados; quem não está na planilha fica como está.</p>
+    openModal(`Importar ${D.plural} (Excel)`, `<p style="margin:0">1. Baixe o modelo · 2. Preencha (Nome, CNPJ${kind === 'forn' ? ', Tipo' : ''}, E-mail, Contato, Telefone, Observação) · 3. Envie o arquivo. Nomes iguais (sem diferença de acento ou maiúscula) são atualizados; quem não está na planilha fica como está. O código é só para conferência: a Central gera sozinha. Empresa sem CNPJ: escreva <b>Estrangeiro</b> na coluna CNPJ.${kind === 'forn' ? ' Tipo: <b>Matéria-prima</b>, <b>Serviço</b> ou <b>Laboratório</b>.' : ''}</p>
       <div class="formfoot"><button class="btn" type="button" id="im-model">Baixar modelo (.xlsx)</button><input type="file" id="im-file" accept=".xlsx,.xls,.csv" hidden><button class="btn primary" type="button" id="im-pick">Escolher arquivo</button></div>
       <div id="im-res"></div>`);
     $('#im-model').onclick = () => {
       const c = S.model.cfg, info = new Map((c[D.info] || []).map((o) => [E.key(o.nome), o]));
-      const aoa = [[D.Um, 'E-mail', 'Contato', 'Telefone', 'Observação']].concat((c[D.list] || []).slice().sort((a, b) => String(a).localeCompare(String(b), 'pt-BR')).map((n) => { const o = info.get(E.key(n)) || {}; return [n, o.email || '', o.contato || '', o.tel || '', o.obs || '']; }));
-      const ws = XLSX.utils.aoa_to_sheet(aoa); ws['!cols'] = [{ wch: 36 }, { wch: 40 }, { wch: 22 }, { wch: 16 }, { wch: 30 }];
+      const fo = kind === 'forn';
+      const aoa = [['Código', D.Um, 'CNPJ'].concat(fo ? ['Tipo'] : [], ['E-mail', 'Contato', 'Telefone', 'Observação'])].concat((c[D.list] || []).slice().sort((a, b) => String(a).localeCompare(String(b), 'pt-BR')).map((n) => { const o = info.get(E.key(n)) || {}; return [o.cod || '', n, o.cnpj || (o.estrangeiro ? 'Estrangeiro' : '')].concat(fo ? [tipoNome(o.tipo)] : [], [o.email || '', o.contato || '', o.tel || '', o.obs || '']); }));
+      const ws = XLSX.utils.aoa_to_sheet(aoa); ws['!cols'] = [{ wch: 10 }, { wch: 36 }, { wch: 21 }].concat(fo ? [{ wch: 15 }] : [], [{ wch: 40 }, { wch: 22 }, { wch: 16 }, { wch: 30 }]);
       const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, D.Um);
       saveFile(`Modelo_${D.plural}_${today8()}.xlsx`, new Blob([XLSX.write(wb, { bookType: 'xlsx', type: 'array' })], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
     };
@@ -8487,18 +8561,32 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       catch (e) { toast('Não consegui ler o arquivo. Use o modelo em Excel.', true); return; }
       const hd = (rows[0] || []).map((h) => E.key(h));
       const col = (...ks) => hd.findIndex((h) => ks.some((k) => h === k || h.startsWith(k)));
-      const cN = col(E.key(D.Um), 'nome'), cE = col('email', 'e-mail', 'e mail'), cC = col('contato'), cT = col('telefone', 'fone'), cO = col('observacao', 'obs');
+      const cN = col(E.key(D.Um), 'nome'), cE = col('email', 'e-mail', 'e mail'), cC = col('contato'), cT = col('telefone', 'fone'), cO = col('observacao', 'obs'), cJ = col('cnpj'), cTp = kind === 'forn' ? col('tipo') : -1;
       if (cN < 0) { $('#im-res').innerHTML = `<div class="warnbox crit">Não achei a coluna “${esc(D.Um)}” (ou “Nome”) na primeira linha. Use o modelo.</div>`; return; }
       const c = S.model.cfg, names = (c[D.list] || []).slice(), info = new Map((c[D.info] || []).map((o) => [E.key(o.nome), Object.assign({}, o)]));
-      const novos = [], muda = [], prob = [], seen = new Set();
+      const novos = [], muda = [], prob = [], seen = new Set(), seenCj = new Map();
       rows.slice(1).forEach((r, ix) => {
         const g = (ci) => (ci >= 0 ? String(r[ci] == null ? '' : r[ci]).trim() : '');
         const nm = upTxt(g(cN)); if (!nm) return;
         const k = E.key(nm); if (seen.has(k)) { prob.push([`linha ${ix + 2}`, 'nome repetido na planilha: ' + nm]); return; } seen.add(k);
         const em = normMails(g(cE)); if (em && !okMails(em)) { prob.push([`linha ${ix + 2}`, 'e-mail inválido: ' + em]); return; }
+        const cjT = g(cJ); let cj = '', estr = false;
+        if (cjT) {
+          if (/estrang|exterior|semcnpj|^ex$/.test(E.key(cjT).replace(/[^a-z]/g, ''))) estr = true;
+          else { cj = cnpjFmt(cnpjPlan(cjT)); if (!cnpjOk(cj)) { prob.push([`linha ${ix + 2}`, 'CNPJ inválido: ' + cjT]); return; } }
+        }
+        if (cj) {
+          const rw = cnpjRaw(cj), outra = (c[D.info] || []).find((x) => E.key(x.nome) !== k && x.cnpj && cnpjRaw(x.cnpj) === rw);
+          if (outra) { prob.push([`linha ${ix + 2}`, `CNPJ ${cj} já está na ficha de ${outra.nome}`]); return; }
+          if (seenCj.has(rw)) { prob.push([`linha ${ix + 2}`, `CNPJ ${cj} repetido na planilha (${seenCj.get(rw)})`]); return; }
+          seenCj.set(rw, nm);
+        }
+        const tp = cTp >= 0 ? tipoDe(g(cTp)) : ''; if (tp === null) { prob.push([`linha ${ix + 2}`, 'tipo não reconhecido: ' + g(cTp) + ' (use Matéria-prima, Serviço ou Laboratório)']); return; }
         const cur = info.get(k), base = names.find((x) => E.key(x) === k);
         const o = Object.assign({ nome: base || nm }, cur || {}), ch = [];
-        [['email', em, 'e-mail'], ['contato', g(cC), 'contato'], ['tel', g(cT), 'telefone'], ['obs', g(cO), 'observação']].forEach(([f, v, l]) => { if (v && v !== (o[f] || '')) { o[f] = v; ch.push(l); } });
+        [['email', em, 'e-mail'], ['cnpj', cj, 'CNPJ'], ['tipo', tp, 'tipo'], ['contato', g(cC), 'contato'], ['tel', g(cT), 'telefone'], ['obs', g(cO), 'observação']].forEach(([f, v, l]) => { if (v && v !== (o[f] || '')) { o[f] = v; ch.push(l); } });
+        if (cj && o.estrangeiro) { delete o.estrangeiro; }
+        if (estr && !o.estrangeiro) { o.estrangeiro = true; delete o.cnpj; ch.push('sem CNPJ (estrangeiro)'); }
         if (!base) novos.push(o); else if (ch.length) muda.push([o, ch]);
       });
       S.entImp = { kind, novos, muda };
@@ -13455,7 +13543,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const V = { A: ['Fornecedor bom', `Classe A · nota ${cf.a} ou mais`], B: ['Precisa de atenção', `Classe B · nota de ${cf.b} a ${cf.a}`], C: ['Abaixo do esperado', `Classe C · nota abaixo de ${cf.b}`] }[o.cls] || ['Poucos dados', `Menos de ${cf.min} lote(s) no período · ainda não classifica`];
     const lost = o.iqf == null ? null : Math.max(0, 100 - o.iqf);
     const rows = iqCrits(o, cf).sort((p, q) => (q.lost == null ? -1 : q.lost) - (p.lost == null ? -1 : p.lost)).map((x) => `<div class="r"><span class="t">${esc(x.l)}<small>peso ${x.peso}</small></span><span class="p ${!x.conta ? 'n' : x.lost < 0.05 ? 'z' : 'm'}">${!x.conta ? 'não conta' : x.lost < 0.05 ? 'sem perda' : '−' + NF1.format(x.lost) + ' pts'}</span><span class="d">${esc(x.d)}${x.semDado ? ' — sem dado, fica fora da conta' : !x.conta ? ' — peso 0, fica fora da conta' : ''}</span></div>`).join('');
-    return `<div class="iqvtop">${iqRing(o)}<div class="iqverd"><div class="iqvt"><span class="iqcls" style="--k:${k}">${o.cls || '–'}</span><span class="big" style="color:${k}">${V[0]}</span></div><span class="why">${esc(V[1])}<br>${esc(P.l)} · ${NF.format(o.lotes)} lote(s) recebido(s)</span>${fi.sit ? `<span class="why">Situação: <b>${esc(fi.sit)}</b></span>` : ''}</div></div>
+    return `<div class="iqvtop">${iqRing(o)}<div class="iqverd"><div class="iqvt"><span class="iqcls" style="--k:${k}">${o.cls || '–'}</span><span class="big" style="color:${k}">${V[0]}</span></div><span class="why">${esc(V[1])}<br>${esc(P.l)} · ${NF.format(o.lotes)} lote(s) recebido(s)</span>${(() => { const e = entInfo('forn', o.nome) || {}, pz = [e.cod, e.cnpj ? 'CNPJ ' + e.cnpj : e.estrangeiro ? 'estrangeiro' : '', tipoNome(e.tipo)].filter(Boolean); return pz.length ? `<span class="why mono">${esc(pz.join(' · '))}</span>` : ''; })()}${fi.sit ? `<span class="why">Situação: <b>${esc(fi.sit)}</b></span>` : ''}</div></div>
       ${lost == null ? '' : `<div class="iqv"><h3 class="iqvh">De 100 pontos, onde ele perdeu</h3><div class="iqstack" style="--k:${k}"><i class="kept" style="width:${o.iqf}%"></i>${lost > 0 ? `<i class="lost" style="width:${lost}%"></i>` : ''}</div><div class="iqsl"><span>ficou com <b style="color:${k}">${NF1.format(o.iqf)}</b></span><span>perdeu <b style="color:var(--crit)">${NF1.format(lost)}</b></span></div></div>`}
       <div class="iqlost">${rows}</div>`;
   }
@@ -13538,7 +13626,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       .sc{display:flex;gap:14px;align-items:center;margin:8px 0 12px}.big{font:700 30pt Arial;border:2px solid #111;border-radius:6px;padding:4px 14px}h2{font-size:10.5pt;background:#eee;padding:3px 6px;margin:12px 0 5px;text-transform:uppercase}
       table{border-collapse:collapse;width:100%}td,th{border:1px solid #aaa;padding:4px 6px;text-align:left}th{background:#f3f3f3}.r{text-align:right}p{margin:4px 0}</style></head><body>
       <div class="hd"><div><h1>Relatório de desempenho do fornecedor</h1><div class="co">AÇOS VITAL COM. DE TUBOS HIDRÁULICOS EIRELI · Qualidade · qualidade@acosvital.com.br · (11) 4797-2352</div></div>${logo}</div>
-      <p><b>Fornecedor:</b> ${esc(o.nome)} &nbsp; · &nbsp; <b>Período:</b> ${esc(P.l)} &nbsp; · &nbsp; <b>Emitido em:</b> ${fD(S.today)}</p>
+      <p><b>Fornecedor:</b> ${esc(o.nome)}${(() => { const e = entInfo('forn', o.nome) || {}; return (e.cod ? ` (${esc(e.cod)})` : '') + (e.cnpj ? ` &nbsp; · &nbsp; <b>CNPJ:</b> ${esc(e.cnpj)}` : ''); })()} &nbsp; · &nbsp; <b>Período:</b> ${esc(P.l)} &nbsp; · &nbsp; <b>Emitido em:</b> ${fD(S.today)}</p>
       <div class="sc"><span class="big">${v(o.iqf)}</span><div><b>Índice de qualidade do fornecedor (IQF)</b><br>Classe ${o.cls || '— (poucos dados)'} · A ≥ ${cf.a} · B ≥ ${cf.b} · C abaixo de ${cf.b}</div></div>
       <h2>Composição da nota</h2><table><thead><tr><th>Critério</th><th>Como é medido</th><th class="r">Peso</th><th class="r">Nota</th></tr></thead><tbody>${IQ_CRIT.map(([c, l, d]) => `<tr><td>${l}</td><td>${d}</td><td class="r">${cf.pesos[c]}</td><td class="r"><b>${v(o[c])}</b></td></tr>`).join('')}</tbody></table>
       <h2>Fornecimentos no período</h2><table><tbody><tr><td>Lotes recebidos</td><td class="r">${o.lotes}</td><td>Com certificado</td><td class="r">${o.cert}</td></tr><tr><td>Aprovados na inspeção</td><td class="r">${o.aprov}</td><td>Reprovados</td><td class="r">${o.rep}</td></tr><tr><td>Liberados sob concessão</td><td class="r">${o.conc}</td><td>Não conformidades (RNC)</td><td class="r">${o.rnc}</td></tr></tbody></table>
@@ -14156,6 +14244,42 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const manLogo = () => (DB.logo ? `<img src="${DB.logo}" alt="">` : '<b class="mav">AÇOS VITAL</b>');
 
   /* ---------- tela ---------- */
+  /* ---------- Mapa de processos 3D: o galpão em 3D com as etapas (mapa3d.html, aberto dentro da Central) ---------- */
+  /* função sugerida no "Eu sou" do mapa (a pessoa pode trocar lá; a escolha dela fica guardada no aparelho) */
+  function m3Papel() {
+    if (DB.owner || DB.admin === true) return 'todos';
+    if (tbOnly()) return tbTool('rir') ? 'insr' : tbTool('rif') ? 'insu' : 'insr';
+    const ps = (S.model && S.model.cfg.PESSOAS) || [], n = myPessoa();
+    const p = (DB.mePes && ps.find((q) => q.id === DB.mePes)) || (n ? ps.find((q) => E.key(q.nome) === E.key(n)) : null);
+    const f = (p && p.funcoes) || [];
+    return f.includes('conferente') ? 'conf' : f.includes('comprador') ? 'comp' : 'qual';
+  }
+  function m3Size() {
+    const w = $('#m3wrap'); if (!w) return;
+    const top = w.getBoundingClientRect().top + window.scrollY, tk = $('#tk');
+    const tkH = document.body.classList.contains('has-tk') && tk && !tk.hidden ? tk.offsetHeight : 0; /* letreiro fixo embaixo */
+    w.style.height = Math.max(420, Math.round(window.innerHeight - top - tkH - (tbOnly() ? 0 : 18))) + 'px';
+  }
+  addEventListener('resize', () => { if (S.view === 'mapa3d') m3Size(); });
+  VIEWS.mapa3d = (main) => {
+    const src = `mapa3d.html?embed=1&sug=${m3Papel()}`, tab = tbOnly();
+    /* os dados da Central mudam o tempo todo; o 3D não precisa recarregar por isso */
+    const cur = $('#m3fr', main);
+    if (cur && cur.dataset.src === src && !!main.querySelector('.tbw') === tab) {
+      if (tab) { const h = $('.tbhd', main); if (h) h.outerHTML = tbHead('Mapa de processos 3D'); }
+      m3Size(); setTimeout(m3Size, 0); return;
+    }
+    const fr = `<div class="m3wrap" id="m3wrap"><iframe id="m3fr" data-src="${src}" src="${src}" title="Mapa de processos 3D" allow="fullscreen"></iframe></div>`;
+    main.innerHTML = tab
+      ? `<div class="tbw">${tbHead('Mapa de processos 3D')}<div class="m3tb">${fr}</div></div>`
+      : `<div class="view m3view">${head('Mapa de processos 3D', 'O caminho do material no galpão, do recebimento à reclamação do cliente. Toque numa etapa para ver quem faz, onde fica na Central e o passo a passo. Em <b>Eu sou</b>, escolha a sua função para destacar o que é seu.', '<button class="btn" type="button" id="m3-tela">⛶ Tela cheia</button>')}${fr}</div>`;
+    const bt = $('#m3-tela');
+    if (bt) bt.onclick = () => {
+      const w = $('#m3wrap'), solto = () => window.open(src.replace('embed=1&', ''), '_blank', 'noopener');
+      if (w && w.requestFullscreen) w.requestFullscreen().catch(solto); else if (w && w.webkitRequestFullscreen) w.webkitRequestFullscreen(); else solto();
+    };
+    m3Size(); setTimeout(m3Size, 0); /* de novo depois que o letreiro aparece */
+  };
   VIEWS.manual = (main) => {
     const L = manLista(), tab = tbOnly(), adm = manAdm();
     if (!MAN.sel || !L.some((d) => d.id === MAN.sel)) MAN.sel = (L[0] || {}).id || null;
@@ -14299,6 +14423,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (viewOk('rnctab')) L.push(['rnctab', 'RNC', 'Não conformidade', 'abrir RNC pelo tablet ou acompanhar as suas', 'var(--rnc)']);
     if (viewOk('riftab')) L.push(['riftab', 'RIF', 'Inspeção final', 'medir, fotografar e assinar o RIF pelo tablet', 'var(--rif)']);
     if (tbOnly() && viewOk('manual')) L.push(['manual', 'MQ', 'Manual', 'como fazer: instruções das suas ferramentas', 'var(--geral)']);
+    if (tbOnly() && viewOk('mapa3d')) L.push(['mapa3d', '3D', 'Mapa de processos 3D', 'o caminho do material no galpão, etapa por etapa', 'var(--geral)']);
     if (!tbOnly()) L.push(['central', 'CQ', 'Central completa', 'menu com todos os módulos liberados para você', 'var(--geral)']);
     return L;
   }
