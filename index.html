@@ -120,7 +120,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .btn.ghost { border-color: transparent; background: transparent; }
 .btn.ghost:hover { background: var(--sunken); }
 .btn[disabled] { opacity: .45; cursor: not-allowed; }
-.field { display: grid; gap: 4px; min-width: 0; }
+.field { display: grid; gap: 4px; min-width: 0; align-content: start; }
+/* diâmetro com duas medidas: [medida] x [medida] [+] */
+.dimrow { display: flex; align-items: center; gap: 6px; min-width: 0; } .dimrow input { flex: 1 1 0; min-width: 0; }
+.dimrow .dimx { font-weight: 600; color: var(--ink-3); } .dimrow .dimadd { flex: none; min-width: 34px; min-height: 34px; padding: 0 8px; font-weight: 700; }
+.fgrid .field.dimon { grid-column: span 2; }
 .field > span { font-size: 12px; font-weight: 600; color: var(--ink-2); letter-spacing: .01em; }
 .field > span b { color: var(--crit); font-weight: 600; }
 .field input, .field select, .field textarea, .inp { width: 100%; border: 1px solid var(--line-2); background: var(--surface); border-radius: 5px; padding: 7px 9px; min-height: 34px; }
@@ -1627,7 +1631,7 @@ body.cq-ver .tbhd { top: 36px; }
       <a href="#alertas" data-v="alertas" style="--c:var(--crit)"><span class="sw"></span>Alertas<span class="ct" id="ct-alertas" hidden></span></a>
       <a href="#rastreio" data-v="rastreio" style="--c:var(--geral)"><span class="sw"></span>Rastreabilidade</a>
       <a href="#equipe" data-v="equipe" style="--c:var(--geral)"><span class="sw"></span>Equipe</a>
-      <a href="#mapa3d" data-v="mapa3d" title="Mapa de processos 3D: o caminho do material no galpão, etapa por etapa" style="--c:var(--geral)"><span class="sw"></span>Mapa 3D</a>
+      <a href="#mapa3d" data-v="mapa3d" hidden title="Mapa de processos 3D: o caminho do material no galpão, etapa por etapa" style="--c:var(--geral)"><span class="sw"></span>Mapa 3D</a>
       <span class="grp">Módulos</span>
       <a href="#av" data-v="av" style="--c:var(--av)"><span class="sw"></span>Lotes (AV)</a>
       <a href="#rir" data-v="rir" title="Relatório de Inspeção de Recebimento" style="--c:var(--rir)"><span class="sw"></span>RIR</a>
@@ -3978,7 +3982,7 @@ var ENGINE = (function () {
     /* valores fora das listas */
     function outOfList(mod, rows, field, col, list, label) {
       var set = new Set((list || []).map(low));
-      var items = rows.filter(function (x) { var v = x[field]; return filled(v) && !set.has(low(v)); }).map(function (x) { return { ref: (x.num || x.id || x.codigo || '') + ' › ' + label.replace(/"/g, ''), text: '"' + x[field] + '"', rec: x }; });
+      var items = rows.filter(function (x) { var v = x[field]; return filled(v) && !set.has(low(v)) && !(/\sx\s/i.test(String(v)) && String(v).split(/\s+x\s+/i).every(function (q) { return set.has(low(q)); })); }).map(function (x) { return { ref: (x.num || x.id || x.codigo || '') + ' › ' + label.replace(/"/g, ''), text: '"' + x[field] + '"', rec: x }; });
       add('baixa', mod, label + ' fora da lista de Configurações', 'O valor não existe na lista de Configurações. Ele aparece separado nos indicadores (ex.: "Nao" e "Não" contam como opções diferentes). Corrija pelo botão Editar do registro.', items);
     }
     var aberto = M.rnc;
@@ -4578,8 +4582,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* telas gerais (versão hospedada): Painel, Alertas, ... 've'/'nao' · Configurações 'nao'/'ver'/'edita'/'admin' · Exportar tudo 'sim'/'nao' */
   const SCR = (v) => (typeof window.CQ_SCREEN === 'function' ? window.CQ_SCREEN(v) : null);
   /* telas do tablet: o inspetor "só tablet" usa só as ferramentas marcadas para ele; quem trabalha na Central abre o tablet dos módulos em que lança */
+  /* Mapa de processos 3D: pronto, mas em espera até a Qualidade liberar (true = aparece no menu e no Trocar do tablet) */
+  const MAPA3D = false;
   const viewOk = (v) => {
-    if (v === 'mapa3d') return !!S.model; /* o mapa 3D é para todos que entram na Central (inclusive quem usa só o tablet) */
+    if (v === 'mapa3d') return MAPA3D && !!S.model; /* o mapa 3D é para todos que entram na Central (inclusive quem usa só o tablet) */
     if (v === 'riftab') return !!S.model && (tbOnly() ? tbTool('rif') && cw('rif') : vis('rif'));
     if (v === 'rirtab') return !!S.model && rirOn() && cw('rir') && (!tbOnly() || tbTool('rir'));
     if (v === 'rnctab') return !!S.model && rncRelOn() && (tbOnly() ? tbTool('rnc') && (tbInsp() || cw('rnc')) : (cw('rnc') || tbInsp()));
@@ -7501,7 +7507,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       { c: 'F', l: 'Descrição', type: 'list', opts: lst('AV_DESCRICOES', 'AV', 'desc'), req: 1, w: 's2' },
       { c: 'E', l: 'Corrida', type: 'text', store: 'auto', help: 'Use * quando não houver.' }, { c: 'D', l: 'Volume', type: 'text', store: 'auto', reveal: '+ informar volume', help: 'Número do volume da usina (chapas).' },
       { c: 'R', l: 'Quantidade', type: 'text', store: 'num', ph: 'opcional' }, { c: 'S', l: 'Unidade', type: 'select', opts: () => cfgL('AV_UNIDADES') },
-      { c: 'G', l: 'Diâmetro', type: 'list', opts: lst('AV_DIAMETROS', 'AV', 'diam') }, { c: 'H', l: 'Espessura', type: 'list', opts: lst('AV_ESPESSURAS', 'AV', 'esp') },
+      { c: 'G', l: 'Diâmetro', type: 'list', opts: lst('AV_DIAMETROS', 'AV', 'diam'), dim: 1, help: 'Duas medidas? Toque em + (fica 2500 x 1500).' }, { c: 'H', l: 'Espessura', type: 'list', opts: lst('AV_ESPESSURAS', 'AV', 'esp') },
       { c: 'I', l: 'Liga/Tipo', type: 'list', opts: lst('AV_LIGAS', 'AV', 'liga') }, { c: 'J', l: 'Material', type: 'list', opts: lst('AV_NORMAS', 'AV', 'norma') },
       { c: 'O', l: 'Certificado', type: 'text', store: 'auto', help: '* = sem certificado' }, { c: 'T', l: 'Link do certificado', type: 'text', store: 'text', ph: 'https://drive.google.com/…', w: 's2' },
       { c: 'Q', l: 'Retrabalho', type: 'select', opts: () => cfgL('AV_RETRABALHO') }, { c: 'U', l: 'Resultado da inspeção', type: 'select', opts: () => cfgL('AV_INSPECAO').filter((v) => v !== CONC), def: () => 'Aprovado', help: 'Lote reprovado fica bloqueado: quem decide (RNC, concessão ou desbloqueio) é a pessoa da RNC.' },
@@ -7599,6 +7605,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const id = `ff-${f.c}`, req = f.req ? ' <b>*</b>' : '', dis = locked ? ' disabled' : '';
     let ctl;
     if (f.type === 'select') ctl = `<select id="${id}" data-c="${f.c}"${dis}><option value=""></option>${optList(f.opts())}</select>`;
+    else if (f.type === 'list' && f.dim) ctl = dimHTML(`<input id="${id}" data-c="${f.c}" type="hidden">`, `dl-${id}`, dis) + `<datalist id="dl-${id}">${optList(f.opts())}</datalist>`;
     else if (f.type === 'list') ctl = `<input id="${id}" data-c="${f.c}" list="dl-${id}" autocomplete="off" placeholder="${esc(f.ph || 'digite ou escolha')}"${dis}><datalist id="dl-${id}">${optList(f.opts())}</datalist>`;
     else if (f.type === 'area') ctl = `<textarea id="${id}" data-c="${f.c}" placeholder="${esc(f.ph || '')}"${dis}></textarea>`;
     else if (f.type === 'date') ctl = `<input id="${id}" data-c="${f.c}" type="date"${dis}>`;
@@ -7633,7 +7640,21 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       el.value = v;
     });
   }
+  /* medida dupla: o campo guardado (escondido) recebe "2500 x 1500"; na tela são duas caixas e um botão + */
+  const DIM_SEP = /\s*[xX×]\s*/;
+  const dimHTML = (hid, dl, dis) => `<div class="dimrow">${hid}<input class="dim-a" list="${dl}" autocomplete="off" placeholder="digite ou escolha"${dis}><span class="dimx" hidden>x</span><input class="dim-b" list="${dl}" autocomplete="off" placeholder="2ª medida" hidden${dis}><button type="button" class="btn small dimadd" title="Adicionar outra medida" aria-label="Adicionar outra medida"${dis}>+</button></div>`;
+  function dimWire(h) {
+    const row = h && h.closest('.dimrow'); if (!row) return;
+    const a = $('.dim-a', row), b = $('.dim-b', row), x = $('.dimx', row), bt = $('.dimadd', row), lab = row.closest('.field');
+    const two = (on) => { b.hidden = x.hidden = !on; bt.textContent = on ? '−' : '+'; bt.title = on ? 'Tirar a segunda medida' : 'Adicionar outra medida'; bt.setAttribute('aria-label', bt.title); if (lab) lab.classList.toggle('dimon', on); };
+    const sync = () => { const va = a.value.trim(), vb = b.hidden ? '' : b.value.trim(); h.value = va && vb ? `${va} x ${vb}` : va || vb; };
+    const p = String(h.value || '').split(DIM_SEP).filter(Boolean);
+    a.value = p.length === 2 ? p[0] : h.value || ''; b.value = p.length === 2 ? p[1] : ''; two(p.length === 2);
+    a.oninput = b.oninput = sync;
+    bt.onclick = (e) => { e.preventDefault(); if (b.hidden) { two(true); b.focus(); } else { b.value = ''; two(false); sync(); a.dispatchEvent(new Event('input', { bubbles: true })); } };
+  }
   function wireReveal(fields, idOf) {
+    fields.filter((f) => f.dim).forEach((f) => dimWire($('#' + idOf(f))));
     fields.filter((f) => f.reveal).forEach((f) => {
       const id = idOf(f), el = $('#' + id); if (!el) return; const lab = el.closest('.field'); if (!lab) return;
       const old = lab.parentNode.querySelector(`[data-reveal="${id}"]`); if (old) old.remove();
@@ -7678,9 +7699,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const id = `it${i}-${f.c}`, req = f.req ? ' <b>*</b>' : '';
       let ctl;
       if (f.type === 'select') ctl = `<select id="${id}" data-ic="${f.c}"><option value=""></option>${optList(f.opts())}</select>`;
+      else if (f.type === 'list' && f.dim) ctl = dimHTML(`<input id="${id}" data-ic="${f.c}" type="hidden">`, `dl-avm-${f.c}`, '');
       else if (f.type === 'list') ctl = `<input id="${id}" data-ic="${f.c}" list="dl-avm-${f.c}" autocomplete="off" placeholder="digite ou escolha">`;
       else ctl = `<input id="${id}" data-ic="${f.c}" type="text" autocomplete="off" placeholder="${esc(f.ph || '')}" ${f.store === 'num' ? 'inputmode="decimal"' : ''}>`;
-      return `<label class="field ${f.w || ''}"><span>${esc(f.l)}${req}</span>${ctl}<span class="errmsg" hidden></span></label>`;
+      return `<label class="field ${f.w || ''}"><span>${esc(f.l)}${req}</span>${ctl}${f.dim && f.help ? `<span class="help">${esc(f.help)}</span>` : ''}<span class="errmsg" hidden></span></label>`;
     };
     const nx = avUltimo() + 1;
     main.innerHTML = `<div class="view">${head(MOD.AV.name, 'Cada lançamento é gravado na hora no banco da Qualidade e aparece para toda a equipe.')}

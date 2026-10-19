@@ -1,7 +1,7 @@
 /* Central da Qualidade · service worker
    Sempre busca a versão mais nova da página na internet; a cópia guardada só é usada se estiver sem conexão. */
-const CACHE = 'central-cq-v14'; /* v14: código, CNPJ e tipo nas fichas de fornecedor e cliente */
-const SHELL = ['./', './index.html', './mapa3d.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+const CACHE = 'central-cq-v15'; /* v15: diâmetro com duas medidas e campos da nota alinhados (Mapa 3D em espera) */
+const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).catch(() => {})); self.skipWaiting(); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', (e) => {
