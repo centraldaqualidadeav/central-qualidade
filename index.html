@@ -4659,9 +4659,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   async function deleteRecord(mod, key) {
     const docId = DB.where[mod][key]; if (!docId) throw new Error('Registro não encontrado.');
+    const meta0 = Object.assign({}, (DB.meta[mod] || {})[key] || {});
     if (mod === 'AV' && PUB()) { const tok = ((DB.meta.AV || {})[key] || {}).qr; if (tok) DB.db.doc('pub/' + tok).delete().catch(() => {}); }
     await DB.db.doc(MOD[mod].col + '/' + docId).update({ items: { [key]: { _del: true, _u: Date.now(), _ub: DB.me || null } } });
-    if (mod === 'RNC') FT.delAll('rncfot', key).catch(() => {});
+    if (mod === 'RNC') { FT.delAll('rncfot', key).catch(() => {}); rncTabLimpar(key, meta0).catch((e) => console.warn('tablet não limpo', e)); }
     if (mod === 'INS') { FT.delAll('insfot', key).catch(() => {}); delete INSF[key]; }
     if (mod === 'RNCC') FT.delAll('rnccf', key).catch(() => {});
   }
@@ -14134,7 +14135,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const a0 = lotTokens(x.lotesAV).map(avById).find(Boolean) || {};
     const reinc = rncReincList(x.forn, x.motivo, x.key), corrs = cw('rnc') ? inbCorrs(key) : [];
     const mon = `<div class="rrmon"><b>Monitoramento</b>${chipRnc(x.status)}${stg ? `<span>Etapa: <b>${esc(stg.t)}</b>${stg.ts != null ? ' · ' + relHTML(stg.ts) : ''}</span>` : ''}<span>Prazo final: <b>${fD(x.prazoFinal) || '—'}</b></span>${E.low(x.reinc) === 'sim' ? '<span class="chip warn"><i>↻</i>Reincidência</span>' : ''}${x.aberta && !x.comprador ? '<span class="chip crit"><i>!</i>Falta comprador</span>' : ''}<small class="muted">Calculado sozinho a partir das respostas do relatório.</small></div>`;
-    const acts = `<button class="btn primary" type="button" data-act="rr-print" data-key="${esc(key)}">Imprimir / PDF do relatório</button>${x.aberta ? `<button class="btn" type="button" data-act="msg-rnc" data-key="${esc(key)}">Cobrança</button>` : ''}${x.aberta && w ? `<button class="btn" type="button" data-act="rnc-ret" data-key="${esc(key)}">Registrar retorno</button>` : ''}${w ? `<button class="btn ghost" type="button" data-act="edit" data-mod="RNC" data-key="${esc(key)}">Editar cadastro</button>` : ''}`;
+    const acts = `<button class="btn primary" type="button" data-act="rr-print" data-key="${esc(key)}">Imprimir / PDF do relatório</button>${x.aberta ? `<button class="btn" type="button" data-act="msg-rnc" data-key="${esc(key)}">Cobrança</button>` : ''}${x.aberta && w ? `<button class="btn" type="button" data-act="rnc-ret" data-key="${esc(key)}">Registrar retorno</button>` : ''}${w ? `<button class="btn ghost" type="button" data-act="edit" data-mod="RNC" data-key="${esc(key)}">Editar cadastro</button>` : ''}${DB.owner ? `<button class="btn ghost" type="button" data-act="rnc-apagar" data-key="${esc(key)}" style="margin-left:auto;color:var(--crit)">Apagar NCF (conta dona)</button>` : ''}`;
     /* 1 · abertura */
     const motOut = Array.isArray(m.motOutros) ? m.motOutros : [];
     const qtd = m.qtdRep != null ? `<b style="color:var(--crit)">${NF.format(m.qtdRep)}</b> reprovada(s)${m.qtdRec != null ? ` de ${NF.format(m.qtdRec)}${m.qtdUnd ? ' ' + esc(m.qtdUnd) : ''}${m.qtdRec ? ` (${Math.round((m.qtdRep / m.qtdRec) * 100)}%)` : ''}` : ''}` : '';
@@ -14989,7 +14990,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   function tbMineInsp() {
     const sx = (INB.mine || {}).s || {}, cx = (INB.mine || {}).c || {};
-    const L = Object.keys(sx).map((id) => Object.assign({ id }, sx[id])).sort((a, b) => (b.at || 0) - (a.at || 0)).slice(0, 15);
+    const L = Object.keys(sx).map((id) => Object.assign({ id }, sx[id])).filter((e) => e.st !== 'del').sort((a, b) => (b.at || 0) - (a.at || 0)).slice(0, 15);
     const pc = (e) => Object.values(cx).filter((c) => c && c.rncKey === e.key).sort((a, b) => b.at - a.at)[0];
     return `<div class="tbcard" id="tb-mine"><div class="ch gr">Minhas NCFs</div>${PREVIEW() ? '<div class="tbnone">No “Ver como” as NCFs enviadas por esta pessoa não aparecem aqui.</div>' : INB.mine == null ? '<div class="tbnone">Carregando…</div>' : L.length ? L.map((e) => { const c = pc(e); return `<div class="tblr"><div><div class="t"><b>${esc(e.num || 'aguardando número')}</b>${e.st === 'ok' ? '<span class="chip ok"><i>✓</i>recebida pela Qualidade</span>' : '<span class="chip warn"><i>…</i>aguardando a Central numerar</span>'}</div><div class="m">${esc(e.forn || '—')} · ${esc(e.motivo || '')}${e.lotesAV ? ' · ' + esc(e.lotesAV) : ''}</div><div class="w">enviada em ${dmy(e.at)} às ${hhmm(e.at)}</div>${c ? `<div class="w">✎ correção pedida em ${dmy(c.at)}: ${c.st === 'novo' ? 'aguardando a Qualidade' : c.st === 'ok' ? 'corrigida' + (c.resp ? ' (' + esc(c.resp) + ')' : '') : 'recusada' + (c.resp ? ': ' + esc(c.resp) : '')}</div>` : ''}</div>${e.st === 'ok' ? `<button class="btn" type="button" data-act="tb-pc" data-key="${esc(e.id)}">Pedir correção</button>` : ''}</div>`; }).join('') : '<div class="tbnone">Você ainda não abriu NCF pelo tablet.</div>'}</div>`;
   }
@@ -15156,6 +15157,23 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (INB.again) { INB.again = false; setTimeout(inbProcess, 60); }
   }
   /* pedidos de correção pendentes (para quem trata as NCFs) */
+  /* NCF apagada que veio do tablet: some também de "Minhas NCFs" do operador (e os pedidos de correção dela) */
+  async function rncTabLimpar(key, meta) {
+    const tid = meta && meta.tbId; if (!tid) return;
+    const i = tid.lastIndexOf('_'); if (i < 1) return;
+    const uid = tid.slice(0, i), id = tid.slice(i + 1), ref = DB.db.doc('rncin/' + uid);
+    const cur = await ref.get(), d = (cur.exists && cur.data()) || {}, patch = { s: { [id]: { st: 'del', delAt: Date.now() } } };
+    Object.keys(d.c || {}).forEach((cid) => { const o = d.c[cid]; if (o && o.rncKey === key) (patch.c = patch.c || {})[cid] = { st: 'del', delAt: Date.now() }; });
+    await ref.update(patch);
+  }
+  function rncApagar(key) {
+    const x = findRec('RNC', key); if (!x || !DB.owner) return;
+    const tab = !!rmeta(x).tbId, lots = (lotTokens(normLotes(x.lotesAV || '')) || []).join(', ');
+    confirmBox('Apagar NCF', `${x.num || key} sai das listas, do Painel e dos Alertas.${tab ? ' Ela veio do tablet: some também de “Minhas NCFs” do operador.' : ''}${lots ? ` O lote ${lots} volta para “esperando NCF” (se também for teste, apague o lote).` : ''} Fica registrado no Histórico.`, 'Apagar NCF', async () => {
+      try { await deleteRecord('RNC', key); logEntry('RNC', key, 'excluído', `${x.num || key} apagada pela conta dona`, null); closeLayer(); toast((x.num || key) + ' apagada.'); go('rnc'); }
+      catch (err) { toast('Não foi possível apagar: ' + ((err && (err.message || err.code)) || err), true); }
+    }, true);
+  }
   function inbCorrs(rncKey) {
     const out = [];
     INB.docs.forEach((dd) => { const c = dd.data.c || {}; Object.keys(c).forEach((cid) => { const o = c[cid]; if (o && o.st === 'novo' && (!rncKey || o.rncKey === rncKey)) out.push(Object.assign({ uid: dd.id, cid }, o)); }); });
@@ -15238,6 +15256,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (a && a.startsWith('rt-') && rtAct(a, key, act)) return;
       if (a && a.startsWith('eq-') && eqAct(a, key)) return;
       if (a === 'bk-dl') { const f = (VY.files || [])[+key]; if (f) saveFile(f[0], f[1]); return; }
+      if (a === 'rnc-apagar') { rncApagar(key); return; }
       if (a && a.startsWith('rr-')) {
         if (a === 'rr-print') { if (key) rncRelPrint(key); return; }
         if (a === 'rr-fadd') { rrFotoAdd(key); return; }

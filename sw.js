@@ -1,6 +1,6 @@
 /* Central da Qualidade · service worker
    Sempre busca a versão mais nova da página na internet; a cópia guardada só é usada se estiver sem conexão. */
-const CACHE = 'central-cq-v25'; /* v25: certificado REV.012 — bloco 3 com PM (partículas magnéticas) no lugar da HB 3 */
+const CACHE = 'central-cq-v26'; /* v26: conta dona apaga NCF direto na ficha; NCF do tablet some também do tablet do operador */
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).catch(() => {})); self.skipWaiting(); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
