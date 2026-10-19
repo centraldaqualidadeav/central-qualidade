@@ -4523,6 +4523,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (!S.model) return;
       rtSnap();
       updateChrome();
+      if (S.view === 'painel' && !$('#layer').innerHTML) render();
       if (S.view === 'rif' && !(S.rif && S.rif.sub)) {
         if ($('#layer .drawer [data-rfk]')) { rfDrawerSync(); render(); }
         else if ($('#layer').innerHTML) S.stale = true;
@@ -4541,6 +4542,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       updateChrome();
       const ae = document.activeElement, digitando = ae && ae.id === 'rit-q';
       if ((S.view === 'rir' || S.view === 'rirtab') && RI.sub !== 'ed' && !$('#layer').innerHTML && !digitando) render();
+      else if (S.view === 'painel' && !$('#layer').innerHTML) render();
     }, () => { RI.ready = true; });
     db.doc('iqf/sit').onSnapshot((snap) => { IQSIT.s = (snap.exists && (snap.data() || {}).s) || {}; }, () => {});
     db.collection('rifv').onSnapshot((snap) => {
@@ -5418,14 +5420,94 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         </div>
         <div class="chart"><h3>Vencidos ou vencendo em até 30 dias<small>os 20 mais urgentes</small></h3><div id="p-urg"></div></div>
       </div></div></section>
+      ${riPainelHTML()}
+      ${rfPainelHTML()}
       ${soldPainelHTML()}
       ${iqPainelHTML()}
       ${cqPainelHTML()}
+      ${procPainelHTML()}
     </div>`;
     mountTable($('#p-urg'), { id: 'p-urg', rows: urg, size: 20, noun: 'instrumentos', open: true, sort: 'dias', dir: 1, cols: [
       { k: 'codigo', l: 'Código', cls: 'mono' }, { k: 'desc', l: 'Descrição', cls: 'clip' }, { k: 'depto', l: 'Setor', cls: 'clip' }, { k: 'status', l: 'Status', f: (x) => chipIns(x.status) }, { k: 'validade', l: 'Validade', f: (x) => fD(x.validade), r: 1 }, { k: 'dias', l: 'Dias p/ vencer', r: 1, f: (x) => NF.format(x.dias) }] });
   };
 
+
+  /* ================= PAINEL · faixas de RIR, RND, RIF e visão do processo ================= */
+  const msSer = (ms) => { const d = new Date(ms); return E.serialFromYMD(d.getFullYear(), d.getMonth() + 1, d.getDate()); };
+  const pctTxt = (a, b) => (b ? NF1.format(Math.round((a / b) * 1000) / 10) + '%' : '—');
+  function riPainelHTML() {
+    if (!rirOn() || !vis('rir') || !RI.ready || !S.model) return '';
+    const C = riCards().filter((c) => c.st === 'f' && c.fin), P = riPend(), atr = riAtrasadas(), mes = mesId(Date.now()), hol = S.model.hol;
+    if (!C.length && !P.length) return '';
+    const doMes = C.filter((c) => mesId(c.fin) === mes), lotMes = doMes.reduce((n, c) => n + Object.keys(c.res || {}).length, 0);
+    const lim = Date.now() - 365 * 864e5, C12 = C.filter((c) => c.fin >= lim);
+    const res12 = []; C12.forEach((c) => Object.entries(c.res || {}).forEach(([k, r]) => res12.push({ k, r, forn: c.forn || '(sem fornecedor)' })));
+    const rep12 = res12.filter((o) => o.r === 'Reprovado').length;
+    /* tempo da entrada do lote até o RIR concluído, em dias úteis */
+    const tempos = []; C12.forEach((c) => (c.lotes || []).forEach((k) => { const x = findRec('AV', k); if (x && x.data != null) tempos.push(Math.max(0, E.workdaysBetween(Math.floor(x.data), msSer(c.fin), hol))); }));
+    const tMed = tempos.length ? Math.round((tempos.reduce((a, b) => a + b, 0) / tempos.length) * 10) / 10 : null;
+    const porMes = monthsBack(6).map((m) => ({ label: m.label, tip: MESES_L[m.m - 1] + ' ' + m.y, value: C.filter((c) => mesId(c.fin) === m.y + '-' + String(m.m).padStart(2, '0')).length }));
+    const fm = new Map(); res12.forEach((o) => { const k = E.key(o.forn); const v = fm.get(k) || { label: o.forn, n: 0, rp: 0 }; v.n++; if (o.r === 'Reprovado') v.rp++; fm.set(k, v); });
+    const repForn = Array.from(fm.values()).filter((v) => v.rp).map((v) => ({ label: v.label, value: Math.round((v.rp / v.n) * 100), tip: `${v.label}: ${v.rp} de ${v.n} lote(s) reprovado(s)` })).sort((a, b) => b.value - a.value).slice(0, 10);
+    const go = { v: 'rir' };
+    return `<section class="sec">${band('RIR', 'Indicadores de inspeção de recebimento (RIR)')}<div class="block"><div class="body">
+      <div class="kpis sm">
+        ${kpiHTML({ l: 'Notas aguardando RIR', v: NF.format(P.length), sub: NF.format(P.reduce((n, g) => n + g.lots.length, 0)) + ' lote(s) sem resultado', c: MOD.RIR.c, cls: P.length ? 'warn' : 'ok', go })}
+        ${kpiHTML({ l: 'Atrasadas', v: NF.format(atr.length), sub: '2 dias úteis ou mais sem RIR', c: MOD.RIR.c, cls: atr.length ? 'crit' : 'ok', go })}
+        ${kpiHTML({ l: 'RIR no mês', v: NF.format(doMes.length), sub: NF.format(lotMes) + ' lote(s) inspecionado(s)', c: MOD.RIR.c, go })}
+        ${kpiHTML({ l: 'Reprovação no recebimento', v: pctTxt(rep12, res12.length), sub: `${NF.format(rep12)} de ${NF.format(res12.length)} lote(s) · 12 meses`, c: MOD.RIR.c, cls: rep12 ? 'warn' : 'ok', go })}
+        ${kpiHTML({ l: 'Tempo até o RIR', v: tMed == null ? '—' : NF1.format(tMed) + ' d', sub: 'média em dias úteis, da entrada do lote ao RIR concluído', c: MOD.RIR.c, go })}
+      </div>
+      <div class="charts">
+        ${chartHTML('RIR concluídos por mês', colsHTML(porMes, MOD.RIR.c), 'últimos 6 meses')}
+        ${chartHTML('Reprovação no recebimento por fornecedor (%)', repForn.length ? barsHTML(repForn, MOD.RIR.c, { max: 10 }) : '<p class="muted" style="margin:0">Nenhum lote reprovado no RIR nos últimos 12 meses.</p>', '12 meses')}
+      </div></div></div></section>`;
+  }
+  function rfPainelHTML() {
+    if (!vis('rif') || !RFI.pedReady) return '';
+    const P = rfPeds(); if (!P.length) return '';
+    const et = (k) => P.filter((p) => rfEtapa(p) === k).length, mes = mesId(Date.now()), lim = Date.now() - 365 * 864e5;
+    const it = []; P.forEach((p) => rfItens(p).forEach((i) => it.push(i)));
+    const fin = it.filter((i) => i.fin && (i.st === 'a' || i.st === 'x')), finMes = fin.filter((i) => mesId(i.fin) === mes), fin12 = fin.filter((i) => i.fin >= lim);
+    const ap1 = fin12.filter((i) => i.st === 'a' && !(i.ant || []).length).length, reins = fin12.filter((i) => (i.ant || []).length).length, rp12 = fin12.filter((i) => i.st === 'x').length;
+    const porMes = monthsBack(6).map((m) => ({ label: m.label, tip: MESES_L[m.m - 1] + ' ' + m.y, value: fin.filter((i) => mesId(i.fin) === m.y + '-' + String(m.m).padStart(2, '0')).length }));
+    const go = { v: 'rif' };
+    return `<section class="sec">${band('RIF', 'Indicadores de inspeção final (RIF)')}<div class="block"><div class="body">
+      <div class="kpis sm">
+        ${kpiHTML({ l: 'Aguardando inspeção', v: NF.format(et('ag')), sub: 'pedidos que chegaram sem RIF', c: MOD.RIF.c, cls: et('ag') ? 'warn' : 'ok', go })}
+        ${kpiHTML({ l: 'Em inspeção', v: NF.format(et('em')), sub: 'RIF em rascunho', c: MOD.RIF.c, go })}
+        ${kpiHTML({ l: 'Com pendência', v: NF.format(et('pd')), c: MOD.RIF.c, cls: et('pd') ? 'warn' : '', go })}
+        ${kpiHTML({ l: 'Reprovados em aberto', v: NF.format(et('rp')), c: MOD.RIF.c, cls: et('rp') ? 'crit' : 'ok', go })}
+        ${kpiHTML({ l: 'Itens inspecionados no mês', v: NF.format(finMes.length), c: MOD.RIF.c, go })}
+        ${kpiHTML({ l: 'Aprovação na 1ª inspeção', v: pctTxt(ap1, fin12.length), sub: `${NF.format(rp12)} reprovado(s) · ${NF.format(reins)} reinspeção(ões) · 12 meses`, c: MOD.RIF.c, cls: rp12 ? 'warn' : 'ok', go })}
+      </div>
+      <div class="charts">
+        ${chartHTML('Itens inspecionados por mês', colsHTML(porMes, MOD.RIF.c), 'últimos 6 meses')}
+        ${chartHTML('Pedidos por etapa', barsHTML(RF_ETAPAS.map(([k, l]) => ({ label: l, value: et(k) })), MOD.RIF.c))}
+      </div></div></div></section>`;
+  }
+  /* visão do processo: o caminho do lote nos últimos 12 meses, do recebimento à RNC resolvida */
+  function procPainelHTML() {
+    if (!S.model || !vis('av')) return '';
+    const t = S.today, a = E.edate(t, -12), L = S.model.av.filter((x) => x.data != null && x.data >= a && x.data <= t);
+    if (!L.length) return '';
+    const insp = L.filter((x) => ['aprovado', 'reprovado', E.low(CONC)].includes(E.low(x.insp)));
+    const rep = insp.filter((x) => E.low(x.insp) !== 'aprovado'), comRnc = rep.filter((x) => (lotSt(x).rncs || []).length), resolv = rep.filter((x) => !lotSt(x).lock);
+    const rnc12 = S.model.rnc.filter((x) => x.data != null && x.data >= a && x.data <= t && x.status !== 'Cancelada').length;
+    const rnd12 = (S.model.rncc || []).filter((x) => x.data != null && x.data >= a && x.data <= t && x.status !== 'Cancelada').length;
+    const nfs = new Set(L.map((x) => E.key(x.forn) + '|' + docN(x.nf))).size;
+    return `<section class="sec">${band('GERAL', 'Visão do processo', 'últimos 12 meses')}<div class="block"><div class="body">
+      <div class="kpis sm">
+        ${kpiHTML({ l: 'RNC de fornecedor por 100 lotes', v: L.length ? NF1.format(Math.round((rnc12 / L.length) * 1000) / 10) : '—', sub: `${NF.format(rnc12)} RNC em ${NF.format(L.length)} lote(s)`, c: MOD.RNC.c, go: { v: 'rnc' } })}
+        ${kpiHTML({ l: 'Lotes reprovados resolvidos', v: pctTxt(resolv.length, rep.length), sub: `${NF.format(resolv.length)} de ${NF.format(rep.length)} com destino ou liberação`, c: MOD.AV.c, cls: rep.length > resolv.length ? 'warn' : 'ok', go: { v: 'av' } })}
+        ${vis('rncc') ? kpiHTML({ l: 'Reclamações de clientes', v: NF.format(rnd12), sub: 'RND abertas em 12 meses', c: MOD.RNCC.c, go: { v: 'rncc' } }) : ''}
+      </div>
+      <div class="charts">
+        ${chartHTML('Caminho do lote', barsHTML([
+          { label: 'Notas fiscais recebidas', value: nfs }, { label: 'Lotes recebidos', value: L.length }, { label: 'Lotes inspecionados', value: insp.length },
+          { label: 'Reprovados', value: rep.length }, { label: 'Reprovados com RNC', value: comRnc.length }, { label: 'Reprovados resolvidos', value: resolv.length }], MOD.AV.c), 'do recebimento à decisão')}
+      </div></div></div></section>`;
+  }
   /* ================= ALERTAS ================= */
   /* ================= RNC de fornecedor: prazo em horas, alertas e cobrança ================= */
   const nowS = () => E.nowSerial();
