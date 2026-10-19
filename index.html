@@ -154,12 +154,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* ---------- KPIs ---------- */
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 10px; }
 /* resumo para a gerência: uma linha por módulo (nome + 2 cartões); duas linhas lado a lado em tela larga */
-.ger { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 600px), 1fr)); gap: 10px 14px; }
-.gerow { display: grid; grid-template-columns: 150px 1fr 1fr; gap: 10px; align-items: stretch; }
-.gerl { display: flex; flex-direction: column; justify-content: center; gap: 3px; padding: 8px 12px; border: 1px solid var(--line); border-left: 4px solid var(--c); border-radius: var(--r); background: var(--surface-2); }
-.gerl b { font: 700 16px/1.1 var(--f-display, inherit); text-transform: uppercase; letter-spacing: .02em; } .gerl span { font-size: 12px; color: var(--ink-3); }
-.gerow .kpi .val { font-size: 30px; }
-@media (max-width: 640px) { .gerow { grid-template-columns: 1fr 1fr; } .gerl { grid-column: 1 / -1; flex-direction: row; align-items: baseline; gap: 8px; } }
 .kpi { position: relative; display: grid; gap: 4px; align-content: start; padding: 12px 14px 12px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); text-align: left; cursor: default; }
 button.kpi { cursor: pointer; }
 button.kpi:hover { border-color: var(--ink-3); }
@@ -5434,90 +5428,86 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
 
   /* ================= PAINEL · resumo para a gerência: 2 indicadores por módulo, mês atual x mês anterior ================= */
   const GER_META = { hi: 95, lo: 90 };
-  function gerPainelHTML() {
+  /* indicadores da gerência (2 por módulo): q = quantidade do mês, p = qualidade/prazo (n de d) */
+  function gerDados() {
     const M = S.model, t = S.today, o = E.ymd(t), [m0, m1] = monthRange(o.y, o.m), pmy = o.m === 1 ? [o.y - 1, 12] : [o.y, o.m - 1], [p0, p1] = monthRange(pmy[0], pmy[1]);
-    const mesTxt = MESES_L[o.m - 1] + ' de ' + o.y, ant = MESES[pmy[1] - 1];
-    const msMes = mesId(Date.now()), msAnt = pmy[0] + '-' + String(pmy[1]).padStart(2, '0');
+    const ant = MESES[pmy[1] - 1], msMes = mesId(Date.now()), msAnt = pmy[0] + '-' + String(pmy[1]).padStart(2, '0');
     const inM = (d) => d != null && d >= m0 && d < m1, inP = (d) => d != null && d >= p0 && d < p1;
     const pc = (a, b) => (b ? Math.round((a / b) * 1000) / 10 : null), pcTxt = (v) => (v == null ? '—' : NF1.format(v) + '%');
     const tier = (v, hi = GER_META.hi, lo = GER_META.lo) => (v == null ? '' : v >= hi ? 'ok' : v >= lo ? 'warn' : 'crit');
     const tierInv = (v, ok, warn) => (v == null ? '' : v <= ok ? 'ok' : v <= warn ? 'warn' : 'crit');
     const tv = (cur, prev) => { const d = cur - prev; return `${d > 0 ? '↑' : d < 0 ? '↓' : '='} ${NF.format(Math.abs(d))} vs ${ant}`; };
     const tp = (cur, prev) => (cur == null || prev == null ? `${ant}: ${pcTxt(prev)}` : `${cur > prev ? '↑' : cur < prev ? '↓' : '='} ${NF1.format(Math.abs(Math.round((cur - prev) * 10) / 10))} pts vs ${ant}`);
-    const card = (k) => kpiHTML(k);
-    const rows = [];
-    const row = (mod, nome, sub, a, b) => { if (a || b) rows.push(`<div class="gerow"><div class="gerl" style="--c:${MOD[mod].c}"><b>${esc(nome)}</b><span>${esc(sub)}</span></div>${a}${b}</div>`); };
-    /* Lotes (AV) */
+    const mes = { de: E.isoDate(m0), ate: E.isoDate(m1 - 1) };
+    const R = [];
+    const add = (mod, m, q, p) => R.push({ mod, m, c: MOD[mod].c, q, p });
+    /* p: { l, v, sub, cls, go, n, d, rl (legenda do anel), tone, lc (rótulo da contagem), vc (valor da contagem) } */
+    const pp = (l, n, d, pv, sub, cls, go, rl, lc) => ({ l, v: pcTxt(pv), sub, cls, go, n, d, rl, tone: cls, lc, vc: NF.format(n) });
     if (vis('av')) {
       const nf = (L) => new Set(L.map((x) => E.key(x.forn) + '|' + docN(x.nf))).size;
-      const Lm = M.av.filter((x) => inM(x.data)), Lp = M.av.filter((x) => inP(x.data));
-      row('AV', 'Lotes (AV)', 'recebimento', card({ l: 'NF de entrada no mês', v: NF.format(nf(Lm)), sub: tv(nf(Lm), nf(Lp)), c: MOD.AV.c, go: { v: 'av', f: { de: E.isoDate(m0), ate: E.isoDate(m1 - 1) } } }),
-        card({ l: 'Lotes recebidos no mês', v: NF.format(Lm.length), sub: tv(Lm.length, Lp.length), c: MOD.AV.c, go: { v: 'av', f: { de: E.isoDate(m0), ate: E.isoDate(m1 - 1) } } }));
+      const Lm = M.av.filter((x) => inM(x.data)), Lp = M.av.filter((x) => inP(x.data)), g = { v: 'av', f: mes };
+      add('AV', 'Lotes', { l: 'NF de entrada no mês', v: NF.format(nf(Lm)), sub: tv(nf(Lm), nf(Lp)), go: g, mini: `${NF.format(Lm.length)} lotes` },
+        { l: 'Lotes recebidos no mês', v: NF.format(Lm.length), sub: tv(Lm.length, Lp.length), go: g, cnt: true });
     }
-    /* RIR */
     if (rirOn() && vis('rir') && RI.ready) {
       const C = riCards().filter((c) => c.st === 'f' && c.fin), res = (mm) => { const r = []; C.filter((c) => mesId(c.fin) === mm).forEach((c) => Object.values(c.res || {}).forEach((v) => r.push(v))); return r; };
-      const rm = res(msMes), rp = res(msAnt), am = pc(rm.filter((v) => v === 'Aprovado').length, rm.length), ap = pc(rp.filter((v) => v === 'Aprovado').length, rp.length);
-      row('RIR', 'RIR', 'inspeção de recebimento', card({ l: 'Lotes inspecionados no mês', v: NF.format(rm.length), sub: tv(rm.length, rp.length), c: MOD.RIR.c, go: { v: 'rir' } }),
-        card({ l: '% aprovado no recebimento', v: pcTxt(am), sub: tp(am, ap), c: MOD.RIR.c, cls: tier(am), go: { v: 'rir' } }));
+      const rm = res(msMes), rp = res(msAnt), na = rm.filter((v) => v === 'Aprovado').length, am = pc(na, rm.length), ap = pc(rp.filter((v) => v === 'Aprovado').length, rp.length), g = { v: 'rir' };
+      add('RIR', 'RIR', { l: 'Lotes inspecionados no mês', v: NF.format(rm.length), sub: tv(rm.length, rp.length), go: g },
+        pp('% aprovado', na, rm.length, am, tp(am, ap), tier(am), g, 'aprovado', 'Lotes aprovados'));
     }
-    /* RNC de fornecedor */
     if (vis('rnc')) {
-      const R = M.rnc.filter((x) => x.status !== 'Cancelada'), Rm = R.filter((x) => inM(x.data)), Rp = R.filter((x) => inP(x.data));
-      const top = countBy(Rm, (x) => x.forn)[0], atr = M.rnc.filter((x) => x.status === 'Atrasado').length;
-      row('RNC', 'RNC fornecedor', 'não conformidade', card({ l: 'RNC abertas no mês', v: NF.format(Rm.length), sub: (top && top.value > 1 ? `mais: ${top.label} (${top.value}) · ` : '') + tv(Rm.length, Rp.length), c: MOD.RNC.c, go: { v: 'rnc', f: { de: E.isoDate(m0), ate: E.isoDate(m1 - 1) } } }),
-        card({ l: 'RNC em atraso', v: NF.format(atr), sub: 'todas as abertas, não só do mês', c: MOD.RNC.c, cls: atr ? 'crit' : 'ok', go: { v: 'rnc', f: { status: ['Atrasado'] } } }));
+      const L = M.rnc.filter((x) => x.status !== 'Cancelada'), Rm = L.filter((x) => inM(x.data)), Rp = L.filter((x) => inP(x.data));
+      const top = countBy(Rm, (x) => x.forn)[0], atr = M.rnc.filter((x) => x.status === 'Atrasado').length, ab = M.rnc.filter((x) => ['Em Andamento', 'Pendente', 'Atrasado'].includes(x.status)).length;
+      add('RNC', 'RNC fornecedor', { l: 'Abertas no mês', v: NF.format(Rm.length), sub: (top && top.value > 1 ? `mais: ${top.label} (${top.value}) · ` : '') + tv(Rm.length, Rp.length), go: { v: 'rnc', f: mes } },
+        { l: 'Em atraso', v: NF.format(atr), sub: 'todas as abertas, não só do mês', cls: atr ? 'crit' : 'ok', go: { v: 'rnc', f: { status: ['Atrasado'] } }, n: atr, d: ab, rl: 'das abertas', tone: 'crit', cnt: true, mini: `${NF.format(atr)} em atraso` });
     }
-    /* RND */
     if (vis('rncc')) {
-      const R = (M.rncc || []).filter((x) => x.status !== 'Cancelada'), Rm = R.filter((x) => inM(x.data)), Rp = R.filter((x) => inP(x.data));
-      const pz = (L) => { const r = L.filter((x) => x.respData != null && x.prazoResp != null); return pc(r.filter((x) => x.respData <= x.prazoResp).length, r.length); };
-      const zm = pz(R.filter((x) => inM(x.respData))), zp = pz(R.filter((x) => inP(x.respData)));
-      row('RNCC', 'RND', 'reclamação e devolução de cliente', card({ l: 'Reclamações/devoluções no mês', v: NF.format(Rm.length), sub: `${NF.format(Rm.filter(isProc).length)} procedente(s) · ${tv(Rm.length, Rp.length)}`, c: MOD.RNCC.c, go: { v: 'rncc' } }),
-        card({ l: 'Respondidas no prazo', v: pcTxt(zm), sub: tp(zm, zp), c: MOD.RNCC.c, cls: tier(zm), go: { v: 'rncc' } }));
+      const L = (M.rncc || []).filter((x) => x.status !== 'Cancelada'), Rm = L.filter((x) => inM(x.data)), Rp = L.filter((x) => inP(x.data));
+      const pz = (X) => { const r = X.filter((x) => x.respData != null && x.prazoResp != null); return [r.filter((x) => x.respData <= x.prazoResp).length, r.length]; };
+      const [zn, zd] = pz(L.filter((x) => inM(x.respData))), [yn, yd] = pz(L.filter((x) => inP(x.respData))), zm = pc(zn, zd), zp = pc(yn, yd), g = { v: 'rncc' };
+      add('RNCC', 'RND', { l: 'Abertas no mês', v: NF.format(Rm.length), sub: `${NF.format(Rm.filter(isProc).length)} procedente(s) · ${tv(Rm.length, Rp.length)}`, go: g },
+        pp('Respondidas no prazo', zn, zd, zm, tp(zm, zp), tier(zm), g, 'no prazo', 'Respondidas no prazo'));
     }
-    /* Certificados */
     if (vis('certq') && CQF.ready) {
       const L = cqCards(), conc = (mm) => L.filter((c) => c.st === 'c' && c.conc && c.conc.at && cqMes(c.conc.at) === mm);
       const cm = conc(msMes), cp = conc(msAnt), itens = cm.reduce((n, c) => n + (c.conc.itens || 0), 0);
-      const pzz = (Lc) => { const b = Lc.filter((c) => !c.conc.avulso); return pc(b.filter(cqNoPrazo).length, b.length); }, zm = pzz(cm), zp = pzz(cp);
-      row('CERTQ', 'Certificados', 'emitidos para o cliente', card({ l: 'Certificados emitidos no mês', v: NF.format(cm.length), sub: `${NF.format(cm.length)} PV · ${NF.format(itens)} itens · ${tv(cm.length, cp.length)}`, c: MOD.CERTQ.c, go: { v: 'certq' } }),
-        card({ l: 'Emitidos no prazo', v: pcTxt(zm), sub: `${cqCfg().prazo} dia(s) útil(eis) · ${tp(zm, zp)}`, c: MOD.CERTQ.c, cls: tier(zm), go: { v: 'certq' } }));
+      const pzz = (Lc) => { const b = Lc.filter((c) => !c.conc.avulso); return [b.filter(cqNoPrazo).length, b.length]; }, [zn, zd] = pzz(cm), [yn, yd] = pzz(cp), zm = pc(zn, zd), zp = pc(yn, yd), g = { v: 'certq' };
+      add('CERTQ', 'Certificados', { l: 'Emitidos no mês', v: NF.format(cm.length), sub: `${NF.format(cm.length)} PV · ${NF.format(itens)} itens · ${tv(cm.length, cp.length)}`, go: g },
+        pp('Emitidos no prazo', zn, zd, zm, `${cqCfg().prazo} dia(s) útil(eis) · ${tp(zm, zp)}`, tier(zm), g, 'no prazo', 'Emitidos no prazo'));
     }
-    /* RIF */
     if (vis('rif') && RFI.pedReady) {
       const it = []; rfPeds().forEach((p) => rfItens(p).forEach((i) => { if (i.fin && (i.st === 'a' || i.st === 'x')) it.push(i); }));
       const im = it.filter((i) => mesId(i.fin) === msMes), ip = it.filter((i) => mesId(i.fin) === msAnt);
-      const a1 = (L) => pc(L.filter((i) => i.st === 'a' && !(i.ant || []).length).length, L.length), am = a1(im), ap = a1(ip);
-      if (it.length || rfPeds().length) row('RIF', 'RIF', 'inspeção final', card({ l: 'Itens inspecionados no mês', v: NF.format(im.length), sub: tv(im.length, ip.length), c: MOD.RIF.c, go: { v: 'rif' } }),
-        card({ l: '% aprovado na 1ª inspeção', v: pcTxt(am), sub: tp(am, ap), c: MOD.RIF.c, cls: tier(am), go: { v: 'rif' } }));
+      const n1 = (L) => L.filter((i) => i.st === 'a' && !(i.ant || []).length).length, am = pc(n1(im), im.length), ap = pc(n1(ip), ip.length), g = { v: 'rif' };
+      if (it.length || rfPeds().length) add('RIF', 'RIF', { l: 'Itens inspecionados no mês', v: NF.format(im.length), sub: tv(im.length, ip.length), go: g },
+        pp('% aprovado na 1ª', n1(im), im.length, am, tp(am, ap), tier(am), g, 'na 1ª', 'Aprovados na 1ª'));
     }
-    /* Calibração */
-    if (vis('ins')) {
+    if (vis('ins') && M.ins.length) {
       const uso = M.ins.filter((x) => x.emUso), venc = uso.filter((x) => x.status === 'VENCIDO').length, dia = pc(uso.length - venc, uso.length);
-      if (M.ins.length) row('INS', 'Calibração', 'instrumentos de medição', card({ l: 'Instrumentos em uso', v: NF.format(uso.length), sub: `de ${NF.format(M.ins.filter(insVivo).length)} no parque`, c: MOD.INS.c, go: { v: 'cal' } }),
-        card({ l: 'Calibração em dia', v: pcTxt(dia), sub: venc ? `${NF.format(venc)} vencido(s)` : 'nenhum vencido', c: MOD.INS.c, cls: tier(dia), go: { v: 'cal', f: { status: ['VENCIDO'] } } }));
+      add('INS', 'Calibração', { l: 'Instrumentos em uso', v: NF.format(uso.length), sub: `de ${NF.format(M.ins.filter(insVivo).length)} no parque`, go: { v: 'cal' } },
+        pp('Em dia', uso.length - venc, uso.length, dia, venc ? `${NF.format(venc)} vencido(s)` : 'nenhum vencido', tier(dia), { v: 'cal', f: { status: ['VENCIDO'] } }, 'em dia', 'Em dia'));
     }
-    /* Soldagem */
     if (vis('sold') && SD.ready) {
-      const W = soldModel().W.filter((w) => w.situacao === 'Ativo'), ok = pc(W.filter((w) => w.nVal).length, W.length);
-      if (W.length) row('SOLD', 'Soldagem', 'soldadores', card({ l: 'Soldadores ativos', v: NF.format(W.length), c: MOD.SOLD.c, go: { v: 'sold' } }),
-        card({ l: 'Com qualificação válida', v: pcTxt(ok), sub: `${NF.format(W.filter((w) => !w.nVal).length)} sem qualificação válida`, c: MOD.SOLD.c, cls: tier(ok), go: { v: 'sold' } }));
+      const W = soldModel().W.filter((w) => w.situacao === 'Ativo'), nv = W.filter((w) => w.nVal).length, ok = pc(nv, W.length), g = { v: 'sold' };
+      if (W.length) add('SOLD', 'Soldagem', { l: 'Soldadores ativos', v: NF.format(W.length), go: g },
+        pp('Qualificação válida', nv, W.length, ok, `${NF.format(W.length - nv)} sem qualificação válida`, tier(ok), g, 'válida', 'Qualificação válida'));
     }
-    /* Avaliação de fornecedores */
     if (vis('iqf') && IQ.ready && vis('av')) {
-      const P = iqPeriod('12m'), L = iqCalc(P.a, P.b).filter((x) => x.cls), nC = L.filter((x) => x.cls === 'C').length;
-      if (L.length) row('IQF', 'Fornecedores', 'avaliação (IQF)', card({ l: 'Fornecedores avaliados', v: NF.format(L.length), sub: 'últimos 12 meses', c: MOD.IQF.c, go: { v: 'iqf' } }),
-        card({ l: 'Fornecedores classe C', v: NF.format(nC), sub: 'abaixo do mínimo', c: MOD.IQF.c, cls: nC ? 'warn' : 'ok', go: { v: 'iqf' } }));
+      const P = iqPeriod('12m'), L = iqCalc(P.a, P.b).filter((x) => x.cls), nC = L.filter((x) => x.cls === 'C').length, g = { v: 'iqf' };
+      if (L.length) add('IQF', 'Fornecedores', { l: 'Avaliados', v: NF.format(L.length), sub: 'últimos 12 meses', go: g },
+        { l: 'Classe C', v: NF.format(nC), sub: 'abaixo do mínimo', cls: nC ? 'warn' : 'ok', go: g, n: nC, d: L.length, rl: 'classe C', tone: 'warn', cnt: true, mini: `${NF.format(nC)} classe C` });
     }
-    /* Serviços */
-    if (vis('serv')) {
-      const Sm = M.serv.filter((x) => inM(x.data)), Sp = M.serv.filter((x) => inP(x.data)), sc = pc(Sm.filter(semCert).length, Sm.length), scp = pc(Sp.filter(semCert).length, Sp.length);
-      if (M.serv.length) row('SERV', 'Serviços', 'terceiros', card({ l: 'Serviços no mês', v: NF.format(Sm.length), sub: tv(Sm.length, Sp.length), c: MOD.SERV.c, go: { v: 'serv' } }),
-        card({ l: 'Sem certificado', v: pcTxt(sc), sub: tp(sc, scp), c: MOD.SERV.c, cls: tierInv(sc, 5, 10), go: { v: 'serv', f: { cert: 'sem' } } }));
+    if (vis('serv') && M.serv.length) {
+      const Sm = M.serv.filter((x) => inM(x.data)), Sp = M.serv.filter((x) => inP(x.data)), ns = Sm.filter(semCert).length, sc = pc(ns, Sm.length), scp = pc(Sp.filter(semCert).length, Sp.length);
+      add('SERV', 'Serviços', { l: 'No mês', v: NF.format(Sm.length), sub: tv(Sm.length, Sp.length), go: { v: 'serv', f: mes } },
+        { ...pp('Sem certificado', ns, Sm.length, sc, tp(sc, scp), tierInv(sc, 5, 10), { v: 'serv', f: { cert: 'sem' } }, 'sem certificado', 'Sem certificado'), tone: tierInv(sc, 5, 10) || 'warn' });
     }
-    if (!rows.length) return '';
-    return `<section class="sec gersec"><div class="band" style="--c:var(--geral);background:#0F1112"><h2>Resumo para a gerência · ${esc(mesTxt)}</h2><span class="src">verde ≥ ${GER_META.hi}% · amarelo ≥ ${GER_META.lo}% · vermelho abaixo</span></div><div class="block"><div class="body"><div class="ger">${rows.join('')}</div></div></div></section>`;
+    return R;
+  }
+  /* topo do Painel: mesmo layout de cartões de antes, 1 cartão por módulo — número do mês grande e o % no anel */
+  function gerPainelHTML() {
+    const R = gerDados(); if (!R.length) return '';
+    return `<div class="kpis">${R.map((x) => kpiHTML({ l: x.m + ' · ' + x.q.l, v: x.q.v, sub: [x.q.mini || x.p.mini || '', x.q.sub || ''].filter(Boolean).join(' · '), c: x.c, go: x.q.go, ...(x.p.d ? { pct: [x.p.n, x.p.d, x.p.rl, x.p.tone || ''] } : {}) })).join('')}</div>`;
   }
   /* ================= PAINEL · faixas de RIR, RND, RIF e visão do processo ================= */
   const msSer = (ms) => { const d = new Date(ms); return E.serialFromYMD(d.getFullYear(), d.getMonth() + 1, d.getDate()); };
