@@ -440,6 +440,9 @@ select.fld option { color: #000; font-weight: normal; }
 .pv-head b { font-size: 14px; word-break: break-word; }
 .pv-head .falta b { color: var(--warn); font-weight: normal; font-style: italic; }
 .pv-head .manual b { color: var(--muted); font-weight: normal; font-style: italic; }
+.pv-pvbox label { display: block; }
+.pv-pvbox input { width: 100%; max-width: 220px; font: 700 14px/1.2 inherit; padding: 5px 8px; border: 1px solid var(--line, #888); border-radius: 6px; background: transparent; color: inherit; }
+.pv-pvbox input.bad { border-color: var(--warn, #c60); }
 .modal p.pv-sum { font-weight: bold; margin: 0 0 8px; }
 .pv-table-wrap {
   flex: 1 1 auto; min-height: 120px; max-height: 50vh;
@@ -556,7 +559,7 @@ select.fld option { color: #000; font-weight: normal; }
     <div class="aviso-pendente" id="avisoPendente" hidden></div>
     <div class="panel-gap"></div>
     <button type="button" class="btn accent" id="btnPedido" title="Ler o PDF do pedido de venda (Omie): cliente, Nº do PV, pedido do cliente, quantidades e descrições. Também dá para arrastar o PDF para a página.">Importar PV (PDF)…</button>
-    <button type="button" class="btn accent" id="btnOC" title="Ler o PDF da ordem de compra do cliente (Jurong/SAP): cliente, Nº da O.C., item da O.C., quantidades e descrições. O Nº do certificado fica em branco para digitar.">Importar O.C. (PDF)…</button>
+    <button type="button" class="btn accent" id="btnOC" title="Ler o PDF da ordem de compra do cliente (Jurong/SAP): cliente, Nº da O.C., item da O.C., quantidades e descrições. Pede o Nº do pedido (PV) para numerar as folhas.">Importar O.C. (PDF)…</button>
     <button type="button" class="btn omie" id="btnLinkOmie" title="Sem baixar o PDF: no Omie, abra o pedido de venda em PDF, copie o endereço da página (Ctrl+C) e cole aqui. Também dá para apertar Ctrl+V em qualquer lugar da página.">Colar link do Omie…</button>
     <button type="button" class="btn secondary" id="btnAbrir" title="Carregar certificados salvos em Excel (.xlsx ou .xlsm). Selecione várias folhas de uma vez (26027, 26027A…) para abrir o conjunto.">Abrir Excel…</button>
     <button type="button" class="btn secondary" id="btnAssinatura" title="Incluir a imagem da assinatura do responsável (PNG ou JPG)">Assinatura…</button>
@@ -564,7 +567,7 @@ select.fld option { color: #000; font-weight: normal; }
     <input type="file" id="ocInput" accept=".pdf,application/pdf" hidden>
     <input type="file" id="sigInput" accept="image/png,image/jpeg" hidden>
     <input type="file" id="fileInput" multiple accept=".xlsx,.xlsm,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel.sheet.macroEnabled.12" hidden>
-    <p class="panel-hint">Pedido do Omie sem baixar: abra o PDF do pedido no Omie, copie o endereço da página e aperte Ctrl+V aqui. Também dá para importar o PDF do pedido de venda ou da O.C. do cliente: cada 10 itens viram uma folha (26027, 26027A, 26027B…). Pela O.C., o Nº do certificado fica em branco para digitar. Cliente, O.C., nota fiscal e data valem para todas as folhas. Os dados ficam salvos neste navegador enquanto você preenche; cole linhas copiadas do Excel direto nas tabelas.</p>
+    <p class="panel-hint">Pedido do Omie sem baixar: abra o PDF do pedido no Omie, copie o endereço da página e aperte Ctrl+V aqui. Também dá para importar o PDF do pedido de venda ou da O.C. do cliente: cada 10 itens viram uma folha (26027, 26027A, 26027B…). Pela O.C., a Central pede o Nº do pedido (PV) para numerar as folhas. Cliente, O.C., nota fiscal e data valem para todas as folhas. Os dados ficam salvos neste navegador enquanto você preenche; cole linhas copiadas do Excel direto nas tabelas.</p>
   </aside>
 </div>
 
@@ -1212,6 +1215,8 @@ function sugerirNormas(texto) {
   }
   const reMss = /\bMSS[\s-]*SP[\s-]*(\d{2,3})\b/g;
   while ((m = reMss.exec(t))) achados.push([m.index, 'e', `MSS SP-${m[1]}`, `SP${m[1]}`]);
+  const reIso = /\b(?:BS\s*)?(?:EN\s*)?ISO\s?27509\b/g;   // flange compacto
+  while ((m = reIso.exec(t))) achados.push([m.index, 'e', 'ISO 27509', 'ISO27509']);
   const reDin = /\b(?:DIN\s*)?EN\s?1092-1\b/g;
   while ((m = reDin.exec(t))) achados.push([m.index, 'e', 'DIN EN1092-1', 'EN1092']);
   // materiais: ASTM Axxx (com grau e classe) e API 5L
@@ -1229,9 +1234,17 @@ function sugerirNormas(texto) {
       grau = g[1];
       sep = /^CC/.test(grau) ? ' GR.' : ' / ';
     }
-    const depois = g ? resto.slice(g[0].length) : resto;
+    let depois = g ? resto.slice(g[0].length) : resto;
+    /* inox "L" e dupla certificação: F316/F316L, WP316/316L, GR. 316/316L, TP304/304L → mantém o grau duplo inteiro */
+    if (grau) {
+      const pre = { 182: 'F', 403: 'WP', 312: 'TP', 213: 'TP', 269: 'TP', 249: 'TP', 358: 'TP', 376: 'TP', 479: '' }[num];
+      if (/^\d{3}/.test(grau) && pre) { grau = pre + grau; sep = ' / '; }
+      const d = /^\s*\/\s*(?:F|WP|TP)?(\d{3}[A-Z]{0,2})(-W)?\b/.exec(depois);
+      if (d) { grau += '/' + d[1] + (d[2] || ''); depois = depois.slice(d[0].length); }
+    }
     const c = /^\s*CL(?:ASSE|ASS)?\.?\s*(\d{1,2})\b/.exec(depois);
     if (c) cl = ` CL.${c[1]}`;
+    else if (/^WP/.test(grau)) { const w = /\bCLASS(?:E)?\s*WP-(S|W|WX|WU)\b/.exec(t); if (w) cl = '-' + w[1]; }   // WP316/316L-WX (com costura, radiografada)
     achados.push([m.index, 'm', `ASTM A-${num}${grau ? sep + grau : ''}${cl}`, `A${num}`]);
   }
   const reApi = /\bAPI\s?5L\b(?:\s*(?:GR(?:ADE)?\.?\s*)?(B|X\d{2})\b)?(?:\s*(PSL\s?[12]))?/g;
@@ -1243,7 +1256,8 @@ function sugerirNormas(texto) {
     vistos.add(chave);
     (tipo === 'e' ? especs : mats).push(txt);
   }
-  if (mats.length && /\bNACE\b|ISO\s?15156/.test(t)) mats[0] += ' NACE MR0175';
+  /* NACE MR0175 (ou ISO 15156) vai junto da especificação: "ASME B16.5 / NACE MR0175" */
+  if (/\bNACE\b|ISO\s?15156/.test(t)) especs.push('NACE MR0175');
   return { espec: especs.join(' / '), material: mats.join(' / '), especs, materiais: mats };
 }
 /* Grades de piso e degraus: vão para o certificado de produtos fabricados (produto + componentes) */
@@ -3923,9 +3937,15 @@ function casarComLista(valor, lista) {
 }
 function prepararNormas(ped) {
   const kRef = refOf(BASE.produto + 1, 11), nRef = refOf(BASE.produto + 1, 14);
+  /* não coube: tira as normas do meio, mas a NACE MR0175 fica (ex.: "ASME B16.11 / NACE MR0175") */
   const ajustar = (partes, ref) => {
     let v = casarComLista(partes.join(' / '), FIELD[ref].list);
-    if (v && !cabeNaCelula(ref, v) && partes.length > 1) v = casarComLista(partes[0], FIELD[ref].list);
+    if (v && !cabeNaCelula(ref, v) && partes.length > 1) {
+      const nace = partes.filter((x) => /NACE/.test(x)), outras = partes.filter((x) => !/NACE/.test(x));
+      const curto = outras.length ? [outras[0]].concat(nace) : nace;
+      v = casarComLista(curto.join(' / '), FIELD[ref].list);
+      if (!cabeNaCelula(ref, v) && curto.length > 1) v = casarComLista(curto[0], FIELD[ref].list);
+    }
     return v;
   };
   for (const it of ped.itens) {
@@ -3935,17 +3955,112 @@ function prepararNormas(ped) {
     it.material = ajustar(s.materiais, nRef);
   }
 }
-/* O.C.: a descrição do SAP repete o texto técnico inteiro entre parênteses — quando não cabe,
- * fica só o trecho antes do parêntese (o texto completo continua na tela de conferência) */
+/* Descrição padronizada da O.C.: PRODUTO + MEDIDAS + SCH/CLASSE + FACE/PONTAS + extras.
+   Norma e material saem da descrição (vão para Especificação e Material). Se não reconhecer o produto, devolve ''. */
+function descPadrao(txt) {
+  let t = String(txt || '').toUpperCase().replace(/[“”″]/g, '"').replace(/\s+/g, ' ').trim();
+  /* o SAP repete o texto técnico inteiro num parêntese longo no fim: corta nele (parênteses curtos como "(DUPLA CERT.)" ficam) */
+  for (let i = t.indexOf('('); i > 10; i = t.indexOf('(', i + 1)) {
+    const f = t.indexOf(')', i), dentro = f < 0 ? t.slice(i + 1) : t.slice(i + 1, f);
+    if (dentro.length > 40) { t = t.slice(0, i).trim(); break; }
+  }
+  const a = t.normalize('NFD').replace(/[̀-ͯ]/g, '');       // sem acento, só para procurar
+  const has = (re) => re.test(a);
+  /* ---- produto (ordem de prioridade) ---- */
+  const P = [
+    [/\bFLANGE\s+(DE\s+)?REDUCAO\b/, () => 'FLANGE DE REDUÇÃO' + (has(/ROSCAD|NPT/) ? ' NPT' : '')],
+    [/\bFLANGE\b[^,]*?\bCOMPACTO\b/, () => (has(/PESCOCO|WELD\s*NECK/) ? 'FLANGE WN COMPACTO' : 'FLANGE COMPACTO')],
+    [/\bFLANGE\s+CEGO\b|\bBLIND\b/, () => 'FLANGE CEGO'],
+    [/\bFLANGE\b[^,]*?\b(PESCOCO|WELD\s*NECK|WN)\b/, () => 'FLANGE WN'],
+    [/\bFLANGE\b[^,]*?\b(ENCAIXE|SOCKET|SW)\b/, () => 'FLANGE SW'],
+    [/\bFLANGE\b[^,]*?\b(SOBREPOSTO|SLIP[\s-]*ON)\b/, () => 'FLANGE SO'],
+    [/\bFLANGE\b[^,]*?\b(ROSCADO|NPT)\b/, () => 'FLANGE ROSCADO NPT'],
+    [/\bFLANGE\b[^,]*?\b(LAP\s*JOINT|SOLTO)\b/, () => 'FLANGE LJ'],
+    [/\bFLANGE\b/, () => 'FLANGE'],
+    [/\b(CURVA|COTOVELO|ELBOW)\b/, () => { const g = /(\d{2,3})\s*(°|GRAUS|DEG)/.exec(a); return 'CURVA ' + (g ? g[1] + '°' : '') + (has(/RAIO\s+LONGO|\bLR\b/) ? ' RL' : has(/RAIO\s+CURTO|\bSR\b/) ? ' RC' : ''); }],
+    [/\bTE\s+(DE\s+)?REDUCAO/, () => 'TE DE REDUÇÃO'],
+    [/\bTE\b/, () => 'TE'],
+    [/\bNIPLE\s+(DE\s+)?REDUCAO\s*EXCENTRIC/, () => 'NIPLE DE REDUÇÃO EXCÊNTRICO'],
+    [/\bNIPLE\s+(DE\s+)?REDUCAO\b/, () => 'NIPLE DE REDUÇÃO CONCÊNTRICO'],
+    [/\bREDUCAO\s*EXCENTRIC/, () => 'REDUÇÃO EXCÊNTRICA'],
+    [/\bREDUCAO\s*CONCENTRIC/, () => 'REDUÇÃO CONCÊNTRICA'],
+    [/\b(SOCKOLET|WELDOLET|THREDOLET|ELBOLET|LATROLET|NIPOLET|SWEEPOLET)\b/, (m) => m[1]],
+    [/\bLUVA\s+(DE\s+)?REDUCAO\b/, () => 'LUVA DE REDUÇÃO'],
+    [/\bMEIA\s+LUVA\b/, () => 'MEIA LUVA'],
+    [/\bLUVA\b/, () => 'LUVA'],
+    [/\b(TAMPAO|CAP)\b/, () => 'TAMPÃO' + (has(/ROSCAD|NPT/) ? ' NPT' : '')],
+    [/\bBUJAO\b|\bPLUG\b/, () => 'BUJÃO' + (has(/ROSCAD|NPT/) ? ' NPT' : '')],
+    [/\bUNIAO\b/, () => 'UNIÃO'],
+    [/\bCRUZETA\b/, () => 'CRUZETA'],
+    [/\bNIPLE\b/, () => 'NIPLE'],
+    [/\bTUBO\b/, () => 'TUBO' + (has(/SEM\s+COSTURA|\bSMLS\b/) ? ' SEM COSTURA' : '')],
+  ];
+  let prod = '', pos = -1;
+  for (const [re, f] of P) { const m = re.exec(a); if (m) { prod = f(m).trim(); pos = m.index; break; } }
+  if (!prod) return '';
+  /* ---- medidas: o trecho antes do produto (ex.: 3" x 20" S-40S x 0.750") ou "10 POL x 8 POL" no meio do texto ---- */
+  const ant = pos > 0 ? t.slice(0, pos) : '';
+  const med = [], sch = [];
+  const pegar = (s) => {
+    const re = /(\d+\s+\d+\/\d+"|\d+-\d+\/\d+"|\d+\/\d+"|\d*[.,]\d+"|\d+")|(\d*[.,]\d+|\d+(?:[ -]\d+\/\d+)?|\d+\/\d+)\s*POL\b|\bS(?:CH)?[\s.-]*(\d{1,3}S?|XXS|XS|STD)\b|(\d{3,4})\s*#/g;
+    let m; const out = [];
+    while ((m = re.exec(s))) {
+      if (m[1]) { let v = m[1].replace(/(\d)-(\d)/, '$1 $2').replace(',', '.'); if (/^\./.test(v)) v = '0' + v; const fr = { '.5': ' 1/2', '.25': ' 1/4', '.75': ' 3/4' }, d = /^(\d+)(\.\d{1,2})"$/.exec(v); if (d && fr[d[2]]) v = (d[1] === '0' ? '' : d[1]) + fr[d[2]] + '"'; out.push(['m', v.trim()]); }
+      else if (m[2]) { let v = m[2].replace(/(\d)-(\d)/, '$1 $2').replace(',', '.'); if (/^\./.test(v)) v = '0' + v; out.push(['m', v + '"']); }
+      else if (m[3]) out.push(['s', m[3]]);
+      else if (m[4]) out.push(['c', m[4]]);
+    }
+    return out;
+  };
+  let tok = pegar(ant);
+  if (!tok.some((x) => x[0] === 'm')) tok = tok.concat(pegar(t.slice(pos)));
+  let classe = '';
+  tok.forEach(([k, v]) => { if (k === 'm' && !med.includes(v)) med.push(v); else if (k === 's') sch.push(v); else if (k === 'c' && !classe) classe = v; });
+  if (!sch.length) { const m = /\bSCH(?:EDULE)?[\s.:-]*(\d{1,3}S?|XXS|XS|STD)\b/.exec(a); if (m) sch.push(m[1]); }
+  if (!classe) { const m = /CLASSE\s*(?:DE\s+PRESSAO:?\s*)?(\d{3,4})\s*(#|LBS?)?|\b(\d{3,4})\s*#/.exec(a); if (m) classe = m[1] || m[3]; }
+  /* espessura em polegada decimal (0.531", 0.750") fica no fim das medidas */
+  const ehEsp = (v) => /^0\.\d+"$/.test(v);
+  const dims = med.filter((v) => !ehEsp(v)), esp = med.filter(ehEsp);
+  if (prod === 'TE' && dims.length > 1 && dims[0] !== dims[1]) prod = 'TE DE REDUÇÃO';   // "TÊ 6\" x 3\"" = te de redução
+  let medTxt = dims.join(' x ');
+  const sch1 = sch.filter((v, i) => sch.indexOf(v) === i);   // "40S x 40S" = 40S
+  if (sch1.length) medTxt += ' SCH ' + (sch1.length === 1 ? sch1[0] : sch.join(' x '));
+  if (esp.length) medTxt += ' x ' + esp.join(' x ');
+  /* ---- classe / face / pontas ---- */
+  const eFlange = /^FLANGE/.test(prod);
+  const ext = [];
+  if (classe) ext.push(eFlange ? 'CL ' + classe : classe + '#');
+  if (eFlange) {
+    if (has(/\bRTJ\b|JUNTA\s+TIPO\s+ANEL/)) ext.push('RTJ');
+    else if (has(/FACE\s+COM\s+RESSALTO|\bRF\b/)) ext.push('RF');
+    else if (has(/FACE\s+PLANA|\bFF\b/)) ext.push('FF');
+    if (has(/IX\s+SEAL\s+RING/)) ext.push('IX SEAL RING');
+  } else if (!/NPT/.test(prod)) {
+    if (has(/BISEL\w*\s*X\s*PLANA/)) ext.push('BW x PE');
+    else if (has(/BIS\s?ELAD|SOLDA\s+DE\s+TOPO|\bBWE?\b/)) ext.push('BW');
+    else if (has(/ENCAIXE|SOCKET|\bSW\b/)) ext.push('SW');
+    else if (has(/ROSCAD|\bNPT\b/)) ext.push('NPT');
+  }
+  if (has(/COM\s+COSTURA|WELDED|\bWX\b/) && !/TUBO SEM/.test(prod)) ext.push('COM COSTURA');
+  return [prod, medTxt, ext.join(' ')].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
+}
+/* O.C.: a descrição do SAP vem com a medida antes do produto e repete o texto técnico inteiro entre parênteses.
+ * Vira a descrição padronizada (produto primeiro; norma e material vão nas colunas próprias). Produto que a Central
+ * não reconhece: quando não cabe, fica só o trecho antes do parêntese. O texto completo continua na tela de conferência. */
 function prepararDescricoesOC(ped) {
   for (const it of ped.itens) {
     it.descricaoCompleta = it.descricaoCompleta || it.descricao || '';
     it.descricao = it.descricaoCompleta;
     it.resumida = false;
+    it.padrao = false;
     it.naoCabe = false;
-    if (!it.descricao || descricaoCabe(it.descricao)) continue;
-    const i = it.descricao.indexOf(' (');
-    if (i >= 15) { it.descricao = it.descricao.slice(0, i).trim(); it.resumida = true; }
+    if (!it.descricao) continue;
+    const pad = ehGrade(it.descricao) ? '' : descPadrao(it.descricao);
+    if (pad) { it.descricao = pad; it.resumida = true; it.padrao = true; }
+    else if (!descricaoCabe(it.descricao)) {
+      const i = it.descricao.indexOf(' (');
+      if (i >= 15) { it.descricao = it.descricao.slice(0, i).trim(); it.resumida = true; }
+    }
     it.naoCabe = !descricaoCabe(it.descricao);
   }
 }
@@ -4032,10 +4147,10 @@ async function importarPed(ped) {
   if (nSug) setStatus(`${nSug} ${nSug === 1 ? 'campo' : 'campos'} ${GRADES ? '' : 'de especificação/material '}com sugestão (em amarelo): confira`);
   const resto = la.length ? ` · ${la.length} ${la.length === 1 ? 'item foi' : 'itens foram'} para ${TIPOS[OUTRO_TIPO]}` : '';
   if (ped.tipo === 'oc') {
-    focusField(REF_NUMERO);
+    if (!ped.pv) focusField(REF_NUMERO);
     const longos = aqui.flatMap((i, k) => (ped.itens[i].naoCabe ? [k + 1] : []));
-    toast(`O.C. ${ped.oc || ''} importada: ${qtd}. Digite o Nº do certificado` +
-      (longos.length ? ` e ajuste a descrição ${longos.length === 1 ? `do ${um} ` + longos[0] : `dos ${varios} ` + longos.join(', ')} (não cabe na célula)` : '') + resto);
+    const ajuste = longos.length ? `ajuste a descrição ${longos.length === 1 ? `do ${um} ` + longos[0] : `dos ${varios} ` + longos.join(', ')} (não cabe na célula)` : '';
+    toast(`O.C. ${ped.oc || ''} importada: ${qtd}.` + (ped.pv ? ` Nº do certificado ${ped.pv} nas folhas.${ajuste ? ' Confira: ' + ajuste : ''}` : ` Digite o Nº do certificado${ajuste ? ' e ' + ajuste : ''}`) + resto);
   } else toast(`Pedido ${ped.pv || ''} importado: ${qtd}${resto}`);
 }
 
@@ -4063,11 +4178,26 @@ function conferirPedido(ped) {
     d.append(el('span', rotulo), el('b', valor || vazio));
     return d;
   };
+  /* O.C.: pede o Nº do pedido (PV) para numerar as folhas (PV, PV A, PV B…); na Central já vem o PV do cartão da fila */
+  let pvIn = null, pvBox = null;
+  if (oc) {
+    pvBox = el('div', '', 'pv-pvbox');
+    pvIn = document.createElement('input');
+    pvIn.type = 'text'; pvIn.inputMode = 'numeric'; pvIn.autocomplete = 'off'; pvIn.id = 'pv-num';
+    pvIn.placeholder = 'ex.: 25940 ou 25940/1';
+    let doHost = ''; try { doHost = CQ_EMBED && window.parent.CQ_CERT_HOST.pv ? String(window.parent.CQ_CERT_HOST.pv() || '') : ''; } catch (e) { doHost = ''; }
+    pvIn.value = ped.pv || doHost;
+    const lb = el('label'); lb.htmlFor = 'pv-num';
+    lb.append(el('span', 'Nº do pedido (PV) → Nº do certificado'), pvIn);
+    pvBox.appendChild(lb);
+  }
+  const pvNorm = (v) => { const m = /^\s*(\d[\d.]*)\s*(?:\/\s*(\d+))?\s*$/.exec(String(v || '')); return m ? m[1].replace(/\./g, '').replace(/^0+/, '') + (m[2] ? '/' + m[2] : '') : ''; };
+  if (pvIn) ped.pv = pvNorm(pvIn.value);
   if (oc) {
     head.append(
       info('Ordem de compra → O.C. do cliente', ped.oc),
       info('Cliente', ped.cliente),
-      info('Nº do certificado', '', 'em branco — digite depois', 'manual'));
+      pvBox);
   } else {
     head.append(
       info('Pedido de venda → Nº do certificado', ped.pv),
@@ -4118,7 +4248,7 @@ function conferirPedido(ped) {
     if (it.resumida) {
       // texto completo da O.C. ao lado (passar o mouse ou clicar em "ver completa")
       const det = el('details', '', 'pv-full');
-      det.append(el('summary', 'resumida · ver completa'), el('span', it.descricaoCompleta));
+      det.append(el('summary', it.padrao ? 'padronizada · ver a descrição da O.C.' : 'resumida · ver completa'), el('span', it.descricaoCompleta));
       det.title = it.descricaoCompleta;
       desc.appendChild(det);
     }
@@ -4151,11 +4281,11 @@ function conferirPedido(ped) {
   table.append(thead, tbody);
   tw.appendChild(table);
   const textoNota = GRADES
-    ? `Entram nas folhas: cliente, O.C. do cliente, ${oc ? 'o Nº do certificado em branco (digite-o na 1ª folha)' : 'Nº do certificado (Nº do PV + letra)'} e, para cada produto, quantidade, descrição e item da O.C. ` +
+    ? `Entram nas folhas: cliente, O.C. do cliente, ${oc ? 'o Nº do certificado (Nº do pedido + letra; em branco se não informar o pedido)' : 'Nº do certificado (Nº do PV + letra)'} e, para cada produto, quantidade, descrição e item da O.C. ` +
       'Tipo, acabamento, medidas e componentes vêm como sugestão (em amarelo na folha) — dá para incluir ou tirar componentes depois. Até 5 produtos e 11 componentes por folha. '
     : oc
       ? 'Entram nas folhas: cliente, O.C. do cliente, item da O.C., quantidade e descrição de cada item (até 10 itens por folha). ' +
-        'O Nº do certificado fica em branco: digite-o na 1ª folha e as seguintes recebem a letra (A, B…) sozinhas. ' +
+        'Com o Nº do pedido (PV), todas as folhas saem com o Nº do certificado: PV, PV A, PV B…; sem ele, o Nº fica em branco para digitar na 1ª folha. ' +
         'Especificação e material vêm como sugestão (quando a descrição traz a norma); corrida, análises e tratamento térmico continuam para preencher. '
       : 'Entram nas folhas: cliente, Nº do certificado (Nº do PV + letra a cada 10 itens), O.C. do cliente, quantidade e descrição de cada item. ' +
         'Especificação e material vêm como sugestão (quando a descrição traz a norma); item da O.C., corrida, análises e tratamento térmico continuam para preencher. ';
@@ -4223,7 +4353,14 @@ function conferirPedido(ped) {
       { label: 'Cancelar', value: null },
       { label: 'Criar', primary: true, value: () => { ped.usarNormas = !!(optNormas && optNormas.checked); return sel.flatMap((s, i) => (s ? [i] : [])); } },
     ],
-    init: ({ buttons }) => { btnOk = buttons[1]; atualizar(); },
+    init: ({ buttons }) => {
+      btnOk = buttons[1];
+      if (pvIn) {
+        pvIn.addEventListener('input', () => { const v = pvNorm(pvIn.value); pvIn.classList.toggle('bad', !!pvIn.value.trim() && !v); ped.pv = v; atualizar(); });
+        if (!pvIn.value) setTimeout(() => pvIn.focus(), 50);
+      }
+      atualizar();
+    },
   });
 }
 /* cabeçalho comum das folhas importadas */
@@ -4232,7 +4369,7 @@ function cabecalhoImportado(c, ped, k) {
   if (ped.pedidoCliente) c.v[REF_OC] = cleanText(ped.pedidoCliente);
   if (ped.pv) c.v[REF_NUMERO] = ped.pv + sufixo(k);
 }
-/* monta as folhas: até 10 itens cada; Nº = PV, PV+A, PV+B… (pela O.C. o Nº fica em branco); cabeçalho igual em todas */
+/* monta as folhas: até 10 itens cada; Nº = PV, PV+A, PV+B… (pela O.C., o PV informado na importação; sem ele, em branco); cabeçalho igual em todas */
 function montarConjunto(ped, indices) {
   if (GRADES) { montarGrades(ped, indices); return; }
   const itens = indices.map(i => ped.itens[i]);

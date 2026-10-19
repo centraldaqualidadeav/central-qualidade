@@ -36,6 +36,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
 .card.nc h3 { background: var(--crit); }
 .card.cc h3 { background: #b8860b; }
 .card.i h3 { background: #2d77c1; }
+.ifoto { display: block; width: 100%; max-height: 420px; object-fit: contain; background: #111; }
 .hero.i { border-top-color: #2d77c1; }
 .hero.cc { border-top-color: #b8860b; }
 .hero.sr { border-top-color: var(--crit); }
@@ -117,7 +118,9 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
     var at = x.at ? new Date(Number(x.at)) : null;
     out.innerHTML = '<div style="display:grid;gap:14px">'
       + '<div class="hero ' + (st[0] === 'ok' ? 'i' : st[0]) + '">' + (st[0] === 'ok' ? SEAL : '') + '<span class="eb">Instrumento de medição</span><span class="code">' + esc(x.codigo) + '</span>'
-      + '<span class="desc">' + esc(x.desc || '') + '</span><span class="chip ' + st[0] + '">' + st[1] + '</span></div>'
+      + '<span class="desc">' + esc(x.desc || '') + '</span><span class="chip ' + st[0] + '">' + st[1] + '</span>' + (x.avaria ? ' <span class="chip warn">⚠ Com avaria — veja abaixo</span>' : '') + '</div>'
+      + (x.avaria ? '<div class="card cc"><h3>Atenção: instrumento com avaria</h3><div class="r"><b style="text-align:left">' + esc(x.avObs || 'Avaria registrada pela Qualidade.') + '</b></div>' + (x.avEm ? '<div class="r"><span>Registrado em</span><b>' + new Date(Number(x.avEm)).toLocaleDateString('pt-BR') + '</b></div>' : '') + '</div>' : '')
+      + (/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(String(x.foto || '')) ? '<div class="card i"><h3>Foto do instrumento</h3><img class="ifoto" src="' + esc(x.foto) + '" alt="Foto do instrumento">' + (x.fotoEm ? '<div class="r"><span>Foto de</span><b>' + new Date(Number(x.fotoEm)).toLocaleDateString('pt-BR') + '</b></div>' : '') + '</div>' : '')
       + card('Calibração', row('Calibrado em', fd(x.dataCal)) + row('Válido até', fd(x.validade)) + row('Resultado', resT) + row('Laboratório', x.lab) + row('Nº do certificado', x.cert, 1))
       + card('Instrumento', row('Tipo', x.tipo) + row('Marca', x.marca) + row('Nº de série', x.serie, 1) + row('Faixa de medição', x.faixa) + row('Resolução', x.resol))
       + card('Onde fica', row('Setor', x.setor) + row('Local / com quem está', x.local), 1)

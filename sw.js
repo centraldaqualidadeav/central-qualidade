@@ -1,6 +1,6 @@
 /* Central da Qualidade · service worker
    Sempre busca a versão mais nova da página na internet; a cópia guardada só é usada se estiver sem conexão. */
-const CACHE = 'central-cq-v22'; /* v22: NCF/NCC no lugar de RNC/RND, RIF (Usinagem), conta dona apaga qualquer coisa, linha do CQ alinhada no menu recolhido */
+const CACHE = 'central-cq-v24'; /* v24: fotos e estado (avaria) dos instrumentos de calibração, na ficha e na página do QR */
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).catch(() => {})); self.skipWaiting(); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });

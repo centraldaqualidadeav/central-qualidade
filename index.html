@@ -1033,6 +1033,16 @@ body.tabmode .main { padding: 0 !important; }
 .eqmeta { font-size: 12px; color: var(--ink-3); line-height: 1.45; margin-top: 4px; } .eqmeta b { color: var(--ink-2); font-weight: 600; }
 .eqfh { display: grid; grid-template-columns: 300px 1fr; gap: 16px; align-items: start; margin: 0 0 14px; }
 .eqfh .eqbox { width: 300px; height: 200px; } .eqfh .eqbox svg { width: 280px; }
+.eqbox.eqfoto { position: relative; cursor: zoom-in; background: #111; } .eqbox.eqfoto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.eqbox.eqfoto i { position: absolute; left: 6px; bottom: 6px; font: 600 11px var(--f-body); font-style: normal; color: #fff; background: rgba(0,0,0,.55); padding: 2px 6px; border-radius: 4px; }
+.imgzoom { position: fixed; inset: 0; z-index: 400; background: rgba(0,0,0,.85); display: grid; place-items: center; padding: 20px; cursor: zoom-out; }
+.imgzoom img { max-width: 100%; max-height: calc(100vh - 80px); border-radius: 6px; } .imgzoom .btn { position: absolute; top: 14px; right: 14px; }
+.insfotos img[data-zoom] { cursor: zoom-in; }
+.insfotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.insfotos figure { position: relative; margin: 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface-2); }
+.insfotos img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+.insfotos figcaption { font-size: 11.5px; padding: 5px 7px; color: var(--ink-3); }
+.insfotos [data-fdel], .insfotos [data-nrm] { position: absolute; top: 4px; right: 4px; background: rgba(255,255,255,.9); }
 .eqfh .scs { color: var(--cal); font: 700 14px var(--f-mono); } .eqfh h3 { margin: 2px 0 6px; font: 700 18px/1.25 var(--f-display); text-transform: uppercase; }
 .eqfh .eqmeta { font-size: 13px; margin-top: 8px; }
 :root[data-theme="dark"] .eqbox { background: radial-gradient(120% 90% at 50% 30%, #4a535b 0%, #343b41 60%, #2a3035 100%); }
@@ -4652,6 +4662,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (mod === 'AV' && PUB()) { const tok = ((DB.meta.AV || {})[key] || {}).qr; if (tok) DB.db.doc('pub/' + tok).delete().catch(() => {}); }
     await DB.db.doc(MOD[mod].col + '/' + docId).update({ items: { [key]: { _del: true, _u: Date.now(), _ub: DB.me || null } } });
     if (mod === 'RNC') FT.delAll('rncfot', key).catch(() => {});
+    if (mod === 'INS') { FT.delAll('insfot', key).catch(() => {}); delete INSF[key]; }
     if (mod === 'RNCC') FT.delAll('rnccf', key).catch(() => {});
   }
   async function logEntry(mod, key, act, label, diff) {
@@ -5192,7 +5203,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         + (sit === 'bloqueado' && x.resultado !== 'REPROVADO' && !insImpPend(x) ? bt('ins-lib', 'Liberar para uso') : '')
         + (x.status !== 'DESCARTADO' ? bt('ins-etq', 'Etiqueta QR') : '')
         + bt('ins-cert', ic.certUrl ? 'Enviar novo certificado' : 'Enviar certificado')
-        + editBtn + (x.status !== 'DESCARTADO' ? bt('ins-baixa', 'Dar baixa') : '') : '';
+        + editBtn + (x.status !== 'DESCARTADO' ? bt('ins-baixa', 'Dar baixa') : '') + bt('ins-foto', 'Fotos e estado') : '';
       extra += eqFichaHTML(x);
       S.insHist = insHistHTML(x);
     }
@@ -5205,6 +5216,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const hist = mod === 'INS' ? S.insHist || '' : ''; S.insHist = '';
     openDrawer(title, MOD[mod].name, (acts ? `<div class="formfoot">${acts}</div>` : '') + extra + kv(pairs) + (mod === 'AV' ? '<div id="av-corr"></div>' : '') + hist + metaLine(mod, key) + (mod === 'AV' ? cqLoteHTML(x) : '') + rel, MOD[mod].c);
     if (mod === 'AV') avCorrFill(x);
+    if (mod === 'INS') insFotoFill(x);
   }
 
   /* ================= tabelas ================= */
@@ -6103,16 +6115,113 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     Object.keys(o).forEach((k) => { if (o[k] === '') delete o[k]; });
     return o;
   }
+  /* foto e avaria vão junto na página pública (lidas do índice das fotos, para nunca sumirem numa atualização) */
+  async function insPubFull(x) {
+    const o = insPubData(x), F = await insFotoIdx(x.key);
+    if (F.th) { o.foto = F.th; if (F.thAt) o.fotoEm = String(F.thAt); }
+    if (F.est && F.est.av) { o.avaria = '1'; if (F.est.obs) o.avObs = F.est.obs; if (F.est.at) o.avEm = String(F.est.at); }
+    return o;
+  }
   async function insEnsurePub(x) {
     if (!PUB()) return null;
     let tok = insTok(x);
     if (!tok && cw('ins')) { tok = 'k' + newToken(); try { await updateRecord('INS', x.key, { qr: tok }); } catch (e) { return null; } }
-    if (tok && cw('ins')) { try { await DB.db.doc('pub/' + tok).set(insPubData(x)); } catch (e) { console.warn('página do instrumento não atualizada', e); } }
+    if (tok && cw('ins')) { try { await DB.db.doc('pub/' + tok).set(await insPubFull(x)); } catch (e) { console.warn('página do instrumento não atualizada', e); } }
     return tok;
   }
   function insPubSync() {
     if (!PUB() || !INSQ.size || !cw('ins')) { INSQ.clear(); return; }
-    Array.from(INSQ).forEach((k) => { INSQ.delete(k); const x = findRec('INS', k), tok = x && insTok(x); if (tok) DB.db.doc('pub/' + tok).set(insPubData(x)).catch((e) => console.warn(e)); });
+    Array.from(INSQ).forEach((k) => { INSQ.delete(k); const x = findRec('INS', k), tok = x && insTok(x); if (tok) insPubFull(x).then((o) => DB.db.doc('pub/' + tok).set(o)).catch((e) => console.warn(e)); });
+  }
+  /* foto ampliada por cima de tudo (clique ou Esc fecha) */
+  function imgZoom(src) {
+    const o = document.createElement('div'); o.className = 'imgzoom'; o.innerHTML = `<img src="${src}" alt=""><button type="button" class="btn small" aria-label="Fechar">✕ Fechar</button>`;
+    const fecha = () => { o.remove(); document.removeEventListener('keydown', esc1, true); };
+    const esc1 = (e) => { if (e.key === 'Escape') { e.stopPropagation(); fecha(); } };
+    o.onclick = fecha; document.addEventListener('keydown', esc1, true); document.body.appendChild(o);
+  }
+  /* ---------- fotos e estado do instrumento (insfot/{key}: índice com fotos, estado e miniatura; insfot/{key}__{id}: a foto) ---------- */
+  const INSF = {};
+  async function insFotoIdx(key, fresh) {
+    if (!fresh && INSF[key]) return INSF[key];
+    let d = {}; try { const s = await DB.db.doc('insfot/' + key).get(); d = (s.exists && s.data()) || {}; } catch (e) { d = {}; }
+    INSF[key] = { th: d.th || null, thAt: d.thAt || null, est: d.est || null, n: Object.values(d.f || {}).filter((v) => v && !v._del).length };
+    return INSF[key];
+  }
+  async function thumbOf(dataUrl) {
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = dataUrl; });
+    const mx = 520, k = Math.min(1, mx / Math.max(img.naturalWidth, img.naturalHeight)), cv = document.createElement('canvas');
+    cv.width = Math.round(img.naturalWidth * k); cv.height = Math.round(img.naturalHeight * k);
+    cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+    return cv.toDataURL('image/jpeg', 0.62);
+  }
+  const insAvTxt = (est) => `<b>Com avaria${est.obs ? ':' : '.'}</b> ${esc(est.obs || '')} <span class="muted">· registrado${est.nome ? ' por ' + esc(est.nome) : ''}${est.at ? ' em ' + dmy(est.at) : ''}</span>`;
+  async function insFotoFill(x) {
+    const F = await insFotoIdx(x.key, true), dr = $('aside.drawer'); if (!dr) return;
+    const box = $('.eqfh .eqbox', dr);
+    if (box && F.th) {
+      box.classList.add('eqfoto'); box.innerHTML = `<img src="${F.th}" alt="Foto do instrumento ${esc(x.codigo || '')}">${F.thAt ? `<i>foto de ${dmy(F.thAt)}</i>` : ''}`;
+      box.setAttribute('role', 'button'); box.tabIndex = 0; box.title = 'Ver as fotos';
+      box.onclick = () => insFotoDialog(x); box.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); insFotoDialog(x); } };
+    }
+    const fh = $('.eqfh', dr);
+    if (fh && F.est && F.est.av && !$('.insav', dr)) fh.insertAdjacentHTML('beforebegin', `<div class="warnbox insav">⚠ ${insAvTxt(F.est)}</div>`);
+    const bt = $(`[data-act="ins-foto"][data-key="${CSS.escape(x.key)}"]`, dr); if (bt && F.n) bt.textContent = `Fotos e estado (${F.n})`;
+  }
+  async function insFotoDialog(x) {
+    const w = cw('ins');
+    openModal('Fotos e estado · ' + x.codigo, '<div class="loading"><span class="spin"></span><span>Carregando as fotos…</span></div>');
+    const [L, F] = await Promise.all([FT.list('insfot', x.key), insFotoIdx(x.key, true)]);
+    await resolveNames(L.map((f) => f.by));
+    const est = F.est || {}, novas = [];
+    const fig = (f) => `<figure><img src="${f.img}" alt="" data-zoom="1" title="Ampliar"><figcaption>${dmy(f.at)}${f.by && DB.names[f.by] ? ' · ' + esc(DB.names[f.by]) : ''}${f.leg ? `<br>${esc(f.leg)}` : ''}</figcaption>${w ? `<button class="btn small ghost" type="button" data-fdel="${esc(f.id)}" title="Apagar esta foto">✕</button>` : ''}</figure>`;
+    openModal('Fotos e estado · ' + x.codigo, `<p class="muted" style="margin:0">Fotos do estado físico do instrumento (ex.: orelha quebrada, ponta gasta, visor riscado). A mais recente aparece na ficha e na página do QR da etiqueta.</p>
+      <div class="insfotos" id="if-lista">${L.length ? L.slice().reverse().map(fig).join('') : '<p class="muted" style="margin:0">Nenhuma foto ainda.</p>'}</div>
+      ${w ? `<div class="fsec"><h3>Nova foto</h3><input type="file" id="if-file" accept="image/*" capture="environment" multiple hidden>
+        <div class="insfotos" id="if-prev"></div>
+        <div class="formfoot" style="justify-content:flex-start"><button class="btn" type="button" id="if-pick">＋ Tirar ou escolher foto</button></div>
+        <label class="field"><span>Legenda (opcional)</span><input id="if-leg" maxlength="140" placeholder="ex.: orelha fixa quebrada"></label></div>` : ''}
+      <div class="fsec"><h3>Estado do instrumento</h3>
+        <div class="seg" id="if-est" role="group" aria-label="Estado"><button type="button" data-v="ok" aria-pressed="${!est.av}" ${w ? '' : 'disabled'}>Sem avaria</button><button type="button" data-v="av" aria-pressed="${!!est.av}" ${w ? '' : 'disabled'}>Com avaria</button></div>
+        <label class="field" id="if-obsf" ${est.av ? '' : 'hidden'}><span>O que tem de errado <b>*</b></span><textarea id="if-obs" rows="3" style="min-height:0;height:84px;font:inherit" maxlength="300" ${w ? '' : 'disabled'} placeholder="ex.: orelha fixa quebrada; medir só com a orelha móvel">${esc(est.obs || '')}</textarea></label>
+        <p class="muted" style="margin:0;font-size:12.5px">Com avaria aparece um aviso amarelo na ficha e na página do QR. Para tirar de uso, use “Dar baixa” ou a situação Bloqueado/Manutenção.</p></div>
+      <div class="formfoot">${w ? '<button class="btn primary" type="button" id="if-ok">Salvar</button>' : ''}<button class="btn" type="button" data-act="close">${w ? 'Cancelar' : 'Fechar'}</button></div>`);
+    $$('.insfotos [data-zoom]').forEach((im) => { im.onclick = () => imgZoom(im.src); });
+    if (!w) return;
+    let av = !!est.av;
+    $$('#if-est button').forEach((b) => { b.onclick = () => { av = b.dataset.v === 'av'; $$('#if-est button').forEach((o) => o.setAttribute('aria-pressed', String(o === b))); $('#if-obsf').hidden = !av; if (av) $('#if-obs').focus(); }; });
+    const prev = () => { $('#if-prev').innerHTML = novas.map((n, i) => `<figure><img src="${n.img}" alt=""><button class="btn small ghost" type="button" data-nrm="${i}" title="Tirar">✕</button></figure>`).join(''); $$('#if-prev [data-nrm]').forEach((b) => { b.onclick = () => { novas.splice(+b.dataset.nrm, 1); prev(); }; }); };
+    $('#if-pick').onclick = () => $('#if-file').click();
+    $('#if-file').onchange = async (e) => { for (const f of Array.from(e.target.files || []).slice(0, 6)) { try { novas.push({ img: await shrinkPhoto(f), nome: f.name }); } catch (err) { toast('Não consegui ler ' + f.name, true); } } e.target.value = ''; prev(); };
+    $$('#if-lista [data-fdel]').forEach((b) => { b.onclick = () => confirmBox('Apagar foto', 'A foto sai do instrumento.', 'Apagar', async () => {
+      try {
+        await FT.del('insfot', x.key, b.dataset.fdel);
+        const rest = await FT.list('insfot', x.key), ult = rest[rest.length - 1];
+        const ref = DB.db.doc('insfot/' + x.key), th = ult ? await thumbOf(ult.img) : null;
+        await ref.merge({ th, thAt: ult ? ult.at : null });
+        logEntry('INS', x.key, 'alterado', `${x.codigo} · foto apagada`, null); INSQ.add(x.key); insPubSync();
+        toast('Foto apagada.'); closeLayer(); openRecord('INS', x.key);
+      } catch (err) { toast('Não foi possível apagar: ' + ((err && (err.message || err.code)) || err), true); }
+    }, true); });
+    $('#if-ok').onclick = async () => {
+      const obs = ($('#if-obs').value || '').trim();
+      if (av && obs.length < 3) { toast('Escreva o que o instrumento tem de errado.', true); $('#if-obs').focus(); return; }
+      const mudouEst = av !== !!est.av || (av && obs !== (est.obs || ''));
+      if (!novas.length && !mudouEst) { closeLayer(); return; }
+      const b = $('#if-ok'); b.disabled = true; b.textContent = 'Gravando…';
+      try {
+        const extra = {};
+        if (mudouEst) extra.est = av ? { av: true, obs, at: Date.now(), by: DB.me || null, nome: myPessoa() || DB.meName || '' } : { av: false, obs: null, at: Date.now(), by: DB.me || null, nome: myPessoa() || DB.meName || '' };
+        if (novas.length) { extra.th = await thumbOf(novas[novas.length - 1].img); extra.thAt = Date.now(); }
+        const leg = ($('#if-leg').value || '').trim();
+        if (novas.length) await FT.add('insfot', x.key, novas.map((n) => ({ img: n.img, nome: n.nome, leg })), extra);
+        else await DB.db.doc('insfot/' + x.key).merge(extra);
+        const txt = [novas.length ? `${novas.length} foto(s)` : '', mudouEst ? (av ? 'com avaria: ' + obs : 'sem avaria') : ''].filter(Boolean).join(' · ');
+        logEntry('INS', x.key, 'alterado', `${x.codigo} · ${txt}`, null);
+        delete INSF[x.key]; INSQ.add(x.key); insPubSync();
+        toast('Gravado.'); closeLayer(); openRecord('INS', x.key);
+      } catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; b.textContent = 'Salvar'; }
+    };
   }
   function insLabelHTML(x, W, H, tok) {
     const pad = Math.max(1.2, Math.min(W, H) * 0.06), qr = Math.min(H - pad * 2, W * 0.42), tw = W - qr - pad * 2 - 1.5, n = Math.max(6, String(x.codigo || '').length);
@@ -8229,8 +8338,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     </div></div></section>`;
   }
   /* todas as coleções da Central (backup completo e "Começar do zero" usam a mesma lista) */
-  const COLS_TUDO = ['av', 'rir', 'rird', 'rirf', 'serv', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'certq', 'certd', 'rifp', 'rif', 'rifv', 'rifn', 'riff', 'rncin', 'rncinf', 'rncfot', 'rnccf', 'corr', 'pub', 'trello', 'acomp', 'cfg', 'meta', 'log', 'usuarios', 'pes'];
-  const COLS_FOTOS = ['rirf', 'riff', 'rncinf', 'rncfot', 'rnccf'];
+  const COLS_TUDO = ['av', 'rir', 'rird', 'rirf', 'serv', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'certq', 'certd', 'rifp', 'rif', 'rifv', 'rifn', 'riff', 'rncin', 'rncinf', 'rncfot', 'rnccf', 'insfot', 'corr', 'pub', 'trello', 'acomp', 'cfg', 'meta', 'log', 'usuarios', 'pes'];
+  const COLS_FOTOS = ['rirf', 'riff', 'rncinf', 'rncfot', 'rnccf', 'insfot'];
   /* o que o "Começar do zero" apaga: [coleção, descrição, guarda(docId, dados) = true mantém] */
   function zeroPlano(o) {
     return [
@@ -8239,7 +8348,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ['certq', 'Fila e certificados emitidos'], ['certd', 'Rascunhos dos certificados', (id) => /^sig-/.test(id)],
       ['rifp', 'Pedidos da inspeção final (RIF)'], ['rif', 'Relatórios RIF'], ['riff', 'Fotos dos RIF'], ['rifv', 'Validações de produto do RIF', () => o.keepRifv],
       ['rifn', 'Numeração dos RIF', () => !o.reiniciar],
-      ['ins', 'Instrumentos e histórico de calibração', () => o.keepIns], ['sold', 'Soldadores, qualificações e EPS', () => o.keepSold],
+      ['ins', 'Instrumentos e histórico de calibração', () => o.keepIns], ['insfot', 'Fotos e estado dos instrumentos', () => o.keepIns], ['sold', 'Soldadores, qualificações e EPS', () => o.keepSold],
       ['pub', 'Páginas públicas do QR', (id, d) => o.keepIns && d && d.k === 'ins'], ['iqf', 'Avaliação de fornecedores (fechamentos e fichas)', (id) => id === 'cfg'],
       ['trello', 'Trello Jurong (importação)'], ['acomp', 'Acompanhamento Jurong (importação)'], ['log', 'Histórico de alterações'],
       ['pes', 'Fichas da Equipe (fotos e histórico)', () => o.keepEq], ['usuarios', 'Usuários (acesso à Central)', () => o.keepUsr]
@@ -9779,9 +9888,17 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   const cqErr = (err) => toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true);
 
-  /* ---------- importar a lista do Omie (Vendas e NF-e › Pedido de Venda › Exportar › Excel) ---------- */
-  function cqLerOmie(buf) {
-    const wb = XLSX.read(buf, { type: 'array', cellDates: true });
+  /* ---------- importar a lista do Omie (Vendas e NF-e › Venda de Produto › Exibir Todos › botão direito › Exportar: Excel ou Arquivo Texto CSV) ---------- */
+  /* CSV: acentos em UTF-8 ou Windows-1252 (o que vier), separador ; , ou tab; datas e números ficam como texto (dd/mm/aaaa não vira mm/dd) */
+  function cqLivro(buf, nome) {
+    const b = new Uint8Array(buf), zip = b[0] === 0x50 && b[1] === 0x4b, ole = b[0] === 0xd0 && b[1] === 0xcf;
+    if (!/\.csv$/i.test(nome || '') && (zip || ole)) return XLSX.read(buf, { type: 'array', cellDates: true });
+    let t; try { t = new TextDecoder('utf-8', { fatal: true }).decode(b); } catch (e) { t = new TextDecoder('windows-1252').decode(b); }
+    t = t.replace(/^\uFEFF/, '').replace(/^sep=.\r?\n/i, '');
+    return XLSX.read(t, { type: 'string', raw: true });
+  }
+  function cqLerOmie(buf, nome) {
+    const wb = cqLivro(buf, nome);
     const ws = wb.Sheets[wb.SheetNames[0]];
     const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: true, defval: null });
     const nh = (v) => E.key(v).replace(/[^a-z0-9 ]/g, '').trim();
@@ -9790,77 +9907,96 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const r = (rows[i] || []).map(nh);
       if (r.includes('numero') && r.some((v) => v === 'nota fiscal')) { hi = i; r.forEach((v, j) => { if (v && H[v] == null) H[v] = j; }); break; }
     }
-    if (hi < 0) throw new Error('Não achei as colunas "Número" e "Nota Fiscal". Exporte a lista de Pedido de Venda do Omie em Excel com essas colunas (e "Sequencial", "Cliente", "Faturado em").');
+    if (hi < 0) throw new Error('Não achei as colunas "Número" e "Nota Fiscal". Exporte a lista de Venda de Produto do Omie (Excel ou Arquivo Texto CSV) com essas colunas (e "Sequencial", "Cliente", "Faturado em").');
     const col = (...names) => { for (const n of names) if (H[n] != null) return H[n]; return null; };
     const C = { sit: col('situacao'), num: col('numero'), seq: col('sequencial'), nf: col('nota fiscal'), cli: col('cliente nome fantasia', 'cliente', 'cliente razao social'), et: col('etapa'), fat: col('faturado em'), prev: col('previsao de faturamento') };
     const toMs = (v) => { if (v instanceof Date && !isNaN(v)) return v.getTime(); if (typeof v === 'number') return Math.round((v - 25569) * 86400000 + new Date().getTimezoneOffset() * 60000); const m = /(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2}))?/.exec(String(v || '')); return m ? new Date(+m[3], +m[2] - 1, +m[1], +(m[4] || 0), +(m[5] || 0)).getTime() : null; };
-    const out = [];
+    const out = []; let parteNoNum = false;
     rows.slice(hi + 1).forEach((r) => {
       if (!r) return;
-      const pv = cqDig(r[C.num]); if (!pv) return;
-      const seq = C.seq != null ? (parseInt(cqDig(r[C.seq]), 10) || 0) : 0;
+      /* número com a parte junto (25940/1): separa pedido e parte */
+      const mb = /^\s*(\d+)\s*\/\s*(\d+)\s*$/.exec(String(r[C.num] == null ? '' : r[C.num]));
+      const pv = mb ? cqDig(mb[1]) : cqDig(r[C.num]); if (!pv) return;
+      if (mb) parteNoNum = true;
+      const seq = (C.seq != null ? (parseInt(cqDig(r[C.seq]), 10) || 0) : 0) || (mb ? (parseInt(mb[2], 10) || 0) : 0);
       const nfRaw = C.nf != null ? cqDig(r[C.nf]) : '';
       out.push({ pv, seq, nf: nfRaw ? String(parseInt(nfRaw, 10)) : '', cli: C.cli != null ? String(r[C.cli] || '').trim() : '', sit: C.sit != null ? String(r[C.sit] || '').trim() : '', et: C.et != null ? String(r[C.et] || '').trim() : '', fat: C.fat != null ? toMs(r[C.fat]) : null, prev: C.prev != null ? toMs(r[C.prev]) : null });
     });
-    return { linhas: out, temSeq: C.seq != null };
+    return { linhas: out, temSeq: C.seq != null || parteNoNum };
   }
+  /* Importação da lista do Omie.
+     - Pedido faturado (com NF) e pedido a faturar (sem NF) entram na fila; o a faturar fica "Aguardando NF" (sem prazo e sem atraso).
+     - Arquivo novo com o mesmo pedido já faturado: só acrescenta a NF e a data de faturamento no cartão que já existe.
+     - Faturado em partes: a 1ª parte usa o cartão do pedido a faturar; as outras partes entram como cartões novos.
+     - Orçamento e pedido cancelado não entram; pedido da fila que o Omie mostrar cancelado sai da fila. */
   function cqPlano(L) {
-    const cf = cqCfg(), cards = cqCards(), have = new Set(cards.map((c) => c.k)), seen = new Set();
+    const cf = cqCfg(), cards = cqCards(), seen = new Set(), usados = new Set();
+    const efk = new Map(); cards.forEach((c) => { efk.set(c.k, c); efk.set(cqKey(c.pv, c.seq), c); });
     const novos = [], rep = [], fora = {}, semCert = [], muda = [];
-    let auto = 0;
+    let auto = 0, aFat = 0, nfChegou = 0;
     const cancelado = (o) => /cancel/i.test(String(o.sit || '') + ' ' + String(o.et || ''));
+    const orcamento = (o) => /or[cç]amento/i.test(String(o.sit || '') + ' ' + String(o.et || ''));
+    const nfPatch = (o) => ({ nf: o.nf, fat: o.fat || Date.now(), anf: null });
     L.forEach((o) => {
-      const k = cqKey(o.pv, o.seq), c0 = have.has(k) ? cards.find((c) => c.k === k) : null;
+      const k = cqKey(o.pv, o.seq);
+      let c0 = efk.get(k) || null;
+      /* 1ª parte faturada de um pedido que entrou a faturar (sem parte): usa o mesmo cartão */
+      if (!c0 && o.seq && o.nf) { const cb = efk.get(cqKey(o.pv, 0)); if (cb && cb.st === 'p' && !cb.nf && !cb.seq && !usados.has(cb.k)) c0 = cb; }
+      if (c0 && seen.has(c0.k)) { rep.push(o); return; }
       /* pedido que já está na fila, ainda pendente: o Omie manda o que mudou */
-      if (c0 && c0.st === 'p' && !seen.has(k)) {
-        if (cancelado(o)) { muda.push({ c: c0, txt: 'pedido cancelado no Omie → sai da fila', patch: { st: 'n', conc: { at: Date.now(), by: DB.me || null, em: cqMe(), nome: cqMeNome(), motivo: 'Cancelado no Omie' } } }); seen.add(k); return; }
-        if (!o.nf && c0.nf) { if (!c0.pend) muda.push({ c: c0, txt: `NF ${c0.nf} cancelada ou estornada no Omie → vai para Aguardando solução`, patch: { pend: { m: 'Outro', j: `NF ${c0.nf} cancelada ou estornada no Omie (importação de ${dmy(Date.now())})`, at: Date.now(), by: DB.me || null, nome: cqMeNome() } } }); seen.add(k); return; }
-        if (o.nf && docN(o.nf) !== docN(c0.nf)) { muda.push({ c: c0, txt: `NF ${c0.nf || '—'} → ${o.nf}`, patch: { nf: o.nf } }); seen.add(k); return; }
+      if (c0 && c0.st === 'p') {
+        if (cancelado(o)) { muda.push({ c: c0, txt: 'pedido cancelado no Omie → sai da fila', patch: { st: 'n', conc: { at: Date.now(), by: DB.me || null, em: cqMe(), nome: cqMeNome(), motivo: 'Cancelado no Omie' } } }); seen.add(c0.k); return; }
+        if (!o.nf && c0.nf) { if (!c0.pend) muda.push({ c: c0, txt: `NF ${c0.nf} cancelada ou estornada no Omie → vai para Aguardando solução`, patch: { pend: { m: 'Outro', j: `NF ${c0.nf} cancelada ou estornada no Omie (importação de ${dmy(Date.now())})`, at: Date.now(), by: DB.me || null, nome: cqMeNome() } } }); seen.add(c0.k); return; }
+        if (o.nf && !c0.nf) { usados.add(c0.k); nfChegou++; muda.push({ c: c0, txt: `NF ${o.nf} chegou${o.seq && !c0.seq ? ` (parte ${o.seq})` : ''} → prazo começa no faturamento`, patch: Object.assign(nfPatch(o), o.seq && !c0.seq ? { seq: o.seq } : {}) }); seen.add(c0.k); return; }
+        if (o.nf && docN(o.nf) !== docN(c0.nf)) { muda.push({ c: c0, txt: `NF ${c0.nf || '—'} → ${o.nf}`, patch: { nf: o.nf } }); seen.add(c0.k); return; }
       }
-      if (!o.nf) { const s = o.sit || 'sem situação'; fora[s] = (fora[s] || 0) + 1; return; }
-      if (have.has(k) || seen.has(k)) { rep.push(o); return; }
+      if (c0) { rep.push(o); seen.add(c0.k); return; }
+      if (seen.has(k)) { rep.push(o); return; }
+      if (cancelado(o) || orcamento(o)) { const s0 = o.sit || o.et || 'sem situação'; fora[s0] = (fora[s0] || 0) + 1; return; }
       seen.add(k);
       const ck = E.key(o.cli);
       const sc = cf.semCert.find((n) => n && ck.includes(E.key(n)));
       const rg = cf.regras.find((r) => r.on !== false && r.cli && ck.includes(E.key(r.cli)));
-      const c = { pv: o.pv, seq: o.seq || 0, nf: o.nf, cli: o.cli, sit: o.sit, et: o.et, fat: o.fat || Date.now(), imp: Date.now(), impBy: DB.me || null, st: 'p', _del: null, conc: null, pend: null, porEm: null, porNome: null };
+      const c = { pv: o.pv, seq: o.seq || 0, nf: o.nf || '', cli: o.cli, sit: o.sit, et: o.et, fat: o.nf ? o.fat || Date.now() : null, anf: o.nf ? null : true, imp: Date.now(), impBy: DB.me || null, st: 'p', _del: null, conc: null, pend: null, porEm: null, porNome: null };
+      if (!o.nf) aFat++;
       if (sc) { c.st = 'n'; c.conc = { at: Date.now(), by: DB.me || null, em: cqMe(), nome: cqMeNome(), motivo: 'Cliente na lista de quem não precisa de certificado' }; semCert.push(c); }
       else if (rg && rg.em) { c.porEm = E.low(rg.em); c.porNome = rg.nome || rg.em; c.auto = true; auto++; }
       novos.push({ k, c });
     });
-    return { novos, rep, fora, semCert, auto, muda, pedidos: new Set(L.map((o) => o.pv)).size };
+    return { novos, rep, fora, semCert, auto, muda, aFat, nfChegou, pedidos: new Set(L.map((o) => o.pv)).size };
   }
   function cqImportar() {
-    const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.xlsx,.xls';
+    const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.xlsx,.xls,.csv';
     inp.onchange = async () => {
       const f = inp.files && inp.files[0]; if (!f) return;
       let R;
-      try { R = cqLerOmie(await f.arrayBuffer()); } catch (e) { openModal('Importar lista do Omie', `<p style="margin:0">${esc(e.message || e)}</p><div class="formfoot"><button class="btn primary" type="button" data-act="close">Entendi</button></div>`); return; }
-      const P = cqPlano(R.linhas), nf = P.novos.filter((o) => o.c.st === 'p').length;
+      try { R = cqLerOmie(await f.arrayBuffer(), f.name); } catch (e) { openModal('Importar lista do Omie', `<p style="margin:0">${esc(e.message || e)}</p><div class="formfoot"><button class="btn primary" type="button" data-act="close">Entendi</button></div>`); return; }
+      const P = cqPlano(R.linhas), nf = P.novos.filter((o) => o.c.st === 'p' && o.c.nf).length, af = P.novos.filter((o) => o.c.st === 'p' && !o.c.nf).length;
       const foraTxt = Object.entries(P.fora).sort((a, b) => b[1] - a[1]).map(([s, n]) => `${NF.format(n)} ${esc(s.toLowerCase())}`).join(' · ');
       openModal('Importar lista do Omie', `<p class="muted" style="margin:0" title="${esc(f.name)}">${esc(f.name)}</p>
         <div class="cqimp">
           <div><b>${NF.format(R.linhas.length)}</b><span>linhas lidas<small>${NF.format(P.pedidos)} pedidos</small></span></div>
-          <div class="ok"><b>${NF.format(nf)}</b><span>entram na fila<small>faturados, com nota fiscal${P.auto ? ` · ${NF.format(P.auto)} já com operador (regra)` : ''}</small></span></div>
+          <div class="ok"><b>${NF.format(nf)}</b><span>faturados entram na fila<small>com nota fiscal${P.auto ? ` · ${NF.format(P.auto)} já com operador (regra)` : ''}</small></span></div>
+          ${af ? `<div class="ok"><b>${NF.format(af)}</b><span>a faturar entram na fila<small>“Aguardando NF”: sem prazo até faturar</small></span></div>` : ''}
           <div class="rep"><b>${NF.format(P.rep.length)}</b><span>repetidos barrados<small>já estavam na Central</small></span></div>
           ${P.muda.length ? `<div class="ok"><b>${NF.format(P.muda.length)}</b><span>atualizados<small>pedidos da fila que mudaram no Omie</small></span></div>` : ''}
           ${P.semCert.length ? `<div><b>${NF.format(P.semCert.length)}</b><span>não precisam de certificado<small>vão direto para Concluídos</small></span></div>` : ''}
-          <div class="off"><b>${NF.format(Object.values(P.fora).reduce((a, b) => a + b, 0))}</b><span>sem nota fiscal, ficam de fora<small>${foraTxt || '—'}</small></span></div>
+          ${foraTxt ? `<div class="off"><b>${NF.format(Object.values(P.fora).reduce((a, b) => a + b, 0))}</b><span>ficam de fora<small>orçamento ou cancelado · ${foraTxt}</small></span></div>` : ''}
         </div>
-        ${R.temSeq ? '' : '<div class="warnbox">O arquivo não tem a coluna <b>Sequencial</b>. Pedidos faturados em partes (25940/1, /2…) podem ser barrados como repetidos. No Omie, deixe a coluna Sequencial visível antes de exportar.</div>'}
+        ${R.temSeq ? '' : '<div class="warnbox">O arquivo não tem a coluna <b>Sequencial</b> (nem o número com a parte, ex.: 25940/1). Pedidos faturados em partes (25940/1, /2…) podem ser barrados como repetidos. No Omie, deixe a coluna Sequencial visível antes de exportar.</div>'}
         ${P.muda.length ? `<div class="twrap" style="max-height:180px;overflow:auto"><table class="t"><tbody>${P.muda.map((m) => `<tr><td class="mono nw">${esc(cqNum(m.c))}</td><td>${esc(m.txt)}</td></tr>`).join('')}</tbody></table></div>` : ''}
-        <p class="muted" style="margin:0;font-size:12.5px">Repetido = mesmo pedido e mesma parte (ex.: 25940/9). Pedido sem nota fiscal entra no dia em que vier faturado num arquivo novo. Pedido da fila que o Omie mostrar cancelado ou com outra NF é atualizado.</p>
+        <p class="muted" style="margin:0;font-size:12.5px">Repetido = mesmo pedido e mesma parte (ex.: 25940/9). Pedido a faturar entra como “Aguardando NF”; quando vier faturado num arquivo novo, a Central só acrescenta a NF (a 1ª parte faturada usa o mesmo cartão). Orçamento e pedido cancelado não entram. Pedido da fila que o Omie mostrar cancelado ou com outra NF é atualizado.</p>
         <div class="formfoot"><button class="btn" type="button" data-act="close">Cancelar</button><button class="btn primary" type="button" id="cq-imp-ok" ${P.novos.length + P.muda.length ? '' : 'disabled'}>${P.novos.length + P.muda.length ? `Gravar ${NF.format(P.novos.length)} novo(s)${P.muda.length ? ' e ' + NF.format(P.muda.length) + ' atualização(ões)' : ''}` : 'Nada novo para colocar'}</button></div>`);
       const ok = $('#cq-imp-ok'); if (!ok) return;
       ok.onclick = async () => {
         ok.disabled = true; ok.textContent = 'Gravando…';
         try {
           const byDoc = {};
-          P.novos.forEach(({ k, c }) => { const d = 'm-' + cqMes(c.fat); (byDoc[d] = byDoc[d] || {})[k] = clean(c); });
+          P.novos.forEach(({ k, c }) => { const d = 'm-' + cqMes(c.fat || c.imp); (byDoc[d] = byDoc[d] || {})[k] = clean(c); });
           for (const d of Object.keys(byDoc)) await soldWrite('certq/' + d, { items: byDoc[d] });
           for (const m of P.muda) await cqPatch(m.c, m.patch, 'Omie: ' + m.txt);
           logEntry('CERTQ', 'importacao', 'importado', `Lista do Omie: ${P.novos.length} pedido(s) novo(s), ${P.muda.length} atualizado(s), ${P.rep.length} repetido(s) barrado(s)`, null);
-          closeLayer(); toast(`${NF.format(P.novos.length)} pedido(s) na Central · ${NF.format(P.rep.length)} repetido(s) barrado(s).`);
+          closeLayer(); toast(`${NF.format(P.novos.length)} pedido(s) na Central${P.nfChegou ? ` · NF chegou em ${NF.format(P.nfChegou)}` : ''} · ${NF.format(P.rep.length)} repetido(s) barrado(s).`);
           S.cqSub = 'pend'; render();
         } catch (err) { cqErr(err); ok.disabled = false; ok.textContent = 'Tentar de novo'; }
       };
@@ -9881,7 +10017,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const foot = c.porEm ? cqWho(c) : (w ? `<button class="btn small" type="button" data-act="cq-pegar" data-key="${esc(c.k)}">Pegar</button>` : '<span class="muted">livre</span>');
     return `<div class="cqc${p ? ' pd' : c.porEm ? ' on' : ''}${cheg ? ' cheg' : ''}"${c.porEm ? ` style="--q:${cqTom(c.porEm)}"` : ''}>
       <div class="cqh"><b class="cqpv">${esc(cqNum(c))}</b>${tag}${w ? `<button type="button" class="cqmenu" data-act="cq-menu" data-key="${esc(c.k)}" title="Pendência e outras ações" aria-label="Pendência e outras ações">⋯</button>` : ''}</div>
-      <div class="cqs"><span class="cqnf mono">NF ${esc(c.nf || '—')}</span>${c.seq ? `<span class="cqparc">parte ${c.seq}</span>` : ''}<span class="muted">fat. ${esc(cqDH(c.fat))}</span></div>
+      <div class="cqs">${c.nf ? `<span class="cqnf mono">NF ${esc(c.nf)}</span>` : '<span class="chip warn" title="Pedido a faturar: o prazo começa quando a NF entrar numa importação do Omie">Aguardando NF</span>'}${c.seq ? `<span class="cqparc">parte ${c.seq}</span>` : ''}${c.fat ? `<span class="muted">fat. ${esc(cqDH(c.fat))}</span>` : ''}</div>
       <div class="cqcli" title="${esc(c.cli)}">${esc(c.cli || '—')}</div>
       ${pb}${c.rasc ? `<div class="cqras">rascunho salvo ${esc(cqDH(c.rasc))}</div>` : ''}
       <div class="cqf">${foot}${w ? `<button class="btn small cqgo" type="button" data-act="cq-fazer" data-key="${esc(c.k)}">${p ? 'Abrir certificado' : c.rasc ? 'Continuar' : 'Fazer certificado'}</button>` : ''}</div></div>`;
@@ -9898,7 +10034,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (!CQF.ready) body = '<div class="empty">Carregando a fila…</div>';
     else if (sub === 'pend' || sub === 'aguard') body = cqPendHTML(pend, sub === 'aguard');
     else body = cqConcHTML(L);
-    main.innerHTML = `<div class="view">${head('Certificados de qualidade', 'Os pedidos faturados entram pelo arquivo do Omie, saem da fila quando o certificado é salvo e vão para Concluídos.', w ? '<button class="btn" type="button" data-act="cq-avulso">Certificado avulso</button><button class="btn primary" type="button" data-act="cq-imp">Importar lista do Omie (.xlsx)</button>' : '')}
+    main.innerHTML = `<div class="view">${head('Certificados de qualidade', 'Os pedidos entram pelo arquivo do Omie (os a faturar como “Aguardando NF”), saem da fila quando o certificado é salvo e vão para Concluídos.', w ? '<button class="btn" type="button" data-act="cq-avulso">Certificado avulso</button><button class="btn primary" type="button" data-act="cq-imp">Importar lista do Omie (Excel ou CSV)</button>' : '')}
       <div class="seg cqtabs" role="tablist">${tab('pend', `Pendentes <b>${NF.format(pend.length)}</b>`)}${tab('aguard', `Aguardando solução <b class="${npd ? 'am' : ''}">${NF.format(npd)}</b>`)}${tab('conc', 'Concluídos')}</div>
       ${body}</div>`;
     main.dataset.cqed = '';
@@ -9911,7 +10047,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (soPend) L = L.filter((c) => c.pend);
     if (flt === 'livres') L = L.filter((c) => !c.porEm); else if (flt === 'meus') L = L.filter(cqMine);
     if (qq) L = L.filter((c) => E.key([cqNum(c), c.nf, c.cli, c.porNome, c.pend && c.pend.oc].join(' ')).includes(qq));
-    L.sort((a, b) => (a.fat || 0) - (b.fat || 0) || cmp(a.pv, b.pv) || (a.seq || 0) - (b.seq || 0));
+    L.sort((a, b) => (a.fat || 9e15) - (b.fat || 9e15) || cmp(a.pv, b.pv) || (a.seq || 0) - (b.seq || 0));
     const comP = L.filter((c) => c.pend), resto = L.filter((c) => !c.pend), lim = 48 + (S.cqN || 0), vis2 = resto.slice(0, lim);
     const fb = (k, l) => `<button type="button" data-act="cq-flt" data-key="${k}" aria-pressed="${flt === k}">${l}</button>`;
     return `<section class="cqcol"><header><b>${soPend ? 'Aguardando solução' : 'Pendentes'}</b><span class="cqn">${NF.format(L.length)}</span><span class="muted">${soPend ? 'pedidos com pendência registrada' : 'pendências em cima, depois o faturamento mais antigo'}</span>
@@ -10085,7 +10221,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     main.dataset.cqed = ed.key + ':' + ed.tipo;
     const lots = c && S.model ? S.model.av.filter((x) => docMatch(x.pv, c.pv)).sort((a, b) => cmp(a.id, b.id)) : [];
     const lotRow = (x) => { const av = lotCertAviso(x); return `<label class="cqlot"><input type="checkbox" data-lot="${esc(x.id)}" ${ed.lotes.includes(x.id) ? 'checked' : ''}><span><b class="mono">${esc(x.id)}</b>${av ? ` <em class="chip ${av.crit ? 'crit' : 'warn'}" style="font-style:normal"><i>${av.crit ? '🔒' : '!'}</i>${esc(av.t)}</em>` : ''} · ${esc([x.desc, x.diam].filter(E.filled).join(' '))}<small>corrida <b class="mono">${esc(E.filled(x.corrida) ? x.corrida : '—')}</b> · ${esc([x.liga, x.norma].filter(E.filled).join(' · ') || '—')}${E.filled(x.cert) ? ' · cert. ' + esc(x.cert) : ''}</small></span></label>`; };
-    window.CQ_CERT_HOST = { salvo: (nome) => cqOnSalvo(nome) };
+    window.CQ_CERT_HOST = { salvo: (nome) => cqOnSalvo(nome), pv: () => { const e = S.cqEd, cc = e && e.k ? cqFind(e.k) : null; return cc ? cqNum(cc) : ''; } };
     main.innerHTML = `<div class="view cqed">
       <div class="cqfrom"><button class="btn ghost small" type="button" data-act="cq-voltar">‹ Fila</button>${c ? `<b class="cqpv">${esc(cqNum(c))}</b><span class="cqnf mono">NF ${esc(c.nf || '—')}</span>${c.seq ? `<span class="cqparc">parte ${c.seq}</span>` : ''}<span class="clip">${esc(c.cli || '')}</span>${c.porEm ? cqWho(c) : ''}${c.st !== 'p' ? '<span class="chip ok">concluído</span>' : ''}` : '<b>Certificado avulso</b><span class="muted">fora da fila: ao salvar, a Central procura o número na fila</span>'}<span class="cqst" id="cq-st"></span></div>
       <div class="cqgrid2">
@@ -10337,7 +10473,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     }
   }
   async function cqConcluir(c, R, nome, P) {
-    const ed = S.cqEd, app = cqApp(), b = $('#cq-cok') || $('#cq-avok'); if (b) { b.disabled = true; b.textContent = 'Gravando…'; }
+    const ed = S.cqEd, app = cqApp(), b = $('#cq-cok') || $('#cq-avok');
+    if (c && !c.nf) { toast(`O pedido ${cqNum(c)} ainda não tem nota fiscal. O certificado fica salvo; conclua quando a NF entrar numa importação do Omie.`, true); return; }
+    if (b) { b.disabled = true; b.textContent = 'Gravando…'; }
     const pv = c ? cqDig(c.pv) : P.pv;
     const lotes = new Set((ed && ed.lotes) || []);
     if (S.model) S.model.av.forEach((x) => { if (docMatch(x.pv, pv) && E.filled(x.corrida) && R.corr.has(E.key(x.corrida))) lotes.add(x.id); });
@@ -10387,7 +10525,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'cq-pass') { cqPassForm(c); return true; }
     if (a === 'cq-pend') { cqPendForm(c); return true; }
     if (a === 'cq-resolver') { cqResolver(c); return true; }
-    if (a === 'cq-fora') { cqConcForm(c, false); return true; }
+    if (a === 'cq-fora') { if (!c.nf) { toast(`O pedido ${cqNum(c)} ainda não tem nota fiscal: só dá para concluir depois que a NF entrar.`, true); return true; } cqConcForm(c, false); return true; }
     if (a === 'cq-nao') { cqConcForm(c, true); return true; }
     if (a === 'cq-reabrir') { cqPatch(c, { st: 'p', conc: null }, 'Voltou para a fila').then(() => { closeLayer(); toast(`Pedido ${cqNum(c)} voltou para Pendentes.`); render(); }).catch(cqErr); return true; }
     if (a === 'cq-del') { confirmBox('Tirar da fila', `Tirar o pedido ${cqNum(c)} da Central? Use só para pedido importado por engano. Se ele vier de novo num arquivo do Omie, entra outra vez.`, 'Tirar da fila', () => { soldWrite('certq/' + c.doc, { items: { [c.k]: { _del: true, _u: Date.now(), _ub: DB.me || null } } }).then(() => { logEntry('CERTQ', cqNum(c), 'excluido', 'Tirado da fila', null); toast('Pedido tirado da fila.'); render(); }).catch(cqErr); }, true); return true; }
@@ -14405,9 +14543,23 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ['Objetivo', MP('Emitir o certificado de qualidade de cada pedido faturado com os dados rastreáveis do material (lote, corrida, química e mecânica) e a inspeção final.')],
       ['Aplicação', MP('Pedidos de venda faturados que precisam de certificado, recebidos pela lista do Omie, e certificados avulsos.')],
       ['Responsabilidades', MRESP([[M_PAPEIS.qual + ' (operador de certificados)', 'Importa a fila, emite e conclui os certificados, registra pendências.'], [M_PAPEIS.adm, 'Define operadores, distribuição automática, clientes que não precisam de certificado e prazo em Configurações › Certificados.']])],
-      ['Fila de pedidos', MOL(['No Omie: Pedido de Venda › Exportar › Excel.', 'Menu <b>Certificados</b> › <b>Importar lista do Omie (.xlsx)</b>. Conferir o resumo (novos, atualizados, repetidos, sem NF) e gravar.', 'Reimportar a lista atualiza a fila: pedido cancelado no Omie sai da fila; NF cancelada vai para “Aguardando solução”; NF trocada é atualizada.'])],
+      ['Exportar os pedidos do Omie', MP('Objetivo: tirar do Omie a lista de pedidos de venda que vai alimentar a fila de certificados, usando os filtros para separar só os pedidos que interessam.') + MOL([
+        '<b>Abrir a listagem.</b> Entrar no Omie com usuário e senha › módulo <b>Vendas e NF-e</b> › no menu lateral, <b>Venda de Produto</b> › <b>Exibir Todos</b>.',
+        '<b>Deixar as colunas que a Central lê visíveis na tela:</b> <b>Número</b>, <b>Sequencial</b> (parte do pedido: 25940/1, /2…), <b>Nota Fiscal</b>, <b>Cliente</b>, <b>Faturado em</b> e <b>Situação</b> (ou <b>Etapa</b>). A exportação leva só o que está na tela.',
+        '<b>Filtrar.</b> Clicar no funil do cabeçalho da coluna e escolher o tipo: <b>Contém</b> (tem o texto), <b>Não Contém</b> (não tem o texto), <b>Igual a</b> (valor exato) ou <b>Hoje</b> (colunas de data). Digitar o valor e apertar Enter. Exemplo: pedidos com barra (faturados em partes) = <b>Contém</b> “/”; sem barra = <b>Não Contém</b> “/”.',
+        '<b>Pedidos faturados no dia</b> (os que precisam de certificado): na coluna de faturamento (<b>Faturado em</b>), filtro <b>Hoje</b> ou a data do dia; conferir a situação.',
+        '<b>Pedidos a faturar</b> (para adiantar o certificado): coluna <b>Situação</b> com o filtro dos pendentes de faturamento e, se quiser só os de hoje, também a previsão de faturamento. Eles entram na fila como <b>Aguardando NF</b>.',
+        '<b>Exportar.</b> Conferir se os filtros mostram só os pedidos desejados › botão direito em qualquer lugar da tabela › <b>Exportar</b> › <b>Arquivo Texto (CSV)</b> (ou Excel) › aguardar o download e salvar na pasta definida pela empresa, separando os arquivos por finalidade quando precisar.',
+        '<b>Conferir o arquivo.</b> Abrir o arquivo e conferir os números dos pedidos, as datas e as situações; não pode ter pedido fora do critério.'
+      ]) + MP('Referência: Ajuda Omie — “Acessando, filtrando e exportando informações no Omie”.')],
+      ['Fila de pedidos', MOL(['Menu <b>Certificados</b> › <b>Importar lista do Omie (Excel ou CSV)</b> › escolher o arquivo exportado. Conferir o resumo (faturados, a faturar, atualizados, repetidos) e gravar.',
+        'Pedido faturado entra com a NF; o prazo (2 dias úteis) conta da data de faturamento.',
+        'Pedido a faturar entra como <b>Aguardando NF</b>: sem prazo e sem atraso. Dá para pegar e preparar o certificado; para <b>concluir</b>, o pedido precisa ter NF.',
+        'Quando o mesmo pedido vier faturado num arquivo novo, a Central só acrescenta a NF e a data de faturamento no cartão que já existe (quem pegou continua com ele). Faturado em partes: a 1ª parte usa o cartão do pedido; as outras partes entram como cartões novos.',
+        'Orçamento e pedido cancelado não entram. Reimportar a lista atualiza a fila: pedido cancelado no Omie sai da fila; NF cancelada vai para “Aguardando solução”; NF trocada é atualizada. Importar o mesmo pedido de novo não duplica (repetido = mesmo pedido e mesma parte).'])],
       ['Emitir o certificado', MOL([
         'No cartão do pedido, <b>Pegar</b> e <b>Fazer certificado</b>.',
+        'Pedido com O.C. do cliente (PDF): <b>Importar O.C. (PDF)</b>. Informar o <b>Nº do pedido (PV)</b> (vindo da fila, já aparece preenchido): as folhas saem numeradas PV, PV A, PV B… A descrição sai padronizada (produto, medidas, SCH/classe, face ou pontas); a norma e a NACE MR0175 vão em <b>Especificação</b> e o material com o grau completo (ex.: F316/316L) em <b>Material</b>, em amarelo para conferir. O texto completo da O.C. fica em “ver a descrição da O.C.”.',
         'Usar <b>Puxar dos lotes (AV)</b> e <b>Preencher os itens marcados</b>: descrição, material, corrida e, quando lançados, a química e a mecânica da usina. Os campos preenchidos sozinhos ficam amarelos até serem conferidos.',
         'Conferir o <b>RIF do pedido</b>.',
         'Salvar o PDF (ou Excel) e responder <b>Sim, concluir</b> para concluir o pedido na fila.'
@@ -14433,6 +14585,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         'Instrumento reprovado na calibração só volta ao uso com nova calibração aprovada. <b>Liberar para uso</b> (com justificativa) vale para o bloqueio por verificação Não OK ou bloqueio manual, depois da análise de impacto. Para retirar de vez: <b>Dar baixa</b> (data e motivo).'
       ])],
       ['Situações', MTB(['Status', 'Significado'], [['Em dia', 'Mais de 30 dias para vencer'], ['Vence em até 30 dias / Vence hoje', 'Programar o envio'], ['Vencido', 'Não usar'], ['No laboratório', 'Enviado para calibração'], ['Bloqueado', 'Reprovado ou bloqueado: não usar'], ['Manutenção · Fora de uso · Descartado', 'Fora de uso']]) + MP('Vencimentos e ações pendentes aparecem em Alertas; o Cronograma 12 meses mostra o que vence em cada mês e o custo previsto.')],
+      ['Fotos e estado', MP('Na ficha do instrumento, <b>Fotos e estado</b>: tirar ou escolher fotos do estado físico (ex.: orelha quebrada, ponta gasta) e marcar <b>Com avaria</b> com a descrição do problema. A foto mais recente aparece na ficha e na página do QR da etiqueta; com avaria, as duas mostram um aviso amarelo. Avaria que impede o uso: <b>Dar baixa</b> ou situação Bloqueado/Manutenção.')],
       ['Registros', MREG([['Cadastro e calibrações do instrumento', 'Código do instrumento', 'Calibração'], ['Histórico do instrumento (calibração, envio, verificação, análise de impacto, uso em inspeção, baixa)', 'Código + data', 'Ficha do instrumento'], ['Certificado de calibração', 'Nome do arquivo = código', 'Google Drive']])],
       ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 7.1.5', 'IT-QUA-02 · IT-QUA-05'])]
     ] },
@@ -15153,7 +15306,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (a === 'iq-mov') { const fq = S.f.iqf || (S.f.iqf = {}); fq.mov = !fq.mov; S.iqN = 60; if (S.t.iqf) S.t.iqf.page = 0; render(); return; }
       if (a === 'cal-vista') { lsSet('cq-cal-vista', key); S.calN = 60; if (S.calDraw) S.calDraw(); return; }
       if (a === 'cal-more') { S.calN = (S.calN || 60) + 60; if (S.calDraw) S.calDraw(); return; }
-      if (['ins-env', 'ins-imp', 'ins-ver', 'ins-baixa', 'ins-lib', 'ins-etq'].includes(a)) { const x = findRec('INS', key); if (!x) return; ({ 'ins-env': insEnvDialog, 'ins-imp': insImpDialog, 'ins-ver': insVerDialog, 'ins-baixa': insBaixaDialog, 'ins-lib': insLibDialog, 'ins-etq': insLabelDialog })[a](x); return; }
+      if (['ins-env', 'ins-imp', 'ins-ver', 'ins-baixa', 'ins-lib', 'ins-etq', 'ins-foto'].includes(a)) { const x = findRec('INS', key); if (!x) return; ({ 'ins-env': insEnvDialog, 'ins-imp': insImpDialog, 'ins-ver': insVerDialog, 'ins-baixa': insBaixaDialog, 'ins-lib': insLibDialog, 'ins-etq': insLabelDialog, 'ins-foto': insFotoDialog })[a](x); return; }
       if (a === 'av-conc') { const x = findRec('AV', key); if (x) avConcDialog(x); return; }
       if (a === 'av-lib') { const x = findRec('AV', key); if (x) libDialog([x]); return; }
       if (a === 'q-rnc' || a === 'q-conc' || a === 'q-lib') { const g = (S.qGroups || [])[+key]; if (!g) return; if (a === 'q-rnc') rncFromLots(g); else if (a === 'q-conc') avConcDialog(g.items); else libDialog(g.items); return; }
