@@ -1035,6 +1035,9 @@ body.tabmode .main { padding: 0 !important; }
 .eqfh .eqbox { width: 300px; height: 200px; } .eqfh .eqbox svg { width: 280px; }
 .eqbox.eqfoto { position: relative; cursor: zoom-in; background: #111; } .eqbox.eqfoto img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .eqbox.eqfoto i { position: absolute; left: 6px; bottom: 6px; font: 600 11px var(--f-body); font-style: normal; color: #fff; background: rgba(0,0,0,.55); padding: 2px 6px; border-radius: 4px; }
+.ibxl { display: grid; gap: 0; max-height: 52vh; overflow: auto; border: 1px solid var(--line); border-radius: 8px; }
+.ibxr { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 9px 12px; border-top: 1px solid var(--line); font-size: 13.5px; } .ibxr:first-child { border-top: 0; }
+.ibxr .muted { font-size: 12.5px; margin-top: 2px; } .ibxr .chip { margin-left: 4px; }
 .imgzoom { position: fixed; inset: 0; z-index: 400; background: rgba(0,0,0,.85); display: grid; place-items: center; padding: 20px; cursor: zoom-out; }
 .imgzoom img { max-width: 100%; max-height: calc(100vh - 80px); border-radius: 6px; } .imgzoom .btn { position: absolute; top: 14px; right: 14px; }
 .insfotos img[data-zoom] { cursor: zoom-in; }
@@ -1392,11 +1395,12 @@ table.t tbody tr.sel td { background: color-mix(in srgb, var(--rif) 9%, var(--su
 .pwhere b { display: block; font: 800 20px var(--f-display); } .pwhere span { font-size: 12px; color: var(--ink-2); }
 .pfoto { display: grid; grid-template-columns: 112px 1fr; gap: 14px; align-items: center; }
 .pfoto .sfph { width: 112px; height: 140px; }
-.org ul.vert { flex-direction: column; align-items: center; gap: 0; }
-.org ul.vert > li { padding: 8px 0 0; }
-.org ul.vert > li::before { display: block; content: ''; position: absolute; top: 0; left: 50%; right: auto; width: 0; height: 8px; border: 0; border-left: 2px solid var(--line-2); border-radius: 0; }
-.org ul.vert > li::after { display: none; }
-.org ul.vert > li:first-child { padding-top: 0; } .org ul.vert > li:first-child::before { display: none; }
+.org ul.vert { flex-direction: column; align-items: flex-start; gap: 0; }
+.org ul.vert::before { content: ''; position: absolute; top: 0; left: 9px; width: calc(50% - 9px); height: 18px; border: 0; border-right: 2px solid var(--line-2); border-bottom: 2px solid var(--line-2); border-radius: 0; }
+.org ul.vert > li { padding: 8px 0 0 24px; align-items: flex-start; }
+.org ul.vert > li::before { display: block; content: ''; position: absolute; top: 0; left: 9px; right: auto; width: 0; height: 100%; border: 0; border-left: 2px solid var(--line-2); border-radius: 0; }
+.org ul.vert > li:last-child::before { height: calc(50% + 4px); border-right: 0; border-radius: 0; }
+.org ul.vert > li::after { display: block; content: ''; position: absolute; top: calc(50% + 4px); left: 9px; right: auto; width: 15px; height: 0; border: 0; border-top: 2px solid var(--line-2); border-radius: 0; }
 .pset { font: 700 12px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--k); }
 .pbar { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; margin: 12px 0 4px; }
 .pbar .filters { flex: 1 1 520px; }
@@ -1501,6 +1505,8 @@ table.t tbody tr.sel td { background: color-mix(in srgb, var(--rif) 9%, var(--su
 .mdoc .mflux i { font: 700 11px var(--f-mono); font-style: normal; color: var(--ink-3); } .mdoc .mflux b { font-size: 12.5px; } .mdoc .mflux span, .mdoc .mflux small { font-size: 11px; color: var(--ink-3); } .mdoc .mflux em { font-style: normal; color: var(--ink-3); }
 .mdoc .mass { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 6px; margin: 6px 0 16px; } .mdoc .mass div { padding: 8px 10px; display: grid; gap: 2px; } .mdoc .mass div + div { border-left: 1px solid var(--line); }
 .mdoc .mass span { font: 600 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.mdist { margin: 0 0 14px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--surface); }
+.mdist h3 { margin: 0 0 8px; font: 700 13px var(--f-body); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); }
 .mdoc.minuta { background-image: repeating-linear-gradient(-45deg, transparent 0 22px, color-mix(in srgb, var(--warn) 6%, transparent) 22px 44px); }
 .tbw .mwrap { grid-template-columns: 260px minmax(0, 1fr); } .tbw .mdoc { font-size: 15.5px; }
 @media (max-width: 900px) { .mwrap, .tbw .mwrap { grid-template-columns: 1fr; } .mlist { position: static; } .mdoc { padding: 14px; } .mdoc .mcab { grid-template-columns: 1fr; } .mdoc .mtt { border-left: 0; border-right: 0; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); } .mdoc .mass { grid-template-columns: 1fr; } .mdoc .mass div + div { border-left: 0; border-top: 1px solid var(--line); } .mdoc table.mt { display: block; overflow-x: auto; } }
@@ -6874,7 +6880,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   };
   VIEWS.rnc = (main) => {
     const M = S.model, f = S.f.rnc || (S.f.rnc = {});
-    main.innerHTML = `<div class="view">${head(MOD.RNC.full, 'NCF · não conformidades de fornecedores. Status e prazos recalculados hoje, com dias úteis e feriados.', (cw('rnc') ? '<button class="btn" type="button" data-go=\'{"v":"rnctab"}\'>Tela do tablet</button>' : '') + newBtn('rnc', 'Nova NCF', 1))}
+    main.innerHTML = `<div class="view">${head(MOD.RNC.full, 'NCF · não conformidades de fornecedores. Status e prazos recalculados hoje, com dias úteis e feriados.', (cw('rnc') ? '<button class="btn" type="button" data-go=\'{"v":"rnctab"}\'>Tela do tablet</button>' : '') + (DB.owner ? '<button class="btn" type="button" data-act="inb-adm">Caixa dos tablets</button>' : '') + newBtn('rnc', 'Nova NCF', 1))}
       ${pendQueueHTML()}
       ${multiChips('Status', [['Em Andamento', 'Em andamento'], ['Pendente', 'Pendente'], ['Atrasado', 'Atrasada'], ['Concluida', 'Concluída'], ['Cancelada', 'Cancelada']], f.status)}
       ${myPessoa() ? `<div class="mine-tg"><button class="btn small" type="button" id="fr-minhas" aria-pressed="${!!f.minhas}">Somente minhas NCFs (${NF.format(M.rnc.filter(isMine).length)})</button><span class="muted">comprador ou emissor: ${esc(myPessoa())}</span></div>` : ''}
@@ -12904,7 +12910,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* organograma: monta sozinho pelo "Responde a" */
   function eqOrgHTML(L, soOrg) {
     const ids = new Set(L.map((p) => p.id)), filhos = {}; L.forEach((p) => { const g = p.gestor && ids.has(p.gestor) && p.gestor !== p.id ? p.gestor : '_'; (filhos[g] = filhos[g] || []).push(p); });
-    Object.values(filhos).forEach((a) => a.sort((x, y) => (filhos[y.id] ? 1 : 0) - (filhos[x.id] ? 1 : 0) || x.nome.localeCompare(y.nome, 'pt-BR')));
+    /* ordem dos irmãos: primeiro o nível da hierarquia (1, 2, 2.1, 2.2… de Configurações › Funcionários › Níveis), depois quem tem equipe, depois o nome */
+    const rk = (p) => { const r = eqNivRank(p.nivel); return r < 0 ? 999 : r; };
+    Object.values(filhos).forEach((a) => a.sort((x, y) => rk(x) - rk(y) || (filhos[y.id] ? 1 : 0) - (filhos[x.id] ? 1 : 0) || x.nome.localeCompare(y.nome, 'pt-BR')));
     const node = (p) => `<${soOrg ? 'div' : 'button type="button"'} class="onode" style="--k:${eqCor(p.setor)}${soOrg ? ';cursor:default' : ''}" ${soOrg ? '' : `data-act="eq-ver" data-key="${esc(p.id)}"`}>${eqFoto(p) ? `<img src="${eqFoto(p)}" alt="">` : `<span class="oi">${esc(eqIni(p.nome))}</span>`}<span><em>${esc(p.setor || 'sem setor')}</em><b>${esc(p.nome)}</b><span>${esc(p.cargo || '')}</span></span></${soOrg ? 'div' : 'button'}>`;
     const seen = new Set();
     const tree = (p) => {
@@ -12916,9 +12924,25 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     };
     const raiz = filhos._ || [], soltos = raiz.filter((p) => !filhos[p.id]), chefes = raiz.filter((p) => filhos[p.id]);
     const setores = uniq(L.map((p) => p.setor).filter(Boolean));
+    const arvores = chefes.map((p) => `<ul>${tree(p)}</ul>`).join('');
+    /* conferência da hierarquia (quem pode editar a equipe): nível igual/abaixo do chefe, círculo e chefe inativo */
+    const confere = [];
+    if (!soOrg) {
+      const todos = eqAll(), porId = new Map(todos.map((p) => [p.id, p])), nv = (p) => eqNiv(p.nivel);
+      L.forEach((p) => {
+        const g = p.gestor && porId.get(p.gestor);
+        if (g && g.inativo) confere.push(`<b>${esc(p.nome)}</b> responde a <b>${esc(g.nome)}</b>, que está inativo.`);
+        else if (g && ids.has(g.id) && nv(p) && nv(g) && rk(p) <= rk(g)) confere.push(`<b>${esc(p.nome)}</b> (nível ${esc(nv(p).num)} · ${esc(nv(p).nome)}) responde a <b>${esc(g.nome)}</b> (nível ${esc(nv(g).num)} · ${esc(nv(g).nome)}): o nível de quem responde deveria ficar abaixo do chefe.`);
+      });
+      const fora = L.filter((p) => !seen.has(p.id) && !soltos.includes(p));
+      if (fora.length) confere.push(`Hierarquia em círculo (um responde ao outro): ${fora.map((p) => '<b>' + esc(p.nome) + '</b>').join(', ')}. Corrija o “Responde a” de um deles.`);
+      const semNv = L.filter((p) => !nv(p)).length;
+      if (semNv) confere.push(`${semNv} pessoa(s) sem <b>nível</b> no cadastro: elas aparecem por último entre os colegas. Preencha o nível na ficha (Editar).`);
+    }
     return `<section class="sec">${band('GERAL', 'Organograma', 'monta sozinho pelo campo "Responde a" de cada ficha')}<div class="block"><div class="body" style="display:grid;gap:10px">
       <div class="orgleg">${setores.map((s) => `<span style="--k:${eqCor(s)}"><i></i>${esc(s)}</span>`).join('')}</div>
-      ${chefes.length ? `<div class="org"><div class="orgroots">${chefes.map((p) => `<ul>${tree(p)}</ul>`).join('')}</div></div>` : ''}
+      ${confere.length ? `<div class="warnbox"><b>Conferir a hierarquia:</b><ul style="margin:4px 0 0;padding-left:18px">${confere.map((t) => `<li>${t}</li>`).join('')}</ul></div>` : ''}
+      ${chefes.length ? `<div class="org"><div class="orgroots">${arvores}</div></div>` : ''}
       ${soltos.length ? `<div class="fsec"><h3>Sem “Responde a” preenchido (${soltos.length})</h3><div class="orgsolto">${soltos.map(node).join('')}</div></div>` : ''}
       ${soOrg ? '' : '<span class="muted" style="font-size:12.5px">Toque numa pessoa para abrir a ficha. Para montar a hierarquia, preencha “Responde a” na ficha de cada um.</span>'}</div></div></section>`;
   }
@@ -14424,7 +14448,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         ['Calibração de instrumento', 'Código do instrumento', 'Calibração'], ['Qualificação de soldador', 'Sinete e Nº do RQS', 'Soldagem'], ['Avaliação de fornecedor', 'Fechamento mensal', 'Avaliação de fornecedores'],
         ['Histórico de alterações', 'Data, pessoa e campos alterados', 'Histórico']
       ])],
-      ['Controle deste manual', MP('Os documentos deste manual ficam na Central da Qualidade, menu <b>Manual</b>, e são aprovados eletronicamente por um administrador. A versão vigente é sempre a que está na Central; cada revisão aprovada fica guardada como obsoleta, com o histórico de revisões no fim de cada documento. Cópias impressas não são controladas: confira a revisão na Central antes de usar.')]
+      ['Controle deste manual', MP('Os documentos deste manual ficam na Central da Qualidade, menu <b>Manual</b>, e são aprovados eletronicamente por um administrador. A versão vigente é sempre a que está na Central; cada revisão aprovada fica guardada como obsoleta, com o histórico de revisões no fim de cada documento. Cópia impressa é não controlada, a não ser quando impressa como <b>cópia controlada</b>: sai com carimbo, nº da cópia e destino (ex.: treinamento, posto de trabalho), entra na lista de distribuição do documento e deve ser recolhida quando sair revisão nova (a Central avisa quais).')]
     ] },
     /* ---------------------------------------------------------------- IT-QUA-01 */
     { id: 'it01', cod: 'IT-QUA-01', tipo: 'Instrução de trabalho', tit: 'Recebimento e identificação de lotes (AV)', cols: ['av'], sec: [
@@ -14742,7 +14766,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const corpo = `<div class="mwrap">${lista}<div class="mread" id="man-read">${d ? '<div class="loading"><span class="spin"></span><span>Abrindo o documento…</span></div>' : ''}</div></div>`;
     main.innerHTML = tab
       ? `<div class="tbw">${tbHead('Manual da Qualidade')}<div class="tbb"><div class="rrfoot" style="justify-content:flex-start">${acts}</div>${corpo}</div></div>`
-      : `<div class="view">${head('Manual da Qualidade', 'Procedimento e instruções de trabalho da Central, controlados conforme a ISO 9001 (7.5). A versão vigente é sempre a que está aqui; cópia impressa não é controlada.' + (adm && pend ? ` <b>${pend} documento(s) aguardando aprovação.</b>` : ''), acts)}${corpo}</div>`;
+      : `<div class="view">${head('Manual da Qualidade', 'Procedimento e instruções de trabalho da Central, controlados conforme a ISO 9001 (7.5). A versão vigente é sempre a que está aqui; cópia impressa só vale como controlada quando sai como “cópia controlada” (com nº e destino).' + (adm && pend ? ` <b>${pend} documento(s) aguardando aprovação.</b>` : ''), acts)}${corpo}</div>`;
     if (d) manLer(d);
   };
   async function manLer(d) {
@@ -14756,13 +14780,16 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     else if (T.semCopia) aviso = '<div class="warnbox mav1">A cópia aprovada não foi encontrada no banco; mostrando o texto atual.</div>';
     const ass = !T.minuta && c ? `<div class="mass"><div><span>Elaborado por</span><b>${esc(c.elab || '—')}</b></div><div><span>Aprovado por</span><b>${manAss(c.aprov)}</b></div></div>` : '';
     const btns = `<button class="btn" type="button" data-act="man-print" data-key="${d.id}">Imprimir${T.minuta ? ' minuta' : ''}</button>${adm && sit.st !== 'vig' ? `<button class="btn primary" type="button" data-act="man-aprovar" data-key="${d.id}">${sit.st === 'minuta' ? 'Aprovar emissão (rev. 00)' : 'Aprovar revisão ' + man2(c.rev + 1)}</button>` : ''}`;
-    el.innerHTML = `<div class="rrfoot mbtns">${btns}</div>${aviso}<article class="mdoc${T.minuta ? ' minuta' : ''}">${manCab(d, c, T.minuta, manLogo())}<div class="mtxt">${T.html}</div>${ass}${manHist(c)}</article>`;
+    const dist = adm ? await manDist() : {};
+    if (!$('#man-read') || MAN.sel !== d.id) return;
+    el.innerHTML = `<div class="rrfoot mbtns">${btns}</div>${aviso}${adm ? manDistHTML(d, c, dist) : ''}<article class="mdoc${T.minuta ? ' minuta' : ''}">${manCab(d, c, T.minuta, manLogo())}<div class="mtxt">${T.html}</div>${ass}${manHist(c)}</article>`;
   }
   function manAct(a, key) {
     if (a === 'man-sel') { MAN.sel = key; MAN.ver = 'vig'; render(); window.scrollTo(0, 0); return true; }
     if (a === 'man-ver') { MAN.ver = key; const d = MAN_DOCS.find((x) => x.id === MAN.sel); if (d) manLer(d); return true; }
-    if (a === 'man-print') { manImprimir([key], MAN.ver === 'min'); return true; }
-    if (a === 'man-tudo') { manImprimir(manLista().map((d) => d.id), false); return true; }
+    if (a === 'man-print') { if (manAdm() && !(MAN.ver === 'min')) manImprDialog([key]); else manImprimir([key], MAN.ver === 'min'); return true; }
+    if (a === 'man-tudo') { if (manAdm()) manImprDialog(manLista().map((d) => d.id)); else manImprimir(manLista().map((d) => d.id), false); return true; }
+    if (a === 'man-recolher') { manRecolher(key); return true; }
     if (a === 'man-mestra') { manMestra(); return true; }
     if (a === 'man-aprovar') { manAprovar(key); return true; }
     return false;
@@ -14791,7 +14818,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         await DB.db.doc('cfg/main').update({ manual: { docs: { [id]: { cod, rev, at, elab, aprov, cv, desc, hist } } } });
         MAN.snap[id] = snap; MAN.ver = 'vig';
         logEntry('GERAL', 'manual', 'alterado', `${cod} · ${d.tit} · revisão ${man2(rev)} aprovada: ${desc}`, null);
-        closeLayer(); toast(`${cod} revisão ${man2(rev)} aprovada.`);
+        closeLayer();
+        const recolher = manCopias(await manDist(true), id).filter((o) => !o.rec && o.rev !== rev).length;
+        toast(`${cod} revisão ${man2(rev)} aprovada.${recolher ? ` ${recolher} cópia(s) controlada(s) da revisão anterior para recolher (veja no documento).` : ''}`);
         await sleep(300); render();
       } catch (err) { toast('Não foi possível aprovar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; b.textContent = 'Aprovar e assinar'; }
     };
@@ -14811,20 +14840,85 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     .mnota{border-left:2.5px solid #777;padding:1mm 2.5mm;background:#f3f4f3}
     .mflux{display:flex;flex-wrap:wrap;align-items:center;gap:1.5mm;margin:1mm 0 2.5mm}.mflux div{border:1px solid #777;border-radius:1.5mm;padding:1.5mm 2mm;width:30mm;display:grid;gap:.3mm}.mflux i{font-style:normal;font-weight:700;font-size:8pt;color:#555}.mflux b{font-size:8.6pt}.mflux span,.mflux small{font-size:7.6pt;color:#444}.mflux em{font-style:normal;color:#555}
     .mass{display:grid;grid-template-columns:1fr 1fr;border:1px solid #aaa;margin-top:3mm}.mass div{padding:2mm 3mm;display:grid}.mass div+div{border-left:1px solid #aaa}.mass span{font-size:7.8pt;color:#444;text-transform:uppercase;letter-spacing:.06em}
+    .ccst{display:flex;justify-content:space-between;align-items:center;gap:4mm;border:1.6px solid #1f4e8c;color:#1f4e8c;padding:1.6mm 3mm;margin:-2mm 0 4mm;font-size:8.6pt}.ccst b{font-size:11pt;letter-spacing:.06em}
     .rod{border-top:1px solid #999;margin-top:3mm;padding-top:1.2mm;font-size:7.4pt;color:#444;display:flex;justify-content:space-between;gap:4mm}
     .minuta .mtxt{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='760'%3E%3Ctext x='300' y='400' transform='rotate(-24 300 380)' text-anchor='middle' font-family='Arial' font-weight='700' font-size='118' fill='rgba(180,0,0,0.13)'%3EMINUTA%3C/text%3E%3C/svg%3E") center top/100% auto repeat-y}
     .cqwm{position:fixed;right:-31mm;top:50%;width:92mm;height:92mm;transform:translateY(-50%);opacity:.09;pointer-events:none;z-index:0}.cqwm svg{width:100%;height:100%}.doc,table.pg{position:relative;z-index:1}
     .rod{align-items:center}.rod .cqs{display:inline-flex;align-items:center;gap:1.4mm;font-weight:700;color:#333;white-space:nowrap}.rod .cqs svg{width:5mm;height:5mm}`;
-  async function manImprimir(ids, minutaAdm) {
+  async function manImprimir(ids, minutaAdm, ctrl) {
     const docs = ids.map((id) => MAN_DOCS.find((x) => x.id === id)).filter(Boolean); if (!docs.length) return;
     const quem = myPessoa() || DB.meName || '', agora = `${dmy(Date.now())} ${hhmm(Date.now())}`, logo = manLogo();
     const partes = [];
-    for (const d of docs) {
+    const lista = [];   /* [documento, cópia controlada ou null] */
+    docs.forEach((d) => { const cc = ctrl && ctrl[d.id]; if (cc && cc.length) cc.forEach((k) => lista.push([d, k])); else lista.push([d, null]); });
+    for (const [d, cc] of lista) {
       const sit = manSit(d), snap = await manSnap(d.id), T = manTexto(d, sit, snap, minutaAdm && ids.length === 1), c = sit.c;
+      const selo = cc ? `<div class="ccst"><b>CÓPIA CONTROLADA Nº ${man2(cc.n)}</b><span>Destino: ${esc(cc.dest)} · Revisão ${man2(cc.rev)} · entregue em ${dmy(cc.at)}</span></div>` : '';
       const ass = !T.minuta && c ? `<div class="mass"><div><span>Elaborado por</span><b>${esc(c.elab || '—')}</b></div><div><span>Aprovado por</span><b>${manAss(c.aprov)}</b></div></div>` : '';
-      partes.push(`<div class="doc${T.minuta ? ' minuta' : ''}"><table class="pg"><thead><tr><td>${manCab(d, c, T.minuta, logo)}</td></tr></thead><tfoot><tr><td><div class="rod"><span><span class="cqs">${MAN_SEAL} Central da Qualidade</span> · ${T.minuta ? '<b>MINUTA — não aprovado, sem validade.</b> ' : ''}Cópia impressa não controlada; a versão vigente está no Manual da Central.</span><span>Impresso em ${esc(agora)}${quem ? ' por ' + esc(quem) : ''}</span></div></td></tr></tfoot><tbody><tr><td><div class="mtxt">${T.html}</div>${ass}${manHist(c)}</td></tr></tbody></table></div>`);
+      partes.push(`<div class="doc${T.minuta ? ' minuta' : ''}"><table class="pg"><thead><tr><td>${manCab(d, c, T.minuta, logo)}${selo}</td></tr></thead><tfoot><tr><td><div class="rod"><span><span class="cqs">${MAN_SEAL} Central da Qualidade</span> · ${T.minuta ? '<b>MINUTA — não aprovado, sem validade.</b> ' : ''}${cc ? `<b>Cópia controlada nº ${man2(cc.n)}</b> (${esc(cc.dest)}): não reproduzir; recolher quando sair revisão nova.` : 'Cópia impressa não controlada; a versão vigente está no Manual da Central.'}</span><span>Impresso em ${esc(agora)}${quem ? ' por ' + esc(quem) : ''}</span></div></td></tr></tfoot><tbody><tr><td><div class="mtxt">${T.html}</div>${ass}${manHist(c)}</td></tr></tbody></table></div>`);
     }
     printHTML(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${docs.length > 1 ? 'Manual da Qualidade' : esc(((manSit(docs[0]).c || {}).cod) || docs[0].cod)}</title><style>${MAN_CSS}</style></head><body>${MAN_WM}${partes.join('')}</body></html>`);
+  }
+  /* ---------- cópias controladas (lista de distribuição em meta/man-dist) ---------- */
+  async function manDist(fresh) {
+    if (!fresh && MAN.dist) return MAN.dist;
+    try { const s0 = await DB.db.doc('meta/man-dist').get(); MAN.dist = (s0.exists && (s0.data() || {}).c) || {}; } catch (e) { MAN.dist = {}; }
+    return MAN.dist;
+  }
+  const manCopias = (dist, id) => Object.keys(dist).map((k) => Object.assign({ k }, dist[k])).filter((o) => o.doc === id).sort((a, b) => a.n - b.n);
+  function manImprDialog(ids) {
+    const docs = ids.map((id) => MAN_DOCS.find((x) => x.id === id)).filter(Boolean);
+    const vig = docs.filter((d) => manSit(d).st !== 'minuta'), umSo = docs.length === 1, d0 = docs[0];
+    openModal(umSo ? `Imprimir ${esc((manSit(d0).c || {}).cod || d0.cod)}` : 'Imprimir o manual', `
+      <div class="seg" id="mi-tipo" role="group" aria-label="Tipo de cópia"><button type="button" data-v="nao" aria-pressed="true">Cópia não controlada</button><button type="button" data-v="ctrl" aria-pressed="false" ${vig.length ? '' : 'disabled'}>Cópia controlada</button></div>
+      <p class="muted" id="mi-nao" style="margin:0">Para consulta: sai com o aviso “cópia impressa não controlada”.</p>
+      <div id="mi-ctrl" hidden>
+        <p class="muted" style="margin:0">Para entregar (ex.: treinamento, posto de trabalho): sai com o carimbo <b>CÓPIA CONTROLADA</b>, o nº da cópia e o destino, e entra na lista de distribuição. Quando sair revisão nova, a Central avisa quais cópias recolher.${vig.length < docs.length ? ` <b>${docs.length - vig.length} documento(s) ainda em minuta</b> saem como minuta (aprove antes para virar cópia controlada).` : ''}</p>
+        <div class="fgrid" style="grid-template-columns:2fr 1fr"><label class="field"><span>Destino / quem recebe <b>*</b></span><input id="mi-dest" maxlength="80" placeholder="ex.: Treinamento recebimento · Posto da usinagem"></label>
+        <label class="field"><span>Nº de cópias de cada documento</span><input id="mi-n" type="number" min="1" max="20" value="1"></label></div>
+      </div>
+      <div class="formfoot"><button class="btn primary" type="button" id="mi-ok">Imprimir</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    let tipo = 'nao';
+    $$('#mi-tipo button').forEach((b) => { b.onclick = () => { if (b.disabled) return; tipo = b.dataset.v; $$('#mi-tipo button').forEach((o) => o.setAttribute('aria-pressed', String(o === b))); $('#mi-ctrl').hidden = tipo !== 'ctrl'; $('#mi-nao').hidden = tipo === 'ctrl'; if (tipo === 'ctrl') $('#mi-dest').focus(); }; });
+    $('#mi-ok').onclick = async () => {
+      if (tipo === 'nao') { closeLayer(); manImprimir(ids, false); return; }
+      const dest = $('#mi-dest').value.trim(), n = Math.max(1, Math.min(20, parseInt($('#mi-n').value, 10) || 1));
+      if (dest.length < 3) { toast('Escreva o destino da cópia (quem recebe).', true); $('#mi-dest').focus(); return; }
+      const b = $('#mi-ok'); b.disabled = true; b.textContent = 'Registrando…';
+      try {
+        const dist = await manDist(true), patch = {}, ctrl = {}, at = Date.now(), nome = myPessoa() || DB.meName || '';
+        vig.forEach((d) => {
+          const c = manSit(d).c; let mx = manCopias(dist, d.id).reduce((m, o) => Math.max(m, o.n || 0), 0);
+          ctrl[d.id] = [];
+          for (let i = 0; i < n; i++) { mx++; const k = d.id + '-' + mx; const o = { doc: d.id, cod: c.cod || d.cod, rev: c.rev, n: mx, dest, at, by: DB.me || null, nome }; patch[k] = o; ctrl[d.id].push(o); }
+        });
+        await DB.db.doc('meta/man-dist').merge({ c: patch });
+        MAN.dist = Object.assign({}, dist, patch);
+        logEntry('GERAL', 'manual', 'alterado', `Cópia(s) controlada(s) entregue(s) a ${dest}: ${vig.map((d) => (manSit(d).c.cod || d.cod) + ' nº ' + ctrl[d.id].map((o) => man2(o.n)).join(', ')).join(' · ')}`, null);
+        closeLayer(); manImprimir(ids, false, ctrl);
+        const dd = MAN_DOCS.find((x) => x.id === MAN.sel); if (dd && S.view === 'manual') setTimeout(() => manLer(dd), 400);
+      } catch (err) { toast('Não foi possível registrar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; b.textContent = 'Imprimir'; }
+    };
+  }
+  function manRecolher(k) {
+    const o = (MAN.dist || {})[k]; if (!o || !manAdm()) return;
+    confirmBox('Cópia recolhida', `Marcar a cópia controlada nº ${man2(o.n)} (${o.cod}, rev. ${man2(o.rev)}, ${o.dest}) como recolhida?`, 'Recolhida', async () => {
+      try {
+        const rec = { at: Date.now(), by: DB.me || null, nome: myPessoa() || DB.meName || '' };
+        await DB.db.doc('meta/man-dist').merge({ c: { [k]: { rec } } });
+        MAN.dist[k] = Object.assign({}, o, { rec });
+        logEntry('GERAL', 'manual', 'alterado', `${o.cod} · cópia controlada nº ${man2(o.n)} (${o.dest}) recolhida`, null);
+        toast('Cópia recolhida.'); const dd = MAN_DOCS.find((x) => x.id === MAN.sel); if (dd) manLer(dd);
+      } catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
+    });
+  }
+  /* lista das cópias controladas do documento (administradores) */
+  function manDistHTML(d, c, dist) {
+    const L = manCopias(dist, d.id); if (!L.length) return '';
+    const vigRev = c ? c.rev : null;
+    const sit = (o) => (o.rec ? `<span class="chip off"><i>–</i>recolhida ${dmy(o.rec.at)}</span>` : o.rev !== vigRev ? '<span class="chip crit"><i>!</i>revisão antiga · recolher</span>' : '<span class="chip ok"><i>✓</i>em uso</span>');
+    const rec = L.filter((o) => !o.rec && o.rev !== vigRev).length;
+    return `<section class="mdist"><h3>Cópias controladas (${L.length})${rec ? ` <span class="chip crit"><i>!</i>${rec} para recolher</span>` : ''}</h3><table class="t"><thead><tr><th>Nº</th><th>Rev.</th><th>Destino</th><th>Entregue</th><th>Situação</th><th></th></tr></thead><tbody>${L.map((o) => `<tr><td class="mono">${man2(o.n)}</td><td class="mono">${man2(o.rev)}</td><td>${esc(o.dest)}</td><td class="nw">${dmy(o.at)}${o.nome ? ' · ' + esc(o.nome) : ''}</td><td>${sit(o)}</td><td>${o.rec ? '' : `<button class="btn small ghost" type="button" data-act="man-recolher" data-key="${esc(o.k)}">Recolhida</button>`}</td></tr>`).join('')}</tbody></table></section>`;
   }
   async function manMestra() {
     const L = MAN_DOCS, agora = `${dmy(Date.now())} ${hhmm(Date.now())}`;
@@ -14832,13 +14926,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const d0 = { tipo: 'Lista mestra', tit: 'Lista mestra de documentos da Qualidade' };
     printHTML(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Lista mestra de documentos</title><style>${MAN_CSS}</style></head><body>${MAN_WM}<table class="pg"><thead><tr><td><div class="mcab"><div class="mlg">${manLogo()}</div><div class="mtt"><span>${d0.tipo}</span><b>${d0.tit}</b></div><div class="mnr"><div><span>Emitida em</span><b>${esc(agora)}</b></div><div><span>Documentos</span><b>${L.length}</b></div></div></div></td></tr></thead><tbody><tr><td>
       <table class="mt"><thead><tr><th>Código</th><th>Título</th><th>Tipo</th><th>Rev.</th><th>Data</th><th>Situação</th><th>Aprovado por</th></tr></thead><tbody>${rows}</tbody></table>
-      <p style="font-size:8.6pt;color:#444">Distribuição: eletrônica, pela Central da Qualidade › Manual (cada pessoa vê os documentos dos módulos que usa). Revisões anteriores ficam guardadas na Central como obsoletas.</p></td></tr></tbody></table></body></html>`);
+      <p style="font-size:8.6pt;color:#444">Distribuição: eletrônica, pela Central da Qualidade › Manual (cada pessoa vê os documentos dos módulos que usa). Cópias impressas controladas (nº e destino) ficam na lista de distribuição de cada documento e são recolhidas quando sai revisão nova. Revisões anteriores ficam guardadas na Central como obsoletas.</p></td></tr></tbody></table></body></html>`);
   }
   /* Configurações › Manual da Qualidade: impressão e situação dos documentos */
   function manCfgHTML() {
     const L = manLista(), adm = manAdm();
     return `<section class="sec">${band('GERAL', 'Manual da Qualidade', 'documentos controlados · ISO 9001 7.5')}<div class="block"><div class="body">
-      <p style="margin:0 0 10px;max-width:80ch">Procedimento e instruções de trabalho de cada módulo. Leia e aprove em <b>Manual</b> (no menu); aqui você imprime. A cópia impressa sai com o cabeçalho do documento controlado e o aviso de cópia não controlada.</p>
+      <p style="margin:0 0 10px;max-width:80ch">Procedimento e instruções de trabalho de cada módulo. Leia e aprove em <b>Manual</b> (no menu); aqui você imprime. A cópia impressa sai com o cabeçalho do documento controlado: como <b>cópia não controlada</b> (consulta) ou <b>cópia controlada</b> (com nº, destino e lista de distribuição).</p>
       <div class="formfoot" style="justify-content:flex-start;margin-bottom:10px"><button class="btn primary" type="button" data-act="man-tudo">Imprimir manual${adm ? ' completo' : ''}</button>${adm ? '<button class="btn" type="button" data-act="man-mestra">Imprimir lista mestra</button>' : ''}<button class="btn ghost" type="button" data-go='{"v":"manual"}'>Abrir o Manual</button></div>
       <div class="twrap"><table class="t"><thead><tr><th class="nosort">Código</th><th class="nosort">Documento</th><th class="nosort">Situação</th><th class="nosort"></th></tr></thead><tbody>${L.map((d) => { const s = manSit(d); return `<tr><td class="mono">${esc((s.c && s.c.cod) || d.cod)}</td><td>${esc(d.tit)}</td><td><span class="chip ${s.cls}"><i>${s.st === 'vig' ? '✓' : '!'}</i>${esc(s.txt)}</span></td><td class="nw"><button class="btn small" type="button" data-act="man-print" data-key="${d.id}">Imprimir</button></td></tr>`; }).join('')}</tbody></table></div>
     </div></div></section>`;
@@ -15185,6 +15279,35 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       catch (err) { toast('Não foi possível apagar: ' + ((err && (err.message || err.code)) || err), true); }
     }, true);
   }
+  /* conta dona: tudo o que está nas caixas dos tablets (NCFs enviadas e pedidos de correção), de todos os operadores, com Apagar */
+  async function inbAdmDialog() {
+    if (!DB.owner) return;
+    let docs = INB.docs;
+    try { const q = await DB.db.collection('rncin').get(); docs = q.docs.map((d) => ({ id: d.id, data: d.data() || {} })); } catch (e) { /* usa o que já está carregado */ }
+    const L = [];
+    docs.forEach((dd) => {
+      const sx = dd.data.s || {}, cx = dd.data.c || {};
+      Object.keys(sx).forEach((id) => { const e = sx[id]; if (e && e.st !== 'del') L.push({ uid: dd.id, id, tipo: 's', e, at: e.at || 0 }); });
+      Object.keys(cx).forEach((id) => { const e = cx[id]; if (e && e.st !== 'del') L.push({ uid: dd.id, id, tipo: 'c', e, at: e.at || 0 }); });
+    });
+    L.sort((a, b) => b.at - a.at);
+    const quem = (o) => (o.e.abAss && o.e.abAss.nome) || o.e.nome || DB.names[o.uid] || 'operador';
+    const sit = (o) => (o.tipo === 'c' ? '<span class="chip warn"><i>✎</i>pedido de correção</span>' : o.e.st === 'novo' ? '<span class="chip warn"><i>…</i>aguardando numerar</span>' : S.model.rnc.some((r) => r.key === o.e.key) ? '<span class="chip ok"><i>✓</i>NCF existe na Central</span>' : '<span class="chip off"><i>–</i>NCF não existe mais</span>');
+    const row = (o, i) => `<div class="ibxr"><div><b>${esc(quem(o))}</b> · <span class="mono">${esc(o.tipo === 'c' ? (o.e.num || o.e.rncKey || '') : (o.e.num || 'sem número'))}</span> ${sit(o)}<div class="muted">${esc(o.tipo === 'c' ? '“' + String(o.e.txt || '').slice(0, 80) + '”' : [o.e.forn, o.e.lotesAV].filter(Boolean).join(' · ') || '—')} · enviado ${o.at ? dmy(o.at) : '—'}</div></div><button class="btn small ghost" type="button" data-ibx="${i}" style="color:var(--crit)">Apagar</button></div>`;
+    openModal('Caixa dos tablets', `<p class="muted" style="margin:0">Tudo o que os operadores enviaram pelo tablet e ainda aparece em “Minhas NCFs”. <b>Apagar</b> tira da lista do tablet do operador na hora. A NCF da Central não é apagada por aqui (use “Apagar NCF” na ficha dela).</p>
+      ${L.length ? `<div class="ibxl">${L.map(row).join('')}</div>` : '<div class="empty">Nenhum registro nas caixas dos tablets.</div>'}
+      <p class="muted" style="margin:0;font-size:12.5px">Rascunho que o operador não enviou fica só no tablet dele: ele descarta lá, em “Descartar”.</p>
+      <div class="formfoot">${L.length > 1 ? '<button class="btn" type="button" id="ibx-all" style="color:var(--crit)">Apagar tudo</button>' : ''}<button class="btn" type="button" data-act="close">Fechar</button></div>`);
+    const apagar = async (lst) => {
+      const por = {};
+      lst.forEach((o) => { const p0 = por[o.uid] = por[o.uid] || {}; (p0[o.tipo] = p0[o.tipo] || {})[o.id] = { st: 'del', delAt: Date.now(), delBy: DB.me || null }; });
+      for (const uid of Object.keys(por)) await DB.db.doc('rncin/' + uid).update(por[uid]);
+      for (const o of lst) if (o.tipo === 's' && o.e.st === 'novo') FT.delAll('rncinf', o.uid + '_' + o.id).catch(() => {});
+      logEntry('RNC', 'tablet', 'excluído', `${lst.length} registro(s) apagado(s) das caixas dos tablets pela conta dona`, null);
+    };
+    $$('[data-ibx]').forEach((b) => { b.onclick = () => { const o = L[+b.dataset.ibx]; confirmBox('Apagar do tablet', `Tirar ${o.tipo === 'c' ? 'o pedido de correção' : (o.e.num || 'a NCF aguardando número')} de “Minhas NCFs” de ${quem(o)}?`, 'Apagar', async () => { try { await apagar([o]); toast('Apagado do tablet.'); inbAdmDialog(); } catch (err) { toast('Não foi possível apagar: ' + ((err && (err.message || err.code)) || err), true); } }, true); }; });
+    const all = $('#ibx-all'); if (all) all.onclick = () => confirmBox('Apagar tudo', `Tirar os ${L.length} registros de todas as caixas dos tablets?`, 'Apagar tudo', async () => { try { await apagar(L); toast('Caixas dos tablets limpas.'); inbAdmDialog(); } catch (err) { toast('Não foi possível apagar: ' + ((err && (err.message || err.code)) || err), true); } }, true);
+  }
   function inbCorrs(rncKey) {
     const out = [];
     INB.docs.forEach((dd) => { const c = dd.data.c || {}; Object.keys(c).forEach((cid) => { const o = c[cid]; if (o && o.st === 'novo' && (!rncKey || o.rncKey === rncKey)) out.push(Object.assign({ uid: dd.id, cid }, o)); }); });
@@ -15268,6 +15391,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (a && a.startsWith('eq-') && eqAct(a, key)) return;
       if (a === 'bk-dl') { const f = (VY.files || [])[+key]; if (f) saveFile(f[0], f[1]); return; }
       if (a === 'rnc-apagar') { rncApagar(key); return; }
+      if (a === 'inb-adm') { inbAdmDialog(); return; }
       if (a && a.startsWith('rr-')) {
         if (a === 'rr-print') { if (key) rncRelPrint(key); return; }
         if (a === 'rr-fadd') { rrFotoAdd(key); return; }
