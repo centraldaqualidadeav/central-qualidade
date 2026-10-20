@@ -15130,7 +15130,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       for (const dd of INB.docs) {
         const s = dd.data.s || {};
         for (const id of Object.keys(s)) {
-          const e = s[id]; if (!e || e.st !== 'novo') continue;
+          const e = s[id];
+          /* NCF já apagada na Central (antes da limpeza automática): tira também de "Minhas NCFs" do operador */
+          if (e && e.st === 'ok' && e.key && rncApagadaNaCentral(e.key)) { await DB.db.doc('rncin/' + dd.id).update({ s: { [id]: { st: 'del', delAt: Date.now() } } }); continue; }
+          if (!e || e.st !== 'novo') continue;
           const tid = dd.id + '_' + id;
           const ex = S.model.rnc.find((r) => rmeta(r).tbId === tid);
           if (ex) { await DB.db.doc('rncin/' + dd.id).update({ s: { [id]: { st: 'ok', num: ex.num, key: ex.key } } }); continue; }
@@ -15157,6 +15160,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (INB.again) { INB.again = false; setTimeout(inbProcess, 60); }
   }
   /* pedidos de correção pendentes (para quem trata as NCFs) */
+  /* a NCF foi apagada (marcada como excluída no banco, ou o bloco dela existe e ela não está mais lá) */
+  function rncApagadaNaCentral(key) {
+    if (!S.model || S.model.rnc.some((r) => r.key === key)) return false;
+    const docs = DB.docs.RNC || {}, doc = docs[chunkOf.RNC(key)];
+    if (!doc) return true;   // o bloco inteiro saiu (ex.: Começar do zero)
+    const it = (doc.items || {})[key];
+    return !it || !!it._del;
+  }
   /* NCF apagada que veio do tablet: some também de "Minhas NCFs" do operador (e os pedidos de correção dela) */
   async function rncTabLimpar(key, meta) {
     const tid = meta && meta.tbId; if (!tid) return;
