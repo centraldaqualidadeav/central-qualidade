@@ -261,6 +261,8 @@ table.t tbody tr.pend td:first-child { box-shadow: inset 3px 0 0 var(--warn); }
 .modal textarea { width: 100%; min-height: 280px; font: 12.5px/1.5 var(--f-mono); border: 1px solid var(--line-2); border-radius: 5px; padding: 10px; background: var(--surface-2); }
 .toast { position: fixed; z-index: 95; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--surface); padding: 10px 14px; border-radius: 6px; box-shadow: var(--shadow); max-width: min(560px, calc(100% - 32px)); font-size: 13.5px; }
 .toast.err { background: var(--crit); color: #fff; }
+.cqnova { position: fixed; z-index: 96; top: calc(10px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; background: var(--ink); color: var(--surface); padding: 8px 8px 8px 18px; border-radius: 12px; box-shadow: var(--shadow); font: 600 15px var(--f-body); max-width: calc(100% - 24px); box-sizing: border-box; }
+.cqnova .btn { min-height: 48px; padding: 0 18px; font-size: 15px; background: var(--surface); color: var(--ink); border-color: var(--surface); }
 
 /* ---------- início ---------- */
 .landing { max-width: 1060px; display: grid; gap: 26px; }
@@ -1636,6 +1638,39 @@ table.t tbody tr.sel td { background: color-mix(in srgb, var(--rif) 9%, var(--su
 body.tabmode .modal .seg button { min-height: 48px; padding: 0 22px; font-size: 15px; }
 @media (max-width: 1060px) { .thw { grid-template-columns: minmax(0, 1fr); } .ths { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); } }
 @media (max-width: 760px) { .thtasks { grid-template-columns: minmax(0, 1fr); } .thtask { grid-template-columns: auto 1fr; grid-template-rows: auto auto auto; column-gap: 16px; } .thtask .n { grid-row: 1 / 3; font-size: 52px; } .thtask .btn.big { grid-column: 1 / -1; } .thrw { grid-template-columns: minmax(0, 1fr); } .thrw em { justify-self: start; } .thola h2 { font-size: 32px; } .thw { padding: 16px 12px 20px; } .thome .tbf .btn.big { min-width: 0; } }
+/* v40 · tablet igual às imagens F (medidas tiradas da imagem, tablet deitado 1180 × 820): cabeçalho mais baixo, fundo da imagem, início em tamanho F1.
+   Botões de toque continuam com 48 px no mínimo (Regra 1). */
+:root:not([data-theme="dark"]) .tbw { background: #e4e8e5; }
+.tbf { padding: 13px 20px; } .tbnet { font-size: 13.5px; } .tbnet:not(.off) i { background: var(--ok); }
+.thand.off h3 span { margin-right: 2px; }
+.tbnet.off { color: var(--ink-3); }
+@media (min-width: 561px) {
+  .tbhd { min-height: 60px; padding: 6px 20px; gap: 14px; }
+  .tbhd .br { gap: 12px; } .tbhd .ic { width: 36px; height: 36px; font-size: 15px; border-radius: 8px; gap: 3px; } .tbhd .ic i { width: 21px; height: 2.5px; }
+  .tbhd .br b { font-size: 22px; } .tbhd .br small { font-size: 13px; }
+  .tbhd .rt { gap: 14px; } .tbhd .swbtn { font-size: 15px; padding: 0 18px; } .tbhd .tbon { height: 34px; font-size: 14.5px; padding: 0 14px; }
+  .tbhd .nm { font-size: 15px; } .tbhd .tbme { font-size: 15px; }
+}
+@media (min-width: 761px) {
+  .thm { gap: 20px; } .ths { gap: 15px; }
+  .thola h2 { font-size: 35px; } .thola p { font-size: 16px; margin-top: 4px; }
+  .thtasks { gap: 15px; }
+  .thtask { border-radius: 12px; box-shadow: inset 7px 0 0 var(--k); padding: 17px 18px 17px 18px; gap: 6px; }
+  .thtask b { font-size: 24px; } .thtask > span:not(.n) { font-size: 14px; line-height: 1.4; }
+  .thtask .btn.big { height: 48px; font-size: 16px; margin-top: 12px; }
+  .thcard { border-radius: 12px; } .thcard > header { padding: 13px 18px; } .thcard > header b { font-size: 22px; } .thcard > header span { font-size: 14px; }
+  .thrw { grid-template-columns: 140px minmax(0, 1fr) auto; gap: 2px 18px; min-height: 70px; padding: 10px 18px 10px 22px; box-shadow: inset 7px 0 0 var(--k); }
+  .thrw .id { font-size: 15px; } .thrw .tx b { font-size: 16px; } .thrw .tx small { font-size: 14px; } .thrw em { font-size: 13px; padding: 4px 10px; }
+  .thand { border-radius: 12px; padding: 17px 17px 18px; gap: 10px; } .thand h3 { font-size: 22px; } .thand p { font-size: 15px; }
+  .thand.off { background: color-mix(in srgb, var(--warn) 6%, var(--surface)); border-color: color-mix(in srgb, var(--warn) 30%, var(--line)); }
+  .thand .it { min-height: 48px; font-size: 15px; } .thand.off .it { border-color: color-mix(in srgb, var(--warn) 22%, var(--line)); }
+  .thand.thdia { gap: 0; } .thand.thdia h3 { margin-bottom: 8px; }
+  .thdia > div { padding: 9px 0; font-size: 16px; align-items: center; } .thdia b { font-size: 28px; line-height: 1; }
+  .thome .tbf .btn.big { min-width: 240px; }
+}
+@media (min-width: 1061px) {
+  .thw { grid-template-columns: minmax(0, 1fr) 328px; gap: 22px; padding: 24px 20px; max-width: 1400px; }
+}
 /* RIF · medidas com teclado na tela (tablet deitado) */
 .tbb.rtkb, .tbb.rgb { max-width: none; padding: 0; }
 .rtkx { display: grid; grid-template-columns: 300px minmax(0, 1fr) 340px; align-items: start; }
@@ -1711,6 +1746,80 @@ body.tabmode .modal .seg button { min-height: 48px; padding: 0 22px; font-size: 
 .rtktog { display: flex; justify-content: flex-end; }
 @media (max-width: 1150px) { .rtkx { grid-template-columns: 260px minmax(0, 1fr) 300px; } .rtkpad .k { height: 76px; } .rtkhd h2 { font-size: 28px; } .rtkfx b { font-size: 26px; } .rtkc b { font-size: 34px; } .rtkprog { width: 220px; } }
 
+/* v40 · RIF com teclado igual à imagem F2 (1180 × 820): lateral 340, teclado 329, sem barra de passos; barra colorida e "salvo no tablet" no rodapé */
+.rtprog .bar i.v { display: none; }
+.tbsalvo { display: inline-flex; align-items: center; gap: 8px; font: 500 15px var(--f-body); color: var(--ink-2); white-space: nowrap; }
+.tbsalvo i { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); flex: none; }
+.tbsalvo.off i { background: var(--warn); } .tbsalvo.crit { color: var(--crit); } .tbsalvo.crit i { background: var(--crit); }
+.rtknom { all: unset; box-sizing: border-box; cursor: pointer; display: block; min-height: 48px; border-radius: 8px; }
+.rtknom b { text-decoration: underline dashed var(--line-2); text-underline-offset: 6px; text-decoration-thickness: 2px; }
+.rtknom:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.rtkps.l3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.rtkprog { width: auto; gap: 18px; font-size: 15px; } .rtkprog .bar { flex: none; width: 230px; height: 8px; border-radius: 4px; }
+.rtkprog .bar i:not(.v) { display: none; } .rtkprog .bar i.v { display: block; background: var(--rev); background-size: 230px 100%; }
+@media (min-width: 1151px) {
+  .rtkx { grid-template-columns: 340px minmax(0, 1fr) 353px; }
+  .rtkr { padding: 20px 25px 20px 0; gap: 11px; } .rtkpad { gap: 11px; } .rtkpad .k { height: 75px; }
+  .tbw.rift .rtkgo.btn.big { min-height: 63px; font-size: 18px; }
+}
+.rtkside { padding: 20px 18px 24px; min-height: calc(100dvh - 147px); }
+.rtkmid { padding: 20px 24px 24px; gap: 16px; top: 60px; } .rtkr { top: 60px; }
+.rtkhd .cd { min-width: 40px; height: 40px; padding: 0 8px; border-radius: 9px; font-size: 19px; }
+.rtkhd h2 { font-size: 31px; }
+@media (max-width: 1000px) {
+  .rtkx { grid-template-columns: 236px minmax(0, 1fr) 270px; }
+  .rtkside { padding: 16px 12px 20px; } .rtkit b { font-size: 20px; }
+  .rtkmid { padding: 16px 16px 20px; gap: 12px; } .rtkr { padding: 16px 16px 16px 0; gap: 10px; } .rtkpad { gap: 8px; }
+  .rtkpad .k { height: 62px; font-size: 32px; } .rtkhd h2 { font-size: 24px; } .rtkfx { gap: 6px 22px; } .rtkfx b { font-size: 22px; }
+  .rtkcs { gap: 8px; } .rtkc { min-height: 96px; padding: 10px; } .rtkc b { font-size: 28px; min-height: 36px; }
+  .tbw.rift .rtkgo.btn.big { min-height: 60px; font-size: 16px; } .tbf .rtkprog .bar { display: none; }
+  .tbw.rift .tbf .rtkprog { width: auto; flex: none; } .tbw.rift .tbf { gap: 10px; padding: 12px 14px; } .tbw.rift .tbf .btn.big { font-size: 16px; padding: 0 14px; }
+  .rtkam .l { flex-wrap: wrap; } .rtkam .l > b { font-size: 20px; }
+}
+/* v40 · NCF do tablet igual à imagem F4: passos e lote à esquerda (300), duas colunas no passo 2 */
+.tbb.ncx { max-width: none; padding: 0; display: grid; grid-template-columns: 300px minmax(0, 1fr); align-items: start; background: linear-gradient(90deg, var(--surface) 0 299px, var(--line) 299px 300px, transparent 300px); }
+.ncside { padding: 20px 18px 24px; display: grid; gap: 16px; align-content: start; position: sticky; top: 60px; }
+.ncsteps { display: grid; gap: 6px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.ncsteps > * { all: unset; box-sizing: border-box; display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 14px; border-radius: 10px; font: 600 17px var(--f-body); color: var(--ink-3); }
+.ncsteps b { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); color: var(--ink-3); font: 700 14px var(--f-body); flex: none; }
+.ncsteps .ok { color: var(--ok); cursor: pointer; } .ncsteps .ok b { background: var(--ok); color: #fff; }
+.ncsteps .ok:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.ncsteps .on { background: var(--rnc); color: #fff; } .ncsteps .on b { background: #fff; color: var(--rnc); }
+.ncsum { display: grid; gap: 8px; }
+.ncsum h3 { margin: 0 0 4px; font: 600 22px var(--f-mono); color: var(--ink); } .ncsum h3:not(.mono) { font: 700 24px var(--f-display); }
+.ncsum p { margin: 0; font: 400 14.5px/1.45 var(--f-body); color: var(--ink-2); }
+.ncsum .ncr { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font: 400 14.5px var(--f-body); }
+.ncsum .ncr span { color: var(--ink-3); flex: none; } .ncsum .ncr b { font-weight: 600; text-align: right; color: var(--ink); min-width: 0; } .ncsum .ncr b.mono { font: 600 14.5px var(--f-mono); white-space: pre; }
+.ncset { all: unset; box-sizing: border-box; cursor: pointer; margin-top: 6px; padding: 12px 14px; border-radius: 10px; background: color-mix(in srgb, var(--warn) 13%, var(--surface)); color: var(--warn); font: 600 14.5px/1.4 var(--f-body); min-height: 48px; }
+.ncset:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.ncmain { padding: 20px 22px 24px; min-width: 0; display: grid; gap: 16px; align-content: start; }
+.nc2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px 22px; align-items: start; }
+.nc2 section { min-width: 0; display: grid; gap: 10px; align-content: start; }
+.nc2 h3 { margin: 0; font: 700 22px/1.1 var(--f-display); color: var(--ink); }
+.ncfotos { display: flex; gap: 10px; flex-wrap: wrap; }
+.ncfotos .add { width: 152px; height: 150px; border-radius: 12px; background: var(--rnc); color: #fff; display: grid; place-content: center; justify-items: center; gap: 10px; font: 600 18px var(--f-body); cursor: pointer; }
+.ncfotos .add b { width: 22px; height: 22px; border: 3px solid #fff; border-radius: 50%; box-shadow: inset 0 0 0 3px var(--rnc), inset 0 0 0 20px #fff; }
+.ncfotos .add:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
+.ncfotos .ft { position: relative; width: 118px; height: 150px; border-radius: 12px; overflow: hidden; background: #6b7370; }
+.ncfotos .ft img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ncfotos .ft span { position: absolute; left: 8px; bottom: 8px; padding: 2px 7px; border-radius: 5px; background: rgba(20, 24, 22, .78); color: #fff; font: 500 12.5px var(--f-body); }
+.ncfotos .ft .x { position: absolute; top: 4px; right: 4px; width: 48px; height: 48px; border-radius: 50%; border: 0; background: rgba(20, 24, 22, .6); color: #fff; font-size: 16px; cursor: pointer; }
+.ncmot { display: flex; flex-wrap: wrap; gap: 9px; }
+.ncmot .chip2 { min-height: 49px; border-radius: 9px; padding: 0 18px; font-size: 17px; color: var(--ink); }
+.ncmot .chip2.on { color: #fff; } .ncmot .chip2.on2 { background: var(--surface); color: var(--rnc); }
+.ncdica { margin: 0; font: 400 13.5px/1.4 var(--f-body); color: var(--ink-3); }
+.nc2 .tbta { width: 100%; box-sizing: border-box; min-height: 117px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 14px 16px; font: 400 17px/1.45 var(--f-body); resize: vertical; }
+.nc2 .tbta:focus { outline: none; border-color: var(--rnc); box-shadow: 0 0 0 3px color-mix(in srgb, var(--rnc) 18%, transparent); }
+.ncq { display: grid; grid-template-columns: 77px minmax(0, 1fr) 77px; width: 285px; max-width: 100%; height: 79px; border: 2px solid var(--rnc); border-radius: 12px; overflow: hidden; background: var(--surface); }
+.ncq button { border: 0; background: var(--surface-2); color: var(--ink); font: 700 30px var(--f-body); cursor: pointer; touch-action: manipulation; }
+.ncq button:active { background: var(--line); }
+.ncq input { border: 0; text-align: center; font: 700 52px/1 var(--f-display); color: var(--ink); background: var(--surface); min-width: 0; width: 100%; }
+.ncq input:focus { outline: none; box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--rnc) 30%, transparent); }
+.ncqi { margin: 0; font: 400 15px var(--f-body); color: var(--ink-2); } .ncqi b { color: var(--crit); }
+.ncqq { display: flex; gap: 10px; flex-wrap: wrap; } .ncqq .btn { min-height: 48px; padding: 0 16px; font-size: 15.5px; font-weight: 600; border-radius: 10px; }
+.tbf .btn.tbsair { min-height: 48px; padding: 0 16px; font-size: 18px; font-weight: 600; color: var(--ink-2); }
+@media (max-width: 1000px) { .nc2 { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) { .tbb.ncx { grid-template-columns: minmax(0, 1fr); background: none; } .ncside { position: static; background: var(--surface); border-bottom: 1px solid var(--line); } .ncsteps { grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); padding-bottom: 12px; } .ncsteps > * { font-size: 14px; padding: 0 8px; gap: 8px; } .ncsum .ncr, .ncset { font-size: 14px; } }
 /* RIR · grade item × lote */
 .rgx { --rgw: 330px; display: grid; grid-template-columns: var(--rgw) minmax(0, 1fr); align-items: start; background: linear-gradient(90deg, var(--surface) 0 calc(var(--rgw) - 1px), var(--line) calc(var(--rgw) - 1px) var(--rgw), transparent var(--rgw)); flex: 1 0 auto; }
 .tbb.rgb { display: flex; flex-direction: column; }
@@ -1760,6 +1869,24 @@ button.rglot { cursor: pointer; } button.rglot:focus-visible { outline: 3px soli
 .rgnc .tbin { height: 52px; font-size: 16px; border-color: color-mix(in srgb, var(--crit) 50%, var(--line)); }
 .rgnc .btn { height: 52px; }
 .rgr.nc { background: color-mix(in srgb, var(--crit) 4%, var(--surface)); }
+/* v40 · RIR igual à imagem F3: lateral 300, células de 134, "Marcar AP no que falta" em verde, RP com foto e motivo numa linha */
+.rgx { --rgw: 300px; }
+.rgside { top: 60px; max-height: calc(100dvh - 147px); }
+.tbw.rirt .rgmain { padding: 20px 22px 24px; }
+.rghd h2 { font-size: 31px; }
+.tbw .rghd .btn.big.rgap { height: 50px; border: 2px solid var(--ok); color: var(--ok); background: color-mix(in srgb, var(--ok) 12%, var(--surface)); border-radius: 12px; padding: 0 20px; }
+.rgt-w { border-radius: 12px; }
+.rgcs { grid-template-columns: repeat(var(--c, 1), 134px); gap: 16px; }
+.rgr { padding: 5px 14px 5px 18px; min-height: 58px; }
+.rgt { height: 48px; border-radius: 10px; font-size: 19px; }
+.rgm { grid-template-columns: minmax(0, 1fr) 48px; }
+.rgv { height: 48px; border-radius: 10px; font-size: 21px; }
+.rgnc2 { grid-template-columns: 48px minmax(0, 1fr); gap: 12px; }
+.rgph { width: 48px; height: 48px; border-radius: 8px; border: 0; cursor: pointer; background: repeating-linear-gradient(135deg, #d9d2d0 0 7px, #ece7e5 7px 14px); color: var(--ink-2); font: 600 20px var(--f-body); display: grid; place-items: center; }
+.rgph:not(.tem) { background: var(--surface-2); border: 2px dashed var(--line-2); }
+.rgmo { all: unset; box-sizing: border-box; cursor: pointer; min-height: 48px; display: flex; align-items: center; font: 600 14.5px/1.35 var(--f-body); color: var(--crit); }
+.rgph:focus-visible, .rgmo:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+@media (max-width: 1100px) { .rgx { --rgw: 260px; } .rgcs { grid-template-columns: repeat(var(--c, 1), 120px); gap: 10px; } }
 :root[data-theme="dark"] .tbw.rirt .rgtabs .chip2.on { color: #111413; }
 @media (max-width: 1100px) { .rgx { --rgw: 280px; } .rgcs { grid-template-columns: repeat(var(--c, 1), 140px); } }
 @media (max-width: 900px) { .rgx { grid-template-columns: minmax(0, 1fr); background: none; } .rgside { position: static; max-height: none; background: var(--surface); border-bottom: 1px solid var(--line); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); } .rgnf, .rgins { grid-column: 1 / -1; } }
@@ -5195,6 +5322,23 @@ re2js/build/index.js:
     const foot = document.querySelector('.railfoot');
     /* app instalável: registra o service worker e mostra "Instalar app" quando o navegador permitir */
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
+    /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
+       A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
+    const APP_V = 40;
+    let novaAvisada = false;
+    const confereVersao = () => {
+      if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
+      fetch('sw.js?v=' + Date.now(), { cache: 'no-store' }).then((r) => (r.ok ? r.text() : '')).then((t) => {
+        const m = /central-cq-v(\d+)/.exec(t || ''); if (!m || +m[1] <= APP_V || novaAvisada) return;
+        novaAvisada = true;
+        const b = document.createElement('div'); b.className = 'cqnova'; b.setAttribute('role', 'status');
+        b.innerHTML = '<span>Tem versão nova da Central.</span><button type="button" class="btn">Atualizar agora</button>';
+        b.querySelector('button').onclick = () => location.reload();
+        document.body.appendChild(b);
+      }).catch(() => {});
+    };
+    setInterval(confereVersao, 20 * 60 * 1000);
+    document.addEventListener('visibilitychange', confereVersao);
     const inst = document.createElement('button'); inst.type = 'button'; inst.className = 'btn small'; inst.id = 'fb-install'; inst.hidden = true; inst.textContent = 'Instalar app';
     foot.insertBefore(inst, foot.firstChild);
     let deferred = null;
@@ -13412,7 +13556,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     catch (e) { if (e && e.code === 'failed-precondition') { RI.ed = null; RI.sub = 'ag'; toast('Este RIR já foi concluído em outro aparelho. O rascunho desta tela não foi gravado.', true); render(); return; } throw e; }
     RI.salvo = Date.now(); riSalvoTxt();
   }
-  function riSalvoTxt(t) { const el = $('#rie-salvo'); if (el) { el.textContent = t || (RI.salvo ? 'rascunho salvo às ' + hhmm(RI.salvo) : 'rascunho'); el.className = 'chip ' + (t === 'não salvo' ? 'crit' : t ? 'off' : 'ok'); } }
+  function riSalvoTxt(t) { const el = $('#rie-salvo'); if (el && el.classList.contains('tbsalvo')) { el.innerHTML = `<i></i>${esc(t || (RI.salvo ? 'salvo no tablet ' + hhmm(RI.salvo) : 'rascunho'))}`; el.className = 'tbsalvo ' + (t === 'não salvo' ? 'crit' : t ? 'off' : 'ok'); return; } if (el) { el.textContent = t || (RI.salvo ? 'rascunho salvo às ' + hhmm(RI.salvo) : 'rascunho'); el.className = 'chip ' + (t === 'não salvo' ? 'crit' : t ? 'off' : 'ok'); } }
   async function riFinalizar() {
     const ed = RI.ed; if (!ed || ed.ro) return; const rel = ed.rel, f = riFalta(rel);
     if (f.length) { toast('Falta para concluir: ' + f.join('; ') + '.', true); return; }
@@ -13553,7 +13697,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     }));
     return { tot, ok };
   }
-  function riTabProgHTML(rel) { const n = riConta(rel), pc = n.tot ? Math.round((n.ok / n.tot) * 100) : 0; return `<span><b style="color:var(--ink)">${n.ok} de ${n.tot}</b> respostas</span><span class="bar"><i style="width:${pc}%;background:var(--rir)"></i></span>`; }
+  function riTabProgHTML(rel) { const n = riConta(rel), pc = n.tot ? Math.round((n.ok / n.tot) * 100) : 0; return `<span><b style="color:var(--ink)">${n.ok} de ${n.tot}</b> respostas</span><span class="bar"><i class="v" style="width:${pc}%"></i></span>`; }
   function riTabGoTxt(rel) { const n = riConta(rel), f = n.tot - n.ok; return f ? `Falta ${f} · continuar` : 'Continuar'; }
   function riTabSync() {
     const ed = RI.ed; if (!ed || ed.ro || S.view !== 'rirtab') return;
@@ -13570,7 +13714,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const resTxt = (k) => { const r = riRes(rel, k), o2 = (rel.lotRes || {})[k] || {}, mot = r === 'Reprovado' ? String(o2.mot || riMotSug(rel, k) || '') : ''; return [r, mot]; };
     const left = `<aside class="rgside"><div class="rgnf"><b>NF ${esc(rel.nf || '—')}</b><span>${esc([rel.forn, rel.pc ? 'pedido de compra ' + rel.pc : ''].filter(Boolean).join(' · '))}</span><span>começado ${esc(dmy(rel.at))} às ${esc(hhmm(rel.at))}${rel.nome ? ' · ' + esc(rel.nome) : ''}</span>${riSitForn(rel.forn)}</div>
       ${rel.lotes.map((k, i) => { const x = findRec('AV', k), [r, mot] = resTxt(k), man = ((rel.lotRes || {})[k] || {}).man, bt = porLote && passo === 1; return `<${bt ? 'button type="button"' : 'div'} class="rglot ${r === 'Aprovado' ? 'ap' : r === 'Reprovado' ? 'rp' : r ? 'av' : ''}${bt && i === RI.tlote ? ' on' : ''}" ${bt ? `data-act="ri-tlote" data-key="${i}"` : ''}><b>${esc(lotId(k))}</b><span>${x ? esc([lotTxt(x), E.filled(x.corrida) ? 'corrida ' + x.corrida : '', x.quant != null && x.quant !== '' ? x.quant + ' ' + (x.und || '') : ''].filter(Boolean).join(' · ')) : ''}</span><em>${r === 'Aprovado' ? '✓ Aprovado' + (man ? '' : ' (sai sozinho)') : r === 'Reprovado' ? '✕ Reprovado' + (mot ? ': ' + esc(mot.length > 70 ? mot.slice(0, 70) + '…' : mot) : '') : r ? esc(r) : 'falta responder'}</em></${bt ? 'button' : 'div'}>`; }).join('')}
-      <div class="rgins"><span>Instrumentos usados</span>${(rel.ins || []).map((i) => `<b><span class="mono">${esc(i.codigo)}</span> ${esc(i.desc || '')}</b>`).join('') || '<em>nenhum ainda · escolha na conclusão</em>'}</div></aside>`;
+      <div class="rgins"><span>Instrumentos usados</span>${(rel.ins || []).map((i) => `<b><span class="mono">${esc(i.codigo)}</span> ${esc(i.desc || '')}${i.val ? ', válido até ' + esc(fD(E.fromIso(i.val)).slice(3)) : ''}</b>`).join('') || '<em>nenhum ainda · escolha na conclusão</em>'}</div></aside>`;
     let main;
     if (passo === 1) {
       const cel = (it, sc) => {
@@ -13581,7 +13725,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const row = (it) => {
         const nf = it.esc === 'nf', scs = nf ? ['nf'] : cols;
         const ncs = scs.filter((sc) => { const a = riAns(rel, it, sc); return a.r === 'NC' || a.o; });
-        const ex = ncs.map((sc) => `<div class="rgnc"><span>RP${nf || cols.length === 1 ? '' : ' · ' + esc(lotId(sc))}</span><input class="tbin" data-rio="${esc(it.id)}" data-sc="${esc(sc)}" value="${esc(riAns(rel, it, sc).o || '')}" placeholder="o que foi encontrado (vai para a NCF)" autocomplete="off"><button type="button" class="btn" data-act="ri-fadd">Tirar foto</button></div>`).join('');
+        const nF = rel.nFotos || 0;
+        const ex = ncs.map((sc) => { const o = String(riAns(rel, it, sc).o || ''), ed = !o || RI.rpEd === it.id + '|' + sc, quem = nf || cols.length === 1 ? '' : ' · ' + esc(lotId(sc));
+          return ed ? `<div class="rgnc"><span>RP${quem}</span><input class="tbin" data-rio="${esc(it.id)}" data-sc="${esc(sc)}" value="${esc(o)}" placeholder="o que foi encontrado (vai para a NCF)" autocomplete="off"><button type="button" class="btn" data-act="ri-fadd">Tirar foto</button></div>`
+            : `<div class="rgnc rgnc2"><button type="button" class="rgph${nF ? ' tem' : ''}" data-act="ri-fadd" aria-label="Tirar foto"><span aria-hidden="true">${nF ? '' : '＋'}</span></button><button type="button" class="rgmo" data-act="ri-rped" data-key="${esc(it.id + '|' + sc)}">RP${quem} pede foto: ${nF ? nF + (nF === 1 ? ' foto tirada' : ' fotos tiradas') : 'nenhuma foto ainda'} · motivo “${esc(o.length > 90 ? o.slice(0, 90) + '…' : o)}”</button></div>`; }).join('');
         return `<div class="rgr${ncs.length ? ' nc' : ''}"><div class="rgi"><b>${esc(it.t)}</b>${nf && nL > 1 ? '<small>vale para a nota inteira</small>' : it.med ? '<small>toque para digitar a medida</small>' : ''}</div><div class="rgcs${nf && cols.length > 1 ? ' nf' : ''}" style="--c:${cols.length}">${nf && cols.length > 1 ? cel(it, 'nf') : scs.map((sc) => cel(it, sc)).join('')}</div>${ex}</div>`;
       };
       const tabs = porLote ? `<div class="rgtabs">${rel.lotes.map((k, i) => `<button type="button" class="chip2${i === RI.tlote ? ' on' : ''}" data-act="ri-tlote" data-key="${i}">${esc(lotId(k))}</button>`).join('')}</div>` : '';
@@ -13600,8 +13747,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         <div class="formfoot"><button class="btn ghost tcrit" type="button" data-act="ri-del">Excluir rascunho</button></div>`;
     }
     const foot = passo === 1
-      ? `<div class="rtprog rtkprog" id="ri-tprog">${riTabProgHTML(rel)}</div><span class="chip ok" id="rie-salvo">rascunho</span><span class="grow"></span><button class="btn big" type="button" data-act="ri-voltar">Notas</button><button class="btn rirb big" type="button" data-act="ri-tpasso" data-key="2">${riTabGoTxt(rel)}</button>`
-      : `<span class="chip ok" id="rie-salvo">rascunho</span><span class="grow"></span><button class="btn big" type="button" data-act="ri-tpasso" data-key="1">Voltar ao checklist</button><button class="btn big" type="button" data-act="ri-print">Imprimir</button><button class="btn rirb big" type="button" data-act="ri-fin" ${falta.length ? 'disabled' : ''}>Concluir e assinar</button>`;
+      ? `<div class="rtprog rtkprog" id="ri-tprog">${riTabProgHTML(rel)}</div><span class="tbsalvo ok" id="rie-salvo"><i></i>rascunho</span><span class="grow"></span><button class="btn big" type="button" data-act="ri-voltar">Notas</button><button class="btn rirb big" type="button" data-act="ri-tpasso" data-key="2">${riTabGoTxt(rel)}</button>`
+      : `<span class="tbsalvo ok" id="rie-salvo"><i></i>rascunho</span><span class="grow"></span><button class="btn big" type="button" data-act="ri-tpasso" data-key="1">Voltar ao checklist</button><button class="btn big" type="button" data-act="ri-print">Imprimir</button><button class="btn rirb big" type="button" data-act="ri-fin" ${falta.length ? 'disabled' : ''}>Concluir e assinar</button>`;
     return `<div class="tbw rirt">${tbHead('Recebimento · RIR', ['NF ' + (rel.nf || '—'), rel.forn].filter(Boolean).join(' · '))}<div class="tbb rgb"><div class="rgx" id="rix">${left}<section class="rgmain riv"><input type="file" id="ri-foto" accept="image/*" capture="environment" multiple hidden>${main}</section></div></div><div class="tbf">${foot}</div></div>`;
   }
 
@@ -13723,12 +13870,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'ri-r') {
       const sc = el.dataset.sc, v = el.dataset.v; rel.ck = rel.ck || {}; rel.ck[key] = rel.ck[key] || {};
       const cur = rel.ck[key][sc] || {}; rel.ck[key][sc] = Object.assign({}, cur, { r: cur.r === v ? null : v });
+      if (v === 'NC' && cur.r !== 'NC') RI.rpEd = key + '|' + sc;
       riAgendar(); riRender(); if (v === 'NC' && cur.r !== 'NC') setTimeout(() => { const i = $(`[data-rio="${key}"][data-sc="${sc}"]`); if (i) i.focus(); }, 30); return true;
     }
     if (a === 'ri-todos') { rel.ck = rel.ck || {}; rel.ck[key] = rel.ck[key] || {}; rel.lotes.forEach((k) => { if (!(rel.ck[key][k] || {}).r) rel.ck[key][k] = Object.assign({}, rel.ck[key][k] || {}, { r: 'C' }); }); riAgendar(); riRender(); return true; }
     if (a === 'ri-res') { rel.lotRes = rel.lotRes || {}; const v = el.dataset.v; rel.lotRes[key] = Object.assign({}, rel.lotRes[key] || {}, { res: v, man: true }); if (v === 'Reprovado' && !rel.lotRes[key].mot) rel.lotRes[key].mot = riMotSug(rel, key); riAgendar(); riRender(); return true; }
     if (a === 'ri-ins') { rel.ins = (rel.ins || []).filter((i) => i.id !== key); riAgendar(); riRender(); return true; }
     if (a === 'ri-fadd') { const i = $('#ri-foto'); if (i) i.click(); return true; }
+    if (a === 'ri-rped') { RI.rpEd = key; riRender(); const [k1, s1] = String(key).split('|'); setTimeout(() => { const i = $(`[data-rio="${k1}"][data-sc="${s1}"]`); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }, 30); return true; }
     if (a === 'ri-fdel') { confirmBox('Excluir foto', 'A foto sai deste RIR.', 'Excluir', async () => { try { await FT.del('rirf', rel.id, key); ed.fotos = null; rel.nFotos = Math.max(0, (rel.nFotos || 1) - 1); await riGravar(); riRender(); } catch (e) { toast('Não foi possível excluir.', true); } }, true); return true; }
     if (a === 'ri-fin') { riFinalizar(); return true; }
     if (a === 'ri-del') { riExcluir(); return true; }
@@ -13736,9 +13885,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const sc = el.dataset.sc; rel.ck = rel.ck || {}; rel.ck[key] = rel.ck[key] || {};
       const cur = rel.ck[key][sc] || {}, nx = RI_CICLO[(RI_CICLO.indexOf(cur.r || '') + 1) % RI_CICLO.length];
       rel.ck[key][sc] = Object.assign({}, cur, { r: nx || null });
-      riAgendar(); riRender(); return true;
+      RI.rpEd = nx === 'NC' ? key + '|' + sc : null; /* tocar em outra célula fecha o campo do motivo (fica a linha "pede foto · motivo") */
+      riAgendar(); riRender(); if (nx === 'NC') setTimeout(() => { const i = $(`[data-rio="${key}"][data-sc="${sc}"]`); if (i) i.focus({ preventScroll: true }); }, 30); return true;
     }
-    if (a === 'ri-tpasso') { RI.tpasso = +key === 2 ? 2 : 1; if (RI.saveT) riGravar().catch(() => {}); render(); window.scrollTo(0, 0); return true; }
+    if (a === 'ri-tpasso') { RI.tpasso = +key === 2 ? 2 : 1; RI.rpEd = null; if (RI.saveT) riGravar().catch(() => {}); render(); window.scrollTo(0, 0); return true; }
     if (a === 'ri-tlote') { RI.tlote = +key; riRender(); return true; }
     if (a === 'ri-apfalta') {
       const nL = rel.lotes.length, cols = nL > 3 || (!riLarga() && nL > 1) ? [rel.lotes[RI.tlote || 0]] : rel.lotes;
@@ -13965,6 +14115,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function rfSalvoTxt(t) {
     const el = $('#rfe-salvo'); if (!el) return;
     const chave = t || (RFI.salvo ? 's' + RFI.salvo : '-'); if (el.dataset.t === chave) return; el.dataset.t = chave;
+    if (el.classList.contains('tbsalvo')) { /* tablet (F2): "● salvo no tablet 19:41" */
+      el.innerHTML = `<i></i>${t ? esc(t) : RFI.salvo ? 'salvo no tablet ' + hhmm(RFI.salvo) : 'rascunho'}`;
+      el.className = 'tbsalvo ' + (t === 'não salvo' ? 'crit' : t ? 'off' : 'ok'); return;
+    }
     el.innerHTML = t ? `<i>●</i>${esc(t)}` : RFI.salvo ? `<i>●</i>rascunho salvo às ${hhmm(RFI.salvo)}` : '<i>●</i>rascunho';
     el.className = 'chip ' + (t === 'não salvo' ? 'crit' : t ? 'off' : 'ok');
   }
@@ -14880,7 +15034,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const RT_PASSOS = ['Peça', 'Medidas', 'Visual e fotos', 'Resultado'];
   const RT_INSREC = 'cq-rif-ins-rec';
   const rtPassos = (n) => `<div class="tbsteps">${RT_PASSOS.map((l, i) => `<div class="${i + 1 === n ? 'on' : i + 1 < n ? 'ok' : ''}"><b>${i + 1 < n ? '✓' : i + 1}</b>${esc(l)}</div>`).join('')}</div>`;
-  const rtSalvo = '<span class="chip ok" id="rfe-salvo"><i>●</i>rascunho</span>';
+  const rtSalvo = '<span class="tbsalvo ok" id="rfe-salvo"><i></i>rascunho</span>';
   const rtInsRec = () => { try { return JSON.parse(lsGet(RT_INSREC, '[]')) || []; } catch (e) { return []; } };
   function rtNum(v) { return v === null || v === undefined || v === '' ? '' : RN.fmt(v); }
   function rtItRot(p, i) { const its = rfItens(p), pos = its.findIndex((x) => x.id === i.id) + 1; return `Item ${pos} · ${rfItTxt(i)}${i.q ? ' · ' + i.q + ' pç' : ''}`; }
@@ -14909,7 +15063,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const p = RT.pk ? Object.assign({ id: RT.pk }, RFI.ped[RT.pk]) : null;
     const h = RT.step === 0 ? rtHome() : RT.step === 1 ? rtPeca(p, ed) : RT.step === 2 ? rtMedidas(ed) : RT.step === 3 ? rtVisual(ed) : RT.step === 4 ? rtResultado(p, ed) : rtFeito(p, ed);
     const sub = RT.step === 0 ? 'Pedidos esperando inspeção' : 'PV ' + rfDig((p && p.pv) || (ed && ed.rel.ident.pv) || '') + ((p && p.cli) ? ' · ' + p.cli : '');
-    main.innerHTML = `<div class="tbw rift">${tbHead('Inspeção final · RIF', sub)}${RT.step >= 1 && RT.step <= 4 ? rtPassos(RT.step) : ''}<div class="tbb${h.cls ? ' ' + h.cls : ''}">${h.body}</div><div class="tbf">${h.foot}</div></div>`;
+    main.innerHTML = `<div class="tbw rift">${tbHead('Inspeção final · RIF', sub)}${RT.step >= 1 && RT.step <= 4 && h.cls !== 'rtkb' ? rtPassos(RT.step) : ''}<div class="tbb${h.cls ? ' ' + h.cls : ''}">${h.body}</div><div class="tbf">${h.foot}</div></div>`;
     if (ed && RT.step >= 1 && RT.step <= 4) rfSalvoTxt();
     rtWire();
     if (h.wire) h.wire();
@@ -15013,7 +15167,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   function rtProgHTML(rel) {
     const r = RN.resumo(rel), alvo = r.cotas.total - r.cotas.na, feitas = r.cotas.ap + r.cotas.rp, pa = alvo ? (r.cotas.ap / alvo) * 100 : 0, pr = alvo ? (r.cotas.rp / alvo) * 100 : 0;
-    return `<span><b style="color:var(--ink)">${feitas} de ${alvo}</b> cotas</span><span class="bar"><i style="width:${pa}%;background:var(--ok)"></i><i style="width:${pr}%;background:var(--crit)"></i></span>${r.cotas.rp ? `<span style="color:var(--crit)">${r.cotas.rp} RP</span>` : ''}`;
+    return `<span><b style="color:var(--ink)">${feitas} de ${alvo}</b> cotas</span><span class="bar"><i class="v" style="width:${pa + pr}%"></i><i style="width:${pa}%;background:var(--ok)"></i><i style="width:${pr}%;background:var(--crit)"></i></span>${r.cotas.rp ? `<span style="color:var(--crit)">${r.cotas.rp} RP</span>` : ''}`;
   }
   function rtMedidas(ed) {
     const rel = ed.rel;
@@ -15040,7 +15194,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* ---------- 2 · medidas com o teclado na tela (tablet deitado, P11) ----------
      Uma cota por vez: nominal, faixa aceita, as peças e um teclado grande; "Gravar" confere a tolerância e vai para a próxima.
      Celular, tablet em pé e computador continuam com a lista de cotas (rtMedidas). Os dados são os mesmos (rel.cotas). */
-  const RT_TEC_MQ = '(pointer: coarse) and (orientation: landscape) and (min-width: 960px)';
+  const RT_TEC_MQ = '(pointer: coarse) and (orientation: landscape) and (min-width: 880px)'; /* v40: vale para os tablets deitados mais comuns (880 pontos ou mais) */
   const rtTecPode = () => !!(window.matchMedia && matchMedia(RT_TEC_MQ).matches);
   const rtTec = () => rtTecPode() && !RT.forceLista && lsGet('cq-rif-teclado', 'sim') !== 'nao';
   const rtTecNom = (c) => c.origem === 'manual' || (c.editavel && (c.nominal === null || c.nominal === undefined)) || !!c.editNom;
@@ -15093,12 +15247,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const stx = na ? 'não se aplica' : dig ? 'digitando…' : ms === 'ap' ? '✓ aprovada' : ms === 'rp' ? '✕ fora da faixa' : ms === 'livre' ? 'anotada' : on ? 'toque nos números' : 'falta medir';
       return `<button type="button" class="rtkc${on && !na ? ' on' : ''}${!dig && ms === 'ap' ? ' ap' : !dig && ms === 'rp' ? ' rp' : ''}" data-act="rt-kj" data-key="${j}" ${na ? 'disabled' : ''}><span>Peça ${j + 1}</span><b>${m ? esc(m) : on && !na ? '' : '—'}${on && !na ? '<i class="cur"></i>' : ''}</b><small>${stx}</small></button>`;
     };
-    const nv = rtTecVal(c, -1);
-    const nomCard = nomEd ? `<button type="button" class="rtkc nom${RT.kj === -1 && !na ? ' on' : ''}" data-act="rt-kj" data-key="-1" ${na ? 'disabled' : ''}><span>Nominal</span><b>${nv ? esc(nv) : RT.kj === -1 ? '' : '—'}${RT.kj === -1 && !na ? '<i class="cur"></i>' : ''}</b><small>${c.editavel && c.origem !== 'manual' ? 'valor do pedido' : 'em mm'}</small></button>` : '';
+    const nv = rtTecVal(c, -1), nomVer = nomEd && (RT.kj === -1 || c.nominal === null || c.nominal === undefined);
+    const nomCard = nomVer ? `<button type="button" class="rtkc nom${RT.kj === -1 && !na ? ' on' : ''}" data-act="rt-kj" data-key="-1" ${na ? 'disabled' : ''}><span>Nominal</span><b>${nv ? esc(nv) : RT.kj === -1 ? '' : '—'}${RT.kj === -1 && !na ? '<i class="cur"></i>' : ''}</b><small>${c.editavel && c.origem !== 'manual' ? 'valor do pedido' : 'em mm'}</small></button>` : '';
     return `<div class="rtkhd"><span class="cd">${esc(c.cod)}${c.corrigida ? '<sup>*</sup>' : ''}</span><h2>${esc(c.desc)}</h2>${rtBadge(cv)}</div>
-      <div class="rtkfx"><div><span>Nominal</span><b>${c.nominal == null ? '—' : esc(RN.fmt(c.nominal)) + ' mm'}</b></div><div><span>${lim ? 'Aceita de' : 'Tolerância'}</span><b>${lim ? esc(fx || '—') : 'sem tolerância'}</b></div><div><span>Medindo</span><b>${na ? '—' : esc(alvo)}</b></div></div>
+      <div class="rtkfx">${nomEd && !nomVer && !na ? `<button type="button" class="rtknom" data-act="rt-kj" data-key="-1" title="Corrigir o nominal"><span>Nominal</span><b>${esc(RN.fmt(c.nominal))} mm</b></button>` : `<div><span>Nominal</span><b>${c.nominal == null ? '—' : esc(RN.fmt(c.nominal)) + ' mm'}</b></div>`}<div><span>${lim ? 'Aceita de' : 'Tolerância'}</span><b>${lim ? esc(fx || '—') : 'sem tolerância'}</b></div><div><span>Medindo</span><b>${na ? '—' : esc(alvo)}</b></div></div>
       ${bar}
-      <div class="rtkcs" style="--n:${Math.min(4, c.medidas.length + (nomEd ? 1 : 0))}">${nomCard}${c.medidas.map((m, j) => card(j)).join('')}</div>
+      <div class="rtkcs" style="--n:${Math.min(4, c.medidas.length + (nomVer ? 1 : 0))}">${nomCard}${c.medidas.map((m, j) => card(j)).join('')}</div>
       ${lim && !na ? '<div class="rtkdica">O resultado sai sozinho pela tolerância. Fora da faixa, a peça fica vermelha e o RIF sai reprovado.</div>' : ''}
       <div class="rtx" id="rtx-${i}">${rtExtra(cv, i)}</div>`;
   }
@@ -15109,10 +15263,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const its = p ? rfItens(p) : [], pos = its.findIndex((x) => x.id === RT.it) + 1, ins = rel.ins[0];
     const st = (x) => (x.sit === 'na' ? 'na' : RN.cota(x));
     const lista = rel.cotas.map((x, i) => { const s = st(x); return `<button type="button" class="rtkl${i === RT.kc ? ' on' : ''}" data-act="rt-kc" data-key="${i}"><span class="cd">${esc(x.cod)}</span><span class="ds">${esc(x.desc)}</span>${i === RT.kc ? '<em>agora</em>' : s === 'ap' ? '<i class="ap" aria-label="aprovada">✓</i>' : s === 'rp' ? '<i class="rp" aria-label="reprovada">✕</i>' : s === 'na' ? '<i class="na">N/A</i>' : s === 'avaliar' ? '<i class="av" aria-label="decidir AP ou RP">?</i>' : s === 'parcial' ? '<i class="pd" aria-label="falta peça">…</i>' : '<i></i>'}</button>`; }).join('');
-    const pecas = c.medidas.map((m, j) => { const ms = RN.medida(c, m); return `<button type="button" class="rtkp${j === RT.kj && !na ? ' on' : ''}${ms === 'ap' ? ' ap' : ms === 'rp' ? ' rp' : ''}" data-act="rt-kj" data-key="${j}" ${na ? 'disabled' : ''} aria-label="Peça ${j + 1}${ms === 'ap' ? ' aprovada' : ms === 'rp' ? ' fora da faixa' : ''}">${ms === 'ap' ? '✓' : ms === 'rp' ? '✕' : ''}P${j + 1}</button>`; }).join('');
-    const sub = [rel.modo === 'norma' ? rel.normaNome || '' : rel.ref || '', rel.ident.mat, pos ? `item ${pos} de ${its.length} do pedido` : ''].filter(Boolean).join(' · ');
+    const pecas = c.medidas.map((m, j) => { const ms = RN.medida(c, m); return `<button type="button" class="rtkp${j === RT.kj && !na ? ' on' : ''}${ms === 'ap' ? ' ap' : ms === 'rp' ? ' rp' : ''}" data-act="rt-kj" data-key="${j}" ${na ? 'disabled' : ''} aria-label="Peça ${j + 1}${ms === 'ap' ? ' aprovada' : ms === 'rp' ? ' fora da faixa' : ''}">${ms === 'ap' ? '✓ ' : ms === 'rp' ? '✕ ' : ''}${c.medidas.length <= 3 ? 'Peça ' : 'P'}${j + 1}</button>`; }).join('');
+    const sub0 = [rel.modo === 'norma' ? rel.normaNome || '' : rel.ref || '', rel.ident.mat].filter(Boolean).join(', ');
+    const sub = [sub0, pos ? `Item ${pos} de ${its.length} do pedido` : ''].filter(Boolean).join('. ');
     const left = `<aside class="rtkside"><div class="rtkit"><b>${esc(rel.desc || 'Peça')}</b>${sub ? `<span>${esc(sub)}</span>` : ''}</div>
-        <div class="rtkam"><div class="l"><span>Amostra do item</span><b>${rel.pecas}${rel.ident.qtd ? ' de ' + esc(rel.ident.qtd) : ''} ${rel.pecas === 1 && !rel.ident.qtd ? 'peça' : 'peças'}</b></div><div class="rtkps">${pecas}</div>
+        <div class="rtkam"><div class="l"><span>Amostra do item</span><b>${rel.pecas}${rel.ident.qtd ? ' de ' + esc(rel.ident.qtd) : ''} ${rel.pecas === 1 && !rel.ident.qtd ? 'peça' : 'peças'}</b></div><div class="rtkps${c.medidas.length <= 3 ? ' l3' : ''}">${pecas}</div>
           <div class="l ins"><span>Instrumento</span>${ins ? `<b>${esc(ins.codigo)}</b>${ins.val ? `<em>válido até ${esc(fD(E.fromIso(ins.val)).slice(3))}</em>` : ''}` : '<em class="no">escolha no passo 3</em>'}</div></div>
         <div class="rtkls">${lista}</div>
         <div class="rtkmore"><button type="button" class="btn" data-act="rt-addc">+ Cota fora da norma</button><button type="button" class="btn ghost" data-act="rt-klista">Ver as cotas em lista</button></div></aside>`;
@@ -17801,15 +17956,17 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const on = tbOn(); if (!on && !TBN.off) TBN.off = Date.now(); if (on) TBN.off = null;
     const el = $('#tb-net'); if (!el) return;
     const cls = 'tbon ' + (on ? 'on' : 'off'); if (el.className === cls) return;
-    el.className = cls; el.innerHTML = `<i></i>${on ? 'Conectado' : 'Sem internet'}`;
+    el.className = cls; el.innerHTML = `<i></i>${on ? 'Conectado' : tbOffTxt()}`;
     if (S.view === 'tabhome' && !$('#layer').innerHTML) render();
   }
   window.addEventListener('online', tbNetSync); window.addEventListener('offline', tbNetSync);
+  /* sem internet: no início "trabalhando no tablet"; dentro das ferramentas "salva no tablet" (F1 e F4) */
+  const tbOffTxt = () => (S.view === 'tabhome' ? 'Sem internet · trabalhando no tablet' : 'Sem internet · salva no tablet');
   const tbIni = () => ((myPessoa() || DB.meName || '?').split(/\s+/).filter(Boolean).map((p) => p[0]).slice(0, 2).join('') || '?').toUpperCase();
   function tbHead(title, sub) {
     const on = tbOn(), home = S.view === 'tabhome', troca = !home && tbDestinos().length > 1;
     return `<div class="tbhd"><button type="button" class="br" ${tbOnly() ? 'tabindex="-1" style="cursor:default"' : 'data-act="tb-sair" title="Voltar à Central"'}><span class="ic" aria-hidden="true">CQ<i></i></span><span><b>${esc(title)}</b>${sub ? `<small>${esc(sub)}</small>` : ''}</span></button>
-      <div class="rt">${troca ? '<button type="button" class="swbtn" data-act="tb-trocar">Trocar<span class="lg"> ferramenta</span></button>' : ''}<span class="tbon ${on ? 'on' : 'off'}" id="tb-net"><i></i>${on ? 'Conectado' : 'Sem internet'}</span><span class="nm">${esc(myPessoa() || DB.meName || '')}</span><button type="button" class="tbme" data-act="tb-conta" title="Sua conta" aria-label="Sua conta">${esc(tbIni())}</button></div></div>`;
+      <div class="rt">${troca ? '<button type="button" class="swbtn" data-act="tb-trocar">Trocar<span class="lg"> ferramenta</span></button>' : ''}<span class="tbon ${on ? 'on' : 'off'}" id="tb-net"><i></i>${on ? 'Conectado' : tbOffTxt()}</span><span class="nm">${esc(myPessoa() || DB.meName || '')}</span><button type="button" class="tbme" data-act="tb-conta" title="Sua conta" aria-label="Sua conta">${esc(tbIni())}</button></div></div>`;
   }
   /* rodapé do tablet: os botões grandes do lado direito ficam do mesmo tamanho (o do texto maior manda) */
   function tbFootEq(root) {
@@ -17852,7 +18009,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const T = [];
     if (okRir) T.push(['rirtab', RI.ready ? P.length : null, 'Receber nota', 'notas esperando inspeção de recebimento (RIR)', 'Fazer RIR', 'var(--rir)']);
     if (okRif) T.push(['riftab', RFI.pedReady ? R.length : null, 'Inspecionar peça', 'itens de pedido esperando inspeção final (RIF)', 'Fazer RIF', 'var(--rif)']);
-    if (okNcf) T.push(['rnctab', N.length, 'Abrir NCF', 'lotes reprovados esperando a não conformidade', 'Abrir NCF', 'var(--rnc)']);
+    if (okNcf) T.push(['rnctab', N.length, 'Abrir NCF', 'lotes reprovados esperando a não conformidade', 'Ler etiqueta', 'var(--rnc)', 'th-qr']);
     /* fila: mais antigo primeiro */
     const F = [];
     N.forEach((a) => { const at = thNcfAt(a); F.push({ at: at || 0, k: 'ncf|' + a.key, c: 'var(--rnc)', id: a.id, t: (lotTxt(a) || 'Lote') + ' reprovado', s: [a.forn, E.filled(a.nf) ? 'NF ' + disp(a.nf) : '', motRepOf(a)].filter(Boolean).join(' · '), tag: 'esperando NCF ' + (at ? (thDia(at) === 'hoje' ? 'desde ' + hhmm(at) : 'desde ' + thDia(at)) : ''), cr: true }); });
@@ -17867,11 +18024,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (okRif && RFI.pedReady) rfPeds().forEach((p) => rfItens(p).forEach((i) => { if (i.st === 'r' && i.rif && E.key(i.ins || '') === me) A.push(['rif|' + p.id + '|' + i.id, 'RIF · PV ' + rfDig(p.pv), i.prog ? i.prog + ' cotas' : 'rascunho']); }));
     if (okRir && RI.ready) riCards().filter((c) => c.st === 'r' && (c.by === DB.me || (me && E.key(c.nome || '') === me))).forEach((c) => A.push(['rir|' + c.id, 'RIR · NF ' + (c.nf || '—'), 'rascunho']));
     const off = !tbOn();
-    const andHTML = `<section class="thand${off ? ' off' : ''}"><h3>${off ? '⚠ Sem internet' : 'Em andamento'}</h3>${off ? `<p>Sem internet${TBN.off ? ' desde ' + hhmm(TBN.off) : ''}. Não feche a Central: o que você fizer vai sozinho quando a conexão voltar. Rascunho de NCF fica guardado neste tablet.</p>` : ''}
-      ${A.length ? A.map(([k, t, s]) => `<button type="button" class="it" data-act="th-cont" data-key="${esc(k)}"><span>${esc(t)}</span><b>${esc(s)}</b></button>`).join('') : '<p>Nada pela metade.</p>'}</section>`;
+    /* F1: sem internet, o quadro "Guardado no tablet" mostra o que ainda vai ser enviado; com internet, "Em andamento" só aparece quando há algo pela metade */
+    const andHTML = off ? `<section class="thand off"><h3><span aria-hidden="true">⚠</span> Guardado no tablet</h3><p>Sem internet${TBN.off ? ' desde ' + hhmm(TBN.off) : ''}. Nada se perde: envia sozinho quando a conexão voltar.</p>
+      ${A.map(([k, t, s]) => `<button type="button" class="it" data-act="th-cont" data-key="${esc(k)}"><span>${esc(t)}</span><b>${esc(s)}</b></button>`).join('')}</section>`
+      : A.length ? `<section class="thand"><h3>Em andamento</h3>${A.map(([k, t, s]) => `<button type="button" class="it" data-act="th-cont" data-key="${esc(k)}"><span>${esc(t)}</span><b>${esc(s)}</b></button>`).join('')}</section>` : '';
     /* meu dia */
     const h0 = new Date(); h0.setHours(0, 0, 0, 0); const t0 = h0.getTime(), D = [];
-    if (okRif) { let pc = 0; rfPeds().forEach((p) => rfItens(p).forEach((i) => { if (i.fin >= t0 && (i.st === 'a' || i.st === 'x') && E.key(i.ins || '') === me) pc += +i.qf || +i.q || 0; })); D.push(['Peças inspecionadas (RIF)', pc]); }
+    if (okRif) { let pc = 0; rfPeds().forEach((p) => rfItens(p).forEach((i) => { if (i.fin >= t0 && (i.st === 'a' || i.st === 'x') && E.key(i.ins || '') === me) pc += +i.qf || +i.q || 0; })); D.push(['Peças inspecionadas', pc]); }
     if (okRir) D.push(['RIR concluídos', riCards().filter((c) => c.st === 'f' && (c.fin || 0) >= t0 && (c.by === DB.me || (me && E.key(c.nome || '') === me))).length]);
     if (okNcf) {
       const hoje = S.today;
@@ -17880,14 +18039,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       D.push(['NCF abertas', n1 + n2]);
     }
     const diaHTML = `<section class="thand thdia"><h3>Meu dia</h3>${D.map(([l, n]) => `<div><span>${esc(l)}</span><b>${NF.format(n)}</b></div>`).join('')}</section>`;
-    const outras = tbDestinos().filter(([k]) => !['rirtab', 'rnctab', 'riftab'].includes(k));
-    const outHTML = outras.length ? `<section class="thand"><h3>Outras telas</h3><div class="tbtiles" style="margin:0">${outras.map(([k, sg, n, d, c]) => `<button type="button" class="tbtile" style="--k:${c}" data-act="tb-ir" data-key="${k}"><i>${sg}</i><span><b>${esc(n)}</b><small>${esc(d)}</small></span></button>`).join('')}</div></section>` : '';
+    /* F1: as outras telas (Manual…) ficam em "Sua conta" (toque nas iniciais) e no Trocar */
     main.innerHTML = `<div class="tbw thome">${tbHead('Central da Qualidade', 'Tablet do inspetor')}<div class="thw"><div class="thm">
         <div class="thola"><h2>${esc(saud)}${pri ? ', ' + esc(pri) : ''}</h2><p>${esc(dia.charAt(0).toUpperCase() + dia.slice(1))}. Toque no que você vai fazer agora.</p></div>
-        <div class="thtasks" style="--n:${T.length}">${T.map(([v, n, t, d, b, c]) => `<div class="thtask" style="--k:${c}"><span class="n">${n == null ? '…' : NF.format(n)}</span><b>${esc(t)}</b><span>${esc(d)}</span><button type="button" class="btn big" data-act="th-go" data-key="${v}">${esc(b)}</button></div>`).join('')}</div>
+        <div class="thtasks" style="--n:${T.length}">${T.map(([v, n, t, d, b, c, act]) => `<div class="thtask" style="--k:${c}"><span class="n">${n == null ? '…' : NF.format(n)}</span><b>${esc(t)}</b><span>${esc(d)}</span><button type="button" class="btn big" data-act="${act || 'th-go'}" data-key="${v}">${esc(b)}</button></div>`).join('')}</div>
         ${filaHTML}</div>
-        <div class="ths">${andHTML}${diaHTML}${outHTML}</div></div>
-      <div class="tbf"><span class="tbnet${off ? ' off' : ''}"><i></i>${off ? 'sem internet' + (TBN.off ? ' desde ' + hhmm(TBN.off) : '') : 'atualizado às ' + hhmm(DB.last || Date.now())}</span><span class="grow"></span><button type="button" class="btn big" data-act="th-minhas">Minhas inspeções</button><button type="button" class="btn dk big" data-act="th-qr">▣&nbsp; Ler QR de etiqueta</button></div></div>`;
+        <div class="ths">${andHTML}${diaHTML}</div></div>
+      <div class="tbf"><span class="tbnet${off ? ' off' : ''}"><i></i>Última sincronização ${hhmm(off ? (TBN.off || DB.last || Date.now()) : (DB.last || Date.now()))}</span><span class="grow"></span><button type="button" class="btn big" data-act="th-minhas">Minhas inspeções</button><button type="button" class="btn dk big" data-act="th-qr">▣&nbsp; Ler QR de etiqueta</button></div></div>`;
   };
   /* abre a ferramenta já no que foi tocado */
   function thAbrir(k) {
@@ -17988,12 +18146,26 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'th-qr') { thQr(); return true; }
     return false;
   }
+  /* F4: passos à esquerda, com os dados do lote embaixo; os passos já feitos voltam com um toque */
+  function tbStepsV(n) { return `<nav class="ncsteps" aria-label="Passos da NCF">${['Material', 'Problema', 'Assinar e enviar'].map((l, i) => { const k = i + 1, ok = k < n, on = k === n; return ok ? `<button type="button" class="ok" data-act="tb-passo" data-key="${k}"><b aria-hidden="true">✓</b>${l}</button>` : `<div class="${on ? 'on' : ''}"${on ? ' aria-current="step"' : ''}><b>${k}</b>${l}</div>`; }).join('')}</nav>`; }
+  function tbLotBox() {
+    const d = TB.d; if (!d) return '';
+    const ls = tbLots(d), a0 = ls[0];
+    const kv = (l, v, mono) => `<div class="ncr"><span>${esc(l)}</span><b${mono ? ' class="mono"' : ''}>${esc(v || '—')}</b></div>`;
+    const set = d.setor ? '' : '<button type="button" class="ncset" data-act="tb-passo" data-key="1">Setor responsável ainda não escolhido. Toque para escolher.</button>';
+    if (a0) return `<div class="ncsum"><h3 class="mono">${esc(ls.map((a) => a.id).join(', '))}</h3>${kv('Material', lotTxt(a0))}${kv('Fornecedor', a0.forn)}${kv('NF / pedido', [disp(a0.nf) || '—', disp(a0.pc) || '—'].join('  /  '), true)}${kv('Corrida', disp(a0.corrida), true)}${kv('Onde', d.origem)}${set}</div>`;
+    if (d.semLote) return `<div class="ncsum"><h3>Sem lote</h3>${kv('Fornecedor', d.forn)}${kv('Onde', d.origem)}${set}</div>`;
+    if (d.lotTxt) return `<div class="ncsum"><h3 class="mono">${esc(d.lotTxt)}</h3><p>Lote ainda não cadastrado na Central: a NCF fica em rascunho e os dados entram sozinhos quando ele aparecer.</p>${kv('Onde', d.origem)}${set}</div>`;
+    return '<div class="ncsum"><p>Leia a etiqueta ou digite o lote para começar.</p></div>';
+  }
+  const tbRasc = () => `<span class="tbnet${tbOn() ? '' : ' off'}"><i></i>rascunho guardado no tablet${tbOn() ? '' : ' · envia ao voltar a internet'}</span>`;
   function tbSteps(n) { return `<div class="tbsteps">${['Material', 'Problema', 'Assinar e enviar'].map((l, i) => `<div class="${i + 1 === n ? 'on' : i + 1 < n ? 'ok' : ''}"><b>${i + 1 < n ? '✓' : i + 1}</b>${l}</div>`).join('')}</div>`; }
   VIEWS.rnctab = (main) => {
     if (!TB.d && TB.step >= 1 && TB.step <= 3) TB.step = 0;
     const h = TB.step === 0 ? tbHome() : TB.step === 1 ? tbS1() : TB.step === 2 ? tbS2() : TB.step === 3 ? tbS3() : tbDone();
     const tbl = TB.d ? tbLots(TB.d) : [];
-    main.innerHTML = `<div class="tbw ncft">${tbHead('Não conformidade · NCF', TB.step === 0 ? 'Lotes reprovados e suas NCFs' : TB.step === 4 ? 'NCF enviada' : tbl.length ? 'Nova NCF do lote ' + tbl.map((a) => a.id).join(', ') : 'Nova NCF')}${TB.step >= 1 && TB.step <= 3 ? tbSteps(TB.step) : ''}<div class="tbb">${h.body}</div><div class="tbf">${h.foot}</div></div>`;
+    const passo = TB.step >= 1 && TB.step <= 3;
+    main.innerHTML = `<div class="tbw ncft">${tbHead('Não conformidade · NCF', TB.step === 0 ? 'Lotes reprovados e suas NCFs' : TB.step === 4 ? 'NCF enviada' : tbl.length ? 'Nova NCF do lote ' + tbl.map((a) => a.id).join(', ') : 'Nova NCF')}${passo ? `<div class="tbb ncx"><aside class="ncside">${tbStepsV(TB.step)}${tbLotBox()}</aside><section class="ncmain ncp${TB.step}">${h.body}</section></div>` : `<div class="tbb">${h.body}</div>`}<div class="tbf">${h.foot}</div></div>`;
     if (h.wire) h.wire();
     if (TB.step === 0) { const ids = uniq(pendLots().map((a) => lotMeta(a)._ub || lotMeta(a)._cb).filter((i) => i && !DB.names[i] && !TB.asked.has(i))); if (ids.length) { ids.forEach((i) => TB.asked.add(i)); resolveNames(ids).then(() => { if (S.view === 'rnctab' && TB.step === 0) render(); }).catch(() => {}); } }
   };
@@ -18028,7 +18200,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         ${found}<label class="tbsl"><input type="checkbox" id="tb-sl" ${d.semLote ? 'checked' : ''}> Esta NCF não tem lote</label></div></div>
         <div class="tbcard"><div class="ch">Onde foi encontrado?</div><div class="cb"><div class="tbchips">${RN_ORIG.map((o) => `<button type="button" class="chip2${d.origem === o ? ' on' : ''}" data-act="tb-orig" data-key="${esc(o)}">${esc(o)}</button>`).join('')}</div></div></div>
         <div class="tbcard"><div class="ch">Setor responsável</div><div class="cb"><div class="tbchips">${cfgL('RNC_DEPTOS').map((o) => `<button type="button" class="chip2${d.setor === o ? ' on' : ''}" data-act="tb-setor" data-key="${esc(o)}">${esc(o)}</button>`).join('')}</div></div></div>`,
-      foot: `<span class="tbnet"><i></i>rascunho salvo no tablet</span><span class="grow"></span><button class="btn big" type="button" data-act="tb-home">Cancelar</button><button class="btn red big" type="button" data-act="tb-next">Próximo →</button>`,
+      foot: `${tbRasc()}<span class="grow"></span><button class="btn big" type="button" data-act="tb-home">Cancelar</button><button class="btn red big" type="button" data-act="tb-next">Problema</button>`,
       wire: () => {
         const inp = $('#tb-lot'); inp.onkeydown = (e) => { if (e.key === 'Enter') tbBusca(); };
         $('#tb-sl').onchange = (e) => { d.semLote = e.target.checked; if (d.semLote) { d.lots = []; d.lotTxt = ''; } tbPersist(); render(); };
@@ -18048,14 +18220,19 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const d = TB.d, ls = tbLots(d), a0 = ls[0], forn = a0 ? a0.forn : d.forn;
     const reinc = rncReincList(forn, d.motivo, null), rec = ls.reduce((s, a) => s + (typeof a.quant === 'number' ? a.quant : Number(a.quant) || 0), 0), und = a0 ? a0.und || 'pç' : 'pç';
     const pct = rec && d.qtdRep !== '' ? Math.round((Number(d.qtdRep) / rec) * 100) : null;
+    /* F4: duas colunas — fotos e motivo em cima; descrição e quantidade embaixo */
     return {
-      body: `<div class="tbcard"><div class="ch">O que está errado?<span>1º toque = motivo principal · os outros ficam como “outros”</span></div><div class="cb"><div class="tbchips g2">${cfgL('RNC_MOTIVOS').map((o) => `<button type="button" class="chip2${d.motivo === o ? ' on' : d.outros.includes(o) ? ' on2' : ''}" data-act="tb-mot" data-key="${esc(o)}">${esc(o)}${d.motivo === o ? '<u>PRINCIPAL</u>' : d.outros.includes(o) ? '<u>outro</u>' : ''}</button>`).join('')}</div>
-        ${reinc.length ? `<div class="tbwarn">↻ ${esc(forn)} já teve <b>${plural(reinc.length, 'NCF', 'NCFs')} de ${esc(d.motivo)}</b> nos últimos 6 meses (${reinc.slice(0, 3).map((r) => esc(r.num)).join(', ')}): esta será marcada como <b>reincidência</b>.</div>` : ''}
-        <label class="field"><span>Descreva a não conformidade</span><textarea id="tb-desc" class="tbta" placeholder="O que foi encontrado, medida, quantidade de peças…">${esc(d.desc)}</textarea></label></div></div>
-        <div class="tbcard"><div class="ch">Quantidade reprovada</div><div class="cb"><div class="tbrow2" style="align-items:center"><div class="tbnum"><button type="button" data-act="tb-q" data-key="-1">−</button><input id="tb-q" inputmode="decimal" value="${esc(d.qtdRep)}"><button type="button" data-act="tb-q" data-key="1">+</button></div><div class="tbnote">${rec ? `de <b>${NF.format(rec)} ${esc(und)}</b> recebidas no lote${pct != null && isFinite(pct) ? `<br><b style="color:var(--crit)">${pct}% reprovado</b>` : ''}` : 'quantidade do lote não informada'}</div></div>
-        ${rec ? `<div class="tbqq"><button type="button" class="btn" data-act="tb-qset" data-key="${rec}">Todas (${NF.format(rec)})</button><button type="button" class="btn" data-act="tb-qset" data-key="${Math.ceil(rec / 2)}">Metade (${NF.format(Math.ceil(rec / 2))})</button><button type="button" class="btn" data-act="tb-qdig">Digitar</button></div>` : ''}</div></div>
-        <div class="tbcard"><div class="ch">Fotos<span>a câmera abre direto · até 8 fotos</span></div><div class="cb"><div class="tbfotos">${d.fotos.map((f, i) => `<div class="ft"><img src="${f}" alt=""><button type="button" class="x" data-act="tb-fdel" data-key="${i}">✕</button></div>`).join('')}${d.fotos.length < 8 ? '<label class="ft add"><input type="file" id="tb-ff" accept="image/*" capture="environment" multiple hidden><b>＋</b>Tirar foto</label>' : ''}</div></div></div>`,
-      foot: `<button class="btn ghost" type="button" data-act="tb-home">Guardar e sair</button><span class="tbnet"><i></i>rascunho salvo no tablet</span><span class="grow"></span><button class="btn big" type="button" data-act="tb-back">← Voltar</button><button class="btn red big" type="button" data-act="tb-next">Próximo →</button>`,
+      body: `<div class="nc2">
+        <section><h3>Fotos do problema</h3><div class="ncfotos">${d.fotos.length < 8 ? '<label class="add"><input type="file" id="tb-ff" accept="image/*" capture="environment" multiple hidden><b aria-hidden="true"></b>Tirar foto</label>' : ''}${d.fotos.map((f, i) => `<div class="ft"><img src="${f}" alt="Foto ${i + 1}"><span>foto ${i + 1}</span><button type="button" class="x" data-act="tb-fdel" data-key="${i}" aria-label="Apagar a foto ${i + 1}">✕</button></div>`).join('')}</div></section>
+        <section><h3>O que está errado</h3><div class="ncmot">${cfgL('RNC_MOTIVOS').map((o) => `<button type="button" class="chip2${d.motivo === o ? ' on' : d.outros.includes(o) ? ' on2' : ''}" data-act="tb-mot" data-key="${esc(o)}" aria-pressed="${d.motivo === o || d.outros.includes(o)}">${esc(o)}${d.motivo === o ? '<u class="sr">, motivo principal</u>' : d.outros.includes(o) ? '<u class="sr">, outro motivo</u>' : ''}</button>`).join('')}</div>
+          <p class="ncdica">1º toque = motivo principal (cheio); os outros ficam como “outros” (contorno).</p>
+          ${reinc.length ? `<div class="tbwarn">↻ ${esc(forn)} já teve <b>${plural(reinc.length, 'NCF', 'NCFs')} de ${esc(d.motivo)}</b> nos últimos 6 meses (${reinc.slice(0, 3).map((r) => esc(r.num)).join(', ')}): esta será marcada como <b>reincidência</b>.</div>` : ''}</section>
+        <section><h3><label for="tb-desc">Descreva</label></h3><textarea id="tb-desc" class="tbta" placeholder="O que foi encontrado, medida, quantidade de peças…">${esc(d.desc)}</textarea></section>
+        <section><h3><label for="tb-q">Quantas peças estão com problema</label></h3><div class="ncq"><button type="button" data-act="tb-q" data-key="-1" aria-label="Menos uma">−</button><input id="tb-q" inputmode="decimal" value="${esc(d.qtdRep)}" autocomplete="off"><button type="button" data-act="tb-q" data-key="1" aria-label="Mais uma">+</button></div>
+          <p class="ncqi">${rec ? `de ${NF.format(rec)} ${esc(und)} recebidas no lote${pct != null && isFinite(pct) ? ` · <b>${pct}% reprovado</b>` : ''}` : 'quantidade do lote não informada'}</p>
+          ${rec ? `<div class="ncqq"><button type="button" class="btn" data-act="tb-qset" data-key="${rec}">Todas (${NF.format(rec)})</button><button type="button" class="btn" data-act="tb-qset" data-key="${Math.ceil(rec / 2)}">Metade (${NF.format(Math.ceil(rec / 2))})</button><button type="button" class="btn" data-act="tb-qdig">Digitar</button></div>` : ''}</section>
+      </div>`,
+      foot: `${tbRasc()}<span class="grow"></span><button class="btn ghost tbsair" type="button" data-act="tb-home">Guardar e sair</button><button class="btn big" type="button" data-act="tb-back">Voltar</button><button class="btn red big" type="button" data-act="tb-next">Conferir e assinar</button>`,
       wire: () => {
         $('#tb-desc').oninput = (e) => { d.desc = e.target.value; tbPersist(); };
         $('#tb-q').oninput = (e) => { d.qtdRep = e.target.value.replace(/[^\d.,]/g, ''); tbPersist(); };
@@ -18077,7 +18254,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         <label class="tbck"><input type="checkbox" id="tb-ok" ${d.ok ? 'checked' : ''}> Confirmo que as informações e fotos estão corretas</label></div></div>
         ${pendCad ? '<div class="tbwarn">O lote ainda não foi cadastrado na Central. A NCF fica guardada como rascunho neste tablet e pode ser enviada assim que o lote aparecer.</div>' : `<div class="tbnote">O número da NCF é gerado ao enviar. O lote fica bloqueado na Central e a Qualidade administrativa recebe a NCF na hora.</div>`}
         ${TB.err ? `<div class="tbwarn" style="border-color:var(--crit);color:var(--crit)">Não foi possível enviar: ${esc(TB.err)}. A NCF continua guardada neste tablet — toque em “Tentar de novo”.</div>` : ''}`,
-      foot: `${pendCad ? '' : '<button class="btn ghost" type="button" data-act="tb-home">Guardar e sair</button>'}<span class="grow"></span><button class="btn big" type="button" data-act="tb-back">← Voltar</button>${pendCad ? '<button class="btn big" type="button" data-act="tb-home">Guardar rascunho</button>' : `<button class="btn red big" type="button" data-act="tb-send" style="min-width:260px">${TB.err ? 'Tentar de novo' : 'Abrir NCF ✓'}</button>`}`,
+      foot: `${tbRasc()}<span class="grow"></span>${pendCad ? '' : '<button class="btn ghost tbsair" type="button" data-act="tb-home">Guardar e sair</button>'}<button class="btn big" type="button" data-act="tb-back">Voltar</button>${pendCad ? '<button class="btn big" type="button" data-act="tb-home">Guardar rascunho</button>' : `<button class="btn red big" type="button" data-act="tb-send" style="min-width:260px">${TB.err ? 'Tentar de novo' : 'Abrir NCF ✓'}</button>`}`,
       wire: () => { $('#tb-ok').onchange = (e) => { d.ok = e.target.checked; tbPersist(); }; },
     };
   }
@@ -18191,6 +18368,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'tb-qdig') { const q = $('#tb-q'); if (q) { q.focus(); q.select(); } return true; }
     if (a === 'tb-fdel') { d.fotos.splice(Number(key), 1); tbPersist(); const y = window.scrollY; render(); window.scrollTo(0, y); return true; }
     if (a === 'tb-next') { tbGo(TB.step + 1); return true; }
+    if (a === 'tb-passo') { const k = +key; if (k >= 1 && k < TB.step) tbGo(k); return true; }
     if (a === 'tb-back') { tbGo(TB.step - 1); return true; }
     if (a === 'tb-send') { tbSend(); return true; }
     return false;
