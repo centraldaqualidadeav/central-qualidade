@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Certificado de Qualidade – Aços Vital</title>
 <link rel="icon" href="favicon.ico?v=39" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
 :root {
   --brand: #002340;
@@ -544,6 +545,166 @@ select.fld option { color: #000; font-weight: normal; }
   .cb:hover { background: transparent; }
 }
 
+/* ===== Área de trabalho do certificado (v41, imagens G1 a G6) ===== */
+html.ws {
+  --w-bg: #e4e8e5; --w-sf: #ffffff; --w-sf2: #f1f3f1; --w-sf3: #f8f9f8; --w-line: #dde2de; --w-line2: #c4cbc6; --w-cell: #e3e7e4;
+  --w-ink: #17201c; --w-ink2: #4b5650; --w-ink3: #737d77;
+  --w-or: #b5651d; --w-dk: #17201c; --w-crit: #b3261e; --w-critbg: #fbe5e2; --w-ok: #1d7446; --w-okbg: #e2f1e7; --w-warn: #9a6400; --w-warnbg: #faefd9;
+  --w-ce: #f6f2ea; --w-cet: #8a5a1c; --w-sug: #fff4cc; --w-sel: #e5eef9; --w-cur: #2d77c1;
+  --w-disp: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --w-body: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --w-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --w-rev: linear-gradient(90deg, #EBDCA6 0%, #D7AA55 17%, #AA6A31 34%, #7B417A 50%, #33428F 66%, #4F87C7 83%, #9CA7AF 100%);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { html.ws:not([data-theme="light"]) { --w-bg: #111413; --w-sf: #191d1b; --w-sf2: #1f2421; --w-sf3: #1c201e; --w-line: #2d3430; --w-line2: #3c4540; --w-cell: #2a302c; --w-ink: #e8ece9; --w-ink2: #b5beb9; --w-ink3: #8d9791; --w-dk: #e8ece9; --w-critbg: #3a1d1b; --w-okbg: #173325; --w-warnbg: #33290f; --w-ce: #2b261c; --w-cet: #e0b46e; --w-sug: #3a3313; --w-sel: #1c2a3d; --w-crit: #f0857d; --w-ok: #5fcf8f; --w-warn: #e6b450; color-scheme: dark; } }
+html.ws[data-theme="dark"] { --w-bg: #111413; --w-sf: #191d1b; --w-sf2: #1f2421; --w-sf3: #1c201e; --w-line: #2d3430; --w-line2: #3c4540; --w-cell: #2a302c; --w-ink: #e8ece9; --w-ink2: #b5beb9; --w-ink3: #8d9791; --w-dk: #e8ece9; --w-critbg: #3a1d1b; --w-okbg: #173325; --w-warnbg: #33290f; --w-ce: #2b261c; --w-cet: #e0b46e; --w-sug: #3a3313; --w-sel: #1c2a3d; --w-crit: #f0857d; --w-ok: #5fcf8f; --w-warn: #e6b450; color-scheme: dark; }
+html.ws, html.ws body { height: 100%; }
+html.ws body { margin: 0; background: var(--w-bg); color: var(--w-ink); font-family: var(--w-body); overflow: hidden; min-height: 0; }
+html.ws .app, html.ws .topbar, html.ws .panel, html.ws .panel-hint { display: none !important; }
+.ws { position: fixed; inset: 0; display: grid; grid-template-rows: auto auto minmax(0, 1fr); font-family: var(--w-body); color: var(--w-ink); }
+.ws button { font-family: inherit; }
+.ws-top { display: flex; align-items: center; gap: 16px; height: 64px; padding: 0 20px; background: var(--w-sf); border-bottom: 1px solid var(--w-line); box-sizing: border-box; min-width: 0; }
+.ws-tit { display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1 1 auto; }
+.ws-ic { width: 36px; height: 36px; border-radius: 8px; background: #15191a; color: #f1f0eb; display: grid; place-content: center; justify-items: center; gap: 3px; flex: none; font: 700 15px/1 var(--w-disp); letter-spacing: .02em; }
+.ws-ic { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); }
+.ws-ic i { display: block; width: 21px; height: 2.5px; border-radius: 2px; background: var(--w-rev); }
+.ws-nm { display: grid; gap: 2px; min-width: 0; }
+.ws-nm b { font: 700 23px/1.05 var(--w-disp); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-nm small { font: 400 13.5px/1.2 var(--w-body); color: var(--w-ink2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-fls { display: flex; align-items: center; gap: 4px; flex: none; background: var(--w-sf2); border: 1px solid var(--w-line); border-radius: 10px; padding: 3px; max-width: 34vw; overflow-x: auto; }
+.ws-fls button { height: 34px; padding: 0 12px; border: 0; border-radius: 7px; background: transparent; color: var(--w-ink2); font: 600 14px var(--w-mono); cursor: pointer; white-space: nowrap; }
+.ws-fls button.on { background: var(--w-sf); color: var(--w-ink); box-shadow: 0 0 0 1px var(--w-line2); }
+.ws-fls button.mini { width: 34px; padding: 0; font: 600 17px var(--w-body); }
+.ws-acts { display: grid; grid-auto-flow: column; grid-auto-columns: 152px; gap: 10px; flex: none; }
+.ws-acts .ws-mais { width: 44px; }
+.ws-acts { grid-template-columns: repeat(4, 152px) 44px; grid-auto-flow: row; }
+.ws-b { height: 42px; border-radius: 9px; border: 1px solid var(--w-line2); background: var(--w-sf); color: var(--w-ink); font: 600 15px var(--w-body); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 0 12px; white-space: nowrap; }
+.ws-b kbd { font: 500 11.5px var(--w-mono); color: var(--w-ink3); border: 1px solid var(--w-line2); border-radius: 4px; padding: 1px 5px; }
+.ws-b:disabled { opacity: .45; cursor: default; }
+.ws-b.dk { background: var(--w-dk); border-color: var(--w-dk); color: var(--w-sf); }
+.ws-b.or, .modal .btn.or { background: var(--w-or); border-color: var(--w-or); color: #fff; }
+.ws-b.busy { opacity: .6; pointer-events: none; }
+.ws-b:focus-visible, .ws-tb:focus-visible, .ws-tabs button:focus-visible, .ws-pv:focus-visible { outline: 3px solid var(--w-cur); outline-offset: 2px; }
+.ws-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 8px; padding: 14px 20px 0; }
+.ws-tabs button { height: 46px; border: 1px solid var(--w-line); border-bottom: 0; border-radius: 10px 10px 0 0; background: var(--w-sf2); color: var(--w-ink2); font: 500 16px var(--w-body); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; min-width: 0; white-space: nowrap; overflow: hidden; }
+.ws-tabs button.on { background: var(--w-sf); color: var(--w-ink); box-shadow: inset 0 3px 0 var(--w-or); position: relative; z-index: 1; }
+.ws-tabs em { font: 600 13px var(--w-body); font-style: normal; padding: 2px 9px; border-radius: 11px; background: var(--w-sf2); color: var(--w-ink2); border: 1px solid var(--w-line); }
+.ws-tabs button.on em { background: var(--w-sf2); }
+.ws-tabs em.cr { background: var(--w-critbg); color: var(--w-crit); border-color: transparent; }
+.ws-tabs em.ok { background: var(--w-okbg); color: var(--w-ok); border-color: transparent; }
+.ws-tabs em.wn { background: var(--w-warnbg); color: var(--w-warn); border-color: transparent; }
+.ws-body { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 18px; padding: 0 20px 16px; min-height: 0; }
+.ws-main { background: var(--w-sf); border: 1px solid var(--w-line); border-radius: 0 0 12px 12px; padding: 14px 16px 10px; display: flex; flex-direction: column; min-height: 0; min-width: 0; margin-top: -1px; }
+.ws-hdr { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, .9fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, .9fr); gap: 10px; margin-bottom: 12px; }
+.ws-hf { display: grid; gap: 4px; min-width: 0; }
+.ws-hf > span { font: 600 12px var(--w-body); color: var(--w-ink3); text-transform: uppercase; letter-spacing: .04em; }
+.ws-hf input, .ws-in { height: 40px; border: 1px solid var(--w-line2); border-radius: 8px; padding: 0 11px; font: 500 15px var(--w-body); color: var(--w-ink); background: var(--w-sf); min-width: 0; width: 100%; box-sizing: border-box; }
+.ws-hf input:focus, .ws-in:focus { outline: none; border-color: var(--w-cur); box-shadow: 0 0 0 3px color-mix(in srgb, var(--w-cur) 22%, transparent); }
+.ws-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 10px; }
+.ws-tb { height: 42px; border: 1px solid var(--w-line2); border-radius: 9px; background: var(--w-sf); color: var(--w-ink); font: 500 15px var(--w-body); cursor: pointer; padding: 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-tb:hover, .ws-b:hover:not(:disabled):not(.dk):not(.or) { background: var(--w-sf2); }
+.ws-aviso { margin-top: 12px; padding: 11px 14px; border-radius: 9px; background: var(--w-critbg); color: var(--w-crit); font: 600 14.5px/1.4 var(--w-body); }
+.ws-aviso span { font-weight: 400; } .ws-aviso.wn { background: var(--w-warnbg); color: var(--w-warn); }
+.ws-leg { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-top: 12px; }
+.ws-leg span { display: flex; align-items: center; gap: 9px; height: 42px; padding: 0 14px; border: 1px solid var(--w-line); border-radius: 9px; font: 500 15px var(--w-body); }
+.ws-leg i, .ws-g .dt { width: 12px; height: 12px; border-radius: 3px; flex: none; display: inline-block; }
+.ws-leg b { margin-left: auto; font-weight: 600; }
+.ws-gw { position: relative; flex: 1 1 auto; min-height: 120px; overflow: auto; margin-top: 12px; border: 1px solid var(--w-line); border-radius: 8px; }
+.ws-g { border-collapse: separate; border-spacing: 0; width: 100%; table-layout: fixed; font: 400 15px var(--w-body); color: var(--w-ink); outline: none; min-width: 560px; }
+.ws-g col.ci { width: 48px; } .ws-g col.lg { width: auto; }
+.ws-g thead th { position: sticky; z-index: 2; background: var(--w-sf2); color: var(--w-ink2); font: 600 14px/1.15 var(--w-body); text-align: center; padding: 0 6px; border-bottom: 1px solid var(--w-cell); border-right: 1px solid var(--w-cell); }
+.ws-g thead tr.h1 th { top: 0; height: 44px; }
+.ws-g thead tr.h1 th small { display: block; font: 400 11.5px var(--w-body); color: var(--w-ink3); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-g thead tr.h1 th b { font-weight: 600; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-g thead tr.h2 th { top: 44px; height: 32px; padding: 0 2px; background: var(--w-sf3); font: 400 12.5px var(--w-body); letter-spacing: -.01em; color: var(--w-ink3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-g thead th.in { color: var(--w-cur); }
+.ws-g th.ci { position: sticky; left: 0; z-index: 3; width: 48px; background: var(--w-sf2); color: var(--w-ink3); font: 500 15px var(--w-body); }
+.ws-g thead th.ci { z-index: 4; }
+.ws-g tbody th.ci { background: var(--w-sf3); border-bottom: 1px solid var(--w-cell); border-right: 1px solid var(--w-cell); cursor: pointer; text-align: center; }
+.ws-g tbody th.ci.in { color: var(--w-cur); background: var(--w-sel); }
+.ws-g td { height: 42px; padding: 0 9px; border-bottom: 1px solid var(--w-cell); border-right: 1px solid var(--w-cell); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: cell; user-select: none; box-sizing: border-box; }
+.ws-g td.mono { font: 400 15px var(--w-mono); } .ws-g td.r { text-align: center; }
+.ws-g td.ce, .ws-g th.ce { background: var(--w-ce); } .ws-g td.ce { color: var(--w-cet); font-weight: 600; }
+.ws-g td.sug { background: var(--w-sug); } .ws-g td.ce.sug { background: var(--w-ce); font-style: italic; }
+.ws-g td.fora { background: var(--w-critbg); color: var(--w-crit); font-weight: 600; }
+.ws-g td.so { color: var(--w-ink2); cursor: default; }
+.ws-g td.in { background: var(--w-sel); } .ws-g td.in.fora { background: color-mix(in srgb, var(--w-critbg) 60%, var(--w-sel)); }
+.ws-g td .dt { margin-right: 8px; vertical-align: -1px; }
+.ws-g tr.gh th.ci { color: color-mix(in srgb, var(--w-ink3) 60%, transparent); }
+.ws-g tfoot td { border: 0; padding: 10px 0 0; height: auto; cursor: default; }
+.ws-g tfoot .ws-tb { width: auto; padding: 0 16px; }
+.ws-g:focus-visible { outline: none; }
+.ws-cur { position: absolute; z-index: 1; pointer-events: none; border: 2px solid var(--w-cur); border-radius: 2px; box-sizing: border-box; }
+.ws-cur .fh { position: absolute; right: -5px; bottom: -5px; width: 9px; height: 9px; background: var(--w-cur); border: 1.5px solid var(--w-sf); border-radius: 2px; pointer-events: auto; cursor: crosshair; }
+.ws-ed { position: absolute; z-index: 5; box-sizing: border-box; border: 2px solid var(--w-cur); border-radius: 2px; padding: 0 8px; font: 400 15px var(--w-body); color: var(--w-ink); background: var(--w-sf); outline: none; box-shadow: 0 4px 14px rgba(0, 0, 0, .14); }
+.ws-ed.mono { font-family: var(--w-mono); } .ws-ed.r { text-align: center; }
+.ws-dica { margin: 10px 2px 0; font: 400 13px/1.45 var(--w-body); color: var(--w-ink3); }
+.ws-st { display: flex; gap: 22px; align-items: center; border-top: 1px solid var(--w-line); margin-top: 10px; padding: 10px 2px 2px; font: 400 14px var(--w-body); color: var(--w-ink2); white-space: nowrap; overflow: hidden; }
+.ws-st b { color: var(--w-ink); font-weight: 600; } .ws-st .gr { flex: 1; }
+.ws-side { display: grid; gap: 16px; align-content: start; min-height: 0; overflow: auto; padding-top: 14px; }
+.ws-card { background: var(--w-sf); border: 1px solid var(--w-line); border-radius: 12px; padding: 14px 16px; }
+.ws-ch { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.ws-ch b { font: 700 21px/1 var(--w-disp); } .ws-ch span { font: 400 13.5px var(--w-body); color: var(--w-ink3); }
+.ws-card { min-width: 0; overflow: hidden; }
+.ws-pv { display: block; width: 100%; max-width: 100%; padding: 0; border: 1px solid var(--w-line); border-radius: 6px; background: #fff; overflow: hidden; cursor: zoom-in; }
+.ws-pv .stage { pointer-events: none; padding: 0 !important; margin: 0 !important; background: #fff !important; min-height: 0 !important; }
+.ws-pv .paper { padding: 6px !important; margin: 0 auto !important; box-shadow: none !important; background: #fff !important; }
+.ws-pv .folhas, .ws-pv .pagebreak, .ws-pv .lin-ctl, .ws-pv .combo-btn, .ws-pv .dica-norma { display: none !important; }
+.ws-kv { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 10px 0; border-top: 1px solid var(--w-line); font: 400 15.5px var(--w-body); color: var(--w-ink2); }
+.ws-ch + .ws-kv { border-top: 0; }
+.ws-kv b { color: var(--w-ink); font-weight: 600; text-align: right; } .ws-kv b.ok { color: var(--w-ok); } .ws-kv b.cr { color: var(--w-crit); } .ws-kv b.wn { color: var(--w-warn); }
+/* Textos e anexos */
+.ws-tx { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 26px; overflow: auto; padding: 4px 2px; }
+.ws-col { display: grid; gap: 22px; align-content: start; min-width: 0; }
+.ws-col section { display: grid; gap: 10px; }
+.ws-sh { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.ws-sh b { font: 700 21px/1.1 var(--w-disp); } .ws-sh span { font: 400 13.5px var(--w-body); color: var(--w-ink3); }
+.ws-p { margin: 0; font: 400 14.5px/1.45 var(--w-body); color: var(--w-ink2); }
+.ws-decl { border: 1px solid var(--w-line); border-radius: 10px; padding: 14px 16px; font: 400 15px/1.55 var(--w-body); color: var(--w-ink2); background: var(--w-sf3); }
+.ws-fr { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 9px; }
+.ws-fr button { height: 44px; border: 0; border-radius: 9px; background: var(--w-sf2); color: var(--w-ink); font: 500 15px var(--w-body); cursor: pointer; padding: 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-fr button:hover { background: var(--w-line); } .ws-fr button.nova { background: var(--w-sf); border: 1px dashed var(--w-line2); color: var(--w-ink2); }
+.ws-sig { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--w-line); border-radius: 10px; padding: 10px 12px; min-height: 64px; box-sizing: border-box; }
+.ws-sig img { max-height: 46px; max-width: 60%; } .ws-sig span { color: var(--w-ink3); font-size: 14.5px; }
+.ws-ck { display: flex; align-items: center; gap: 10px; min-height: 44px; font: 400 15px var(--w-body); cursor: pointer; }
+.ws-ck input { width: 20px; height: 20px; accent-color: var(--w-or); flex: none; }
+/* menus e janelas */
+.ws-menu { position: fixed; z-index: 2000; min-width: 260px; background: var(--w-sf, #fff); color: var(--w-ink, #17201c); border: 1px solid var(--w-line, #dde2de); border-radius: 10px; box-shadow: 0 12px 36px rgba(0, 0, 0, .22); padding: 6px; font-family: var(--w-body); }
+.ws-menu button { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 24px; height: 40px; padding: 0 12px; border: 0; border-radius: 7px; background: none; color: inherit; font: 400 15px var(--w-body); cursor: pointer; text-align: left; }
+.ws-menu button:hover, .ws-menu button:focus { background: var(--w-sf2, #f1f3f1); outline: none; }
+.ws-menu button:disabled { opacity: .4; cursor: default; }
+.ws-menu kbd { font: 500 12px var(--w-mono); color: var(--w-ink3, #737d77); border: 1px solid var(--w-line2, #c4cbc6); border-radius: 4px; padding: 1px 6px; }
+.ws-menu hr { border: 0; border-top: 1px solid var(--w-line, #dde2de); margin: 5px 4px; }
+html.ws .modal { font-family: var(--w-body); }
+.ws-pdf { width: 100%; height: 70vh; border: 1px solid var(--w-line); border-radius: 6px; background: #fff; }
+.ws-cols .ws-colg { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; margin-top: 12px; }
+.ws-colg label { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 12px; border: 1px solid var(--w-line2); border-radius: 9px; cursor: pointer; font: 600 15px var(--w-body); }
+.ws-colg label.tem { opacity: .7; cursor: default; } .ws-colg input { accent-color: var(--w-or); width: 18px; height: 18px; }
+.ws-dlg { max-width: 860px !important; }
+.modal.ws-dlg h2 { font: 700 30px/1.1 var(--w-disp); margin-bottom: 4px; }
+.ws-conf { position: relative; display: grid; gap: 12px; }
+.ws-imp { position: absolute; top: -46px; right: 0; font: 600 14px var(--w-body); font-style: normal; padding: 5px 12px; border-radius: 14px; background: var(--w-critbg); color: var(--w-crit); }
+.ws-imp.ok { background: var(--w-okbg); color: var(--w-ok); }
+.ws-cl { display: grid; gap: 10px; }
+.ws-ci { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--w-line); border-radius: 10px; }
+.ws-ci i { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 700 16px var(--w-body); font-style: normal; color: #fff; background: var(--w-ok); }
+.ws-ci b { display: block; font: 600 16px var(--w-body); } .ws-ci span { display: block; font: 400 14.5px/1.4 var(--w-body); color: var(--w-ink2); margin-top: 2px; }
+.ws-ci.x { background: var(--w-critbg); border-color: color-mix(in srgb, var(--w-crit) 50%, var(--w-line)); } .ws-ci.x i { background: var(--w-crit); }
+.ws-ci.\! { background: var(--w-warnbg); border-color: color-mix(in srgb, var(--w-warn) 45%, var(--w-line)); } .ws-ci.\! i { background: var(--w-warn); }
+.ws-ci .ws-b { min-width: 170px; }
+.ws-just { display: grid; gap: 6px; font: 600 14px var(--w-body); color: var(--w-ink2); }
+.ws-just textarea { font: 400 15px var(--w-body); border: 1px solid var(--w-line2); border-radius: 8px; padding: 10px 12px; resize: vertical; background: var(--w-sf); color: var(--w-ink); }
+/* dentro da Central: mesmo fundo da Central e sem a margem de fora (a faixa do pedido fica logo acima) */
+html.ws.cq-embed { --w-bg: #eef0ed; }
+@media (prefers-color-scheme: dark) { html.ws.cq-embed:not([data-theme="light"]) { --w-bg: #111413; } }
+html.ws.cq-embed[data-theme="dark"] { --w-bg: #111413; }
+html.ws.cq-embed .ws-top { border: 1px solid var(--w-line); border-radius: 12px; }
+html.ws.cq-embed .ws-tabs { padding: 12px 0 0; }
+html.ws.cq-embed .ws-body { padding: 0 0 2px; }
+@media (max-width: 1720px) { .ws-tb { font-size: 14.5px; padding: 0 6px; } }
+@media (max-width: 1320px) { .ws-body { grid-template-columns: minmax(0, 1fr) 320px; } .ws-acts { grid-template-columns: repeat(4, 140px) 44px; } .ws-b { padding: 0 8px; font-size: 14.5px; } .ws-b kbd { display: none; } }
+@media (max-width: 1100px) { .ws-body { grid-template-columns: minmax(0, 1fr); overflow: auto; } .ws-side { grid-template-columns: 1fr 1fr; overflow: visible; } .ws-main { min-height: 70vh; } html.ws body { overflow: auto; } .ws { position: static; min-height: 100vh; } .ws-acts { grid-template-columns: repeat(4, minmax(0, 1fr)) 44px; } .ws-top { height: auto; flex-wrap: wrap; padding: 10px 14px; } .ws-hdr { grid-template-columns: 1fr 1fr; } .ws-tx { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -1356,11 +1517,13 @@ if (typeof module !== 'undefined') module.exports = { lerPedidoOmie, lerOrdemCom
 (() => {
 'use strict';
 const CQ_EMBED = (() => { try { return window.self !== window.top && !!window.parent.CQ_CERT_HOST; } catch (e) { return false; } })();
-const cqSalvo = (nome) => { if (CQ_EMBED) { try { window.parent.CQ_CERT_HOST.salvo(nome); } catch (e) { /* Central fechada */ } } };
+const cqSalvo = (nome) => { if (wsMudo) { wsMudo.push(nome); return; } if (CQ_EMBED) { try { window.parent.CQ_CERT_HOST.salvo(nome); } catch (e) { /* Central fechada */ } } };
 
+/* v42: cada pedido aberto pela Central tem o seu rascunho no navegador (?k=pedido), para duas abas não misturarem */
+const NS = (() => { try { const k = new URLSearchParams(location.search).get('k'); return k ? '#' + String(k).replace(/[^\w.@-]/g, '_') : ''; } catch (e) { return ''; } })();
 /* tipo de certificado aberto nesta página: tubos (padrão) ou grades */
-const TIPO_KEY = 'certificado-acos-vital/tipo';
-const PENDENTE_KEY = 'certificado-acos-vital/pendente';           // pedido/Excel que ficou para o outro tipo
+const TIPO_KEY = 'certificado-acos-vital/tipo' + NS;
+const PENDENTE_KEY = 'certificado-acos-vital/pendente' + NS;           // pedido/Excel que ficou para o outro tipo
 const MODELS = window.CERT_MODELS || { tubos: window.CERT_MODEL };
 const TIPO = (() => {
   let t = 'tubos';
@@ -1402,7 +1565,7 @@ const PAD_X = 2, PAD_Y = 1;                      // margem interna das células 
 const IND_PX = 9;                                // um nível de recuo do Excel (px a 96 dpi)
 const BOX_PX = 11;                               // quadradinho das opções de tratamento térmico
 const CHECK_ON = '☒', CHECK_OFF = '☐';
-const STORE_KEY = GRADES ? 'certificado-acos-vital/grades-v1' : 'certificado-acos-vital/rascunho-v2';
+const STORE_KEY = (GRADES ? 'certificado-acos-vital/grades-v1' : 'certificado-acos-vital/rascunho-v2') + NS;
 const STORE_KEY_V1 = 'certificado-acos-vital/rascunho-v1';
 const ZOOM_KEY = 'certificado-acos-vital/zoom';
 const CONFIG_KEY = 'certificado-acos-vital/config';
@@ -1752,7 +1915,7 @@ function sanitizeDoc(d, guardado) {
   const mig = (x) => (velho ? migrarMecV2(x) : x);
   if (d && Array.isArray(d.certs) && d.certs.length) {
     const certs = d.certs.slice(0, MAX_FOLHAS).map(mig).map(sanitizeState);
-    return { certs, atual: clamp(parseInt(d.atual, 10) || 0, 0, certs.length - 1), syncExtras: d.syncExtras !== false, mec: 2 };
+    return { certs, atual: clamp(parseInt(d.atual, 10) || 0, 0, certs.length - 1), syncExtras: d.syncExtras !== false, mec: 2, just: d.just && typeof d.just === 'object' ? d.just : undefined };
   }
   return { certs: [sanitizeState(mig(d))], atual: 0, syncExtras: true, mec: 2 };       // rascunho antigo: um certificado só
 }
@@ -1790,6 +1953,7 @@ function saveDraft() {
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify(doc));
     setStatus('Rascunho salvo neste navegador às ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }));
+    if (WS.on) { WS.lastSave = Date.now(); if (WS.root) wsTopo(); }
   } catch (e) {
     setStatus('Rascunho não pôde ser salvo neste navegador');
   }
@@ -2524,6 +2688,7 @@ function render() {
   updateTitle();
   renderTabs();
   if (ED.sel) marcarSel();
+  if (WS.on && WS.root) wsRender();          // área de trabalho (v41) acompanha a folha
 }
 
 /* inserir uma linha abaixo / remover esta linha (componentes) — só na tela */
@@ -3330,6 +3495,7 @@ function conferir(certs) {
   return out;
 }
 async function conferirAntes(certs, titulo, sempre) {
+  if (WS.on) return wsConferir(certs, titulo, sempre);      // área de trabalho (v41): conferência no formato das imagens G3/G5
   const L = conferir(certs);
   if (!L.length) { if (sempre) await alertMsg(titulo, 'Tudo certo: nada faltando e nenhum valor fora da faixa das normas.'); return true; }
   const faltas = L.filter(x => x.tipo === 'falta').length;
@@ -5643,6 +5809,1054 @@ const ajustarTopo = () => document.documentElement.style.setProperty('--topbar-h
 ajustarTopo();
 window.addEventListener('resize', ajustarTopo);
 
+/* =====================================================================
+ * Área de trabalho do certificado (v41, imagens G1 a G6)
+ *  - abas Produtos · Química · Mecânica e ensaios · Tratamento térmico · Textos e anexos
+ *    (no modelo de grades: Produtos · Componentes · Corridas · Galvanização · Dimensional · Textos e anexos)
+ *  - cada aba é uma planilha: setas, Tab, Enter, Shift seleciona, Ctrl+C/V com o Excel, Ctrl+D/R,
+ *    Delete, Ctrl+Z/Y, botão direito, arrastar o ponto azul para copiar
+ *  - prévia do PDF ao lado (é a própria folha, reduzida) e "Esta folha"
+ *  - os dados são os mesmos da folha (state.v): o PDF e o Excel saem exatamente como antes
+ * ===================================================================== */
+const WS_PARAM = (() => { try { return new URLSearchParams(location.search).get('ws'); } catch (e) { return null; } })();
+const WS = {
+  on: CQ_EMBED ? WS_PARAM !== '0' : WS_PARAM === '1',
+  tab: null, cur: { r: 1, c: 0 }, anc: null, edit: null, drag: null, fill: null,
+  root: null, lastSave: 0, central: 0, menu: null, busca: '',
+};
+const WS_COLS_KEY = 'certificado-acos-vital/ws-colunas';
+const WS_FRASES_KEY = 'certificado-acos-vital/ws-frases';
+const WS_TABS = GRADES ? [
+  { id: 'produto', nome: 'Produtos', bloco: 'produto' },
+  { id: 'comp', nome: 'Componentes', bloco: 'comp' },
+  { id: 'corr', nome: 'Corridas', bloco: 'corr' },
+  { id: 'galv', nome: 'Galvanização', bloco: 'galv' },
+  { id: 'dim', nome: 'Dimensional', bloco: 'dim' },
+  { id: 'textos', nome: 'Textos e anexos' },
+] : [
+  { id: 'produto', nome: 'Produtos', bloco: 'produto' },
+  { id: 'quimica', nome: 'Química', bloco: 'quimica', corrida: true },
+  { id: 'mecanica', nome: 'Mecânica e ensaios', bloco: 'mecanica', corrida: true },
+  { id: 'trat', nome: 'Tratamento térmico', ht: true },
+  { id: 'textos', nome: 'Textos e anexos' },
+];
+WS.tab = WS_TABS[0].id;
+const wsTab = () => WS_TABS.find(t => t.id === WS.tab) || WS_TABS[0];
+const WS_MEC = { 2: ['Escoam.', 'YS (MPa)'], 3: ['Resist.', 'TS (MPa)'], 4: ['Along.', 'El. (%)'], 5: ['Red. área', 'RA (%)'], 6: ['HB 1', 'dureza'], 7: ['HB 2', 'dureza'],
+  8: ['Charpy', 'temp. (°C)'], 9: ['Média', 'Charpy (J)'], 10: ['LP', 'PT'], 11: ['PM', 'MT'], 12: ['US', 'UT'], 13: ['RX', 'RT'], 14: ['Corrosão', ''], 15: ['Achatam.', ''],
+  16: ['Dobram.', ''], 17: ['Visual', ''], 18: ['Dimens.', ''] };
+/* colunas que aparecem no editor quando a folha ainda não tem nada nelas (o PDF sai sempre com todas, como antes) */
+const WS_PADRAO = { quimica: ['C', 'Si', 'Mn', 'P', 'S', 'Cr', 'Mo', 'Ni', 'Cu', 'V', 'CE'], mecanica: [2, 3, 4, 6, 7, 8, 9, 17, 18] };
+const wsEl = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+const wsEsc = t => String(t == null ? '' : t).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+const wsHost = () => { try { return CQ_EMBED ? window.parent.CQ_CERT_HOST : null; } catch (e) { return null; } };
+const wsHora = t => new Date(t).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+/* ---------- colunas visíveis (só no editor) ---------- */
+function wsColsGuardadas() { try { return JSON.parse(localStorage.getItem(WS_COLS_KEY) || '{}') || {}; } catch (e) { return {}; } }
+function wsColKey(t, c1) { return t.bloco === 'quimica' ? String(cellAt(BASE.quimica, c1).t) : c1; }
+function wsColVisivel(t, c1) {
+  if (t.bloco !== 'quimica' && t.bloco !== 'mecanica') return true;
+  const k = wsColKey(t, c1);
+  const g = wsColsGuardadas()[t.bloco];
+  const pad = Array.isArray(g) ? g : WS_PADRAO[t.bloco];
+  if (pad.map(String).includes(String(k))) return true;
+  return doc.certs.some(cert => FIELDS.some(f => f.tbl === t.bloco && f.c1 === c1 && cert.v[f.ref]));
+}
+
+/* ---------- definição das colunas de cada aba ---------- */
+function wsCols(t) {
+  if (t.ht) {
+    const ft = FIELD[refOf(59, 3)];
+    return [
+      { key: 'desc', head: 'Produto', so: true, w: 0 },
+      { key: 'corr', head: 'Corrida', so: true, w: 110, mono: true },
+      { key: 't', head: 'Tratamento térmico', w: 0, list: ft && ft.list, kind: ft && ft.list ? 'combo' : 'text', dot: true },
+      { key: 'temp', head: 'Temp. (°C)', w: 108, num: true },
+      { key: 'tempo', head: 'Tempo (h)', w: 96, num: true },
+      { key: 'resf', head: 'Resfriamento', w: 150, list: (FIELD[refOf(59, 15)] || {}).list },
+    ];
+  }
+  const b = BLOCO[t.bloco];
+  const fs = FIELDS.filter(f => f.tbl === t.bloco && f.r1 === b.base + 1).sort((p, q) => p.c1 - q.c1);
+  const cols = [];
+  if (t.corrida) cols.push({ c1: 17, corrida: true, head: 'Corrida', sub: '', w: 104, mono: true, f0: FIELD[refOf(BASE.produto + 1, 17)] });
+  for (const f of fs) {
+    if (!wsColVisivel(t, f.c1)) continue;
+    let head = f.head || f.label, sub = '', w = 0, mono = false;
+    if (t.bloco === 'quimica') { head = String(cellAt(BASE.quimica, f.c1).t); sub = /^CE/i.test(head) ? 'IIW · automático' : '%'; w = /^CE/i.test(head) ? 104 : 0; mono = true; }
+    else if (t.bloco === 'mecanica') { [head, sub] = WS_MEC[f.c1] || [f.head, '']; mono = f.c1 < 10; }
+    else if (t.bloco === 'produto' && !GRADES) {
+      w = { 2: 60, 10: 78, 11: 140, 14: 140, 17: 112 }[f.c1] || 0;
+      sub = { 2: 'Qty.', 3: 'Product description', 10: 'PO item', 11: 'Specification', 14: 'Material', 17: 'Heat No.' }[f.c1] || '';
+      mono = f.c1 === 17;
+    }
+    cols.push({ c1: f.c1, head, sub, w, mono, f0: f, num: f.numeric && f.kind !== 'select', list: f.list, kind: f.kind,
+      ce: t.bloco === 'quimica' && /^CE/i.test(head), larga: f.c2 - f.c1 >= 4 });
+  }
+  return cols;
+}
+const wsBloco = t => (t.ht ? null : BLOCO[t.bloco]);
+const wsLinhas = t => (t.ht ? MAX_ITENS : wsBloco(t).max);
+const wsConta = t => (t.ht ? state.itens : contaDe(state, wsBloco(t)));
+function wsRef(t, col, n) {
+  if (t.ht) return null;
+  if (col.corrida) return refOf(BASE.produto + n, 17);
+  return refOf(wsBloco(t).base + n, col.c1);
+}
+const wsNumLinha = (t, n) => (t.ht || wsBloco(t).numera ? state.inicio + n - 1 : n);
+
+/* ---------- tratamento térmico por item (a folha guarda até 5 linhas; o editor mostra item a item) ---------- */
+const HT_C = { itens: 1, t: 3, temp: 10, tempo: 13, resf: 15 };
+function htLinhas(cert) {
+  const L = [];
+  for (let k = 1; k <= 5; k++) {
+    const r = 58 + k, g = c => cleanText(cert.v[refOf(r, c)] || '').trim();
+    const o = { k, itens: g(1), t: g(3), temp: g(10), tempo: g(13), resf: g(15) };
+    if (o.itens || o.t || o.temp || o.tempo || o.resf) L.push(o);
+  }
+  return L;
+}
+function htPorItem(cert) {
+  const out = {}, soltas = [];
+  for (const l of htLinhas(cert)) {
+    const its = itensDoTexto(l.itens, cert);
+    if (!its || its.invalido || !its.nums.length) { soltas.push(l); continue; }
+    let usou = false;
+    for (const num of its.nums) {
+      const n = num - cert.inicio + 1;
+      if (n < 1 || n > cert.itens) continue;
+      usou = true;
+      const cur = out[n];
+      out[n] = cur ? { t: [cur.t, l.t].filter(Boolean).join(' + '), temp: [cur.temp, l.temp].filter(Boolean).join(' / '), tempo: [cur.tempo, l.tempo].filter(Boolean).join(' / '), resf: l.resf || cur.resf }
+        : { t: l.t, temp: l.temp, tempo: l.tempo, resf: l.resf };
+    }
+    if (!usou) soltas.push(l);
+  }
+  return { out, soltas };
+}
+function htTextoItens(nums, cert) {
+  const todos = cert.itens > 1 && nums.length === cert.itens;
+  if (todos) return HT_TODOS;
+  const s = nums.slice().sort((a, b) => a - b), partes = [];
+  for (let i = 0; i < s.length;) {
+    let j = i; while (j + 1 < s.length && s[j + 1] === s[j] + 1) j++;
+    if (j - i >= 2) partes.push(`${s[i]} a ${s[j]}`); else for (let k = i; k <= j; k++) partes.push(String(s[k]));
+    i = j + 1;
+  }
+  if (partes.length === 1) return partes[0];
+  if (partes.length === 2 && !/ a /.test(partes.join(''))) return partes.join(' e ');
+  return partes.join(', ');
+}
+/* grava o tratamento item a item de volta nas 5 linhas da folha; false se passar de 5 */
+function htGravar(por, soltas) {
+  const grupos = new Map();
+  for (let n = 1; n <= state.itens; n++) {
+    const o = por[n]; if (!o || !(o.t || o.temp || o.tempo || o.resf)) continue;
+    const k = [o.t, o.temp, o.tempo, o.resf].join('\u0001');
+    if (!grupos.has(k)) grupos.set(k, { o, nums: [] });
+    grupos.get(k).nums.push(state.inicio + n - 1);
+  }
+  const linhas = [...grupos.values()].sort((a, b) => a.nums[0] - b.nums[0]).map(g => ({ itens: htTextoItens(g.nums, state), t: g.o.t, temp: g.o.temp, tempo: g.o.tempo, resf: g.o.resf }))
+    .concat(soltas || []);
+  if (linhas.length > 5) return false;
+  for (let k = 1; k <= 5; k++) {
+    const l = linhas[k - 1] || {};
+    for (const [key, c] of Object.entries(HT_C)) setValue(refOf(58 + k, c), l[key] || '');
+  }
+  return true;
+}
+const HT_CORES = ['#2F6FD0', '#7B417A', '#C06A1C', '#1D7446', '#9A6400', '#0E7490', '#B3261E'];
+function htCor(t, lista) { if (!t) return 'transparent'; if (/sem tratamento|no heat/i.test(t)) return '#7C8681'; const i = lista.indexOf(t); return HT_CORES[i % HT_CORES.length]; }
+const htNome = t => cleanText(t).split(/\s+\+\s+/).map(x => x.split(' / ')[0]).join(' + ');
+
+/* ---------- valor de uma célula ---------- */
+function wsVal(t, col, n) {
+  if (t.ht) {
+    if (col.key === 'desc') return cleanText(state.v[refOf(BASE.produto + n, 3)] || '');
+    if (col.key === 'corr') return cleanText(state.v[refOf(BASE.produto + n, 17)] || '');
+    const o = WS.htCache && WS.htCache.out[n];
+    return o ? o[col.key] || '' : '';
+  }
+  return state.v[wsRef(t, col, n)] || '';
+}
+/* grava uma célula; devolve false se a lista fechada não aceitou */
+function wsSet(t, col, n, val, emLote) {
+  if (col.so) return true;
+  if (t.ht) {
+    const { out, soltas } = WS.htCache || htPorItem(state);
+    const o = Object.assign({ t: '', temp: '', tempo: '', resf: '' }, out[n] || {});
+    o[col.key] = cleanText(val).trim();
+    const novo = Object.assign({}, out, { [n]: o });
+    if (n > state.itens) state.itens = n;
+    if (!htGravar(novo, soltas)) { toast('A folha tem 5 linhas de tratamento térmico: com este, seriam mais de 5 tratamentos diferentes. Use o mesmo tratamento para mais itens.', true); return false; }
+    WS.htCache = htPorItem(state);
+    return true;
+  }
+  const b = wsBloco(t);
+  if (n > contaDe(state, b) && cleanText(val).trim()) {
+    if (b.conta === 'itens') state.itens = Math.min(MAX_ITENS, n);
+    else if (b.conta !== 'fixo') state[b.conta] = Math.min(b.max, n);
+    renumerar();
+  }
+  const ref = wsRef(t, col, n), f = FIELD[ref];
+  if (!f) return false;
+  if (emLote) return gravarCampo(state, f, val);
+  let v = cleanText(val).trim();
+  if (f.kind === 'select' && v) { const hit = f.list.find(o => o.toLowerCase() === v.toLowerCase()); if (!hit) { toast(`"${v}" não está na lista: ${f.list.join(', ')}`, true); return false; } v = hit; }
+  setValue(ref, v);
+  return true;
+}
+/* CE (IIW) = C + Mn/6 + (Cr+Mo+V)/5 + (Ni+Cu)/15: preenche sozinho quando o CE está vazio (fica em amarelo até conferir) */
+function wsCE(n) {
+  if (GRADES) return;
+  const colCE = FIELDS.find(f => f.tbl === 'quimica' && f.item === n && /^CE/i.test(String(cellAt(BASE.quimica, f.c1).t)));
+  if (!colCE) return;
+  const g = el => { const f = FIELDS.find(x => x.tbl === 'quimica' && x.item === n && String(cellAt(BASE.quimica, x.c1).t) === el); return f ? numDe(state.v[f.ref] || '') : null; };
+  const C = g('C'), Mn = g('Mn');
+  const atual = state.v[colCE.ref], auto = state.sug && state.sug[colCE.ref];
+  if (atual && !auto) return;
+  if (C == null || Mn == null) { if (auto) { delete state.v[colCE.ref]; delete state.sug[colCE.ref]; } return; }
+  const z = x => x || 0;
+  const ce = C + Mn / 6 + (z(g('Cr')) + z(g('Mo')) + z(g('V'))) / 5 + (z(g('Ni')) + z(g('Cu'))) / 15;
+  state.v[colCE.ref] = ce.toFixed(2).replace('.', ',');
+  (state.sug = state.sug || {})[colCE.ref] = true;
+}
+
+/* ---------- montagem da tela ---------- */
+function wsMontar() {
+  document.documentElement.classList.add('ws');
+  const root = wsEl('div', 'ws'); root.id = 'ws';
+  root.innerHTML = `
+    <header class="ws-top">
+      <div class="ws-tit"><span class="ws-ic" aria-hidden="true">CQ<i></i></span><span class="ws-nm"><b id="ws-t"></b><small id="ws-s"></small></span></div>
+      <div class="ws-fls" id="ws-fls" hidden></div>
+      <div class="ws-acts">
+        <button type="button" class="ws-b" id="ws-undo" title="Desfazer (Ctrl+Z)">↶ Desfazer <kbd>Ctrl+Z</kbd></button>
+        <button type="button" class="ws-b" id="ws-redo" title="Refazer (Ctrl+Y)">↷ Refazer <kbd>Ctrl+Y</kbd></button>
+        <button type="button" class="ws-b dk" id="ws-conf">Conferir</button>
+        <button type="button" class="ws-b or" id="ws-save">Salvar PDF e Excel</button>
+        <button type="button" class="ws-b ws-mais" id="ws-mais" title="Mais: importar, salvar só um dos arquivos, modelo, assinatura…" aria-label="Mais ações" aria-haspopup="menu">⋯</button>
+      </div>
+    </header>
+    <nav class="ws-tabs" id="ws-tabs" role="tablist" aria-label="Partes do certificado"></nav>
+    <div class="ws-body">
+      <section class="ws-main" id="ws-main"></section>
+      <aside class="ws-side">
+        <div class="ws-card ws-prev"><div class="ws-ch"><b>Prévia do PDF</b><span>atualiza ao digitar</span></div><button type="button" class="ws-pv" id="ws-pv" title="Abrir a prévia do PDF em tamanho real"></button></div>
+        <div class="ws-card ws-folha" id="ws-folha"></div>
+      </aside>
+    </div>`;
+  document.body.insertBefore(root, document.body.firstChild);
+  WS.root = root;
+  $('ws-pv').appendChild($('stage'));
+  $('ws-undo').addEventListener('click', () => { wsFecharEd(true); desfazer(); });
+  $('ws-redo').addEventListener('click', () => { wsFecharEd(true); refazerHist(); });
+  $('ws-conf').addEventListener('click', () => { wsFecharEd(true); conferirAntes(doc.certs, 'Conferir antes de emitir', true); });
+  $('ws-save').addEventListener('click', () => { wsFecharEd(true); wsSalvar(); });
+  $('ws-mais').addEventListener('click', e => wsMenuMais(e.currentTarget));
+  $('ws-pv').addEventListener('click', wsPreviaGrande);
+  window.addEventListener('resize', wsZoom);
+  /* tema igual ao da Central */
+  try {
+    const ph = window.parent.document.documentElement;
+    const sync = () => { const t = ph.dataset.theme; if (t) document.documentElement.dataset.theme = t; };
+    if (CQ_EMBED) { sync(); new MutationObserver(sync).observe(ph, { attributes: true, attributeFilter: ['data-theme'] }); }
+  } catch (e) { /* sem a Central */ }
+}
+function wsZoom() {
+  if (!WS.on || !LAYOUT) return;
+  const box = $('ws-pv'); if (!box) return;
+  const card = box.parentElement, cs = getComputedStyle(card);
+  const w = card.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 2;
+  if (w > 50) applyZoom(Math.max(0.2, (w - 4) / (LAYOUT.W + 40)), false);
+}
+/* aço carbono (A105, A350 LF2, A106 B, A234 WPB): o CE vazio é calculado sozinho, marcado como sugestão até alguém conferir */
+const WS_CE_NORMAS = ['A105', 'LF2', 'A106B', 'WPB'];
+function wsCEAuto() {
+  if (GRADES || WS.ceRodando) return false;
+  let mudou = false;
+  for (let n = 1; n <= state.itens; n++) {
+    const nm = normaDoItem(state, n); if (!nm || !WS_CE_NORMAS.includes(nm.id)) continue;
+    const f = FIELDS.find(x => x.tbl === 'quimica' && x.item === n && /^CE/i.test(String(cellAt(BASE.quimica, x.c1).t)));
+    if (!f) continue;
+    const antes = state.v[f.ref] || '';
+    if (antes && !(state.sug && state.sug[f.ref])) continue;
+    wsCE(n);
+    if ((state.v[f.ref] || '') !== antes) mudou = true;
+  }
+  return mudou;
+}
+function wsRender() {
+  if (!WS.on || !WS.root) return;
+  if (wsCEAuto()) { WS.ceRodando = true; try { render(); saveDraftSoon(); } finally { WS.ceRodando = false; } return; }
+  WS.htCache = GRADES ? null : htPorItem(state);
+  if (!wsTab().ht && wsTab().bloco && !WS_TABS.some(t => t.id === WS.tab)) WS.tab = WS_TABS[0].id;
+  wsTopo(); wsAbas(); wsCorpo(); wsFolha(); wsZoom();
+}
+function wsTopo() {
+  const num = cleanText(state.v[REF_NUMERO] || '').trim(), cli = cleanText(state.v[REF_CLIENTE] || '').trim();
+  $('ws-t').textContent = 'Certificado' + (num ? ' ' + num : '') + (cli ? ' · ' + cli : '');
+  const n = doc.certs.length;
+  const sal = WS.central ? `rascunho salvo na Central às ${wsHora(WS.central)}` : WS.lastSave ? `rascunho salvo às ${wsHora(WS.lastSave)}` : 'rascunho';
+  $('ws-s').textContent = [`folha ${doc.atual + 1} de ${n}`, `${state.itens} de ${MAX_ITENS} ${NOME_ITEM[1]}`, sal].join(' · ');
+  const fl = $('ws-fls');
+  fl.hidden = n < 2;
+  if (n >= 2) {
+    fl.innerHTML = doc.certs.map((c, i) => `<button type="button" class="${i === doc.atual ? 'on' : ''}" data-i="${i}" title="${wsEsc(faixaItens(c))}">${wsEsc(rotuloFolha(i))}</button>`).join('') +
+      `<button type="button" class="mini" data-x="del" title="Remover a última folha (${wsEsc(rotuloFolha(n - 1))})" aria-label="Remover a última folha">×</button><button type="button" class="mini" data-x="add" title="Nova folha de continuação" aria-label="Nova folha">+</button>`;
+    fl.querySelectorAll('[data-i]').forEach(b => b.addEventListener('click', () => { wsFecharEd(true); irParaFolha(+b.dataset.i); }));
+    fl.querySelector('[data-x=del]').addEventListener('click', () => { wsFecharEd(true); removerFolha(); });
+    fl.querySelector('[data-x=add]').addEventListener('click', () => { wsFecharEd(true); criarContinuacao(); });
+  }
+  $('ws-undo').disabled = HIST.i <= 0;
+  $('ws-redo').disabled = HIST.i >= HIST.pilha.length - 1;
+}
+function wsBadge(t) {
+  if (t.id === 'textos') { const n = ['info1', 'info2'].filter(k => FIELDS.some(f => f.key === k && state.v[f.ref])).length; return n ? { t: String(n) } : null; }
+  if (t.ht) {
+    const por = (WS.htCache || {}).out || {}, tipos = new Set(Object.values(por).map(o => o.t).filter(Boolean));
+    let falta = 0; for (let n = 1; n <= state.itens; n++) if (temItemDados(n) && !(por[n] && por[n].t)) falta++;
+    return falta ? { t: `${falta} sem`, cls: 'wn' } : tipos.size ? { t: tipos.size === 1 ? '✓' : `${tipos.size} tipos`, cls: 'ok' } : null;
+  }
+  const b = wsBloco(t);
+  if (t.bloco === 'quimica' || t.bloco === 'mecanica') {
+    let fora = 0, cheio = 0;
+    for (const f of FIELDS) if (f.tbl === t.bloco && f.item && f.item <= state.itens && state.v[f.ref]) { cheio++; if (foraDaNorma(state, f)) fora++; }
+    return fora ? { t: `${fora} fora`, cls: 'cr' } : cheio ? { t: '✓', cls: 'ok' } : null;
+  }
+  const n = contaDe(state, b);
+  return { t: String(n) };
+}
+const temItemDados = n => FIELDS.some(f => f.item === n && state.v[f.ref]);
+function wsAbas() {
+  const nav = $('ws-tabs');
+  nav.innerHTML = WS_TABS.filter(t => !(t.id === 'galv' && !(state.opt && state.opt.galv))).map(t => {
+    const bd = wsBadge(t);
+    return `<button type="button" role="tab" aria-selected="${t.id === WS.tab}" class="${t.id === WS.tab ? 'on' : ''}" data-t="${t.id}">${wsEsc(t.nome)}${bd ? `<em class="${bd.cls || ''}">${wsEsc(bd.t)}</em>` : ''}</button>`;
+  }).join('');
+  nav.querySelectorAll('[data-t]').forEach(b => b.addEventListener('click', () => wsIrAba(b.dataset.t)));
+}
+function wsIrAba(id) {
+  wsFecharEd(true);
+  if (WS.tab !== id) { WS.tab = id; WS.cur = { r: 1, c: 0 }; WS.anc = null; }
+  wsRender();
+  const g = $('ws-grid'); if (g) g.focus({ preventScroll: true });
+}
+
+/* ---------- corpo da aba: barra de ferramentas, aviso, planilha e rodapé ---------- */
+function wsCorpo() {
+  const t = wsTab(), main = $('ws-main');
+  const scroll = main.querySelector('.ws-gw'); const sx = scroll ? scroll.scrollLeft : 0, sy = scroll ? scroll.scrollTop : 0;
+  const focado = document.activeElement && document.activeElement.id === 'ws-grid';
+  if (t.id === 'textos') { wsTextos(main); return; }
+  const cols = wsCols(t);
+  WS.cols = cols;
+  WS.cur.c = clamp(WS.cur.c, 0, cols.length - 1); WS.cur.r = clamp(WS.cur.r, 1, wsLinhas(t));
+  const bar = wsBarra(t);
+  const aviso = wsAviso(t);
+  const cab = t.id === 'produto' ? wsCabecalho() : '';
+  const leg = t.ht ? wsLegenda() : '';
+  main.innerHTML = `${cab}<div class="ws-bar">${bar}</div>${aviso ? `<div class="ws-aviso${aviso.cls ? ' ' + aviso.cls : ''}">${aviso.html}</div>` : ''}${leg}
+    <div class="ws-gw"><table class="ws-g" id="ws-grid" tabindex="0" aria-label="${wsEsc(t.nome)}" data-t="${t.id}"></table><div class="ws-cur" id="ws-cur" hidden><i class="fh" id="ws-fh" title="Arraste para copiar"></i></div></div>
+    <p class="ws-dica">${wsEsc(t.ht ? 'Toque no tratamento de um item e escolha na lista; itens com o mesmo tratamento viram uma linha só na folha (até 5 linhas). Ctrl+D repete para baixo.' : 'Setas andam · Shift+setas selecionam · Ctrl+setas pulam até o fim · clique no número do item para pegar a linha inteira · Ctrl+C / Ctrl+V com o Excel (um valor copiado enche toda a seleção) · Ctrl+Enter grava em todas as selecionadas · Ctrl+D / Ctrl+R repetem · botão direito: mais opções')}</p>
+    <div class="ws-st" id="ws-st"></div>`;
+  wsTabela(t, cols);
+  main.querySelectorAll('[data-wb]').forEach(b => b.addEventListener('click', () => wsBotao(b.dataset.wb, b)));
+  main.querySelectorAll('[data-hdr]').forEach(i => {
+    i.addEventListener('input', () => { setValue(i.dataset.hdr, i.value); saveDraftSoon(); wsTopo(); });
+    i.addEventListener('change', () => { setValue(i.dataset.hdr, i.value); saveDraftSoon(); wsRender(); });
+  });
+  const sc = main.querySelector('.ws-gw'); sc.scrollLeft = sx; sc.scrollTop = sy;
+  wsCursor(); wsStatus();
+  if (focado) $('ws-grid').focus({ preventScroll: true });
+}
+function wsCabecalho() {
+  const inp = (ref, rot, ph, cls) => { const f = FIELD[ref]; return `<label class="ws-hf ${cls || ''}"><span>${rot}</span><input data-hdr="${ref}" value="${wsEsc(state.v[ref] || '')}" placeholder="${wsEsc(ph || '')}" autocomplete="off"${f && f.kind === 'date' ? ' inputmode="numeric"' : ''}></label>`; };
+  return `<div class="ws-hdr">${inp(REF_CLIENTE, 'Cliente / Customer', 'Nome do cliente', 'l')}${inp(REF_NUMERO, 'Nº do certificado', 'Nº', 'm')}${inp(REF_OC, 'O.C. do cliente', 'Nº da O.C.')}${inp(REF_NF, 'Nota fiscal', 'Nº da NF')}${inp(REF_DATA, 'Data de emissão', 'dd/mm/aaaa', 'm')}</div>`;
+}
+function wsBarra(t) {
+  const b = (k, txt, tit) => `<button type="button" class="ws-tb" data-wb="${k}" title="${wsEsc(tit || '')}">${txt}</button>`;
+  const host = wsHost();
+  const puxar = host && host.acao ? b('lotes', '↓ Puxar da corrida', 'Preencher com os dados dos lotes recebidos (descrição, material, corrida, química e mecânica do certificado da usina)') : '';
+  if (t.ht) return [b('baixo', '⤓ Repetir para baixo', 'Ctrl+D'), b('htcorr', '↓ Puxar da corrida', 'Itens com a mesma corrida recebem o tratamento do primeiro que já tem'), b('agrupar', '⇅ Agrupar por tratamento', 'Refaz as linhas da folha juntando os itens com o mesmo tratamento'), b('limpar', '⌫ Limpar seleção', 'Delete')].join('');
+  if (t.id === 'produto') return [b('baixo', '⤓ Repetir para baixo', 'Ctrl+D'), puxar, b('importar', '⇪ Importar pedido', 'PV (PDF), O.C. (PDF), link do Omie ou Excel'), b('colar', '⎘ Colar do Excel', 'Ctrl+V'), b('ordenar', '⇅ Ordenar itens'), b('achar', '⌕ Localizar', 'Ctrl+F')].join('');
+  if (t.bloco === 'quimica') return [b('baixo', '⤓ Repetir para baixo', 'Ctrl+D'), puxar, b('colar', '⎘ Colar do Excel', 'Ctrl+V'), b('cols', '+ Elemento', 'Mostrar ou esconder elementos no editor (o PDF sai sempre com todos)'), b('ordenar', '⇅ Ordenar itens'), b('achar', '⌕ Localizar', 'Ctrl+F')].join('');
+  if (t.bloco === 'mecanica') return [b('baixo', '⤓ Repetir para baixo', 'Ctrl+D'), puxar, b('colar', '⎘ Colar do Excel', 'Ctrl+V'), b('cols', '+ Ensaio', 'Mostrar ou esconder ensaios no editor (o PDF sai sempre com todos)'), b('ordenar', '⇅ Ordenar itens'), b('achar', '⌕ Localizar', 'Ctrl+F')].join('');
+  return [b('baixo', '⤓ Repetir para baixo', 'Ctrl+D'), b('colar', '⎘ Colar do Excel', 'Ctrl+V'), b('achar', '⌕ Localizar', 'Ctrl+F')].join('');
+}
+/* aviso vermelho em cima da planilha: valores fora da norma desta aba (G1) */
+function wsAviso(t) {
+  if (t.ht) {
+    const s = (WS.htCache || {}).soltas || [];
+    if (s.length) return { cls: 'wn', html: `A linha ${s.map(l => l.k).join(', ')} do tratamento térmico não diz a que itens vale (“${wsEsc(s[0].itens || 'em branco')}”). Ela continua na folha como está.` };
+    return null;
+  }
+  if (t.bloco !== 'quimica' && t.bloco !== 'mecanica') return null;
+  const G = new Map();
+  for (const f of FIELDS) {
+    if (f.tbl !== t.bloco || !f.item || f.item > state.itens || !state.v[f.ref]) continue;
+    const L = foraDaNorma(state, f); if (!L) continue;
+    const corr = cleanText(state.v[refOf(BASE.produto + f.item, 17)] || '');
+    const k = [L.nome, state.v[f.ref], corr, L.nm.id].join('|');
+    if (!G.has(k)) G.set(k, { L, v: state.v[f.ref], corr, its: [] });
+    G.get(k).its.push(state.inicio + f.item - 1);
+  }
+  if (!G.size) return null;
+  const g = [...G.values()][0], its = g.its.length === 1 ? `Item ${g.its[0]}` : `Itens ${g.its.slice(0, -1).join(', ')} e ${g.its[g.its.length - 1]}`;
+  const un = t.bloco === 'quimica' ? '%' : '';
+  return { html: `${its}${g.corr ? ' · corrida ' + wsEsc(g.corr) : ''}: ${wsEsc(g.L.nome.replace(/ \(%\)$/, ''))} ${wsEsc(g.v)}${un} passa do limite da ${wsEsc(g.L.nm.nome)} (${wsEsc(textoFaixa(g.L.faixa))}${un}). Confira o certificado da usina antes de emitir.${G.size > 1 ? ` <b>+ ${G.size - 1} outro${G.size > 2 ? 's' : ''}</b>` : ''}${g.L.ok ? '' : ' <span>(limite ainda não conferido)</span>'}` };
+}
+function wsLegenda() {
+  const por = (WS.htCache || {}).out || {}, cont = new Map();
+  for (let n = 1; n <= state.itens; n++) { const t = por[n] && por[n].t; if (t) cont.set(t, (cont.get(t) || 0) + 1); }
+  if (!cont.size) return '';
+  const lista = [...cont.keys()];
+  return `<div class="ws-leg">${lista.map(t => `<span><i style="background:${htCor(t, lista)}"></i>${wsEsc(htNome(t))}<b>${cont.get(t)}</b></span>`).join('')}</div>`;
+}
+/* a planilha */
+function wsLimite(t, col, n0) {
+  if (!n0 || col.corrida || !col.f0) return '';
+  const f = FIELD[refOf(wsBloco(t).base + n0, col.c1)];
+  const L = f && limiteDe(state, f);
+  if (!L) return '';
+  const [a, b] = L.faixa;
+  return a != null && b != null ? `${numBR(a)}–${numBR(b)}` : a != null ? `≥ ${numBR(a)}` : `≤ ${numBR(b)}`;
+}
+function wsTabela(t, cols) {
+  const tb = $('ws-grid'), N = wsLinhas(t), conta = wsConta(t);
+  const lim = !t.ht && (t.bloco === 'quimica' || t.bloco === 'mecanica');
+  let n0 = 0;
+  if (lim) { const r = WS.cur.r <= state.itens && normaDoItem(state, WS.cur.r) ? WS.cur.r : 0; n0 = r || (() => { for (let n = 1; n <= state.itens; n++) if (normaDoItem(state, n)) return n; return 0; })(); }
+  const lista = t.ht ? [...new Set(Object.values((WS.htCache || {}).out || {}).map(o => o.t).filter(Boolean))] : [];
+  let h = '<colgroup><col class="ci">' + cols.map(c => `<col${c.w ? ` style="width:${c.w}px"` : c.larga || c.key === 'desc' || c.key === 't' ? ' class="lg"' : ''}>`).join('') + '</colgroup>';
+  h += `<thead><tr class="h1"><th class="ci">${t.ht || wsBloco(t).numera ? 'Item' : 'Linha'}</th>${cols.map((c, j) => `<th data-c="${j}" class="${c.ce ? 'ce' : ''}${c.mono ? ' r' : ''}"><b>${wsEsc(c.head)}</b>${c.sub ? `<small>${wsEsc(c.sub)}</small>` : ''}</th>`).join('')}</tr>`;
+  if (lim) {
+    const nm = n0 ? normaDoItem(state, n0) : null;
+    h += `<tr class="h2"><th class="ci"></th>${cols.map(c => `<th class="${c.ce ? 'ce' : ''}">${c.corrida ? wsEsc(nm ? nm.id : '') : wsEsc(wsLimite(t, c, n0))}</th>`).join('')}</tr>`;
+  }
+  h += '</thead><tbody>';
+  for (let n = 1; n <= N; n++) {
+    const ghost = n > conta;
+    h += `<tr class="${ghost ? 'gh' : ''}" data-r="${n}"><th class="ci" data-rh="${n}">${wsNumLinha(t, n)}</th>`;
+    cols.forEach((c, j) => {
+      const v = ghost && !t.ht ? '' : wsVal(t, c, n);
+      const ref = t.ht ? null : wsRef(t, c, n), f = ref && FIELD[ref];
+      const cls = [c.mono ? 'mono' : '', c.num || c.mono ? 'r' : '', c.ce ? 'ce' : '', c.so ? 'so' : '',
+        f && v && foraDaNorma(state, f) ? 'fora' : '', ref && state.sug && state.sug[ref] ? 'sug' : '', f && f.kind === 'select' ? 'sel' : ''].filter(Boolean).join(' ');
+      const dot = c.dot && v ? `<i class="dt" style="background:${htCor(v, lista)}"></i>` : '';
+      h += `<td data-r="${n}" data-c="${j}" class="${cls}">${dot}${wsEsc(c.dot ? htNome(v) : v)}</td>`;
+    });
+    h += '</tr>';
+  }
+  h += '</tbody>';
+  if (t.id === 'produto' && !GRADES && state.itens >= MAX_ITENS) {
+    const prox = doc.atual === doc.certs.length - 1 ? numeroFolha(doc.certs.length) : '';
+    h += `<tfoot><tr><td colspan="${cols.length + 1}"><button type="button" class="ws-tb" data-wb="folha">${doc.atual === doc.certs.length - 1 ? `+ Folha ${wsEsc(prox || 'de continuação')} (${NOME_ITEM[1]} ${state.inicio + state.itens} em diante)` : `Ir para a folha ${wsEsc(rotuloFolha(doc.atual + 1))} →`}</button></td></tr></tfoot>`;
+  }
+  tb.innerHTML = h;
+  const fb = tb.querySelector('[data-wb=folha]'); if (fb) fb.addEventListener('click', () => { wsFecharEd(true); adicionarItem(); });
+}
+const wsTd = (r, c) => { const g = $('ws-grid'); return g && g.querySelector(`td[data-r="${r}"][data-c="${c}"]`); };
+const wsSelRet = () => { const a = WS.anc || WS.cur, b = WS.cur; return { r1: Math.min(a.r, b.r), r2: Math.max(a.r, b.r), c1: Math.min(a.c, b.c), c2: Math.max(a.c, b.c) }; };
+const wsMulti = () => { const s = wsSelRet(); return s.r1 !== s.r2 || s.c1 !== s.c2; };
+function wsCursor() {
+  const g = $('ws-grid'); if (!g) return;
+  const s = wsSelRet();
+  g.querySelectorAll('td.in, td.ac').forEach(td => td.classList.remove('in', 'ac'));
+  for (let r = s.r1; r <= s.r2; r++) for (let c = s.c1; c <= s.c2; c++) { const td = wsTd(r, c); if (td) td.classList.add('in'); }
+  const ac = wsTd(WS.cur.r, WS.cur.c); if (ac) ac.classList.add('ac');
+  g.querySelectorAll('th[data-c]').forEach(th => th.classList.toggle('in', +th.dataset.c >= s.c1 && +th.dataset.c <= s.c2));
+  g.querySelectorAll('th[data-rh]').forEach(th => th.classList.toggle('in', +th.dataset.rh >= s.r1 && +th.dataset.rh <= s.r2));
+  const box = $('ws-cur'), w = g.parentElement;
+  const a = wsTd(s.r1, s.c1), z = wsTd(s.r2, s.c2);
+  if (!a || !z) { box.hidden = true; return; }
+  const gr = w.getBoundingClientRect(), ra = a.getBoundingClientRect(), rz = z.getBoundingClientRect();
+  box.hidden = false;
+  box.style.left = (ra.left - gr.left + w.scrollLeft - 1) + 'px';
+  box.style.top = (ra.top - gr.top + w.scrollTop - 1) + 'px';
+  box.style.width = (rz.right - ra.left + 1) + 'px';
+  box.style.height = (rz.bottom - ra.top + 1) + 'px';
+  $('ws-fh').hidden = !!(WS.cols[WS.cur.c] && WS.cols[WS.cur.c].so);
+}
+function wsVerCelula() {
+  const td = wsTd(WS.cur.r, WS.cur.c), w = td && td.closest('.ws-gw'); if (!td) return;
+  const tr = td.getBoundingClientRect(), wr = w.getBoundingClientRect(), head = w.querySelector('thead').getBoundingClientRect().height, ci = 46;
+  if (tr.left < wr.left + ci) w.scrollLeft -= wr.left + ci - tr.left; else if (tr.right > wr.right) w.scrollLeft += tr.right - wr.right;
+  if (tr.top < wr.top + head) w.scrollTop -= wr.top + head - tr.top; else if (tr.bottom > wr.bottom) w.scrollTop += tr.bottom - wr.bottom;
+}
+/* rodapé: seleção, média, mínimo, máximo e soma */
+function wsStatus() {
+  const st = $('ws-st'); if (!st) return;
+  const t = wsTab(), s = wsSelRet(), cols = WS.cols, nums = [];
+  let n = 0;
+  for (let r = s.r1; r <= s.r2; r++) for (let c = s.c1; c <= s.c2; c++) { n++; const v = wsVal(t, cols[c], r); const x = numDe(v); if (x != null && v !== '') nums.push(x); }
+  const nomes = s.c1 === s.c2 ? cols[s.c1].head : `${cols[s.c1].head} a ${cols[s.c2].head}`;
+  const [um, varios] = t.ht || wsBloco(t).numera ? ['item', 'itens'] : ['linha', 'linhas'];
+  const lin = s.r1 === s.r2 ? `${um} ${wsNumLinha(t, s.r1)}` : `${varios} ${wsNumLinha(t, s.r1)} a ${wsNumLinha(t, s.r2)}`;
+  const fmt = x => { const d = Math.max(...nums.map(v => (String(v).split('.')[1] || '').length), 0); return x.toFixed(Math.min(3, Math.max(d, Number.isInteger(x) ? 0 : 1))).replace('.', ','); };
+  const est = nums.length > 1 ? `<span>Média <b>${fmt(nums.reduce((a, b) => a + b, 0) / nums.length)}</b></span><span>Mín. <b>${fmt(Math.min(...nums))}</b></span><span>Máx. <b>${fmt(Math.max(...nums))}</b></span><span>Soma <b>${fmt(nums.reduce((a, b) => a + b, 0))}</b></span>` : '';
+  st.innerHTML = `<span>Seleção: <b>${n} célula${n === 1 ? '' : 's'}</b> (${wsEsc(nomes)}, ${lin})</span>${est}<span class="gr"></span><span>${t.bloco === 'quimica' ? 'CE calculado sozinho · arraste o ponto azul para copiar' : 'arraste o ponto azul para copiar'}</span>`;
+}
+/* "Esta folha" */
+function wsFolha() {
+  const el = $('ws-folha'); if (!el) return;
+  let pags = 1; try { pags = pageSetup(layoutFor(state, true)).pages.length; } catch (e) { /* conta 1 */ }
+  let fora = 0; for (const f of FIELDS) if (f.item && f.item <= state.itens && state.v[f.ref] && foraDaNorma(state, f)) fora++;
+  const host = wsHost(); let info = null; try { info = host && host.info ? host.info() : null; } catch (e) { info = null; }
+  const L = [['Itens', `${state.itens} de ${MAX_ITENS}`],
+    ['Cabe em uma folha A4', pags === 1 ? 'sim' : `não · ${pags} páginas`, pags === 1 ? 'ok' : 'wn']];
+  if (info && info.lotes != null) L.push(['Lotes da Central ligados', String(info.lotes)]);
+  if (!GRADES) L.push(['Fora da norma', fora ? `${fora} célula${fora === 1 ? '' : 's'}` : 'nenhuma', fora ? 'cr' : 'ok']);
+  if (doc.certs.length > 1) L.push(['Folhas do certificado', `${doc.certs.length} (${rotuloFolha(0)} a ${rotuloFolha(doc.certs.length - 1)})`]);
+  el.innerHTML = `<div class="ws-ch"><b>Esta folha</b></div>${L.map(([a, b, c]) => `<div class="ws-kv"><span>${wsEsc(a)}</span><b class="${c || ''}">${wsEsc(b)}</b></div>`).join('')}`;
+}
+/* prévia grande: o PDF de verdade desta folha */
+async function wsPreviaGrande() {
+  let url = null;
+  try { url = URL.createObjectURL(buildPdf([state])); } catch (e) { toast('Não foi possível montar a prévia: ' + (e && e.message ? e.message : e), true); return; }
+  const fr = wsEl('iframe', 'ws-pdf'); fr.src = url; fr.title = 'Prévia do PDF';
+  await showDialog({ title: 'Prévia do PDF · ' + (nomeArquivo(state) || 'sem número'), content: fr, wide: true, buttons: [{ label: 'Fechar', value: null, primary: true }] });
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/* ---------- Textos e anexos (G2, sem mudar o PDF) ---------- */
+function wsFrases() {
+  const pad = ['NACE MR0175', 'Marcação por punção', 'Isento de mercúrio', 'Pintura anticorrosiva', 'Inspeção 100%'];
+  try { const x = JSON.parse(localStorage.getItem(WS_FRASES_KEY) || 'null'); return Array.isArray(x) ? pad.concat(x.filter(s => !pad.includes(s))) : pad; } catch (e) { return pad; }
+}
+function wsTextos(main) {
+  WS.cols = null;
+  const fI = k => FIELDS.find(f => f.key === k);
+  const i1 = fI('info1'), i2 = fI('info2');
+  const decl = Object.values(MODEL.cells).map(e => String(e[1] || '')).filter(s => /^Certificamos|^We certify/i.test(s));
+  const ass = REF_ASSINANTE;
+  const varias = doc.certs.length > 1;
+  main.innerHTML = `<div class="ws-tx">
+    <div class="ws-col">
+      <section><div class="ws-sh"><b>Responsável</b><span>assina o certificado</span></div>
+        <label class="ws-hf l"><span>Nome do responsável</span><input data-hdr="${ass}" value="${wsEsc(state.v[ass] || '')}" placeholder="Nome do responsável" autocomplete="off"></label>
+        <div class="ws-sig">${config.assinatura ? `<img src="${config.assinatura}" alt="Assinatura">` : '<span>sem imagem da assinatura</span>'}<button type="button" class="ws-tb" data-wb="assinatura">${config.assinatura ? 'Trocar a imagem…' : 'Incluir a imagem…'}</button></div></section>
+      ${varias || GRADES ? `<section><div class="ws-sh"><b>Folhas e seções</b></div>
+        ${varias ? `<label class="ws-ck"><input type="checkbox" id="ws-sync" ${doc.syncExtras ? 'checked' : ''}><span>Mesmo tratamento térmico e informações adicionais em todas as folhas</span></label>` : ''}
+        ${GRADES ? `<label class="ws-ck"><input type="checkbox" id="ws-galv" ${state.opt && state.opt.galv ? 'checked' : ''}><span>Galvanizado a fogo (a seção de galvanização sai no certificado)</span></label>` : ''}</section>` : ''}
+      ${GRADES ? '' : `<section><div class="ws-sh"><b>Limites das normas</b><span>só avisam, nunca impedem</span></div><p class="ws-p">A105, A350 LF2, A182 F304L e F316L, A106 B e A234 WPB. Confira cada faixa com a norma da empresa.</p><button type="button" class="ws-tb" data-wb="limites">Limites das normas…</button></section>`}
+    </div>
+    <div class="ws-col">
+      <section><div class="ws-sh"><b>Declaração de conformidade</b><span>texto fixo do certificado</span></div><div class="ws-decl">${decl.map(wsEsc).join('<br>')}</div></section>
+      ${i1 ? `<section><div class="ws-sh"><b>Informações adicionais</b><span>toque para incluir</span></div>
+        <div class="ws-fr">${wsFrases().map(s => `<button type="button" data-fr="${wsEsc(s)}">${wsEsc(s)}</button>`).join('')}<button type="button" class="nova" data-fr="">+ Nova frase</button></div>
+        <label class="ws-hf l"><span>Linha 1</span><input data-hdr="${i1.ref}" value="${wsEsc(state.v[i1.ref] || '')}" placeholder="Informações adicionais (opcional)" autocomplete="off"></label>
+        ${i2 ? `<label class="ws-hf l"><span>Linha 2</span><input data-hdr="${i2.ref}" value="${wsEsc(state.v[i2.ref] || '')}" autocomplete="off"></label>` : ''}</section>` : ''}
+      <section><div class="ws-sh"><b>Anexos no PDF</b><span>certificados da usina das corridas</span></div>
+        <p class="ws-p">Escolha os PDFs dos certificados da usina: a Central salva um PDF só, com o certificado na frente e os da usina no fim. O certificado em si não muda.</p>
+        <button type="button" class="ws-tb" data-wb="usina">Escolher os PDFs da usina e salvar…</button></section>
+    </div></div>`;
+  main.querySelectorAll('[data-hdr]').forEach(i => {
+    i.addEventListener('input', () => { setValue(i.dataset.hdr, i.value); saveDraftSoon(); });
+    i.addEventListener('change', () => { setValue(i.dataset.hdr, i.value); saveDraftSoon(); wsAbas(); });
+  });
+  main.querySelectorAll('[data-wb]').forEach(b => b.addEventListener('click', () => wsBotao(b.dataset.wb, b)));
+  main.querySelectorAll('[data-fr]').forEach(b => b.addEventListener('click', () => wsFrase(b.dataset.fr)));
+  const sy = $('ws-sync'); if (sy) sy.addEventListener('change', () => alternarSync(sy));
+  const gv = $('ws-galv'); if (gv) gv.addEventListener('change', () => { alternarGalv(gv.checked); wsRender(); });
+}
+async function wsFrase(fr) {
+  if (!fr) {
+    const inp = wsEl('input', 'ws-in'); inp.placeholder = 'Ex.: Teste hidrostático 100%';
+    const ok = await showDialog({ title: 'Nova frase', content: inp, buttons: [{ label: 'Cancelar', value: false }, { label: 'Guardar', value: true, primary: true }], init: () => setTimeout(() => inp.focus(), 30) });
+    fr = ok ? cleanText(inp.value).trim() : '';
+    if (!fr) return;
+    try { const x = JSON.parse(localStorage.getItem(WS_FRASES_KEY) || '[]') || []; if (!x.includes(fr)) x.push(fr); localStorage.setItem(WS_FRASES_KEY, JSON.stringify(x)); } catch (e) { /* sem armazenamento */ }
+  }
+  const i1 = FIELDS.find(f => f.key === 'info1'), i2 = FIELDS.find(f => f.key === 'info2');
+  const junta = (a, b) => (a ? a + ' · ' + b : b);
+  const v1 = cleanText(state.v[i1.ref] || '').trim();
+  if (v1.includes(fr) || (i2 && cleanText(state.v[i2.ref] || '').includes(fr))) { toast(`"${fr}" já está nas informações adicionais`); return; }
+  registrarAgora();
+  if (cabeNaCelula(i1.ref, junta(v1, fr)) || !i2) setValue(i1.ref, junta(v1, fr));
+  else setValue(i2.ref, junta(cleanText(state.v[i2.ref] || '').trim(), fr));
+  saveDraft(); wsRender();
+  toast(`"${fr}" incluída nas informações adicionais`);
+}
+
+/* ---------- botões da barra ---------- */
+async function wsBotao(k, btn) {
+  wsFecharEd(true);
+  const t = wsTab();
+  if (k === 'baixo') { wsPreencher('baixo'); return; }
+  if (k === 'limpar') { wsApagar(); return; }
+  if (k === 'colar') { let tx = ''; try { tx = await navigator.clipboard.readText(); } catch (e) { toast('Use Ctrl+V na planilha (o navegador não deixou ler a área de transferência pelo botão)', true); $('ws-grid').focus(); return; } wsColar(tx); return; }
+  if (k === 'lotes') { const h = wsHost(); if (h && h.acao) h.acao('lotes'); return; }
+  if (k === 'importar') { wsMenu(btn, [['Importar PV (PDF)…', () => $('btnPedido').click()], ['Importar O.C. (PDF)…', () => $('btnOC').click()], ['Colar link do Omie…', () => $('btnLinkOmie').click()], ['Abrir Excel…', () => $('btnAbrir').click()]]); return; }
+  if (k === 'cols') { wsEscolherColunas(t); return; }
+  if (k === 'ordenar') { wsOrdenar(); return; }
+  if (k === 'achar') { wsLocalizar(); return; }
+  if (k === 'htcorr') { wsHtCorrida(); return; }
+  if (k === 'agrupar') { wsHtAgrupar(); return; }
+  if (k === 'assinatura') { $('btnAssinatura').click(); return; }
+  if (k === 'limites') { await dialogoLimites(); wsRender(); return; }
+  if (k === 'usina') { $('btnUsina').click(); return; }
+}
+function wsMenu(anchor, itens) {
+  wsFecharMenu();
+  const m = wsEl('div', 'ws-menu'); m.setAttribute('role', 'menu');
+  for (const it of itens) {
+    if (!it) { m.appendChild(wsEl('hr')); continue; }
+    const [txt, fn, atalho, desl] = it;
+    const b = wsEl('button'); b.type = 'button'; b.setAttribute('role', 'menuitem');
+    b.innerHTML = `<span>${wsEsc(txt)}</span>${atalho ? `<kbd>${wsEsc(atalho)}</kbd>` : ''}`;
+    b.disabled = !!desl;
+    b.addEventListener('click', () => { wsFecharMenu(); fn(); });
+    m.appendChild(b);
+  }
+  document.body.appendChild(m);
+  const r = anchor.getBoundingClientRect ? anchor.getBoundingClientRect() : { left: anchor.x, right: anchor.x, top: anchor.y, bottom: anchor.y };
+  const mw = m.offsetWidth, mh = m.offsetHeight, W = innerWidth, H = innerHeight;
+  let x = anchor.getBoundingClientRect ? Math.min(r.left, W - mw - 8) : Math.min(r.left, W - mw - 8), y = r.bottom + 4;
+  if (y + mh > H - 8) y = Math.max(8, (anchor.getBoundingClientRect ? r.top : r.top) - mh - 4);
+  m.style.left = Math.max(8, x) + 'px'; m.style.top = y + 'px';
+  WS.menu = m;
+  const f = m.querySelector('button:not(:disabled)'); if (f) f.focus();
+  m.addEventListener('keydown', e => {
+    const bs = [...m.querySelectorAll('button:not(:disabled)')], i = bs.indexOf(document.activeElement);
+    if (e.key === 'Escape') { e.preventDefault(); wsFecharMenu(); const g = $('ws-grid'); if (g) g.focus(); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); bs[(i + 1) % bs.length].focus(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); bs[(i - 1 + bs.length) % bs.length].focus(); }
+  });
+}
+function wsFecharMenu() { if (WS.menu) { WS.menu.remove(); WS.menu = null; } }
+document.addEventListener('mousedown', e => { if (WS.menu && !WS.menu.contains(e.target)) wsFecharMenu(); }, true);
+function wsMenuMais(btn) {
+  const h = wsHost(), varias = doc.certs.length > 1;
+  const tipoOutro = TIPO === 'grades' ? 'tubos' : 'grades';
+  wsMenu(btn, [
+    ['Importar PV (PDF)…', () => $('btnPedido').click()], ['Importar O.C. (PDF)…', () => $('btnOC').click()], ['Colar link do Omie…', () => $('btnLinkOmie').click()], ['Abrir Excel…', () => $('btnAbrir').click()],
+    null,
+    [varias ? 'Salvar só o PDF desta folha' : 'Salvar só o PDF', () => $('btnPdf').click()], [varias ? 'Salvar só o Excel desta folha' : 'Salvar só o Excel', () => $('btnXlsx').click()],
+    ['PDF com os certificados da usina…', () => $('btnUsina').click()],
+    null,
+    [`Trocar o modelo para ${TIPOS[tipoOutro]}`, () => { if (h && h.acao) h.acao('tipo', tipoOutro); else trocarTipo(tipoOutro); }, '', !MODELS[tipoOutro]],
+    ...(GRADES ? [] : [['Limites das normas…', async () => { await dialogoLimites(); wsRender(); }]]),
+    ['Assinatura…', () => $('btnAssinatura').click()],
+    ...(h && h.acao ? [['RIF do pedido', () => h.acao('rif')]] : []),
+    null,
+    ['Zerar o certificado…', () => { if (h && h.acao) h.acao('zerar'); else novoCertificado(); }],
+  ]);
+}
+
+/* ---------- edição ---------- */
+function wsEditar(inicial) {
+  const t = wsTab(), col = WS.cols && WS.cols[WS.cur.c];
+  if (!col) return;
+  if (col.so) { toast(col.key === 'desc' ? 'A descrição se muda na aba Produtos.' : 'A corrida se muda na aba Produtos.'); return; }
+  const td = wsTd(WS.cur.r, WS.cur.c); if (!td) return;
+  wsFecharEd(true);
+  const w = td.closest('.ws-gw'), gr = w.getBoundingClientRect(), r = td.getBoundingClientRect();
+  const inp = wsEl('input', 'ws-ed' + (col.mono ? ' mono' : '') + (col.num || col.mono ? ' r' : ''));
+  inp.autocomplete = 'off'; inp.spellcheck = false;
+  const lista = col.list || (col.f0 && col.f0.list);
+  if (lista && lista.length) { const dl = wsEl('datalist'); dl.id = 'ws-dl'; dl.innerHTML = lista.map(o => `<option value="${wsEsc(o)}">`).join(''); w.appendChild(dl); inp.setAttribute('list', 'ws-dl'); }
+  const atual = wsVal(t, col, WS.cur.r);
+  inp.value = inicial != null ? inicial : atual;
+  const larg = Math.max(r.width, col.num ? 70 : 120), esq = Math.min(r.left - gr.left + w.scrollLeft, w.scrollWidth - larg);
+  Object.assign(inp.style, { left: Math.max(0, esq) + 'px', top: (r.top - gr.top + w.scrollTop) + 'px', width: larg + 'px', height: r.height + 'px' });
+  w.appendChild(inp);
+  WS.edit = { inp, r: WS.cur.r, c: WS.cur.c, orig: atual, t: t.id, desde: Date.now() };
+  inp.focus({ preventScroll: true });
+  if (inicial == null) inp.select(); else inp.setSelectionRange(inp.value.length, inp.value.length);
+  inp.addEventListener('keydown', wsTeclaEd);
+  inp.addEventListener('blur', () => setTimeout(() => { if (WS.edit && WS.edit.inp === inp && document.activeElement !== inp && !(WS.menu)) wsFecharEd(true); }, 0));
+  if (WS.cur.r <= state.itens && (wsTab().bloco === 'quimica' || wsTab().bloco === 'mecanica')) wsLimitesLinha();
+}
+function wsLimitesLinha() { /* a linha de limites acompanha o item do cursor */
+  const t = wsTab(); if (t.ht || !(t.bloco === 'quimica' || t.bloco === 'mecanica')) return;
+  const tr = $('ws-grid') && $('ws-grid').querySelector('tr.h2'); if (!tr) return;
+  const n0 = WS.cur.r <= state.itens && normaDoItem(state, WS.cur.r) ? WS.cur.r : 0; if (!n0) return;
+  const nm = normaDoItem(state, n0), ths = tr.querySelectorAll('th');
+  WS.cols.forEach((c, j) => { ths[j + 1].textContent = c.corrida ? nm.id : wsLimite(t, c, n0); });
+}
+function wsFecharEd(gravar) {
+  const e = WS.edit; if (!e) return false;
+  WS.edit = null;
+  const dl = $('ws-dl'); if (dl) dl.remove();
+  e.inp.remove();
+  const t = wsTab(), col = WS.cols && WS.cols[e.c];
+  if (!gravar || !col || t.id !== e.t || e.inp.value === e.orig) return false;
+  const ok = wsSet(t, col, e.r, e.inp.value, false);
+  if (ok && t.bloco === 'quimica') wsCE(e.r);
+  if (ok) { renumerar(); render(); saveDraftSoon(); }
+  return ok;
+}
+function wsTeclaEd(e) {
+  const ed = WS.edit; if (!ed) return;
+  if (e.key === 'Escape') { e.preventDefault(); ed.inp.value = ed.orig; wsFecharEd(false); $('ws-grid').focus(); return; }
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); const v = ed.inp.value; wsFecharEd(false); wsNaSelecao(v); $('ws-grid').focus(); return; }
+  if (e.key === 'Enter' || e.key === 'Tab') {
+    e.preventDefault();
+    wsFecharEd(true);
+    const N = wsLinhas(wsTab()), C = WS.cols.length;
+    if (e.key === 'Enter') WS.cur.r = clamp(WS.cur.r + (e.shiftKey ? -1 : 1), 1, N);
+    else WS.cur.c = clamp(WS.cur.c + (e.shiftKey ? -1 : 1), 0, C - 1);
+    WS.anc = null; wsCursor(); wsStatus(); wsVerCelula(); $('ws-grid').focus({ preventScroll: true });
+    return;
+  }
+  if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && !e.shiftKey) {
+    e.preventDefault(); wsFecharEd(true);
+    WS.cur.r = clamp(WS.cur.r + (e.key === 'ArrowDown' ? 1 : -1), 1, wsLinhas(wsTab())); WS.anc = null;
+    wsCursor(); wsStatus(); wsVerCelula(); $('ws-grid').focus({ preventScroll: true });
+  }
+}
+/* teclado na planilha (cursor, sem caixa de edição aberta) */
+function wsTecla(e) {
+  if (WS.edit || e.target.id !== 'ws-grid') return;
+  const t = wsTab(), N = wsLinhas(t), C = WS.cols.length, ctrl = e.ctrlKey || e.metaKey, k = e.key;
+  const mover = (dr, dc) => {
+    if (e.shiftKey) { if (!WS.anc) WS.anc = { r: WS.cur.r, c: WS.cur.c }; } else WS.anc = null;
+    if (ctrl) {
+      if (dr) WS.cur.r = dr > 0 ? Math.max(WS.cur.r, wsUltimaLinha(t)) : 1;
+      if (dc) WS.cur.c = dc > 0 ? C - 1 : 0;
+    } else { WS.cur.r = clamp(WS.cur.r + dr, 1, N); WS.cur.c = clamp(WS.cur.c + dc, 0, C - 1); }
+    wsCursor(); wsStatus(); wsVerCelula(); wsLimitesLinha();
+  };
+  if (k === 'ArrowDown') { e.preventDefault(); mover(1, 0); return; }
+  if (k === 'ArrowUp') { e.preventDefault(); mover(-1, 0); return; }
+  if (k === 'ArrowRight') { e.preventDefault(); mover(0, 1); return; }
+  if (k === 'ArrowLeft') { e.preventDefault(); mover(0, -1); return; }
+  if (k === 'Tab') { e.preventDefault(); WS.anc = null; mover(0, e.shiftKey ? -1 : 1); return; }
+  if (k === 'Enter') { e.preventDefault(); if (ctrl) return; WS.anc = null; mover(e.shiftKey ? -1 : 1, 0); return; }
+  if (k === 'Home') { e.preventDefault(); WS.cur.c = 0; if (ctrl) WS.cur.r = 1; WS.anc = null; wsCursor(); wsStatus(); wsVerCelula(); return; }
+  if (k === 'End') { e.preventDefault(); WS.cur.c = C - 1; if (ctrl) WS.cur.r = wsUltimaLinha(t); WS.anc = null; wsCursor(); wsStatus(); wsVerCelula(); return; }
+  if (k === 'F2') { e.preventDefault(); wsEditar(); return; }
+  if (k === 'Delete' || k === 'Backspace') { e.preventDefault(); wsApagar(); return; }
+  if (ctrl && !e.altKey) {
+    const kk = k.toLowerCase();
+    if (kk === 'z' && !e.shiftKey) { e.preventDefault(); desfazer(); return; }
+    if (kk === 'y' || (kk === 'z' && e.shiftKey)) { e.preventDefault(); refazerHist(); return; }
+    if (kk === 'd') { e.preventDefault(); wsPreencher('baixo'); return; }
+    if (kk === 'r') { e.preventDefault(); wsPreencher('direita'); return; }
+    if (kk === 'a') { e.preventDefault(); WS.anc = { r: 1, c: 0 }; WS.cur = { r: Math.max(1, wsConta(t)), c: C - 1 }; wsCursor(); wsStatus(); return; }
+    if (kk === 'f') { e.preventDefault(); wsLocalizar(); return; }
+    if (k === '+' || k === '=') { e.preventDefault(); wsLinhasOp('acima'); return; }
+    if (k === '-') { e.preventDefault(); wsLinhasOp('excluir'); return; }
+    return;
+  }
+  if (k.length === 1 && !e.altKey) { e.preventDefault(); WS.anc = null; wsCursor(); wsEditar(k); }
+}
+function wsUltimaLinha(t) { let u = 1; for (let n = 1; n <= wsLinhas(t); n++) if (WS.cols.some(c => wsVal(t, c, n))) u = n; return u; }
+/* várias células de uma vez (colar, apagar, repetir) */
+function wsLote(fn, msg) {
+  const t = wsTab();
+  registrarAgora();
+  const r = fn(t);
+  if (t.bloco === 'quimica') for (let n = 1; n <= state.itens; n++) wsCE(n);
+  renumerar();
+  render();
+  saveDraftSoon();
+  if (msg) toast(typeof msg === 'function' ? msg(r) : msg);
+  return r;
+}
+function wsGravarLote(t, col, n, val) {
+  if (t.ht) return wsSet(t, col, n, val, true);
+  return wsSet(t, col, n, val, true);
+}
+function wsApagar() {
+  const s = wsSelRet(), t = wsTab();
+  wsLote(() => { let n = 0; for (let r = s.r1; r <= s.r2; r++) for (let c = s.c1; c <= s.c2; c++) { if (WS.cols[c].so || !wsVal(t, WS.cols[c], r)) continue; if (wsGravarLote(t, WS.cols[c], r, '')) n++; } return n; },
+    n => (n > 1 ? `${n} células apagadas` : null) || (n ? 'Célula apagada' : 'Nada para apagar'));
+}
+function wsNaSelecao(val) {
+  const s = wsSelRet(), t = wsTab();
+  wsLote(() => { let n = 0, fora = 0; for (let r = s.r1; r <= s.r2; r++) for (let c = s.c1; c <= s.c2; c++) { if (WS.cols[c].so) continue; if (wsGravarLote(t, WS.cols[c], r, val)) n++; else fora++; } return [n, fora]; },
+    ([n, fora]) => `"${cleanText(val).slice(0, 40)}" em ${n} célula${n === 1 ? '' : 's'}` + (fora ? ` · ${fora} não aceitaram` : ''));
+}
+function wsPreencher(dir) {
+  const s = wsSelRet(), t = wsTab();
+  wsLote(() => {
+    let n = 0;
+    if (dir === 'baixo') {
+      const topo = s.r1 === s.r2 ? s.r1 - 1 : s.r1;
+      if (topo < 1) return 0;
+      for (let c = s.c1; c <= s.c2; c++) { const v = wsVal(t, WS.cols[c], topo); for (let r = topo + 1; r <= s.r2; r++) if (!WS.cols[c].so && wsGravarLote(t, WS.cols[c], r, v)) n++; }
+    } else {
+      const esq = s.c1 === s.c2 ? s.c1 - 1 : s.c1;
+      if (esq < 0) return 0;
+      for (let r = s.r1; r <= s.r2; r++) { const v = wsVal(t, WS.cols[esq], r); for (let c = esq + 1; c <= s.c2; c++) if (!WS.cols[c].so && wsGravarLote(t, WS.cols[c], r, v)) n++; }
+    }
+    return n;
+  }, n => (dir === 'baixo' ? `Repetido para baixo (${n} célula${n === 1 ? '' : 's'})` : `Repetido para a direita (${n} célula${n === 1 ? '' : 's'})`));
+}
+const wsTsv = () => { const s = wsSelRet(), t = wsTab(), L = []; for (let r = s.r1; r <= s.r2; r++) { const row = []; for (let c = s.c1; c <= s.c2; c++) row.push(wsVal(t, WS.cols[c], r)); L.push(row.join('\t')); } return L.join('\n'); };
+function wsColar(texto) {
+  const t = wsTab();
+  const tx = String(texto || '').replace(/\r\n?/g, '\n').replace(/\n$/, '');
+  if (!tx) return;
+  const linhas = tx.split('\n').map(l => l.split('\t'));
+  if (linhas.length === 1 && linhas[0].length === 1 && wsMulti()) { wsNaSelecao(linhas[0][0]); return; }
+  const r0 = Math.min(WS.cur.r, (WS.anc || WS.cur).r), c0 = Math.min(WS.cur.c, (WS.anc || WS.cur).c), N = wsLinhas(t), C = WS.cols.length;
+  wsLote(() => {
+    let n = 0, fora = 0;
+    linhas.forEach((row, i) => row.forEach((v, j) => { const r = r0 + i, c = c0 + j; if (r > N || c >= C || WS.cols[c].so) return; if (wsGravarLote(t, WS.cols[c], r, v.trim())) n++; else fora++; }));
+    WS.anc = { r: r0, c: c0 }; WS.cur = { r: Math.min(N, r0 + linhas.length - 1), c: Math.min(C - 1, c0 + Math.max(...linhas.map(l => l.length)) - 1) };
+    return [n, fora];
+  }, ([n, fora]) => `${n} célula${n === 1 ? '' : 's'} colada${n === 1 ? '' : 's'}` + (fora ? ` · ${fora} não aceitaram (lista fechada)` : '') + (linhas.length + r0 - 1 > N ? ` · ${linhas.length + r0 - 1 - N} linha(s) não couberam nesta folha` : ''));
+}
+/* linhas (itens) inteiras: inserir, excluir, duplicar, copiar e colar */
+function wsLinhasOp(op) {
+  const t = wsTab(), s = wsSelRet(), b = wsBloco(t);
+  if (t.ht || !b) { toast('No tratamento térmico, insira ou exclua itens na aba Produtos.'); return; }
+  const qt = s.r2 - s.r1 + 1;
+  if (b.conta !== 'itens') {
+    if (op === 'acima') { for (let i = 0; i < qt; i++) inserirLinha(b, Math.max(0, s.r1 - 1)); }
+    else if (op === 'excluir') { for (let i = 0; i < qt; i++) removerLinha(b, s.r1); }
+    wsRender(); return;
+  }
+  if (op === 'acima' || op === 'excluir') {
+    registrarAgora();
+    for (let i = 0; i < qt; i++) { if (op === 'acima') { if (!inserirItemEm(doc.atual, s.r1)) { toast(GRADES ? `A folha já tem ${MAX_ITENS} produtos.` : 'Não foi possível inserir: limite de folhas.', true); break; } } else if (s.r1 <= state.itens) excluirItemEm(doc.atual, s.r1); }
+    renumerar(); render(); saveDraftSoon();
+    toast(op === 'acima' ? `${qt} linha${qt === 1 ? '' : 's'} inserida${qt === 1 ? '' : 's'} acima` : `${qt} linha${qt === 1 ? '' : 's'} excluída${qt === 1 ? '' : 's'}`);
+    return;
+  }
+  if (op === 'copiar') { WS.clipLinhas = []; for (let n = s.r1; n <= s.r2; n++) WS.clipLinhas.push(lerItem(state, n)); toast(qt === 1 ? `Linha inteira do item ${wsNumLinha(t, s.r1)} copiada (produto, química, mecânica)` : `${qt} linhas inteiras copiadas`); return; }
+  if (op === 'colar') {
+    if (!WS.clipLinhas) return;
+    registrarAgora();
+    WS.clipLinhas.forEach((o, i) => { const n = s.r1 + i; if (n > MAX_ITENS) return; if (n > state.itens) state.itens = n; gravarItem(state, n, o); });
+    renumerar(); render(); saveDraftSoon(); toast(`${WS.clipLinhas.length} linha${WS.clipLinhas.length === 1 ? '' : 's'} inteira${WS.clipLinhas.length === 1 ? '' : 's'} colada${WS.clipLinhas.length === 1 ? '' : 's'}`);
+    return;
+  }
+  if (op === 'duplicar') { opItem('duplicar', s.r1); return; }
+}
+function wsMenuCelula(x, y) {
+  const t = wsTab(), s = wsSelRet(), qt = s.r2 - s.r1 + 1, linhas = !t.ht && wsBloco(t);
+  wsMenu({ getBoundingClientRect: null, x, y, left: x, top: y }, [
+    ['Copiar', () => wsCopiarMenu(false), 'Ctrl+C'], ['Recortar', () => wsCopiarMenu(true), 'Ctrl+X'], ['Colar', () => wsBotao('colar'), 'Ctrl+V'],
+    null,
+    ...(linhas && wsBloco(t).conta === 'itens' ? [[qt === 1 ? 'Copiar a linha inteira' : 'Copiar as linhas inteiras', () => wsLinhasOp('copiar')], [WS.clipLinhas && WS.clipLinhas.length > 1 ? 'Colar as linhas inteiras' : 'Colar a linha inteira', () => wsLinhasOp('colar'), '', !WS.clipLinhas], null] : []),
+    ['Repetir para baixo', () => wsPreencher('baixo'), 'Ctrl+D'], ['Repetir para a direita', () => wsPreencher('direita'), 'Ctrl+R'], ['Limpar', () => wsApagar(), 'Delete'],
+    ...(linhas ? [null, [`Inserir ${qt} linha${qt === 1 ? '' : 's'} acima`, () => wsLinhasOp('acima'), 'Ctrl++'], [`Excluir ${qt} linha${qt === 1 ? '' : 's'}`, () => wsLinhasOp('excluir'), 'Ctrl+−'],
+      ...(wsBloco(t).conta === 'itens' && qt === 1 ? [['Duplicar a linha', () => wsLinhasOp('duplicar')]] : [])] : []),
+  ]);
+}
+async function wsCopiarMenu(recortar) {
+  try { await navigator.clipboard.writeText(wsTsv()); } catch (e) { toast('Use Ctrl+C (o navegador não deixou copiar pelo menu)', true); return; }
+  if (recortar) wsApagar(); else toast(wsMulti() ? 'Células copiadas' : 'Célula copiada');
+}
+/* mouse: clique, arrastar seleção, duplo clique edita, ponto azul copia */
+function wsLigarGrade() {
+  const main = $('ws-main');
+  main.addEventListener('mousedown', e => {
+    if (e.button !== 0) return;
+    const fh = e.target.closest('#ws-fh');
+    if (fh) { e.preventDefault(); WS.fill = { s: wsSelRet(), r: WS.cur.r, c: WS.cur.c }; return; }
+    const rh = e.target.closest('th[data-rh]');
+    if (rh) { e.preventDefault(); wsFecharEd(true); const r = +rh.dataset.rh; if (e.shiftKey && WS.cur) { WS.anc = WS.anc || { r: WS.cur.r, c: 0 }; WS.anc.c = 0; WS.cur = { r, c: WS.cols.length - 1 }; } else { WS.anc = { r, c: 0 }; WS.cur = { r, c: WS.cols.length - 1 }; } wsCursor(); wsStatus(); $('ws-grid').focus({ preventScroll: true }); WS.drag = { rows: true }; return; }
+    const ch = e.target.closest('th[data-c]');
+    if (ch && ch.closest('#ws-grid')) { e.preventDefault(); wsFecharEd(true); const c = +ch.dataset.c; WS.anc = { r: 1, c }; WS.cur = { r: Math.max(1, wsConta(wsTab())), c }; wsCursor(); wsStatus(); $('ws-grid').focus({ preventScroll: true }); return; }
+    const td = e.target.closest('#ws-grid td[data-r]');
+    if (!td) return;
+    if (WS.edit && e.target === WS.edit.inp) return;
+    e.preventDefault();
+    wsFecharEd(true);
+    const r = +td.dataset.r, c = +td.dataset.c;
+    if (e.shiftKey) { if (!WS.anc) WS.anc = { r: WS.cur.r, c: WS.cur.c }; } else WS.anc = { r, c };
+    WS.cur = { r, c };
+    WS.drag = { cells: true };
+    wsCursor(); wsStatus(); wsLimitesLinha();
+    $('ws-grid').focus({ preventScroll: true });
+  });
+  main.addEventListener('mousemove', e => {
+    if (!WS.drag && !WS.fill) return;
+    const td = document.elementFromPoint(e.clientX, e.clientY); const cell = td && td.closest && td.closest('#ws-grid td[data-r]');
+    if (!cell) return;
+    const r = +cell.dataset.r, c = +cell.dataset.c;
+    if (WS.fill) { WS.fill.alvo = { r, c }; const s = WS.fill.s; WS.anc = { r: s.r1, c: s.c1 }; WS.cur = { r: Math.max(s.r2, r), c: Math.max(s.c2, Math.abs(r - s.r2) >= Math.abs(c - s.c2) ? s.c2 : c) }; if (r < s.r1) WS.cur.r = s.r2; wsCursor(); return; }
+    if (WS.drag.rows) { WS.cur.r = r; wsCursor(); wsStatus(); return; }
+    WS.cur = { r, c }; wsCursor(); wsStatus();
+  });
+  document.addEventListener('mouseup', () => {
+    if (WS.fill) {
+      const f = WS.fill; WS.fill = null; const s = f.s, novo = wsSelRet();
+      if (novo.r2 > s.r2 || novo.c2 > s.c2) {
+        const t = wsTab(), alt = s.r2 - s.r1 + 1, lar = s.c2 - s.c1 + 1;
+        wsLote(() => { let n = 0; for (let r = s.r1; r <= novo.r2; r++) for (let c = s.c1; c <= novo.c2; c++) { if (r <= s.r2 && c <= s.c2) continue; const v = wsVal(t, WS.cols[s.c1 + ((c - s.c1) % lar)], s.r1 + ((r - s.r1) % alt)); if (!WS.cols[c].so && wsGravarLote(t, WS.cols[c], r, v)) n++; } return n; }, n => `${n} célula${n === 1 ? '' : 's'} copiada${n === 1 ? '' : 's'}`);
+      }
+      return;
+    }
+    WS.drag = null;
+  });
+  main.addEventListener('dblclick', e => { const td = e.target.closest('#ws-grid td[data-r]'); if (td) { WS.cur = { r: +td.dataset.r, c: +td.dataset.c }; WS.anc = null; wsCursor(); wsEditar(); } });
+  main.addEventListener('contextmenu', e => {
+    const td = e.target.closest('#ws-grid td[data-r], #ws-grid th[data-rh]'); if (!td) return;
+    e.preventDefault(); wsFecharEd(true);
+    if (td.matches('td')) { const r = +td.dataset.r, c = +td.dataset.c, s = wsSelRet(); if (!(r >= s.r1 && r <= s.r2 && c >= s.c1 && c <= s.c2)) { WS.anc = null; WS.cur = { r, c }; wsCursor(); wsStatus(); } }
+    wsMenuCelula(e.clientX, e.clientY);
+  });
+  main.addEventListener('keydown', e => { if (e.target.id === 'ws-grid') wsTecla(e); });
+  main.addEventListener('scroll', () => { if (WS.edit && Date.now() - WS.edit.desde > 250) wsFecharEd(true); }, true);
+  document.addEventListener('copy', e => { if (!WS.on || WS.edit || document.activeElement !== $('ws-grid')) return; e.preventDefault(); e.clipboardData.setData('text/plain', wsTsv()); toast(wsMulti() ? 'Células copiadas' : 'Célula copiada'); });
+  document.addEventListener('cut', e => { if (!WS.on || WS.edit || document.activeElement !== $('ws-grid')) return; e.preventDefault(); e.clipboardData.setData('text/plain', wsTsv()); wsApagar(); });
+  document.addEventListener('paste', e => { if (!WS.on || WS.edit || document.activeElement !== $('ws-grid')) return; e.preventDefault(); e.stopPropagation(); wsColar((e.clipboardData || window.clipboardData).getData('text/plain')); }, true);
+  document.addEventListener('keydown', e => {
+    if (!WS.on || document.querySelector('.modal-overlay')) return;
+    const ctrl = e.ctrlKey || e.metaKey, a = document.activeElement;
+    if (ctrl && !e.altKey && (a === document.body || !a) && /^[zy]$/i.test(e.key)) { e.preventDefault(); if (e.key.toLowerCase() === 'z' && !e.shiftKey) desfazer(); else refazerHist(); }
+  });
+}
+
+/* ---------- colunas, ordenar, localizar ---------- */
+async function wsEscolherColunas(t) {
+  const b = BLOCO[t.bloco], fs = FIELDS.filter(f => f.tbl === t.bloco && f.r1 === b.base + 1).sort((p, q) => p.c1 - q.c1);
+  const wrap = wsEl('div', 'ws-cols');
+  const nome = f => (t.bloco === 'quimica' ? String(cellAt(BASE.quimica, f.c1).t) : (WS_MEC[f.c1] || [f.head])[0]);
+  const temDado = f => doc.certs.some(c => FIELDS.some(x => x.tbl === t.bloco && x.c1 === f.c1 && c.v[x.ref]));
+  wrap.innerHTML = `<p class="ws-p">${t.bloco === 'quimica' ? 'Elementos que aparecem no editor.' : 'Ensaios que aparecem no editor.'} O PDF e o Excel saem sempre com todas as colunas, como hoje. Coluna com valor não pode ser escondida.</p>
+    <div class="ws-colg">${fs.map(f => `<label class="${temDado(f) ? 'tem' : ''}"><input type="checkbox" value="${wsEsc(wsColKey(t, f.c1))}" ${wsColVisivel(t, f.c1) ? 'checked' : ''} ${temDado(f) ? 'disabled' : ''}><span>${wsEsc(nome(f))}</span></label>`).join('')}</div>`;
+  const ok = await showDialog({ title: t.bloco === 'quimica' ? 'Elementos da análise química' : 'Ensaios', content: wrap, buttons: [{ label: 'Cancelar', value: false }, { label: 'Usar', value: true, primary: true }] });
+  if (!ok) return;
+  const g = wsColsGuardadas();
+  g[t.bloco] = [...wrap.querySelectorAll('input:checked')].map(i => (t.bloco === 'quimica' ? i.value : +i.value));
+  try { localStorage.setItem(WS_COLS_KEY, JSON.stringify(g)); } catch (e) { /* sem armazenamento */ }
+  wsRender();
+}
+async function wsOrdenar() {
+  if (GRADES) { toast('No modelo de grades a ordem dos produtos fica como está.'); return; }
+  const wrap = wsEl('div', 'ws-ord');
+  wrap.innerHTML = `<p class="ws-p">Reordena os ${state.itens} itens desta folha (produto, química e mecânica andam juntos). Dá para desfazer com Ctrl+Z.</p>
+    ${[['itemoc', 'Item da O.C.'], ['corrida', 'Corrida'], ['desc', 'Descrição do produto'], ['material', 'Material']].map(([k, n], i) => `<label class="ws-ck"><input type="radio" name="ws-ord" value="${k}" ${i ? '' : 'checked'}><span>${n}</span></label>`).join('')}`;
+  const ok = await showDialog({ title: 'Ordenar itens', content: wrap, buttons: [{ label: 'Cancelar', value: false }, { label: 'Ordenar', value: true, primary: true }] });
+  if (!ok) return;
+  const k = wrap.querySelector('input:checked').value, c = { itemoc: 10, corrida: 17, desc: 3, material: 14 }[k];
+  const its = []; for (let n = 1; n <= state.itens; n++) its.push({ n, o: lerItem(state, n), v: cleanText(state.v[refOf(BASE.produto + n, c)] || '') });
+  its.sort((a, b) => (a.v === '' ? 1 : 0) - (b.v === '' ? 1 : 0) || a.v.localeCompare(b.v, 'pt-BR', { numeric: true }) || a.n - b.n);
+  if (its.every((x, i) => x.n === i + 1)) { toast('Os itens já estão nessa ordem'); return; }
+  wsLote(() => its.forEach((x, i) => gravarItem(state, i + 1, x.o)), `Itens ordenados por ${wrap.querySelector('input:checked').nextElementSibling.textContent.toLowerCase()}`);
+}
+async function wsLocalizar() {
+  const inp = wsEl('input', 'ws-in'); inp.placeholder = 'Texto, número da corrida, material…'; inp.value = WS.busca || '';
+  const ok = await showDialog({ title: 'Localizar', content: inp, buttons: [{ label: 'Cancelar', value: false }, { label: 'Localizar', value: true, primary: true }], init: () => setTimeout(() => { inp.focus(); inp.select(); }, 30) });
+  const q = ok ? cleanText(inp.value).trim().toLowerCase() : ''; if (!q) return;
+  WS.busca = inp.value;
+  const ordem = WS_TABS.filter(t => t.id !== 'textos');
+  const i0 = ordem.findIndex(t => t.id === WS.tab);
+  for (let k = 0; k <= ordem.length; k++) {
+    const t = ordem[(Math.max(0, i0) + k) % ordem.length], cols = wsCols(t);
+    for (let n = 1; n <= wsLinhas(t); n++) for (let c = 0; c < cols.length; c++) {
+      if (k === 0 && (n < WS.cur.r || (n === WS.cur.r && c <= WS.cur.c))) continue;
+      if (String(wsVal(t, cols[c], n)).toLowerCase().includes(q)) { WS.tab = t.id; WS.cur = { r: n, c }; WS.anc = null; wsRender(); wsVerCelula(); $('ws-grid').focus({ preventScroll: true }); return; }
+    }
+  }
+  toast(`Nada encontrado com "${inp.value}"`, true);
+}
+function wsHtCorrida() {
+  const t = wsTab(), s = wsSelRet(), por = (WS.htCache || {}).out || {};
+  const corr = n => cleanText(state.v[refOf(BASE.produto + n, 17)] || '').trim();
+  const r1 = wsMulti() ? s.r1 : 1, r2 = wsMulti() ? s.r2 : state.itens;
+  wsLote(() => {
+    let n = 0;
+    for (let i = r1; i <= r2; i++) {
+      if (por[i] && por[i].t) continue;
+      const c = corr(i); if (!c) continue;
+      for (let j = 1; j <= state.itens; j++) if (j !== i && corr(j) === c && por[j] && por[j].t) { for (const col of WS.cols.filter(x => !x.so)) wsSet(t, col, i, por[j][col.key] || '', true); n++; break; }
+    }
+    return n;
+  }, n => (n ? `${n} item${n === 1 ? '' : 's'} com o tratamento da mesma corrida` : 'Nenhum item sem tratamento com outro da mesma corrida'));
+}
+function wsHtAgrupar() {
+  const { out, soltas } = htPorItem(state);
+  wsLote(() => htGravar(out, soltas), ok => (ok ? 'Linhas do tratamento térmico refeitas, agrupando os itens com o mesmo tratamento' : 'Mais de 5 tratamentos diferentes: a folha só tem 5 linhas'));
+}
+
+/* ---------- salvar PDF e Excel juntos ---------- */
+let wsMudo = null;
+async function wsSalvar() {
+  if (doc.certs.length > 1) { await salvarTodos(); return; }
+  const cert = state, nome = nomeArquivo(cert);
+  if (!nome) { await exigirNumero('Salvar PDF e Excel'); return; }
+  if (!(await conferirAntes([cert], 'Conferir antes de emitir'))) return;
+  const btn = $('ws-save');
+  wsMudo = [];
+  try {
+    await runBusy(btn, async () => {
+      const a = await saveFile(async () => buildPdf([cert]), nome + '.pdf', TIPO_PDF);
+      if (!a) return;
+      const b = await saveFile(() => buildXlsx(cert), nome + '.xlsx', TIPO_XLSX);
+      toast(b ? `Salvos: ${a} e ${b}` : `PDF salvo: ${a} · o Excel não foi salvo`, !b);
+    });
+  } finally {
+    const L = wsMudo; wsMudo = null;
+    if (L && L.length) cqSalvo(L.join(' e '));
+  }
+}
+
+/* ---------- conferir antes de emitir (G3 e G5) ---------- */
+async function wsConferir(certs, titulo, sempre) {
+  const L = conferir(certs);
+  const G = [
+    { id: 'dados', t: 'Dados do certificado', ok: () => { const c = certs[0]; return [c.v[REF_NUMERO], c.v[REF_OC] ? 'O.C. ' + c.v[REF_OC] : '', c.v[REF_NF] ? 'NF ' + c.v[REF_NF] : ''].filter(Boolean).join(' · ') || 'cliente, nº e data preenchidos'; }, m: x => [REF_CLIENTE, REF_NUMERO, REF_DATA, REF_OC, REF_NF].includes(x.ref) },
+    { id: 'itens', t: GRADES ? 'Produtos com quantidade e descrição' : 'Itens com descrição e corrida', ok: () => { const n = certs.reduce((a, c) => a + c.itens, 0); return `${n} ${n === 1 ? NOME_ITEM[0] : NOME_ITEM[1]}`; }, m: x => FIELD[x.ref] && (FIELD[x.ref].tbl === 'produto' || FIELD[x.ref].tbl === 'comp') && !/texto maior/.test(x.msg) },
+    ...(GRADES ? [] : [
+      { id: 'quim', t: 'Química dentro da norma', ok: () => 'nenhum valor fora da faixa das normas', m: x => FIELD[x.ref] && FIELD[x.ref].tbl === 'quimica' && !/texto maior/.test(x.msg) },
+      { id: 'mec', t: 'Mecânica e ensaios aprovados', ok: () => 'mínimos atendidos e ensaios AP', m: x => FIELD[x.ref] && FIELD[x.ref].tbl === 'mecanica' && !/texto maior/.test(x.msg) },
+      { id: 'trat', t: 'Tratamento térmico de cada item', ok: () => { const p = htPorItem(certs[0]).out, cont = new Map(); Object.entries(p).forEach(([n, o]) => { if (o.t) { if (!cont.has(o.t)) cont.set(o.t, []); cont.get(o.t).push(certs[0].inicio + +n - 1); } }); return [...cont].map(([t, ns]) => `${htNome(t)}: ${htTextoItens(ns, Object.assign({}, certs[0], { itens: 999 }))}`).join(' · ') || 'conferido'; }, m: x => FIELD[x.ref] && FIELD[x.ref].tbl === 'trat' && !/texto maior/.test(x.msg) },
+    ]),
+    { id: 'txt', t: 'Descrições cabem na célula', ok: () => 'nenhum texto cortado', m: x => /texto maior/.test(x.msg) },
+    { id: 'ass', t: 'Assinatura do responsável', ok: () => `${cleanText(certs[0].v[REF_ASSINANTE] || '')} · Controle da Qualidade`, m: x => x.ref === REF_ASSINANTE },
+  ];
+  const usados = new Set();
+  for (const g of G) { g.L = L.filter(x => !usados.has(x) && g.m(x)); g.L.forEach(x => usados.add(x)); }
+  const resto = L.filter(x => !usados.has(x)); if (resto.length) G[1].L.push(...resto);
+  for (const g of G) g.st = g.L.some(x => x.tipo === 'falta' || x.tipo === 'norma') ? 'x' : g.L.length ? '!' : 'ok';
+  const imp = G.filter(g => g.st === 'x').length;
+  const nf = certs.length;
+  const wrap = wsEl('div', 'ws-conf');
+  const num = cleanText(certs[0].v[REF_NUMERO] || '').trim();
+  wrap.innerHTML = `${imp ? `<em class="ws-imp">${imp} impede${imp === 1 ? '' : 'm'} a emissão</em>` : '<em class="ws-imp ok">pode emitir</em>'}
+    <p class="ws-p">A Central conferiu ${nf > 1 ? `as ${nf} folhas do certificado` : 'o certificado'}${num ? ' ' + wsEsc(num) : ''} com os itens, as normas e o tratamento térmico.</p>
+    <div class="ws-cl">${G.map((g, i) => {
+      const x = g.L[0];
+      const sub = g.st === 'ok' ? g.ok() : g.L.slice(0, 2).map(y => (nf > 1 ? rotuloFolha(y.ci) + ' · ' : '') + y.msg).join(' · ') + (g.L.length > 2 ? ` · e mais ${g.L.length - 2}` : '');
+      return `<div class="ws-ci ${g.st}"><i aria-hidden="true">${g.st === 'ok' ? '✓' : g.st === 'x' ? '✕' : '!'}</i><div><b>${wsEsc(g.t)}</b><span>${wsEsc(sub)}</span></div>${x ? `<button type="button" class="ws-b" data-ir="${i}">Ir para a célula</button>` : ''}</div>`;
+    }).join('')}</div>
+    <label class="ws-just" hidden><span>Por que emitir assim? (fica registrado no rascunho do pedido)</span><textarea rows="2" placeholder="Ex.: a usina confirmou o Mn por e-mail em 24/10"></textarea></label>`;
+  let irPara = null;
+  const r = await showDialog({
+    title: sempre ? 'Conferir antes de emitir' : titulo, content: wrap, wide: true,
+    buttons: sempre ? [{ label: 'Fechar', value: false, primary: true }]
+      : [{ label: 'Voltar e corrigir', value: false }, { label: 'Emitir com justificativa', value: 'just' }, { label: 'Emitir certificado', value: true, primary: !imp }],
+    init: ({ box, buttons, close }) => {
+      box.classList.add('ws-dlg');
+      wrap.querySelectorAll('[data-ir]').forEach(b => b.addEventListener('click', () => { irPara = G[+b.dataset.ir].L[0]; close(false); }));
+      if (sempre) return;
+      const [, bj, be] = buttons;
+      be.disabled = !!imp; be.classList.add('or');
+      if (!imp) bj.hidden = true;
+      const lab = wrap.querySelector('.ws-just'), ta = lab.querySelector('textarea');
+      bj.addEventListener('click', ev => { if (lab.hidden || !ta.value.trim()) { ev.stopImmediatePropagation(); lab.hidden = false; ta.focus(); toast('Escreva a justificativa e toque de novo em "Emitir com justificativa"'); } }, true);
+      bj.addEventListener('click', () => { WS.just = ta.value.trim(); }, true);
+    },
+  });
+  if (irPara) { if (irPara.ci !== doc.atual && irPara.ci >= 0) irParaFolha(irPara.ci); setTimeout(() => wsIrPara(irPara.ref), 30); return false; }
+  if (r === 'just') { doc.just = { txt: WS.just || '', em: todayBR(), por: cleanText(state.v[REF_ASSINANTE] || config.assinante || ''), itens: L.filter(x => x.tipo !== 'aviso').map(x => x.msg).slice(0, 12) }; saveDraft(); return true; }
+  return r === true && !sempre;
+}
+function wsIrPara(ref) {
+  const f = FIELD[ref]; if (!f) return;
+  if (!f.item && !f.linha) { WS.tab = (f.key === 'info1' || f.key === 'info2' || ref === REF_ASSINANTE) ? 'textos' : 'produto'; wsRender(); const i = WS.root.querySelector(`[data-hdr="${ref}"]`); if (i) i.focus(); return; }
+  if (f.tbl === 'trat') { WS.tab = 'trat'; WS.cur = { r: 1, c: 2 }; WS.anc = null; wsRender(); $('ws-grid').focus(); return; }
+  const t = WS_TABS.find(x => x.bloco === f.tbl) || WS_TABS[0];
+  WS.tab = t.id;
+  let cols = wsCols(t);
+  let c = cols.findIndex(x => !x.corrida && x.c1 === f.c1);
+  if (c < 0 && f.tbl !== 'produto' && f.c1 !== 17) { const g = wsColsGuardadas(); g[t.bloco] = (Array.isArray(g[t.bloco]) ? g[t.bloco] : WS_PADRAO[t.bloco]).concat([wsColKey(t, f.c1)]); try { localStorage.setItem(WS_COLS_KEY, JSON.stringify(g)); } catch (e) { /* sem armazenamento */ } cols = wsCols(t); c = cols.findIndex(x => !x.corrida && x.c1 === f.c1); }
+  if (c < 0) c = cols.findIndex(x => x.corrida);
+  WS.cur = { r: f.item || f.linha, c: Math.max(0, c) }; WS.anc = null;
+  wsRender(); wsVerCelula(); $('ws-grid').focus({ preventScroll: true });
+}
+/* chamado pela Central quando o rascunho foi gravado no banco */
+window.__ws = { salvoCentral(t) { WS.central = t || Date.now(); wsTopo(); }, get on() { return WS.on; }, ir: wsIrAba, irPara: wsIrPara, WS };
+
 const restored = loadDraft();
 render();
 registrar();
@@ -5657,6 +6871,8 @@ applyZoom(1, false);
 if (savedZoom && savedZoom > 0) applyZoom(savedZoom, false);
 else if (fitZoom() < 1) applyZoom(fitZoom(), false);
 
+if (WS.on) { wsMontar(); wsLigarGrade(); wsRender(); }
+
 // ganchos para testes automatizados
 window.__cert = {
   get state() { return state; },
@@ -5669,6 +6885,7 @@ window.__cert = {
   importarPed, montarGrades, trocarTipo, inserirLinha, removerLinha, atualizarCorridas, BLOCO, TIPO,
   FIELDS, CHECKS, layoutFor, pageSetup,
   conferir, opItem, desfazer, refazerHist, HIST, selCampos, LIMITES, limiteDe, foraDaNorma, carregarPdfLib, juntarUsina, ED,
+  WS, htPorItem, htLinhas, wsRender, wsIrPara,
 };
 })();
 

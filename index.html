@@ -1258,6 +1258,68 @@ html[data-theme="dark"] .btn.cqgo { color: color-mix(in srgb, var(--tcr) 55%, #f
 .cqgrid2 { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 14px; align-items: start; }
 .cqsheet { background: #5b6670; border-radius: var(--r); overflow: hidden; border: 1px solid var(--line); }
 .cqsheet iframe { width: 100%; height: calc(100vh - 150px); min-height: 640px; border: 0; display: block; background: #5b6670; }
+/* v42: nome de quem está com o pedido legível no cartão escuro do cliente crítico */
+.cqc.crit .cqwho { color: #eef1f3; } html[data-theme="dark"] .cqc.crit .cqwho { color: var(--ink); }
+.cqtag.aba { background: var(--info); } .cqtag.ras { background: #6c7772; } .cqtag.sal { background: var(--ok); } .cqtag.nf { background: #8a6d1d; }
+.cqfrom .cqoutra { margin-left: 4px; }
+.cqtoast { position: fixed; z-index: 95; left: 50%; bottom: calc(64px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--surface); padding: 8px 8px 8px 16px; border-radius: 10px; box-shadow: var(--shadow); display: flex; gap: 14px; align-items: center; font-weight: 600; font-size: 14px; max-width: min(760px, calc(100% - 32px)); }
+.cqtoast .btn { background: var(--surface); color: var(--ink); border-color: var(--surface); min-height: 40px; flex: none; }
+/* v42: aba de certificados — sem o menu da Central; fila à esquerda (300 aberta, 76 recolhida, igual ao menu) */
+body.cqaba .rail, body.cqaba .tk, body.cqaba .tkpill, body.cqaba .railtip, body.cqaba #tk, body.cqaba #tk-pill { display: none !important; }
+body.cqaba .app { grid-template-columns: minmax(0, 1fr) !important; }
+body.cqaba .main { padding: 0 !important; }
+.cqaba-w { display: grid; grid-template-columns: 300px minmax(0, 1fr); min-height: 100vh; }
+body.filamini .cqaba-w { grid-template-columns: 76px minmax(0, 1fr); }
+.cqfila { position: sticky; top: 0; height: 100vh; overflow: auto; background: var(--surface); border-right: 1px solid var(--line); padding: 14px 12px; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box; }
+.cqfila > * { flex-shrink: 0; }
+.cqfh { display: flex; align-items: center; gap: 8px; min-height: 40px; }
+.cqfh b { font: 800 22px/1 var(--f-display); letter-spacing: .02em; }
+.cqfila .cqn, .cqfmini .cqn { font: 700 12px/1 var(--f-body); padding: 4px 8px; border-radius: 10px; background: color-mix(in srgb, var(--av) 15%, var(--surface)); color: var(--av); }
+.cqftg { margin-left: auto; width: 40px; height: 40px; border-radius: 9px; border: 1px solid var(--line-2); background: var(--surface); cursor: pointer; font: 700 15px var(--f-body); color: var(--ink-2); flex: none; }
+.cqfq { width: 100%; box-sizing: border-box; min-height: 40px; }
+.cqfseg { display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.cqfseg button { padding: 0 !important; min-height: 38px; text-align: center; }
+.cqfsec { display: flex; justify-content: space-between; font: 600 11px/1 var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); padding: 8px 2px 0; }
+.cqfl { display: grid; gap: 8px; }
+.cqfv { margin: 4px 2px; font-size: 13px; }
+.cqmw { position: relative; }
+.cqc.cqm { display: grid; cursor: pointer; text-align: left; font: inherit; color: inherit; width: 100%; gap: 3px; padding: 9px 11px; box-sizing: border-box; }
+.cqc.cqm .cqpv { font-size: 21px; }
+.cqc.cqm .cqh { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding-right: 22px; }
+.cqc.cqm .cqh .cqtag:first-of-type { margin-left: auto; }
+.cqc.cqm .cqcli { font: 600 12.5px var(--f-body); text-transform: uppercase; letter-spacing: .02em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cqc.cqm .cqs { display: flex; gap: 8px; align-items: center; font-size: 12px; }
+.cqc.cqm .cqpor { margin-left: auto; font-weight: 700; }
+.cqc.cqm.sel { box-shadow: 0 0 0 3px #f2b705; }
+.cqmx { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; border: 0; border-radius: 6px; background: transparent; color: var(--ink-3); font: 600 16px var(--f-body); cursor: pointer; opacity: 0; }
+.cqmw:hover .cqmx, .cqmx:focus-visible { opacity: 1; } .cqmx:hover { background: var(--surface-2); color: var(--ink); }
+.cqc.crit + .cqmx { color: #cfd6dc; }
+.cqfmini { display: none; }
+body.filamini .cqfila > :not(.cqfmini) { display: none !important; }
+body.filamini .cqfila { padding: 12px 8px; align-items: center; }
+body.filamini .cqfmini { display: grid; gap: 7px; justify-items: center; width: 100%; }
+.cqfmini .cqftg { margin: 0; }
+.cqfmini small { font: 600 9.5px/1 var(--f-body); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-top: 6px; }
+.cqfpv { position: relative; width: 60px; height: 40px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--surface); font: 700 13px/1 var(--f-mono); color: var(--ink); cursor: pointer; }
+.cqfpv.crit { background: #1c2126; border-color: #1c2126; color: #fff; }
+.cqfpv.sel { box-shadow: 0 0 0 3px #f2b705; }
+.cqfpv.late::after { content: ''; position: absolute; top: -3px; right: -3px; width: 9px; height: 9px; border-radius: 50%; background: var(--crit); border: 2px solid var(--surface); }
+.cqabam { min-width: 0; padding: 14px 18px 0; }
+.cqabam .cqws { padding: 0; }
+.cqfrom.cqtopo { min-height: 54px; flex-wrap: nowrap; }
+.cqfrom.cqtopo .cqbrand { font: 800 19px/1 var(--f-display); letter-spacing: .02em; }
+.cqfrom.cqtopo .cqaq { margin-left: auto; color: var(--ok); font-weight: 600; font-size: 13.5px; white-space: nowrap; }
+.cqfrom.cqtopo .cqst { margin-left: 8px; }
+.cqfrom.cqtopo .btn { min-width: 128px; }
+.cqfrom.cqtopo .clip { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cqvazio { display: grid; place-content: center; text-align: center; gap: 8px; min-height: 60vh; color: var(--ink-2); }
+.cqvazio b { font: 700 26px var(--f-display); color: var(--ink); } .cqvazio span { max-width: 460px; }
+body.cqaba .cqws .cqsheet.cqwsf iframe { height: calc(100vh - 98px); }
+/* v41: área de trabalho do certificado ocupa a largura toda (o painel da direita foi para dentro do certificado) */
+.cqws .cqsheet.cqwsf { background: var(--bg); border: 0; border-radius: 0; }
+.cqws .cqsheet.cqwsf iframe { height: calc(100vh - 168px); min-height: 600px; background: transparent; border-radius: 0; }
+.cqws .cqfrom { margin-bottom: 10px; }
+.cqlotm { display: grid; gap: 6px; max-height: 52vh; overflow: auto; margin: 10px 0; }
 .cqpanel { display: grid; gap: 10px; position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow: auto; }
 .cqbox { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 11px 12px; display: grid; gap: 7px; }
 .cqbox h4 { margin: 0; font: 700 11.5px var(--f-body); letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
@@ -5324,7 +5386,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 40;
+    const APP_V = 43;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -5859,7 +5921,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* textos que mudam conforme onde a Central está hospedada (Claude ou Firebase) */
   const TXT = Object.assign({ noClaude: 'Esta página precisa ser aberta pelo link da Central da Qualidade no Claude, onde ficam os dados.', noDb: 'O banco de dados não está disponível nesta visualização. Entre na sua conta do Claude e abra a Central da Qualidade pelo link compartilhado.', ro: 'Seu acesso é só de consulta. Para lançar dados, peça ao responsável da Qualidade acesso de Colaborador ou Editor.', cfgRo: 'Só quem é Editor da página altera as configurações. Você pode consultar.', cfgDenied: 'Sem permissão para alterar configurações (só Editores).' }, window.CQ_TEXT || {});
 
-  const S = { model: null, audit: [], idx: null, today: E.todaySerial(), view: 'painel', f: {}, t: {}, form: 'av', editKey: null, rq: '', repMonth: null, stale: false, histDays: 7 };
+  /* v42: aba de certificados (index.html?certificados) — a mesma Central, só com o certificado e a fila ao lado */
+  const CQ_ABA = (() => { try { return new URLSearchParams(location.search).has('certificados'); } catch (e) { return false; } })();
+  if (CQ_ABA) { document.body.classList.add('cqaba'); document.title = 'Certificados · Central'; }
+  const S = { model: null, audit: [], idx: null, today: E.todaySerial(), view: CQ_ABA ? 'certq' : 'painel', f: {}, t: {}, form: 'av', editKey: null, rq: '', repMonth: null, stale: false, histDays: 7 };
   const DB = { db: null, user: null, me: null, canWrite: null, docs: { AV: {}, SERV: {}, RNC: {}, INS: {}, RNCC: {} }, snapPend: {}, cfg: null, ready: {}, where: {}, meta: {}, names: {}, state: 'wait', last: null, raw: null, numer: {}, owner: false, admin: null };
 
   /* ================= utilidades ================= */
@@ -6275,7 +6340,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (S.model && !['cadastro', 'config'].includes(S.view)) render();
       setTimeout(cfgSeed, 300); setTimeout(entCodigos, 1500);
     }).catch(() => {});
+    /* v42: a aba de certificados só ouve o que o certificado usa: lotes (AV), NCFs, a fila, o RIF e a configuração */
+    const ABA_MODS = ['AV', 'RNC'];
     MODS.forEach((mod) => {
+      if (CQ_ABA && !ABA_MODS.includes(mod)) { DB.docs[mod] = {}; DB.ready[mod] = true; return; }
       db.collection(MOD[mod].col).onSnapshot((snap) => {
         DB.ready[mod] = true; DB.state = 'on';
         if (rebAdiar() && DB.docs[mod]) { DB.snapPend[mod] = snap; scheduleRebuild(); return; }
@@ -6285,13 +6353,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         scheduleRebuild();
       }, (err) => { DB.state = 'off'; updateChrome(); toast('Conexão com o banco interrompida (' + (err && err.code) + '). Recarregue a página.', true); });
     });
-    db.collection('iqf').onSnapshot((snap) => {
+    if (CQ_ABA) { IQ.ready = true; SD.ready = true; RI.ready = true; RFI.valReady = true; }
+    if (!CQ_ABA) db.collection('iqf').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); IQ.docs = o; IQ.ready = true; IQ.ver++;
       if (autoOk()) setTimeout(iqSitSync, 2000);
       if (!S.model) return;
       if (['iqf', 'painel'].includes(S.view)) { const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
     }, () => { IQ.ready = true; });
-    db.collection('sold').onSnapshot((snap) => {
+    if (!CQ_ABA) db.collection('sold').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); SD.docs = o; SD.ready = true; SD.ver++;
       if (!S.model) return;
       updateChrome();
@@ -6301,7 +6370,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); CQF.docs = o; CQF.ready = true; CQF.ver++;
       if (!S.model) return;
       updateChrome();
-      if (S.view === 'certq' || S.view === 'painel') { if (S.view === 'certq' && S.cqSub === 'ed') { cqPanelSync(); return; } const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
+      if (S.view === 'certq' || S.view === 'painel') { if (S.view === 'certq' && S.cqSub === 'ed') { cqPanelSync(); if (CQ_ABA) abaFila(); else if (!S.cqEd) render(); return; } const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
     }, () => { CQF.ready = true; });
     db.collection('rifp').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RFI.ped = o; RFI.pedReady = true;
@@ -6316,7 +6385,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         else { const busca = document.activeElement && document.activeElement.id === 'rf-q'; render(); if (busca) { const i = $('#rf-q'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } } }
       }
     }, () => { RFI.pedReady = true; });
-    db.collection('rir').onSnapshot((snap) => {
+    if (!CQ_ABA) db.collection('rir').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RI.docs = o; RI.ready = true;
       if (!S.model) return;
       updateChrome();
@@ -6325,7 +6394,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       else if (S.view === 'painel' && !$('#layer').innerHTML) render();
     }, () => { RI.ready = true; });
     db.doc('iqf/sit').onSnapshot((snap) => { IQSIT.s = (snap.exists && (snap.data() || {}).s) || {}; }, () => {});
-    db.collection('rifv').onSnapshot((snap) => {
+    if (!CQ_ABA) db.collection('rifv').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RFI.val = o; RFI.valReady = true;
       rtSnap();
       if (S.view === 'config' && S.cfgTab === 'rif' && !$('#layer').innerHTML) rfCfgPane();
@@ -6366,7 +6435,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const PREVIEW = () => !!window.CQ_PREVIEW;
   /* P8: a tela pode estar com os dados guardados no aparelho (sem resposta do servidor); aí nada é gravado sozinho */
   const dadoVelho = () => !!(window.CQ_BANCO && window.CQ_BANCO.velho());
-  const autoOk = () => !PREVIEW() && !dadoVelho();
+  const autoOk = () => !PREVIEW() && !dadoVelho() && !CQ_ABA;   /* v42: na aba de certificados nada grava sozinho */
   window.addEventListener('cq-cache', () => { if (S.model) updateChrome(); });
   /* acesso por módulo (versão hospedada): 'nao' = não vê, 'ver' = só consulta, 'lanca' = lança */
   /* módulos em teste: a conta dona esconde de todo mundo (inclusive administradores) até liberar.
@@ -7062,6 +7131,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function render() {
     const main = $('#main');
     if (!S.model) return;
+    if (CQ_ABA) { S.view = 'certq'; VIEWS.certq(main); return; }   /* v42: a aba de certificados só tem esta tela */
     if (!viewOk(S.view)) {
       const fv = firstView();
       if (!fv) { document.body.classList.toggle('tabmode', false); applyTheme(); main.innerHTML = tbOnly() ? '<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--warn)">Tablet</span><h2>Nenhuma ferramenta do tablet liberada</h2><p>Peça ao administrador da Central: em <b>Usuários</b>, marque as ferramentas do tablet (RIR, NCF ou RIF) para você. RIR e RIF também precisam estar liberados em Configurações › Módulos em teste.</p></div></div>' : '<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--warn)">Sem telas liberadas</span><h2>Nenhuma tela liberada para você</h2><p>Peça ao administrador da Central para liberar as telas que você usa, na tela Usuários.</p></div></div>'; return; }
@@ -7698,7 +7768,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   /* aviso ao entrar, uma vez por dia */
   function rncDailyNotice() {
-    if (!S.model || !vis('rnc') || $('#layer').innerHTML) return;
+    if (CQ_ABA || !S.model || !vis('rnc') || $('#layer').innerHTML) return;
     if (navigator.webdriver && !window.__CQ_AVISO) return; /* testes automáticos */
     if (lsGet('cq-rnc-aviso', '') === String(S.today)) return;
     const L = rncOpen(), V = L.filter((o) => o.venc), H = L.filter((o) => o.hoje), P = pendLots();
@@ -8756,15 +8826,21 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     .ln{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ln span{font-weight:700}.ft{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}.qr{flex:none;line-height:0}
     .lab.cmp{justify-content:center}.lab.cmp .id{white-space:nowrap}.lab.cmp.v{flex-direction:column;gap:.6mm}.lab.cmp .cl{display:grid;gap:1mm;justify-items:center}
     .bnd{background:#000;color:#fff;font-weight:800;text-align:center;letter-spacing:.05em;border-radius:.5mm;padding:.3mm 1.2mm;line-height:1.15;white-space:nowrap;-webkit-print-color-adjust:exact;print-color-adjust:exact;justify-self:stretch}`;
+  /* nome do arquivo ao "Salvar como PDF": Chrome e Edge usam o título da página principal (não o do relatório),
+     então o título da Central vira o nome do documento enquanto a janela de impressão está aberta */
+  const nomeArq = (t) => String(t || '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+    .replace(/[\\/:*?"<>|\u0000-\u001f]+/g, '-').replace(/\s+/g, ' ').replace(/^[\s.-]+|[\s.-]+$/g, '').slice(0, 120);
   function printHTML(html) {
-    const fr = document.createElement('iframe');
+    const fr = document.createElement('iframe'), m = /<title>([^<]*)<\/title>/i.exec(html), nome = m ? nomeArq(m[1]) : '';
     fr.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
     document.body.appendChild(fr);
     fr.onload = () => {
       let n = 0;
       const go = () => {
         let w = null; try { w = fr.contentWindow; if (w.__pgEspera && !w.__pgPronto && n++ < 40) { setTimeout(go, 100); return; } } catch (e) { /* segue */ }
-        try { w.focus(); w.print(); } catch (e) { toast('Este visualizador não permite imprimir.', true); } setTimeout(() => fr.remove(), 60000);
+        const t0 = document.title; let volta = false; const devolve = () => { if (!volta) { volta = true; document.title = t0; } };
+        if (nome) { document.title = nome; try { w.addEventListener('afterprint', devolve); } catch (e) { /* segue */ } setTimeout(devolve, 60000); }
+        try { w.focus(); w.print(); } catch (e) { devolve(); toast('Este visualizador não permite imprimir.', true); } setTimeout(() => fr.remove(), 60000);
       };
       setTimeout(go, 250);
     };
@@ -9394,6 +9470,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     x.custos = r.custos || {}; x.custoTotal = CUSTOS.reduce((s, [k]) => s + (typeof x.custos[k] === 'number' ? x.custos[k] : 0), 0);
     x.aceite = r.aceite || ''; x.aceiteData = r.aceiteData ?? null; x.ackData = r.ackData ?? null; x.efPrev = r.efPrev ?? null; x.efEvid = r.efEvid || '';
     x.procJust = r.procJust || ''; x.procData = r.procData ?? null; x.fotosN = r.fotosN || 0;
+    x.en = r.en && typeof r.en === 'object' ? r.en : {};   /* v43: inglês opcional do texto digitado, só para o 8D */
     x.improc = isImproc(x);
     x.acoesAbertas = x.acoes.filter((a) => !a.feito);
     x.acoesAtras = x.acoesAbertas.filter((a) => a.prazo != null && a.prazo < S.today);
@@ -9445,6 +9522,38 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${rfld('Outros participantes (separe por vírgula)', `<input id="re-out" placeholder="ex.: representante do cliente">`)}${foot('re-ok', 'Salvar equipe')}`);
     $$('#re-p .pfun').forEach((b) => { b.onclick = () => b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true'); });
     $('#re-ok').onclick = () => { const eq = $$('#re-p .pfun[aria-pressed="true"]').map((b) => b.dataset.n).concat(rv('re-out').split(',').map((s) => s.trim()).filter(Boolean)); rnccSave(x, { equipe: uniq(eq) }, 'equipe', '#re-ok'); };
+  }
+  /* v43: o 8D vai para o cliente. Nada é traduzido sozinho: aqui se escreve, se quiser, o inglês de cada texto digitado.
+     Campo vazio = no 8D sai só o português. Guardado no próprio registro da NCC (campo en). */
+  function rcEnItens(x) {
+    const L = [], pq = x.porques.filter(Boolean);
+    if (E.filled(x.desc)) L.push({ k: 'desc', l: 'D2 · Reclamação', pt: x.desc });
+    if (E.filled(x.procJust)) L.push({ k: 'procJust', l: 'D2 · Procedência (justificativa)', pt: x.procJust });
+    if (!x.improc) {
+      if (E.filled(x.contencao)) L.push({ k: 'contencao', l: 'D3 · Ação de contenção', pt: x.contencao });
+      pq.forEach((p, i) => L.push({ k: 'porques.' + i, l: `D4 · Por quê? ${i + 1}`, pt: p }));
+      const causa = pq.length ? pq[pq.length - 1] : x.causa;
+      if (E.filled(causa)) L.push({ k: 'causa', l: 'D4 · Causa raiz', pt: causa });
+      const ac = x.acoes.length ? x.acoes : x.acao ? [{ id: '_', desc: x.acao }] : [];
+      ac.filter((a) => E.filled(a.desc)).forEach((a, i) => L.push({ k: 'acoes.' + a.id, l: `D5/D6 · Ação ${i + 1}`, pt: a.desc }));
+      if (E.filled(x.efEvid)) L.push({ k: 'efEvid', l: 'D7 · Evidência da eficácia', pt: x.efEvid });
+    }
+    return L;
+  }
+  const rcEnGet = (en, k) => { const [a, b] = k.split('.'); const v = b == null ? en[a] : (en[a] || {})[b]; return typeof v === 'string' ? v : ''; };
+  function rcEn(x) {
+    const L = rcEnItens(x), en = x.en || {}, base = en._pt || {};
+    if (!L.length) { toast('Ainda não há texto digitado na NCC para passar para o inglês.', true); return; }
+    openModal('Inglês do 8D · ' + x.num, `<p style="margin:0">Opcional. O 8D já sai com os rótulos em inglês; aqui você escreve o inglês do que foi <b>digitado</b>. Campo vazio: no 8D sai só o português.</p>
+      <div class="fgrid cm-grid">${L.map((o, i) => { const v = rcEnGet(en, o.k), velho = v && base[o.k] != null && base[o.k] !== o.pt;
+        return rfld(esc(o.l), `<div class="muted" style="font-size:13px;margin:0 0 4px;white-space:pre-wrap">${esc(o.pt)}</div>${rta('ren-' + i, v, 'em inglês (opcional)', 54)}`, { span: 1, help: velho ? '<b style="color:var(--bad)">O português mudou depois que o inglês foi escrito. Confira.</b>' : '' }); }).join('')}</div>${foot('ren-ok', 'Salvar inglês')}`);
+    $('#ren-ok').onclick = () => {
+      const o = { porques: [], acoes: {}, _pt: {} };
+      L.forEach((it, i) => { const v = rv('ren-' + i), [a, b] = it.k.split('.'); if (b == null) o[a] = v || null; else if (a === 'porques') o.porques[+b] = v || null; else o.acoes[b] = v || null; if (v) o._pt[it.k] = it.pt; });
+      o.porques = o.porques.map((v) => v || null);
+      if (o.acoes._ !== undefined) { o.acao = o.acoes._; delete o.acoes._; }
+      rnccSave(x, { en: o }, 'inglês do 8D', '#ren-ok');
+    };
   }
   function rcProc(x) {
     openModal('Procedência · ' + x.num, `<p style="margin:0">A reclamação procede? <b>Sim</b>: segue contenção, causa e ações. <b>Não</b>: responda ao cliente explicando o motivo e encerre.</p>
@@ -9736,23 +9845,25 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   async function rnccPrint(x) {
     const fotos = await rnccFotos(x.key);
     const T = (v) => esc(v == null || v === '' ? '—' : v).replace(/\n/g, '<br>');
-    const sec = (n, t, inner) => `<div class="sec"><div class="sh">${n} · ${t}</div>${inner}</div>`;
-    const kv = (rows) => `<table>${rows.filter((r) => r).map(([k, v]) => `<tr><td class="k">${k}</td><td>${v}</td></tr>`).join('')}</table>`;
+    const XE = x.en || {}, TE = (v, en) => (E.filled(v) && en ? biT(T(v), en) : T(v)); /* inglês opcional do texto digitado (proposta: só NCC/8D) */
+    const V = (v) => (E.filled(v) ? biL(String(v)) : '—');
+    const sec = (n, t, inner, chave) => `<div class="sec"><div class="sh">${biS(n, t, chave)}</div>${inner}</div>`;
+    const kv = (rows) => `<table>${rows.filter((r) => r).map(([k, v]) => `<tr><td class="k">${biL(k)}</td><td>${v}</td></tr>`).join('')}</table>`;
     const ac = x.acoes.length ? x.acoes : x.acao ? [{ desc: x.acao, resp: x.resp, prazo: x.acaoPrazo, tipo: 'Corretiva' }] : [];
     const sit = { 'Em Andamento': 'Em andamento', Pendente: 'Em andamento', Atrasado: 'Em andamento', Concluida: 'Concluída', Cancelada: 'Cancelada' }[x.status] || '';
     const corpo = `${sec('D1', 'Equipe', `<div class="sig">${T(x.equipe.join(', ') || x.emissor)}</div>`)}
-      ${sec('D2', 'Descrição do problema', kv([['Reclamação', T(x.desc)], ['Motivo', T(x.motivo)], ['Gravidade', T(x.gravidade)], ['Contato / canal', T([x.contato, x.canal].filter(Boolean).join(' · '))], ['NF / pedido', T([x.nf, x.pv].filter(E.filled).join(' / '))], ['Produto', T(x.produto)], ['Quantidade', T(x.qtd)], ['Lotes / corridas', T(x.lotes)], ['Procedência', T(x.procedente + (x.procJust ? ' — ' + x.procJust : ''))]]) + (fotos.length ? `<div class="sh l">Registro fotográfico <span>${fotos.length} foto${fotos.length > 1 ? 's' : ''}</span></div><div class="fot c3">${fotos.map((f) => `<figure><img src="${f.img}" alt=""><figcaption>${esc(f.leg || '')}</figcaption></figure>`).join('')}</div>` : ''))}
-      ${x.improc ? '' : sec('D3', 'Ação de contenção', kv([['Ação', T(x.contencao)], ['Data', T(fD(x.contData))], ['Disposição', T(x.disp)]]))}
-      ${x.improc ? '' : sec('D4', 'Causa raiz', kv([['Categoria (6M)', T(x.m6)], ['Origem', T(x.origem)], ['Setor', T(x.setor)]]) + (x.porques.some(Boolean) ? `<div class="sig"><ol style="margin:0 0 0 5mm;padding:0">${x.porques.filter(Boolean).map((p) => `<li>Por quê? ${esc(p)}</li>`).join('')}</ol><div style="margin-top:1mm"><b>Causa raiz:</b> ${esc(x.porques.filter(Boolean).slice(-1)[0])}</div></div>` : `<div class="sig">${T(x.causa)}</div>`))}
-      ${x.improc ? '' : sec('D5/D6', 'Ações corretivas e implementação', ac.length ? `<table><thead><tr><td class="k">Ação</td><td class="k">Tipo</td><td class="k">Responsável</td><td class="k">Prazo</td><td class="k">Concluída</td><td class="k">Evidência</td></tr></thead><tbody>${ac.map((a) => `<tr><td>${T(a.desc)}</td><td>${T(a.tipo)}</td><td>${T(a.resp)}</td><td class="nw">${fD(a.prazo) || '—'}</td><td class="nw">${fD(a.feito) || '—'}</td><td>${T(a.evid)}</td></tr>`).join('')}</tbody></table>` : '<div class="sig">—</div>')}
-      ${x.improc ? '' : sec('D7', 'Verificação de eficácia', kv([['Resultado', T(x.eficacia)], ['Data', T(fD(x.eficData))], ['Evidência', T(x.efEvid)]]))}
-      ${sec('D8', 'Encerramento', kv([['Resposta ao cliente', T(fD(x.respData))], ['Retorno do cliente', T(x.aceite)], ['Conclusão', T(fD(x.conclusao))]]))}`;
-    printHTML(relDocHTML({ titulo: 'Relatório 8D ' + esc(x.num), cor: '#980000', nome: 'RELATÓRIO DE ANÁLISE DE RECLAMAÇÃO (8D)', sub: 'Reclamação de cliente', num: esc(x.num),
-      linhas: `<div><span>Abertura</span><b>${fD(x.data)}</b></div><div><span>Cliente</span><b>${T(x.cliente)}</b></div><div><span>Situação</span><b>${esc(sit)}</b></div>`,
+      ${sec('D2', 'Descrição do problema', kv([['Reclamação', TE(x.desc, XE.desc)], ['Motivo', V(x.motivo)], ['Gravidade', V(x.gravidade)], ['Contato / canal', T([x.contato, x.canal].filter(Boolean).join(' · '))], ['NF / pedido', T([x.nf, x.pv].filter(E.filled).join(' / '))], ['Produto', T(x.produto)], ['Quantidade', T(x.qtd)], ['Lotes / corridas', T(x.lotes)], ['Procedência', E.filled(x.procedente) ? biT(esc(x.procedente) + (x.procJust ? ' — ' + T(x.procJust) : ''), relEn(x.procedente) + (x.procJust && XE.procJust ? ' — ' + XE.procJust : '')) : '—']]) + (fotos.length ? `<div class="sh l">${biS('', 'Registro fotográfico')} <span>${biL(fotos.length + ' foto' + (fotos.length > 1 ? 's' : ''))}</span></div><div class="fot c3">${fotos.map((f) => `<figure><img src="${f.img}" alt=""><figcaption>${esc(f.leg || '')}</figcaption></figure>`).join('')}</div>` : ''))}
+      ${x.improc ? '' : sec('D3', 'Ação de contenção', kv([['Ação', TE(x.contencao, XE.contencao)], ['Data', T(fD(x.contData))], ['Disposição', V(x.disp)]]))}
+      ${x.improc ? '' : sec('D4', 'Causa raiz', kv([['Categoria (6M)', V(x.m6)], ['Origem', V(x.origem)], ['Setor', V(x.setor)]]) + (x.porques.some(Boolean) ? `<div class="sig"><ol style="margin:0 0 0 5mm;padding:0">${x.porques.filter(Boolean).map((p, i) => `<li>${biI('Por quê?')} ${esc(p)}${(XE.porques || [])[i] ? `<small class="en">${esc(XE.porques[i])}</small>` : ''}</li>`).join('')}</ol><div style="margin-top:1mm"><b>${biI('Causa raiz:')}</b> ${esc(x.porques.filter(Boolean).slice(-1)[0])}${XE.causa ? `<small class="en">${esc(XE.causa)}</small>` : ''}</div></div>` : `<div class="sig">${TE(x.causa, XE.causa)}</div>`))}
+      ${x.improc ? '' : sec('D5/D6', 'Ações corretivas e implementação', ac.length ? `<table><thead><tr><td class="k">${biL('Ação')}</td><td class="k">${biL('Tipo')}</td><td class="k">${biL('Responsável')}</td><td class="k">${biL('Prazo')}</td><td class="k">${biL('Concluída')}</td><td class="k">${biL('Evidência')}</td></tr></thead><tbody>${ac.map((a) => `<tr><td>${TE(a.desc, a.id ? (XE.acoes || {})[a.id] : XE.acao)}</td><td>${V(a.tipo)}</td><td>${T(a.resp)}</td><td class="nw">${fD(a.prazo) || '—'}</td><td class="nw">${fD(a.feito) || '—'}</td><td>${T(a.evid)}</td></tr>`).join('')}</tbody></table>` : '<div class="sig">—</div>')}
+      ${x.improc ? '' : sec('D7', 'Verificação de eficácia', kv([['Resultado', V(x.eficacia)], ['Data', T(fD(x.eficData))], ['Evidência', TE(x.efEvid, XE.efEvid)]]), 'Verificação de eficácia (8D)')}
+      ${sec('D8', 'Encerramento', kv([['Resposta ao cliente', T(fD(x.respData))], ['Retorno do cliente', V(x.aceite)], ['Conclusão', T(fD(x.conclusao))]]))}`;
+    printHTML(relDocHTML({ en: true, titulo: '8D-' + esc(x.num), cor: '#492f88', nome: 'RELATÓRIO DE ANÁLISE DE RECLAMAÇÃO (8D)', sub: 'Reclamação de cliente', subEn: esc(relEn('Reclamação de cliente')), num: esc(x.num),
+      linhas: `<div><span>${biL('Abertura')}</span><b>${fD(x.data)}</b></div><div><span>${biL('Cliente')}</span><b>${T(x.cliente)}</b></div><div><span>${biL('Situação')}</span><b>${sit ? biL(sit, null, sit === 'Concluída' ? 'Concluída (situação)' : null) : ''}</b></div>`,
       co: 'AÇOS VITAL COM. DE TUBOS HIDRÁULICOS EIRELI · Rod. Pedro Eroles, nº 1855 KM49 - Jd Aracy, Mogi das Cruzes - SP, CEP 08770-490 · Tel. +55 (11) 4797-2352 · qualidade@acosvital.com.br',
       extra: '.fot.c3{grid-template-columns:repeat(3,1fr)}.fot figure{margin:0}.fot figcaption{font-size:7.5pt;color:#444;margin-top:.6mm}.fot.c3 img{aspect-ratio:auto;height:42mm}',
       corpo, form: 'NCC', rodape: 'Aços Vital · Qualidade · Relatório de Análise de Reclamação (8D)', rodNum: esc(x.num),
-      aprov: apvHTML([{ papel: 'Qualidade — Aços Vital', nome: x.emissor || null, dia: x.respData != null ? x.respData : x.conclusao, linha: true }, { papel: 'Cliente (ciência)', branco: true }]) }));
+      aprov: apvHTML([{ papel: 'Qualidade — Aços Vital', nome: x.emissor || null, dia: x.respData != null ? x.respData : x.conclusao, linha: true }, { papel: 'Cliente (ciência)', branco: true }], null, true) }));
   }
 
   /* ---------- ficha da NCC ---------- */
@@ -9769,7 +9880,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const head2 = `<div class="d8top"><div>${chipRnc(x.status)} ${chipGrav(x.gravidade)} ${x.reinc === 'Sim' ? '<span class="chip warn"><i>↺</i>Reincidência</span>' : ''} ${x.improc ? '<span class="chip off"><i>–</i>Improcedente</span>' : ''}</div>
       <div class="d8due">${x.aberta ? `<span>Etapa atual: <b>${esc(stg.t)}</b>${stg.due != null ? ' · prazo ' + fD(stg.due) + dl(stg.due) : ''}</span>` : ''}<span>Responder ao cliente até <b>${fD(x.prazoResp)}</b>${x.respData == null && x.aberta ? dl(x.prazoResp) : ''}</span><span>Prazo final <b>${fD(x.prazoFinal)}</b>${x.aberta ? dl(x.prazoFinal) : ''}</span></div></div>`;
     const acts = `<div class="formfoot">${w && x.aberta ? `<button class="btn primary" type="button" data-act="rc-mail" data-key="${esc(key)}" data-tipo="${x.ackData == null ? 'ack' : 'resp'}">${x.ackData == null ? 'E-mail de recebimento ao cliente' : 'E-mail de resposta ao cliente'}</button>` : ''}
-      <button class="btn" type="button" data-act="rc-print" data-key="${esc(key)}">Relatório 8D</button>${x.aberta ? `<button class="btn" type="button" data-act="msg-rncc" data-key="${esc(key)}">Cobrança interna</button>` : ''}
+      <button class="btn" type="button" data-act="rc-print" data-key="${esc(key)}">Relatório 8D</button>${w ? `<button class="btn" type="button" data-act="rc-en" data-key="${esc(key)}">Inglês do 8D</button>` : ''}${x.aberta ? `<button class="btn" type="button" data-act="msg-rncc" data-key="${esc(key)}">Cobrança interna</button>` : ''}
       ${cw('rncc') && cw('rnc') && E.low(x.origem) === 'fornecedor' && !x.rncf ? `<button class="btn" type="button" data-act="rncc-to-rncf" data-key="${esc(key)}">Abrir NCF</button>` : ''}
       ${w ? `<button class="btn" type="button" data-act="rc-nota" data-key="${esc(key)}">Anotação</button><button class="btn" type="button" data-act="edit" data-mod="RNCC" data-key="${esc(key)}">Editar tudo</button>` : ''}</div>`;
     const body = head2 + prog + acts
@@ -12149,7 +12260,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const bkPode = () => !!(DB.owner || DB.admin === true);
   const bkFeitos = (y) => { const a = ((VY.bk || {}).anos || {})[y] || {}; return Object.keys(a).map((id) => Object.assign({ id }, a[id])).sort((p, q) => q.at - p.at); };
   async function bkLoad(force) {
-    if (!bkPode() || !DB.db || VY.bkLoading || (VY.bk && !force)) return;
+    if (CQ_ABA || !bkPode() || !DB.db || VY.bkLoading || (VY.bk && !force)) return;
     VY.bkLoading = true;
     try { const d = await DB.db.doc('meta/backups').get(); VY.bk = d.exists ? d.data() || {} : {}; } catch (e) { VY.bk = VY.bk || {}; }
     VY.bkLoading = false;
@@ -12307,6 +12418,17 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const CQ_MOT = ['OC pendente', 'Aguardando certificado do fornecedor', 'Aguardando cliente / comercial', 'Outro'];
   const CQ_TOM = ['#2d77c1', '#be5615', '#825ddc', '#378267', '#996c21', '#2e7f87', '#5f67e3', '#d9362a', '#6c7772'];
   const CQ_KEYS = { tipo: 'certificado-acos-vital/tipo', tubos: 'certificado-acos-vital/rascunho-v2', grades: 'certificado-acos-vital/grades-v1', cfg: 'certificado-acos-vital/config' };
+  /* v42: o rascunho de cada pedido tem a sua chave no navegador (o certificado abre com ?k=pedido); assim a aba de
+     certificados e a Central podem ter pedidos diferentes abertos sem um gravar por cima do outro. A cópia de verdade é a do banco. */
+  const cqNs = (key) => '#' + String(key || '').replace(/[^\w.@-]/g, '_');
+  const cqK = (t, key) => (t === 'cfg' ? CQ_KEYS.cfg : CQ_KEYS[t] + cqNs(key == null ? (S.cqEd && S.cqEd.key) : key));
+  const CQ_NS_IDX = 'certificado-acos-vital/ns-idx';
+  function cqNsLimpa(atual) {   /* tira do navegador as cópias de pedidos que ninguém mexe há 3 dias */
+    let idx = {}; try { idx = JSON.parse(cqLG(CQ_NS_IDX) || '{}') || {}; } catch (e) { idx = {}; }
+    const agora = Date.now();
+    Object.keys(idx).forEach((k) => { if (k !== atual && agora - (idx[k] || 0) > 3 * 864e5) { ['tipo', 'tubos', 'grades'].forEach((t) => { try { localStorage.removeItem(cqK(t, k)); } catch (e) { /* sem armazenamento */ } }); delete idx[k]; } });
+    idx[atual] = agora; cqLS(CQ_NS_IDX, JSON.stringify(idx));
+  }
   const CQ_MOD = { tubos: 'Principal', grades: 'Grade de piso' };
   const cqAdm = () => bkPode();
   const cqDig = (v) => docN(v);
@@ -12503,16 +12625,18 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const tag = crit ? cqSeloCrit(c) : p ? `<span class="cqtag${cheg ? ' ok' : ''}">${cheg ? 'material chegou' : 'pendência'}</span>` : late ? `<span class="cqtag late" title="Mais de ${cqCfg().prazo} dia(s) útil(eis) desde o faturamento">atrasado</span>` : '';
     const pb = p ? `<div class="cqpb"><b>⚠ ${esc(p.m || 'Pendência')}</b>${p.oc ? ` <span class="mono">OC ${esc(p.oc)}</span>` : ''}${p.j ? `<p>${esc(p.j)}</p>` : ''}<small>desde ${esc(cqDH(p.at))}${p.nome ? ' · ' + esc(p.nome) : ''}</small>${cheg ? `<div class="cqok">✓ Chegou o lote <button type="button" class="lnk" data-open="AV:${esc(cheg.id)}">${esc(cheg.id)}</button> da OC ${esc(p.oc)}: conferir e resolver</div>` : ''}</div>` : '';
     const foot = c.porEm ? cqWho(c) : (w ? `<button class="btn small" type="button" data-act="cq-pegar" data-key="${esc(c.k)}">Pegar</button>` : '<span class="muted">livre</span>');
+    const naAba = !CQ_ABA && abaTem(c.k);
     return `<div class="cqc${p ? ' pd' : c.porEm ? ' on' : ''}${cheg ? ' cheg' : ''}${crit ? ' crit' : ''}"${c.porEm ? ` style="--q:${cqTom(c.porEm)}"` : ''}>
-      <div class="cqh"><b class="cqpv">${esc(cqNum(c))}</b>${tag}${w ? `<button type="button" class="cqmenu" data-act="cq-menu" data-key="${esc(c.k)}" title="Pendência e outras ações" aria-label="Pendência e outras ações">⋯</button>` : ''}</div>
+      <div class="cqh"><b class="cqpv">${esc(cqNum(c))}</b>${tag}${naAba ? `<span class="cqtag aba" title="Aberto na aba de certificados">${tag ? 'na aba' : 'na aba de certificados'}</span>` : ''}${w ? `<button type="button" class="cqmenu" data-act="cq-menu" data-key="${esc(c.k)}" title="Pendência e outras ações" aria-label="Pendência e outras ações">⋯</button>` : ''}</div>
       <div class="cqs">${c.nf ? `<span class="cqnf mono">NF ${esc(c.nf)}</span>` : '<span class="chip warn" title="Pedido a faturar: o prazo começa quando a NF entrar numa importação do Omie">Aguardando NF</span>'}${c.seq ? `<span class="cqparc">parte ${c.seq}</span>` : ''}${c.fat ? `<span class="muted">fat. ${esc(cqDH(c.fat))}</span>` : ''}</div>
       <div class="cqcli" title="${esc(c.cli)}">${esc(c.cli || '—')}</div>
       ${pb}${c.rasc ? `<div class="cqras">rascunho salvo ${esc(cqDH(c.rasc))}</div>` : ''}
-      <div class="cqf">${foot}${w ? `<button class="btn small cqgo" type="button" data-act="cq-fazer" data-key="${esc(c.k)}">${p ? 'Abrir certificado' : c.rasc ? 'Continuar' : 'Fazer certificado'}</button>` : ''}</div></div>`;
+      <div class="cqf">${foot}${w ? (naAba ? `<button class="btn small cqgo" type="button" data-act="cq-iraba" data-key="${esc(c.k)}">Ir para a aba</button>` : `<button class="btn small cqgo" type="button" data-act="cq-fazer" data-key="${esc(c.k)}">${p ? 'Abrir certificado' : c.rasc ? 'Continuar' : 'Fazer certificado'}</button>`) : ''}</div></div>`;
   }
 
   /* ---------- tela ---------- */
   VIEWS.certq = (main) => {
+    if (CQ_ABA) { abaView(main); return; }
     if (S.cqSub === 'ed' && S.cqEd) { cqEditor(main); return; }
     const adm = cqAdm(), w = cw('certq'), L = cqCards();
     const pend = L.filter((c) => c.st === 'p'), npd = pend.filter((c) => c.pend).length;
@@ -12529,16 +12653,21 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const q2 = $('#cq-q2'); if (q2) { let tm; q2.oninput = () => { clearTimeout(tm); tm = setTimeout(() => { S.cqQ2 = q2.value; const p = q2.selectionStart; render(); const q3 = $('#cq-q2'); if (q3) { q3.focus(); try { q3.setSelectionRange(p, p); } catch (e) { /* ok */ } } }, 250); }; }
     const q = $('#cq-q'); if (q) { let tm; q.oninput = () => { clearTimeout(tm); tm = setTimeout(() => { S.cqQ = q.value; S.cqN = 0; const p = q.selectionStart; render(); const q2 = $('#cq-q'); if (q2) { q2.focus(); try { q2.setSelectionRange(p, p); } catch (e) { /* ok */ } } }, 250); }; }
   };
-  function cqPendHTML(pend, soPend) {
-    const flt = S.cqFlt || 'todos', qq = E.key(S.cqQ || '');
-    let L = pend.slice();
-    if (soPend) L = L.filter((c) => c.pend);
-    const CR = new Map(pend.map((c) => [c, cqCrit(c)])), nCrit = (soPend ? pend.filter((c) => c.pend) : pend).filter((c) => CR.get(c)).length;
+  /* filtro e ordem da fila: os mesmos na Central e no painel da aba de certificados (v42) */
+  function cqOrdena(L0, flt, qq) {
+    let L = L0.slice();
+    const CR = new Map(L.map((c) => [c, cqCrit(c)]));
     if (flt === 'livres') L = L.filter((c) => !c.porEm); else if (flt === 'meus') L = L.filter(cqMine); else if (flt === 'crit') L = L.filter((c) => CR.get(c));
-    if (qq) L = L.filter((c) => E.key([cqNum(c), c.nf, c.cli, c.porNome, c.pend && c.pend.oc].join(' ')).includes(qq));
+    if (qq) L = L.filter((c) => E.key([cqNum(c), c.nf, c.cli, c.porNome, c.pend && c.pend.oc, c.oc].join(' ')).includes(qq));
     /* vence primeiro: cada pedido com o seu prazo (o do crítico é menor, então ele sobe sozinho); sem NF vai para o fim; empate, o crítico na frente */
     const FZ = new Map(L.map((c) => { const f = cqFalta(c); return [c, f == null ? 9e9 : f]; }));
-    L.sort((a, b) => FZ.get(a) - FZ.get(b) || (CR.get(b) ? 1 : 0) - (CR.get(a) ? 1 : 0) || (a.fat || 9e15) - (b.fat || 9e15) || cmp(a.pv, b.pv) || (a.seq || 0) - (b.seq || 0));
+    L.sort((a, b) => (b.pend ? 1 : 0) - (a.pend ? 1 : 0) || FZ.get(a) - FZ.get(b) || (CR.get(b) ? 1 : 0) - (CR.get(a) ? 1 : 0) || (a.fat || 9e15) - (b.fat || 9e15) || cmp(a.pv, b.pv) || (a.seq || 0) - (b.seq || 0));
+    return L;
+  }
+  function cqPendHTML(pend, soPend) {
+    const flt = S.cqFlt || 'todos', qq = E.key(S.cqQ || '');
+    const CR = new Map(pend.map((c) => [c, cqCrit(c)])), nCrit = (soPend ? pend.filter((c) => c.pend) : pend).filter((c) => CR.get(c)).length;
+    const L = cqOrdena(soPend ? pend.filter((c) => c.pend) : pend, flt, qq);
     const comP = L.filter((c) => c.pend), resto = L.filter((c) => !c.pend), lim = 48 + (S.cqN || 0), vis2 = resto.slice(0, lim);
     const fb = (k, l) => `<button type="button" data-act="cq-flt" data-key="${k}" aria-pressed="${flt === k}">${l}</button>`;
     return `<section class="cqcol"><header><b>${soPend ? 'Aguardando solução' : 'Pendentes'}</b><span class="cqn">${NF.format(L.length)}</span><span class="muted">${soPend ? 'pedidos com pendência registrada' : 'pendências em cima, depois o que vence primeiro'}${nCrit ? ` · <b>${NF.format(nCrit)} de clientes críticos</b>` : ''}</span>
@@ -12721,8 +12850,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     try { const d = await DB.db.doc('certd/r-' + key).get(); r = d && d.exists ? d.data() : null; } catch (e) { r = null; }
     try { if (DB.me) { const d = await DB.db.doc('certd/sig-' + DB.me).get(); sig = d && d.exists ? d.data() : null; } } catch (e) { sig = null; }
     const tipo = (r && r.tipo) || 'tubos', docs = (r && r.docs) || {};
-    cqLS(CQ_KEYS.tipo, tipo);
-    ['tubos', 'grades'].forEach((t) => cqLS(CQ_KEYS[t], docs[t] || cqDocInicial(t, c)));
+    cqNsLimpa(key);
+    cqLS(cqK('tipo', key), tipo);
+    ['tubos', 'grades'].forEach((t) => cqLS(cqK(t, key), docs[t] || cqDocInicial(t, c)));
     /* assinatura: sempre a de quem está logado — nunca a da última pessoa que usou este computador */
     let cfgDev = {}; try { cfgDev = JSON.parse(cqLG(CQ_KEYS.cfg) || 'null') || {}; } catch (e) { cfgDev = {}; }
     const sigJson = JSON.stringify(Object.assign({}, cfgDev, { assinante: (sig && sig.assinante) || myPessoa() || DB.meName || '', assinatura: (sig && sig.assinatura) || null }));
@@ -12740,29 +12870,259 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     main.dataset.cqed = ed.key + ':' + ed.tipo;
     const lots = c && S.model ? S.model.av.filter((x) => docMatch(x.pv, c.pv)).sort((a, b) => cmp(a.id, b.id)) : [];
     const lotRow = (x) => { const av = lotCertAviso(x); return `<label class="cqlot"><input type="checkbox" data-lot="${esc(x.id)}" ${ed.lotes.includes(x.id) ? 'checked' : ''}><span><b class="mono">${esc(x.id)}</b>${av ? ` <em class="chip ${av.crit ? 'crit' : 'warn'}" style="font-style:normal"><i>${av.crit ? '🔒' : '!'}</i>${esc(av.t)}</em>` : ''} · ${esc([x.desc, x.diam].filter(E.filled).join(' '))}<small>corrida <b class="mono">${esc(E.filled(x.corrida) ? x.corrida : '—')}</b> · ${esc([x.liga, x.norma].filter(E.filled).join(' · ') || '—')}${E.filled(x.cert) ? ' · cert. ' + esc(x.cert) : ''}</small></span></label>`; };
-    window.CQ_CERT_HOST = { salvo: (nome) => cqOnSalvo(nome), pv: () => { const e = S.cqEd, cc = e && e.k ? cqFind(e.k) : null; return cc ? cqNum(cc) : ''; } };
-    main.innerHTML = `<div class="view cqed">
-      <div class="cqfrom"><button class="btn ghost small" type="button" data-act="cq-voltar">‹ Fila</button>${c ? `<b class="cqpv">${esc(cqNum(c))}</b><span class="cqnf mono">NF ${esc(c.nf || '—')}</span>${c.seq ? `<span class="cqparc">parte ${c.seq}</span>` : ''}<span class="clip">${esc(c.cli || '')}</span>${c.porEm ? cqWho(c) : ''}${c.st !== 'p' ? '<span class="chip ok">concluído</span>' : ''}` : '<b>Certificado avulso</b><span class="muted">fora da fila: ao salvar, a Central procura o número na fila</span>'}<span class="cqst" id="cq-st"></span></div>
-      <div class="cqgrid2">
-        <div class="cqsheet"><iframe id="cq-frame" src="cert.html?v=1" title="Certificado de qualidade"></iframe></div>
-        <aside class="cqpanel">
-          <div class="cqbox cqtop"><div class="cq2"><button class="btn small" type="button" data-act="cq-voltar" title="Voltar para a fila (o rascunho fica salvo)">‹ Voltar</button><button class="btn small" type="button" data-act="cq-limpar" title="Apagar o que foi preenchido e começar de novo" ${w ? '' : 'disabled'}>Zerar</button></div></div>
-          <div class="cqbox"><h4>Modelo</h4><div class="seg cqtipo">${['tubos', 'grades'].map((t) => `<button type="button" data-act="cq-tipo" data-key="${t}" aria-pressed="${ed.tipo === t}">${CQ_MOD[t]}</button>`).join('')}</div></div>
-          <div class="cqbox"><h4>Salvar</h4><div class="cq2"><button class="btn primary" type="button" data-act="cq-btn" data-key="btnPdf" ${w ? '' : 'disabled'}>Salvar PDF</button><button class="btn primary" type="button" data-act="cq-btn" data-key="btnXlsx" ${w ? '' : 'disabled'}>Salvar Excel</button></div><button class="btn" type="button" data-act="cq-btn" data-key="btnTodos" id="cq-todos" hidden>Salvar todas as folhas…</button><div class="cq2"><button class="btn" type="button" data-act="cq-btn" data-key="btnConferir" title="O que falta e os valores fora da faixa das normas, com o atalho para cada célula">Conferir</button><button class="btn" type="button" data-act="cq-btn" data-key="btnUsina" title="PDF do certificado com os PDFs dos certificados da usina no fim, num arquivo só" ${w ? '' : 'disabled'}>PDF + usina…</button></div>
-            <p class="cqhint">Ao salvar, a Central confere o nº do certificado com a fila e pergunta se o pedido pode ir para Concluídos. O arquivo sai igual ao de sempre, sem nada da Central.</p></div>
-          <div class="cqbox"><h4>Itens</h4><div class="cq2"><button class="btn" type="button" data-act="cq-btn" data-key="btnAdd">+ Adicionar</button><button class="btn" type="button" data-act="cq-btn" data-key="btnDel">− Remover</button></div><p class="cqhint c" id="cq-ic"></p>
-            <div id="cq-gr" hidden><div class="cq2"><button class="btn small" type="button" data-act="cq-btn" data-key="compAdd">+ componente</button><button class="btn small" type="button" data-act="cq-btn" data-key="compDel">− componente</button></div><div class="cq2"><button class="btn small" type="button" data-act="cq-btn" data-key="corrAdd">+ corrida</button><button class="btn small" type="button" data-act="cq-btn" data-key="corrDel">− corrida</button></div><label class="cqchk"><input type="checkbox" id="cq-galv"> Galvanizado a fogo</label></div></div>
-          <div class="cqbox"><h4>Importar</h4><button class="btn" type="button" data-act="cq-btn" data-key="btnPedido">Importar PV (PDF)…</button><button class="btn" type="button" data-act="cq-btn" data-key="btnOC">Importar O.C. (PDF)…</button><button class="btn" type="button" data-act="cq-btn" data-key="btnLinkOmie">Colar link do Omie…</button><button class="btn" type="button" data-act="cq-btn" data-key="btnAbrir">Abrir Excel…</button></div>
-          ${c ? cqRifBox(c) : ''}
-          ${c ? `<div class="cqbox cqlots"><h4>Puxar dos lotes (AV)</h4><div class="cqpvl"><span>PV</span><b class="mono">${esc(cqDig(c.pv))}</b><em>${NF.format(lots.length)} lote(s) recebido(s)</em></div>
-            ${lots.length ? `<div class="cqlotl">${lots.map(lotRow).join('')}</div><button class="btn" type="button" data-act="cq-lotes">Preencher os itens marcados</button><p class="cqhint">Preenche descrição, especificação, material, corrida e — quando lançados na ficha do lote — a análise química e as propriedades mecânicas do certificado da usina. Os campos ficam em amarelo até alguém conferir.</p>` : `<p class="cqhint">Nenhum lote AV com o pedido de venda ${esc(cqDig(c.pv))}. Confira o "Ped. venda" nos lotes ou digite a corrida no certificado.</p>`}</div>` : ''}
-          <div class="cqbox"><h4>Planilha</h4><p class="cqhint">Setas, Tab e Enter andam; Shift seleciona; Ctrl+C/V copiam e colam várias células; Ctrl+D e Ctrl+R preenchem; Ctrl+Z desfaz. Botão direito: inserir, excluir, duplicar e copiar item.</p>${ed.tipo === 'grades' ? '' : '<button class="btn small" type="button" data-act="cq-btn" data-key="btnLimites">Limites das normas…</button>'}</div>
-          <div class="cqbox"><h4>Assinatura</h4><p class="cqhint" id="cq-sig">—</p><button class="btn small" type="button" data-act="cq-btn" data-key="btnAssinatura">Trocar a imagem da assinatura…</button></div>
-          <div class="cqbox"><h4>Zoom</h4><div class="cq2"><button class="btn small" type="button" data-act="cq-zoom" data-key="-">−</button><button class="btn small" type="button" data-act="cq-zoom" data-key="+">+</button></div></div>
-        </aside></div></div>`;
+    window.CQ_CERT_HOST = {
+      salvo: (nome) => cqOnSalvo(nome),
+      pv: () => { const e = S.cqEd, cc = e && e.k ? cqFind(e.k) : null; return cc ? cqNum(cc) : ''; },
+      /* v41: área de trabalho do certificado (imagens G1 a G6) — o que antes ficava no painel da direita vem por aqui */
+      info: () => { const e = S.cqEd, cc = e && e.k ? cqFind(e.k) : null; return { lotes: e && e.lotes ? e.lotes.length : 0, pv: cc ? cqNum(cc) : '' }; },
+      acao: (k, v) => cqWsAcao(k, v),
+    };
+    main.innerHTML = `<div class="view cqed cqws">
+      ${CQ_ABA ? abaFaixa(c) : `<div class="cqfrom"><button class="btn ghost small" type="button" data-act="cq-voltar">‹ Fila</button>${c ? `<b class="cqpv">${esc(cqNum(c))}</b><span class="cqnf mono">NF ${esc(c.nf || '—')}</span>${c.seq ? `<span class="cqparc">parte ${c.seq}</span>` : ''}<span class="clip">${esc(c.cli || '')}</span>${c.porEm ? cqWho(c) : ''}${c.st !== 'p' ? '<span class="chip ok">concluído</span>' : ''}` : '<b>Certificado avulso</b><span class="muted">fora da fila: ao salvar, a Central procura o número na fila</span>'}<span class="cqst" id="cq-st"></span>${c && abaPode() ? '<button class="btn small cqoutra" type="button" data-act="aba-mover" title="Continuar este certificado na aba de certificados (a fila fica ao lado)">⧉ Abrir em outra aba</button>' : ''}</div>`}
+      <div class="cqsheet cqwsf"><iframe id="cq-frame" src="cert.html?v=1&amp;ws=1&amp;k=${encodeURIComponent(ed.key)}" title="Certificado de qualidade"></iframe></div></div>`;
+    S.cqLotRow = lotRow; S.cqLots = lots;
     const fr = $('#cq-frame');
     fr.onload = () => { cqAposCarregar(); };
     const galv = $('#cq-galv'); if (galv) galv.onchange = () => { const f = cqFrame(); const g = f && f.contentDocument.getElementById('chkGalv'); if (g) { g.click(); setTimeout(cqPanelSync, 300); } };
+  }
+
+  /* ================= ABA DE CERTIFICADOS (v42, imagens 1, 3, 5 e 6) =================
+     - index.html?certificados: a própria Central, sem o menu, com a fila num painel à esquerda (aberto ou recolhido)
+       e o certificado novo ao lado; um pedido de cada vez na tela, os outros ficam em "Em andamento".
+     - uma aba só por computador (trava entre abas); a Central manda o pedido para ela e marca "na aba de certificados".
+     - a aba só ouve o que o certificado usa e nada grava sozinho (autoOk). */
+  const ABA = {
+    abertos: (() => { try { return JSON.parse(sessionStorage.getItem('cq-aba-abertos') || '[]') || []; } catch (e) { return []; } })(),
+    flt: 'todos', q: '', dup: false, inicial: null, titT: null, hb: null,
+  };
+  try { const m = /(?:^|[#&])k=([^&]+)/.exec(location.hash); if (CQ_ABA && m) ABA.inicial = decodeURIComponent(m[1]); } catch (e) { /* sem pedido */ }
+  const ABA_BC = (() => { try { return 'BroadcastChannel' in window ? new BroadcastChannel('cq-certificados') : null; } catch (e) { return null; } })();
+  const ABA_HB = 'cq-aba-hb', ABA_MSG = 'cq-aba-msg', ABA_HB_MS = 2500;
+  let ABA_WIN = null;
+  function abaMsg(o) {
+    o = Object.assign({ de: CQ_ABA ? 'aba' : 'central', at: Date.now(), id: Math.random().toString(36).slice(2) }, o);
+    if (ABA_BC) { try { ABA_BC.postMessage(o); return; } catch (e) { /* cai no localStorage */ } }
+    lsSet(ABA_MSG, JSON.stringify(o));
+  }
+  const abaEstado = () => { try { const o = JSON.parse(lsGet(ABA_HB, '') || 'null'); return o && Date.now() - (o.at || 0) < ABA_HB_MS * 2.4 ? o : null; } catch (e) { return null; } };
+  const abaAberta = () => !!abaEstado();
+  const abaTem = (k) => { const o = abaEstado(); return !!(o && (o.abertos || []).includes(k)); };
+  /* só no computador e para quem lança em Certificados */
+  const abaPode = () => !CQ_ABA && cw('certq') && !!(window.matchMedia && matchMedia('(min-width: 1100px) and (pointer: fine)').matches);
+  function abaPisca(txt) {
+    clearInterval(ABA.titT); let n = 0;
+    const base = CQ_ABA ? 'Certificados · Central' : document.title;
+    ABA.titT = setInterval(() => { document.title = n % 2 ? base : '▶ ' + txt; if (++n > 7) { clearInterval(ABA.titT); document.title = base; } }, 700);
+  }
+  /* ---------- lado da Central ---------- */
+  function abaToast(c, n) {
+    const t = document.createElement('div'); t.className = 'cqtoast'; t.setAttribute('role', 'status');
+    t.innerHTML = `<span>Pedido <b class="mono">${esc(cqNum(c))}</b> · ${esc(c.cli || '')} foi para a aba de certificados${n ? ` (${n} ${n === 1 ? 'pedido aberto' : 'pedidos abertos'})` : ''}</span><button class="btn small" type="button">Ir para a aba</button>`;
+    $$('.cqtoast').forEach((x) => x.remove());
+    document.body.appendChild(t);
+    t.querySelector('button').onclick = () => { t.remove(); abaIr(c); };
+    setTimeout(() => t.remove(), 9000);
+  }
+  function abaIr(c) {
+    if (ABA_WIN && !ABA_WIN.closed) { try { ABA_WIN.focus(); } catch (e) { /* o navegador não deixou */ } }
+    abaMsg({ t: 'foco', k: c ? c.k : null });
+    toast(`O pedido ${c ? cqNum(c) + ' ' : ''}está na aba "Certificados · Central". Se ela não veio para a frente, clique nela na barra de abas do navegador.`);
+  }
+  function abaPessoa(c, depois) {   /* E5: outra pessoa está com o pedido */
+    if (!c || !c.porEm || E.low(c.porEm) === cqMe()) { depois(); return; }
+    confirmBox('Pedido com outra pessoa', `${c.porNome || c.porEm} está com o pedido ${cqNum(c)}${c.porAt ? ' desde ' + cqDH(c.porAt) : ''}. Se os dois mexerem ao mesmo tempo, o rascunho de um apaga o do outro. Combine antes quem continua.`, 'Abrir mesmo assim', depois);
+  }
+  function abaFazer(c) {
+    if (!abaPode()) { abaPessoa(c, () => cqAbrir(c)); return; }
+    abaPessoa(c, () => {
+      const est = abaEstado();
+      if (est) { abaMsg({ t: 'abrir', k: c.k }); abaToast(c, ((est.abertos || []).includes(c.k) ? 0 : 1) + (est.abertos || []).length); if (ABA_WIN && !ABA_WIN.closed) { try { ABA_WIN.focus(); } catch (e) { /* segue */ } } return; }
+      const w = window.open('index.html?certificados#k=' + encodeURIComponent(c.k), 'cq-certificados');
+      if (!w) { toast('O navegador bloqueou a aba nova: o certificado abriu aqui mesmo. Para usar a aba de certificados, libere as janelas novas para a Central.', true); cqAbrir(c); return; }
+      ABA_WIN = w;
+    });
+  }
+  async function abaMover() {   /* "⧉ Abrir em outra aba": o certificado aberto aqui vai para a aba */
+    const ed = S.cqEd, c = ed && ed.k ? cqFind(ed.k) : null; if (!c) return;
+    await cqDraft(true);
+    S.cqSub = 'pend'; S.cqEd = null; render();
+    const est = abaEstado();
+    if (est) { abaMsg({ t: 'abrir', k: c.k }); abaToast(c, (est.abertos || []).length + 1); return; }
+    const w = window.open('index.html?certificados#k=' + encodeURIComponent(c.k), 'cq-certificados');
+    if (!w) { toast('O navegador bloqueou a aba nova. Libere as janelas novas para a Central e tente de novo.', true); cqAbrir(c); return; }
+    ABA_WIN = w;
+  }
+  /* a Central redesenha a fila quando a aba muda o que tem aberto */
+  let abaUlt = '';
+  function abaCentralSync() {
+    if (CQ_ABA) return;
+    const o = abaEstado(), j = JSON.stringify(o ? o.abertos || [] : []);
+    if (j === abaUlt) return; abaUlt = j;
+    if (S.model && S.view === 'certq' && !(S.cqSub === 'ed' && S.cqEd) && !$('#layer').innerHTML) render();
+  }
+  /* ---------- lado da aba ---------- */
+  function abaGuarda() { try { sessionStorage.setItem('cq-aba-abertos', JSON.stringify(ABA.abertos)); } catch (e) { /* sem armazenamento */ } abaBate(); }
+  function abaBate() { if (!CQ_ABA || ABA.dup) return; lsSet(ABA_HB, JSON.stringify({ at: Date.now(), abertos: ABA.abertos, atual: S.cqEd ? S.cqEd.k : null })); }
+  async function abaAbrir(k, deFora) {
+    const c = cqFind(k); if (!c) { toast('Pedido não encontrado na fila.', true); return; }
+    if (S.cqEd && S.cqEd.k === k) { if (deFora) abaPisca('Certificados · ' + cqNum(c)); return; }
+    const vai = async () => {
+      if (S.cqEd) await cqDraft(true);
+      if (!ABA.abertos.includes(k)) ABA.abertos.push(k);
+      abaGuarda();
+      await cqAbrir(c);
+      abaBate();
+      try { history.replaceState(null, '', '?certificados#k=' + encodeURIComponent(k)); } catch (e) { /* sem histórico */ }
+      if (deFora) abaPisca('Certificados · ' + cqNum(c));
+    };
+    if (deFora) vai(); else abaPessoa(c, vai);
+  }
+  function abaTirar(k) {
+    ABA.abertos = ABA.abertos.filter((x) => x !== k); abaGuarda();
+    if (S.cqEd && S.cqEd.k === k) { cqDraft(true); S.cqEd = null; render(); } else abaFila();
+  }
+  function abaVerCentral() {
+    let ok = false;
+    try { if (window.opener && !window.opener.closed) { window.opener.focus(); ok = true; } } catch (e) { ok = false; }
+    abaMsg({ t: 'foco-central' });
+    if (!ok) { const w = window.open('index.html#certq', 'cq-central'); if (!w) toast('Abra a Central na outra aba do navegador.'); }
+  }
+  async function abaFechar() {
+    const ed = S.cqEd, app = cqApp();
+    if (ed && app && JSON.stringify(app.doc) !== ed.lastJson) { await cqDraft(true); toast('Rascunho salvo na Central.'); }
+    window.close();
+    setTimeout(() => { if (!window.closed) toast('O navegador não deixa esta página fechar a aba sozinha: feche com Ctrl+W ou no × da aba. O rascunho já está salvo.'); }, 400);
+  }
+  function abaFaixa(c) {
+    return `<div class="cqfrom cqtopo"><b class="cqbrand">CENTRAL DA QUALIDADE</b><span class="muted">· Certificados</span>${c ? `<b class="cqpv">${esc(cqNum(c))}</b><span class="cqnf mono">NF ${esc(c.nf || '—')}</span><span class="clip">${esc(c.cli || '')}</span>${c.porEm && E.low(c.porEm) !== cqMe() ? cqWho(c) : ''}${c.st !== 'p' ? '<span class="chip ok">concluído</span>' : ''}` : '<b>Certificado avulso</b>'}<span class="cqaq">● aberto nesta aba</span><span class="cqst" id="cq-st"></span><button class="btn small" type="button" data-act="aba-central">Ver a Central ↗</button><button class="btn small" type="button" data-act="aba-fechar">Fechar aba</button></div>`;
+  }
+  function abaTags(c) {
+    const p = c.pend, crit = cqCrit(c), adm = cqAdm(), late = adm && !p && c.st === 'p' && cqDias(c) > cqCfg().prazo;
+    const T = [];
+    if (crit && c.st === 'p') T.push(cqSeloCrit(c));
+    else if (p) T.push('<span class="cqtag">pendência</span>');
+    else if (late) T.push('<span class="cqtag late">atrasado</span>');
+    else if (!c.nf && c.st === 'p') T.push('<span class="cqtag nf">aguardando NF</span>');
+    return T.join('');
+  }
+  const abaLate = (c) => c.st === 'p' && ((cqCrit(c) && c.fat && cqFalta(c) < 0) || (cqAdm() && !c.pend && cqDias(c) > cqCfg().prazo));
+  function abaCard(c, andamento) {
+    const sel = S.cqEd && S.cqEd.k === c.k, est = andamento ? (c.st !== 'p' ? '<span class="cqtag sal">salvo</span>' : c.rasc || sel ? '<span class="cqtag ras">rascunho</span>' : '') : '';
+    return `<div class="cqmw"><button type="button" class="cqc cqm${cqCrit(c) && c.st === 'p' ? ' crit' : ''}${sel ? ' sel' : ''}" data-act="aba-abrir" data-key="${esc(c.k)}" aria-current="${sel}">
+      <span class="cqh"><b class="cqpv">${esc(cqNum(c))}</b>${abaTags(c)}${est}</span><span class="cqcli">${esc(c.cli || '—')}</span>
+      <span class="cqs">${c.nf ? `<span class="cqnf mono">NF ${esc(c.nf)}</span>` : ''}${c.fat ? `<span class="muted">fat. ${esc(dmy(c.fat).slice(0, 5))}</span>` : ''}${c.porEm && E.low(c.porEm) !== cqMe() ? `<span class="muted cqpor" title="Com ${esc(c.porNome || '')}">${esc(cqIni(c.porNome))}</span>` : ''}</span></button>
+      ${andamento ? `<button type="button" class="cqmx" data-act="aba-tirar" data-key="${esc(c.k)}" title="Tirar de Em andamento (o rascunho continua salvo na Central)" aria-label="Tirar ${esc(cqNum(c))} de Em andamento">×</button>` : ''}</div>`;
+  }
+  function abaListas() {
+    const L = cqCards(), and = ABA.abertos.map((k) => L.find((c) => c.k === k)).filter(Boolean);
+    const pend = L.filter((c) => c.st === 'p' && !ABA.abertos.includes(c.k));
+    const fila = cqOrdena(pend, ABA.flt, E.key(ABA.q || ''));
+    return { and, fila, total: L.filter((c) => c.st === 'p').length, nCrit: pend.filter(cqCrit).length };
+  }
+  function abaFila() {
+    const el = $('#cqfila'); if (!el) return;
+    const { and, fila, total, nCrit } = abaListas(), fb = (k, l, t) => `<button type="button" data-act="aba-flt" data-key="${k}" aria-pressed="${ABA.flt === k}" title="${t || ''}">${l}</button>`;
+    const foco = document.activeElement && document.activeElement.id === 'aba-q', pos = foco ? document.activeElement.selectionStart : 0;
+    el.innerHTML = `<div class="cqfh"><b>FILA</b><span class="cqn">${NF.format(total)}</span><button class="cqftg" type="button" data-act="aba-mini" title="Recolher a fila" aria-label="Recolher a fila">«</button></div>
+      <input id="aba-q" class="inp cqfq" type="search" placeholder="PV, NF, cliente, O.C.…" value="${esc(ABA.q)}" autocomplete="off" aria-label="Procurar na fila">
+      <div class="seg cqfseg" role="group" aria-label="Filtro da fila">${fb('todos', 'Todos')}${fb('livres', 'Livres')}${fb('meus', 'Meus')}${fb('crit', '★', `Clientes críticos (${nCrit})`)}</div>
+      ${and.length ? `<div class="cqfsec"><span>Em andamento</span><span>${and.length}</span></div><div class="cqfl">${and.map((c) => abaCard(c, true)).join('')}</div>` : ''}
+      <div class="cqfsec"><span>Na fila</span><span>${fila.length}</span></div>
+      <div class="cqfl">${fila.length ? fila.slice(0, 80).map((c) => abaCard(c, false)).join('') : `<p class="muted cqfv">${ABA.q || ABA.flt !== 'todos' ? 'Nada com esse filtro.' : 'Nenhum pedido na fila.'}</p>`}${fila.length > 80 ? `<p class="muted cqfv">+ ${fila.length - 80} — use a busca</p>` : ''}</div>
+      <div class="cqfmini"><button class="cqftg" type="button" data-act="aba-mini" title="Abrir a fila" aria-label="Abrir a fila">»</button><span class="cqn">${NF.format(total)}</span>
+        ${and.length ? `<small>Abertos</small>${and.map(abaMiniPv).join('')}` : ''}<small>Fila</small>${fila.slice(0, 30).map(abaMiniPv).join('')}</div>`;
+    const q = $('#aba-q', el);
+    q.oninput = () => { ABA.q = q.value; abaFila(); };
+    if (foco) { const q2 = $('#aba-q'); q2.focus(); try { q2.setSelectionRange(pos, pos); } catch (e) { /* busca */ } }
+  }
+  const abaMiniPv = (c) => `<button type="button" class="cqfpv${cqCrit(c) && c.st === 'p' ? ' crit' : ''}${S.cqEd && S.cqEd.k === c.k ? ' sel' : ''}${abaLate(c) ? ' late' : ''}" data-act="aba-abrir" data-key="${esc(c.k)}" title="${esc(cqNum(c) + ' · ' + (c.cli || ''))}${abaLate(c) ? ' · atrasado' : ''}">${esc(cqDig(c.pv))}</button>`;
+  function abaView(main) {
+    if (ABA.dup) {
+      main.innerHTML = `<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--info)">Certificados</span><h2>A aba de certificados já está aberta</h2><p>Neste computador só pode ter uma aba de certificados, para o mesmo pedido não ser aberto duas vezes.</p><div class="formfoot" style="justify-content:center"><button class="btn primary" type="button" data-act="aba-iroutra">Ir para a aba aberta</button><button class="btn" type="button" data-act="aba-fechar">Fechar esta</button></div></div></div>`;
+      return;
+    }
+    if (!cw('certq')) { main.innerHTML = '<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--warn)">Certificados</span><h2>Sem acesso para lançar certificados</h2><p>A aba de certificados é para quem faz os certificados. Peça o acesso “lançar” em Certificados a um administrador.</p></div></div>'; return; }
+    if (!$('#cqaba', main)) { main.dataset.cqed = ''; main.innerHTML = '<div class="cqaba-w" id="cqaba"><aside class="cqfila" id="cqfila" aria-label="Fila de certificados"></aside><section class="cqabam" id="cqabam"></section></div>'; }
+    document.body.classList.toggle('filamini', lsGet('cq-aba-mini', '') === '1');
+    abaFila();
+    const m = $('#cqabam');
+    if (ABA.inicial && CQF.ready) { const k = ABA.inicial; ABA.inicial = null; setTimeout(() => abaAbrir(k, true), 0); }
+    if (S.cqEd) { S.cqSub = 'ed'; cqEditor(m); return; }
+    m.dataset.cqed = '';
+    m.innerHTML = `${abaFaixa(null).replace('<b>Certificado avulso</b>', '<span class="muted">nenhum pedido aberto</span>').replace('<span class="cqaq">● aberto nesta aba</span>', '')}<div class="cqvazio"><b>Escolha um pedido na fila</b><span>O certificado abre aqui. Os que você abrir ficam em “Em andamento”, com o rascunho guardado, para trocar com um clique.</span></div>`;
+  }
+  function abaAct(a, key) {
+    if (a === 'aba-abrir') { abaAbrir(key); return true; }
+    if (a === 'aba-tirar') { abaTirar(key); return true; }
+    if (a === 'aba-flt') { ABA.flt = key; abaFila(); return true; }
+    if (a === 'aba-mini') { const on = !document.body.classList.contains('filamini'); document.body.classList.toggle('filamini', on); lsSet('cq-aba-mini', on ? '1' : ''); return true; }
+    if (a === 'aba-central') { abaVerCentral(); return true; }
+    if (a === 'aba-fechar') { abaFechar(); return true; }
+    if (a === 'aba-iroutra') { abaMsg({ t: 'foco' }); toast('A aba de certificados aberta foi avisada. Se ela não veio para a frente, clique nela na barra de abas.'); return true; }
+    if (a === 'aba-mover') { abaMover(); return true; }
+    return false;
+  }
+  function abaRecebe(o) {
+    if (!o || typeof o !== 'object') return;
+    if (CQ_ABA && !ABA.dup) {
+      if (o.t === 'abrir' && o.k) { abaAbrir(o.k, true); return; }
+      if (o.t === 'foco') { try { window.focus(); } catch (e) { /* o navegador decide */ } abaPisca(o.k && cqFind(o.k) ? 'Certificados · ' + cqNum(cqFind(o.k)) : 'Certificados'); if (o.k && cqFind(o.k)) abaAbrir(o.k, true); return; }
+    }
+    if (!CQ_ABA && o.t === 'foco-central') { try { window.focus(); } catch (e) { /* o navegador decide */ } abaPisca('Central da Qualidade'); }
+  }
+  if (ABA_BC) ABA_BC.onmessage = (e) => abaRecebe(e.data);
+  window.addEventListener('storage', (e) => {
+    if (e.key === ABA_MSG && e.newValue) { try { abaRecebe(JSON.parse(e.newValue)); } catch (err) { /* ignora */ } }
+    if (e.key === ABA_HB) abaCentralSync();
+  });
+  if (!CQ_ABA) setInterval(abaCentralSync, 3000);   /* a aba fechou sem avisar: o selo "na aba" sai sozinho */
+  if (CQ_ABA) {
+    /* uma aba só por computador: a trava fica com a primeira; sem Web Locks, o sinal no localStorage decide */
+    const assume = () => { abaBate(); ABA.hb = setInterval(abaBate, ABA_HB_MS); window.addEventListener('pagehide', () => { try { localStorage.removeItem(ABA_HB); } catch (e) { /* ok */ } }); };
+    if (navigator.locks && navigator.locks.request) {
+      navigator.locks.request('cq-aba-certificados', { ifAvailable: true }, (lock) => {
+        if (!lock) { ABA.dup = true; if (S.model) render(); return null; }
+        assume(); return new Promise(() => {});
+      }).catch(() => assume());
+    } else if (abaAberta()) { ABA.dup = true; } else assume();
+  }
+  /* E5: alguém mexeu no mesmo rascunho em outro computador enquanto este está aberto */
+  let abaRascUnsub = null, abaRascKey = null;
+  function abaVigia() {
+    const ed = S.cqEd, k = ed ? ed.key : null;
+    if (k === abaRascKey) return;
+    if (abaRascUnsub) { try { abaRascUnsub(); } catch (e) { /* ok */ } abaRascUnsub = null; }
+    abaRascKey = k; if (!k || !DB.db) return;
+    const desde = Date.now();
+    try {
+      abaRascUnsub = DB.db.doc('certd/r-' + k).onSnapshot((snap) => {
+        const d = snap && snap.exists ? snap.data() || {} : null;
+        if (!d || !d.by || d.by === DB.me || (d.at || 0) < desde + 1500 || !S.cqEd || S.cqEd.key !== k || S.cqEd.avisoAt === d.at) return;
+        S.cqEd.avisoAt = d.at;
+        toast(`Atenção: outra pessoa salvou o rascunho deste certificado às ${hhmm(d.at)}. Se os dois continuarem, um apaga o que o outro fez. Combinem quem continua.`, true);
+      }, () => {});
+    } catch (e) { abaRascUnsub = null; }
+  }
+  /* ações que a área de trabalho do certificado pede para a Central (v41) */
+  function cqWsAcao(k, v) {
+    const ed = S.cqEd, c = ed && ed.k ? cqFind(ed.k) : null;
+    if (k === 'tipo') { cqTrocarTipo(v); return; }
+    if (k === 'zerar') { cqLimpar(); return; }
+    if (k === 'voltar') { cqAct('cq-voltar'); return; }
+    if (k === 'rif') {
+      if (!c) { toast('Certificado avulso: não tem pedido para conferir o RIF.', true); return; }
+      const box = cqRifBox(c);
+      openModal('RIF do pedido', (box ? box.replace('<div class="cqbox">', '<div class="cqbox" style="border:0;padding:0">').replace(/<h4>[^<]*<\/h4>/, '') : '<p class="muted" style="margin:0">Este pedido não tem item usinado (sem RIF).</p>') + '<div class="formfoot"><button class="btn primary" type="button" data-act="close">Fechar</button></div>');
+      return;
+    }
+    if (k === 'lotes') {
+      if (!c) { toast('Certificado avulso: não tem pedido para puxar os lotes.', true); return; }
+      const lots = S.model ? S.model.av.filter((x) => docMatch(x.pv, c.pv)).sort((a, b) => cmp(a.id, b.id)) : [], lotRow = S.cqLotRow;
+      openModal(`Puxar dos lotes · PV ${cqDig(c.pv)}`, lots.length && lotRow ? `<p class="muted" style="margin:0">${NF.format(lots.length)} lote(s) recebido(s) com este pedido. Marque os que vão no certificado: a Central preenche descrição, especificação, material, corrida e, quando lançados na ficha do lote, a química e a mecânica do certificado da usina. Os campos ficam em amarelo até alguém conferir.</p>
+        <div class="cqlotl cqlotm">${lots.map(lotRow).join('')}</div><div class="formfoot"><button class="btn" type="button" data-act="close">Cancelar</button><button class="btn primary" type="button" id="cq-lotok">Preencher os itens marcados</button></div>`
+        : `<p style="margin:0">Nenhum lote AV recebido com o pedido de venda <b class="mono">${esc(cqDig(c.pv))}</b>. Confira o “Ped. venda” nos lotes ou digite a corrida no certificado.</p><div class="formfoot"><button class="btn primary" type="button" data-act="close">Fechar</button></div>`);
+      const ok = $('#cq-lotok'); if (ok) ok.onclick = async () => { const ids = $$('#layer [data-lot]').filter((i) => i.checked).map((i) => i.dataset.lot); if (!ids.length) { toast('Marque os lotes que vão no certificado.', true); return; } closeLayer(); await cqLotesPreencher(ids); };
+    }
   }
   function cqAposCarregar() {
     const app = cqApp(); if (!app) { setTimeout(cqAposCarregar, 300); return; }
@@ -12774,6 +13134,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     } catch (e) { /* segue sem assinatura */ }
     ed.loaded = JSON.stringify(app.doc);
     cqPanelSync();
+    abaVigia();
   }
   function cqPanelSync() {
     const app = cqApp(), f = cqFrame(); if (!app || !f) return;
@@ -12784,7 +13145,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (td) td.hidden = !(app.doc && app.doc.certs && app.doc.certs.length > 1);
     if (sg) { const cf = app.config || {}; sg.textContent = (cf.assinante || 'sem nome do responsável') + (cf.assinatura ? ' · com imagem da assinatura' : ' · sem imagem da assinatura'); }
   }
-  function cqSalvarLocal() { const app = cqApp(); if (!app) return; cqLS(CQ_KEYS[app.TIPO === 'grades' ? 'grades' : 'tubos'], JSON.stringify(app.doc)); }
+  function cqSalvarLocal() { const app = cqApp(); if (!app) return; cqLS(cqK(app.TIPO === 'grades' ? 'grades' : 'tubos'), JSON.stringify(app.doc)); }
   let cqDraftT = null;
   function cqDraftSoon() { clearTimeout(cqDraftT); cqDraftT = setTimeout(() => cqDraft(false), 1500); }
   async function cqDraft(force) {
@@ -12796,6 +13157,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     try {
       await soldWrite('certd/r-' + ed.key, { tipo, docs: { [tipo]: json }, lotes: ed.lotes || [], at: Date.now(), by: DB.me || null, k: ed.k || null });
       if (st) st.textContent = 'rascunho salvo na Central ' + hhmm(Date.now());
+      try { const fw = cqFrame(); if (fw && fw.contentWindow.__ws) fw.contentWindow.__ws.salvoCentral(Date.now()); } catch (e2) { /* certificado fechado */ }
       const c = ed.k ? cqFind(ed.k) : null;
       if (c && c.st === 'p' && (!c.rasc || Date.now() - c.rasc > 10 * 60000)) cqPatch(c, { rasc: Date.now() }).catch(() => {});
     } catch (err) { if (st) st.textContent = 'não foi possível salvar o rascunho'; }
@@ -12803,7 +13165,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* o certificado grava no navegador a cada alteração: a Central copia para o banco */
   window.addEventListener('storage', (e) => {
     if (!S.cqEd || S.cqSub !== 'ed' || S.view !== 'certq') return;
-    if (e.key === CQ_KEYS.tubos || e.key === CQ_KEYS.grades) { cqDraftSoon(); setTimeout(cqPanelSync, 100); }
+    if (e.key === cqK('tubos') || e.key === cqK('grades')) { cqDraftSoon(); setTimeout(cqPanelSync, 100); }
     if (e.key === CQ_KEYS.cfg && DB.me && cw('certq')) {
       const v = e.newValue; if (!v || v === S.cqEd.sig) return; S.cqEd.sig = v;
       try { const o = JSON.parse(v); soldWrite('certd/sig-' + DB.me, { assinante: o.assinante || '', assinatura: o.assinatura || null, at: Date.now() }).catch(() => {}); } catch (err) { /* ignora */ }
@@ -12813,7 +13175,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   async function cqTrocarTipo(t) {
     const ed = S.cqEd, app = cqApp(); if (!ed || !app || app.TIPO === t) return;
     await cqDraft(true);
-    ed.tipo = t; cqLS(CQ_KEYS.tipo, t);
+    ed.tipo = t; cqLS(cqK('tipo'), t);
     try { await soldWrite('certd/r-' + ed.key, { tipo: t, at: Date.now() }); } catch (e) { /* segue */ }
     render();
   }
@@ -12883,12 +13245,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     };
   }
   const quimEl = (lab) => { const t = String(lab || '').replace(/\(.*?\)|%/g, '').trim().toLowerCase(); return QUIM_EL.find((k) => k.toLowerCase() === t) || null; };
-  async function cqLotesPreencher() {
+  async function cqLotesPreencher(idsArg) {
     const app = cqApp(), ed = S.cqEd, c = ed && ed.k ? cqFind(ed.k) : null; if (!app || !c) return;
-    const ids = $$('[data-lot]').filter((i) => i.checked).map((i) => i.dataset.lot);
+    const ids = idsArg || $$('[data-lot]').filter((i) => i.checked).map((i) => i.dataset.lot);
     if (!ids.length) { toast('Marque os lotes que vão no certificado.', true); return; }
     const lots = ids.map((id) => S.model.av.find((x) => x.id === id)).filter(Boolean);
-    const bloq = cqSemJust(lots); if (bloq.length) { cqJustDialog(bloq, () => cqLotesPreencher()); return; }
+    const bloq = cqSemJust(lots); if (bloq.length) { cqJustDialog(bloq, () => cqLotesPreencher(ids)); return; }
     const CD = {}; for (const x of lots) CD[x.id] = await corrGet(x, true);
     let nCorr = 0; const semCorr = lots.filter((x) => !corrTem(CD[x.id])).map((x) => x.id);
     const s = JSON.parse(JSON.stringify(app.state)), F = app.FIELDS || [], sug = s.sug || (s.sug = {});
@@ -12980,7 +13342,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const alvo = pendL.find((c) => c.k === ed.k) || (pendL.length === 1 ? pendL[0] : null);
     const resumo = `<ul class="cqul"><li>Operador: <b>${esc(cqMeNome())}</b></li><li>Itens no certificado: <b>${NF.format(R.itens)}</b> · folhas: <b>${R.folhas}</b></li><li>Vai para <b>Concluídos</b> com a data de hoje</li></ul>`;
     if (alvo) {
-      openModal(`${/\.pdf$/i.test(nome || '') ? 'PDF' : /\.zip$/i.test(nome || '') ? 'Arquivos' : 'Excel'} salvo · concluir o pedido?`, `<div class="cqdlg"><b class="cqpv">${esc(cqNum(alvo))}</b><span class="cqnf mono">NF ${esc(alvo.nf || '—')}</span><span>${esc(alvo.cli || '')}</span></div>
+      openModal(`${/\.pdf e .+\.xlsx$/i.test(nome || '') ? 'PDF e Excel salvos' : /\.pdf$/i.test(nome || '') ? 'PDF salvo' : /\.zip$/i.test(nome || '') ? 'Arquivos salvos' : 'Excel salvo'} · concluir o pedido?`, `<div class="cqdlg"><b class="cqpv">${esc(cqNum(alvo))}</b><span class="cqnf mono">NF ${esc(alvo.nf || '—')}</span><span>${esc(alvo.cli || '')}</span></div>
         <p style="margin:0">Esse pedido está na fila de pendentes. Quer marcar como <b>concluído</b>?</p>${resumo}
         <div class="formfoot"><button class="btn" type="button" data-act="close">Ainda não, só salvar</button><button class="btn primary" type="button" id="cq-cok">Sim, concluir</button></div>`);
       $('#cq-cok').onclick = async () => { await cqConcluir(alvo, R, nome); };
@@ -13039,7 +13401,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'cq-lotes') { cqLotesPreencher(); return true; }
     if (a === 'cq-limpar') { cqLimpar(); return true; }
     if (!c) return false;
-    if (a === 'cq-fazer') { cqAbrir(c); return true; }
+    if (a === 'cq-fazer') { abaFazer(c); return true; }
+    if (a === 'cq-iraba') { abaIr(c); return true; }
     if (a === 'cq-menu') { cqMenu(c); return true; }
     if (a === 'cq-ver') { cqVer(c); return true; }
     if (a === 'cq-pegar') { cqPegar(c, cqMe(), cqMeNome(), 'Pegou o pedido').then((ok) => { if (ok) render(); }); return true; }
@@ -13838,17 +14201,18 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const lotId = (k) => ((findRec('AV', k) || {}).id || (rel.ids || [])[rel.lotes.indexOf(k)] || k);
     const cel = (a) => (a.r ? `<b>${a.r === 'NC' ? '<span style="color:#b3261e">RP</span>' : RI_MARCA[a.r]}</b>${a.v ? ' ' + esc(a.v) : ''}${a.o ? `<div style="font-size:7.5pt">${esc(a.o)}</div>` : ''}` : '<span style="color:#999">—</span>');
     const cols = rel.lotes;
-    const ckRows = rel.itens.map((it) => `<tr><td>${esc(it.sec)} · ${esc(it.t)}</td>${it.esc === 'nf' ? `<td colspan="${cols.length}" style="text-align:center">${cel(riAns(rel, it, 'nf'))}</td>` : cols.map((k) => `<td style="text-align:center">${cel(riAns(rel, it, k))}</td>`).join('')}</tr>`).join('');
-    const res = (k) => { const o = (rel.lotRes || {})[k] || {}, r = rel.status === 'finalizado' ? o.res : riRes(rel, k); return r ? `<b${r === 'Reprovado' ? ' style="color:#b3261e"' : ''}>${esc(r)}</b>${o.mot ? ' · ' + esc(o.mot) : ''}` : '—'; };
-    printHTML(relDocHTML({ titulo: esc(rel.numero || 'RIR-rascunho'), cor: '#3f541b', nome: 'RELATÓRIO DE INSPEÇÃO DE RECEBIMENTO', sub: 'Checklist da nota fiscal · resultado por lote', num: esc(rel.numero || 'RASCUNHO'),
-      linhas: `<div><span>Data</span><b>${esc(dmy(rel.fin || rel.at))}</b></div><div><span>NF</span><b>${t(rel.nf)}</b></div>`,
-      corpo: `<div class="sec"><div class="sh">1 · Identificação</div><table><tr><td class="k">Fornecedor</td><td>${t(rel.forn)}</td><td class="k">Nota fiscal</td><td>${t(rel.nf)}</td></tr><tr><td class="k">Pedido de compra</td><td>${t(rel.pc)}</td><td class="k">Lotes</td><td>${esc((rel.ids || []).join(', '))}</td></tr></table></div>
-        <div class="sec"><div class="sh">2 · Lotes e resultado</div><table><tr><td class="k">Lote</td><td class="k" style="width:auto">Material</td><td class="k" style="width:auto">Corrida</td><td class="k" style="width:auto">Resultado</td></tr>${cols.map((k) => { const x = findRec('AV', k) || {}; return `<tr><td class="mono">${esc(lotId(k))}</td><td>${esc(lotTxt(x) || '—')}</td><td>${E.filled(x.corrida) ? esc(x.corrida) : '—'}</td><td>${res(k)}</td></tr>`; }).join('')}</table></div>
-        <div class="sec"><div class="sh">3 · Checklist <span>AP = aprovado · RP = reprovado · N/A = não aplicável</span></div><table><tr><td class="k" style="width:auto">Item</td>${cols.map((k) => `<td class="k" style="width:auto;text-align:center">${esc(lotId(k))}</td>`).join('')}</tr>${ckRows}</table></div>
-        <div class="sec"><div class="sh">4 · Instrumentos</div><table><tr><td>${(rel.ins || []).map((i) => esc(i.codigo + ' · ' + (i.desc || '') + (i.val ? ' · validade ' + fD(E.fromIso(i.val)) : ''))).join('<br>') || '—'}</td></tr></table></div>
-        ${fotos.length ? `<div class="sec"><div class="sh">5 · Fotos <span>${fotos.length} foto${fotos.length > 1 ? 's' : ''}</span></div><div class="fot">${fotos.map((f) => `<img src="${f.img}" alt="">`).join('')}</div></div>` : ''}
-        <div class="sec"><div class="sh">${fotos.length ? 6 : 5} · Observações</div><div class="sig pre">${esc(rel.obs || '—')}</div></div>`,
-      aprov: apvHTML([{ papel: 'Inspecionado e liberado por', sig: rel.assin, nome: rel.assin ? null : rel.inspetor }], `${fotos.length ? 7 : 6} · Aprovação`),
+    const ckRows = rel.itens.map((it) => `<tr><td>${biT(esc(it.sec) + ' · ' + esc(it.t), (() => { const a = relEn(it.sec), b = relEn(it.t); return a && b ? a + ' · ' + b : ''; })())}</td>${it.esc === 'nf' ? `<td colspan="${cols.length}" style="text-align:center">${cel(riAns(rel, it, 'nf'))}</td>` : cols.map((k) => `<td style="text-align:center">${cel(riAns(rel, it, k))}</td>`).join('')}</tr>`).join('');
+    const res = (k) => { const o = (rel.lotRes || {})[k] || {}, r = rel.status === 'finalizado' ? o.res : riRes(rel, k); return r ? `<b${r === 'Reprovado' ? ' style="color:#b3261e"' : ''}>${esc(r)}</b>${o.mot ? ' · ' + esc(o.mot) : ''}${relEnDif(r) ? `<small class="en">${esc(relEn(r))}</small>` : ''}` : '—'; };
+    const L = (pt) => biL(pt), itEn = (it) => { const a = relEn(it.sec), b = relEn(it.t); return a && b ? a + ' · ' + b : ''; };
+    printHTML(relDocHTML({ en: true, titulo: esc(rel.numero || 'RIR-rascunho' + (rfDig(rel.nf) ? '-NF' + rfDig(rel.nf) : '')), cor: '#3f541b', nome: 'RELATÓRIO DE INSPEÇÃO DE RECEBIMENTO', sub: 'Checklist da nota fiscal · resultado por lote', subEn: esc(relEn('Checklist da nota fiscal · resultado por lote')), num: rel.numero ? esc(rel.numero) : biL('RASCUNHO'),
+      linhas: `<div><span>${L('Data')}</span><b>${esc(dmy(rel.fin || rel.at))}</b></div><div><span>${L('NF')}</span><b>${t(rel.nf)}</b></div>`,
+      corpo: `<div class="sec"><div class="sh">${biS('1', 'Identificação')}</div><table><tr><td class="k">${L('Fornecedor')}</td><td>${t(rel.forn)}</td><td class="k">${L('Nota fiscal')}</td><td>${t(rel.nf)}</td></tr><tr><td class="k">${L('Pedido de compra')}</td><td>${t(rel.pc)}</td><td class="k">${L('Lotes')}</td><td>${esc((rel.ids || []).join(', '))}</td></tr></table></div>
+        <div class="sec"><div class="sh">${biS('2', 'Lotes e resultado')}</div><table><tr><td class="k">${L('Lote')}</td><td class="k" style="width:auto">${L('Material')}</td><td class="k" style="width:auto">${L('Corrida')}</td><td class="k" style="width:auto">${L('Resultado')}</td></tr>${cols.map((k) => { const x = findRec('AV', k) || {}; return `<tr><td class="mono">${esc(lotId(k))}</td><td>${esc(lotTxt(x) || '—')}</td><td>${E.filled(x.corrida) ? esc(x.corrida) : '—'}</td><td>${res(k)}</td></tr>`; }).join('')}</table></div>
+        <div class="sec"><div class="sh">${biS('3', 'Checklist')} <span>${L('AP = aprovado · RP = reprovado · N/A = não aplicável')}</span></div><table><tr><td class="k" style="width:auto">${L('Item')}</td>${cols.map((k) => `<td class="k" style="width:auto;text-align:center">${esc(lotId(k))}</td>`).join('')}</tr>${ckRows}</table></div>
+        <div class="sec"><div class="sh">${biS('4', 'Instrumentos')}</div><table><tr><td>${(rel.ins || []).map((i) => esc(i.codigo + ' · ' + (i.desc || '')) + (i.val ? ' · ' + biI('validade') + ' ' + esc(fD(E.fromIso(i.val))) : '')).join('<br>') || '—'}</td></tr></table></div>
+        ${fotos.length ? `<div class="sec"><div class="sh">${biS('5', 'Fotos')} <span>${L(fotos.length + ' foto' + (fotos.length > 1 ? 's' : ''))}</span></div><div class="fot">${fotos.map((f) => `<img src="${f.img}" alt="">`).join('')}</div></div>` : ''}
+        <div class="sec"><div class="sh">${biS(fotos.length ? '6' : '5', 'Observações')}</div><div class="sig pre">${esc(rel.obs || '—')}</div></div>`,
+      aprov: apvHTML([{ papel: 'Inspecionado e liberado por', sig: rel.assin, nome: rel.assin ? null : rel.inspetor }], `${fotos.length ? 7 : 6} · Aprovação`, true),
       form: 'RIR', rodape: 'Aços Vital · Qualidade · Relatório de Inspeção de Recebimento', rodNum: esc(rel.numero || 'Rascunho') }));
   }
   function riAct(a, key, el) {
@@ -14601,23 +14965,26 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const resTxt = res === 'aprovado' ? 'APROVADO' : res === 'reprovado' ? 'REPROVADO' : '—', resCor = res === 'aprovado' ? '#1b5e3b' : '#980000';
     const quando = rel.finalizadoEm ? dmy(rel.finalizadoEm) + ' ' + hhmm(rel.finalizadoEm) : dmy(Date.now());
     const nP = rel.pecas || 1, nRP = rel.cotas.filter((c) => RN.cota(c) === 'rp').length;
+    const L = (pt, html) => biL(pt, html);
+    const tolEn = (c) => (RN.textoTol(c) === 'exato' ? `<small class="en">${esc(relEn('exato'))}</small>` : '');
     const sit = (c) => { const s = RN.cota(c); return s === 'ap' ? '<span class="s ap">AP</span>' : s === 'rp' ? '<span class="s rp">RP</span>' : s === 'na' ? '<span class="s na">N/A</span>' : '<span style="color:#888">—</span>'; };
     const dim = rel.cotas.map((c) => {
       const lim = RN.limites(c), fx = RN.faixa(c);
       const meds = Array.from({ length: nP }, (_, j) => { const m = (c.medidas || [])[j], s = c.sit === 'na' ? '' : RN.medida(c, m), v = RN.num(m); return `<td class="c${s === 'rp' ? ' fora' : ''}">${c.sit === 'na' ? '—' : isNaN(v) ? '' : esc(RN.fmt(v, Math.min(2, (String(m).split(/[.,]/)[1] || '').length)))}</td>`; }).join('');
-      return `<tr><td class="cod">${esc(c.cod)}${c.corrigida ? '<sup>*</sup>' : ''}</td><td>${esc(c.desc)}</td><td class="c">${esc(RN.fmt(c.nominal))}${c.criterio === 'min' ? '<small>mín.</small>' : c.criterio === 'max' ? '<small>máx.</small>' : ''}</td><td class="c">${esc(RN.textoTol(c))}${lim && fx && c.criterio !== 'exato' ? `<small>${esc(fx)}</small>` : ''}</td>${meds}<td class="c">${sit(c)}${c.just && c.sit === 'ap' ? '<sup>†</sup>' : ''}</td></tr>`;
+      return `<tr><td class="cod">${esc(c.cod)}${c.corrigida ? '<sup>*</sup>' : ''}</td><td>${biT(esc(c.desc), relEnDif(c.desc))}</td><td class="c">${esc(RN.fmt(c.nominal))}${c.criterio === 'min' ? '<small>mín.</small>' : c.criterio === 'max' ? '<small>máx.</small>' : ''}</td><td class="c">${esc(RN.textoTol(c))}${lim && fx && c.criterio !== 'exato' ? `<small>${esc(fx)}</small>` : tolEn(c)}</td>${meds}<td class="c">${sit(c)}${c.just && c.sit === 'ap' ? '<sup>†</sup>' : ''}</td></tr>`;
     }).join('');
     const notas = [];
     const corr = rel.cotas.filter((c) => c.corrigida);
-    if (corr.length) { const k = corr[0].corrigida; notas.push(`<b>* Valor corrigido pela Qualidade em relação à norma — ${corr.map((c) => esc(c.cod) + ': na norma ' + esc(c.corrigida.norma.texto)).join('; ')}.${k.motivo ? ' Motivo: ' + esc(k.motivo) + '.' : ''}${k.responsavel ? ' (' + esc(k.responsavel) + (k.data ? ', ' + esc(k.data) : '') + ')' : ''}</b>`); }
+    if (corr.length) { const k = corr[0].corrigida; notas.push(`<b>* Valor corrigido pela Qualidade em relação à norma — ${corr.map((c) => esc(c.cod) + ': na norma ' + esc(c.corrigida.norma.texto)).join('; ')}.${k.motivo ? ' Motivo: ' + esc(k.motivo) + '.' : ''}${k.responsavel ? ' (' + esc(k.responsavel) + (k.data ? ', ' + esc(k.data) : '') + ')' : ''}</b><small class="en">${esc(relEn('* Valor corrigido pela Qualidade em relação à norma'))} — ${corr.map((c) => esc(c.cod) + ': ' + esc(relEn('na norma')) + ' ' + esc(c.corrigida.norma.texto)).join('; ')}.${k.motivo ? ' ' + esc(relEn('Motivo:')) + ' ' + esc(k.motivo) + '.' : ''}</small>`); }
     const js = rel.cotas.filter((c) => c.just && c.sit === 'ap');
-    if (js.length) notas.push(`<b>† Cota sem tolerância aceita com desvio — ${js.map((c) => esc(c.cod) + ': ' + esc(c.just)).join('; ')}.</b>`);
-    notas.push('AP = aprovado · RP = reprovado · N/A = não se aplica · — = não avaliado. ' + (rel.modo === 'norma' && rel.normaNome ? `Tolerâncias conforme ${esc(rel.normaNome)}; cotas sem tolerância na norma avaliadas pelo inspetor.` : `Nominais e tolerâncias informados no relatório${rel.ref ? ', conforme ' + esc(rel.ref) : ''}; cotas sem tolerância avaliadas pelo inspetor.`));
+    if (js.length) notas.push(`<b>† Cota sem tolerância aceita com desvio — ${js.map((c) => esc(c.cod) + ': ' + esc(c.just)).join('; ')}.</b><small class="en">${esc(relEn('† Cota sem tolerância aceita com desvio'))} — ${js.map((c) => esc(c.cod) + ': ' + esc(c.just)).join('; ')}.</small>`);
+    const leg = 'AP = aprovado · RP = reprovado · N/A = não se aplica · — = não avaliado.', tolPt = rel.modo === 'norma' && rel.normaNome ? `Tolerâncias conforme ${rel.normaNome}; cotas sem tolerância na norma avaliadas pelo inspetor.` : `Nominais e tolerâncias informados no relatório${rel.ref ? ', conforme ' + rel.ref : ''}; cotas sem tolerância avaliadas pelo inspetor.`;
+    notas.push(biT(esc(leg + ' ' + tolPt), [relEn(leg), relEn(tolPt)].filter(Boolean).join(' ')));
     const tri = (r) => ['ap', 'rp', 'na'].map((o) => `<b class="${r === o ? o : ''}">${o === 'na' ? 'N/A' : o.toUpperCase()}</b>`).join('');
-    const vis = rel.visual.length ? `<div class="vis">${rel.visual.map((v) => `<div><span>${esc(v.t)}${v.r === 'rp' && v.o ? `<em>${esc(v.o)}</em>` : ''}</span><span class="tri">${tri(v.r)}</span></div>`).join('')}</div>` : `<div class="sig">${vzs} Sem itens de inspeção visual.</div>`;
+    const vis = rel.visual.length ? `<div class="vis">${rel.visual.map((v) => `<div><span>${biT(esc(v.t), relEnDif(v.t))}${v.r === 'rp' && v.o ? `<em>${esc(v.o)}</em>` : ''}</span><span class="tri">${tri(v.r)}</span></div>`).join('')}</div>` : `<div class="sig">${vzs} ${biL('Sem itens de inspeção visual.')}</div>`;
     const hoje = rel.finalizadoEm ? new Date(rel.finalizadoEm).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10);
-    const ins = rel.ins.length ? `<table><tr><th style="width:24mm">Código</th><th>Instrumento</th><th style="width:44mm">Calibração válida até</th></tr>${rel.ins.map((x) => `<tr><td><b>${esc(x.codigo)}</b></td><td>${esc(x.desc)}</td><td${x.val && x.val < hoje ? ' class="fora"' : ''}>${x.val ? esc(x.val.split('-').reverse().join('/')) : '—'}</td></tr>`).join('')}</table>` : `<div class="sig">${vzs} Nenhum instrumento informado.</div>`;
-    const comb = rel.modo === 'norma' ? (rel.valid || (rasc && rfValDe(rel.chave)) ? (() => { const v = rel.valid || { resp: rfValDe(rel.chave).responsavel, data: rfValDe(rel.chave).data, corr: corr.length }; return `<span class="val ok">✓ Validada</span> por ${esc(v.resp)} em ${esc(v.data)}${v.corr ? ' — com correção de ' + v.corr + (v.corr > 1 ? ' valores' : ' valor') : ''}`; })() : '<span class="val pend">! Aguardando validação da Qualidade</span>') : 'Valores informados no relatório (produto manual)';
+    const ins = rel.ins.length ? `<table><tr><th style="width:24mm">${L('Código')}</th><th>${L('Instrumento')}</th><th style="width:44mm">${L('Calibração válida até')}</th></tr>${rel.ins.map((x) => `<tr><td><b>${esc(x.codigo)}</b></td><td>${esc(x.desc)}</td><td${x.val && x.val < hoje ? ' class="fora"' : ''}>${x.val ? esc(x.val.split('-').reverse().join('/')) : '—'}</td></tr>`).join('')}</table>` : `<div class="sig">${vzs} ${biL('Nenhum instrumento informado.')}</div>`;
+    const comb = rel.modo === 'norma' ? (rel.valid || (rasc && rfValDe(rel.chave)) ? (() => { const v = rel.valid || { resp: rfValDe(rel.chave).responsavel, data: rfValDe(rel.chave).data, corr: corr.length }; const cpt = v.corr ? ' — com correção de ' + v.corr + (v.corr > 1 ? ' valores' : ' valor') : ''; return biT(`<span class="val ok">✓ Validada</span> por ${esc(v.resp)} em ${esc(v.data)}${cpt}`, relEn('✓ Validada') + ' ' + relEn(`por ${v.resp} em ${v.data}`) + (cpt ? relEn(cpt) : '')); })() : biL('! Aguardando validação da Qualidade', '<span class="val pend">! Aguardando validação da Qualidade</span>')) : biL('Valores informados no relatório (produto manual)');
     const F = (rel.fotos || []).filter((f) => fotos && fotos[f.id]);
     let sec = 6;
     const rod = 'Aços Vital · Qualidade · Relatório de Inspeção Final (Usinagem)', num = rel.numero || 'Rascunho — sem validade';
@@ -14631,27 +14998,28 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       .sum{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid #bbb}.sum div{padding:2mm 2.5mm;border-right:1px solid #bbb}.sum div:last-child{border-right:0}.sum b{display:block;font-size:13pt;line-height:1.1}.sum span{font-size:7.8pt;color:#444;text-transform:uppercase;font-weight:700}
       .fot img{aspect-ratio:4/3}.rasc{position:fixed;top:40%;left:0;right:0;text-align:center;font:800 70pt Arial;color:rgba(27,58,107,.08);transform:rotate(-24deg);pointer-events:none}.pgA4 .rasc{position:absolute}
       ${tela ? 'html.pagin body{padding:0;background:#fff}html.pagin .pgA4{margin:0 auto 4mm;box-shadow:0 0 0 1px #ccc}' : ''}`;
-    const corpo = `${rasc ? '<div class="rasc" data-pg="wm">RASCUNHO</div>' : ''}
-      <div class="sec"><div class="sh">1 · Identificação</div><table>
-        <tr><td class="k">Cliente</td><td>${t(rel.ident.cli)}</td><td class="k k2">Pedido (PV)</td><td>${t(rel.ident.pv)}</td><td class="k k2">Vendedor</td><td>${t(rel.ident.vend)}</td></tr>
-        <tr><td class="k">Quantidade</td><td>${rel.ident.qtd ? esc(rel.ident.qtd) + ' pç' : vzs}</td><td class="k k2">Material</td><td>${t(rel.ident.mat)}</td><td class="k k2">Corrida</td><td>${t(rel.ident.corrida)}</td></tr>
-        <tr><td class="k">Lote mat.-prima</td><td>${t(rel.ident.lote)}</td><td class="k k2">Nº desenho</td><td>${t(rel.ident.des)}</td><td class="k k2">Sinete</td><td>${t(rel.ident.sinete)}</td></tr>${rel.ident.sold ? `<tr><td class="k">Soldador</td><td colspan="5">${esc(rel.ident.sold)}${rfSoldW(rel.ident.sold) ? ' · ' + esc(rfSoldW(rel.ident.sold).nome) : ''}</td></tr>` : ''}</table></div>
-      <div class="sec"><div class="sh">2 · Produto</div><table>
-        <tr><td class="k">Produto</td><td><b>${t(rel.desc)}</b></td><td class="k k2">${rel.modo === 'norma' ? 'Norma' : 'Referência'}</td><td>${t(rel.modo === 'norma' ? rel.normaNome : rel.ref)}</td></tr>
-        <tr><td class="k">Combinação</td><td colspan="3">${comb}</td></tr>${rel.notaLinha ? `<tr><td class="k">Nota da norma</td><td colspan="3">${esc(rel.notaLinha)}</td></tr>` : ''}</table></div>
-      <div class="sec" style="break-inside:auto"><div class="sh">3 · Inspeção dimensional <span>mm · ${nP} peça${nP > 1 ? 's' : ''} medida${nP > 1 ? 's' : ''}</span></div>
-        <table class="dim"><tr><th class="c" style="width:9mm">Cód.</th><th>Cota</th><th class="c" style="width:16mm">Nominal</th><th class="c" style="width:21mm">Tolerância</th>${Array.from({ length: nP }, (_, j) => `<th class="c">P${j + 1}</th>`).join('')}<th class="c" style="width:12mm">Sit.</th></tr>${dim}</table>
+    const corpo = `${rasc ? '<div class="rasc" data-pg="wm">RASCUNHO<span>DRAFT</span></div>' : ''}
+      <div class="sec"><div class="sh">${biS('1', 'Identificação')}</div><table>
+        <tr><td class="k">${L('Cliente')}</td><td>${t(rel.ident.cli)}</td><td class="k k2">${L('Pedido (PV)')}</td><td>${t(rel.ident.pv)}</td><td class="k k2">${L('Vendedor')}</td><td>${t(rel.ident.vend)}</td></tr>
+        <tr><td class="k">${L('Quantidade')}</td><td>${rel.ident.qtd ? esc(rel.ident.qtd) + ' pç' : vzs}</td><td class="k k2">${L('Material')}</td><td>${t(rel.ident.mat)}</td><td class="k k2">${L('Corrida')}</td><td>${t(rel.ident.corrida)}</td></tr>
+        <tr><td class="k">${L('Lote mat.-prima')}</td><td>${t(rel.ident.lote)}</td><td class="k k2">${L('Nº desenho')}</td><td>${t(rel.ident.des)}</td><td class="k k2">${L('Sinete')}</td><td>${t(rel.ident.sinete)}</td></tr>${rel.ident.sold ? `<tr><td class="k">${L('Soldador')}</td><td colspan="5">${esc(rel.ident.sold)}${rfSoldW(rel.ident.sold) ? ' · ' + esc(rfSoldW(rel.ident.sold).nome) : ''}</td></tr>` : ''}</table></div>
+      <div class="sec"><div class="sh">${biS('2', 'Produto')}</div><table>
+        <tr><td class="k">${L('Produto')}</td><td><b>${t(rel.desc)}</b></td><td class="k k2">${L(rel.modo === 'norma' ? 'Norma' : 'Referência')}</td><td>${t(rel.modo === 'norma' ? rel.normaNome : rel.ref)}</td></tr>
+        <tr><td class="k">${L('Combinação')}</td><td colspan="3">${comb}</td></tr>${rel.notaLinha ? `<tr><td class="k">${L('Nota da norma')}</td><td colspan="3">${biT(esc(rel.notaLinha), relEn(rel.notaLinha))}</td></tr>` : ''}</table></div>
+      <div class="sec" style="break-inside:auto"><div class="sh">${biS('3', 'Inspeção dimensional')} <span>${biL(`mm · ${nP} peça${nP > 1 ? 's' : ''} medida${nP > 1 ? 's' : ''}`)}</span></div>
+        <table class="dim"><tr><th class="c" style="width:9mm">${L('Cód.')}</th><th>${L('Cota')}</th><th class="c" style="width:16mm">${L('Nominal')}</th><th class="c" style="width:21mm">${L('Tolerância')}</th>${Array.from({ length: nP }, (_, j) => `<th class="c">P${j + 1}</th>`).join('')}<th class="c" style="width:12mm">${L('Sit.')}</th></tr>${dim}</table>
         ${notas.map((x) => `<div class="nota">${x}</div>`).join('')}</div>
-      <div class="sec"><div class="sh">4 · Inspeção visual <span>AP = aprovado · RP = reprovado · N/A = não se aplica</span></div>${vis}</div>
-      <div class="sec"><div class="sh">5 · Instrumentos de medição</div>${ins}</div>
-      ${F.length ? `<div class="sec"><div class="sh">${sec++} · Registro fotográfico</div><div class="fot">${F.map((f) => `<img src="${fotos[f.id]}" alt="">`).join('')}</div></div>` : ''}
-      <div class="sec"><div class="sh">${sec} · Resultado da inspeção</div>
-        <div class="sum"><div><span>Peças do item</span><b>${rel.ident.qtd ? esc(rel.ident.qtd) : '—'}</b></div><div><span>Peças medidas</span><b>${nP}</b></div><div><span>Cotas reprovadas</span><b style="color:${nRP ? '#980000' : '#1b5e3b'}">${nRP}</b></div><div><span>Parecer</span><b style="color:${resCor}">${resTxt}</b></div></div>
-        <table><tr><td class="k">Observações</td><td class="pre">${t(rel.obs)}</td></tr></table></div>`;
-    return relDocHTML({ titulo: rel.numero || 'RIF-rascunho', cor: NAV, nome: 'RELATÓRIO DE INSPEÇÃO FINAL (USINAGEM)', sub: 'Inspeção dimensional e visual' + (rel.ident.pv ? ' · PV ' + esc(rfDig(rel.ident.pv)) : ''),
-      num: esc(rel.numero || 'RASCUNHO'), linhas: `<div><span>Inspeção</span><b>${esc(quando)}</b></div><div><span>Resultado</span><b style="color:${resCor}">${resTxt}</b></div>`,
+      <div class="sec"><div class="sh">${biS('4', 'Inspeção visual')} <span>${biL('AP = aprovado · RP = reprovado · N/A = não se aplica')}</span></div>${vis}</div>
+      <div class="sec"><div class="sh">${biS('5', 'Instrumentos de medição')}</div>${ins}</div>
+      ${F.length ? `<div class="sec"><div class="sh">${biS(String(sec++), 'Registro fotográfico')}</div><div class="fot">${F.map((f) => `<img src="${fotos[f.id]}" alt="">`).join('')}</div></div>` : ''}
+      <div class="sec"><div class="sh">${biS(String(sec), 'Resultado da inspeção')}</div>
+        <div class="sum"><div><span>${L('Peças do item')}</span><b>${rel.ident.qtd ? esc(rel.ident.qtd) : '—'}</b></div><div><span>${L('Peças medidas')}</span><b>${nP}</b></div><div><span>${L('Cotas reprovadas')}</span><b style="color:${nRP ? '#980000' : '#1b5e3b'}">${nRP}</b></div><div><span>${L('Parecer')}</span><b style="color:${resCor}">${resTxt === '—' ? resTxt : biL(resTxt)}</b></div></div>
+        <table><tr><td class="k">${L('Observações')}</td><td class="pre">${t(rel.obs)}</td></tr></table></div>`;
+    return relDocHTML({ en: true, titulo: rel.numero || 'RIF-rascunho' + (rfDig(rel.ident.pv) ? '-PV' + rfDig(rel.ident.pv) : ''), cor: NAV, nome: 'RELATÓRIO DE INSPEÇÃO FINAL (USINAGEM)', sub: 'Inspeção dimensional e visual' + (rel.ident.pv ? ' · PV ' + esc(rfDig(rel.ident.pv)) : ''),
+      subEn: esc(relEn('Inspeção dimensional e visual') + (rel.ident.pv ? ' · ' + relEn('PV ' + rfDig(rel.ident.pv)) : '')),
+      num: rel.numero ? esc(rel.numero) : biL('RASCUNHO'), linhas: `<div><span>${L('Inspeção')}</span><b>${esc(quando)}</b></div><div><span>${L('Resultado')}</span><b style="color:${resCor}">${resTxt === '—' ? resTxt : biL(resTxt)}</b></div>`,
       margem: '9mm 11mm 12mm', extra, corpo, rodape: rod, rodNum: esc(num), form: 'RIF',
-      aprov: apvHTML([{ papel: 'Inspecionado e liberado por', sig: rel.assin ? Object.assign({}, rel.assin, { nome: rel.inspetor || rel.assin.nome }) : null, nome: rel.assin ? null : rel.inspetor, nota: rel.assin ? '' : 'assinatura ao finalizar' }], `${sec + 1} · Aprovação`) });
+      aprov: apvHTML([{ papel: 'Inspecionado e liberado por', sig: rel.assin ? Object.assign({}, rel.assin, { nome: rel.inspetor || rel.assin.nome }) : null, nome: rel.assin ? null : rel.inspetor, nota: rel.assin ? '' : 'assinatura ao finalizar' }], `${sec + 1} · Aprovação`, true) });
   }
   function rfFotosVer() {
     const ed = RFI.ed; if (!ed) return;
@@ -17130,14 +17498,16 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const formTxt = (k) => { if (!k) return ''; const f = formInfo(k); return f.cod ? f.cod + (f.rev !== '' ? ' · Rev. ' + f.rev : '') : ''; };
   const cargoDe = (sig) => { if (!sig) return ''; const ps = (S.model && S.model.cfg.PESSOAS) || []; const p = ps.find((q) => sig.email && q.email && E.low(q.email) === E.low(sig.email)) || ps.find((q) => E.key(q.nome) === E.key(sig.nome)); return (p && p.cargo) || ''; };
   /** bloco cinza de aprovação: [{ papel, sig: {nome, at|em, email}, nome (sem assinatura), quando, nota, branco }] */
-  function apvHTML(L, titulo) {
+  function apvHTML(L, titulo, en) {
+    const B = (pt) => (en ? biL(pt) : esc(pt));
     const linha = (o) => {
       const sg = o.sig, at = sg ? sg.at || sg.em : o.quando, nome = sg ? sg.nome : o.nome;
       const cg = o.cargo != null ? o.cargo : cargoDe(sg || (nome ? { nome } : null));
-      const st = o.branco || o.linha ? '<span class="ass"></span>' : sg ? 'assinado eletronicamente' : o.nota || (nome ? '' : '<span style="color:#888">pendente</span>');
-      return `<tr><td class="k">${esc(o.papel)}</td><td><b>${nome ? esc(nome) : o.branco ? '' : '—'}</b></td><td>${esc(cg || (o.branco ? '' : '—'))}</td><td class="nw">${at ? esc(dmy(at) + ' ' + hhmm(at)) : o.dia != null ? esc(fD(o.dia)) : o.branco ? '' : '—'}</td><td>${st}</td></tr>`;
+      const st = o.branco || o.linha ? '<span class="ass"></span>' : sg ? B('assinado eletronicamente') : o.nota ? B(o.nota) : (nome ? '' : `<span style="color:#888">${B('pendente')}</span>`);
+      return `<tr><td class="k">${B(o.papel)}</td><td><b>${nome ? esc(nome) : o.branco ? '' : '—'}</b></td><td>${esc(cg || (o.branco ? '' : '—'))}</td><td class="nw">${at ? esc(dmy(at) + ' ' + hhmm(at)) : o.dia != null ? esc(fD(o.dia)) : o.branco ? '' : '—'}</td><td>${st}</td></tr>`;
     };
-    return `<div class="sec apv"><div class="sh q">${esc(titulo || 'Aprovação')}</div><table><thead><tr><td class="k">Função</td><td class="k">Nome</td><td class="k">Cargo</td><td class="k">Data e hora</td><td class="k">Assinatura</td></tr></thead><tbody>${L.map(linha).join('')}</tbody></table></div>`;
+    const tt = titulo || 'Aprovação', ti = tt.indexOf(' · ');
+    return `<div class="sec apv"><div class="sh q">${en ? (ti > 0 ? biS(tt.slice(0, ti), tt.slice(ti + 3)) : biS('', tt)) : esc(tt)}</div><table><thead><tr><td class="k">${B('Função')}</td><td class="k">${B('Nome')}</td><td class="k">${B('Cargo')}</td><td class="k">${B('Data e hora')}</td><td class="k">${B('Assinatura')}</td></tr></thead><tbody>${L.map(linha).join('')}</tbody></table></div>`;
   }
   /* páginas A4 montadas pelo relPaginar (mesmo CSS na folha de relatório e no relatório diário/mensal) */
   const PG_CSS = (mT, mX) => `.pgA4{width:210mm;height:297mm;padding:${mT} ${mX} 0;display:flex;flex-direction:column;overflow:hidden;position:relative;break-after:page;page-break-after:always;background:#fff}.pgA4:last-child{break-after:auto;page-break-after:auto}
@@ -17182,7 +17552,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       var head = headingOf(b), U = units(b), part = null, map = null, n = 0, recomecou = false;
       function newPart(cont) {
         part = b.cloneNode(false); part.removeAttribute('id');
-        if (head) { var h = head.cloneNode(true); if (cont) { var ct = document.createElement('i'); ct.className = 'ct'; ct.textContent = ' (continuação)'; h.insertBefore(ct, h.childNodes[1] || null); } part.appendChild(h); }
+        if (head) { var h = head.cloneNode(true); if (cont) { var ct = document.createElement('i'); ct.className = 'ct'; ct.textContent = src.getAttribute('data-cont') || ' (continuação)'; h.insertBefore(ct, h.childNodes[1] || null); } part.appendChild(h); }
         map = new Map(); n = 0; cur.appendChild(part); fresh = false;
       }
       function holder(u) {
@@ -17220,7 +17590,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     function run() {
       try {
         newPage(); kids(flow).forEach(place);
-        var N = pages.length; pages.forEach(function (pg, i) { var pn = pg.querySelector('.pgn'); if (pn) pn.textContent = 'Página ' + (i + 1) + ' de ' + N; });
+        var N = pages.length, pf = src.getAttribute('data-pag') || 'Página {i} de {n}'; pages.forEach(function (pg, i) { var pn = pg.querySelector('.pgn'); if (pn) pn.textContent = pf.replace(/\{i\}/g, i + 1).replace(/\{n\}/g, N); });
         src.remove(); document.documentElement.classList.add('pagin');
       } catch (e) { pages.forEach(function (pg) { pg.remove(); }); src.style.display = ''; }
       window.__pgPronto = true;
@@ -17228,6 +17598,437 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     /* com fonte da internet (relatório diário/mensal), espera a fonte chegar para medir certo */
     if (src.hasAttribute('data-fontes') && document.fonts && document.fonts.ready) { var feito = false, vai = function () { if (!feito) { feito = true; run(); } }; document.fonts.ready.then(vai); setTimeout(vai, 2500); } else run();
   }
+  /* ================= RELATÓRIOS EM PORTUGUÊS E INGLÊS =================
+     Dicionário único (português → inglês) de todos os relatórios impressos (RIF, RIR, NCF e 8D).
+     Traduz só o que é da Central: rótulos, títulos, legendas, escolhas fixas e os textos das normas.
+     Dados (cliente, material, corrida, números) e o texto digitado pelas pessoas saem como estão.
+     Chave com {x} é modelo: o que está entre chaves é dado e passa igual para o inglês.
+     Texto sem tradução sai só em português (sem linha vazia). */
+  const REL_EN = {
+    /* 1. Comum a todos os relatórios */
+    "Emitido em": "Issued on",
+    "Formulário": "Form",
+    "Página {i} de {n}": "Page {i} of {n}",
+    " (continuação)": " (continued)",
+    "RASCUNHO": "DRAFT",
+    "Rascunho — sem validade": "Draft — not valid",
+    "Aprovação": "Approval",
+    "Função": "Role",
+    "Nome": "Name",
+    "Cargo": "Position",
+    "Data e hora": "Date and time",
+    "Assinatura": "Signature",
+    "assinado eletronicamente": "electronically signed",
+    "pendente": "pending",
+    "assinatura ao finalizar": "signed upon completion",
+    "Inspecionado e liberado por": "Inspected and released by",
+    "Identificação": "Identification",
+    "Registro fotográfico": "Photographic record",
+    "{n} foto": "{n} photo",
+    "{n} fotos": "{n} photos",
+    "Observações": "Remarks",
+    "Observação": "Remark",
+    "Data": "Date",
+    "Resultado": "Result",
+    "Cliente": "Customer",
+    "Fornecedor": "Supplier",
+    "Nota fiscal": "Invoice No.",
+    "NF": "Invoice",
+    "Corrida": "Heat No.",
+    "Quantidade": "Quantity",
+    "Produto": "Product",
+    "Motivo": "Reason",
+    "Descrição": "Description",
+    "Disposição": "Disposition",
+    "Causa raiz": "Root cause",
+    "Ação": "Action",
+    "Evidência": "Evidence",
+    "Setor": "Department",
+    "Origem": "Origin",
+    "Abertura": "Opened on",
+    "Filial": "Branch",
+    "Situação": "Status",
+    "Material": "Material",
+    /* 2. RIF · inspeção final */
+    "RELATÓRIO DE INSPEÇÃO FINAL (USINAGEM)": "FINAL INSPECTION REPORT (MACHINING)",
+    "Inspeção dimensional e visual": "Dimensional and visual inspection",
+    "PV {pv}": "Sales order {pv}",
+    "Inspeção": "Inspection",
+    "APROVADO": "APPROVED",
+    "REPROVADO": "REJECTED",
+    "Pedido (PV)": "Sales order",
+    "Vendedor": "Salesperson",
+    "Lote mat.-prima": "Raw material lot",
+    "Nº desenho": "Drawing No.",
+    "Sinete": "Stamp",
+    "Soldador": "Welder",
+    "Norma": "Standard",
+    "Referência": "Reference",
+    "Combinação": "Standard data",
+    "✓ Validada": "✓ Validated",
+    "por {nome} em {data}": "by {nome} on {data}",
+    " — com correção de 1 valor": " — 1 value corrected",
+    " — com correção de {n} valores": " — {n} values corrected",
+    "! Aguardando validação da Qualidade": "! Awaiting Quality validation",
+    "Valores informados no relatório (produto manual)": "Values entered in the report (custom product)",
+    "Nota da norma": "Standard note",
+    "Inspeção dimensional": "Dimensional inspection",
+    "mm · {n} peças medidas": "mm · {n} pieces measured",
+    "mm · 1 peça medida": "mm · 1 piece measured",
+    "Cód.": "Code",
+    "Cota": "Dimension",
+    "Nominal": "Nominal",
+    "Tolerância": "Tolerance",
+    "Sit.": "Status",
+    "mín.": "min.",
+    "máx.": "max.",
+    "exato": "exact",
+    "AP = aprovado · RP = reprovado · N/A = não se aplica · — = não avaliado.": "AP = approved · RP = rejected · N/A = not applicable · — = not evaluated.",
+    "Tolerâncias conforme {norma}; cotas sem tolerância na norma avaliadas pelo inspetor.": "Tolerances per {norma}; dimensions with no tolerance in the standard are assessed by the inspector.",
+    "Nominais e tolerâncias informados no relatório; cotas sem tolerância avaliadas pelo inspetor.": "Nominal values and tolerances as entered in the report; dimensions with no tolerance are assessed by the inspector.",
+    "Nominais e tolerâncias informados no relatório, conforme {ref}; cotas sem tolerância avaliadas pelo inspetor.": "Nominal values and tolerances as entered in the report, per {ref}; dimensions with no tolerance are assessed by the inspector.",
+    "* Valor corrigido pela Qualidade em relação à norma": "* Value corrected by Quality against the standard",
+    "na norma": "standard value",
+    "Motivo:": "Reason:",
+    "† Cota sem tolerância aceita com desvio": "† Dimension with no tolerance accepted with deviation",
+    "Inspeção visual": "Visual inspection",
+    "AP = aprovado · RP = reprovado · N/A = não se aplica": "AP = approved · RP = rejected · N/A = not applicable",
+    "Sem itens de inspeção visual.": "No visual inspection items.",
+    "Instrumentos de medição": "Measuring instruments",
+    "Código": "Code",
+    "Instrumento": "Instrument",
+    "Calibração válida até": "Calibration valid until",
+    "Nenhum instrumento informado.": "No instrument recorded.",
+    "Resultado da inspeção": "Inspection result",
+    "Peças do item": "Item quantity",
+    "Peças medidas": "Pieces measured",
+    "Cotas reprovadas": "Rejected dimensions",
+    "Parecer": "Verdict",
+    /* 3. RIR · inspeção de recebimento */
+    "RELATÓRIO DE INSPEÇÃO DE RECEBIMENTO": "RECEIVING INSPECTION REPORT",
+    "Checklist da nota fiscal · resultado por lote": "Invoice checklist · result per lot",
+    "Pedido de compra": "Purchase order",
+    "Lotes": "Lots",
+    "Lote": "Lot",
+    "Lotes e resultado": "Lots and result",
+    "Checklist": "Checklist",
+    "AP = aprovado · RP = reprovado · N/A = não aplicável": "AP = approved · RP = rejected · N/A = not applicable",
+    "Item": "Item",
+    "Instrumentos": "Instruments",
+    "validade {data}": "valid until {data}",
+    "Fotos": "Photos",
+    "Aprovado": "Approved",
+    "Reprovado": "Rejected",
+    "Em análise": "Under review",
+    /* 4. NCF · não conformidade de fornecedor */
+    "REGISTRO DE NÃO CONFORMIDADE DE FORNECEDOR": "SUPPLIER NONCONFORMITY REPORT",
+    "origem: {origem}": "origin: {origem}",
+    "Lote(s)": "Lot(s)",
+    "Pedido / PV": "PO / Sales order",
+    "Certificado": "Certificate",
+    "Setor resp.": "Resp. department",
+    "Não conformidade": "Nonconformity",
+    "(principal)": "(main)",
+    "Recebida:": "Received:",
+    "Reprovada:": "Rejected:",
+    "Reincidência": "Recurrence",
+    "Tratamento da não conformidade": "Nonconformity handling",
+    "Qualidade": "Quality",
+    "Contenção": "Containment",
+    "Resp. / data": "Resp. / date",
+    "Ação corretiva": "Corrective action",
+    "Não necessária": "Not required",
+    "Responsável:": "Responsible:",
+    "prazo:": "due:",
+    "Verificação de eficácia": "Effectiveness check",
+    "Data / lote": "Date / lot",
+    "Inspetor (abertura)": "Inspector (opening)",
+    "Aprovação da Qualidade": "Quality approval",
+    "NCF concluída": "NCF closed",
+    /* 5. Relatório 8D · NCC */
+    "RELATÓRIO DE ANÁLISE DE RECLAMAÇÃO (8D)": "COMPLAINT ANALYSIS REPORT (8D)",
+    "Reclamação de cliente": "Customer complaint",
+    "Equipe": "Team",
+    "Descrição do problema": "Problem description",
+    "Reclamação": "Complaint",
+    "Gravidade": "Severity",
+    "Contato / canal": "Contact / channel",
+    "NF / pedido": "Invoice / order",
+    "Lotes / corridas": "Lots / heats",
+    "Procedência": "Justified?",
+    "Ação de contenção": "Containment action",
+    "Categoria (6M)": "Category (6M)",
+    "Por quê?": "Why?",
+    "Causa raiz:": "Root cause:",
+    "Ações corretivas e implementação": "Corrective actions and implementation",
+    "Tipo": "Type",
+    "Responsável": "Responsible",
+    "Prazo": "Due date",
+    "Concluída": "Completed",
+    "Verificação de eficácia (8D)": "Effectiveness verification",
+    "Encerramento": "Closure",
+    "Resposta ao cliente": "Reply to customer",
+    "Retorno do cliente": "Customer feedback",
+    "Conclusão": "Closed on",
+    "Qualidade — Aços Vital": "Quality — Aços Vital",
+    "Cliente (ciência)": "Customer (acknowledgement)",
+    /* 6. Valores fixos (escolhas da Central) */
+    "Em andamento": "In progress",
+    "Concluída (situação)": "Closed",
+    "Cancelada": "Cancelled",
+    "Baixa": "Low",
+    "Média": "Medium",
+    "Alta": "High",
+    "Sim": "Yes",
+    "Não": "No",
+    "Interna": "Internal",
+    "Transporte": "Transport",
+    "Cliente (uso/aplicação)": "Customer (use/application)",
+    "Em verificação": "Under verification",
+    "Eficaz": "Effective",
+    "Não eficaz": "Not effective",
+    "Método": "Method",
+    "Máquina": "Machine",
+    "Mão de obra": "Manpower",
+    "Medição": "Measurement",
+    "Meio ambiente": "Environment",
+    "Corretiva": "Corrective",
+    "Preventiva": "Preventive",
+    "Melhoria": "Improvement",
+    "Aceita pelo cliente": "Accepted by the customer",
+    "Contestada pelo cliente": "Disputed by the customer",
+    "Sem retorno do cliente": "No reply from the customer",
+    "Padrão": "Standard",
+    "Estendido": "Extended",
+    "Complexo": "Complex",
+    "Recebimento": "Receiving",
+    "Inspeção de processo": "In-process inspection",
+    "Inspeção final": "Final inspection",
+    "Outro": "Other",
+    /* 7. Listas de Configurações (texto padrão de hoje) */
+    "Material fora de especificação": "Material out of specification",
+    "Documentação": "Documentation",
+    "Documentação / certificado": "Documentation / certificate",
+    "Embalagem": "Packaging",
+    "Avaria no transporte": "Transport damage",
+    "Prazo de entrega": "Delivery time",
+    "Dimensional": "Dimensional",
+    "Devolução": "Return",
+    "Uso como está (concessão)": "Use as is (concession)",
+    "Retrabalho": "Rework",
+    "Seleção / triagem": "Sorting / screening",
+    "Sucata": "Scrap",
+    "Troca": "Replacement",
+    "Crédito / abatimento": "Credit / discount",
+    "Aceite sob concessão": "Accepted under concession",
+    "Sem disposição (improcedente)": "No disposition (unjustified)",
+    "E-mail": "E-mail",
+    "Telefone": "Phone",
+    "Visita": "Visit",
+    "WhatsApp": "WhatsApp",
+    "Portal do cliente": "Customer portal",
+    "Compras": "Purchasing",
+    "Comercial": "Sales",
+    "Produção": "Production",
+    "Usinagem": "Machining",
+    "Expedição": "Shipping",
+    "Almoxarifado": "Warehouse",
+    /* 8. RIR · checklist padrão */
+    "Quantidade e embalagem": "Quantity and packaging",
+    "Visual": "Visual",
+    "NF confere com o pedido de compra": "Invoice matches the purchase order",
+    "Certificado da usina recebido": "Mill certificate received",
+    "Certificado confere com a norma pedida": "Certificate complies with the ordered standard",
+    "Corrida / marcação legível no material": "Heat No. / marking legible on the material",
+    "Corrida confere com o certificado": "Heat No. matches the certificate",
+    "Quantidade confere com a NF": "Quantity matches the invoice",
+    "Embalagem / amarração sem avaria": "Packaging / strapping undamaged",
+    "Superfície sem trinca, dupla laminação ou corrosão": "Surface free of cracks, laminations or corrosion",
+    "Sem amassado, empeno ou ovalização": "No dents, bending or ovality",
+    "Diâmetro": "Diameter",
+    "Espessura": "Thickness",
+    "Comprimento": "Length",
+    /* 9. RIF · inspeção visual padrão */
+    "Marcação conforme (fabricante, norma, classe, tamanho, material e corrida)": "Marking as required (manufacturer, standard, class, size, material and heat No.)",
+    "Acabamento da face de vedação ranhurado (Ra 3,2 a 6,3 µm)": "Serrated gasket face finish (Ra 3.2 to 6.3 µm)",
+    "Face de vedação sem riscos radiais ou imperfeições acima do permitido": "Gasket face free of radial scratches or imperfections beyond the allowed limits",
+    "Furação equidistante e fora das linhas de centro": "Bolt holes equally spaced, straddling the centerlines",
+    "Sem trincas, dobras, porosidades ou rebarbas": "Free of cracks, laps, porosity or burrs",
+    "Chanfro de solda conforme (Welding Neck)": "Weld bevel as required (Welding Neck)",
+    "Rosca conforme e protegida (Roscado)": "Thread as required and protected (Threaded)",
+    "Proteção anticorrosiva / pintura": "Corrosion protection / painting",
+    "Identificação e embalagem": "Identification and packaging",
+    /* 10. RIF · cotas das normas */
+    "Ø do soquete": "Socket bore diameter",
+    "Furo menor (conforme o tubo/pedido)": "Smaller bore (per pipe/order)",
+    "Ø externo do flange": "Flange outside diameter",
+    "Espessura mín. do flange (sem o ressalto)": "Min. flange thickness (excl. raised face)",
+    "Espessura mín. do flange (lap joint)": "Min. flange thickness (lap joint)",
+    "Ø do cubo (junto à face traseira)": "Hub diameter at base (back face)",
+    "Ø do cubo no chanfro de solda": "Hub diameter at weld bevel",
+    "Comprimento total através do cubo": "Overall length through hub",
+    "Comprimento através do cubo": "Length through hub",
+    "Comprimento mín. de rosca": "Min. thread length",
+    "Furo mínimo": "Min. bore",
+    "Furo (conforme o tubo/pedido)": "Bore (per pipe/order)",
+    "Escareado mín. da rosca": "Min. thread counterbore",
+    "Raio do canto do furo": "Corner radius of bore",
+    "Profundidade do soquete": "Socket depth",
+    "Ø do ressalto (face RF)": "Raised face diameter",
+    "Altura do ressalto (face RF)": "Raised face height",
+    "Ø do círculo de furação": "Bolt circle diameter",
+    "Número de furos": "Number of bolt holes",
+    "Ø dos furos": "Bolt hole diameter",
+    "Furo (bore)": "Bore",
+    "Furo do sobreposto (mín.)": "Slip-on bore (min.)",
+    "Ø do escareado traseiro da rosca": "Back counterbore diameter (threaded)",
+    "Ø do escareado da face": "Face counterbore diameter",
+    "Profundidade do escareado traseiro (a partir da face)": "Back counterbore depth (from face)",
+    "Profundidade do escareado da face": "Face counterbore depth",
+    "Ø primitivo do canal do anel": "Ring groove pitch diameter",
+    "Profundidade do canal do anel": "Ring groove depth",
+    "Largura do canal do anel": "Ring groove width",
+    "Raio no fundo do canal": "Radius at bottom of groove",
+    "Ø do furo da tomada de pressão (TT)": "Pressure tap hole diameter",
+    "Posição da tomada de pressão (da face, medida no furo)": "Pressure tap location (from face, at bore)",
+    "Espessura mín. do flange cego (sem o ressalto)": "Min. blind flange thickness (excl. raised face)",
+    "Raio de concordância cubo/flange (mín.)": "Hub-to-flange fillet radius (min.)",
+    "Ø da parte elevada da face RTJ (mín.)": "Raised portion diameter, RTJ face (min.)",
+    "Espessura do flange (inclui o ressalto)": "Flange thickness (incl. raised face)",
+    "Espessura do flange cego (inclui o ressalto)": "Blind flange thickness (incl. raised face)",
+    "Ø externo da ponta de solda": "Outside diameter at weld end",
+    "Espessura de parede na ponta de solda (mín.)": "Wall thickness at weld end (min.)",
+    "Comprimento total (face até o fim do pescoço)": "Overall length (face to end of neck)",
+    "Comprimento total (face até a ponta de solda)": "Overall length (face to weld end)",
+    "Trecho cilíndrico do pescoço na ponta de solda": "Cylindrical neck length at weld end",
+    "Ø do pescoço junto ao flange": "Neck diameter at flange",
+    "Raio de concordância pescoço/flange": "Neck-to-flange fillet radius",
+    "Ø do ressalto": "Raised face diameter",
+    "Altura do ressalto": "Raised face height",
+    "Ø máx. da parte central sem usinagem (se houver)": "Max. diameter of unmachined centre (if any)",
+    "Ø interno do flange": "Flange inside diameter",
+    "Espessura do flange": "Flange thickness",
+    "Espessura mínima do cego (depois de usinado)": "Min. blind flange thickness (after machining)",
+    "Ø do cubo": "Hub diameter",
+    "Espessura do flange (sem o ressalto)": "Flange thickness (excl. raised face)",
+    "Espessura total do cego (com o ressalto)": "Overall blind flange thickness (incl. raised face)",
+    "Espessura da aba do cego (sem o ressalto)": "Blind flange rim thickness (excl. raised face)",
+    "Espessura do flange cego": "Blind flange thickness",
+    "Espessura do flange (dimensão alternativa H)": "Flange thickness (alternative dimension H)",
+    "Espessura sem o ressalto (t − f)": "Thickness excl. raised face (t − f)",
+    "Espessura do cego sem o ressalto (t − f)": "Blind flange thickness excl. raised face (t − f)",
+    "Espessura sem o ressalto (t − f), dimensão alternativa H": "Thickness excl. raised face (t − f), alternative dimension H",
+    "Ø do anel externo da fêmea/ranhura": "Outer ring diameter, female/groove face",
+    "Ø interno da lingueta": "Tongue inside diameter",
+    "Ø interno da ranhura": "Groove inside diameter",
+    "Ø externo do macho / lingueta": "Male / tongue outside diameter",
+    "Ø externo da fêmea / ranhura": "Female / groove outside diameter",
+    "Altura do macho / lingueta": "Male / tongue height",
+    "Profundidade da fêmea / ranhura": "Female / groove depth",
+    "Ø interno (abaixo do batente)": "Inside diameter (below stopper)",
+    "Altura do batente (stopper)": "Stopper height",
+    "Ø interno": "Inside diameter",
+    "Profundidade do encaixe": "Socket depth",
+    "Chanfro / raio da borda do furo": "Bore edge chamfer / radius",
+    "Ø interno do flange (furo)": "Flange inside diameter (bore)",
+    "Ø menor do cubo": "Hub small-end diameter",
+    "Ø maior do cubo": "Hub large-end diameter",
+    "Comprimento total do flange": "Overall flange length",
+    "Ø do cubo na ponta (= Ø externo do tubo)": "Hub diameter at end (= pipe outside diameter)",
+    /* 11. RIF · inspeção visual das normas */
+    "Duas tomadas de pressão radiais, roscadas 1/2\" NPT (ou soquete 1/2\" ASME B16.11), com bujão (9.1 e 9.3)": "Two radial pressure taps, threaded 1/2\" NPT (or 1/2\" ASME B16.11 socket), with plug (9.1 and 9.3)",
+    "Furo da tomada de pressão (TT) livre de rebarbas": "Pressure tap hole free of burrs",
+    "Parafuso extrator (jack screw) no círculo de furação, a 90° das tomadas, com rasgo para a porca (10)": "Jack screw on the bolt circle, 90° from the taps, with nut slot (10)",
+    "Diâmetro do furo (bore) marcado no flange (6)": "Bore diameter marked on the flange (6)",
+    "Imperfeições na face dentro da Tabela 29 (6.1.5): projeção radial até 12,5 mm (rasas) e até 6,0 mm (mais fundas que a ranhura), afastadas pelo menos 4× a projeção; sem saliências acima das ranhuras": "Face imperfections within Table 29 (6.1.5): radial projection up to 12.5 mm (shallow) and up to 6.0 mm (deeper than the serrations), spaced at least 4× the projection apart; no protrusions above the serrations",
+    "Imperfeições na face dentro da Tabela 29 (6.1.5): projeção radial até 14,0 mm (rasas) e até 7,0 mm (mais fundas que a ranhura), afastadas pelo menos 4× a projeção; sem saliências acima das ranhuras": "Face imperfections within Table 29 (6.1.5): radial projection up to 14.0 mm (shallow) and up to 7.0 mm (deeper than the serrations), spaced at least 4× the projection apart; no protrusions above the serrations",
+    "Imperfeições na face dentro da Tabela 29 (6.1.5): projeção radial até 16,0 mm (rasas) e até 8,0 mm (mais fundas que a ranhura), afastadas pelo menos 4× a projeção; sem saliências acima das ranhuras": "Face imperfections within Table 29 (6.1.5): radial projection up to 16.0 mm (shallow) and up to 8.0 mm (deeper than the serrations), spaced at least 4× the projection apart; no protrusions above the serrations",
+    "Canal do anel com ângulo de 23° ± 1/2° e paredes com rugosidade de até 1,6 µm Ra (Tabela 28 e 6.1.4.1)": "Ring groove angle 23° ± 1/2°, groove walls with roughness up to 1.6 µm Ra (Table 28 and 6.1.4.1)",
+    "Periferia marcada com a letra R e o número do canal do anel (4.2.7)": "Periphery marked with the letter R and the ring groove number (4.2.7)",
+    "Superfícies de apoio das porcas paralelas à face (dentro de 1°); spot facing sem reduzir o tf (6.3)": "Nut bearing surfaces parallel to the flange face (within 1°); spot facing without reducing tf (6.3)",
+    "Chanfro de solda conforme a Fig. 1: 37,5° ± 2,5° e nariz de 2 ± 1 mm; parede acima de 22 mm com chanfro composto de 10° ± 2,5° (6.4)": "Weld bevel per Fig. 1: 37.5° ± 2.5° with 2 ± 1 mm root face; walls over 22 mm with compound bevel of 10° ± 2.5° (6.4)",
+    "Espessura do cubo na ponta de solda de pelo menos 87,5 % da espessura nominal do tubo (7.3.4)": "Hub thickness at weld end at least 87.5 % of the nominal pipe wall thickness (7.3.4)",
+    "Face de vedação torneada (ranhura concêntrica ou espiral), ferramenta com raio de ponta ≥ 1,0 mm, Ra 3,2 a 12,5 µm / Rz 12,5 a 50 µm (Tabela 2)": "Turned sealing face (concentric or spiral serrations), tool nose radius ≥ 1.0 mm, Ra 3.2 to 12.5 µm / Rz 12.5 to 50 µm (Table 2)",
+    "Face de vedação B2 com Ra 0,8 a 3,2 µm / Rz 3,2 a 12,5 µm (Tabela 2)": "Type B2 sealing face, Ra 0.8 to 3.2 µm / Rz 3.2 to 12.5 µm (Table 2)",
+    "Marcação conforme 5.10: fabricante / EN 1092-1 / tipo / DN / PN / material / corrida (ex.: XXX/EN 1092-1/11/DN 150/PN 40/P265GH/A2345), estampada na borda externa": "Marking per 5.10: manufacturer / EN 1092-1 / type / DN / PN / material / heat No. (e.g. XXX/EN 1092-1/11/DN 150/PN 40/P265GH/A2345), stamped on the outer rim",
+    "Furos igualmente espaçados (5.6.4); distância entre furos vizinhos ±1,0 mm até M24 e ±1,5 mm de M27 a M45 (Tabela 22)": "Bolt holes equally spaced (5.6.4); distance between adjacent holes ±1.0 mm up to M24 and ±1.5 mm from M27 to M45 (Table 22)",
+    "Excentricidade entre a face usinada e o círculo de furação até 1,0 mm (Tabela 22)": "Eccentricity between machined face and bolt circle up to 1.0 mm (Table 22)",
+    "Excentricidade entre a face usinada e o círculo de furação até 2,0 mm (Tabela 22)": "Eccentricity between machined face and bolt circle up to 2.0 mm (Table 22)",
+    "Apoio das porcas paralelo à face: até 1° se usinado, 2° se não usinado; rebaixo (spot facing) sem reduzir a espessura C (5.8.2 e Tabela 22)": "Nut bearing surface parallel to the face: within 1° if machined, 2° if not machined; spot facing without reducing thickness C (5.8.2 and Table 22)",
+    "Ponta de solda conforme o Anexo A: parede até 3 mm pode ser reta; de 3 a 22 mm, chanfro de 30° (+5°/−0°) com nariz de 1,6 ± 0,8 mm; acima de 22 mm, Figura A.2; parede maior que a do tubo, chanfro interno de 15° (Figura A.3)": "Weld end per Annex A: walls up to 3 mm may be square; 3 to 22 mm, 30° (+5°/−0°) bevel with 1.6 ± 0.8 mm root face; over 22 mm, Figure A.2; wall thicker than the pipe, 15° internal taper (Figure A.3)",
+    "Rosca paralela Rp (ou cônica Rc, se pedida) conforme ISO 7-1, verificada com calibrador (EN 10226-3), concêntrica com o eixo (até 5 mm por metro), com chanfro de entrada de 30° a 50° (5.6.3)": "Parallel thread Rp (or taper Rc if ordered) per ISO 7-1, checked with gauge (EN 10226-3), concentric with the axis (within 5 mm per metre), 30° to 50° entry chamfer (5.6.3)",
+    "Face plana, sem ressalto, com ranhura serrilhada concêntrica ou espiral de 24 a 55 ranhuras/pol (0,94 a 2,17 por mm), ferramenta com raio ≥ 1,52 mm e rugosidade de 6,35 a 12,7 µm (250 a 500 µpol) (4.2.2)": "Flat face, no raised face, concentric or spiral serrated finish of 24 to 55 grooves/in (0.94 to 2.17 per mm), tool radius ≥ 1.52 mm, roughness 6.35 to 12.7 µm (250 to 500 µin) (4.2.2)",
+    "Face sem revestimento ou pintura (só é permitido protetivo solúvel contra ferrugem) e sem protuberâncias na área de assentamento da junta (4.2.2.2)": "Face free of coating or paint (only soluble rust preventive allowed) and free of protrusions in the gasket seating area (4.2.2.2)",
+    "Furação em múltiplos de 4, com os furos fora das linhas de centro (um de cada lado), salvo pedido especial (4.2.3)": "Bolt holes in multiples of 4, straddling the centerlines, unless otherwise specified (4.2.3)",
+    "Furos igualmente espaçados: distância entre centros de furos vizinhos ±0,79 mm (1/32 pol) (4.2.1.8)": "Bolt holes equally spaced: center-to-center distance between adjacent holes ±0.79 mm (1/32 in) (4.2.1.8)",
+    "Flange cego usinado na face para casar com o flange par; a espessura da Tabela 7 é a mínima depois da usinagem (4.2.5)": "Blind flange face machined to match the mating flange; Table 7 thickness is the minimum after machining (4.2.5)",
+    "Flange segmentado (se houver): no máximo 4 segmentos, todas as soldas com radiografia ou ultrassom e alívio de tensões depois da soldagem e antes da usinagem (4.2.4)": "Segmented flange (if any): max. 4 segments, all welds radiographed or ultrasonically tested, stress relieved after welding and before machining (4.2.4)",
+    "Material: forjado ASTM A105 ou A181, ou chapa/barra ASTM A36 ou A516 grau 60, 65 ou 70 (LR ≥ 345 MPa, LE ≥ 221 MPa, C ≤ 0,29 %, P ≤ 0,04 %, S ≤ 0,05 %) — conferir o certificado (4.1.3)": "Material: ASTM A105 or A181 forging, or ASTM A36 or A516 grade 60, 65 or 70 plate/bar (UTS ≥ 345 MPa, YS ≥ 221 MPa, C ≤ 0.29 %, P ≤ 0.04 %, S ≤ 0.05 %) — check the certificate (4.1.3)",
+    "Marcação estampada: tamanho, nome ou marca do fabricante e classe AWWA (6.1)": "Stamped marking: size, manufacturer's name or trademark and AWWA class (6.1)",
+    "Dimensões e tolerâncias verificadas antes da pintura de acabamento (9.2)": "Dimensions and tolerances checked before finish painting (9.2)",
+    "Superfícies usinadas com acabamento uniforme, sem arranhões, cortes, mossas, rebarbas ou cantos vivos (4.3.2.3)": "Machined surfaces with uniform finish, free of scratches, cuts, dents, burrs or sharp edges (4.3.2.3)",
+    "Sem defeitos como trincas, porosidades, bolhas, depressões, inclusões ou escamas de oxidação (4.3.2.2)": "Free of defects such as cracks, porosity, blisters, depressions, inclusions or mill scale (4.3.2.2)",
+    "Centro do flange cego côncavo, a partir do DN 300 (Tabelas 35 e 36)": "Concave centre on blind flanges from DN 300 (Tables 35 and 36)",
+    "Marcação visível e indelével: fabricante, ano de fabricação (2 últimos algarismos), rastreabilidade, DN, PN e NBR 7675 (Seção 8)": "Visible and permanent marking: manufacturer, year of manufacture (last 2 digits), traceability, DN, PN and NBR 7675 (Section 8)",
+    "Face torneada com ferramenta de ponta redonda, rugosidade Ra 3,2 a 6,3 µm (14.1 e Tabelas 9 e 10)": "Face turned with round-nose tool, roughness Ra 3.2 to 6.3 µm (14.1 and Tables 9 and 10)",
+    "Face de vedação com rugosidade Ra até 3,2 µm (14.1 e Tabela 9)": "Sealing face roughness Ra up to 3.2 µm (14.1 and Table 9)",
+    "Furos: passo entre furos vizinhos ±0,8 mm; excentricidade do círculo de furação em relação ao furo central até 0,8 mm (Tabela 22)": "Bolt holes: pitch between adjacent holes ±0.8 mm; bolt circle eccentricity to the bore up to 0.8 mm (Table 22)",
+    "Apoio do parafuso e da porca inclinado no máximo 1° em relação à face de vedação (Tabela 22)": "Bolt and nut bearing surfaces inclined max. 1° to the sealing face (Table 22)",
+    "Rosca cônica Rc conforme JIS B 0203, verificada com calibrador; perpendicularidade do eixo da rosca à face até 0,9 mm em 100 mm (12.4 e 12.5)": "Taper thread Rc per JIS B 0203, checked with gauge; thread axis perpendicular to the face within 0.9 mm per 100 mm (12.4 and 12.5)",
+    "Bordas cortadas a gás ou plasma usinadas, com pelo menos 2 mm removidos (16.1 c)": "Gas- or plasma-cut edges machined, with at least 2 mm removed (16.1 c)",
+    "Livre de trincas ou falhas prejudiciais ao uso (13)": "Free of cracks or defects harmful to use (13)",
+    "Marcação indelével na periferia: pressão nominal (com L, H ou A/B/C quando houver), tamanho, material, corrida ou nº rastreável e nome ou marca do fabricante (20)": "Permanent marking on the periphery: nominal pressure (with L, H or A/B/C where applicable), size, material, heat No. or traceable No., and manufacturer's name or trademark (20)",
+    /* 12. RIF · notas das normas */
+    "Conforme a norma: neste tamanho a Classe 400 usa as dimensões da Classe 600.": "Per the standard: in this size Class 400 uses Class 600 dimensions.",
+    "Conforme a norma: neste tamanho a Classe 900 usa as dimensões da Classe 1500.": "Per the standard: in this size Class 900 uses Class 1500 dimensions.",
+    "Conforme a norma (Tabela 3): neste tamanho a Classe 900 usa as dimensões da Classe 1500.": "Per the standard (Table 3): in this size Class 900 uses Class 1500 dimensions.",
+    "Atenção: a tabela métrica (37) traz Y = 168 mm, mas a tabela em polegadas (I-35) traz 5,63\" = 143 mm, valor que segue a sequência dos tamanhos vizinhos. Confirme com o pedido ou o desenho.": "Note: the metric table (37) gives Y = 168 mm, but the inch table (I-35) gives 5.63\" = 143 mm, which follows the sequence of the adjacent sizes. Confirm with the order or drawing.",
+    "Atenção: a tabela métrica (37) traz Y = 165 mm, mas a tabela em polegadas (I-35) traz 7,50\" = 190,5 mm, valor que segue a sequência dos tamanhos vizinhos. Confirme com o pedido ou o desenho.": "Note: the metric table (37) gives Y = 165 mm, but the inch table (I-35) gives 7.50\" = 190.5 mm, which follows the sequence of the adjacent sizes. Confirm with the order or drawing.",
+    "Atenção: a tabela métrica (37) traz A = 1557,3 mm, mas a tabela em polegadas (I-35) traz 60,31\" = 1531,9 mm, valor que segue a sequência dos tamanhos vizinhos. Confirme com o pedido ou o desenho. O furo máximo do 2.7.1 também depende de A.": "Note: the metric table (37) gives A = 1557.3 mm, but the inch table (I-35) gives 60.31\" = 1531.9 mm, which follows the sequence of the adjacent sizes. Confirm with the order or drawing. The maximum bore in 2.7.1 also depends on A.",
+    "Conforme a norma (nota (h) das Tabelas 38 a 40): a partir do NPS 38 a Série B usa as dimensões da Série A.": "Per the standard (note (h) to Tables 38 to 40): from NPS 38 upward, Series B uses Series A dimensions.",
+    "Rosca ISO 7-1 tamanho {x} (Rp; Rc se pedida).": "ISO 7-1 thread, size {x} (Rp; Rc if ordered).",
+    "Rosca conforme o pedido (a ISO 7-1 vai até o tamanho 6).": "Thread per order (ISO 7-1 covers up to size 6).",
+    "A Tabela 13 permite 4 furos neste DN e PN, se combinado entre fabricante e comprador (nota b).": "Table 13 allows 4 bolt holes for this DN and PN if agreed between manufacturer and purchaser (note b).",
+    "Atenção: a Tabela 7 diz que o tipo 01 PN 63 até DN 50 tem as dimensões do PN 100, mas a Tabela 16 traz valores próprios para o DN 50 (usados aqui). No PN 100: D = 195, K = 145, L = 26 e C1 = 28 mm. Confirme com o pedido.": "Note: Table 7 states that type 01 PN 63 up to DN 50 has PN 100 dimensions, but Table 16 gives its own values for DN 50 (used here). For PN 100: D = 195, K = 145, L = 26 and C1 = 28 mm. Confirm with the order.",
+    "Conforme a norma (Tabelas 7 e 19): no DN 10, o flange tipo 11 PN 250 usa as dimensões do PN 320.": "Per the standard (Tables 7 and 19): at DN 10, type 11 PN 250 flanges use PN 320 dimensions.",
+    "Atenção: a Tabela 7 diz que o tipo 11 PN 2,5 até DN 1000 tem as dimensões do PN 6, mas a Tabela 10 traz C2 = 30 e H2 = 74 mm (no PN 6: C2 = 34 e H2 = 78 mm). Valores da Tabela 10 usados; confirme com o pedido.": "Note: Table 7 states that type 11 PN 2.5 up to DN 1000 has PN 6 dimensions, but Table 10 gives C2 = 30 and H2 = 74 mm (PN 6: C2 = 34 and H2 = 78 mm). Table 10 values used; confirm with the order.",
+    "Atenção: a Tabela 7 diz que o tipo 11 PN 2,5 até DN 1000 tem as dimensões do PN 6, mas a Tabela 10 traz C2 = 30 e H2 = 74 mm (no PN 6: C2 = 38 e H2 = 82 mm). Valores da Tabela 10 usados; confirme com o pedido.": "Note: Table 7 states that type 11 PN 2.5 up to DN 1000 has PN 6 dimensions, but Table 10 gives C2 = 30 and H2 = 74 mm (PN 6: C2 = 38 and H2 = 82 mm). Table 10 values used; confirm with the order.",
+    "Ø interno B definido pelo comprador: no máximo 6,35 mm (0,25 pol) acima do Ø externo do tubo (Tabela {n}).": "Inside diameter B specified by the purchaser: max. 6.35 mm (0.25 in) above the pipe outside diameter (Table {n}).",
+    "Acima de 48 pol a norma recomenda usar anel com tampo conformado (flanged and dished head) no lugar do cego (4.2.5 e nota 5 da Tabela 7).": "Above 48 in the standard recommends a ring flange with a flanged and dished head instead of a blind flange (4.2.5 and note 5 to Table 7).",
+    "Flange com o ressalto removido: T' mínimo = T − 1,52 mm (0,06 pol), nota § da Tabela 4. Nesse caso, marque T como N/A e inclua T' em Cota adicional.": "Flange with raised face removed: min. T' = T − 1.52 mm (0.06 in), note § to Table 4. In this case mark T as N/A and add T' as an additional dimension.",
+    "Atenção: na Tabela 7 o valor em mm (68,53) não bate com o em polegadas (2,690 pol = 68,33 mm). Usado o valor em polegadas, igual à espessura do anel classe F da Tabela 6.": "Note: in Table 7 the mm value (68.53) does not match the inch value (2.690 in = 68.33 mm). The inch value is used, equal to the Class F ring flange thickness in Table 6.",
+    "Atenção: na Tabela 7 o valor em mm (101,40) não bate com o em polegadas (3,982 pol = 101,14 mm). Usado o valor em polegadas.": "Note: in Table 7 the mm value (101.40) does not match the inch value (3.982 in = 101.14 mm). The inch value is used.",
+    "Atenção: a Tabela 15 traz espessura a = 20,5 mm (igual ao PN 10), mas as Tabelas 35 e 37 trazem 22,5 mm para a aba do mesmo DN. Usado o valor da Tabela 15; com a tolerância de ±4,0 mm, os dois valores são aceitos.": "Note: Table 15 gives thickness a = 20.5 mm (same as PN 10), but Tables 35 and 37 give 22.5 mm for the rim of the same DN. Table 15 value used; with the ±4.0 mm tolerance both values are accepted.",
+    "Rosca Rc {x} (JIS B 0203).": "Rc {x} thread (JIS B 0203).",
+    "Com face plana (FF), a norma recomenda junta de face inteira neste tamanho (21.1).": "With flat face (FF), the standard recommends a full-face gasket in this size (21.1)."
+  };
+  let relEnPad = null;
+  function relEn(pt) {
+    const k0 = String(pt == null ? '' : pt);
+    if (Object.prototype.hasOwnProperty.call(REL_EN, k0)) return REL_EN[k0];
+    const k = k0.trim(); if (!k) return '';
+    if (Object.prototype.hasOwnProperty.call(REL_EN, k)) return REL_EN[k];
+    if (!relEnPad) relEnPad = Object.keys(REL_EN).filter((p) => p.includes('{')).map((p) => { const nomes = []; const rx = new RegExp('^' + p.replace(/[.*+?^$()|[\]\\]/g, '\\$&').replace(/\{(\w+)\}/g, (m, n) => { nomes.push(n); return '(.+?)'; }) + '$'); return { rx, nomes, en: REL_EN[p] }; });
+    for (const o of relEnPad) { const m = k.match(o.rx); if (m) return o.en.replace(/\{(\w+)\}/g, (x, n) => m[o.nomes.indexOf(n) + 1]); }
+    return '';
+  }
+  const relEnDif = (pt, chave) => { const en = relEn(chave || pt); return en && en.toLocaleLowerCase('en') !== String(pt).trim().toLocaleLowerCase('pt-BR') ? en : ''; };
+  /* rótulo, título de coluna, escolha fixa: português em cima, inglês menor embaixo */
+  const biL = (pt, html, chave) => { const en = relEnDif(pt, chave); return (html != null ? html : esc(pt)) + (en ? `<small class="en">${esc(en)}</small>` : ''); };
+  /* texto com o inglês já pronto (linha de baixo) */
+  const biT = (html, en) => html + (en ? `<small class="en">${esc(en)}</small>` : '');
+  /* título da seção: "1 · IDENTIFICAÇÃO / Identification" */
+  const biS = (n, pt, chave) => { const en = relEnDif(pt, chave); return `<b class="st">${n ? esc(n) + ' · ' : ''}${esc(pt)}${en ? ` <i class="en">/ ${esc(en)}</i>` : ''}</b>`; };
+  /* palavra no meio da linha: "validade / valid until" */
+  const biI = (pt) => { const en = relEnDif(pt); return esc(pt) + (en ? ` <i class="en-i">/ ${esc(en)}</i>` : ''); };
+  const REL_EN_CSS = `.en{display:block;font:400 6.3pt/1.15 Arial,Helvetica,sans-serif;color:#666;text-transform:none;letter-spacing:0;font-style:normal;margin-top:.2mm}
+      .en-i{font-style:normal;font-weight:400;color:#777;text-transform:none;letter-spacing:0}
+      .hd .t .en{font-size:8.6pt;color:#777;letter-spacing:.02em;margin-top:.8mm}.hd .t .en.sub{font-size:7.8pt;margin-top:.3mm}
+      .hd .n .en{font-size:6pt;color:#888;margin-top:0}.hd .n b .en{text-align:right;font-weight:400}.hd .rn{flex-wrap:wrap}.hd .rn .en{flex-basis:100%;font-size:7pt;color:inherit;text-align:right}
+      .sh .st{font:inherit;letter-spacing:inherit}.sh .st .en{display:inline;font-size:8.2pt;font-weight:400;letter-spacing:0;text-transform:none;color:inherit;opacity:.8}
+      .sh span .en{display:block;text-align:right;color:inherit;opacity:.8;font-size:6.3pt}.sh.l .st .en{color:#555;opacity:1}
+      th .en{font-size:6pt;color:#4d5e7a}td.k .en{font-size:6.2pt}.chk{vertical-align:top}.chk .en{display:block;font-size:6pt;color:#777}.chk.on .en{color:#ddd}
+      .rasc span{display:block;font-size:.62em}`;
   /** Relatório A4 da Qualidade (NCF e NCC vermelho, RIR verde, RIF azul-marinho, IQF e fichas cinza): mesmo cabeçalho, faixas e rodapé. */
   function relDocHTML(o) {
     const logo = DB.logo ? `<img src="${DB.logo}" alt="">` : '<b style="font-size:16pt">AÇOS VITAL</b>';
@@ -17245,8 +18046,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       .sig{padding:2mm 2.5mm;font-size:9pt}.chk{display:inline-block;border:1px solid #777;border-radius:1mm;padding:0 1.5mm;margin:0 1.2mm .8mm 0;font-size:8.3pt}.chk.on{background:#111;color:#fff;border-color:#111}
       .apv{background:#f4f5f4}.apv td{font-size:8.6pt;vertical-align:middle}.apv thead td.k{width:auto;font-size:7.2pt}.apv tbody td.k{width:34mm}.apv .ass{display:block;border-bottom:1px solid #555;height:7mm}
       .ft{flex:none;height:${mB};display:flex;align-items:center;justify-content:space-between;gap:4mm;font-size:7.5pt;color:#666;border-top:1px solid #ccc}.ft .fc{color:#444}.ft .pgn{font-weight:700;color:#333}#src .ft{border:0;height:auto;margin-top:4mm}
-      .pre{white-space:pre-wrap}${o.extra || ''}</style></head><body><div id="src">
-      <div class="hd" data-pg="hd"><div class="lg">${logo}</div><div class="t"><b>${o.nome}</b><span>${o.sub}</span></div><div class="n"><div class="rn">${o.num}</div>${o.linhas}<div class="fc"><span>Emitido em</span><b>${esc(dmy(agora) + ' ' + hhmm(agora))}</b></div>${cod ? `<div class="fc"><span>Formulário</span><b>${esc(cod)}</b></div>` : ''}</div>${o.co ? `<div class="co">${o.co}</div>` : ''}</div>
+      .pre{white-space:pre-wrap}${o.en ? REL_EN_CSS : ''}${o.extra || ''}</style></head><body><div id="src"${o.en ? ` data-pag="Página {i} de {n} · Page {i} of {n}" data-cont=" (continuação / continued)"` : ''}>
+      <div class="hd" data-pg="hd"><div class="lg">${logo}</div><div class="t"><b>${o.nome}</b>${o.en && relEn(o.nome) ? `<i class="en">${esc(relEn(o.nome))}</i>` : ''}<span>${o.sub}</span>${o.en && o.subEn ? `<i class="en sub">${o.subEn}</i>` : ''}</div><div class="n"><div class="rn">${o.num}</div>${o.linhas}<div class="fc"><span>${o.en ? biL('Emitido em') : 'Emitido em'}</span><b>${esc(dmy(agora) + ' ' + hhmm(agora))}</b></div>${cod ? `<div class="fc"><span>${o.en ? biL('Formulário') : 'Formulário'}</span><b>${esc(cod)}</b></div>` : ''}</div>${o.co ? `<div class="co">${o.co}</div>` : ''}</div>
       <div data-pg="flow">${o.corpo}${o.aprov || ''}</div>
       <div class="ft" data-pg="ft"><span>${o.rodape}</span>${cod ? `<span class="fc">${esc(cod)}</span>` : ''}<span>${o.rodNum ? o.rodNum + ' · ' : ''}<span class="pgn"></span></span></div></div>
       <script>(${relPaginar})();<\/script></body></html>`;
@@ -17255,33 +18056,36 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const x = findRec('RNC', key); if (!x) return; const m = rmeta(x), fotos = await rncFotos(key);
     const a0 = lotTokens(x.lotesAV).map(avById).find(Boolean) || {}, t = (v) => esc(disp(v)) || '—', motOut = Array.isArray(m.motOutros) ? m.motOutros : [];
     const mots = uniq(cfgL('RNC_MOTIVOS').concat(x.motivo ? [x.motivo] : []).concat(motOut));
-    const chk = (on, l) => `<span class="chk${on ? ' on' : ''}">${esc(l)}</span>`;
-    const qtd = m.qtdRep != null ? `Recebida: ${m.qtdRec != null ? NF.format(m.qtdRec) + ' ' + esc(m.qtdUnd || '') : '—'} · <b>Reprovada: ${NF.format(m.qtdRep)} ${esc(m.qtdUnd || '')}${m.qtdRec ? ` (${Math.round((m.qtdRep / m.qtdRec) * 100)}%)` : ''}</b>` : '—';
+    const L = (pt) => biL(pt), V = (v) => (E.filled(v) ? biL(String(v)) : '—');
+    const chk = (on, l, extra) => `<span class="chk${on ? ' on' : ''}">${esc(l)}${extra ? ' ' + esc(extra) : ''}${relEnDif(l) || extra ? `<small class="en">${esc(relEn(l) || l)}${extra ? ' ' + esc(relEn(extra)) : ''}</small>` : ''}</span>`;
+    const qRec = m.qtdRec != null ? NF.format(m.qtdRec) + ' ' + esc(m.qtdUnd || '') : '—', qRep = `${NF.format(m.qtdRep)} ${esc(m.qtdUnd || '')}${m.qtdRec ? ` (${Math.round((m.qtdRep / m.qtdRec) * 100)}%)` : ''}`;
+    const qtd = m.qtdRep != null ? `Recebida: ${qRec} · <b>Reprovada: ${qRep}</b><small class="en">${esc(relEn('Recebida:'))} ${qRec} · ${esc(relEn('Reprovada:'))} ${qRep}</small>` : '—';
+    const qtd0 = m.qtdRep != null ? `Recebida: ${m.qtdRec != null ? NF.format(m.qtdRec) + ' ' + esc(m.qtdUnd || '') : '—'} · <b>Reprovada: ${NF.format(m.qtdRep)} ${esc(m.qtdUnd || '')}${m.qtdRec ? ` (${Math.round((m.qtdRep / m.qtdRec) * 100)}%)` : ''}</b>` : '—';
     const efics = cfgL('RNC_ANALISE_CRITICA');
-    printHTML(relDocHTML({ titulo: esc(x.num), cor: '#980000', nome: 'REGISTRO DE NÃO CONFORMIDADE DE FORNECEDOR', sub: `Fornecedor${m.origem ? ' · origem: ' + esc(E.low(m.origem)) : ''}`, num: esc(x.num),
-      linhas: `<div><span>Abertura</span><b>${esc(fmtTs(x.data))}</b></div><div><span>Filial</span><b>${t(x.filial)}</b></div>`,
-      corpo: `<div class="sec"><div class="sh">1 · Identificação</div><table>
-        <tr><td class="k">Fornecedor</td><td>${t(x.forn)}</td><td class="k">Lote(s)</td><td>${esc(lotTokens(x.lotesAV).join(', ')) || t(m.abrang)}</td></tr>
-        <tr><td class="k">Nota fiscal</td><td>${t(x.nf)}</td><td class="k">Pedido / PV</td><td>${t(x.oc)} / ${t(x.pv)}</td></tr>
-        <tr><td class="k">Material</td><td>${a0.desc ? esc(lotTxt(a0)) : '—'}</td><td class="k">Corrida</td><td>${E.filled(a0.corrida) ? esc(a0.corrida) : '—'}</td></tr>
-        <tr><td class="k">Certificado</td><td>${a0.cert && E.filled(a0.cert) && !E.isStar(a0.cert) ? esc(a0.cert) : '—'}</td><td class="k">Setor resp.</td><td>${t(x.depto)}</td></tr></table></div>
-      <div class="sec"><div class="sh">2 · Não conformidade</div><table>
-        <tr><td class="k">Motivo</td><td colspan="3">${mots.map((v) => chk(v === x.motivo || motOut.includes(v), v + (v === x.motivo ? ' (principal)' : ''))).join('')}</td></tr>
-        <tr><td class="k">Descrição</td><td colspan="3" class="pre">${t(m.descNc)}</td></tr>
-        <tr><td class="k">Quantidade</td><td>${qtd}</td><td class="k">Reincidência</td><td>${t(x.reinc)}</td></tr></table>
-        ${fotos.length ? `<div class="sh l">Registro fotográfico</div><div class="fot">${fotos.map((o) => `<img src="${o.img}" alt="">`).join('')}</div>` : ''}
+    printHTML(relDocHTML({ en: true, titulo: esc(x.num), cor: '#980000', nome: 'REGISTRO DE NÃO CONFORMIDADE DE FORNECEDOR', sub: `Fornecedor${m.origem ? ' · origem: ' + esc(E.low(m.origem)) : ''}`, subEn: esc(relEn('Fornecedor') + (m.origem ? ' · ' + relEn('origem: ' + (relEn(m.origem) || m.origem).toLowerCase()) : '')), num: esc(x.num),
+      linhas: `<div><span>${L('Abertura')}</span><b>${esc(fmtTs(x.data))}</b></div><div><span>${L('Filial')}</span><b>${t(x.filial)}</b></div>`,
+      corpo: `<div class="sec"><div class="sh">${biS('1', 'Identificação')}</div><table>
+        <tr><td class="k">${L('Fornecedor')}</td><td>${t(x.forn)}</td><td class="k">${L('Lote(s)')}</td><td>${esc(lotTokens(x.lotesAV).join(', ')) || t(m.abrang)}</td></tr>
+        <tr><td class="k">${L('Nota fiscal')}</td><td>${t(x.nf)}</td><td class="k">${L('Pedido / PV')}</td><td>${t(x.oc)} / ${t(x.pv)}</td></tr>
+        <tr><td class="k">${L('Material')}</td><td>${a0.desc ? esc(lotTxt(a0)) : '—'}</td><td class="k">${L('Corrida')}</td><td>${E.filled(a0.corrida) ? esc(a0.corrida) : '—'}</td></tr>
+        <tr><td class="k">${L('Certificado')}</td><td>${a0.cert && E.filled(a0.cert) && !E.isStar(a0.cert) ? esc(a0.cert) : '—'}</td><td class="k">${L('Setor resp.')}</td><td>${V(x.depto)}</td></tr></table></div>
+      <div class="sec"><div class="sh">${biS('2', 'Não conformidade')}</div><table>
+        <tr><td class="k">${L('Motivo')}</td><td colspan="3">${mots.map((v) => chk(v === x.motivo || motOut.includes(v), v, v === x.motivo ? '(principal)' : '')).join('')}</td></tr>
+        <tr><td class="k">${L('Descrição')}</td><td colspan="3" class="pre">${t(m.descNc)}</td></tr>
+        <tr><td class="k">${L('Quantidade')}</td><td>${qtd}</td><td class="k">${L('Reincidência')}</td><td>${V(x.reinc)}</td></tr></table>
+        ${fotos.length ? `<div class="sh l">${biS('', 'Registro fotográfico')}</div><div class="fot">${fotos.map((o) => `<img src="${o.img}" alt="">`).join('')}</div>` : ''}
         ${corrLines(m).length ? `<div class="sig" style="border-top:1px solid #bbb">${corrLines(m).map((l) => `<div style="font-size:8.3pt;color:#444">✎ ${l}</div>`).join('')}</div>` : ''}</div>
-      <div class="sec"><div class="sh q">3 · Tratamento da não conformidade <span>Qualidade</span></div><table>
-        <tr><td class="k">Disposição</td><td>${t(x.disp)}</td><td class="k">Data</td><td>${fD(x.fechDisp) || '—'}</td></tr>
-        <tr><td class="k">Contenção</td><td>${t(m.contTxt)}</td><td class="k">Resp. / data</td><td>${t(m.contResp)}${m.contData ? ' · ' + fD(m.contData) : ''}</td></tr>
-        <tr><td class="k">Causa raiz</td><td colspan="3" class="pre">${t(m.causa)}</td></tr>
-        <tr><td class="k">Ação corretiva</td><td colspan="3"><span class="pre">${E.low(x.corretiva) === 'não' ? 'Não necessária' : t(m.acaoTxt)}</span>${E.low(x.corretiva) === 'sim' ? `<br><span style="color:#555">Responsável: ${t(m.acaoResp)} · prazo: ${fD(x.prazoFechar) || '—'}${x.nivel ? ' (' + esc(x.nivel) + ')' : ''}</span>` : ''}</td></tr></table></div>
-      <div class="sec"><div class="sh q">4 · Verificação de eficácia</div><table>
-        <tr><td class="k">Resultado</td><td>${efics.map((v) => chk(v === x.analise, v)).join('')}</td><td class="k">Data / lote</td><td>${fD(m.eficData) || '—'}${m.eficLote ? ' · ' + esc(m.eficLote) : ''}</td></tr>
-        <tr><td class="k">Observação</td><td colspan="3" class="pre">${t(m.eficObs)}</td></tr></table></div>
+      <div class="sec"><div class="sh q">${biS('3', 'Tratamento da não conformidade')} <span>${L('Qualidade')}</span></div><table>
+        <tr><td class="k">${L('Disposição')}</td><td>${V(x.disp)}</td><td class="k">${L('Data')}</td><td>${fD(x.fechDisp) || '—'}</td></tr>
+        <tr><td class="k">${L('Contenção')}</td><td>${t(m.contTxt)}</td><td class="k">${L('Resp. / data')}</td><td>${t(m.contResp)}${m.contData ? ' · ' + fD(m.contData) : ''}</td></tr>
+        <tr><td class="k">${L('Causa raiz')}</td><td colspan="3" class="pre">${t(m.causa)}</td></tr>
+        <tr><td class="k">${L('Ação corretiva')}</td><td colspan="3"><span class="pre">${E.low(x.corretiva) === 'não' ? L('Não necessária') : t(m.acaoTxt)}</span>${E.low(x.corretiva) === 'sim' ? `<br><span style="color:#555">${biI('Responsável:')} ${t(m.acaoResp)} · ${biI('prazo:')} ${fD(x.prazoFechar) || '—'}${x.nivel ? ' (' + biI(x.nivel) + ')' : ''}</span>` : ''}</td></tr></table></div>
+      <div class="sec"><div class="sh q">${biS('4', 'Verificação de eficácia')}</div><table>
+        <tr><td class="k">${L('Resultado')}</td><td>${efics.map((v) => chk(v === x.analise, v)).join('')}</td><td class="k">${L('Data / lote')}</td><td>${fD(m.eficData) || '—'}${m.eficLote ? ' · ' + esc(m.eficLote) : ''}</td></tr>
+        <tr><td class="k">${L('Observação')}</td><td colspan="3" class="pre">${t(m.eficObs)}</td></tr></table></div>
 `,
       aprov: apvHTML([{ papel: 'Inspetor (abertura)', sig: m.abAss, nome: m.abAss ? null : x.emissor },
-        { papel: 'Aprovação da Qualidade', sig: m.aprAss, dia: !m.aprAss && x.status === 'Concluida' ? x.conclusao : null, nota: !m.aprAss && x.status === 'Concluida' ? 'NCF concluída' : '' }], '5 · Aprovação'),
+        { papel: 'Aprovação da Qualidade', sig: m.aprAss, dia: !m.aprAss && x.status === 'Concluida' ? x.conclusao : null, nota: !m.aprAss && x.status === 'Concluida' ? 'NCF concluída' : '' }], '5 · Aprovação', true),
       form: 'NCF', rodape: 'Aços Vital · Qualidade · Registro de Não Conformidade de Fornecedor', rodNum: esc(x.num) }));
   }
 
@@ -18570,6 +19374,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (a === 'tv-on') { tvLiga(); return; }
       if (a && a.startsWith('vy-') && vyAct(a, key)) return;
       if (a && a.startsWith('cq-') && cqAct(a, key, act)) return;
+      if (a && a.startsWith('aba-') && abaAct(a, key)) return;
       if (a && a.startsWith('rf-') && rfAct(a, key, act)) return;
       if (a && a.startsWith('ri-') && riAct(a, key, act)) return;
       if (a && a.startsWith('man-') && manAct(a, key)) return;
@@ -18602,7 +19407,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         const x = findRec('RNCC', key); if (!x) return; const id = act.dataset.id;
         if (a === 'rc-ctl') { rcContLotes(x0(key)); return; }
         if (a === 'rc-ctx') { rcContLib(x0(key)); return; }
-        const F = { 'rc-equipe': rcEquipe, 'rc-proc': rcProc, 'rc-cont': rcCont, 'rc-causa': rcCausa, 'rc-resp': rcResp, 'rc-custos': rcCustos, 'rc-efic': rcEfic, 'rc-fim': rcFim, 'rc-nota': rcNota, 'rc-foto': rcFotoAdd, 'rc-print': rnccPrint };
+        const F = { 'rc-equipe': rcEquipe, 'rc-proc': rcProc, 'rc-cont': rcCont, 'rc-causa': rcCausa, 'rc-resp': rcResp, 'rc-custos': rcCustos, 'rc-efic': rcEfic, 'rc-fim': rcFim, 'rc-nota': rcNota, 'rc-foto': rcFotoAdd, 'rc-print': rnccPrint, 'rc-en': rcEn };
         if (F[a]) { F[a](x); return; }
         if (a === 'rc-acao') { rcAcao(x, id || null); return; }
         if (a === 'rc-feita') { rcAcaoFeita(x, id); return; }
@@ -18700,7 +19505,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   $$('#nav a').forEach((a) => { if (a.dataset.v === navOf(S.view)) a.setAttribute('aria-current', 'page'); });
   setInterval(() => { if (S.model && E.todaySerial() !== S.today) scheduleRebuild(); else refreshBanner(); }, 60000);
   boot();
-  window.__CQ = { S, DB, go, openRecord, lotSt, T: { avFind, normLotes, avIdFmt, caseVal, nomeProprio, listNorm, cqPlano, iqCalc, fornSit, cqConcluir, cqResumoDoc, cqApp, cqFind, lotCertAviso, numMax, insImpPend, nextRnc, nextRncc, createRecord, updateRecord, deleteRecord, addDecisions, addInsEvent, FT, docMatch, docList, entResolve, entPropagate, saveEnt, pesPropagate, corrGet, corrId, rncFotos, findRec, related, destDialog, cfgSeed } };
+  window.__CQ = { S, DB, go, openRecord, lotSt, T: { cqAbrirTeste: (k) => cqAbrir(cqFind(k)), abaEstado: () => abaEstado(), nomeArq, relEn, rcEn, avFind, normLotes, avIdFmt, caseVal, nomeProprio, listNorm, cqPlano, iqCalc, fornSit, cqConcluir, cqResumoDoc, cqApp, cqFind, lotCertAviso, numMax, insImpPend, nextRnc, nextRncc, createRecord, updateRecord, deleteRecord, addDecisions, addInsEvent, FT, docMatch, docList, entResolve, entPropagate, saveEnt, pesPropagate, corrGet, corrId, rncFotos, findRec, related, destDialog, cfgSeed } };
 })();
 
 </script>
