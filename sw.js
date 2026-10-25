@@ -1,8 +1,9 @@
 /* Central da Qualidade · service worker
    Sempre busca a versão mais nova da página na internet; a cópia guardada só é usada se estiver sem conexão. */
-const CACHE = 'central-cq-v30'; /* v30: Certificado — novo cabeçalho (ISO 9001 e CRC Petrobras novos, bandeira do Paraguai) e símbolos das redes sociais clicáveis no PDF */
-const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
-self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).catch(() => {})); self.skipWaiting(); });
+const CACHE = 'central-cq-v39'; /* v39: ícone oficial novo (etiqueta CQ) em todas as páginas, no app instalado, no Android e no iPhone */
+const SHELL = ['./', './index.html', './manifest.webmanifest', './xlsx.full.min.js', './favicon.ico?v=39', './icon-192.png?v=39', './icon-512.png?v=39', './icon-maskable-512.png?v=39', './apple-touch-icon.png?v=39'];
+/* cada arquivo entra sozinho: um que falte não impede os outros de ficarem guardados */
+self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => Promise.all(SHELL.map((u) => c.add(u).catch(() => {})))).catch(() => {})); self.skipWaiting(); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', (e) => {
   const req = e.request, url = new URL(req.url);

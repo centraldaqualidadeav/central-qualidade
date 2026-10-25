@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Lote · Qualidade Aços Vital</title>
 <meta name="theme-color" content="#0F1112">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico?v=39" sizes="any">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;600&display=swap">
 <style>
@@ -20,6 +20,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
 .cq svg { width: 40px; height: 40px; flex: none; }
 .cq .t { display: grid; gap: 4px; min-width: 0; }
 .cq b { font: 800 clamp(15px, 4.6vw, 18px)/1 var(--fd); text-transform: uppercase; letter-spacing: .01em; }
+.cq .sb { font-size: 12px; color: var(--ink3); }
 .st { display: block; width: 120px; height: 3px; border-radius: 2px; background: linear-gradient(90deg, #EBDCA6 0%, #D7AA55 17%, #AA6A31 34%, #7B417A 50%, #33428F 66%, #4F87C7 83%, #9CA7AF 100%); }
 .top img { max-height: 46px; max-width: min(120px, 28vw); object-fit: contain; flex: none; }
 .hero { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--geral); border-radius: 10px; padding: 18px 16px 16px; display: grid; justify-items: center; gap: 6px; text-align: center; }
@@ -54,8 +55,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
 <body>
 <div class="pg" id="pg">
   <div class="top">
-    <div class="cq"><svg viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="cqrev" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#EBDCA6"/><stop offset="17%" stop-color="#D7AA55"/><stop offset="34%" stop-color="#AA6A31"/><stop offset="50%" stop-color="#7B417A"/><stop offset="66%" stop-color="#33428F"/><stop offset="83%" stop-color="#4F87C7"/><stop offset="100%" stop-color="#9CA7AF"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="#0F1112"/><g transform="translate(0.0 0.0) scale(1.0)"><text x="256" y="318" text-anchor="middle" style="font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:800;font-size:236px;letter-spacing:4px" fill="#F1F0EB">CQ</text><rect x="112" y="358" width="288" height="30" rx="15" fill="url(#cqrev)"/></g></svg>
-      <div class="t"><b>Central da Qualidade</b><span class="st"></span></div></div>
+    <div class="cq"><div class="t"><b>Aços Vital</b><span class="sb">Controle da Qualidade</span></div></div>
     <img id="logo" alt="Aços Vital" hidden>
   </div>
   <div id="out"><div class="msg"><div class="spin"></div>Carregando os dados…</div></div>
@@ -93,7 +93,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
       + '<span class="desc">' + esc([x.desc, dim].filter(Boolean).join(' · ')) + '</span>' + (st ? '<span class="chip ' + st[0] + '">' + st[1] + '</span>' : '') + '</div>'
       + card('Material', row('Descrição', x.desc) + row('Material', x.material) + row('Diâmetro', x.diam) + row('Espessura', x.esp) + row('Liga / tipo', x.liga) + row('Corrida', x.corrida, 1) + row('Volume', x.volume, 1) + row('Quantidade', x.quant || '—'))
       + card('Inspeção', row('Resultado da inspeção', x.insp) + row('Destino do material', x.dest) + row('Inspetor', x.conf || '—') + row('Recebido em', x.recebido) + row('Filial', x.filial))
-      + card('Origem', row('Fornecedor', x.forn) + row('Nota fiscal', x.nf, 1) + row('Pedido de compra', x.pc, 1) + row('Pedido de venda', x.pv, 1), 1)
+      /* fornecedor, nota e pedidos não aparecem: a etiqueta pode sair da empresa junto com o material */
       + '<div class="ft">Página somente para consulta. Os dados são os registrados pela Qualidade da Aços Vital.' + (at ? '<br>Atualizado em ' + at.toLocaleDateString('pt-BR') + ' às ' + at.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '') + '</div></div>';
     document.title = (x.id || 'Lote') + ' · Qualidade Aços Vital';
   }).catch(function () { msg('Não foi possível carregar os dados agora. Verifique a internet e tente de novo.'); });

@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0F1112">
+<title>Mapa de Processos 3D · Central da Qualidade</title>
+<link rel="icon" href="favicon.ico?v=39" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=39">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Mapa de processos 3D: o galpão à noite (opção 3), com as etapas da Central como estações.
+   Fontes e cores são as da Central; a linha de revenimento é a marca. */
+:root { --rev: linear-gradient(90deg,#EBDCA6 0%,#D7AA55 17%,#AA6A31 34%,#7B417A 50%,#33428F 66%,#4F87C7 83%,#9CA7AF 100%);
+  --ink: #F1F0EB; --ink2: #c7cdcf; --ink3: #8d9699; --glass: rgba(15,17,18,.9); --line: #2d3335; --ok: #5dcb8d; --okbg: rgba(93,203,141,.12); --warnbg: rgba(227,173,72,.13); --warn: #f0c27a; --info: rgba(114,168,222,.14);
+  --fd: "Barlow Condensed", "Arial Narrow", sans-serif; --fb: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif; --fm: "IBM Plex Mono", ui-monospace, Consolas, monospace; }
+* { box-sizing: border-box; } [hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; background: #07090b; color: var(--ink); font: 14px/1.45 var(--fb); overflow: hidden; -webkit-font-smoothing: antialiased; }
+#c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; outline: none; }
+button, select { font: inherit; color: inherit; }
+.top { position: fixed; left: max(16px, env(safe-area-inset-left)); right: max(16px, env(safe-area-inset-right)); top: max(14px, env(safe-area-inset-top)); display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; pointer-events: none; z-index: 5; }
+.top > * { pointer-events: auto; }
+.brand { display: grid; gap: 6px; background: var(--glass); padding: 12px 15px; border-radius: 12px; border: 1px solid var(--line); backdrop-filter: blur(8px); }
+.brand span { font: 500 10.5px/1 var(--fm); letter-spacing: .16em; text-transform: uppercase; color: var(--ink3); }
+.brand b { font: 800 26px/.95 var(--fd); letter-spacing: .01em; text-transform: uppercase; }
+.brand i { display: block; height: 4px; width: 100%; max-width: 260px; border-radius: 3px; background: var(--rev); }
+.tools { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.tb { display: inline-flex; align-items: center; gap: 7px; font: 600 13px/1 var(--fb); background: var(--glass); border: 1px solid #343a3c; border-radius: 10px; padding: 0 13px; height: 40px; cursor: pointer; backdrop-filter: blur(8px); text-decoration: none; color: var(--ink); }
+.tb:hover { border-color: #59636a; } .tb.on { background: var(--ink); color: #0F1112; border-color: var(--ink); }
+.tb select { appearance: none; -webkit-appearance: none; background: transparent; border: 0; font: 600 13px/1 var(--fb); color: inherit; padding: 0 16px 0 0; cursor: pointer; outline: none; }
+.tb select option { color: #111; }
+.tb.sel { position: relative; } .tb.sel::after { content: '▾'; position: absolute; right: 12px; pointer-events: none; font-size: 11px; color: var(--ink3); }
+:focus-visible { outline: 2px solid #72a8de; outline-offset: 2px; }
+.steps { position: fixed; left: 50%; transform: translateX(-50%); bottom: max(14px, env(safe-area-inset-bottom)); display: flex; gap: 4px; background: var(--glass); border: 1px solid var(--line); border-radius: 14px; padding: 6px; max-width: calc(100vw - 32px); overflow-x: auto; scrollbar-width: none; z-index: 5; backdrop-filter: blur(8px); }
+.steps::-webkit-scrollbar { display: none; }
+.steps button { display: flex; align-items: center; gap: 7px; padding: 7px 10px 7px 7px; border-radius: 9px; font: 600 12.5px/1 var(--fb); color: #b9c0c2; white-space: nowrap; background: transparent; border: 0; cursor: pointer; transition: opacity .2s; }
+.steps button i { font-style: normal; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font: 700 11.5px/1 var(--fb); color: #fff; background: var(--c); flex: none; }
+.steps button:hover { background: rgba(255,255,255,.06); } .steps button.on { background: var(--ink); color: #0F1112; }
+.steps button.dim { opacity: .35; }
+.steps .sep { width: 1px; background: var(--line); margin: 4px 4px; flex: none; }
+@media (max-width: 1500px) and (min-width: 761px) { .steps button.sup { padding: 7px; } .steps button.sup span { display: none; } }
+.card { position: fixed; right: max(16px, env(safe-area-inset-right)); top: 76px; width: 380px; max-height: calc(100dvh - 160px); overflow: auto; background: rgba(15,17,18,.94); border: 1px solid var(--line); border-top: 4px solid var(--c); border-radius: 14px; padding: 14px 16px 16px; display: grid; gap: 10px; box-shadow: 0 20px 50px rgba(0,0,0,.45); z-index: 6; backdrop-filter: blur(8px); }
+.card .k { display: flex; justify-content: space-between; align-items: center; font: 500 11px/1 var(--fm); letter-spacing: .1em; color: var(--ink3); text-transform: uppercase; }
+.card .x { background: transparent; border: 0; color: var(--ink3); font-size: 20px; line-height: 1; cursor: pointer; padding: 2px 4px; }
+.card h2 { margin: 0; font: 800 30px/.95 var(--fd); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
+.card .mod { display: inline-flex; align-items: center; gap: 7px; font: 600 13px/1 var(--fb); color: var(--cl); }
+.card .mod::before { content: ''; width: 9px; height: 9px; border-radius: 2px; background: var(--c); }
+.facts { display: flex; flex-wrap: wrap; gap: 6px; } .facts span { font-size: 12px; border: 1px solid #343a3c; border-radius: 7px; padding: 5px 8px; color: var(--ink2); } .facts b { color: #fff; font-weight: 600; }
+.card h3 { margin: 4px 0 0; font: 600 10.5px/1 var(--fb); letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); }
+.card ol { margin: 0; padding: 0; list-style: none; counter-reset: p; display: grid; gap: 7px; }
+.card ol li { counter-increment: p; display: grid; grid-template-columns: 22px 1fr; gap: 8px; font-size: 13.5px; line-height: 1.4; color: #dfe3e4; }
+.card ol li::before { content: counter(p); width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--cl); color: var(--cl); display: grid; place-items: center; font: 700 11px/1 var(--fb); }
+.card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 5px; } .card ul li { font-size: 12.5px; line-height: 1.4; border-radius: 7px; padding: 6px 9px; }
+.card ul.stop li { background: var(--warnbg); color: #f3dcb2; } .card ul.auto li { background: var(--okbg); color: #bfe9cf; }
+.card .nota { font-size: 12.5px; background: var(--info); color: #cfe2f5; border-radius: 7px; padding: 7px 10px; }
+.card .nav2 { display: flex; gap: 8px; margin-top: 2px; } .card .nav2 button { flex: 1; font: 600 13px/1 var(--fb); border-radius: 9px; padding: 11px; border: 1px solid #343a3c; background: transparent; color: var(--ink); cursor: pointer; } .card .nav2 button.p { background: var(--ink); color: #0F1112; border-color: var(--ink); }
+.hint { position: fixed; left: max(16px, env(safe-area-inset-left)); bottom: 84px; font: 500 12px/1.4 var(--fm); color: var(--ink3); background: var(--glass); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; z-index: 4; max-width: 340px; }
+#load { position: fixed; inset: 0; display: grid; place-items: center; background: #07090b; z-index: 20; transition: opacity .5s; }
+#load div { display: grid; gap: 10px; justify-items: center; text-align: center; padding: 20px; }
+#load b { font: 800 32px/1 var(--fd); text-transform: uppercase; } #load i { display: block; height: 5px; width: 220px; border-radius: 3px; background: var(--rev); }
+#load span { color: var(--ink3); font-size: 13.5px; max-width: 420px; }
+#load.out { opacity: 0; pointer-events: none; }
+body.embed .back { display: none; }
+/* dentro da Central o título já está na página: some o quadro do nome e sobra mais galpão */
+body.embed .brand { display: none; } body.embed .top { justify-content: flex-end; }
+@media (max-width: 760px) {
+  .brand { padding: 9px 11px; } .brand b { font-size: 19px; } .brand span { display: none; }
+  .tb { height: 36px; padding: 0 10px; font-size: 12px; } .tb .lbl { display: none; }
+  .card { left: max(10px, env(safe-area-inset-left)); right: max(10px, env(safe-area-inset-right)); width: auto; top: auto; bottom: calc(max(14px, env(safe-area-inset-bottom)) + 58px); max-height: 48dvh; }
+  .card h2 { font-size: 25px; }
+  .hint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { #load { transition: none; } }
+</style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+</head>
+<body>
+<canvas id="c" tabindex="0" aria-label="Galpão em 3D com as etapas da Qualidade"></canvas>
+<div id="load"><div><b>Mapa de processos 3D</b><i></i><span id="load-msg">Montando o galpão…</span></div></div>
+<script>/* se a biblioteca 3D não chegar (sem internet), avisa em vez de ficar carregando para sempre */
+setTimeout(function () { if (window.__m3) return; var m = document.getElementById('load-msg'), l = document.getElementById('load'); if (!m || !l) return; m.textContent = 'O 3D ainda não abriu. Confira a internet e toque aqui para tentar de novo.'; l.style.cursor = 'pointer'; l.onclick = function () { location.reload(); }; }, 30000);</script>
+<div class="top">
+  <div class="brand"><span>Central da Qualidade · Aços Vital</span><b>Mapa de processos 3D</b><i></i></div>
+  <div class="tools">
+    <button class="tb on" type="button" id="b-geral" title="Ver o galpão inteiro">⌂ <span class="lbl">Visão geral</span></button>
+    <button class="tb" type="button" id="b-tour" title="O lote anda pelas etapas sozinho">▶ <span class="lbl">Andar sozinho</span></button>
+    <label class="tb sel" title="Mostrar só as etapas da sua função"><span class="lbl">Eu sou:</span><select id="papel" aria-label="Eu sou"></select></label>
+    <a class="tb back" href="./" title="Voltar à Central">← <span class="lbl">Central</span></a>
+  </div>
+</div>
+<aside class="card" id="card" hidden aria-live="polite"></aside>
+<div class="hint" id="hint">Arraste para girar · role ou use dois dedos para aproximar · toque numa etapa para ver o passo a passo</div>
+<nav class="steps" id="steps" aria-label="Etapas"></nav>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const Q = new URLSearchParams(location.search);
+if (Q.get('embed') === '1' || window.self !== window.top) document.body.classList.add('embed');
+const UA = navigator.userAgent, TOQUE = /Android|iPad|iPhone|Mobile/i.test(UA) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(UA));
+const LOW = Q.get('q') === 'leve' || (Q.get('q') !== 'alta' && (TOQUE || (navigator.hardwareConcurrency || 8) <= 4));
+const STY = 'noite', NOITE = true, BRANCO = false;
+const loadMsg = (t) => { const e = document.getElementById('load-msg'); if (e) e.textContent = t; };
+try { await Promise.race([Promise.all(['800 40px "Barlow Condensed"', '600 20px "IBM Plex Sans"', '500 20px "IBM Plex Mono"'].map((f) => document.fonts.load(f))), new Promise((r) => setTimeout(r, 2500))]); } catch (e) { /* segue com a fonte reserva */ }
+let W = innerWidth, H = innerHeight;
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true, powerPreference: 'high-performance' }); }
+catch (e) { loadMsg('Este aparelho não conseguiu abrir o 3D. Use o menu Manual da Central (PR-QUA-01), que tem o mesmo caminho em texto.'); throw e; }
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, LOW ? 1.25 : 1.5)); renderer.setSize(W, H, false);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = LOW ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.9;
+const scene = new THREE.Scene();
+const BG = '#07090b';
+scene.background = new THREE.Color(BG); scene.fog = new THREE.Fog(BG, 140, 300);
+const pmrem = new THREE.PMREMGenerator(renderer); scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+scene.environmentIntensity = 0.18;
+const fovFor = (a) => (a < 0.9 ? 50 : 34);
+const camera = new THREE.PerspectiveCamera(fovFor(W / H), W / H, 0.5, 400);
+const PICK = [];
+
+/* luz */
+const hemi = new THREE.HemisphereLight(NOITE ? '#6b7d92' : '#eef3f7', NOITE ? '#0b0c0d' : '#8a8f8c', NOITE ? 0.22 : BRANCO ? 0.3 : 0.55); scene.add(hemi);
+const sun = new THREE.DirectionalLight(NOITE ? '#9fb6d8' : '#fff4e2', NOITE ? 0.35 : BRANCO ? 1.5 : 3.0); sun.position.set(-26, 46, 30); sun.castShadow = true;
+sun.shadow.mapSize.set(LOW ? 2048 : 4096, LOW ? 2048 : 4096); if (LOW) sun.shadow.radius = 2; Object.assign(sun.shadow.camera, { left: -42, right: 42, top: 30, bottom: -30, near: 1, far: 140 }); sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02; sun.shadow.radius = 4; scene.add(sun);
+
+/* materiais */
+const M = (c, o = {}) => new THREE.MeshStandardMaterial(Object.assign({ color: c, roughness: 0.55, metalness: 0.1 }, o));
+const CLAY = M('#e2e0da', { roughness: 0.8, metalness: 0 });
+const pick = (m) => (BRANCO ? CLAY : m);
+const STEEL = pick(M('#b7bec3', { metalness: 0.9, roughness: 0.28 })), GALV = pick(M('#cdd2d0', { metalness: 0.85, roughness: 0.38 }));
+const PAINT_GRAY = pick(M('#6d7a83', { metalness: 0.3, roughness: 0.5 })), DARK = pick(M('#2a2f33', { roughness: 0.6, metalness: 0.3 })), RUBBER = pick(M('#151718', { roughness: 0.9 }));
+const WHITE = pick(M('#eceeec', { roughness: 0.45 })), WOOD = pick(M('#b08a5a', { roughness: 0.9 })), YEL = pick(M('#e6b422', { roughness: 0.45, metalness: 0.2 }));
+const GLASS = BRANCO ? new THREE.MeshStandardMaterial({ color: '#ffffff', transparent: true, opacity: 0.25, roughness: 0.1 }) : new THREE.MeshStandardMaterial({ color: '#cfe3ee', transparent: true, opacity: 0.22, roughness: 0.05, metalness: 0.1 });
+function mesh(geo, mat, x, y, z, p) { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; (p || scene).add(m); return m; }
+const box = (w, h, d, mat, x, y, z, p) => mesh(new THREE.BoxGeometry(w, h, d), mat, x, y + h / 2, z, p);
+const rbox = (w, h, d, r, mat, x, y, z, p) => mesh(new RoundedBoxGeometry(w, h, d, 3, r), mat, x, y + h / 2, z, p);
+const cylY = (r, h, mat, x, y, z, p, s = 20) => mesh(new THREE.CylinderGeometry(r, r, h, s), mat, x, y + h / 2, z, p);
+function cylX(r, len, mat, x, y, z, p, s = 18) { const m = mesh(new THREE.CylinderGeometry(r, r, len, s), mat, x, y, z, p); m.rotation.z = Math.PI / 2; return m; }
+function cylZ(r, len, mat, x, y, z, p, s = 18) { const m = mesh(new THREE.CylinderGeometry(r, r, len, s), mat, x, y, z, p); m.rotation.x = Math.PI / 2; return m; }
+const screen = (tex) => new THREE.MeshStandardMaterial({ color: '#000', emissive: '#fff', emissiveMap: tex, emissiveIntensity: NOITE ? 1.1 : 0.9, map: tex, roughness: 0.3 });
+
+/* ---------- piso de concreto polido ---------- */
+function concreteTex() {
+  const s = 1024, cv = document.createElement('canvas'); cv.width = cv.height = s; const g = cv.getContext('2d');
+  g.fillStyle = NOITE ? '#5d5f5d' : BRANCO ? '#c9c8c3' : '#9c9e9a'; g.fillRect(0, 0, s, s);
+  if (!BRANCO) { for (let i = 0; i < 260; i++) { const x = Math.random() * s, y = Math.random() * s, r = 20 + Math.random() * 140, d = Math.random() < 0.5; const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, d ? 'rgba(60,62,58,.045)' : 'rgba(255,255,250,.035)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(x - r, y - r, 2 * r, 2 * r); }
+    const id = g.getImageData(0, 0, s, s); for (let i = 0; i < id.data.length; i += 4) { const n = (Math.random() - 0.5) * 10; id.data[i] += n; id.data[i + 1] += n; id.data[i + 2] += n; } g.putImageData(id, 0, 0); }
+  g.strokeStyle = BRANCO ? 'rgba(0,0,0,.07)' : 'rgba(40,40,38,.35)'; g.lineWidth = 2; g.strokeRect(0, 0, s, s);
+  const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(12, 8); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+}
+const floorMat = new THREE.MeshStandardMaterial({ map: concreteTex(), roughness: NOITE ? 0.35 : BRANCO ? 0.9 : 0.42, metalness: 0.0 });
+const floor = mesh(new THREE.PlaneGeometry(72, 48), floorMat, 0, 0, 0); floor.rotation.x = -Math.PI / 2; floor.castShadow = false;
+if (!BRANCO) { const out = mesh(new THREE.PlaneGeometry(400, 400), M(NOITE ? '#0c0e0f' : '#9da39f', { roughness: 1 }), 0, -0.02, 0); out.rotation.x = -Math.PI / 2; out.castShadow = false; }
+
+/* ---------- prédio: parede do fundo, parede esquerda, colunas, ponte rolante ---------- */
+function corrugTex(c1, c2) { const cv = document.createElement('canvas'); cv.width = 256; cv.height = 16; const g = cv.getContext('2d'); const gr = g.createLinearGradient(0, 0, 256, 0);
+  for (let i = 0; i <= 8; i++) { gr.addColorStop(i / 8, i % 2 ? c2 : c1); } g.fillStyle = gr; g.fillRect(0, 0, 256, 16); const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; return t; }
+const wallT = corrugTex(NOITE ? '#3a434a' : '#c9d1d6', NOITE ? '#2a3137' : '#a9b3ba'); wallT.repeat.set(18, 1);
+const wallMat = BRANCO ? CLAY : new THREE.MeshStandardMaterial({ map: wallT, roughness: 0.6, metalness: 0.4 });
+const back = mesh(new THREE.BoxGeometry(72, 10, 0.3), wallMat, 0, 5, -20.2);
+const wallT2 = wallT.clone(); wallT2.repeat.set(12, 1); wallT2.needsUpdate = true;
+const left1 = mesh(new THREE.BoxGeometry(0.3, 10, 20), BRANCO ? CLAY : new THREE.MeshStandardMaterial({ map: wallT2, roughness: .6, metalness: .4 }), -36, 5, -10.2);
+const left2 = mesh(new THREE.BoxGeometry(0.3, 3.4, 8), BRANCO ? CLAY : new THREE.MeshStandardMaterial({ map: wallT2, roughness: .6, metalness: .4 }), -36, 8.3, 4);
+/* faixa de janelas (luz natural) */
+const winMat = new THREE.MeshStandardMaterial({ color: NOITE ? '#1a2633' : '#eaf4fb', emissive: NOITE ? '#2b3d52' : '#ffffff', emissiveIntensity: NOITE ? 0.35 : 0.55, roughness: .2 });
+for (let i = 0; i < 9; i++) { const wx = -31 + i * 7.8; if (Math.abs(wx - 26) < 8.5) continue; mesh(new THREE.BoxGeometry(6, 1.1, 0.1), winMat, wx, 8.4, -20.0); }
+/* portão de expedição aberto no fundo */
+mesh(new THREE.BoxGeometry(6.2, 5.6, 0.12), new THREE.MeshStandardMaterial({ color: NOITE ? '#0b1218' : '#eef5f9', emissive: NOITE ? '#0b1218' : '#dfeaf2', emissiveIntensity: NOITE ? 0.2 : 0.5 }), 26, 2.8, -20.0);
+box(6.6, 0.5, 0.25, YEL, 26, 5.6, -19.9);
+/* placa da empresa na parede do fundo (na Central, usa o logo de Configurações › Aparência) */
+let LOGO_URL = ''; try { LOGO_URL = localStorage.getItem('cq-logo') || ''; } catch (e) { /* sem armazenamento */ }
+function plaqueTex(img) { const cv = document.createElement('canvas'); cv.width = 2400; cv.height = 720; const g = cv.getContext('2d');
+  rr(g, 0, 0, 2400, 720, 40); g.fillStyle = '#0F1112'; g.fill(); g.lineWidth = 6; g.strokeStyle = 'rgba(255,255,255,.14)'; g.stroke();
+  const lx = 70, ly = 90, lw = 760, lh = 540;
+  if (img) { rr(g, lx, ly, lw, lh, 26); g.fillStyle = '#ffffff'; g.fill(); const k = Math.min((lw - 80) / img.width, (lh - 80) / img.height); g.drawImage(img, lx + (lw - img.width * k) / 2, ly + (lh - img.height * k) / 2, img.width * k, img.height * k); }
+  else { g.setLineDash([26, 18]); g.lineWidth = 6; g.strokeStyle = 'rgba(241,240,235,.55)'; rr(g, lx, ly, lw, lh, 26); g.stroke(); g.setLineDash([]); g.fillStyle = 'rgba(241,240,235,.7)'; g.font = '600 62px "IBM Plex Sans"'; g.textAlign = 'center'; g.fillText('logo da empresa', lx + lw / 2, ly + lh / 2 + 4); g.font = '500 36px "IBM Plex Mono"'; g.fillStyle = 'rgba(241,240,235,.45)'; g.fillText('(o mesmo das Configurações)', lx + lw / 2, ly + lh / 2 + 66); }
+  g.textAlign = 'left'; g.fillStyle = '#F1F0EB'; g.font = '800 250px "Barlow Condensed", "Arial Narrow", sans-serif'; g.fillText('AÇOS VITAL', 900, 360, 1400);
+  const gr = g.createLinearGradient(905, 0, 2300, 0); ['#EBDCA6', '#D7AA55', '#AA6A31', '#7B417A', '#33428F', '#4F87C7', '#9CA7AF'].forEach((c, i) => gr.addColorStop(i / 6, c)); g.fillStyle = gr; rr(g, 905, 405, 1395, 26, 13); g.fill();
+  g.fillStyle = '#b9c0c2'; g.font = '600 92px "IBM Plex Sans", sans-serif'; g.fillText('Central da Qualidade', 905, 560, 1395);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 16; return t; }
+const plaque = mesh(new THREE.PlaneGeometry(11.5, 3.45), new THREE.MeshBasicMaterial({ map: plaqueTex(null), toneMapped: false }), 26, 7.95, -19.9); plaque.castShadow = false; plaque.receiveShadow = false;
+box(11.8, 3.75, 0.12, DARK, 26, 6.07, -20.02);
+if (LOGO_URL) { const im = new Image(); im.onload = () => { plaque.material.map = plaqueTex(im); plaque.material.needsUpdate = true; try { dirty = true; } catch (e) { /* ainda montando */ } }; im.src = LOGO_URL; }
+if (NOITE) [22.5, 29.5].forEach((x) => { const L = new THREE.SpotLight('#fff1d6', 70, 12, 0.5, 0.7, 1.4); L.position.set(x, 9.6, -17); L.target.position.set(x, 7.4, -20); scene.add(L, L.target); });
+/* colunas I */
+function iBeam(h) { const s = new THREE.Shape(), b = 0.32, d = 0.42, tf = 0.04, tw = 0.025; s.moveTo(-b / 2, -d / 2); s.lineTo(b / 2, -d / 2); s.lineTo(b / 2, -d / 2 + tf); s.lineTo(tw / 2, -d / 2 + tf); s.lineTo(tw / 2, d / 2 - tf); s.lineTo(b / 2, d / 2 - tf); s.lineTo(b / 2, d / 2); s.lineTo(-b / 2, d / 2); s.lineTo(-b / 2, d / 2 - tf); s.lineTo(-tw / 2, d / 2 - tf); s.lineTo(-tw / 2, -d / 2 + tf); s.lineTo(-b / 2, -d / 2 + tf); s.closePath(); const g = new THREE.ExtrudeGeometry(s, { depth: h, bevelEnabled: false }); g.rotateX(-Math.PI / 2); return g; }
+const colMat = pick(M('#56657a', { metalness: 0.5, roughness: 0.45 })), guard = pick(M('#e2b21f', { roughness: .5 }));
+const COLS = []; [-28, -16, -4, 8, 20, 32].forEach((x) => COLS.push([x, -19.6])); [[-34, -5], [-20.25, -5], [-34, 3.2], [-20.25, 3.2]].forEach((c) => COLS.push(c));
+COLS.forEach(([x, z]) => { mesh(iBeam(9.6), colMat, x, 0, z); box(0.6, 1.0, 0.7, guard, x, 0, z); if (!BRANCO) box(0.62, 0.12, 0.72, DARK, x, 0.45, z); });
+/* ponte rolante sobre o recebimento */
+const runY = 7.4; [-5, 3.2].forEach((z) => box(14.6, 0.6, 0.4, colMat, -27.1, runY, z));
+const girder = pick(M('#e2b21f', { roughness: .4, metalness: .3 }));
+box(0.7, 0.8, 8.8, girder, -27.3, runY + 0.6, -0.9); box(0.7, 0.8, 8.8, girder, -26.1, runY + 0.6, -0.9);
+box(1.9, 0.8, 1.5, DARK, -26.7, runY + 1.4, 0.2); [-27.0, -26.4].forEach((x) => cylY(0.025, runY - 3.3, STEEL, x, 3.3, 0.2));
+/* luminárias industriais */
+const lampMat = new THREE.MeshStandardMaterial({ color: '#fff', emissive: NOITE ? '#ffe6b8' : '#ffffff', emissiveIntensity: NOITE ? 2.6 : 0.8 });
+const LAMPS = [];
+for (let x = -24; x <= 30; x += 12) for (const z of [-6, 8]) { const lg = new THREE.Group(); lg.userData.p = new THREE.Vector3(x, 8.7, z); scene.add(lg); LAMPS.push(lg); cylY(0.02, 1.4, DARK, x, 8.8, z, lg); mesh(new THREE.CylinderGeometry(0.45, 0.7, 0.35, 24, 1, true), DARK, x, 8.7, z, lg); const d = mesh(new THREE.CircleGeometry(0.62, 24), lampMat, x, 8.55, z, lg); d.rotation.x = Math.PI / 2; d.castShadow = false;
+  if (NOITE && (!LOW || z > 0)) { const L = new THREE.SpotLight('#ffe2b0', LOW ? 230 : 170, 26, 0.85, 0.6, 1.6); L.castShadow = false; L.position.set(x, 8.5, z); L.target.position.set(x, 0, z); scene.add(L, L.target); } }
+
+/* ---------- estações ---------- */
+const C = { av: '#378267', rir: '#6f8f3a', rnc: '#d9362a', rif: '#3f6fbf', certq: '#8f9a3c', ent: '#7d8a92', rncc: '#825ddc', cal: '#2d77c1', sold: '#be5615', iqf: '#986b3e', serv: '#996c21' };
+const ST = [
+  { k: 'rec', n: '1', t: 'Recebimento', mod: 'Lotes (AV)', c: C.av, x: -25, z: -1.2 },
+  { k: 'rir', n: '2', t: 'Inspeção de recebimento', mod: 'RIR · tablet', c: C.rir, x: -15.5, z: -1.2 },
+  { k: 'rnc', n: '3', t: 'Não conformidade', mod: 'RNC', c: C.rnc, x: -15.5, z: 13.6 },
+  { k: 'cheg', n: '4', t: 'Chegada na usinagem', mod: 'RIF › chegada', c: C.rif, x: -6, z: -1.2 },
+  { k: 'rif', n: '5', t: 'Inspeção final', mod: 'RIF · tablet', c: C.rif, x: 3.5, z: -1.2 },
+  { k: 'cert', n: '6', t: 'Certificado', mod: 'Certificados', c: C.certq, x: 13, z: -1.2 },
+  { k: 'ent', n: '7', t: 'Expedição', mod: 'NF + certificado', c: C.ent, x: 22.5, z: -1.2 },
+  { k: 'rnd', n: '8', t: 'Reclamação do cliente', mod: 'RND', c: C.rncc, x: 22.5, z: 13.6 },
+  { k: 'iqf', n: 'C', t: 'Avaliação de fornecedores', mod: 'IQF', c: C.iqf, x: -25, z: -15.2, sup: 1 },
+  { k: 'cal', n: 'A', t: 'Calibração', mod: 'laboratório', c: C.cal, x: -6, z: -15.2, sup: 1 },
+  { k: 'sold', n: 'B', t: 'Soldagem', mod: 'soldadores', c: C.sold, x: 3.5, z: -15.2, sup: 1 },
+  { k: 'serv', n: 'D', t: 'Serviços', mod: 'terceiros', c: C.serv, x: 13, z: -15.2, sup: 1 },
+];
+const S = Object.fromEntries(ST.map((s) => [s.k, s]));
+const paint = (c, op = 1) => new THREE.MeshBasicMaterial({ color: c, transparent: op < 1, opacity: op, toneMapped: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2 });
+function floorRect(x, z, w, d, c, t = 0.14, op = 0.95) { const m = paint(c, op); m.transparent = true; [[0, -d / 2, w, t], [0, d / 2, w, t], [-w / 2, 0, t, d], [w / 2, 0, t, d]].forEach(([dx, dz, a, b]) => { const p = new THREE.Mesh(new THREE.PlaneGeometry(a, b), m); p.rotation.x = -Math.PI / 2; p.position.set(x + dx, 0.012, z + dz); p.receiveShadow = true; scene.add(p); }); return m; }
+function floorText(text, x, z, w, c, rot = 0) { const cv = document.createElement('canvas'); cv.width = 1024; cv.height = 160; const g = cv.getContext('2d'); g.fillStyle = c; g.font = '800 120px "Barlow Condensed"'; g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillText(text.toUpperCase(), 8, 86);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; const p = new THREE.Mesh(new THREE.PlaneGeometry(w, w * 160 / 1024), new THREE.MeshBasicMaterial({ map: t, transparent: true, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -3, opacity: 0.92 })); p.rotation.x = -Math.PI / 2; p.rotation.z = rot; p.position.set(x, 0.013, z); scene.add(p); return p.material; }
+ST.forEach((s) => { s.g = new THREE.Group(); s.g.position.set(s.x, 0, s.z); scene.add(s.g); const w = 8.2, d = s.sup ? 6.4 : 7.6; s.w = w; s.d = d;
+  s.line = floorRect(s.x, s.z, w, d, s.c); s.fill = paint(s.c, 0.10); const fill = new THREE.Mesh(new THREE.PlaneGeometry(w, d), s.fill); fill.rotation.x = -Math.PI / 2; fill.position.set(s.x, 0.011, s.z); scene.add(fill);
+  s.txt = floorText(`${s.n} · ${s.t}`, s.x - w / 2 + 0.3 + (s.t.length > 18 ? 3.1 : 2.4), s.z + d / 2 - 0.55, s.t.length > 18 ? 6.2 : 4.8, '#f4f2ea');
+  const hit = new THREE.Mesh(new THREE.BoxGeometry(w, 3.2, d), new THREE.MeshBasicMaterial({ visible: false })); hit.position.set(s.x, 1.6, s.z); hit.userData.k = s.k; scene.add(hit); PICK.push(hit); });
+
+/* pessoa com capacete e colete */
+function person(g, x, z, rot = 0, vest = '#f2c230', pose = 0) {
+  const p = new THREE.Group(); p.position.set(x, 0, z); p.rotation.y = rot; g.add(p);
+  const pants = pick(M('#2c3542', { roughness: .85 })), shirt = pick(M('#3c4a5a', { roughness: .8 })), skin = pick(M('#c99b77', { roughness: .7 })), boot = pick(M('#1b1b1b', { roughness: .8 }));
+  [-0.11, 0.11].forEach((dx) => { mesh(new THREE.CapsuleGeometry(0.075, 0.68, 4, 8), pants, dx, 0.47, 0, p); box(0.12, 0.08, 0.24, boot, dx, 0, 0.04, p); });
+  mesh(new THREE.CapsuleGeometry(0.17, 0.42, 4, 10), shirt, 0, 1.12, 0, p);
+  const v = mesh(new THREE.CapsuleGeometry(0.182, 0.36, 4, 10), pick(M(vest, { roughness: .6, emissive: NOITE ? vest : '#000', emissiveIntensity: NOITE ? .15 : 0 })), 0, 1.15, 0, p);
+  [1.02, 1.24].forEach((y) => { const r = mesh(new THREE.CylinderGeometry(0.186, 0.186, 0.035, 16), pick(M('#d9dcdc', { metalness: .6, roughness: .2 })), 0, y, 0, p); });
+  [-1, 1].forEach((s) => { const a = mesh(new THREE.CapsuleGeometry(0.055, 0.5, 4, 8), shirt, s * 0.24, 1.08, pose ? 0.12 : 0, p); a.rotation.z = s * 0.12; if (pose) a.rotation.x = -0.7; });
+  mesh(new THREE.SphereGeometry(0.11, 16, 12), skin, 0, 1.6, 0, p);
+  mesh(new THREE.SphereGeometry(0.128, 18, 10, 0, Math.PI * 2, 0, Math.PI / 2), pick(M('#f4f2ea', { roughness: .35 })), 0, 1.64, 0, p);
+  mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.015, 18), pick(M('#f4f2ea', { roughness: .35 })), 0, 1.645, 0.02, p);
+  return p;
+}
+function tubeBundle(g, x, y, z, rows = 3, len = 6, r = 0.11, mat = STEEL, alongX = true) {
+  const grp = new THREE.Group(); grp.position.set(x, y, z); g.add(grp);
+  for (let rr = 0; rr < rows; rr++) for (let i = 0; i < rows + 2 - rr; i++) { const off = (i - (rows + 1 - rr) / 2) * r * 2.05, yy = r + rr * r * 1.78; (alongX ? cylX : cylZ)(r, len, mat, alongX ? 0 : off, yy, alongX ? off : 0, grp, 16); }
+  return grp;
+}
+function canvasTex(w, h, draw) { const cv = document.createElement('canvas'); cv.width = w; cv.height = h; draw(cv.getContext('2d'), w, h); const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; }
+function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+const tabletTex = (title, col) => canvasTex(512, 360, (g, w, h) => { g.fillStyle = '#f5f6f4'; g.fillRect(0, 0, w, h); g.fillStyle = '#0F1112'; g.fillRect(0, 0, w, 58); g.fillStyle = '#fff'; g.font = '700 30px "IBM Plex Sans"'; g.fillText(title, 18, 39);
+  for (let i = 0; i < 5; i++) { const y = 80 + i * 54; g.fillStyle = '#e3e6e2'; g.fillRect(18, y, w - 36, 44); g.fillStyle = '#48514c'; g.font = '500 20px "IBM Plex Sans"'; g.fillText(['Nota fiscal', 'Identificação', 'Embalagem', 'Visual', 'Dimensional'][i], 30, y + 29);
+    ['AP', 'RP', 'N/A'].forEach((m, j) => { const on = j === (i === 3 && col === 'r' ? 1 : 0); g.fillStyle = on ? (j === 1 ? '#d9362a' : '#1d7446') : '#fff'; rr(g, w - 210 + j * 64, y + 7, 56, 30, 7); g.fill(); g.fillStyle = on ? '#fff' : '#48514c'; g.font = '700 16px "IBM Plex Mono"'; g.fillText(m, w - 200 + j * 64, y + 28); }); } });
+
+/* 1 recebimento: carreta com tubos + rack cantilever + pessoa */
+{ const s = S.rec, g = s.g;
+  const tr = new THREE.Group(); tr.position.set(-6.5, 0, 0.6); g.add(tr);
+  const cab = pick(M('#e9ebe8', { roughness: .35, metalness: .2 }));
+  rbox(2.3, 2.5, 2.4, 0.18, cab, -6.4, 0.9, 0, tr); box(0.06, 1.0, 2.0, pick(M('#1d2a33', { metalness: .7, roughness: .1 })), -5.24, 2.2, 0, tr); box(1.0, 1.1, 2.3, cab, -5.0, 0.9, 0, tr); box(0.05, 0.12, 2.36, pick(M(C.av)), -6.4, 2.6, 0, tr);
+  box(10, 0.32, 2.5, DARK, 0.4, 1.15, 0, tr); for (let i = 0; i < 6; i++) [-1.18, 1.18].forEach((zz) => box(0.08, 1.0, 0.08, DARK, -4.2 + i * 1.8, 1.47, zz, tr));
+  [[-6.4], [-4.6], [2.6], [3.8], [5.0]].forEach(([xx]) => [-1.05, 1.05].forEach((zz) => { cylZ(0.5, 0.36, RUBBER, xx, 0.5, zz, tr, 24); cylZ(0.28, 0.38, STEEL, xx, 0.5, zz, tr, 16); }));
+  tubeBundle(tr, 0.6, 1.47, -0.55, 3, 8.2, 0.105); tubeBundle(tr, 0.6, 1.47, 0.55, 3, 8.2, 0.105);
+  const hang = tubeBundle(g, -1.3, 3.3, 1.4, 2, 5.5, 0.1, GALV, true);
+  /* rack cantilever */
+  [-0.5, 2.5].forEach((xx) => { box(0.3, 4.0, 0.3, pick(M('#2f5b9a', { metalness: .4 })), xx, 0, -2.6, g); [0.9, 2.0, 3.1].forEach((yy) => box(0.12, 0.12, 1.5, pick(M('#2f5b9a', { metalness: .4 })), xx, yy, -1.9, g)); });
+  [0.9, 2.0, 3.1].forEach((yy, i) => tubeBundle(g, 1.0, yy + 0.12, -1.9, 2, 5, 0.09, i === 1 ? GALV : STEEL, true));
+  person(g, 2.6, 1.6, -0.6, '#f2c230'); }
+/* 2 RIR: bancada, tubos em cavaletes, tablet, inspetor */
+{ const s = S.rir, g = s.g;
+  [[-2.4], [0], [2.4]].forEach(([xx]) => { box(0.12, 0.85, 0.9, DARK, xx, 0, -0.8, g); box(0.6, 0.12, 0.9, DARK, xx, 0.85, -0.8, g); });
+  tubeBundle(g, 0, 0.97, -0.8, 1, 6, 0.11, STEEL, true);
+  box(2.2, 0.06, 1.0, pick(M('#7b8a94', { metalness: .5, roughness: .35 })), 1.7, 0.92, 1.4, g); [[0.7, 1.0], [2.7, 1.0], [0.7, 1.8], [2.7, 1.8]].forEach(([a, b]) => box(0.06, 0.92, 0.06, DARK, a, 0, b, g));
+  const tb = box(0.36, 0.26, 0.025, screen(tabletTex('RIR · NF 45871', 'r')), 1.3, 1.25, 1.2, g); tb.rotation.x = -0.35; cylY(0.015, 0.3, DARK, 1.3, 0.98, 1.25, g);
+  box(0.5, 0.02, 0.06, STEEL, 2.1, 0.98, 1.3, g);
+  person(g, 1.3, 2.3, Math.PI, '#b7df4a', 1); person(g, -2.8, 1.2, 1.2, '#f2c230'); }
+/* 3 RNC: área cercada com tela */
+{ const s = S.rnc, g = s.g;
+  const meshTex = canvasTex(256, 256, (c, w, h) => { c.clearRect(0, 0, w, h); c.strokeStyle = 'rgba(40,44,46,.9)'; c.lineWidth = 3; for (let i = 0; i <= w; i += 16) { c.beginPath(); c.moveTo(i, 0); c.lineTo(i, h); c.stroke(); c.beginPath(); c.moveTo(0, i); c.lineTo(w, i); c.stroke(); } }); meshTex.wrapS = meshTex.wrapT = THREE.RepeatWrapping; meshTex.repeat.set(4, 4);
+  const netM = new THREE.MeshStandardMaterial({ map: meshTex, transparent: true, alphaTest: 0.2, side: THREE.DoubleSide, roughness: .6, metalness: .5, color: BRANCO ? '#ddd' : '#ffffff' });
+  const fr = pick(M('#c62f24', { roughness: .45, metalness: .3 }));
+  const fence = (x, z, len, rot) => { const p = new THREE.Group(); p.position.set(x, 0, z); p.rotation.y = rot; g.add(p); const n = mesh(new THREE.PlaneGeometry(len, 2.0), netM, 0, 1.15, 0, p); n.castShadow = false; box(len, 0.06, 0.06, fr, 0, 2.15, 0, p); box(len, 0.06, 0.06, fr, 0, 0.12, 0, p); [-len / 2, len / 2].forEach((xx) => box(0.07, 2.2, 0.07, fr, xx, 0, 0, p)); };
+  fence(-0.6, -2.6, 6, 0); fence(-3.6, 0.1, 5.4, Math.PI / 2); fence(2.4, 0.1, 5.4, Math.PI / 2); fence(-2.2, 2.8, 2.8, 0);
+  tubeBundle(g, -0.6, 0, -0.6, 3, 4.6, 0.11, pick(M('#9b5b4e', { metalness: .7, roughness: .35 })), true);
+  const sign = box(1.4, 0.95, 0.03, new THREE.MeshStandardMaterial({ map: canvasTex(420, 280, (c, w, h) => { c.fillStyle = '#c62f24'; c.fillRect(0, 0, w, h); c.strokeStyle = '#fff'; c.lineWidth = 10; c.strokeRect(12, 12, w - 24, h - 24); c.fillStyle = '#fff'; c.textAlign = 'center'; c.font = '800 70px "Barlow Condensed"'; c.fillText('MATERIAL', w / 2, 120); c.fillText('BLOQUEADO', w / 2, 200); }), roughness: .6 }), -2.2, 1.1, 2.86, g);
+  person(g, 1.0, 3.4, -2.6, '#ff7d5c', 1); }
+/* 4 chegada: porta-palete azul/laranja */
+{ const s = S.cheg, g = s.g, up = pick(M('#2f5b9a', { metalness: .4, roughness: .45 })), bm = pick(M('#e2731f', { roughness: .45 }));
+  [-3, 0, 3].forEach((xx) => [-2.6, -1.6].forEach((zz) => box(0.1, 4.2, 0.1, up, xx, 0, zz, g)));
+  [1.4, 2.8, 4.1].forEach((yy) => [-2.6, -1.6].forEach((zz) => box(6.1, 0.12, 0.08, bm, 0, yy, zz, g)));
+  [0, 1.4, 2.8].forEach((yy) => [-1.5, 1.5].forEach((xx) => { box(1.2, 0.14, 1.0, WOOD, xx, yy + 0.12, -2.1, g); box(1.0, 0.7, 0.85, pick(M('#c9a57a', { roughness: .9 })), xx, yy + 0.26, -2.1, g); }));
+  for (let i = 0; i < 4; i++) { const f = mesh(new THREE.TorusGeometry(0.28, 0.1, 12, 28), STEEL, -1.0 + i * 0.7, 0.42, 1.0, g); f.rotation.x = Math.PI / 2; cylY(0.2, 0.32, STEEL, -1.0 + i * 0.7, 0.32, 1.0, g); }
+  box(3.2, 0.14, 1.1, WOOD, 0.05, 0, 1.0, g); person(g, 2.4, 1.6, -0.9, '#f2c230'); }
+/* 5 RIF: centro de usinagem + desempeno de granito */
+{ const s = S.rif, g = s.g, body = pick(M('#e5e8e6', { roughness: .4, metalness: .15 }));
+  rbox(3.4, 2.6, 2.2, 0.15, body, -1.3, 0, -1.6, g); box(3.42, 0.5, 2.22, pick(M('#2b3036', { roughness: .5 })), -1.3, 2.6, -1.6, g);
+  box(1.6, 1.1, 0.05, GLASS, -1.6, 0.9, -0.48, g); box(1.5, 1.0, 0.02, new THREE.MeshStandardMaterial({ color: '#0d1b2a', emissive: '#4a78c2', emissiveIntensity: NOITE ? 0.8 : 0.35 }), -1.6, 0.95, -0.56, g);
+  box(0.55, 0.7, 0.18, DARK, 0.75, 1.3, -0.45, g); box(0.45, 0.5, 0.02, screen(canvasTex(200, 220, (c, w, h) => { c.fillStyle = '#0f2a44'; c.fillRect(0, 0, w, h); c.fillStyle = '#79a6ef'; c.font = '500 20px "IBM Plex Mono"'; for (let i = 0; i < 7; i++) c.fillText(['G54 X120.0', 'G01 Z-4.5', 'F250 S1800', 'M03', 'G02 R45', 'X0 Y0', 'M30'][i], 12, 30 + i * 28); })), 0.75, 1.4, -0.35, g);
+  box(1.8, 0.85, 1.2, pick(M('#222', { roughness: .25, metalness: .1 })), 2.0, 0, 1.2, g); const fl = mesh(new THREE.TorusGeometry(0.34, 0.12, 14, 32), STEEL, 1.8, 0.97, 1.2, g); fl.rotation.x = Math.PI / 2; cylY(0.22, 0.5, STEEL, 1.8, 0.85, 1.2, g);
+  box(0.08, 0.9, 0.08, STEEL, 2.6, 0.85, 1.0, g); box(0.25, 0.1, 0.12, STEEL, 2.5, 1.35, 1.0, g);
+  const tb = box(0.36, 0.26, 0.025, screen(tabletTex('RIF-2026-00001', 'a')), 1.2, 1.12, 1.5, g); tb.rotation.x = -0.4;
+  person(g, 2.0, 2.4, Math.PI - 0.3, '#79a6ef', 1); }
+/* 6 certificado: sala de vidro com mesa */
+function glassRoom(g, w, d) { const fr = pick(M('#3a4249', { metalness: .6, roughness: .35 }));
+  [[0, -d / 2, w, 0], [-w / 2, 0, d, Math.PI / 2], [w / 2, 0, d, Math.PI / 2]].forEach(([x, z, len, r]) => { const p = new THREE.Group(); p.position.set(x, 0, z); p.rotation.y = r; g.add(p); const gl = mesh(new THREE.PlaneGeometry(len, 2.6), GLASS, 0, 1.3, 0, p); gl.material.side = THREE.DoubleSide; gl.castShadow = false; box(len, 0.08, 0.08, fr, 0, 2.6, 0, p); box(len, 0.1, 0.08, fr, 0, 0, 0, p); for (let i = 0; i <= Math.round(len / 1.4); i++) box(0.06, 2.6, 0.06, fr, -len / 2 + i * len / Math.round(len / 1.4), 0, 0, p); }); }
+function desk(g, x, z, scr, rot = 0) { const d = new THREE.Group(); d.position.set(x, 0, z); d.rotation.y = rot; g.add(d); box(1.8, 0.05, 0.8, WHITE, 0, 0.74, 0, d); [[-0.85], [0.85]].forEach(([a]) => box(0.05, 0.74, 0.75, DARK, a, 0, 0, d)); box(0.7, 0.42, 0.03, screen(scr), 0, 0.92, -0.25, d); box(0.06, 0.18, 0.06, DARK, 0, 0.79, -0.25, d);
+  rbox(0.5, 0.5, 0.5, 0.06, DARK, 0, 0.0, 0.62, d); return d; }
+{ const s = S.cert, g = s.g; glassRoom(g, 6.5, 5);
+  desk(g, -1.2, -0.6, canvasTex(420, 260, (c, w, h) => { c.fillStyle = '#fff'; c.fillRect(0, 0, w, h); c.fillStyle = '#0F1112'; c.fillRect(0, 0, w, 40); c.fillStyle = '#fff'; c.font = '700 20px "IBM Plex Sans"'; c.fillText('Certificado · PV 25940', 14, 27); c.fillStyle = '#d7aa55'; c.fillRect(14, 50, w - 28, 4); c.fillStyle = '#6b756f'; for (let i = 0; i < 7; i++) c.fillRect(14, 72 + i * 24, w - 60 - (i % 3) * 60, 10); }));
+  person(g, -1.2, 0.5, Math.PI, '#c9d27a'); box(0.6, 0.35, 0.5, WHITE, 1.6, 0.74, -1.6, g); box(1.6, 0.74, 0.7, WHITE, 1.6, 0, -1.6, g); }
+/* 7 expedição: carreta saindo pelo portão */
+{ const s = S.ent, g = s.g; const tr = new THREE.Group(); tr.position.set(0.4, 0, -3.0); tr.rotation.y = Math.PI / 2; g.add(tr); const cab = pick(M('#d8dcdb', { roughness: .35, metalness: .2 }));
+  box(7, 0.32, 2.5, DARK, 0, 1.15, 0, tr); [[-2.4], [2.0], [2.9]].forEach(([xx]) => [-1.05, 1.05].forEach((zz) => { cylZ(0.5, 0.36, RUBBER, xx, 0.5, zz, tr, 24); cylZ(0.28, 0.38, STEEL, xx, 0.5, zz, tr, 16); }));
+  tubeBundle(tr, 0, 1.47, -0.5, 3, 6, 0.1, GALV); for (let i = 0; i < 5; i++) [-0.6, 0.6].forEach((zz) => box(0.04, 0.02, 2.5, pick(M('#e2731f')), -2.4 + i * 1.2, 1.95, 0, tr));
+  person(g, 2.8, 2.4, -0.3, '#f2c230'); }
+/* 8 RND: escritório de atendimento */
+{ const s = S.rnd, g = s.g; glassRoom(g, 6.5, 5); desk(g, -1.2, -0.6, canvasTex(420, 260, (c, w, h) => { c.fillStyle = '#fff'; c.fillRect(0, 0, w, h); c.fillStyle = '#825ddc'; c.fillRect(0, 0, w, 40); c.fillStyle = '#fff'; c.font = '700 20px "IBM Plex Sans"'; c.fillText('RND-2026-00001 · 8D', 14, 27); ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8'].forEach((d, i) => { c.fillStyle = i < 3 ? '#825ddc' : '#e3e6e2'; rr(c, 14 + i * 50, 60, 42, 34, 6); c.fill(); c.fillStyle = i < 3 ? '#fff' : '#48514c'; c.font = '700 16px "IBM Plex Mono"'; c.fillText(d, 24 + i * 50, 83); }); c.fillStyle = '#6b756f'; for (let i = 0; i < 5; i++) c.fillRect(14, 116 + i * 24, w - 60 - (i % 2) * 80, 10); }));
+  person(g, -1.2, 0.5, Math.PI, '#b9a3f2'); desk(g, 1.6, -0.6, canvasTex(10, 10, (c) => { c.fillStyle = '#20252a'; c.fillRect(0, 0, 10, 10); })); }
+/* apoio */
+{ const g = S.cal.g; glassRoom(g, 6.5, 4.2); box(2.0, 0.85, 1.0, pick(M('#1d1f20', { roughness: .2 })), 1.2, 0, -0.6, g); box(0.08, 0.6, 0.08, STEEL, 1.6, 0.85, -0.6, g); rbox(1.4, 2.0, 0.6, .05, WHITE, -2.0, 0, -1.6, g);
+  for (let i = 0; i < 3; i++) for (let j = 0; j < 2; j++) box(0.3, 0.06, 0.15, STEEL, -2.4 + i * 0.4, 0.5 + j * 0.6, -1.25, g); person(g, 1.2, 0.5, Math.PI, '#79a6ef', 1); }
+{ const g = S.sold.g; const cur = new THREE.MeshStandardMaterial({ color: BRANCO ? '#ddd' : '#e8671f', transparent: true, opacity: BRANCO ? .5 : .62, side: THREE.DoubleSide, roughness: .8 });
+  [[0, -1.8, 5, 0], [-2.5, 0, 3.6, Math.PI / 2], [2.5, 0, 3.6, Math.PI / 2]].forEach(([x, z, l, r]) => { const p = mesh(new THREE.PlaneGeometry(l, 2.0), cur, x, 1.1, z, g); p.rotation.y = r; p.castShadow = false; });
+  box(1.6, 0.8, 0.9, DARK, 0, 0, -0.4, g); tubeBundle(g, 0, 0.8, -0.4, 1, 1.4, 0.1, STEEL, true); person(g, 0.2, 0.6, Math.PI, '#5b4636', 1);
+  if (!BRANCO) { const L = new THREE.PointLight('#9ec5ff', NOITE ? 30 : 12, 6, 1.5); L.position.set(0.1, 1.0, -0.2); g.add(L); mesh(new THREE.SphereGeometry(0.05, 12, 8), new THREE.MeshBasicMaterial({ color: '#e8f2ff' }), 0.1, 0.98, -0.2, g); } }
+{ const g = S.iqf.g; glassRoom(g, 6.5, 4.2); desk(g, -1.0, -0.4, canvasTex(420, 260, (c, w, h) => { c.fillStyle = '#fff'; c.fillRect(0, 0, w, h); c.fillStyle = '#0F1112'; c.font = '700 20px "IBM Plex Sans"'; c.fillText('IQF · fornecedores', 14, 30); [92, 81, 68, 95, 74].forEach((v, i) => { c.fillStyle = v >= 90 ? '#1d7446' : v >= 75 ? '#9a6400' : '#b3261e'; c.fillRect(14, 54 + i * 38, (w - 80) * v / 100, 24); c.fillStyle = '#48514c'; c.fillText(String(v), w - 54, 73 + i * 38); }); }));
+  person(g, -1.0, 0.7, Math.PI, '#d7aa55'); }
+{ const g = S.serv.g; box(1.3, 0.14, 1.1, WOOD, -1.5, 0, 0, g); box(1.3, 0.14, 1.1, WOOD, 0.5, 0, 0, g); tubeBundle(g, -0.5, 0.14, 0, 2, 3.6, 0.09, GALV, true); box(3.0, 0.9, 1.4, pick(M('#596167', { metalness: .6, roughness: .4 })), 1.8, 0, -1.8, g); person(g, -2.6, 1.2, 0.8, '#f2c230'); }
+
+/* ---------- caminhos pintados no chão ---------- */
+const REV = ['#EBDCA6', '#D7AA55', '#AA6A31', '#7B417A', '#33428F', '#4F87C7', '#9CA7AF'];
+const revCol = (t) => { const p = Math.min(.9999, Math.max(0, t)) * (REV.length - 1), i = Math.floor(p); return new THREE.Color(REV[i]).lerp(new THREE.Color(REV[i + 1]), p - i); };
+function lane(pts, w, colFn, opt = {}) {
+  const curve = new THREE.CatmullRomCurve3(pts.map(([x, z]) => new THREE.Vector3(x, 0, z)), false, 'catmullrom', 0.1); const N = Math.round(curve.getLength() * 6), pos = [], col = [], idx = [];
+  for (let i = 0; i <= N; i++) { const t = i / N, p = curve.getPointAt(t), tg = curve.getTangentAt(t), nx = -tg.z, nz = tg.x, c = colFn(t); pos.push(p.x + nx * w / 2, 0.014, p.z + nz * w / 2, p.x - nx * w / 2, 0.014, p.z - nz * w / 2); col.push(c.r, c.g, c.b, c.r, c.g, c.b); if (i < N && (!opt.dash || Math.floor(i / 4) % 2 === 0)) idx.push(2 * i, 2 * i + 1, 2 * i + 2, 2 * i + 1, 2 * i + 3, 2 * i + 2); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3)); g.setIndex(idx);
+  const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false, transparent: true, opacity: opt.op || 0.95, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -4 })); scene.add(m);
+  if (opt.arrows) { const L = curve.getLength(); for (let d = 2; d < L - 1; d += opt.arrows) { const t = d / L, p = curve.getPointAt(t), tg = curve.getTangentAt(t); const sh = new THREE.Shape(); sh.moveTo(0, 0.38); sh.lineTo(0.3, -0.1); sh.lineTo(0.13, -0.1); sh.lineTo(0, 0.12); sh.lineTo(-0.13, -0.1); sh.lineTo(-0.3, -0.1); sh.closePath();
+    const a = new THREE.Mesh(new THREE.ShapeGeometry(sh), new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.9, side: THREE.DoubleSide, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -5 })); a.rotation.x = -Math.PI / 2; a.rotation.z = Math.atan2(-tg.x, -tg.z); a.position.set(p.x, 0.016, p.z); scene.add(a); } }
+  return curve;
+}
+/* faixas amarelas do corredor */
+[3.6, 8.6].forEach((z) => lane([[-35, z], [35, z]], 0.12, () => new THREE.Color('#e2b21f')));
+const MAIN = lane([[-35, 6.1], [-25, 6.1], [-15.5, 6.1], [-6, 6.1], [3.5, 6.1], [13, 6.1], [22.5, 6.1], [34, 6.1]], 0.75, revCol, { arrows: 3.4 });
+const RP = lane([[-15.5, 6.1], [-15.5, 8], [-15.5, 9.8]], 0.6, () => new THREE.Color('#d9362a'), { arrows: 2 });
+lane([[22.5, 6.1], [22.5, 8], [22.5, 9.8]], 0.35, () => new THREE.Color('#8d9699'), { dash: 1 });
+lane([[18.4, 13.6], [5, 13.6], [-11.4, 13.6]], 0.35, () => new THREE.Color('#9b7be6'), { dash: 1 });
+
+
+
+/* ---------- placas suspensas: viram para quem olha ---------- */
+const SIGNS = {};
+function sign(s) {
+  const Wc = 900, Hc = 250, cv = document.createElement('canvas'); cv.width = Wc * 2; cv.height = Hc * 2; const x = cv.getContext('2d'); x.scale(2, 2);
+  rr(x, 0, 0, Wc, Hc, 22); x.fillStyle = '#0F1112'; x.fill(); x.save(); rr(x, 0, 0, Wc, Hc, 22); x.clip(); x.fillStyle = s.c; x.fillRect(0, 0, Wc, 18); x.restore();
+  x.fillStyle = s.c; x.beginPath(); x.arc(92, 132, 52, 0, Math.PI * 2); x.fill(); x.fillStyle = '#fff'; x.font = '700 54px "IBM Plex Sans"'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(s.n, 92, 135);
+  x.textAlign = 'left'; let fs = 84; x.font = `800 ${fs}px "Barlow Condensed"`; while (x.measureText(s.t.toUpperCase()).width > Wc - 200 && fs > 50) { fs -= 2; x.font = `800 ${fs}px "Barlow Condensed"`; }
+  x.fillStyle = '#F1F0EB'; x.fillText(s.t.toUpperCase(), 172, 112); x.font = '600 38px "IBM Plex Sans"'; x.fillStyle = '#b9c0c2'; x.fillText(s.mod, 174, 180);
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+  const k = (s.sup ? 0.9 : 1) * 1.2, sw = 5.6 * k, sh = sw * Hc / Wc, y = s.sup ? 5.9 : s.k === 'rec' ? 4.5 : 6.7, z = s.z + (s.k === 'rnc' || s.k === 'rnd' ? -1.8 : s.k === 'rec' ? 4.7 : -0.8);
+  const grp = new THREE.Group(); grp.position.set(s.x, y, z); grp.rotation.order = 'YXZ'; grp.rotation.x = -0.3; scene.add(grp);
+  const mat = new THREE.MeshBasicMaterial({ map: tex, toneMapped: false, transparent: true, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+  const p = mesh(new THREE.PlaneGeometry(sw, sh), mat, 0, 0, 0.07, grp); p.castShadow = false; p.receiveShadow = false; p.userData.k = s.k; PICK.push(p);
+  const back = new THREE.MeshStandardMaterial({ color: '#2a2f33', roughness: .6, metalness: .3, transparent: true });
+  box(sw + 0.1, sh + 0.1, 0.06, back, 0, -(sh + 0.1) / 2, 0, grp);
+  [-sw / 2.6, sw / 2.6].forEach((dx) => cylY(0.012, 9.6 - y - sh / 2, STEEL, dx, sh / 2, 0, grp));
+  /* desenhadas por último: o vidro das janelas e das salas não passa por cima da placa */
+  grp.children.forEach((o) => { o.renderOrder = 10; }); p.renderOrder = 11;
+  SIGNS[s.k] = { grp, mat, back };
+}
+ST.forEach(sign);
+
+/* ---------- empilhadeira levando o lote ---------- */
+const fork = new THREE.Group(); scene.add(fork);
+{ const yb = pick(M('#e6b422', { roughness: .4, metalness: .25 }));
+  rbox(2.0, 1.0, 1.15, 0.12, yb, 0, 0.35, 0, fork); box(0.7, 0.9, 1.1, pick(M('#2a2f33', { roughness: .5 })), -0.8, 0.5, 0, fork);
+  [[-0.65, 0.58], [-0.65, -0.58], [0.6, 0.58], [0.6, -0.58]].forEach(([a, b]) => cylZ(0.3, 0.22, RUBBER, a, 0.3, b, fork, 20));
+  [[-0.4, 0.5], [-0.4, -0.5], [0.55, 0.5], [0.55, -0.5]].forEach(([a, b]) => box(0.06, 1.6, 0.06, DARK, a, 1.35, b, fork)); box(1.05, 0.06, 1.06, DARK, 0.07, 2.95, 0, fork);
+  [-0.35, 0.35].forEach((b) => box(0.1, 2.6, 0.1, DARK, 1.1, 0.1, b, fork)); [-0.3, 0.3].forEach((b) => box(1.3, 0.05, 0.12, STEEL, 1.75, 0.35, b, fork));
+  person(fork, -0.2, 0, Math.PI / 2, '#f2c230');
+  tubeBundle(fork, 1.8, 0.42, 0, 2, 4.6, 0.1, STEEL, false); }
+const lotTag = (() => { const tex = canvasTex(520, 120, (g, w, h) => { rr(g, 4, 4, w - 8, h - 8, 22); g.fillStyle = '#378267'; g.fill(); g.fillStyle = '#fff'; g.font = '500 56px "IBM Plex Mono"'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('AV-26-20000', w / 2, h / 2 + 3); });
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthTest: false, depthWrite: false, toneMapped: false })); sp.renderOrder = 10; const k = 2.3; sp.scale.set(k, k * 120 / 520, 1); sp.position.set(1.0, 3.7, 0); fork.add(sp); return sp; })();
+function place(curve, t) { const p = curve.getPointAt(t), tg = curve.getTangentAt(t); fork.position.set(p.x, 0, p.z); fork.rotation.y = Math.atan2(-tg.z, tg.x); }
+
+
+
+/* ---------- conteúdo das estações (o mesmo do Manual) ---------- */
+const INFO = {
+  rec: { quem: 'Conferente', onde: 'Menu Lotes (AV) › Novo lote', dev: 'Computador', it: 'IT-QUA-01', roles: ['conf', 'qual'],
+    passos: ['Menu Lotes (AV) › Novo lote.', 'Nota fiscal e recebimento: data, filial, fornecedor, NF, pedido de compra, pedido(s) de venda e Conferido por.', 'Um bloco por material: descrição, corrida (* se não houver), quantidade, diâmetro, espessura, liga, material e certificado (* = sem certificado).', 'Conferir os avisos e clicar em Gravar lotes.', 'Imprimir etiquetas e colar cada uma no material certo.', 'Na ficha do lote: Lançar dados da corrida (química e mecânica do certificado da usina).'],
+    trava: ['Nota já lançada ou corrida repetida na mesma NF: a Central avisa antes de gravar.'],
+    auto: ['Gera o número AV-AA-NNNNN (a sequência nunca recomeça).', 'Põe a nota na fila do RIR.', 'Lote sem certificado vai para Alertas › Lotes sem certificado.', 'Avisa se o fornecedor está suspenso no IQF.'] },
+  rir: { quem: 'Inspetor de recebimento', onde: 'Tablet › RIR › Fazer RIR', dev: 'Tablet', it: 'IT-QUA-02', roles: ['insr', 'qual'],
+    passos: ['No tablet, abrir RIR e tocar em Fazer RIR na nota.', 'Responder cada item com AP, RP ou N/A. Em todo RP, descrever o que foi encontrado.', 'Anotar as medidas e adicionar o instrumento usado (só aparecem os calibrados).', 'Tirar as fotos do material (até 12).', 'Conferir o resultado de cada lote e o motivo da reprovação.', 'Tocar em Concluir e assinar.'],
+    trava: ['Item sem resposta, ou RP sem descrição.', 'Medida sem valor ou sem instrumento válido.', 'Lote sem resultado, ou reprovado sem motivo.'],
+    auto: ['Salva o rascunho a cada toque.', 'Grava o resultado em cada lote.', 'Lote reprovado fica bloqueado e entra na fila da RNC.', 'Nota sem RIR há 2 dias úteis aparece em Alertas.'] },
+  rnc: { quem: 'Inspetor abre · Qualidade trata', onde: 'Tablet › RNC · Central › RNC', dev: 'Tablet + computador', it: 'IT-QUA-03', roles: ['insr', 'qual', 'comp'],
+    passos: ['Tablet › RNC › Lotes reprovados esperando RNC › Abrir RNC → (ou Ler etiqueta).', 'Escolher o motivo, descrever, informar a quantidade e tirar as fotos (até 8).', 'Marcar a confirmação e tocar em Abrir RNC ✓.', 'Qualidade: disposição, contenção, causa raiz e ação corretiva; Cobrança ao fornecedor.', 'Registrar o destino do lote: devolvido, retrabalhado ou sucateado.', 'Verificar a eficácia no próximo recebimento e Aprovar e concluir.'],
+    nota: 'Concessão (usar o material reprovado) só pela fila de reprovados, antes de abrir a RNC. Concluir a RNC não libera o lote: falta registrar o destino.',
+    trava: ['Aprovar e concluir pede a disposição respondida e, com ação corretiva, o resultado da eficácia.'],
+    auto: ['Numera a RNC e bloqueia os lotes.', 'Calcula os prazos em dias úteis (disposição em 48 h úteis).', 'Monta os e-mails de cobrança.', 'A etiqueta e o QR mostram a situação do lote.'] },
+  cheg: { quem: 'Qualidade', onde: 'Menu RIF › + Registrar chegada', dev: 'Computador', it: 'IT-QUA-05', roles: ['qual'],
+    passos: ['Menu RIF › + Registrar chegada.', 'Informar o pedido de venda (PV), cliente, vendedor e os itens (um RIF por item).', 'Clicar em Registrar chegada (ou Inspecionar agora →).'],
+    auto: ['Preenche o cliente quando o PV já está na fila de Certificados.', 'O pedido aparece em Aguardando inspeção no tablet do inspetor.'] },
+  rif: { quem: 'Inspetor de usinagem', onde: 'Tablet › RIF', dev: 'Tablet', it: 'IT-QUA-05', roles: ['insu'],
+    passos: ['Buscar o pedido (QR ou PV) e escolher o item e a norma (ou o modo manual).', 'Preencher material, corrida e lote da matéria-prima, desenho, sinete e soldador.', 'Medir as cotas (padrão: 3 peças). A Central compara com a tolerância.', 'Visual: AP, RP ou N/A; instrumentos usados; fotos.', 'Conferir a prévia, escolher o resultado e tocar em Assinar e finalizar.'],
+    trava: ['Instrumento vencido ou bloqueado.', 'Soldador sem qualificação válida.', 'Cota ou item visual sem marcação; RP sem descrição.'],
+    auto: ['Marca AP ou RP comparando a medida com a tolerância da norma.', 'Item reprovado: Reinspecionar abre um RIF novo com as mesmas cotas.'] },
+  cert: { quem: 'Qualidade', onde: 'Menu Certificados', dev: 'Computador', it: 'IT-QUA-06', roles: ['qual'],
+    passos: ['No Omie: Pedido de Venda › Exportar › Excel.', 'Certificados › Importar lista do Omie (.xlsx).', 'No cartão do pedido: Pegar e Fazer certificado.', 'Puxar dos lotes (AV), conferir os campos amarelos e o RIF do pedido.', 'Salvar o PDF e responder Sim, concluir.'],
+    trava: ['Lote reprovado, com RNC, em contenção ou em análise: só com justificativa.', 'Item usinado sem RIF aprovado: só com justificativa.'],
+    auto: ['Puxa descrição, material, corrida, química e mecânica dos lotes.', 'Guarda uma revisão congelada do certificado.', 'Prazo padrão: 2 dias úteis.'] },
+  ent: { quem: 'Expedição', onde: 'Fora da Central', dev: 'Fora da Central', it: 'PR-QUA-01', roles: [],
+    passos: ['Enviar a NF de venda junto com o certificado de qualidade.'],
+    auto: ['A ficha de cada lote mostra os certificados emitidos com ele.'] },
+  rnd: { quem: 'Qualidade', onde: 'Menu RND › Nova RND', dev: 'Computador', it: 'IT-QUA-04', roles: ['qual', 'comp'],
+    passos: ['Menu RND › Nova RND: cliente, NF de venda, lotes ou corridas, descrição e gravidade.', 'Enviar o E-mail de recebimento ao cliente e decidir a procedência.', 'D3 Contenção: pôr em contenção os lotes da mesma corrida.', 'D4 Causa raiz (5 porquês) e D5·D6 plano de ação.', 'Responder ao cliente com o Relatório 8D.', 'D7 Verificar a eficácia e D8 Encerrar.'],
+    nota: 'Causa do fornecedor: Abrir RNC de fornecedor. A RNC já vem preenchida e fica ligada à RND.',
+    auto: ['Prazos: contenção 1 dia útil, resposta 5, final 30.', 'Lote em contenção trava no certificado e aparece na etiqueta e no QR.', 'O encerramento libera a contenção dos lotes.'] },
+  cal: { quem: 'Responsável pela calibração', onde: 'Menu Calibração', dev: 'Computador', it: 'IT-QUA-07', roles: ['qual'],
+    passos: ['Cadastrar o instrumento e imprimir a etiqueta QR.', 'Enviar para calibração: data, laboratório e previsão de retorno.', 'Registrar calibração: data, nº do certificado, maior erro e incerteza.', 'Fazer a verificação intermediária quando o instrumento tiver intervalo definido.'],
+    auto: ['Aprova quando |maior erro| + incerteza ≤ EMA e calcula a validade.', 'Reprovado: bloqueia e abre a análise de impacto com os RIR e RIF que usaram o instrumento.', 'Vencimentos aparecem em Alertas.'] },
+  sold: { quem: 'Qualidade', onde: 'Menu Soldagem', dev: 'Computador', it: 'IT-QUA-08', roles: ['qual'],
+    passos: ['Cadastrar o soldador (sinete único) e as EPS.', 'Registrar a qualificação: EPS, nº do RQS, processo, posições e faixas.', 'Registrar a continuidade sempre que o soldador soldar com o processo.'],
+    auto: ['Validade = teste ou última continuidade + 6 meses (padrão).', 'Soldador sem qualificação válida não deixa assinar o RIF.'] },
+  iqf: { quem: 'Qualidade · Compras', onde: 'Menu Avaliação de fornecedores', dev: 'Computador', it: 'IT-QUA-09', roles: ['qual', 'comp'],
+    passos: ['Acompanhar as classes e quem mudou de classe.', 'Na ficha do fornecedor: Relatório de desempenho (classe C: plano de ação em 15 dias).', 'Registrar ação / situação: Aprovado, Em desenvolvimento ou Suspenso.', 'Todo mês: Fechar mês.'],
+    auto: ['Recalcula a nota a cada lote e RNC.', 'Fornecedor Suspenso é avisado no recebimento, no RIR e na RNC.'] },
+  serv: { quem: 'Qualidade', onde: 'Menu Serviços › Novo serviço', dev: 'Computador', it: 'IT-QUA-10', roles: ['qual'],
+    passos: ['Menu Serviços › Novo serviço.', 'Data, tipo de serviço, fornecedor, NF, pedidos e nº do certificado (* = sem certificado).', 'Clicar em Gravar serviço.'],
+    auto: ['Gera o número SV-NNNN.', 'Liga o serviço aos lotes e RNC com a mesma NF ou pedido.'] }
+};
+const ORDEM = ['rec', 'rir', 'rnc', 'cheg', 'rif', 'cert', 'ent', 'rnd', 'cal', 'sold', 'iqf', 'serv'];
+const PAPEIS = [['todos', 'Todos'], ['conf', 'Conferente'], ['insr', 'Inspetor de recebimento'], ['insu', 'Inspetor de usinagem'], ['qual', 'Qualidade'], ['comp', 'Compras'], ['adm', 'Administrador']];
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const lighten = (c) => '#' + new THREE.Color(c).lerp(new THREE.Color('#ffffff'), 0.35).getHexString();
+
+/* ---------- controles da câmera ---------- */
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = 0.08; controls.minDistance = 7; controls.maxDistance = 105; controls.maxPolarAngle = 1.38; controls.screenSpacePanning = false;
+/* visão geral: de lado na tela deitada; em pé (celular), de frente para o Recebimento, com o processo indo para o fundo */
+const FIT = [[-29.5, 0, 17.8], [27, 0, 17.8], [-30, 9.4, -20], [31, 9.4, -20]].map((a) => new THREE.Vector3(...a));
+const tanH = () => Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect;
+function vgFor() {
+  if (camera.aspect < 0.9) { const tgt = new THREE.Vector3(-6, 0, 0.8); return { pos: tgt.clone().addScaledVector(new THREE.Vector3(-0.68, 0.73, 0).normalize(), Math.max(60, 14.5 / tanH())), tgt }; }
+  const tgt = new THREE.Vector3(-1.5, 0, 1.6), dir = new THREE.Vector3(10.5, 45, 55.4).normalize();
+  /* afasta a câmera até o galpão inteiro caber entre o título (em cima) e a barra de etapas (embaixo) */
+  const cam = new THREE.PerspectiveCamera(camera.fov, camera.aspect, 0.1, 400), top = 1 - 2 * 92 / H, bot = -1 + 2 * 66 / H;
+  let d = 72.1;
+  for (; d < 130; d += 1.5) { cam.position.copy(tgt).addScaledVector(dir, d); cam.lookAt(tgt); cam.updateMatrixWorld(); if (FIT.every((p) => { const v = p.clone().project(cam); return Math.abs(v.x) <= 0.985 && v.y <= top && v.y >= bot; })) break; }
+  controls.maxDistance = Math.max(105, d + 12);
+  return { pos: tgt.clone().addScaledVector(dir, d), tgt };
+}
+let VG = vgFor();
+camera.position.copy(VG.pos); controls.target.copy(VG.tgt); controls.update();
+const clampTarget = () => { const t = controls.target; t.x = THREE.MathUtils.clamp(t.x, -34, 34); t.z = THREE.MathUtils.clamp(t.z, -19, 20); t.y = THREE.MathUtils.clamp(t.y, 0, 6); };
+let dirty = true; controls.addEventListener('change', () => { clampTarget(); dirty = true; });
+
+/* ---------- pós-processamento ---------- */
+let composer = null, ao = null;
+function buildComposer() {
+  composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(W, H, { type: THREE.HalfFloatType, samples: LOW ? 0 : 4 }));
+  composer.addPass(new RenderPass(scene, camera));
+  if (!LOW) { ao = new GTAOPass(scene, camera, W, H); ao.output = GTAOPass.OUTPUT.Default; ao.blendIntensity = 0.85; ao.updateGtaoMaterial({ radius: 1.0, distanceExponent: 1.5, thickness: 2, scale: 1, samples: 12 }); composer.addPass(ao); }
+  composer.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), 0.42, 0.5, 1.0));
+  composer.addPass(new OutputPass());
+  composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(W, H);
+}
+buildComposer();
+addEventListener('resize', () => { W = innerWidth; H = innerHeight; const vira = (camera.aspect < 0.9) !== (W / H < 0.9); camera.aspect = W / H; camera.fov = fovFor(camera.aspect); camera.updateProjectionMatrix(); VG = vgFor(); if (vira && !atual && !anims.length) { camera.position.copy(VG.pos); controls.target.copy(VG.tgt); controls.update(); } renderer.setSize(W, H, false); composer.setSize(W, H); if (ao) ao.setSize(W, H); dirty = true; });
+
+/* ---------- caminho do lote no chão ---------- */
+const tOf = (curve, x) => { let best = 0, bd = 1e9; for (let i = 0; i <= 600; i++) { const t = i / 600, d = Math.abs(curve.getPointAt(t).x - x); if (d < bd) { bd = d; best = t; } } return best; };
+const TT = Object.fromEntries(['rec', 'rir', 'cheg', 'rif', 'cert', 'ent'].map((k) => [k, tOf(MAIN, S[k].x)]));
+let lot = { curve: MAIN, t: TT.rec };
+place(lot.curve, lot.t);
+
+/* ---------- animações (câmera e empilhadeira) ---------- */
+const ease = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
+let anims = [];
+function animate(dur, fn) { return new Promise((res) => { anims.push({ t0: performance.now(), dur, fn, res }); dirty = true; }); }
+function flyTo(pos, tgt, dur = 1300) { const p0 = camera.position.clone(), t0 = controls.target.clone(); return animate(dur, (u) => { const e = ease(u); camera.position.lerpVectors(p0, pos, e); controls.target.lerpVectors(t0, tgt, e); }); }
+function camFor(k) { const s = S[k]; const tgt = new THREE.Vector3(s.x + 0.5, 2.4, s.z + (s.sup ? 0.5 : 0)); const fz = Math.max(1, 6.5 / tanH() / 20.9); const pos = tgt.clone().add(new THREE.Vector3(-7.5, 10.5, 16.5).multiplyScalar(fz)); return { pos, tgt }; }
+function driveTo(curve, t1, dur) { const c = curve, a = lot.curve === c ? lot.t : 0; return animate(dur, (u) => { lot.curve = c; lot.t = THREE.MathUtils.lerp(a, t1, ease(u)); place(c, lot.t); }); }
+
+/* ---------- interface ---------- */
+const stepsEl = document.getElementById('steps'), card = document.getElementById('card'), sel = document.getElementById('papel');
+sel.innerHTML = PAPEIS.map(([k, l]) => `<option value="${k}">${l}</option>`).join('');
+/* ordem: ?papel= no endereço › a escolha guardada neste aparelho › a sugestão da Central (?sug=) › Todos */
+let papel = Q.get('papel') || ''; try { papel = papel || localStorage.getItem('cq-m3-papel') || ''; } catch (e) { /* sem armazenamento */ } papel = papel || Q.get('sug') || 'todos';
+if (!PAPEIS.some(([k]) => k === papel)) papel = 'todos'; sel.value = papel;
+const doPapel = (k) => papel === 'todos' || papel === 'adm' || INFO[k].roles.includes(papel);
+let atual = null;
+function drawSteps() {
+  stepsEl.innerHTML = ORDEM.map((k, i) => (i === 8 ? '<span class="sep"></span>' : '') + `<button type="button" data-k="${k}" class="${k === atual ? 'on' : ''}${doPapel(k) ? '' : ' dim'}${S[k].sup ? ' sup' : ''}" style="--c:${S[k].c}" title="${esc(S[k].t)}"><i>${S[k].n}</i><span>${esc(S[k].t.replace('Inspeção de recebimento', 'Inspeção receb.').replace('Reclamação do cliente', 'Reclamação').replace('Avaliação de fornecedores', 'Fornecedores').replace('Chegada na usinagem', 'Chegada usinagem'))}</span></button>`).join('');
+  /* rola só a barra (scrollIntoView rolaria também a página da Central por fora) */
+  const b = stepsEl.querySelector('.on'); if (b) stepsEl.scrollTo({ left: b.offsetLeft - (stepsEl.clientWidth - b.offsetWidth) / 2, behavior: 'smooth' });
+}
+function applyPapel() {
+  ST.forEach((s) => { const on = doPapel(s.k), sg = SIGNS[s.k]; sg.mat.opacity = on ? 1 : 0.22; sg.back.opacity = on ? 1 : 0.3; s.line.opacity = on ? 0.95 : 0.2; s.fill.opacity = on ? 0.10 : 0.03; s.txt.opacity = on ? 0.92 : 0.2; });
+  drawSteps(); dirty = true;
+}
+function showCard(k) {
+  const s = S[k], d = INFO[k]; card.hidden = false; card.style.setProperty('--c', s.c); card.style.setProperty('--cl', lighten(s.c));
+  const lista = papel === 'todos' || papel === 'adm' ? ORDEM : ORDEM.filter(doPapel), i = lista.indexOf(k);
+  card.innerHTML = `<div class="k"><span>${s.sup ? 'Apoio' : 'Estação'} ${s.n} · ${esc(d.it)}</span><button class="x" type="button" data-x aria-label="Fechar">×</button></div>
+    <h2>${esc(s.t)}</h2><span class="mod">${esc(s.mod.split(' · ')[0])}</span>
+    <div class="facts"><span>Quem: <b>${esc(d.quem)}</b></span><span>Onde: <b>${esc(d.onde)}</b></span><span>Aparelho: <b>${esc(d.dev)}</b></span></div>
+    ${d.nota ? `<div class="nota">${esc(d.nota)}</div>` : ''}
+    <h3>Passo a passo</h3><ol>${d.passos.map((p) => `<li><span>${esc(p)}</span></li>`).join('')}</ol>
+    ${d.trava ? `<h3>Não deixa concluir se</h3><ul class="stop">${d.trava.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}
+    <h3>A Central faz sozinha</h3><ul class="auto">${d.auto.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>
+    <div class="nav2"><button type="button" data-nav="-1" ${i <= 0 ? 'disabled' : ''}>◀ Anterior</button><button type="button" class="p" data-nav="1" ${i < 0 || i >= lista.length - 1 ? 'disabled' : ''}>Próxima ▶</button></div>`;
+  card.scrollTop = 0;
+}
+async function irPara(k, opts = {}) {
+  if (!S[k]) return; atual = k; drawSteps(); showCard(k); hideHint();
+  document.getElementById('b-geral').classList.remove('on');
+  const main = TT[k] != null;
+  if (opts.lote !== false && main && lot.curve === MAIN) await Promise.all([driveTo(MAIN, TT[k], 1600), (async () => { const c = camFor(k); await flyTo(c.pos, c.tgt, 1500); })()]);
+  else if (opts.lote !== false && k === 'rnc') { if (lot.curve !== MAIN) { await driveTo(RP, 0, 600); lot = { curve: MAIN, t: TT.rir }; } await driveTo(MAIN, TT.rir, 900); lot = { curve: RP, t: 0 }; const c = camFor(k); await Promise.all([driveTo(RP, 0.62, 1400), flyTo(c.pos, c.tgt, 1500)]); }
+  else if (opts.lote !== false && main && lot.curve === RP) { await driveTo(RP, 0, 700); lot = { curve: MAIN, t: TT.rir }; const c = camFor(k); await Promise.all([driveTo(MAIN, TT[k], 1400), flyTo(c.pos, c.tgt, 1500)]); }
+  else { const c = camFor(k); await flyTo(c.pos, c.tgt, 1400); }
+}
+function visaoGeral() { atual = null; card.hidden = true; drawSteps(); document.getElementById('b-geral').classList.add('on'); return flyTo(VG.pos.clone(), VG.tgt.clone(), 1400); }
+function vizinho(dir) { const lista = papel === 'todos' || papel === 'adm' ? ORDEM : ORDEM.filter(doPapel); const i = lista.indexOf(atual); const k = lista[Math.max(0, Math.min(lista.length - 1, (i < 0 ? -1 : i) + dir))]; if (k) irPara(k); }
+
+/* passeio */
+let tour = false;
+async function passeio() {
+  const b = document.getElementById('b-tour');
+  if (tour) { tour = false; b.classList.remove('on'); b.innerHTML = '▶ <span class="lbl">Andar sozinho</span>'; return; }
+  tour = true; b.classList.add('on'); b.innerHTML = '■ <span class="lbl">Parar</span>';
+  const lista = ORDEM.filter((k) => doPapel(k) && !(papel === 'todos' && S[k].sup));
+  if (lot.curve !== MAIN || lot.t > TT.rec + 0.001) { lot = { curve: MAIN, t: TT.rec }; place(MAIN, TT.rec); }
+  for (const k of lista) { if (!tour) break; await irPara(k); for (let w = 0; w < 60 && tour; w++) await new Promise((r) => setTimeout(r, 100)); }
+  if (tour) { tour = false; b.classList.remove('on'); b.innerHTML = '▶ <span class="lbl">Andar sozinho</span>'; }
+}
+
+/* toques e cliques */
+const ray = new THREE.Raycaster(), ptr = new THREE.Vector2(); let down = null;
+function pickAt(ev) { const r = renderer.domElement.getBoundingClientRect(); ptr.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1); ray.setFromCamera(ptr, camera); const h = ray.intersectObjects(PICK, false).find((i) => !i.object.material.visible || i.object.material.opacity > 0.5); return h ? h.object.userData.k : null; }
+renderer.domElement.addEventListener('pointerdown', (e) => { down = { x: e.clientX, y: e.clientY }; hideHint(); });
+renderer.domElement.addEventListener('pointerup', (e) => { if (!down) return; const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y); down = null; if (moved > 7) return; const k = pickAt(e); if (k) { tour = false; irPara(k); } });
+let hov = null;
+renderer.domElement.addEventListener('pointermove', (e) => { if (e.pointerType !== 'mouse' || down) return; const k = pickAt(e); if (k !== hov) { if (hov) S[hov].fill.opacity = doPapel(hov) ? 0.10 : 0.03; hov = k; if (k) S[k].fill.opacity = 0.24; renderer.domElement.style.cursor = k ? 'pointer' : ''; dirty = true; } });
+stepsEl.addEventListener('click', (e) => { const b = e.target.closest('[data-k]'); if (b) { tour = false; irPara(b.dataset.k); } });
+card.addEventListener('click', (e) => { if (e.target.closest('[data-x]')) { card.hidden = true; return; } const n = e.target.closest('[data-nav]'); if (n && !n.disabled) { tour = false; vizinho(+n.dataset.nav); } });
+document.getElementById('b-geral').onclick = () => { tour = false; visaoGeral(); };
+document.getElementById('b-tour').onclick = () => passeio();
+sel.onchange = () => { papel = sel.value; try { localStorage.setItem('cq-m3-papel', papel); } catch (e) { /* sem armazenamento */ } applyPapel(); if (atual) showCard(atual); };
+addEventListener('keydown', (e) => { if (e.target.closest && e.target.closest('select')) return; if (e.key === 'ArrowRight') vizinho(1); else if (e.key === 'ArrowLeft') vizinho(-1); else if (e.key === 'Escape') { card.hidden = true; } });
+let hintOff = false; function hideHint() { if (hintOff) return; hintOff = true; document.getElementById('hint').hidden = true; }
+
+/* ---------- laço de desenho: só desenha quando algo mudou ---------- */
+const flame = scene.getObjectByProperty('type', 'PointLight');
+let idleAO = 0, busyOff = false; const viewOff = { x: 0, y: 0 };
+new MutationObserver(() => { dirty = true; }).observe(card, { attributes: true, attributeFilter: ['hidden'] });
+function loop(now) {
+  requestAnimationFrame(loop);
+  let busy = false;
+  if (anims.length) { busy = true; anims = anims.filter((a) => { const u = Math.min(1, (now - a.t0) / a.dur); a.fn(u); if (u >= 1) { a.res(); return false; } return true; }); }
+  if (controls.update()) busy = true;
+  if (busyOff) busy = true;
+  if (busy) dirty = true;
+  if (!dirty) { if (ao && !ao.enabled && now - idleAO > 250) { ao.enabled = true; dirty = true; } else return; }
+  if (ao) { if (busy) { ao.enabled = false; idleAO = now; } }
+  /* placas viram para a câmera e somem quando estão perto demais (não tapam a vista) */
+  for (const k in SIGNS) { const sg = SIGNS[k], g = sg.grp; g.rotation.y = Math.atan2(camera.position.x - g.position.x, camera.position.z - g.position.z);
+    const f = k === atual ? 1 : THREE.MathUtils.clamp((camera.position.distanceTo(g.position) - 10) / 8, 0.06, 1), on = doPapel(k);
+    sg.mat.opacity = (on ? 1 : 0.22) * f; sg.back.opacity = (on ? 1 : 0.3) * f; sg.mat.depthWrite = sg.back.depthWrite = f > 0.9; }
+  for (const lg of LAMPS) lg.visible = camera.position.distanceTo(lg.userData.p) > 11;
+  /* com o cartão aberto no computador, a cena anda um pouco para a esquerda */
+  /* (no celular o cartão fica embaixo: a cena sobe para a parte livre da tela) */
+  const aberto = !card.hidden, ox = aberto && W > 760 ? Math.min(card.offsetWidth + 24, W * 0.4) / 2 : 0, oy = aberto && W <= 760 ? Math.min(H * 0.3, (H - card.getBoundingClientRect().top) / 2) : 0;
+  if (Math.abs(ox - viewOff.x) + Math.abs(oy - viewOff.y) > 0.8) { viewOff.x += (ox - viewOff.x) * 0.18; viewOff.y += (oy - viewOff.y) * 0.18; busyOff = true; } else { viewOff.x = ox; viewOff.y = oy; busyOff = false; }
+  if (viewOff.x > 0.5 || viewOff.y > 0.5) camera.setViewOffset(W, H, viewOff.x, viewOff.y, W, H); else camera.clearViewOffset();
+  composer.render(); dirty = false;
+}
+applyPapel();
+composer.render();
+requestAnimationFrame(loop);
+const L = document.getElementById('load'); L.classList.add('out'); setTimeout(() => L.remove(), 600);
+if (Q.get('e')) irPara(Q.get('e'));
+window.__m3 = { irPara, visaoGeral, passeio, S, camera, controls, ready: true };
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+CENTRAL DA QUALIDADE — v39 (ÍCONE OFICIAL NOVO)
+Inclui a v38. Só o ícone muda: telas, cores, textos e dados ficam iguais.
+
+ARQUIVOS (todos na mesma pasta do index.html, a raiz do GitHub)
+- Páginas: index.html, lote.html, mapa3d.html, cert.html
+- manifest.webmanifest e sw.js
+- Ícones: favicon.ico, favicon-16.png, favicon-32.png, icon-48.png, icon-192.png, icon-512.png,
+  icon-maskable-512.png, apple-touch-icon.png e icone-central.svg (o original em vetor, fica guardado)
+
+O QUE MUDOU
+- Ícone novo (etiqueta CQ) na aba do navegador, no app instalado, no Android e no iPhone.
+- Aba do navegador: com tela 100% usa uma versão de 16 pixels simplificada (o mesmo CQ e a mesma
+  barra, maiores, sem o tracejado e o ilhós, que somem nesse tamanho). Telas maiores: ícone completo.
+- Android: o desenho ficou 5% menor dentro do fundo escuro, para nenhum formato de aparelho
+  cortar a ponta da etiqueta. Desenho, cores e proporções iguais.
+- O certificado (cert.html), que abria com o globo do navegador na aba, agora tem o ícone.
+- Endereço dos ícones com "?v=39" e cache do app central-cq-v39: os aparelhos percebem a troca.
+
+COMO SUBIR
+1. GitHub > Add file > Upload files > arraste todos os arquivos desta pasta (menos este LEIA-ME)
+   > Commit. Os ícones substituem os antigos (mesmos nomes).
+2. Se ainda não subiu a v38: esta v39 já traz o index.html da v38, mas publique também as
+   regras do Firebase que estão no zip da v38 (passo 2 do LEIA-ME da v38).
+3. Se no GitHub existir uma pasta "icones", pode apagar: ela não é usada.
+
+PASSO A PASSO PARA A EQUIPE (o ícone novo em cada aparelho)
+Computador (Chrome ou Edge)
+  1. Abra a Central e aperte Ctrl+F5. A aba já mostra o ícone novo.
+  2. Quem usa a Central instalada como app: feche o app e abra de novo. O navegador pode
+     mostrar um aviso pedindo para aceitar o ícone novo: aceite.
+  3. Se em uma semana o ícone do app não mudar: no app, menu (três pontinhos) > Desinstalar.
+     Abra a Central no navegador e clique em Instalar (no fim da barra de endereço).
+     Se o app estava fixado na barra de tarefas, fixe de novo.
+Android (celular e tablet)
+  1. Abra o app da Central com internet. O Android troca o ícone sozinho, em geral em alguns
+     dias. Não dá para garantir o prazo: depende do aparelho.
+  2. Se em uma semana não mudar: segure o ícone > Desinstalar (ou Remover). Abra a Central no
+     Chrome > menu (três pontinhos) > Instalar app.
+iPhone e iPad
+  O iPhone nunca troca o ícone sozinho.
+  1. Segure o ícone da Central > Remover app > Apagar da Tela de Início (apaga só o atalho).
+  2. Abra a Central no Safari > Compartilhar > Adicionar à Tela de Início.
+IMPORTANTE nos tablets do inspetor: antes de remover o app, deixe o tablet com internet
+("Conectado") e sem rascunho pendente. Remover o app pode apagar o que ainda não subiu.
+Remover o atalho não apaga nada do banco da Central.
+
+TESTADO
+- Google Chrome de verdade: aba no tema claro e escuro, tela 100% e 150%, nas páginas da Central,
+  do certificado, do QR do lote e do mapa 3D. O Edge usa o mesmo motor do Chrome.
+- Manifesto lido pelo Chrome sem erro, com os 3 ícones; nada impede instalar o app.
+- Windows, Android e iPhone: simulação com os arquivos finais. Conferir nos aparelhos depois de subir.
