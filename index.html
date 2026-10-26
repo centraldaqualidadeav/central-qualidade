@@ -1296,11 +1296,13 @@ body.filamini .cqaba-w { grid-template-columns: 76px minmax(0, 1fr); }
 .cqc.crit + .cqmx { color: #cfd6dc; }
 .cqfmini { display: none; }
 body.filamini .cqfila > :not(.cqfmini) { display: none !important; }
-body.filamini .cqfila { padding: 12px 8px; align-items: center; }
+body.filamini .cqfila { padding: 12px 4px; align-items: center; overflow-x: hidden; }
+@supports not selector(::-webkit-scrollbar) { body.filamini .cqfila { scrollbar-width: thin; } }
+body.filamini .cqfila::-webkit-scrollbar { width: 6px; } body.filamini .cqfila::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 3px; }
 body.filamini .cqfmini { display: grid; gap: 7px; justify-items: center; width: 100%; }
 .cqfmini .cqftg { margin: 0; }
 .cqfmini small { font: 600 9.5px/1 var(--f-body); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-top: 6px; }
-.cqfpv { position: relative; width: 60px; height: 40px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--surface); font: 700 13px/1 var(--f-mono); color: var(--ink); cursor: pointer; }
+.cqfpv { position: relative; width: 54px; height: 40px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--surface); font: 700 13px/1 var(--f-mono); color: var(--ink); cursor: pointer; }
 .cqfpv.crit { background: #1c2126; border-color: #1c2126; color: #fff; }
 .cqfpv.sel { box-shadow: 0 0 0 3px #f2b705; }
 .cqfpv.late::after { content: ''; position: absolute; top: -3px; right: -3px; width: 9px; height: 9px; border-radius: 50%; background: var(--crit); border: 2px solid var(--surface); }
@@ -1661,7 +1663,7 @@ table.t tbody tr.sel td { background: color-mix(in srgb, var(--rif) 9%, var(--su
   .tbf { flex-wrap: wrap; } .tbacts { flex: 1 1 100%; } .tbacts .btn.big { font-size: 15.5px; padding: 0 10px; }
 }
 /* início do tablet */
-.thw { max-width: 1280px; width: 100%; margin: 0 auto; padding: 24px 22px 28px; box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; flex: 1 0 auto; }
+.thw { max-width: 1280px; width: 100%; margin: 0 auto; padding: 24px 22px 28px; box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; align-content: start; flex: 1 0 auto; }
 .thm, .ths { display: grid; gap: 20px; min-width: 0; align-content: start; }
 .ths { gap: 16px; }
 .thola h2 { margin: 0; font: 700 40px/1.05 var(--f-display); }
@@ -1699,7 +1701,10 @@ table.t tbody tr.sel td { background: color-mix(in srgb, var(--rif) 9%, var(--su
 :root[data-theme="dark"] .tbw .btn.dk { background: var(--ink); border-color: var(--ink); color: var(--bg); }
 body.tabmode .modal .seg button { min-height: 48px; padding: 0 22px; font-size: 15px; }
 @media (max-width: 1060px) { .thw { grid-template-columns: minmax(0, 1fr); } .ths { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); } }
-@media (max-width: 760px) { .thtasks { grid-template-columns: minmax(0, 1fr); } .thtask { grid-template-columns: auto 1fr; grid-template-rows: auto auto auto; column-gap: 16px; } .thtask .n { grid-row: 1 / 3; font-size: 52px; } .thtask .btn.big { grid-column: 1 / -1; } .thrw { grid-template-columns: minmax(0, 1fr); } .thrw em { justify-self: start; } .thola h2 { font-size: 32px; } .thw { padding: 16px 12px 20px; } .thome .tbf .btn.big { min-width: 0; } }
+@media (max-width: 519px) { .thtasks { grid-template-columns: minmax(0, 1fr); } .thtask { grid-template-columns: auto 1fr; grid-template-rows: auto auto auto; column-gap: 16px; } .thtask .n { grid-row: 1 / 3; font-size: 52px; } .thtask .btn.big { grid-column: 1 / -1; } .thrw { grid-template-columns: minmax(0, 1fr); } .thrw em { justify-self: start; } }
+/* v45 · tablet pequeno em pé: os três cartões lado a lado como na F1, letras um pouco menores */
+@media (min-width: 520px) and (max-width: 760px) { .thtasks { gap: 10px; } .thtask { padding: 14px 12px 14px 16px; gap: 4px; } .thtask .n { font-size: 46px; } .thtask b { font-size: 19px; line-height: 1.1; } .thtask > span:not(.n) { font-size: 12.5px; line-height: 1.35; } .thtask .btn.big { height: 48px; font-size: 14.5px; padding: 0 6px; margin-top: 8px; } .thrw { grid-template-columns: 96px minmax(0, 1fr); padding: 10px 14px 10px 18px; } .thrw em { grid-column: 2; justify-self: start; } }
+@media (max-width: 760px) { .thola h2 { font-size: 32px; } .thw { padding: 16px 12px 20px; } .thome .tbf .btn.big { min-width: 0; } }
 /* v40 · tablet igual às imagens F (medidas tiradas da imagem, tablet deitado 1180 × 820): cabeçalho mais baixo, fundo da imagem, início em tamanho F1.
    Botões de toque continuam com 48 px no mínimo (Regra 1). */
 :root:not([data-theme="dark"]) .tbw { background: #e4e8e5; }
@@ -1838,6 +1843,56 @@ body.tabmode .modal .seg button { min-height: 48px; padding: 0 22px; font-size: 
   .tbw.rift .tbf .rtkprog { width: auto; flex: none; } .tbw.rift .tbf { gap: 10px; padding: 12px 14px; } .tbw.rift .tbf .btn.big { font-size: 16px; padding: 0 14px; }
   .rtkam .l { flex-wrap: wrap; } .rtkam .l > b { font-size: 20px; }
 }
+@media (max-width: 1000px) { .tbw.rift .rtkp { font-size: 12px; padding: 0 2px; letter-spacing: -.01em; } }
+/* v45 · tablet pequeno em pé (520 a 700 pontos): cotas à esquerda e, à direita, a cota com o teclado embaixo */
+@media (max-width: 700px) {
+  .rtkx.rtkx { grid-template-columns: 168px minmax(0, 1fr); grid-template-rows: auto 1fr; }
+  .rtkx .rtkside { grid-row: 1 / span 2; grid-column: 1; }
+  .rtkx .rtkmid { grid-column: 2; position: static; } .rtkx .rtkr { grid-column: 2; position: static; padding: 0 12px 16px; }
+  .rtkx .rtkpad .k { height: 52px; }
+  .rtkx .rtkdica { display: none; } .rtkx .rtkc { min-height: 52px; } .rtkx .rtkmid { gap: 8px; padding-bottom: 10px; } .rtkx .rtkr { gap: 6px; }
+  .rtkx .rtkgo.btn.big { min-height: 52px; }
+}
+/* v45 · RIF com teclado no tablet em pé (600 a 860 pontos): as mesmas três colunas da F2, mais estreitas */
+@media (max-width: 860px) {
+  .rtkx { grid-template-columns: 206px minmax(0, 1fr) 214px; }
+  .tbw.rift .rtkp { font-size: 12px; padding: 0 2px; letter-spacing: -.01em; }
+  .tbw.rift .tbf { gap: 8px; padding: 12px; } .tbw.rift .tbf .btn.big { font-size: 15px; padding: 0 10px; min-width: 0; flex: 0 1 auto; }
+  .tbw.rift .tbf .rtkprog { font-size: 13px; flex: 1 1 auto; min-width: 0; flex-wrap: wrap; row-gap: 2px; }
+  .rtkside { padding: 14px 10px 18px; gap: 10px; } .rtkit b { font-size: 18px; } .rtkit span { font-size: 13px; }
+  .rtkam { padding: 10px; } .rtkps { grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap: 6px; } .rtkp { font-size: 13.5px; }
+  .rtkl { grid-template-columns: 30px minmax(0, 1fr) auto; gap: 6px; padding: 0 6px; font-size: 14.5px; }
+  .rtkmid { padding: 14px 12px 18px; gap: 10px; } .rtkr { padding: 14px 12px 14px 0; gap: 8px; }
+  .rtkhd h2 { font-size: 21px; } .rtkfx b { font-size: 19px; } .rtkcs { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .rtkc { min-height: 64px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; } .rtkc b { font-size: 24px; min-height: 0; }
+  .rtkpad { gap: 6px; } .rtkpad .k { height: 58px; font-size: 28px; }
+}
+/* v45 · painel do lado do tablet (RIF, RIR e NCF) pode ser recolhido numa faixa estreita, como a fila da aba de certificados.
+   « recolhe, » abre; a escolha fica guardada no tablet. Botões com 48 px (Regra 1). */
+.tbsmin { justify-self: end; width: 48px; height: 48px; border-radius: 10px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink-2); font: 700 18px var(--f-body); cursor: pointer; touch-action: manipulation; flex: none; }
+.tbsmin .b { display: none; } body.tbmini .tbsmin .a { display: none; } body.tbmini .tbsmin .b { display: inline; }
+.rgmini { display: none; }
+body.tbmini .rtkx.rtkx { grid-template-columns: 72px minmax(0, 1fr) var(--rtkpad, 340px); }
+body.tbmini .rtkside { padding: 10px 6px 16px; justify-items: center; }
+body.tbmini .rtkside > :not(.tbsmin):not(.rtkls) { display: none; }
+body.tbmini .rtkls { width: 100%; }
+body.tbmini .rtkl { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 0; padding: 4px 0; min-height: 52px; }
+body.tbmini .rtkl .ds, body.tbmini .rtkl em { display: none; } body.tbmini .rtkl i { font-size: 12px; min-width: 0; }
+body.tbmini .rgx { --rgw: 72px; }
+body.tbmini .rgside { padding: 10px 6px 16px; justify-items: center; }
+body.tbmini .rgside > .rgnf, body.tbmini .rgside > .rgins, body.tbmini .rglot > span, body.tbmini .rglot > em, body.tbmini .rglot > b { display: none; }
+body.tbmini .rglot { width: 100%; min-height: 48px; padding: 6px 2px; display: grid; place-items: center; box-sizing: border-box; }
+body.tbmini .rgmini { display: block; font: 700 13px var(--f-mono); font-style: normal; }
+body.tbmini .tbb.ncx { grid-template-columns: 72px minmax(0, 1fr); background: linear-gradient(90deg, var(--surface) 0 71px, var(--line) 71px 72px, transparent 72px); }
+body.tbmini .ncside { padding: 10px 6px 16px; justify-items: center; }
+body.tbmini .ncside > :not(.tbsmin):not(.ncsteps) { display: none; }
+body.tbmini .ncsteps { width: 100%; border-bottom: 0; }
+body.tbmini .ncsteps > * { font-size: 0; justify-content: center; padding: 0; }
+@media (max-width: 1150px) { body.tbmini .rtkx.rtkx { --rtkpad: 300px; } }
+@media (max-width: 1000px) { body.tbmini .rtkx.rtkx { --rtkpad: 270px; } }
+@media (max-width: 860px) { body.tbmini .rtkx.rtkx { --rtkpad: 214px; } }
+@media (max-width: 700px) { body.tbmini .rtkx.rtkx { grid-template-columns: 72px minmax(0, 1fr); } }
+@media (max-width: 519px) { .tbsmin { display: none; } }
 /* v40 · NCF do tablet igual à imagem F4: passos e lote à esquerda (300), duas colunas no passo 2 */
 .tbb.ncx { max-width: none; padding: 0; display: grid; grid-template-columns: 300px minmax(0, 1fr); align-items: start; background: linear-gradient(90deg, var(--surface) 0 299px, var(--line) 299px 300px, transparent 300px); }
 .ncside { padding: 20px 18px 24px; display: grid; gap: 16px; align-content: start; position: sticky; top: 60px; }
@@ -1881,7 +1936,8 @@ body.tabmode .modal .seg button { min-height: 48px; padding: 0 22px; font-size: 
 .ncqq { display: flex; gap: 10px; flex-wrap: wrap; } .ncqq .btn { min-height: 48px; padding: 0 16px; font-size: 15.5px; font-weight: 600; border-radius: 10px; }
 .tbf .btn.tbsair { min-height: 48px; padding: 0 16px; font-size: 18px; font-weight: 600; color: var(--ink-2); }
 @media (max-width: 1000px) { .nc2 { grid-template-columns: minmax(0, 1fr); } }
-@media (max-width: 760px) { .tbb.ncx { grid-template-columns: minmax(0, 1fr); background: none; } .ncside { position: static; background: var(--surface); border-bottom: 1px solid var(--line); } .ncsteps { grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); padding-bottom: 12px; } .ncsteps > * { font-size: 14px; padding: 0 8px; gap: 8px; } .ncsum .ncr, .ncset { font-size: 14px; } }
+@media (min-width: 520px) and (max-width: 760px) { .tbb.ncx { grid-template-columns: 200px minmax(0, 1fr); background: linear-gradient(90deg, var(--surface) 0 199px, var(--line) 199px 200px, transparent 200px); } .ncside { padding: 16px 10px 20px; gap: 12px; } .ncsteps > * { font-size: 14.5px; } }
+@media (max-width: 519px) { .tbb.ncx { grid-template-columns: minmax(0, 1fr); background: none; } .ncside { position: static; background: var(--surface); border-bottom: 1px solid var(--line); } .ncsteps { grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); padding-bottom: 12px; } .ncsteps > * { font-size: 14px; padding: 0 8px; gap: 8px; } .ncsum .ncr, .ncset { font-size: 14px; } }
 /* RIR · grade item × lote */
 .rgx { --rgw: 330px; display: grid; grid-template-columns: var(--rgw) minmax(0, 1fr); align-items: start; background: linear-gradient(90deg, var(--surface) 0 calc(var(--rgw) - 1px), var(--line) calc(var(--rgw) - 1px) var(--rgw), transparent var(--rgw)); flex: 1 0 auto; }
 .tbb.rgb { display: flex; flex-direction: column; }
@@ -1951,7 +2007,8 @@ button.rglot { cursor: pointer; } button.rglot:focus-visible { outline: 3px soli
 @media (max-width: 1100px) { .rgx { --rgw: 260px; } .rgcs { grid-template-columns: repeat(var(--c, 1), 120px); gap: 10px; } }
 :root[data-theme="dark"] .tbw.rirt .rgtabs .chip2.on { color: #111413; }
 @media (max-width: 1100px) { .rgx { --rgw: 280px; } .rgcs { grid-template-columns: repeat(var(--c, 1), 140px); } }
-@media (max-width: 900px) { .rgx { grid-template-columns: minmax(0, 1fr); background: none; } .rgside { position: static; max-height: none; background: var(--surface); border-bottom: 1px solid var(--line); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); } .rgnf, .rgins { grid-column: 1 / -1; } }
+@media (min-width: 520px) and (max-width: 900px) { .rgx { --rgw: 210px; } .rgside { padding: 16px 10px 20px; gap: 10px; } }
+@media (max-width: 519px) { .rgx { grid-template-columns: minmax(0, 1fr); background: none; } .rgside { position: static; max-height: none; background: var(--surface); border-bottom: 1px solid var(--line); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); } .rgnf, .rgins { grid-column: 1 / -1; } }
 @media (max-width: 560px) { .rgr { grid-template-columns: minmax(0, 1fr); } .rgcs { grid-template-columns: repeat(var(--c, 1), minmax(0, 1fr)); } .rgnc { grid-template-columns: minmax(0, 1fr); } .tbw.rirt .rgmain { padding: 14px 12px 20px; } .rtkprog { display: none; } }
 
 /* NCF passo 2: motivos em grade de 2 colunas e atalhos de quantidade */
@@ -5386,7 +5443,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 43;
+    const APP_V = 46; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7145,6 +7202,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       return;
     }
     const tabAntes = document.body.classList.contains('tabmode');
+    document.body.classList.toggle('tbmini', lsGet('cq-tb-mini', '') === '1');
     document.body.classList.toggle('tabmode', S.view === 'tabhome' || S.view === 'rnctab' || S.view === 'riftab' || S.view === 'rirtab' || ((S.view === 'manual' || S.view === 'mapa3d') && tbOnly()));
     const tabAgora = document.body.classList.contains('tabmode'); if (tabAgora !== tabAntes) applyTheme();
     if (S.view === 'equipe' || S.view === 'sold') ouvePes();
@@ -13015,9 +13073,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   function abaListas() {
     const L = cqCards(), and = ABA.abertos.map((k) => L.find((c) => c.k === k)).filter(Boolean);
-    const pend = L.filter((c) => c.st === 'p' && !ABA.abertos.includes(c.k));
+    /* v44: na fila lateral não aparece o pedido que outra pessoa já pegou (na Central ele continua aparecendo) */
+    const pend = L.filter((c) => c.st === 'p' && !ABA.abertos.includes(c.k) && !(c.porEm && E.low(c.porEm) !== cqMe()));
     const fila = cqOrdena(pend, ABA.flt, E.key(ABA.q || ''));
-    return { and, fila, total: L.filter((c) => c.st === 'p').length, nCrit: pend.filter(cqCrit).length };
+    return { and, fila, total: and.length + pend.length, nCrit: pend.filter(cqCrit).length };
   }
   function abaFila() {
     const el = $('#cqfila'); if (!el) return;
@@ -14075,8 +14134,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const passo = RI.tpasso === 2 ? 2 : 1;
     const cols = porLote ? [rel.lotes[RI.tlote]] : rel.lotes;
     const resTxt = (k) => { const r = riRes(rel, k), o2 = (rel.lotRes || {})[k] || {}, mot = r === 'Reprovado' ? String(o2.mot || riMotSug(rel, k) || '') : ''; return [r, mot]; };
-    const left = `<aside class="rgside"><div class="rgnf"><b>NF ${esc(rel.nf || '—')}</b><span>${esc([rel.forn, rel.pc ? 'pedido de compra ' + rel.pc : ''].filter(Boolean).join(' · '))}</span><span>começado ${esc(dmy(rel.at))} às ${esc(hhmm(rel.at))}${rel.nome ? ' · ' + esc(rel.nome) : ''}</span>${riSitForn(rel.forn)}</div>
-      ${rel.lotes.map((k, i) => { const x = findRec('AV', k), [r, mot] = resTxt(k), man = ((rel.lotRes || {})[k] || {}).man, bt = porLote && passo === 1; return `<${bt ? 'button type="button"' : 'div'} class="rglot ${r === 'Aprovado' ? 'ap' : r === 'Reprovado' ? 'rp' : r ? 'av' : ''}${bt && i === RI.tlote ? ' on' : ''}" ${bt ? `data-act="ri-tlote" data-key="${i}"` : ''}><b>${esc(lotId(k))}</b><span>${x ? esc([lotTxt(x), E.filled(x.corrida) ? 'corrida ' + x.corrida : '', x.quant != null && x.quant !== '' ? x.quant + ' ' + (x.und || '') : ''].filter(Boolean).join(' · ')) : ''}</span><em>${r === 'Aprovado' ? '✓ Aprovado' + (man ? '' : ' (sai sozinho)') : r === 'Reprovado' ? '✕ Reprovado' + (mot ? ': ' + esc(mot.length > 70 ? mot.slice(0, 70) + '…' : mot) : '') : r ? esc(r) : 'falta responder'}</em></${bt ? 'button' : 'div'}>`; }).join('')}
+    const left = `<aside class="rgside"><button type="button" class="tbsmin" data-act="tb-mini" aria-label="Recolher ou abrir o painel do lado" title="Recolher ou abrir o painel"><span class="a">«</span><span class="b">»</span></button><div class="rgnf"><b>NF ${esc(rel.nf || '—')}</b><span>${esc([rel.forn, rel.pc ? 'pedido de compra ' + rel.pc : ''].filter(Boolean).join(' · '))}</span><span>começado ${esc(dmy(rel.at))} às ${esc(hhmm(rel.at))}${rel.nome ? ' · ' + esc(rel.nome) : ''}</span>${riSitForn(rel.forn)}</div>
+      ${rel.lotes.map((k, i) => { const x = findRec('AV', k), [r, mot] = resTxt(k), man = ((rel.lotRes || {})[k] || {}).man, bt = porLote && passo === 1; return `<${bt ? 'button type="button"' : 'div'} class="rglot ${r === 'Aprovado' ? 'ap' : r === 'Reprovado' ? 'rp' : r ? 'av' : ''}${bt && i === RI.tlote ? ' on' : ''}" ${bt ? `data-act="ri-tlote" data-key="${i}"` : ''}><b>${esc(lotId(k))}</b><i class="rgmini">${esc(String(lotId(k)).split('-').pop())}</i><span>${x ? esc([lotTxt(x), E.filled(x.corrida) ? 'corrida ' + x.corrida : '', x.quant != null && x.quant !== '' ? x.quant + ' ' + (x.und || '') : ''].filter(Boolean).join(' · ')) : ''}</span><em>${r === 'Aprovado' ? '✓ Aprovado' + (man ? '' : ' (sai sozinho)') : r === 'Reprovado' ? '✕ Reprovado' + (mot ? ': ' + esc(mot.length > 70 ? mot.slice(0, 70) + '…' : mot) : '') : r ? esc(r) : 'falta responder'}</em></${bt ? 'button' : 'div'}>`; }).join('')}
       <div class="rgins"><span>Instrumentos usados</span>${(rel.ins || []).map((i) => `<b><span class="mono">${esc(i.codigo)}</span> ${esc(i.desc || '')}${i.val ? ', válido até ' + esc(fD(E.fromIso(i.val)).slice(3)) : ''}</b>`).join('') || '<em>nenhum ainda · escolha na conclusão</em>'}</div></aside>`;
     let main;
     if (passo === 1) {
@@ -15561,10 +15620,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
 
   /* ---------- 2 · medidas com o teclado na tela (tablet deitado, P11) ----------
      Uma cota por vez: nominal, faixa aceita, as peças e um teclado grande; "Gravar" confere a tolerância e vai para a próxima.
-     Celular, tablet em pé e computador continuam com a lista de cotas (rtMedidas). Os dados são os mesmos (rel.cotas). */
-  const RT_TEC_MQ = '(pointer: coarse) and (orientation: landscape) and (min-width: 880px)'; /* v40: vale para os tablets deitados mais comuns (880 pontos ou mais) */
-  const rtTecPode = () => !!(window.matchMedia && matchMedia(RT_TEC_MQ).matches);
-  const rtTec = () => rtTecPode() && !RT.forceLista && lsGet('cq-rif-teclado', 'sim') !== 'nao';
+     Celular e computador continuam com a lista de cotas (rtMedidas); desde a v45, o tablet em pé também usa esta tela. Os dados são os mesmos (rel.cotas). */
+  /* v45: a tela da imagem F2 (cotas ao lado + teclado) vale em qualquer tablet, deitado ou em pé (520 pontos ou mais de largura).
+     Celular continua com a lista. "Usar a lista" vale só até sair do RIF (não fica gravado no tablet). */
+  const RT_TEC_MQ = '(min-width: 520px) and (min-height: 440px)';
+  const rtTecPode = () => !!(window.matchMedia && matchMedia(RT_TEC_MQ).matches && (matchMedia('(any-pointer: coarse)').matches || tbOnly()));
+  const rtTec = () => rtTecPode() && !RT.forceLista;
+  try { localStorage.removeItem('cq-rif-teclado'); } catch (e) { /* sem armazenamento */ }
   const rtTecNom = (c) => c.origem === 'manual' || (c.editavel && (c.nominal === null || c.nominal === undefined)) || !!c.editNom;
   const rtTecVal = (c, j) => (j === -1 ? (RT.kbuf != null ? RT.kbuf : rfNum(c.nominal)) : String((c.medidas || [])[j] || ''));
   function rtTecVazia(c) {
@@ -15631,10 +15693,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const its = p ? rfItens(p) : [], pos = its.findIndex((x) => x.id === RT.it) + 1, ins = rel.ins[0];
     const st = (x) => (x.sit === 'na' ? 'na' : RN.cota(x));
     const lista = rel.cotas.map((x, i) => { const s = st(x); return `<button type="button" class="rtkl${i === RT.kc ? ' on' : ''}" data-act="rt-kc" data-key="${i}"><span class="cd">${esc(x.cod)}</span><span class="ds">${esc(x.desc)}</span>${i === RT.kc ? '<em>agora</em>' : s === 'ap' ? '<i class="ap" aria-label="aprovada">✓</i>' : s === 'rp' ? '<i class="rp" aria-label="reprovada">✕</i>' : s === 'na' ? '<i class="na">N/A</i>' : s === 'avaliar' ? '<i class="av" aria-label="decidir AP ou RP">?</i>' : s === 'parcial' ? '<i class="pd" aria-label="falta peça">…</i>' : '<i></i>'}</button>`; }).join('');
-    const pecas = c.medidas.map((m, j) => { const ms = RN.medida(c, m); return `<button type="button" class="rtkp${j === RT.kj && !na ? ' on' : ''}${ms === 'ap' ? ' ap' : ms === 'rp' ? ' rp' : ''}" data-act="rt-kj" data-key="${j}" ${na ? 'disabled' : ''} aria-label="Peça ${j + 1}${ms === 'ap' ? ' aprovada' : ms === 'rp' ? ' fora da faixa' : ''}">${ms === 'ap' ? '✓ ' : ms === 'rp' ? '✕ ' : ''}${c.medidas.length <= 3 ? 'Peça ' : 'P'}${j + 1}</button>`; }).join('');
+    const pecas = c.medidas.map((m, j) => { const ms = RN.medida(c, m); return `<button type="button" class="rtkp${j === RT.kj && !na ? ' on' : ''}${ms === 'ap' ? ' ap' : ms === 'rp' ? ' rp' : ''}" data-act="rt-kj" data-key="${j}" ${na ? 'disabled' : ''} aria-label="Peça ${j + 1}${ms === 'ap' ? ' aprovada' : ms === 'rp' ? ' fora da faixa' : ''}">${ms === 'ap' ? '✓ ' : ms === 'rp' ? '✕ ' : ''}${c.medidas.length <= 3 && !(window.matchMedia && matchMedia('(max-width: 700px)').matches) ? 'Peça ' : 'P'}${j + 1}</button>`; }).join('');
     const sub0 = [rel.modo === 'norma' ? rel.normaNome || '' : rel.ref || '', rel.ident.mat].filter(Boolean).join(', ');
     const sub = [sub0, pos ? `Item ${pos} de ${its.length} do pedido` : ''].filter(Boolean).join('. ');
-    const left = `<aside class="rtkside"><div class="rtkit"><b>${esc(rel.desc || 'Peça')}</b>${sub ? `<span>${esc(sub)}</span>` : ''}</div>
+    const left = `<aside class="rtkside"><button type="button" class="tbsmin" data-act="tb-mini" aria-label="Recolher ou abrir o painel do lado" title="Recolher ou abrir o painel"><span class="a">«</span><span class="b">»</span></button><div class="rtkit"><b>${esc(rel.desc || 'Peça')}</b>${sub ? `<span>${esc(sub)}</span>` : ''}</div>
         <div class="rtkam"><div class="l"><span>Amostra do item</span><b>${rel.pecas}${rel.ident.qtd ? ' de ' + esc(rel.ident.qtd) : ''} ${rel.pecas === 1 && !rel.ident.qtd ? 'peça' : 'peças'}</b></div><div class="rtkps${c.medidas.length <= 3 ? ' l3' : ''}">${pecas}</div>
           <div class="l ins"><span>Instrumento</span>${ins ? `<b>${esc(ins.codigo)}</b>${ins.val ? `<em>válido até ${esc(fD(E.fromIso(ins.val)).slice(3))}</em>` : ''}` : '<em class="no">escolha no passo 3</em>'}</div></div>
         <div class="rtkls">${lista}</div>
@@ -15887,8 +15949,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'rt-kgo') { rtTecGravar(); return true; }
     if (a === 'rt-kc') { rtTecIr(+key); return true; }
     if (a === 'rt-kj') { rtTecIr(RT.kc, +key); return true; }
-    if (a === 'rt-klista') { rtTecFecha(); lsSet('cq-rif-teclado', 'nao'); render(); return true; }
-    if (a === 'rt-ktec') { lsSet('cq-rif-teclado', 'sim'); RT.forceLista = false; RT.addc = false; render(); window.scrollTo(0, 0); return true; }
+    if (a === 'rt-klista') { rtTecFecha(); RT.forceLista = true; render(); return true; }
+    if (a === 'rt-ktec') { RT.forceLista = false; RT.addc = false; render(); window.scrollTo(0, 0); return true; }
     if (a === 'rt-sel') { rtTrocaSel(el.dataset.i, el.dataset.v); return true; }
     if (a === 'rt-manual') {
       if (rel.modo === 'manual') return true;
@@ -18216,7 +18278,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ['Fazer o RIR', MOL([
         'No tablet, abrir <b>RIR</b> pelo início do tablet (cartão <b>Receber nota</b> ou a nota na <b>Fila de hoje</b>) ou, na Central, menu <b>RIR</b> › <b>Tela do tablet</b>. A lista mostra as notas aguardando inspeção e os RIR em andamento.',
         'Tocar em <b>Fazer RIR</b> na nota. Se já houver rascunho da nota, a Central abre o rascunho.',
-        'No checklist, cada lote é uma coluna (até 3 lotes lado a lado; com mais lotes, ou no celular, um lote por vez, com <b>Copiar do lote</b> anterior). Tocar no quadro troca a resposta: <b>AP</b> (aprovado) → <b>RP</b> (reprovado) → <b>N/A</b> (não aplicável) → em branco. Itens da “nota inteira” têm um quadro só. <b>Marcar AP no que falta</b> marca os itens ainda em branco (as medidas continuam para digitar). Na Central (computador), os mesmos itens aparecem em lista, com AP, RP e N/A lado a lado e <b>todos AP</b>.',
+        'No tablet, deitado ou em pé, a tela tem o <b>painel da esquerda</b> com a nota, os lotes (com o resultado de cada um) e os instrumentos; o botão <b>«</b> recolhe o painel numa faixa fina só com o fim do número de cada lote e o <b>»</b> abre de novo (o tablet lembra a escolha). No checklist, cada lote é uma coluna (até 3 lotes lado a lado; com mais lotes, no tablet pequeno em pé ou no celular, um lote por vez, com <b>Copiar do lote</b> anterior). Tocar no quadro troca a resposta: <b>AP</b> (aprovado) → <b>RP</b> (reprovado) → <b>N/A</b> (não aplicável) → em branco. Itens da “nota inteira” têm um quadro só. <b>Marcar AP no que falta</b> marca os itens ainda em branco (as medidas continuam para digitar). Na Central (computador), os mesmos itens aparecem em lista, com AP, RP e N/A lado a lado e <b>todos AP</b>.',
         'Nos itens de medida, digitar o valor medido (o item fica AP; tocar no AP para trocar). Em todo item RP, descrever o que foi encontrado (vai para a NCF) e, se preciso, tirar foto.',
         'Tocar em <b>Continuar</b> (o botão mostra quantas respostas faltam). Na <b>Conclusão</b>, adicionar o instrumento usado nas medidas pelo código (só aparecem instrumentos em uso e com calibração válida) e tirar as fotos do material (até 12).',
         'Em <b>Resultado por lote</b>, conferir o resultado sugerido (algum RP = Reprovado; tudo respondido sem RP = Aprovado) e o motivo da reprovação, que vai para a NCF.',
@@ -18224,6 +18286,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ]) + MNOTA('O rascunho é salvo sozinho a cada alteração. Se o RIR for concluído em outro aparelho, o rascunho desta tela não é gravado.')],
       ['O que impede concluir', MUL(['Item sem resposta.', 'Item de medida sem valor (exceto N/A).', 'Item RP sem descrição.', 'Medida feita sem instrumento informado, ou instrumento vencido ou bloqueado.', 'Lote sem resultado, ou reprovado sem motivo.'])],
       ['Depois de concluir', MUL(['Cada lote passa a ter o resultado do RIR.', 'Lote reprovado fica bloqueado e entra na fila “Lotes reprovados aguardando decisão”; a NCF é aberta conforme IT-QUA-03.', 'Lote “Em análise” não fica bloqueado e pode ser liberado sob concessão.', 'O uso de cada instrumento fica registrado no histórico dele (análise de impacto, IT-QUA-07).', '<b>Imprimir</b> gera o relatório em A4 com checklist, instrumentos, as 8 primeiras fotos e assinatura (todas as fotos ficam no RIR).'])],
+['Relatório impresso', MP('<b>Imprimir</b> gera o relatório A4 em português, com o inglês menor embaixo de cada rótulo, título e escolha fixa (ex.: “Corrida / Heat No.”). Dados e texto digitado saem como foram escritos; datas e números no padrão brasileiro. Ao escolher <b>Salvar como PDF</b>, o nome do arquivo já vem com o número: <b>RIR-AAAA-NNNNN.pdf</b> (rascunho: <b>RIR-rascunho-NF…</b>).')],
       ['Prazo', MP('Nota sem RIR há 2 dias úteis ou mais aparece em Alertas.')],
       ['Checklist', MP('O checklist padrão tem Documentação, Identificação, Quantidade e embalagem, Visual e Dimensional (diâmetro, espessura e comprimento). Ele é mantido em Configurações › RIR, uma linha por item no formato “Seção ; item ; nf ou lote ; medida”. Os RIR já começados guardam a lista do dia em que foram abertos.')],
       ['Registros', MREG([['Relatório de inspeção de recebimento', 'RIR-AAAA-NNNNN', 'RIR › Concluídos'], ['Resultado de cada lote', 'Nº do RIR na ficha do lote', 'Lotes (AV)'], ['Fotos', 'Dentro do RIR', 'RIR']])],
@@ -18236,6 +18299,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ['Responsabilidades', MRESP([[M_PAPEIS.insr, 'Abre a NCF do lote reprovado pelo tablet, com descrição e fotos, e assina a abertura.'], [M_PAPEIS.qual, 'Numera e trata a NCF (disposição, contenção, causa, ação corretiva, eficácia), decide o destino do lote e aprova.'], [M_PAPEIS.comp, 'Recebe as cobranças e obtém do fornecedor a disposição e a causa raiz.']])],
       ['Abrir a NCF pelo tablet (inspetor)', MOL([
         'No tablet, abrir <b>NCF</b> (cartão <b>Abrir NCF</b> do início do tablet; o lote tocado na <b>Fila de hoje</b> já abre a NCF dele). O cartão “Lotes reprovados esperando NCF” lista os lotes reprovados; tocar em <b>Abrir NCF →</b>. Para outro lote, usar <b>Ler QR de etiqueta</b> (início) ou <b>Ler etiqueta e abrir NCF</b>, ou digitar o número (AV-26-20000 ou só 20000).',
+        'No tablet, deitado ou em pé, a tela tem o <b>painel da esquerda</b> com os passos (Material, Problema, Assinar e enviar) e o lote; <b>«</b> recolhe o painel (ficam só os números dos passos) e <b>»</b> abre de novo.',
         '<b>Material</b>: conferir o lote encontrado e marcar os outros lotes da mesma NF, se houver. Escolher onde foi encontrado e o setor responsável. Sem lote: marcar “Esta NCF não tem lote” e justificar.',
         '<b>Problema</b>: tocar no motivo principal (e nos outros, se houver), descrever a não conformidade, informar a quantidade reprovada (<b>Todas</b>, <b>Metade</b> ou digitar) e tirar as fotos (até 8).',
         '<b>Assinar e enviar</b>: conferir, marcar “Confirmo que as informações e fotos estão corretas” e tocar em <b>Abrir NCF ✓</b>.'
@@ -18257,6 +18321,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         ['Liberado sob concessão', 'Fila de reprovados ou ficha do lote (antes de abrir a NCF, ou lote “Em análise”) › <b>Liberar sob concessão</b>', 'Autorizado por, data da autorização, justificativa; cliente que aceitou e NCF vinculada quando houver'],
         ['Desbloquear (erro)', 'Fila ou ficha do lote › <b>Desbloquear (erro)</b>', 'Novo resultado (Aprovado ou Em análise) e justificativa. Só para lote reprovado por engano.']
       ]) + MNOTA('Concluir a NCF não libera o lote: o lote continua na NCF até o destino (devolvido, retrabalhado ou sucateado) ser registrado. A concessão só é possível pela fila de reprovados, antes de abrir a NCF. NCF cancelada devolve o lote reprovado à fila “Lotes reprovados aguardando decisão” (continua bloqueado); lotes que só entraram pela “nota fiscal completa” voltam ao resultado original.')],
+['Relatório impresso', MP('<b>Imprimir</b> gera o relatório A4 em português, com o inglês menor embaixo de cada rótulo, título e escolha fixa (ex.: “Corrida / Heat No.”). Dados e texto digitado saem como foram escritos; datas e números no padrão brasileiro. Ao escolher <b>Salvar como PDF</b>, o nome do arquivo já vem com o número: <b>NCF-AAAA-NNNNN.pdf</b>.')],
       ['Prazos (dias úteis, com feriados)', MTB(['Etapa', 'Prazo padrão'], [['Disposição', '48 horas a partir da abertura, contando só dias úteis (o relógio para no fim de semana e feriado e volta às 7 h); se vencer depois das 17 h, vence às 17 h'], ['Tomar a ação corretiva', '10 dias úteis depois do prazo da disposição'], ['Fechar a ação', 'Prazo da ação + 10 (Padrão), 20 (Estendido) ou 30 (Complexo) dias úteis'], ['Prazo final', '20 dias úteis da abertura, ou o fechamento da ação se for depois']]) + MP('Os prazos são definidos em Configurações › NCF. A Central mostra o status (Em andamento, Pendente, Atrasada, Concluída, Cancelada), avisa uma vez por dia e lista as NCF vencendo em Alertas.')],
       ['Registros', MREG([['Registro de Não Conformidade de Fornecedor', 'NCF-AAAA-NNNNN', 'NCF'], ['Assinaturas da abertura e da aprovação', 'Nome, e-mail, data e hora', 'Ficha da NCF'], ['Cobranças e retornos', 'Data e destinatários', 'Ficha da NCF'], ['Decisões e destino dos lotes', 'Data, pessoa e justificativa', 'Ficha do lote'], ['Correções da abertura', 'Valor antigo, motivo, pessoa', 'Histórico da NCF']])],
       ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 8.7 e 10.2', 'IT-QUA-01 · IT-QUA-02 · IT-QUA-09'])]
@@ -18274,11 +18339,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         ['D3 Contenção', '<b>Registrar</b> a ação e a data. Em “Material para conter” aparecem os lotes citados e os da mesma corrida e fornecedor: <b>Pôr em contenção</b>.'],
         ['D4 Causa raiz', 'Setor responsável, origem da causa (Interna, Fornecedor, Transporte, Cliente), categoria 6M e os 5 porquês. O último preenchido é a causa raiz.'],
         ['D5·D6 Plano de ação', '<b>Nova ação</b>: o que será feito, tipo (Corretiva, Preventiva, Melhoria), responsável e prazo. Ao terminar, <b>Concluir</b> com data e evidência.'],
-        ['Resposta ao cliente', 'Enviar o <b>E-mail de resposta ao cliente</b> com o <b>Relatório 8D</b> em anexo e registrar o retorno do cliente (Aceita, Contestada, Sem retorno).'],
+        ['Resposta ao cliente', 'Se o cliente precisar do 8D em inglês, usar <b>Inglês do 8D</b> e escrever o inglês dos textos digitados (campo vazio sai só em português). Enviar o <b>E-mail de resposta ao cliente</b> com o <b>Relatório 8D</b> em anexo e registrar o retorno do cliente (Aceita, Contestada, Sem retorno).'],
         ['Custos', '<b>Lançar</b> os custos da não qualidade (frete, retrabalho, reposição, crédito, outros).'],
         ['D7 Verificação de eficácia', '<b>Verificar</b> na data prevista: resultado (Eficaz, Não eficaz), data e evidência.'],
         ['D8 Encerrar', 'Conferir o que falta e <b>Encerrar</b> com data e observação. O encerramento libera a contenção dos lotes.']
       ]) + MNOTA('Quando a origem da causa é Fornecedor, usar <b>Abrir NCF</b>: a NCF já vem preenchida e fica ligada à NCC (IT-QUA-03).')],
+['Relatório 8D', MP('<b>Relatório 8D</b> gera o relatório A4 em português, com o inglês menor embaixo de cada rótulo e título. Nada é traduzido sozinho: o texto digitado (reclamação, procedência, contenção, porquês, causa, ações, evidência) só sai em inglês se for escrito em <b>Inglês do 8D</b>. Se o português mudar depois, a janela avisa para conferir o inglês. Ao escolher <b>Salvar como PDF</b>, o nome já vem como <b>8D-NCC-AAAA-NNNNN.pdf</b>.')],
       ['Prazos', MTB(['Etapa', 'Prazo padrão (da abertura)'], [['Contenção', '1 dia útil'], ['Resposta ao cliente', '5 dias úteis'], ['Prazo final', '30 dias úteis, ou o prazo da última ação se for depois'], ['Verificação de eficácia', '30 dias corridos depois da última ação']]) + MP('Prazos definidos em Configurações › NCC. Status: Em andamento, Pendente (contenção ou resposta fora do prazo), Atrasada, Concluída, Cancelada.')],
       ['Registros', MREG([['Registro de Não Conformidade de Cliente', 'NCC-AAAA-NNNNN', 'NCC'], ['Relatório 8D', 'Nº da NCC', 'NCC › Relatório 8D'], ['Contenção dos lotes', 'Nº da NCC na ficha do lote', 'Lotes (AV)'], ['Ações e evidências', 'Dentro da NCC', 'NCC']])],
       ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 8.2.1, 8.7, 9.1.2 e 10.2', 'IT-QUA-03 · IT-QUA-06'])]
@@ -18291,11 +18357,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ['Registrar a chegada', MOL(['Menu <b>RIF</b> › <b>+ Registrar chegada</b>.', 'Informar o pedido de venda (PV), cliente, vendedor e os itens (um RIF por item).', 'Clicar em <b>Registrar chegada</b> (ou <b>Inspecionar agora →</b>). O pedido entra em “Aguardando inspeção” e aparece no tablet do inspetor.'])],
       ['Fazer o RIF no tablet', MOL([
         '<b>Peça</b>: buscar o pedido (QR ou PV/cliente), escolher o item e a norma com seus seletores (tipo, classe, NPS/DN, face…) ou o modo manual (descrição e referência). Preencher a identificação: material, corrida e lote da matéria-prima (os lotes recebidos para o PV aparecem para tocar), nº do desenho, sinete e soldador quando há solda.',
-        '<b>Medidas</b>: medir as cotas nas peças (padrão 3). Com o tablet deitado, uma cota por vez: a tela mostra o nominal, a faixa aceita e as peças; digitar a medida no teclado da tela e tocar em <b>Gravar peça … e ir para …</b>. A Central compara com a tolerância e marca AP ou RP; fora da faixa, a peça fica vermelha e aparece <b>Medir de novo</b>. Tocar numa cota da lista ou numa peça vai direto a ela; <b>Cota não se aplica</b> marca N/A. Com o tablet em pé, no celular e no computador, as cotas aparecem em lista (<b>Ver as cotas em lista</b> também mostra a lista). Cota sem tolerância: marcar AP ou RP; desvio grande pede justificativa.',
+        '<b>Medidas</b>: medir as cotas nas peças (padrão 3). No tablet, deitado ou em pé, uma cota por vez: o painel da esquerda mostra a peça, a amostra e a lista de cotas; ao lado ficam o nominal, a faixa aceita, as peças e o teclado (no tablet em pé, o teclado fica embaixo da cota). Digitar a medida no teclado da tela e tocar em <b>Gravar peça … e ir para …</b>. A Central compara com a tolerância e marca AP ou RP; fora da faixa, a peça fica vermelha e aparece <b>Medir de novo</b>. Tocar numa cota da lista ou numa peça vai direto a ela; <b>Cota não se aplica</b> marca N/A. O botão <b>«</b> recolhe o painel numa faixa só com os códigos das cotas e o <b>»</b> abre de novo (o tablet lembra a escolha). No celular e no computador, as cotas aparecem em lista; no tablet, <b>Ver as cotas em lista</b> mostra a lista só até sair daquele RIF. Cota sem tolerância: marcar AP ou RP; desvio grande pede justificativa.',
         '<b>Visual e fotos</b>: marcar AP, RP ou N/A em cada item visual (RP exige descrição), informar os instrumentos usados e tirar as fotos.',
         '<b>Resultado</b>: conferir a <b>Prévia</b>, escolher Aprovado ou Reprovado, escrever a observação e tocar em <b>Assinar e finalizar</b>.'
       ]) + MNOTA('O RIF recebe o número RIF-AAAA-NNNNN na assinatura e não pode mais ser alterado. Item reprovado: usar <b>Reinspecionar</b>, que abre um RIF novo com as mesmas cotas.')],
       ['O que impede assinar', MUL(['Peça não escolhida ou sem cotas; nominal ou medida faltando.', 'Cota sem tolerância sem AP/RP; desvio sem justificativa.', 'Item visual sem marcação ou RP sem descrição.', 'Resultado Aprovado com cota ou item RP sem observação.', 'Nenhum instrumento, ou instrumento vencido ou bloqueado (IT-QUA-07).', 'Soldador sem qualificação válida na Soldagem (IT-QUA-08).'])],
+['Relatório impresso', MP('<b>Imprimir</b> gera o relatório A4 em português, com o inglês menor embaixo de cada rótulo, título e escolha fixa (ex.: “Corrida / Heat No.”). Dados e texto digitado saem como foram escritos; datas e números no padrão brasileiro. Ao escolher <b>Salvar como PDF</b>, o nome do arquivo já vem com o número: <b>RIF-AAAA-NNNNN.pdf</b> (rascunho: <b>RIF-rascunho-PV…</b>, com a marca “RASCUNHO / DRAFT”).')],
       ['Pendência e validação', MUL(['<b>Marcar pendência</b> (acabamento/retrabalho, aguardando sinete, incompleto…) tira o pedido da inspeção até <b>Pendência resolvida</b>.', '<b>Validar combinação</b>: qualquer pessoa com “Lança” em RIF confere a tabela da norma para uma combinação e corrige valores com motivo (fica registrado quem, quando e por quê). Correções entram sozinhas nos rascunhos abertos; RIF assinado não muda. A falta de validação não impede a assinatura, mas fica registrada no RIF.'])],
       ['Registros', MREG([['Relatório de Inspeção Final (Usinagem)', 'RIF-AAAA-NNNNN', 'RIF'], ['Pedido e histórico do pedido', 'Nº do PV', 'RIF › quadro'], ['Validação de combinação', 'Norma e combinação', 'Configurações › RIF']])],
       ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 8.5.1, 8.6 e 7.1.5', 'IT-QUA-06 · IT-QUA-07 · IT-QUA-08'])]
@@ -18320,11 +18387,23 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         'Quando o mesmo pedido vier faturado num arquivo novo, a Central só acrescenta a NF e a data de faturamento no cartão que já existe (quem pegou continua com ele). Faturado em partes: a 1ª parte usa o cartão do pedido; as outras partes entram como cartões novos.',
         'Orçamento e pedido cancelado não entram. Reimportar a lista atualiza a fila: pedido cancelado no Omie sai da fila; NF cancelada vai para “Aguardando solução”; NF trocada é atualizada. Importar o mesmo pedido de novo não duplica (repetido = mesmo pedido e mesma parte).'])],
       ['Emitir o certificado', MOL([
-        'No cartão do pedido, <b>Pegar</b> e <b>Fazer certificado</b>.',
-        'Pedido com O.C. do cliente (PDF): <b>Importar O.C. (PDF)</b>. Informar o <b>Nº do pedido (PV)</b> (vindo da fila, já aparece preenchido): as folhas saem numeradas PV, PV A, PV B… A descrição sai padronizada (produto, medidas, SCH/classe, face ou pontas); a norma e a NACE MR0175 vão em <b>Especificação</b> e o material com o grau completo (ex.: F316/316L) em <b>Material</b>, em amarelo para conferir. O texto completo da O.C. fica em “ver a descrição da O.C.”.',
-        'Usar <b>Puxar dos lotes (AV)</b> e <b>Preencher os itens marcados</b>: descrição, material, corrida e, quando lançados, a química e a mecânica da usina. Os campos preenchidos sozinhos ficam amarelos até serem conferidos.',
-        'Conferir o <b>RIF do pedido</b>.',
-        'Salvar o PDF (ou Excel) e responder <b>Sim, concluir</b> para concluir o pedido na fila. O arquivo sai com o nome <b>CQ + Nº do pedido</b> (ex.: CQ 25940; folhas seguintes CQ 25940A, CQ 25940B…).'
+        'No cartão do pedido, <b>Fazer certificado</b> (abrir um pedido livre já pega o pedido para você). No computador, o certificado abre na <b>aba de certificados</b> (seção abaixo); no celular e no tablet, abre dentro da Central.',
+        'O editor tem em cima o número do certificado e o cliente, e os botões <b>Desfazer</b>, <b>Refazer</b>, <b>Conferir</b>, <b>Salvar PDF e Excel</b> e <b>⋯</b> (mais ações). Embaixo ficam as abas <b>Produtos</b>, <b>Química</b>, <b>Mecânica e ensaios</b>, <b>Tratamento térmico</b> e <b>Textos e anexos</b>. À direita, a <b>Prévia do PDF</b> (atualiza ao digitar) e <b>Esta folha</b> (itens, se cabe em uma A4, lotes ligados, fora da norma).',
+        'Cada aba funciona como planilha: setas, Tab, Enter, Ctrl+C / Ctrl+V com o Excel, Ctrl+D e Ctrl+R repetem, Ctrl+Z / Ctrl+Y desfazem e refazem, o ponto azul arrasta para copiar e o botão direito abre o menu. Digitar numa linha vazia já cria o item.',
+        'Pedido com O.C. do cliente (PDF) ou PV: <b>Importar pedido</b> (aba Produtos) ou <b>⋯</b> › <b>Importar O.C. (PDF)</b> / <b>Importar PV (PDF)</b> / <b>Colar link do Omie</b>. Informar o <b>Nº do pedido (PV)</b> (vindo da fila, já aparece preenchido): as folhas saem numeradas PV, PV A, PV B… A descrição sai padronizada (produto, medidas, SCH/classe, face ou pontas); a norma e a NACE MR0175 vão em <b>Especificação</b> e o material com o grau completo (ex.: F316/316L) em <b>Material</b>, em amarelo para conferir. O texto completo da O.C. fica em “ver a descrição da O.C.”.',
+        '<b>Puxar da corrida</b>: abre a lista dos lotes (AV) do pedido com a situação de cada um; marcar os lotes e confirmar para preencher descrição, material, corrida e, quando lançados, a química e a mecânica da usina. Os campos preenchidos sozinhos ficam amarelos até serem conferidos.',
+        '<b>Química</b> e <b>Mecânica e ensaios</b> mostram a faixa da norma de cada item; o que está fora da norma fica vermelho e aparece o aviso em cima. O CE (IIW) é calculado sozinho para aço carbono (A105, A350 LF2, A106 B, A234 WPB) quando está vazio; se digitar outro valor, vale o digitado.',
+        '<b>Tratamento térmico</b> é preenchido item a item; a Central junta os itens iguais nas 5 linhas da folha (ex.: “1 a 3 · Normalizado”). Com mais de 5 tratamentos diferentes, ela avisa e não grava.',
+        'Conferir o <b>RIF do pedido</b> (<b>⋯</b> › RIF do pedido).',
+        '<b>Conferir</b> mostra o que está certo, o que falta e o que <b>impede</b> a emissão (campo obrigatório em branco ou química/mecânica fora da norma). Para emitir assim, <b>Emitir com justificativa</b>: o motivo fica guardado no certificado.',
+        '<b>Salvar PDF e Excel</b> salva os dois de uma vez (só um deles: <b>⋯</b> › Salvar só o PDF / só o Excel; com os certificados da usina: <b>⋯</b> › PDF com os certificados da usina). A Central pergunta uma vez se o pedido vai para Concluídos. O arquivo sai com o nome <b>CQ + Nº do pedido</b> (ex.: CQ 25940; folhas seguintes CQ 25940A, CQ 25940B…).'
+      ]) + MNOTA('O rascunho de cada pedido é salvo sozinho, no navegador e na Central; voltar ao pedido traz tudo de volta. Se outra pessoa estiver com o pedido, a Central avisa antes de abrir (<b>Abrir mesmo assim</b>): se os dois mexerem ao mesmo tempo, o rascunho de um apaga o do outro.')],
+      ['Aba de certificados (computador)', MUL([
+        'Uma aba só por computador, chamada <b>Certificados · Central</b>. <b>Fazer certificado</b> na fila abre a aba com o pedido; se ela já estiver aberta, o pedido entra nela e a Central mostra “Pedido … foi para a aba de certificados · <b>Ir para a aba</b>”. Se o navegador não trouxer a aba para a frente, clicar nela na barra de abas.',
+        'Na fila da Central, o pedido aberto na aba fica com o selo <b>NA ABA DE CERTIFICADOS</b> e o botão <b>Ir para a aba</b>. Certificado aberto dentro da Central tem o botão <b>⧉ Abrir em outra aba</b>.',
+        'Em cima: CENTRAL DA QUALIDADE · Certificados, PV, NF, cliente, <b>Ver a Central ↗</b> e <b>Fechar aba</b> (avisa se tiver algo sem salvar).',
+        'À esquerda, a <b>FILA</b>: busca, Todos / Livres / Meus / ★, <b>Em andamento</b> (pedidos abertos na aba, com rascunho ou salvo; o × tira da lista) e <b>Na fila</b> na mesma ordem e com os mesmos selos da Central. Pedido que outra pessoa já pegou não aparece na fila da aba (na Central continua aparecendo, com o nome de quem pegou). Um clique troca de pedido, guardando o rascunho do anterior.',
+        '<b>«</b> recolhe a fila numa coluna só com os números (crítico escuro, bolinha vermelha = atrasado); <b>»</b> abre de novo. A escolha fica lembrada.'
       ])],
       ['Bloqueios e justificativas', MUL(['Lote reprovado, com NCF aberta, em contenção, com destino registrado ou em análise: o certificado só segue com justificativa (mínimo 10 caracteres).', 'Item usinado do pedido sem RIF aprovado: justificativa obrigatória.', 'Lote liberado sob concessão, sem resultado de inspeção ou sem certificado do fornecedor: só aviso.'])],
       ['Pendências', MP('No menu do cartão (⋯): <b>Registrar pendência</b> (motivo, nº da OC, justificativa), <b>Pendência resolvida</b>, <b>Passar para outra pessoa</b>, <b>Marcar como concluído (feito fora da Central)</b> e <b>Não precisa de certificado</b>. O prazo padrão é 2 dias úteis.')],
@@ -18849,7 +18928,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         <div class="thtasks" style="--n:${T.length}">${T.map(([v, n, t, d, b, c, act]) => `<div class="thtask" style="--k:${c}"><span class="n">${n == null ? '…' : NF.format(n)}</span><b>${esc(t)}</b><span>${esc(d)}</span><button type="button" class="btn big" data-act="${act || 'th-go'}" data-key="${v}">${esc(b)}</button></div>`).join('')}</div>
         ${filaHTML}</div>
         <div class="ths">${andHTML}${diaHTML}</div></div>
-      <div class="tbf"><span class="tbnet${off ? ' off' : ''}"><i></i>Última sincronização ${hhmm(off ? (TBN.off || DB.last || Date.now()) : (DB.last || Date.now()))}</span><span class="grow"></span><button type="button" class="btn big" data-act="th-minhas">Minhas inspeções</button><button type="button" class="btn dk big" data-act="th-qr">▣&nbsp; Ler QR de etiqueta</button></div></div>`;
+      <div class="tbf"><span class="tbnet${off ? ' off' : ''}"><i></i>Última sincronização ${hhmm(off ? (TBN.off || DB.last || Date.now()) : (DB.last || Date.now()))}${window.CQ_V ? ` · v${window.CQ_V}` : ''}</span><span class="grow"></span><button type="button" class="btn big" data-act="th-minhas">Minhas inspeções</button><button type="button" class="btn dk big" data-act="th-qr">▣&nbsp; Ler QR de etiqueta</button></div></div>`;
   };
   /* abre a ferramenta já no que foi tocado */
   function thAbrir(k) {
@@ -18969,7 +19048,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const h = TB.step === 0 ? tbHome() : TB.step === 1 ? tbS1() : TB.step === 2 ? tbS2() : TB.step === 3 ? tbS3() : tbDone();
     const tbl = TB.d ? tbLots(TB.d) : [];
     const passo = TB.step >= 1 && TB.step <= 3;
-    main.innerHTML = `<div class="tbw ncft">${tbHead('Não conformidade · NCF', TB.step === 0 ? 'Lotes reprovados e suas NCFs' : TB.step === 4 ? 'NCF enviada' : tbl.length ? 'Nova NCF do lote ' + tbl.map((a) => a.id).join(', ') : 'Nova NCF')}${passo ? `<div class="tbb ncx"><aside class="ncside">${tbStepsV(TB.step)}${tbLotBox()}</aside><section class="ncmain ncp${TB.step}">${h.body}</section></div>` : `<div class="tbb">${h.body}</div>`}<div class="tbf">${h.foot}</div></div>`;
+    main.innerHTML = `<div class="tbw ncft">${tbHead('Não conformidade · NCF', TB.step === 0 ? 'Lotes reprovados e suas NCFs' : TB.step === 4 ? 'NCF enviada' : tbl.length ? 'Nova NCF do lote ' + tbl.map((a) => a.id).join(', ') : 'Nova NCF')}${passo ? `<div class="tbb ncx"><aside class="ncside"><button type="button" class="tbsmin" data-act="tb-mini" aria-label="Recolher ou abrir o painel do lado" title="Recolher ou abrir o painel"><span class="a">«</span><span class="b">»</span></button>${tbStepsV(TB.step)}${tbLotBox()}</aside><section class="ncmain ncp${TB.step}">${h.body}</section></div>` : `<div class="tbb">${h.body}</div>`}<div class="tbf">${h.foot}</div></div>`;
     if (h.wire) h.wire();
     if (TB.step === 0) { const ids = uniq(pendLots().map((a) => lotMeta(a)._ub || lotMeta(a)._cb).filter((i) => i && !DB.names[i] && !TB.asked.has(i))); if (ids.length) { ids.forEach((i) => TB.asked.add(i)); resolveNames(ids).then(() => { if (S.view === 'rnctab' && TB.step === 0) render(); }).catch(() => {}); } }
   };
@@ -19144,6 +19223,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'tb-sair' && S.view === 'riftab') { rtSalvaAntes().catch(() => {}).then(() => { RFI.ed = null; RT.pk = RT.it = RT.rel = null; RT.step = 0; go('rif'); }); return true; }
     if (a === 'tb-sair' && S.view === 'rirtab') { if (!tbOnly()) { if (RI.saveT) riGravar().catch(() => {}); RI.ed = null; RI.sub = 'ag'; go('rir'); } return true; }
     if (a === 'tb-sair') { if (!tbOnly()) go(S.view === 'tabhome' ? 'painel' : cw('rnc') ? 'rnc' : 'painel'); return true; }
+    if (a === 'tb-mini') { const on = !document.body.classList.contains('tbmini'); document.body.classList.toggle('tbmini', on); lsSet('cq-tb-mini', on ? '1' : ''); return true; }
     if (a === 'tb-trocar') { if (viewOk('tabhome') && S.view !== 'tabhome') { if (S.view === 'riftab') rtSalvaAntes().catch(() => {}); if (S.view === 'rirtab' && RI.saveT) riGravar().catch(() => {}); go('tabhome'); } else tbTrocar(); return true; }
     if (a === 'tb-tema') { lsSet('cq-tab-tema', key === 'escuro' ? 'escuro' : 'claro'); applyTheme(); $$('[data-act="tb-tema"]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.key === tabTema()))); return true; }
     if (a === 'tb-conta') { tbConta(); return true; }
