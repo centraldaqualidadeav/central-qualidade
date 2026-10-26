@@ -1981,6 +1981,13 @@ button.rglot { cursor: pointer; } button.rglot:focus-visible { outline: 3px soli
 .rgr.rgh { border-top: 0; background: var(--surface-2); padding-top: 12px; padding-bottom: 12px; }
 .rgr.rgh .rgi b { font: 600 15px var(--f-body); color: var(--ink-2); } .rgr.rgh .rgcs b { text-align: center; font: 600 15px var(--f-mono); color: var(--ink); }
 .rgi b { display: block; font: 500 16.5px/1.3 var(--f-body); } .rgi small { display: block; font: 400 13.5px var(--f-body); color: var(--ink-3); margin-top: 2px; }
+.rgs { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.rgmais { min-height: 48px; font: 600 15px var(--f-body); color: var(--rir); border-color: color-mix(in srgb, var(--rir) 45%, var(--line)); }
+.rgmdel { all: unset; cursor: pointer; display: inline-flex; align-items: center; min-height: 48px; padding: 0 6px; font: 500 13px var(--f-body); color: var(--crit); text-decoration: underline; margin-left: 4px; }
+.field .avest { display: flex; align-items: center; gap: 8px; min-height: 36px; margin-top: 4px; font: 500 13.5px var(--f-body); color: var(--ink-2); cursor: pointer; }
+.field .avest input { width: 20px; height: 20px; margin: 0; flex: none; }
+.rimls { display: flex; flex-wrap: wrap; gap: 6px 16px; } .rimls .check { white-space: nowrap; min-height: 44px; display: inline-flex; align-items: center; gap: 8px; }
+.rih3 { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .rgs { padding: 10px 18px 8px; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--rir) 6%, var(--surface)); font: 700 18px var(--f-display); color: var(--rir); }
 .rgcs { display: grid; grid-template-columns: repeat(var(--c, 1), 170px); gap: 10px; }
 .rgcs.nf > * { grid-column: 1 / -1; }
@@ -5460,7 +5467,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 48; window.CQ_V = APP_V;
+    const APP_V = 49; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -6025,6 +6032,19 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   function chipInsp(v) { const m = { aprovado: ['ok', '✓', 'Aprovado'], reprovado: ['crit', '✕', 'Reprovado'], 'em análise': ['warn', '!', 'Em análise'], 'em analise': ['warn', '!', 'Em análise'], 'liberado sob concessão': ['warn', '!', CONC] }[String(v || '').trim().toLowerCase()]; return m ? `<span class="chip ${m[0]}"><i>${m[1]}</i>${m[2]}</span>` : '<span class="muted">—</span>'; }
   function chipRes(r) { return r === 'REPROVADO' ? '<span class="chip crit"><i>✕</i>Reprovado</span>' : r === 'APROVADO' ? '<span class="chip ok"><i>✓</i>Aprovado</span>' : r === 'AGUARDANDO ANÁLISE' ? '<span class="chip warn"><i>!</i>Aguardando análise</span>' : r === 'SEM CRITÉRIO' ? '<span class="chip warn"><i>!</i>Sem EMA</span>' : ''; }
+  /* v49: quem lançou o lote (login de quem gravou); os nomes vêm do cadastro e são buscados uma vez */
+  let avQuemPed = false;
+  function avQuemLancou(x) {
+    const id = ((DB.meta.AV || {})[x.key] || {})._cb; if (!id) return '';
+    if (!(id in DB.names) && !avQuemPed) { avQuemPed = true; const ids = uniq(Object.values(DB.meta.AV || {}).map((m) => m && m._cb).filter((i) => i && !(i in DB.names))); resolveNames(ids).then(() => { if (S.view === 'painel' || S.view === 'av') render(); }).catch(() => {}); }
+    return DB.names[id] || '';
+  }
+  /* v49: inspetor do lote = quem fez o RIR (antes a página do lote mostrava o "Conferido por") */
+  function avInspetor(x) {
+    const ie = lotSt(x).insp; if (!ie) return '';
+    const c = ie.rid && typeof riCards === 'function' ? riCards().find((r) => r.id === ie.rid) : null;
+    return (c && c.nome) || (ie.by && DB.names[ie.by]) || '';
+  }
   function countBy(arr, fn) {
     const m = new Map();
     arr.forEach((x) => {
@@ -7101,7 +7121,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const link = /^https?:\/\//i.test(x.certLink || '') ? ` <a class="btn small" href="${esc(x.certLink)}" target="_blank" rel="noopener noreferrer">Abrir certificado ↗</a>` : (x.certLink ? ` <span class="muted">${t(x.certLink)}</span>` : '');
       const LR = lotRncs(x);
       pairs = [['ID', `<span class="mono">${esc(x.id)}</span>`], ['Resultado da inspeção', chipInsp(x.insp) + lockChip(x)], motRepOf(x) ? ['Motivo da reprovação', esc(motRepOf(x))] : null, lotSt(x).insp ? ['Inspeção de recebimento', `<button class="btn small ghost mono" type="button" data-open="RIR:${esc(lotSt(x).insp.rid || '')}">${esc(lotSt(x).insp.rir || 'RIR')}</button> <span class="muted">${esc(dmy(lotSt(x).insp.at))}</span>`] : (rirOn() && !E.filled(x.insp) ? ['Inspeção de recebimento', '<span class="chip warn"><i>…</i>aguardando RIR</span>'] : null), LR.length ? ['NCF deste lote', LR.map((o) => `<button class="btn small ghost" type="button" data-open="${o.rec.mod}:${esc(o.rec.key)}"><span class="mono">${esc(o.rec.num)}</span></button> ${chipRnc(o.rec.status)}`).join('<br>')] : null, ['Data de entrada', fD(x.data)], ['Filial', t(x.filial)], ['Corrida', `<span class="mono">${t(x.corrida)}</span>`], E.filled(x.volume) && !E.isStar(x.volume) ? ['Volume', `<span class="mono">${t(x.volume)}</span>`] : null, ['Descrição', t(x.desc)],
-        ['Quantidade', x.quant == null || x.quant === '' ? '' : t(x.quant) + (x.und ? ' ' + t(x.und) : '')], ['Diâmetro', t(x.diam)], ['Espessura', t(x.esp)], ['Liga/Tipo', t(x.liga)], ['Material', t(x.norma)], ['Fornecedor', t(x.forn)], ['Nota fiscal', t(x.nf)], ['Pedido de compra', t(x.pc)], ['Pedido de venda', t(x.pv)], ['Certificado', (semCert(x) ? '<span class="chip warn"><i>!</i>sem certificado</span>' : t(x.cert)) + link], ['Conferido', t(x.conf)], ['Retrabalho', t(x.retrab)]];
+        ['Quantidade', x.quant == null || x.quant === '' ? '' : t(x.quant) + (x.und ? ' ' + t(x.und) : '')], ['Diâmetro', t(x.diam)], ['Espessura', t(x.esp)], ['Liga/Tipo', t(x.liga)], ['Material', t(x.norma)], ['Fornecedor', t(x.forn)], ['Nota fiscal', t(x.nf)], ['Ordem de compra', t(x.pc)], ['Pedido de venda', t(x.pv)], ['Certificado', (semCert(x) ? '<span class="chip warn"><i>!</i>sem certificado</span>' : t(x.cert)) + link], ['Conferido', t(x.conf)], ['Retrabalho', t(x.retrab)]];
       acts = (rirOn() && cw('rir') && !E.filled(x.insp) && !lotSt(x).insp ? `<button class="btn primary" type="button" data-act="ri-lote" data-key="${esc(key)}">${riCards().some((c) => c.st === 'r' && (c.lotes || []).includes(key)) ? 'Continuar RIR' : 'Fazer RIR'}</button>` : '') + (cw(MOD[mod].col) ? `<button class="btn" type="button" data-act="av-similar" data-key="${esc(key)}">Lançar parecido</button>` : '') + `<button class="btn" type="button" data-act="av-label" data-key="${esc(key)}">Etiqueta</button>`
         + (cw('rnc') && lotSt(x).st === 'pend' ? `<button class="btn tcrit" type="button" data-act="av-to-rncf" data-key="${esc(key)}">Abrir NCF</button><button class="btn" type="button" data-act="av-conc" data-key="${esc(key)}">Liberar sob concessão</button><button class="btn ghost" type="button" data-act="av-lib" data-key="${esc(key)}">Desbloquear (erro)</button>` : '')
         + (cw('rnc') && lotSt(x).st === 'rnc' ? `<button class="btn" type="button" data-act="av-dest" data-key="${esc(key)}">Registrar destino</button>` : '')
@@ -7490,7 +7510,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         <div class="charts">
           <div class="chart"><h3>${S.avSerie === 'notas' ? 'Notas fiscais recebidas por mês' : 'Lotes recebidos por mês'}<small>últimos 12 meses</small><span class="seg mini" role="group" aria-label="Mostrar"><button type="button" data-act="av-serie" data-key="lotes" aria-pressed="${S.avSerie !== 'notas'}">Lotes</button><button type="button" data-act="av-serie" data-key="notas" aria-pressed="${S.avSerie === 'notas'}">Notas</button></span></h3>${colsHTML(S.avSerie === 'notas' ? mb12.map((m) => ({ label: m.label, tip: MESES_L[m.m - 1] + ' ' + m.y + ' · notas', value: nNotas(M.av.filter((x) => inRange(x.data, m.start, m.end))) })) : ser(M.av, mb12), MOD.AV.c)}</div>
           ${chartHTML('Top 10 fornecedores', barsHTML(countBy(M.av, (x) => x.forn).map((i) => ({ ...i, go: { v: 'av', f: { forn: i.label } } })), MOD.AV.c, { max: 10 }), 'nº de lotes')}
-          ${chartHTML('Lotes por conferente', barsHTML(countBy(M.av, (x) => x.conf).map((i) => ({ ...i, go: { v: 'av', f: { conf: i.label } } })), MOD.AV.c, { max: 10 }))}
+          ${chartHTML('Lotes por quem lançou', barsHTML(countBy(M.av, avQuemLancou), MOD.AV.c, { max: 10 }))}
           ${chartHTML('Lotes por filial', barsHTML(countBy(M.av, (x) => x.filial).map((i) => ({ ...i, go: { v: 'av', f: { filial: i.label } } })), MOD.AV.c))}
           ${chartHTML('Aprovação na inspeção por fornecedor', aprovForn.length ? barsHTML(aprovForn, MOD.AV.c, { suf: '%' }) : '<div class="empty">Ainda não há lotes com resultado de inspeção.</div>', 'piores primeiro · fornecedores com 3 ou mais lotes inspecionados')}
         </div></div></div></section>
@@ -8504,10 +8524,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     openModal(`Baixa do certificado · NF ${g.nf}`, `<p style="margin:0">${esc(g.forn)} — marque os lotes que chegaram com este certificado.</p>
       <div style="display:grid;gap:4px;max-height:220px;overflow:auto">${g.items.map((x) => `<label class="check"><input type="checkbox" class="bx-it" value="${esc(x.key)}" checked> <span class="mono">${esc(x.id)}</span> · ${esc(x.desc || '')}${E.filled(x.corrida) && !E.isStar(x.corrida) ? ' · corrida ' + esc(x.corrida) : ''}</label>`).join('')}</div>
       <label class="field"><span>Nº do certificado <b>*</b></span><input id="bx-cert" autocomplete="off"></label>
-      <label class="field"><span>Link do certificado (opcional)</span><input id="bx-link" placeholder="https://drive.google.com/…" autocomplete="off"></label>
       <div class="formfoot"><button class="btn primary" type="button" id="bx-ok">Dar baixa</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
     $('#bx-ok').onclick = async () => {
-      const cert = $('#bx-cert').value.trim(), link = $('#bx-link').value.trim(), keys = $$('.bx-it').filter((c) => c.checked).map((c) => c.value);
+      const cert = $('#bx-cert').value.trim(), link = '', keys = $$('.bx-it').filter((c) => c.checked).map((c) => c.value);
       if (!cert) { toast('Informe o número do certificado.', true); $('#bx-cert').focus(); return; }
       if (!keys.length) { toast('Marque pelo menos um lote.', true); return; }
       const b = $('#bx-ok'); b.disabled = true; b.textContent = 'Gravando…';
@@ -8832,7 +8851,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const s = (v) => (v == null || v === '' || E.isStar(v) ? '' : String(v).trim());
     const nc = lotNC(x);
     const o = { id: s(x.id), desc: s(x.desc), material: s(x.norma), diam: s(x.diam), esp: s(x.esp), liga: s(x.liga), corrida: s(x.corrida), volume: s(x.volume),
-      quant: x.quant == null || x.quant === '' ? '' : String(x.quant) + (x.und ? ' ' + x.und : ''), insp: s(x.insp), conf: s(x.conf), recebido: x.data != null ? fD(x.data) : '', filial: s(x.filial),
+      quant: x.quant == null || x.quant === '' ? '' : String(x.quant) + (x.und ? ' ' + x.und : ''), insp: s(lotSt(x).insp ? lotSt(x).insp.res : x.insp), conf: s(avInspetor(x)), recebido: x.data != null ? fD(x.data) : '', filial: s(x.filial),
       nf: s(x.nf), pc: s(x.pc), pv: s(x.pv), rnc: nc ? '1' : '', at: Date.now() };
     if (nc) o.forn = s(x.forn); /* o fornecedor só vai para a página de lote com NCF */
     const ds = lotSt(x).dest; if (ds && DEST[ds.dest]) o.dest = DEST[ds.dest][0] + (ds.data != null ? ' em ' + fD(ds.data) : '');
@@ -9078,8 +9097,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       { k: 'id', l: 'ID', cls: 'mono', s: (x) => keyNum(x.key), w: 12, f: (x) => esc(x.id) + (lotRncAberta(x) ? ' <span class="chip warn lrnc" title="Lote com NCF aberta"><i>!</i>NCF</span>' : '') },
       { k: 'data', l: 'Entrada', f: (x) => fD(x.data), x: (x) => dateCell(x.data), w: 11 }, { k: 'filial', l: 'Filial', cls: 'clip', w: 20 },
       { k: 'corrida', l: 'Corrida', cls: 'mono' }, { k: 'desc', l: 'Descrição', cls: 'clip', w: 26 }, { k: 'diam', l: 'Diâm.', cls: 'nw' }, { k: 'esp', l: 'Esp.', cls: 'nw' }, { k: 'liga', l: 'Liga/Tipo', cls: 'nw' }, { k: 'norma', l: 'Material', cls: 'nw' }, { k: 'quant', l: 'Qtd', r: 1, cls: 'nw', f: (x) => (x.quant == null || x.quant === '' ? '' : esc(disp(x.quant)) + (x.und ? ' <span class="muted">' + esc(x.und) + '</span>' : '')), x: (x) => (x.quant == null ? '' : disp(x.quant) + (x.und ? ' ' + x.und : '')) },
-      { k: 'forn', l: 'Fornecedor', cls: 'clip', w: 24 }, { k: 'nf', l: 'NF', cls: 'mono' }, { k: 'pc', l: 'Ped. compra', cls: 'mono' }, { k: 'pv', l: 'Ped. venda', cls: 'mono' },
-      { k: 'cert', l: 'Certificado', f: (x) => semCert(x) ? '<span class="chip warn"><i>!</i>sem</span>' : esc(disp(x.cert)), x: (x) => disp(x.cert) }, { k: 'conf', l: 'Conferido', cls: 'clip', w: 20 }, { k: 'retrab', l: 'Retrab.' }, { k: 'insp', l: 'Inspeção', f: (x) => chipInsp(x.insp) + (lotSt(x).st === 'pend' ? ' <span class="chip crit" title="Bloqueado: aguardando decisão da NCF">🔒</span>' : ''), x: (x) => x.insp || '' }],
+      { k: 'forn', l: 'Fornecedor', cls: 'clip', w: 24 }, { k: 'nf', l: 'NF', cls: 'mono' }, { k: 'pc', l: 'Ord. compra', cls: 'mono' }, { k: 'pv', l: 'Ped. venda', cls: 'mono' },
+      { k: 'cert', l: 'Certificado', f: (x) => semCert(x) ? '<span class="chip warn"><i>!</i>sem</span>' : esc(disp(x.cert)), x: (x) => disp(x.cert) }, { k: 'retrab', l: 'Retrab.' }, { k: 'insp', l: 'Inspeção', f: (x) => chipInsp(x.insp) + (lotSt(x).st === 'pend' ? ' <span class="chip crit" title="Bloqueado: aguardando decisão da NCF">🔒</span>' : ''), x: (x) => x.insp || '' }],
     SERV: [
       { k: 'sv', l: 'Nº', cls: 'mono', s: (x) => keyNum(x.key), w: 9 }, { k: 'data', l: 'Data', f: (x) => fD(x.data), x: (x) => dateCell(x.data), w: 11 }, { k: 'desc', l: 'Descrição', cls: 'clip', w: 26 }, { k: 'nf', l: 'NF', cls: 'mono' }, { k: 'forn', l: 'Fornecedor', cls: 'clip', w: 24 },
       { k: 'pc', l: 'Ped. compra', cls: 'mono' }, { k: 'pv', l: 'Ped. venda', cls: 'mono' }, { k: 'cert', l: 'Certificado', f: (x) => semCert(x) ? '<span class="chip warn"><i>!</i>sem</span>' : esc(disp(x.cert)), x: (x) => disp(x.cert) }],
@@ -9132,7 +9151,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   VIEWS.av = (main) => {
     const M = S.model, f = S.f.av || (S.f.av = {});
     main.innerHTML = `<div class="view">${head('Lotes (AV)', 'Controle de lotes recebidos. O número AV-AA-NNNNN é gerado na hora do lançamento: AA é o ano e NNNNN a sequência, que continua na virada do ano.', '<button class="btn" type="button" data-go=\'{"v":"certcobra"}\'>Cobrar certificados</button>' + newBtn('av', 'Novo lote', 1))}
-      <div class="filters">${ftext('fa-q', 'Buscar', f.q, 'ID, corrida, NF, pedido, descrição…', 1)}${fsel('fa-filial', 'Filial', distinct(M.av, (x) => x.filial), f.filial)}${ftext('fa-forn', 'Fornecedor', f.forn, 'nome do fornecedor')}${fsel('fa-conf', 'Conferido por', distinct(M.av, (x) => x.conf), f.conf)}
+      <div class="filters">${ftext('fa-q', 'Buscar', f.q, 'ID, corrida, NF, pedido, descrição…', 1)}${fsel('fa-filial', 'Filial', distinct(M.av, (x) => x.filial), f.filial)}${ftext('fa-forn', 'Fornecedor', f.forn, 'nome do fornecedor')}
       ${fdate('fa-de', 'Entrada de', f.de)}${fdate('fa-ate', 'até', f.ate)}<label class="field"><span>Certificado</span><select id="fa-cert"><option value="">Todos</option><option value="com" ${f.cert === 'com' ? 'selected' : ''}>Com certificado</option><option value="sem" ${f.cert === 'sem' ? 'selected' : ''}>Sem certificado</option></select></label>${fsel('fa-retrab', 'Retrabalho', distinct(M.av, (x) => x.retrab), f.retrab)}${fsel('fa-insp', 'Inspeção', ['Aprovado', 'Reprovado', 'Em análise', CONC, 'Sem registro'], f.insp)}<button class="btn ghost" type="button" id="f-clear">Limpar filtros</button></div>
       <div id="tbl"></div></div>`;
     const draw = () => {
@@ -10086,15 +10105,16 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       { c: 'B', l: 'Data de entrada', type: 'date', req: 1, def: () => E.isoDate(S.today) },
       { c: 'C', l: 'Filial', type: 'select', opts: () => cfgL('AV_FILIAIS'), req: 1 },
       { c: 'K', l: 'Fornecedor', type: 'list', opts: fornList, req: 1, w: 's2' },
-      { c: 'L', l: 'Nota fiscal', type: 'text', store: 'auto', req: 1 }, { c: 'M', l: 'Pedido de compra', type: 'text', store: 'auto' }, { c: 'N', l: 'Pedido(s) de venda', type: 'text', store: 'text', ph: 'ex.: 12345 ou 12345, 12346', help: 'Se o material atende mais de um pedido, separe por vírgula. A Central liga o lote a cada pedido (certificado, RIF, NCC).' },
-      { c: 'P', l: 'Conferido por', type: 'select', opts: () => cfgL('AV_CONFERENTES'), req: 1 }] }),
+      { c: 'L', l: 'Nota fiscal', type: 'text', store: 'auto', req: 1 }, { c: 'M', l: 'Ordem de compra', type: 'text', store: 'auto', reqNovo: 1 }, { c: 'N', l: 'Pedido(s) de venda', type: 'text', store: 'text', reqNovo: 1, estoque: 1, ph: 'ex.: 12345 ou 12345, 12346', help: 'Mais de um pedido: separe por vírgula. A Central liga o lote a cada pedido (certificado, RIF, NCC).' }] }),
+    /* v49: "Conferido por" saiu do lançamento (quem lança fica registrado pelo login: "Lançado por" na ficha);
+       os lotes antigos continuam com o nome gravado. Ordem de compra, pedido de venda (ou Estoque) e quantidade são obrigatórios só no lote novo. */
     avMat: () => ({ t: 'Material', f: [
       { c: 'F', l: 'Descrição', type: 'list', opts: lst('AV_DESCRICOES', 'AV', 'desc'), req: 1, w: 's2' },
       { c: 'E', l: 'Corrida', type: 'text', store: 'auto', help: 'Use * quando não houver.' }, { c: 'D', l: 'Volume', type: 'text', store: 'auto', reveal: '+ informar volume', help: 'Número do volume da usina (chapas).' },
-      { c: 'R', l: 'Quantidade', type: 'text', store: 'num', ph: 'opcional' }, { c: 'S', l: 'Unidade', type: 'select', opts: () => cfgL('AV_UNIDADES') },
+      { c: 'R', l: 'Quantidade', type: 'text', store: 'num', reqNovo: 1 }, { c: 'S', l: 'Unidade', type: 'select', opts: () => cfgL('AV_UNIDADES'), reqNovo: 1 },
       { c: 'G', l: 'Diâmetro', type: 'list', opts: lst('AV_DIAMETROS', 'AV', 'diam'), dim: 1, help: 'Duas medidas? Toque em + (fica 2500 x 1500).' }, { c: 'H', l: 'Espessura', type: 'list', opts: lst('AV_ESPESSURAS', 'AV', 'esp') },
       { c: 'I', l: 'Liga/Tipo', type: 'list', opts: lst('AV_LIGAS', 'AV', 'liga') }, { c: 'J', l: 'Material', type: 'list', opts: lst('AV_NORMAS', 'AV', 'norma') },
-      { c: 'O', l: 'Certificado', type: 'text', store: 'auto', help: '* = sem certificado' }, { c: 'T', l: 'Link do certificado', type: 'text', store: 'text', ph: 'https://drive.google.com/…', w: 's2' },
+      { c: 'O', l: 'Certificado', type: 'text', store: 'auto', help: '* = sem certificado' },
       { c: 'Q', l: 'Retrabalho', type: 'select', opts: () => cfgL('AV_RETRABALHO') }, { c: 'U', l: 'Resultado da inspeção', type: 'select', opts: () => cfgL('AV_INSPECAO').filter((v) => v !== CONC), def: () => 'Aprovado', help: 'Lote reprovado fica bloqueado: quem decide (NCF, concessão ou desbloqueio) é a pessoa da NCF.' },
       { c: 'V', l: 'Motivo da reprovação', type: 'text', w: 's2', ph: 'o que foi encontrado (obrigatório quando reprovado)' }] }),
     serv: () => ({ t: 'Serviço', f: [
@@ -10175,7 +10195,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   };
   const FORMS = {
     rncc: { t: 'Nova NCC', et: 'Editar NCC', mod: 'RNCC', btn: 'Abrir NCC', secs: () => [SEC.rnccAb(), SEC.rnccRast(), SEC.rnccRecl(1), SEC.rnccCont()], editSecs: () => [SEC.rnccAb(), SEC.rnccRast(), SEC.rnccRecl(0), SEC.rnccHi(), SEC.rnccEnc()], label: (v, k) => `${k} · ${v.E || 'cliente'}` },
-    av: { t: 'Novo lote (AV)', et: 'Editar lote', mod: 'AV', btn: 'Gravar lote', secs: () => [SEC.avNota(), SEC.avMat()], keep: 'BCKLMP', label: (v, k) => `Lote ${k} · ${v.F || ''} · NF ${v.L || ''}` },
+    av: { t: 'Novo lote (AV)', et: 'Editar lote', mod: 'AV', btn: 'Gravar lote', secs: () => [SEC.avNota(), SEC.avMat()], keep: 'BCKLMN', label: (v, k) => `Lote ${k} · ${v.F || ''} · NF ${v.L || ''}` },
     serv: { t: 'Novo serviço', et: 'Editar serviço', mod: 'SERV', btn: 'Gravar serviço', secs: () => [SEC.serv()], keep: 'A', label: (v, k, rec) => `${rec ? rec.sv || 'Serviço' : svOf(k) || 'Serviço'} · ${v.B || ''} · NF ${v.C || ''}` },
     rnc: { t: 'Nova NCF', et: 'Editar NCF', mod: 'RNC', btn: 'Abrir NCF', secs: () => [SEC.rncAb(), SEC.rncId(1), SEC.rncEm(), SEC.rncHi('Informações complementares')], editSecs: () => [SEC.rncAb(), SEC.rncId(0), SEC.rncAn(), SEC.rncFe(), SEC.rncEm(), SEC.rncHi()], label: (v, k) => `${k} · ${v.G || 'sem fornecedor'}` },
     cal: { t: 'Registrar calibração', mod: 'INS', btn: 'Registrar calibração', pick: 'INS', fresh: { E: () => E.isoDate(S.today), D: () => '', Q: () => '', Y: () => '', AA: () => '', M: () => '' }, secs: () => [SEC.insCal(1)], label: (v, k, rec) => `Calibração ${rec ? rec.codigo : ''} em ${v.E ? E.fmtDate(E.fromIso(v.E)) : ''}` },
@@ -10261,7 +10281,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     });
   }
   /* ---------- AV: vários lotes de uma nota fiscal ---------- */
-  const AVM_ITEM = () => SEC.avMat().f.filter((f) => !rirOn() || (f.c !== 'U' && f.c !== 'V'));
+  const reqNovo = (L) => L.map((f) => (f.reqNovo ? Object.assign({}, f, { req: 1 }) : f));   /* v49: obrigatório só no lote novo */
+  const AVM_ITEM = () => reqNovo(SEC.avMat().f.filter((f) => !rirOn() || (f.c !== 'U' && f.c !== 'V')));
+  const AV_ESTOQUE = 'Estoque';
   const avmBlank = () => (rirOn() ? {} : { U: 'Aprovado' });
   function avmDupes(nota, items) {
     const out = [], seen = new Map();
@@ -10461,7 +10483,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function renderAvMulti(main) {
     const st = S.avm || (S.avm = { items: [avmBlank()], last: null });
     if (S.avmPrefill) { const pf = S.avmPrefill; S.avmPrefill = null; st.items = pf.items.map((x) => Object.assign({}, x)); st.nota = pf.nota; st.last = null; }
-    const nota = SEC.avNota(), itf = AVM_ITEM();
+    const nota0 = SEC.avNota(), nota = Object.assign({}, nota0, { f: reqNovo(nota0.f) }), itf = AVM_ITEM();
     const dl = itf.filter((f) => f.type === 'list').map((f) => `<datalist id="dl-avm-${f.c}">${optList(f.opts())}</datalist>`).join('');
     const itField = (f, i) => {
       const id = `it${i}-${f.c}`, req = f.req ? ' <b>*</b>' : '';
@@ -10487,6 +10509,15 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       </div></div></section></div>`;
     { const bk0 = $('#avm-back', main); if (bk0) bk0.onclick = () => go('av'); }
     nota.f.forEach((f) => { const el = $(`#ff-${f.c}`); if (el) el.value = st.nota && st.nota[f.c] != null ? st.nota[f.c] : (f.def ? f.def() : ''); });
+    { /* v49: Estoque (sem pedido de venda): o campo continua obrigatório, mas aceita "Estoque" */
+      const pvI = $('#ff-N'), lab = pvI && pvI.closest('.field');
+      if (lab) {
+        pvI.insertAdjacentHTML('afterend', `<label class="check avest"><input type="checkbox" id="ff-N-est"> Estoque (sem pedido de venda)</label>`);
+        const cb = $('#ff-N-est'), apl = () => { pvI.readOnly = cb.checked; if (cb.checked) pvI.value = AV_ESTOQUE; else if (pvI.value === AV_ESTOQUE) pvI.value = ''; };
+        cb.checked = E.low(pvI.value) === E.low(AV_ESTOQUE); apl();
+        cb.onchange = () => { apl(); pvI.dispatchEvent(new Event('input', { bubbles: true })); if (!cb.checked) pvI.focus(); };
+      }
+    }
     const box = $('#avm-items');
     const readItems = () => $$('.avitem', box).map((el) => { const o = {}; $$('[data-ic]', el).forEach((c) => { o[c.dataset.ic] = c.value.trim(); }); return o; });
     const readNota = () => { const o = {}; nota.f.forEach((f) => { const el = $(`#ff-${f.c}`); o[f.c] = el ? el.value.trim() : ''; }); return o; };
@@ -13888,13 +13919,25 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     return L.sort((a, b) => (b.at || 0) - (a.at || 0));
   }
   /* notas com lotes ainda sem resultado de inspeção (e fora de um RIR em andamento) */
+  /* v49: a nota fica com o inspetor que tocou em "Inspecionar esta nota" (o rascunho do RIR guarda by/nome).
+     Lote lançado depois para uma nota que já está em inspeção não abre nota nova: aparece dentro do RIR aberto. */
+  const riNotaK = (x) => (lotEnt(x) || E.key(x.forn)) + '|' + (docN(x.nf) || 'x' + x.key);
+  const riRascK = (c) => (c.fornId || E.key(c.forn || '')) + '|' + (docN(c.nf) || '');
+  const riMeu = (c) => !!c && (c.by === DB.me || (!c.by && E.key(c.nome || '') === E.key(myPessoa() || '')));
+  function riNovosDe(rel) {
+    if (!S.model || !rel || rel.status === 'finalizado' || !docN(rel.nf)) return [];
+    const k = riRascK(rel), outros = new Set(); riCards().filter((c) => c.st === 'r' && c.id !== rel.id).forEach((c) => (c.lotes || []).forEach((l) => outros.add(l)));
+    return S.model.av.filter((x) => !E.filled(x.insp) && !lotSt(x).insp && !(rel.lotes || []).includes(x.key) && !outros.has(x.key) && riNotaK(x) === k);
+  }
   function riPend() {
     if (!S.model) return [];
     const emRasc = new Set(); riCards().filter((c) => c.st === 'r').forEach((c) => (c.lotes || []).forEach((k) => emRasc.add(k)));
+    const rascK = new Set(riCards().filter((c) => c.st === 'r' && docN(c.nf)).map(riRascK));
     const g = new Map();
     S.model.av.forEach((x) => {
       if (E.filled(x.insp) || lotSt(x).insp || emRasc.has(x.key)) return;
-      const k = (lotEnt(x) || E.key(x.forn)) + '|' + (docN(x.nf) || 'x' + x.key);
+      const k = riNotaK(x);
+      if (rascK.has(k)) return;
       if (!g.has(k)) g.set(k, { forn: x.forn || '', nf: x.nf, pc: x.pc, lots: [], data: x.data });
       const o = g.get(k); o.lots.push(x); if (x.data != null && (o.data == null || x.data < o.data)) o.data = x.data;
     });
@@ -13982,11 +14025,63 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const s = await DB.db.doc('rird/' + id).get(); if (!s.exists) { toast('RIR não encontrado.', true); return; }
       const rel = s.data();
       if (!full && rel.status === 'finalizado') { RI.ed = { rel, ro: true, fotos: null }; riFicha(rel); return; }
+      if (rel.status !== 'finalizado' && cw('rir') && !riMeu(rel) && !RI.assumindo) {
+        confirmBox('Nota com outro inspetor', `${rel.nome || 'Outro inspetor'} está inspecionando a NF ${rel.nf || '—'} desde ${dmy(rel.at)} às ${hhmm(rel.at)}. Se você continuar, a nota passa para você (as respostas já dadas ficam no RIR).`, 'Assumir a nota', async () => {
+          try {
+            const nome = myPessoa() || null;
+            rel.by = DB.me || null; rel.nome = nome;
+            await DB.db.doc('rird/' + rel.id).setIf(rel, (cur) => !cur || cur.status !== 'finalizado');
+            await soldWrite('rir/m-' + rel.mes, { items: { [rel.id]: { by: DB.me || null, nome } } });
+            logEntry('RIR', rel.id, 'alterado', `RIR da NF ${rel.nf || '—'} assumido por ${nome || 'outra pessoa'}`, null);
+            RI.assumindo = true; await riAbrir(id, full);
+          } catch (err) { toast('Não foi possível assumir: ' + ((err && (err.message || err.code)) || err), true); } finally { RI.assumindo = false; }
+        });
+        return;
+      }
       RI.ed = { rel, ro: rel.status === 'finalizado' || !cw('rir'), fotos: null }; RI.salvo = 0; RI.sub = 'ed'; RI.tpasso = 1; RI.tlote = 0; closeLayer();
       if (S.view !== 'rir' && S.view !== 'rirtab') go(document.body.classList.contains('tabmode') ? 'rirtab' : 'rir'); else { render(); window.scrollTo(0, 0); }
     } catch (err) { toast('Não foi possível abrir: ' + ((err && (err.message || err.code)) || err), true); }
   }
   function riAgendar() { clearTimeout(RI.saveT); riSalvoTxt('salvando…'); RI.saveT = setTimeout(() => { riGravar().then(() => { RI.falhou = false; }).catch((e) => { RI.falhou = true; if (semNet(e)) { riSalvoTxt('sem internet · grava quando voltar'); return; } riSalvoTxt('não salvo'); toast('Não foi possível salvar o rascunho: ' + ((e && (e.message || e.code)) || e), true); }); }, 800); }
+  /* v49: "+ Medida": medida a mais só neste RIR (ex.: Diâmetro interno, Ovalização), escolhendo os lotes que levam a medida;
+     nos outros lotes ela já fica N/A. O checklist padrão (Configurações › RIR) não muda. */
+  function riMedidaNova(sec) {
+    const ed = RI.ed; if (!ed || ed.ro) return; const rel = ed.rel;
+    const lotId = (k) => ((findRec('AV', k) || {}).id || (rel.ids || [])[rel.lotes.indexOf(k)] || k);
+    openModal('+ Medida · NF ' + (rel.nf || '—'), `<p style="margin:0" class="muted">A medida entra só neste RIR, na parte ${esc(sec)}. Nos lotes não marcados ela fica N/A.</p>
+      <label class="field"><span>Nome da medida <b>*</b></span><input id="rim-n" autocomplete="off" placeholder="ex.: Diâmetro interno (mm), Ovalização (mm)"></label>
+      ${rel.lotes.length > 1 ? `<div class="field"><span>Lotes que levam esta medida</span><div class="rimls">${rel.lotes.map((k) => `<label class="check"><input type="checkbox" class="rim-l" value="${esc(k)}" checked> <span class="mono">${esc(lotId(k))}</span></label>`).join('')}</div></div>` : ''}
+      <div class="formfoot"><button class="btn primary" type="button" id="rim-ok">Adicionar medida</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    const n = $('#rim-n'); if (n) setTimeout(() => n.focus(), 50);
+    $('#rim-ok').onclick = () => {
+      const nome = ($('#rim-n').value || '').trim(); if (!nome) { toast('Escreva o nome da medida.', true); $('#rim-n').focus(); return; }
+      if (rel.itens.some((it) => E.key(it.t) === E.key(nome))) { toast('Este RIR já tem uma medida com esse nome.', true); return; }
+      const marc = $$('.rim-l').length ? $$('.rim-l').filter((c) => c.checked).map((c) => c.value) : rel.lotes.slice();
+      if (!marc.length) { toast('Marque pelo menos um lote.', true); return; }
+      const id = 'x' + Date.now().toString(36), it = { id, sec, t: nome, esc: 'lote', med: true, extra: true };
+      let pos = -1; rel.itens.forEach((o, i) => { if (o.sec === sec) pos = i; });
+      rel.itens.splice(pos + 1, 0, it);
+      rel.ck = rel.ck || {}; rel.ck[id] = {}; rel.lotes.filter((k) => !marc.includes(k)).forEach((k) => { rel.ck[id][k] = { r: 'NA' }; });
+      closeLayer(); riAgendar(); render(); toast('Medida “' + nome + '” adicionada.');
+    };
+  }
+  function riMedidaDel(id) {
+    const ed = RI.ed; if (!ed || ed.ro) return; const rel = ed.rel, it = rel.itens.find((o) => o.id === id && o.extra); if (!it) return;
+    confirmBox('Remover medida', `A medida “${it.t}” e os valores digitados nela saem deste RIR.`, 'Remover', () => {
+      rel.itens = rel.itens.filter((o) => o.id !== id); if (rel.ck) delete rel.ck[id];
+      riAgendar(); render();
+    });
+  }
+  async function riPuxar() {
+    const ed = RI.ed; if (!ed || ed.ro) return; const rel = ed.rel, L = riNovosDe(rel); if (!L.length) return;
+    rel.lotes = (rel.lotes || []).concat(L.map((x) => x.key)); rel.ids = (rel.ids || []).concat(L.map((x) => x.id));
+    try {
+      await riGravar();
+      await soldWrite('rir/m-' + rel.mes, { items: { [rel.id]: { lotes: rel.lotes, ids: rel.ids } } });
+      logEntry('RIR', rel.id, 'alterado', `Lote(s) ${L.map((x) => x.id).join(', ')} puxado(s) para o RIR da NF ${rel.nf || '—'}`, null);
+      toast(`${L.length === 1 ? 'Lote ' + L[0].id + ' entrou' : L.length + ' lotes entraram'} no RIR.`); render();
+    } catch (err) { toast('Não foi possível puxar: ' + ((err && (err.message || err.code)) || err), true); }
+  }
   async function riGravar() {
     clearTimeout(RI.saveT); RI.saveT = null;
     const ed = RI.ed; if (!ed || ed.ro || ed.rel.status === 'finalizado') return;
@@ -14072,10 +14167,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const tab = (k, l) => `<button type="button" data-act="ri-sub" data-key="${k}" aria-pressed="${sub === k}">${l}</button>`;
     const grp = (g, i) => `<div class="ricard"><div class="rih"><b>NF ${esc(disp(g.nf) || '—')}</b>${riSitForn(g.forn)}<span class="muted">${esc(g.forn || 'sem fornecedor')}</span></div>
       <div class="rils">${g.lots.map((x) => `<button type="button" class="lchip" data-open="AV:${esc(x.key)}">${esc(x.id)} <small>${esc(lotTxt(x))}</small></button>`).join('')}</div>
-      <div class="rif"><span class="muted">recebido ${fD(g.data)}</span>${w ? `<button class="btn primary" type="button" data-act="ri-novo" data-key="${i}">Fazer RIR</button>` : ''}</div></div>`;
-    const rasc = (c) => `<div class="ricard em"><div class="rih"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>em andamento</span><span class="muted">${esc(c.forn || '')}</span></div>
+      <div class="rif"><span class="muted">recebido ${fD(g.data)}</span>${w ? `<button class="btn primary" type="button" data-act="ri-novo" data-key="${i}">Inspecionar esta nota</button>` : ''}</div></div>`;
+    const rasc = (c) => `<div class="ricard em"><div class="rih"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>${riMeu(c) ? 'com você' : 'com ' + esc((c.nome || 'outro inspetor').split(' ')[0])}</span><span class="muted">${esc(c.forn || '')}</span></div>
       <div class="rils">${(c.ids || []).map((id) => `<span class="lchip">${esc(id)}</span>`).join('')}</div>
-      <div class="rif"><span class="muted">${esc(c.nome || '')} · ${esc(dmy(c.at))}</span><button class="btn primary" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${w ? 'Continuar' : 'Ver'}</button></div></div>`;
+      <div class="rif"><span class="muted">${esc(c.nome || '')} · ${esc(dmy(c.at))}</span><button class="btn ${riMeu(c) ? 'primary' : ''}" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${!w ? 'Ver' : riMeu(c) ? 'Continuar' : 'Assumir'}</button></div></div>`;
     let body;
     if (!RI.ready) body = '<div class="loading"><span class="spin"></span><span>Carregando…</span></div>';
     else if (sub === 'ag') {
@@ -14100,14 +14195,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* ---------- tela do tablet (#rirtab): mesma lista em formato de tablet, no verde do RIR ---------- */
   VIEWS.rirtab = (main) => VIEWS.rir(main);
   function riTabHome(main) {
-    const w = cw('rir'), C = riCards(), P = riPend(), ras = C.filter((c) => c.st === 'r'), q = E.key(RI.tq || '');
+    const w = cw('rir'), C = riCards(), P = riPend(), rasT = C.filter((c) => c.st === 'r'), ras = rasT.filter(riMeu), nOutros = rasT.length - ras.length, q = E.key(RI.tq || '');
     RI.pend = P;
     const hoje = dmy(Date.now()), eu = E.key(myPessoa() || DB.meName || '');
     const nHoje = C.filter((c) => c.st === 'f' && c.fin && dmy(c.fin) === hoje).reduce((s0, c) => s0 + Object.keys(c.res || {}).length, 0);
     const meus = C.filter((c) => c.st === 'f' && (c.by === DB.me || (eu && E.key(c.nome || '') === eu))).sort((a, b) => (b.fin || 0) - (a.fin || 0)).slice(0, 10);
     const bate = (txt) => !q || E.key(txt).includes(q);
     const lotTx = (L) => L.map((x) => x.id + (lotTxt(x) ? ' · ' + lotTxt(x) : '')).join(' — ');
-    const agRow = (g, i) => `<div class="tblr"><div><div class="t"><b>NF ${esc(disp(g.nf) || '—')}</b>${riSitForn(g.forn)}</div><div class="d">${esc(g.forn || 'sem fornecedor')}</div><div class="m">${g.lots.length} ${g.lots.length === 1 ? 'lote' : 'lotes'}: ${esc(lotTx(g.lots))}</div><div class="w">recebido ${esc(fD(g.data))}${g.pc ? ' · pedido de compra ' + esc(disp(g.pc)) : ''}</div></div><button class="btn rirb big" type="button" data-act="ri-novo" data-key="${i}" ${w ? '' : 'disabled'}>Fazer RIR</button></div>`;
+    const agRow = (g, i) => `<div class="tblr"><div><div class="t"><b>NF ${esc(disp(g.nf) || '—')}</b>${riSitForn(g.forn)}</div><div class="d">${esc(g.forn || 'sem fornecedor')}</div><div class="m">${g.lots.length} ${g.lots.length === 1 ? 'lote' : 'lotes'}: ${esc(lotTx(g.lots))}</div><div class="w">recebido ${esc(fD(g.data))}${g.pc ? ' · pedido de compra ' + esc(disp(g.pc)) : ''}</div></div><button class="btn rirb big" type="button" data-act="ri-novo" data-key="${i}" ${w ? '' : 'disabled'}>Inspecionar esta nota</button></div>`;
     const rasRow = (c) => `<div class="tblr"><div><div class="t"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>em andamento</span></div><div class="d">${esc(c.forn || 'sem fornecedor')}</div><div class="m">${esc((c.ids || []).join(', '))}</div><div class="w">${esc(c.nome || '')} · começado ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${w ? 'Continuar' : 'Ver'}</button></div>`;
     const finRow = (c) => { const nr = Object.values(c.res || {}).filter((r) => r === 'Reprovado').length; return `<div class="tblr"><div><div class="t"><b>${esc(c.num || 'RIR')}</b>${nr ? `<span class="chip crit"><i>✕</i>${nr} reprovado(s)</span>` : '<span class="chip ok"><i>✓</i>aprovado</span>'}</div><div class="d">NF ${esc(c.nf || '—')} · ${esc(c.forn || '')}</div><div class="m">${esc((c.ids || []).join(', '))}</div><div class="w">concluído ${esc(dmy(c.fin || c.at))} às ${esc(hhmm(c.fin || c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">Ver</button></div>`; };
     const ag = P.map((g, i) => [g, i]).filter(([g]) => bate([g.nf, g.forn, g.pc, g.lots.map((x) => x.id).join(' ')].join(' ')));
@@ -14115,8 +14210,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const body = !RI.ready ? '<div class="loading"><span class="spin"></span><span>Carregando…</span></div>' : `
       <div class="tbrowq" style="grid-template-columns:1fr auto"><input id="rit-q" class="tbin" placeholder="Buscar NF, fornecedor ou lote" value="${esc(RI.tq || '')}" autocomplete="off"><button class="btn big" type="button" data-act="ri-tlimpa" ${RI.tq ? '' : 'disabled'}>Limpar</button></div>
       ${w ? '' : '<div class="tbwarn">Seu acesso ao RIR é só de consulta: dá para ver as notas, mas não para inspecionar.</div>'}
-      <div class="rtk"><div style="--k:var(--rir)"><b>${NF.format(P.length)}</b><span>notas aguardando RIR</span></div><div style="--k:var(--info)"><b>${NF.format(ras.length)}</b><span>em andamento</span></div><div style="--k:var(--ok)"><b>${NF.format(nHoje)}</b><span>lotes inspecionados hoje</span></div></div>
-      ${rs.length ? `<div class="tbcard"><div class="ch">Em andamento<span class="cnt">${rs.length}</span></div>${rs.map(rasRow).join('')}</div>` : ''}
+      <div class="rtk"><div style="--k:var(--rir)"><b>${NF.format(P.length)}</b><span>notas aguardando RIR</span></div><div style="--k:var(--info)"><b>${NF.format(ras.length)}</b><span>com você${nOutros ? ` · ${nOutros} com outros` : ''}</span></div><div style="--k:var(--ok)"><b>${NF.format(nHoje)}</b><span>lotes inspecionados hoje</span></div></div>
+      ${rs.length ? `<div class="tbcard"><div class="ch">Com você<span class="cnt">${rs.length}</span></div>${rs.map(rasRow).join('')}</div>` : ''}
       <div class="tbcard"><div class="ch">Notas aguardando inspeção<span class="cnt">${ag.length}</span></div>${ag.length ? ag.map(([g, i]) => agRow(g, i)).join('') : `<div class="tbnone">${q ? 'Nenhuma nota com essa busca.' : 'Nenhuma nota aguardando inspeção de recebimento. 👍'}</div>`}</div>
       ${meus.length && !q ? `<div class="tbcard"><div class="ch gr">Seus RIR concluídos</div>${meus.map(finRow).join('')}</div>` : ''}`;
     main.innerHTML = `<div class="tbw rirt">${tbHead('Recebimento · RIR', 'Notas esperando inspeção')}<div class="tbb">${body}</div><div class="tbf"><span class="tbnet"><i></i>a lista atualiza sozinha</span></div></div>`;
@@ -14168,12 +14263,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         const ex = ncs.map((sc) => { const o = String(riAns(rel, it, sc).o || ''), ed = !o || RI.rpEd === it.id + '|' + sc, quem = nf || cols.length === 1 ? '' : ' · ' + esc(lotId(sc));
           return ed ? `<div class="rgnc"><span>RP${quem}</span><input class="tbin" data-rio="${esc(it.id)}" data-sc="${esc(sc)}" value="${esc(o)}" placeholder="o que foi encontrado (vai para a NCF)" autocomplete="off"><button type="button" class="btn" data-act="ri-fadd">Tirar foto</button></div>`
             : `<div class="rgnc rgnc2"><button type="button" class="rgph${nF ? ' tem' : ''}" data-act="ri-fadd" aria-label="Tirar foto"><span aria-hidden="true">${nF ? '' : '＋'}</span></button><button type="button" class="rgmo" data-act="ri-rped" data-key="${esc(it.id + '|' + sc)}">RP${quem} pede foto: ${nF ? nF + (nF === 1 ? ' foto tirada' : ' fotos tiradas') : 'nenhuma foto ainda'} · motivo “${esc(o.length > 90 ? o.slice(0, 90) + '…' : o)}”</button></div>`; }).join('');
-        return `<div class="rgr${ncs.length ? ' nc' : ''}"><div class="rgi"><b>${esc(it.t)}</b>${nf && nL > 1 ? '<small>vale para a nota inteira</small>' : it.med ? '<small>toque para digitar a medida</small>' : ''}</div><div class="rgcs${nf && cols.length > 1 ? ' nf' : ''}" style="--c:${cols.length}">${nf && cols.length > 1 ? cel(it, 'nf') : scs.map((sc) => cel(it, sc)).join('')}</div>${ex}</div>`;
+        return `<div class="rgr${ncs.length ? ' nc' : ''}"><div class="rgi"><b>${esc(it.t)}${it.extra ? ` <button type="button" class="rgmdel" data-act="ri-mdel" data-key="${esc(it.id)}" aria-label="Remover a medida ${esc(it.t)}">remover</button>` : ''}</b>${nf && nL > 1 ? '<small>vale para a nota inteira</small>' : it.med ? '<small>toque para digitar a medida</small>' : ''}</div><div class="rgcs${nf && cols.length > 1 ? ' nf' : ''}" style="--c:${cols.length}">${nf && cols.length > 1 ? cel(it, 'nf') : scs.map((sc) => cel(it, sc)).join('')}</div>${ex}</div>`;
       };
       const tabs = porLote ? `<div class="rgtabs">${rel.lotes.map((k, i) => `<button type="button" class="chip2${i === RI.tlote ? ' on' : ''}" data-act="ri-tlote" data-key="${i}">${esc(lotId(k))}</button>`).join('')}</div>` : '';
       main = `<div class="rghd"><h2>Checklist da nota</h2><span class="grow"></span>${porLote && RI.tlote > 0 ? `<button type="button" class="btn big" data-act="ri-copia">Copiar do lote ${esc(lotId(rel.lotes[RI.tlote - 1]))}</button>` : ''}<button type="button" class="btn big rgap" data-act="ri-apfalta">✓ Marcar AP no que falta</button></div>${tabs}
         <div class="rgt-w"><div class="rgr rgh"><div class="rgi"><b>Item</b></div><div class="rgcs" style="--c:${cols.length}">${cols.map((k) => `<b class="mono">${esc(lotId(k))}</b>`).join('')}</div></div>
-        ${secs.map((s) => `<div class="rgs">${esc(s)}</div>${rel.itens.filter((it) => it.sec === s).map(row).join('')}`).join('')}</div>
+        ${secs.map((s) => `<div class="rgs"><span>${esc(s)}</span>${!RI.ed.ro && rel.itens.some((it) => it.sec === s && it.med) ? `<button type="button" class="btn rgmais" data-act="ri-madd" data-key="${esc(s)}">+ Medida</button>` : ''}</div>${rel.itens.filter((it) => it.sec === s).map(row).join('')}`).join('')}</div>
         <p class="tbnote" style="margin:0">Toque para trocar: AP → RP → N/A → em branco. RP pede o que foi encontrado; vai para a NCF do lote.</p>`;
     } else {
       main = `<div class="rghd"><h2>Conclusão</h2></div>
@@ -14204,7 +14299,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         ${it.med ? `<input class="inp rimed mono" ${ro ? 'disabled' : ''} data-riv="${esc(it.id)}" data-sc="${esc(sc)}" value="${esc(a.v || '')}" placeholder="medida" inputmode="decimal" autocomplete="off">` : ''}
         ${a.r === 'NC' || a.o ? `<input class="inp rio" ${ro ? 'disabled' : ''} data-rio="${esc(it.id)}" data-sc="${esc(sc)}" value="${esc(a.o || '')}" placeholder="o que foi encontrado" autocomplete="off">` : ''}</div>`;
     };
-    const item = (it) => `<div class="riit"><div class="rit"><span>${esc(it.t)}</span>${it.med ? '<small>medida</small>' : ''}${!ro && it.esc !== 'nf' && rel.lotes.length > 1 ? `<button class="btn small ghost" type="button" data-act="ri-todos" data-key="${esc(it.id)}">todos AP</button>` : ''}</div>${riEscopos(rel, it).map((sc) => linha(it, sc)).join('')}</div>`;
+    const item = (it) => `<div class="riit"><div class="rit"><span>${esc(it.t)}</span>${it.med ? '<small>medida</small>' : ''}${it.extra && !ro ? `<button class="btn small ghost" type="button" data-act="ri-mdel" data-key="${esc(it.id)}">Remover medida</button>` : ''}${!ro && it.esc !== 'nf' && rel.lotes.length > 1 ? `<button class="btn small ghost" type="button" data-act="ri-todos" data-key="${esc(it.id)}">todos AP</button>` : ''}</div>${riEscopos(rel, it).map((sc) => linha(it, sc)).join('')}</div>`;
     const insSel = new Set((rel.ins || []).map((i) => i.id)), insL = rfInstr();
     const insHTML = `${(rel.ins || []).map((i) => { const x = insL.find((y) => y.id === i.id); return `<span class="lchip sel">${esc(i.codigo)} <small>${esc(i.desc || '')}${!x ? ' · <b style="color:var(--crit)">bloqueado/sem uso</b>' : x.venc ? ' · <b style="color:var(--crit)">vencido</b>' : ' · val. ' + esc(fD(E.fromIso(x.val)))}</small>${ro ? '' : `<button type="button" class="x" data-act="ri-ins" data-key="${esc(i.id)}" aria-label="Tirar">×</button>`}</span>`; }).join('') || '<span class="muted">Nenhum instrumento informado.</span>'}
       ${ro ? '' : `<div class="field" style="margin-top:8px"><span>Adicionar instrumento</span><select id="ri-insadd"><option value="">— escolha pelo código —</option>${insL.filter((x) => !insSel.has(x.id) && !x.venc).map((x) => `<option value="${esc(x.id)}">${esc(x.codigo)} · ${esc(x.desc)}</option>`).join('')}</select></div>`}`;
@@ -14222,7 +14317,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${rel.status === 'finalizado' ? `<div class="okbox" style="margin:8px 0">Concluído em ${esc(dmy(rel.fin))} às ${esc(hhmm(rel.fin))} · ${sigLine(rel.assin)}</div>` : ''}
       <div class="fsec"><h3>Lotes desta nota</h3><div class="rils">${rel.lotes.map((k) => { const x = findRec('AV', k); return x ? lotBtn(k, `${esc(x.id)} <small>${esc(lotTxt(x))}${E.filled(x.corrida) ? ' · corrida ' + esc(x.corrida) : ''}${x.quant != null && x.quant !== '' ? ' · ' + esc(x.quant) + ' ' + esc(x.und || '') : ''}</small>`) : `<span class="lchip">${esc(lotId(k))}</span>`; }).join('')}</div>
         ${rel.pc ? `<p class="muted" style="margin:6px 0 0;font-size:12.5px">Pedido de compra <span class="mono">${esc(rel.pc)}</span></p>` : ''}</div>
-      ${secs.map((s) => `<div class="fsec"><h3>${esc(s)}</h3>${rel.itens.filter((it) => it.sec === s).map(item).join('')}</div>`).join('')}
+      ${secs.map((s) => `<div class="fsec"><h3 class="rih3"><span>${esc(s)}</span>${!ro && rel.itens.some((it) => it.sec === s && it.med) ? `<button type="button" class="btn small" data-act="ri-madd" data-key="${esc(s)}">+ Medida</button>` : ''}</h3>${rel.itens.filter((it) => it.sec === s).map(item).join('')}</div>`).join('')}
       <div class="fsec"><h3>Instrumentos usados nas medidas</h3><div class="rils" id="ri-ins">${insHTML}</div></div>
       <div class="fsec"><h3>Fotos</h3><div class="rphs" id="ri-fotos"><span class="muted">${rel.nFotos ? 'Carregando fotos…' : 'Sem fotos.'}</span></div>
         ${ro ? '' : '<input type="file" id="ri-foto" accept="image/*" capture="environment" multiple hidden><div class="formfoot"><button class="btn" type="button" data-act="ri-fadd">Tirar ou escolher fotos</button></div>'}</div>
@@ -14230,10 +14325,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <div class="fsec"><h3>Observações</h3><textarea class="inp" id="ri-obs" ${ro ? 'disabled' : ''} style="min-height:70px;width:100%" placeholder="opcional">${esc(rel.obs || '')}</textarea></div>
       ${falta.length ? `<div class="warnbox" style="margin-top:10px"><b>Falta para concluir:</b> ${esc(falta.join('; '))}.</div>` : ''}
       ${tab ? (ro ? '' : '<div class="formfoot rifoot"><button class="btn ghost tcrit push" type="button" data-act="ri-del">Excluir rascunho</button></div>') : `<div class="formfoot rifoot">${ro ? '' : `<button class="btn primary big" type="button" data-act="ri-fin" ${falta.length ? 'disabled' : ''}>Concluir e assinar</button>`}<button class="btn" type="button" data-act="ri-print">Imprimir</button>${ro ? '' : '<button class="btn ghost tcrit push" type="button" data-act="ri-del">Excluir rascunho</button>'}</div>`}`;
+    const novos = ro ? [] : riNovosDe(rel);
+    const novosHTML = novos.length ? `<div class="warnbox rinovo"><b>${novos.length === 1 ? 'Chegou 1 lote novo' : 'Chegaram ' + novos.length + ' lotes novos'} desta nota:</b> ${novos.map((x) => esc(x.id)).join(', ')}. <button class="btn small" type="button" data-act="ri-puxar">Puxar para este RIR</button></div>` : '';
     main.innerHTML = tab && !ro ? riTabHTML({ rel, lotId, secs, insHTML, resHTML, falta }) : tab
       ? `<div class="tbw rirt">${tbHead('Recebimento · RIR', [rel.numero, 'NF ' + (rel.nf || '—'), rel.forn].filter(Boolean).join(' · '))}<div class="tbb"><div class="riv" id="rix">${corpo}</div></div><div class="tbf"><button class="btn big" type="button" data-act="ri-voltar">← Notas</button>${ro ? '' : '<span class="chip ok" id="rie-salvo">rascunho</span>'}<span class="grow"></span><button class="btn big" type="button" data-act="ri-print">Imprimir</button>${ro ? '' : `<button class="btn rirb big" type="button" data-act="ri-fin" ${falta.length ? 'disabled' : ''}>Concluir e assinar</button>`}</div></div>`
       : `<div class="view riv" id="rix">${corpo}</div>`;
     if (!ro) riSalvoTxt();
+    if (novosHTML) { const host = $('.tbw.rirt .tbb') || $('#rix'); if (host) host.insertAdjacentHTML('afterbegin', novosHTML); }
     const box = $('#rix');
     box.addEventListener('input', (e) => {
       const t = e.target, r = RI.ed && RI.ed.rel; if (!r || RI.ed.ro) return;
@@ -14296,6 +14394,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'ri-tlimpa') { RI.tq = ''; render(); return true; }
     if (a === 'ri-voltar') { if (RI.saveT) riGravar().catch(() => {}); RI.ed = null; RI.sub = 'ag'; render(); return true; }
     if (a === 'ri-novo') { const g = (RI.pend || [])[+key]; if (g) riNovo(g.lots); return true; }
+    if (a === 'ri-puxar') { riPuxar(); return true; }
+    if (a === 'ri-madd') { riMedidaNova(key); return true; }
+    if (a === 'ri-mdel') { riMedidaDel(key); return true; }
     if (a === 'ri-lote') {
       const x = findRec('AV', key); if (!x) return true;
       const ras = riCards().find((c) => c.st === 'r' && (c.lotes || []).includes(x.key)); if (ras) { riAbrir(ras.id); return true; }
@@ -18273,16 +18374,17 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ['Responsabilidades', MRESP([[M_PAPEIS.conf, 'Confere a NF e o material, lança os lotes, imprime e cola as etiquetas, lança os dados da corrida.'], [M_PAPEIS.qual, 'Cobra os certificados que faltam e decide sobre lotes reprovados (IT-QUA-03).']])],
       ['Lançar os lotes de uma nota', MOL([
         'Menu <b>Lotes (AV)</b> › <b>Novo lote</b>.',
-        'Com a NF-e: clicar em <b>Ler XML…</b> (ou arrastar o arquivo XML) ou bipar o código de barras do DANFE no campo <b>Chave da NF-e</b>. A Central preenche fornecedor, nota fiscal, pedido de compra e um bloco por lote/corrida da nota; conferir e completar o que faltar. Sem o XML, a chave preenche só o fornecedor e o número da nota.',
-        'Em <b>Nota fiscal e recebimento</b>, preencher: Data de entrada, Filial, Fornecedor, Nota fiscal, Pedido de compra, Pedido(s) de venda (separados por vírgula) e Conferido por.',
-        'Em <b>Lotes desta nota</b>, preencher um bloco por material: Descrição, Corrida (use * quando não houver), Quantidade e Unidade, Diâmetro, Espessura, Liga/Tipo, Material, Certificado (* = sem certificado) e Link do certificado. Use <b>+ Adicionar lote</b> ou <b>Duplicar</b> para os outros materiais da nota.',
+        'Com a NF-e: clicar em <b>Ler XML…</b> (ou arrastar o arquivo XML) ou bipar o código de barras do DANFE no campo <b>Chave da NF-e</b>. A Central preenche fornecedor, nota fiscal, ordem de compra e um bloco por lote/corrida da nota; conferir e completar o que faltar. Sem o XML, a chave preenche só o fornecedor e o número da nota.',
+        'Em <b>Nota fiscal e recebimento</b>, preencher: Data de entrada, Filial, Fornecedor, Nota fiscal, <b>Ordem de compra</b> e <b>Pedido(s) de venda</b> (separados por vírgula). Material para estoque: marcar <b>Estoque (sem pedido de venda)</b>. Quem lança fica registrado pelo login (“Lançado por” na ficha do lote).',
+        'Em <b>Lotes desta nota</b>, preencher um bloco por material: Descrição, Corrida (use * quando não houver), <b>Quantidade e Unidade</b>, Diâmetro, Espessura, Liga/Tipo, Material e Certificado (* = sem certificado). Use <b>+ Adicionar lote</b> ou <b>Duplicar</b> para os outros materiais da nota.',
+        'Os campos com * são obrigatórios: Ordem de compra, Pedido de venda (ou Estoque), Quantidade e Unidade, além dos que já eram. Em lote antigo, editar não exige esses campos.',
         'Conferir os avisos (nota já lançada, possível duplicidade, fornecedor suspenso no IQF, lote sem certificado) e clicar em <b>Gravar lotes</b>.',
         'Na tela seguinte, clicar em <b>Imprimir etiquetas</b> e colar cada etiqueta no material correspondente.'
       ]) + MNOTA('O número do lote (AV-AA-NNNNN) é gerado na hora de gravar. A sequência nunca recomeça e número excluído não é reaproveitado.')],
       ['Lançar um lote parecido', MP('Na ficha de um lote, <b>Lançar parecido</b> abre o formulário já preenchido com a nota e o material. Alterar o que for diferente (corrida, certificado…) e gravar.')],
       ['Dados da corrida', MOL(['Na ficha do lote, no bloco “Corrida · certificado da usina”, clicar em <b>Lançar dados da corrida</b>.', 'Preencher Usina / fabricante, Nº do certificado da usina, a análise química (%) e as propriedades mecânicas.', 'Clicar em <b>Salvar dados da corrida</b>. Os dados valem para todos os lotes da mesma corrida e do mesmo fornecedor e são usados no certificado de qualidade.'])],
       ['Etiqueta e página do QR', MOL(['Na ficha do lote, clicar em <b>Etiqueta</b>.', 'Escolher o modelo (Compacta: AV + QR; Completa: com os dados do lote) e o tamanho da etiqueta.', 'Clicar em <b>Imprimir etiqueta</b>.']) + MP('O QR code abre uma página só de consulta com a situação do lote (aprovado, reprovado, em análise, liberado sob concessão ou em contenção). Etiqueta de lote reprovado ou liberado sob concessão sai com faixa preta indicando a situação.')],
-      ['Certificado da usina que falta', MP('Lotes sem certificado recebidos nos últimos 30 dias aparecem em <b>Alertas › Lotes sem certificado</b>, agrupados por fornecedor e NF. Ao receber o certificado, usar <b>Dar baixa</b> (Nº do certificado e link). <b>E-mail ao fornecedor</b> monta a cobrança com o e-mail cadastrado em Configurações › Fornecedores. Para cobrar tudo de uma vez, usar <b>Lotes (AV)</b> › <b>Cobrar certificados</b>: um e-mail por fornecedor com todas as notas pendentes (30 dias, 90 dias, 1 ano ou todas). O texto dos e-mails fica em Configurações › Modelos de mensagem.')],
+      ['Certificado da usina que falta', MP('Lotes sem certificado recebidos nos últimos 30 dias aparecem em <b>Alertas › Lotes sem certificado</b>, agrupados por fornecedor e NF. Ao receber o certificado, usar <b>Dar baixa</b> (Nº do certificado). <b>E-mail ao fornecedor</b> monta a cobrança com o e-mail cadastrado em Configurações › Fornecedores. Para cobrar tudo de uma vez, usar <b>Lotes (AV)</b> › <b>Cobrar certificados</b>: um e-mail por fornecedor com todas as notas pendentes (30 dias, 90 dias, 1 ano ou todas). O texto dos e-mails fica em Configurações › Modelos de mensagem.')],
       ['Situações do lote', MTB(['Situação', 'Significado'], [['Aguardando RIR', 'Lançado; o resultado sai do RIR (IT-QUA-02).'], ['Aprovado', 'Pode ser usado.'], ['Reprovado · bloqueado', 'Aguardando decisão da NCF; só entra em certificado com justificativa (IT-QUA-06) e não pode ser excluído.'], ['Em análise', 'Não bloqueado; pode ser liberado sob concessão.'], ['Liberado sob concessão', 'Uso autorizado com justificativa.'], ['Devolvido · Retrabalhado · Sucateado', 'Destino físico registrado.'], ['Em contenção', 'Travado por uma NCC até a liberação.']])],
       ['Registros', MREG([['Lote recebido', 'AV-AA-NNNNN', 'Lotes (AV)'], ['Decisões do lote', 'Data, pessoa e justificativa', 'Ficha do lote › Decisões da NCF'], ['Dados da corrida', 'Corrida + fornecedor', 'Ficha do lote'], ['Histórico de alterações', 'Data e pessoa', 'Histórico']])],
       ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 8.4 e 8.5.2', 'PR-QUA-01 · IT-QUA-02 · IT-QUA-03'])]
@@ -18294,9 +18396,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ['Responsabilidades', MRESP([[M_PAPEIS.insr, 'Faz, conclui e assina o RIR.'], [M_PAPEIS.adm, 'Mantém o checklist em Configurações › RIR.'], [M_PAPEIS.qual, 'Acompanha as notas atrasadas em Alertas.']])],
       ['Fazer o RIR', MOL([
         'No tablet, abrir <b>RIR</b> pelo início do tablet (cartão <b>Receber nota</b> ou a nota na <b>Fila de hoje</b>) ou, na Central, menu <b>RIR</b> › <b>Tela do tablet</b>. A lista mostra as notas aguardando inspeção e os RIR em andamento.',
-        'Tocar em <b>Fazer RIR</b> na nota. Se já houver rascunho da nota, a Central abre o rascunho.',
+        'Escolher a nota e tocar em <b>Inspecionar esta nota</b>: o RIR já vem com todos os lotes daquela nota e a nota passa a ser sua. Ela some da fila dos outros inspetores (no tablet deles aparece só “N com outros”); na Central aparece “com Fulano”. Para continuar a nota de outra pessoa (falta, férias), usar <b>Assumir</b> na Central: as respostas já dadas ficam. Para devolver a nota à fila, <b>Excluir rascunho</b>.',
+        'Se for lançado um lote novo de uma nota que já está em inspeção, ele não abre outra nota: aparece dentro do RIR aberto, com o aviso “Chegou 1 lote novo desta nota”. Tocar em <b>Puxar para este RIR</b>.',
         'No tablet, deitado ou em pé, a tela tem o <b>painel da esquerda</b> com a nota, os lotes (com o resultado de cada um) e os instrumentos; o botão <b>«</b> recolhe o painel numa faixa fina só com o fim do número de cada lote e o <b>»</b> abre de novo (o tablet lembra a escolha). No checklist, cada lote é uma coluna (até 3 lotes lado a lado; com mais lotes, no tablet pequeno em pé ou no celular, um lote por vez, com <b>Copiar do lote</b> anterior). Tocar no quadro troca a resposta: <b>AP</b> (aprovado) → <b>RP</b> (reprovado) → <b>N/A</b> (não aplicável) → em branco. Itens da “nota inteira” têm um quadro só. <b>Marcar AP no que falta</b> marca os itens ainda em branco (as medidas continuam para digitar). Na Central (computador), os mesmos itens aparecem em lista, com AP, RP e N/A lado a lado e <b>todos AP</b>.',
-        'Nos itens de medida, digitar o valor medido (o item fica AP; tocar no AP para trocar). Em todo item RP, descrever o que foi encontrado (vai para a NCF) e, se preciso, tirar foto.',
+        'Nos itens de medida, digitar o valor medido (o item fica AP; tocar no AP para trocar). Quando um lote precisa de uma medida que não está no checklist, tocar em <b>+ Medida</b> na parte Dimensional: dar o nome (ex.: Diâmetro interno) e marcar os lotes que levam a medida (nos outros ela fica N/A). A medida vale só para este RIR e pode ser removida enquanto ele não for concluído. Em todo item RP, descrever o que foi encontrado (vai para a NCF) e, se preciso, tirar foto.',
         'Tocar em <b>Continuar</b> (o botão mostra quantas respostas faltam). Na <b>Conclusão</b>, adicionar o instrumento usado nas medidas pelo código (só aparecem instrumentos em uso e com calibração válida) e tirar as fotos do material (até 12).',
         'Em <b>Resultado por lote</b>, conferir o resultado sugerido (algum RP = Reprovado; tudo respondido sem RP = Aprovado) e o motivo da reprovação, que vai para a NCF.',
         'Tocar em <b>Concluir e assinar</b> e confirmar. O RIR recebe o número e não pode mais ser alterado.'
@@ -19023,7 +19126,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const ras = viewOk('rirtab') && RI.ready ? riCards().find((c) => c.st === 'r' && (c.lotes || []).includes(a.key)) : null;
       const B = [];
       if (N.some((x) => x.key === a.key)) B.push(`<button class="btn red big" type="button" data-act="th-fila" data-key="${esc('ncf|' + a.key)}">Abrir NCF deste lote</button>`);
-      if (g) B.push(`<button class="btn rirb big" type="button" data-act="th-fila" data-key="${esc('rir|' + g.lots.map((x) => x.key).join(','))}">Fazer o RIR da NF ${esc(disp(g.nf) || '—')}</button>`);
+      if (g) B.push(`<button class="btn rirb big" type="button" data-act="th-fila" data-key="${esc('rir|' + g.lots.map((x) => x.key).join(','))}">Inspecionar a NF ${esc(disp(g.nf) || '—')}</button>`);
       if (ras) B.push(`<button class="btn rirb big" type="button" data-act="th-cont" data-key="${esc('rir|' + ras.id)}">Continuar o RIR da NF ${esc(ras.nf || '—')}</button>`);
       if (!B.length && viewOk('rnctab')) B.push(`<button class="btn big" type="button" data-act="th-fila" data-key="${esc('ncf|' + a.key)}">Abrir NCF mesmo assim</button>`);
       const st = (lm.insp && lm.insp.res) || (E.filled(a.insp) ? String(a.insp) : '');
