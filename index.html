@@ -310,6 +310,22 @@ table.t tbody tr.pend td:first-child { box-shadow: inset 3px 0 0 var(--warn); }
 .formwrap { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
 .fgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr)); gap: 12px 14px; }
 .fgrid .s2 { grid-column: span 2; } .fgrid .s3 { grid-column: 1 / -1; }
+/* v50: Nota fiscal e recebimento do lote em 3 colunas fechadas */
+.fgrid.avnota { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-flow: row dense; }
+.fgrid.avnota :is(input, select) { min-width: 0; max-width: 100%; box-sizing: border-box; }
+.fsec:has(> .fgrid.avnota) { container-type: inline-size; }
+@container (max-width: 540px) { .fgrid.avnota { grid-template-columns: repeat(2, minmax(0, 1fr)); } .fgrid.avnota .s2 { grid-column: 1 / -1; } }
+@media (max-width: 640px) { .fgrid.avnota { grid-template-columns: minmax(0, 1fr); } .fgrid.avnota .s2 { grid-column: auto; } }
+.pvsrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.pvsrow .pvs-in { width: 180px; flex: none; }
+.pvsadd { width: var(--h-in); height: var(--h-in); min-height: var(--h-in); padding: 0; flex: none; font: 600 20px/1 var(--f-body); }
+@media (pointer: coarse) { .pvsadd { width: 48px; height: 48px; } .pvschip { height: 48px; border-radius: 24px; } }
+.pvschips { display: contents; }
+.pvschip { display: inline-flex; align-items: center; gap: 2px; height: var(--h-in); padding: 0 4px 0 12px; border-radius: 18px; background: color-mix(in srgb, var(--av) 12%, var(--surface)); border: 1px solid color-mix(in srgb, var(--av) 35%, var(--line)); font-size: 14px; color: var(--ink); }
+.pvschip button { all: unset; cursor: pointer; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; font: 600 17px/1 var(--f-body); color: var(--ink-2); }
+.pvschip button:hover { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.pvsrow .avest { margin: 0 0 0 auto; min-height: var(--h-in); }
+.pvsrow.est .pvs-in, .pvsrow.est .pvsadd { opacity: .45; }
 #fx, #fx-fields { display: grid; gap: 22px; min-width: 0; }
 .fsec { display: grid; gap: 10px; }
 .fsec > h3 { margin: 0; font: 600 11px/1 var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); padding-bottom: 6px; border-bottom: 1px solid var(--line); }
@@ -5467,7 +5483,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 49; window.CQ_V = APP_V;
+    const APP_V = 50; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -10101,11 +10117,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const cliList = (extra) => { const ina = inativosDe(S.model.cfg.CLI_INFO); return uniq(cfgL('GER_CLIENTES').concat(extra || [])).filter((n) => !ina.has(E.key(n))); };
   const lst = (n, mod, f) => () => uniq(cfgL(n).concat(distinct(listOf(mod), (x) => x[f])));
   const SEC = {
-    avNota: () => ({ t: 'Nota fiscal e recebimento', f: [
+    /* v50: grade fechada de 3 colunas (Regra 1): Data · Filial · Nota fiscal / Fornecedor (2) · Ordem de compra / Pedidos de venda (linha inteira, com +) */
+    avNota: () => ({ t: 'Nota fiscal e recebimento', cls: 'avnota', f: [
       { c: 'B', l: 'Data de entrada', type: 'date', req: 1, def: () => E.isoDate(S.today) },
       { c: 'C', l: 'Filial', type: 'select', opts: () => cfgL('AV_FILIAIS'), req: 1 },
+      { c: 'L', l: 'Nota fiscal', type: 'text', store: 'auto', req: 1 },
       { c: 'K', l: 'Fornecedor', type: 'list', opts: fornList, req: 1, w: 's2' },
-      { c: 'L', l: 'Nota fiscal', type: 'text', store: 'auto', req: 1 }, { c: 'M', l: 'Ordem de compra', type: 'text', store: 'auto', reqNovo: 1 }, { c: 'N', l: 'Pedido(s) de venda', type: 'text', store: 'text', reqNovo: 1, estoque: 1, ph: 'ex.: 12345 ou 12345, 12346', help: 'Mais de um pedido: separe por vírgula. A Central liga o lote a cada pedido (certificado, RIF, NCC).' }] }),
+      { c: 'M', l: 'Ordem de compra', type: 'text', store: 'auto', reqNovo: 1 },
+      { c: 'N', l: 'Pedido(s) de venda', type: 'pvs', store: 'text', reqNovo: 1, w: 's3' }] }),
     /* v49: "Conferido por" saiu do lançamento (quem lança fica registrado pelo login: "Lançado por" na ficha);
        os lotes antigos continuam com o nome gravado. Ordem de compra, pedido de venda (ou Estoque) e quantidade são obrigatórios só no lote novo. */
     avMat: () => ({ t: 'Material', f: [
@@ -10214,6 +10233,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     else if (f.type === 'list') ctl = `<input id="${id}" data-c="${f.c}" list="dl-${id}" autocomplete="off" placeholder="${esc(f.ph || 'digite ou escolha')}"${dis}><datalist id="dl-${id}">${optList(f.opts())}</datalist>`;
     else if (f.type === 'area') ctl = `<textarea id="${id}" data-c="${f.c}" placeholder="${esc(f.ph || '')}"${dis}></textarea>`;
     else if (f.type === 'date') ctl = `<input id="${id}" data-c="${f.c}" type="date"${dis}>`;
+    else if (f.type === 'pvs') return `<div class="field ${f.w || ''}"><span>${esc(f.l)}${req}</span>${pvsHTML(`<input id="${id}" data-c="${f.c}" type="hidden">`, dis)}<span class="errmsg" hidden></span></div>`;
     else ctl = `<input id="${id}" data-c="${f.c}" type="text" autocomplete="off" class="${f.cls || ''}" placeholder="${esc(f.ph || '')}" ${f.store === 'num' ? 'inputmode="decimal"' : ''}${dis}>`;
     return `<label class="field ${f.w || ''}"><span>${esc(f.l)}${req}</span>${ctl}${f.help && !locked ? `<span class="help">${esc(f.help)}</span>` : ''}<span class="errmsg" hidden></span></label>`;
   }
@@ -10248,6 +10268,28 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* medida dupla: o campo guardado (escondido) recebe "2500 x 1500"; na tela são duas caixas e um botão + */
   const DIM_SEP = /\s*[xX×]\s*/;
   const dimHTML = (hid, dl, dis) => `<div class="dimrow">${hid}<input class="dim-a" list="${dl}" autocomplete="off" placeholder="digite ou escolha"${dis}><span class="dimx" hidden>x</span><input class="dim-b" list="${dl}" autocomplete="off" placeholder="2ª medida" hidden${dis}><button type="button" class="btn small dimadd" title="Adicionar outra medida" aria-label="Adicionar outra medida"${dis}>+</button></div>`;
+  /* v50: pedidos de venda: digita o número e toca em + (ou Enter); cada pedido vira uma etiqueta com ×.
+     O valor gravado continua "12345, 12346" (os outros módulos leem igual). Estoque = sem pedido de venda. */
+  const pvsHTML = (hid, dis) => `<div class="pvsrow">${hid}<input class="pvs-in mono" inputmode="numeric" autocomplete="off" placeholder="nº do pedido"${dis}><button type="button" class="btn pvsadd" title="Adicionar o pedido" aria-label="Adicionar o pedido"${dis}>+</button><div class="pvschips" aria-live="polite"></div><label class="check avest"><input type="checkbox" class="pvs-est"${dis}> Estoque (sem pedido de venda)</label></div>`;
+  function pvsWire(h) {
+    const row = h && h.closest('.pvsrow'); if (!row || row.dataset.w) return; row.dataset.w = '1';
+    const inp = $('.pvs-in', row), add = $('.pvsadd', row), box = $('.pvschips', row), est = $('.pvs-est', row);
+    let L = String(h.value || '').split(/[,;\n]+/).map((t) => t.trim()).filter(Boolean);
+    const ehEst = () => L.length === 1 && E.low(L[0]) === E.low(AV_ESTOQUE);
+    const sync = () => { h.value = est.checked ? AV_ESTOQUE : L.concat(inp.value.trim() ? [inp.value.trim()] : []).join(', '); h.dispatchEvent(new Event('input', { bubbles: true })); };
+    const draw = () => {
+      box.innerHTML = est.checked ? '' : L.map((v, i) => `<span class="pvschip mono">${esc(v)}<button type="button" data-pvx="${i}" aria-label="Tirar o pedido ${esc(v)}">×</button></span>`).join('');
+      inp.disabled = add.disabled = est.checked; row.classList.toggle('est', est.checked);
+    };
+    const poe = () => { const v = inp.value.trim(); if (!v) { inp.focus(); return; } v.split(/[,;\s]+/).filter(Boolean).forEach((t) => { if (!L.some((x) => E.key(x) === E.key(t))) L.push(t); }); inp.value = ''; draw(); sync(); inp.focus(); };
+    est.checked = ehEst(); if (est.checked) L = [];
+    add.onclick = (e) => { e.preventDefault(); poe(); };
+    inp.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); poe(); } };
+    inp.oninput = sync;
+    box.onclick = (e) => { const b = e.target.closest('[data-pvx]'); if (!b) return; e.preventDefault(); L.splice(+b.dataset.pvx, 1); draw(); sync(); };
+    est.onchange = () => { draw(); sync(); if (!est.checked) inp.focus(); };
+    draw();
+  }
   function dimWire(h) {
     const row = h && h.closest('.dimrow'); if (!row) return;
     const a = $('.dim-a', row), b = $('.dim-b', row), x = $('.dimx', row), bt = $('.dimadd', row), lab = row.closest('.field');
@@ -10260,6 +10302,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   function wireReveal(fields, idOf) {
     fields.filter((f) => f.dim).forEach((f) => dimWire($('#' + idOf(f))));
+    fields.filter((f) => f.type === 'pvs').forEach((f) => { const h = $('#' + idOf(f)); if (h) { const r = h.closest('.pvsrow'); if (r) delete r.dataset.w; pvsWire(h); } });
     fields.filter((f) => f.reveal).forEach((f) => {
       const id = idOf(f), el = $('#' + id); if (!el) return; const lab = el.closest('.field'); if (!lab) return;
       const old = lab.parentNode.querySelector(`[data-reveal="${id}"]`); if (old) old.remove();
@@ -10501,7 +10544,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${st.last ? `<div class="okbox avm-done"><b>${st.last.length} lote(s) gravado(s):</b> ${st.last.map((k) => `<button class="btn small ghost mono" type="button" data-open="AV:${esc(k)}">${esc(k)}</button>`).join(' ')} <button class="btn small" type="button" id="avm-labels">Imprimir etiquetas (${st.last.length})</button> <button class="btn small ghost" type="button" id="avm-done-x">Fechar</button></div>` : ''}
       <section class="sec">${band('AV', 'Novo lançamento de lotes (AV)')}<div class="block"><div class="body">
         <div class="formwrap"><form id="fx" novalidate>${dl}
-          <div class="fsec"><h3>${esc(nota.t)}</h3>${cw('av') ? nfeHTML() : ''}<div class="fgrid">${nota.f.map((f) => fieldHTML(f, false)).join('')}</div></div>
+          <div class="fsec"><h3>${esc(nota.t)}</h3>${cw('av') ? nfeHTML() : ''}<div class="fgrid ${nota.cls || ''}">${nota.f.map((f) => fieldHTML(f, false)).join('')}</div></div>
           <div class="fsec"><h3>Lotes desta nota <small class="muted" id="avm-n"></small></h3><div id="avm-items" class="avm-items"></div>
             <div class="formfoot"><button class="btn" type="button" id="avm-add">+ Adicionar lote</button><span class="muted" style="font-size:12.5px">Cada lote recebe o seu número AV na hora de gravar.</span></div></div>
           <div class="formfoot"><button class="btn primary" type="submit" id="fx-save" ${cw('av') ? '' : 'disabled'}>Gravar lotes</button><label class="check"><input type="checkbox" id="keep" checked> Manter os dados da nota para o próximo lançamento</label><button class="btn ghost" type="button" id="avm-clear">Limpar</button></div>
@@ -10509,15 +10552,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       </div></div></section></div>`;
     { const bk0 = $('#avm-back', main); if (bk0) bk0.onclick = () => go('av'); }
     nota.f.forEach((f) => { const el = $(`#ff-${f.c}`); if (el) el.value = st.nota && st.nota[f.c] != null ? st.nota[f.c] : (f.def ? f.def() : ''); });
-    { /* v49: Estoque (sem pedido de venda): o campo continua obrigatório, mas aceita "Estoque" */
-      const pvI = $('#ff-N'), lab = pvI && pvI.closest('.field');
-      if (lab) {
-        pvI.insertAdjacentHTML('afterend', `<label class="check avest"><input type="checkbox" id="ff-N-est"> Estoque (sem pedido de venda)</label>`);
-        const cb = $('#ff-N-est'), apl = () => { pvI.readOnly = cb.checked; if (cb.checked) pvI.value = AV_ESTOQUE; else if (pvI.value === AV_ESTOQUE) pvI.value = ''; };
-        cb.checked = E.low(pvI.value) === E.low(AV_ESTOQUE); apl();
-        cb.onchange = () => { apl(); pvI.dispatchEvent(new Event('input', { bubbles: true })); if (!cb.checked) pvI.focus(); };
-      }
-    }
+    pvsWire($('#ff-N'));   /* v50: pedidos de venda com + e Estoque */
     const box = $('#avm-items');
     const readItems = () => $$('.avitem', box).map((el) => { const o = {}; $$('[data-ic]', el).forEach((c) => { o[c.dataset.ic] = c.value.trim(); }); return o; });
     const readNota = () => { const o = {}; nota.f.forEach((f) => { const el = $(`#ff-${f.c}`); o[f.c] = el ? el.value.trim() : ''; }); return o; };
@@ -10612,7 +10647,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <section class="sec">${band(fd.mod, title)}<div class="block"><div class="body">
         <div class="formwrap"><form id="fx" novalidate>
           ${fd.pick && !editing ? `<div class="fsec"><h3>Escolha ${fd.pick === 'INS' ? 'o instrumento' : 'a NCF'}</h3><div class="fgrid"><label class="field s2"><span>${fd.pick === 'INS' ? 'Instrumento' : fd.pick === 'RNCC' ? 'NCC' : 'NCF'} <b>*</b></span><input id="pick" list="dl-pick" autocomplete="off" placeholder="digite o ${fd.pick === 'INS' ? 'código' : 'número'}"><datalist id="dl-pick">${pickList.map((o) => `<option value="${esc(o.v)}">${esc(o.d)}</option>`).join('')}</datalist><span class="errmsg" hidden></span></label></div></div>` : ''}
-          <div id="fx-fields" ${fd.pick && !editing ? 'hidden' : ''}>${secsOf(fd).map((s) => `<div class="fsec"><h3>${esc(s.t)}</h3><div class="fgrid">${s.f.map((f) => fieldHTML(f, editing && (f.lock || inspLocked(fd, f, erec)))).join('')}</div></div>`).join('')}
+          <div id="fx-fields" ${fd.pick && !editing ? 'hidden' : ''}>${secsOf(fd).map((s) => `<div class="fsec"><h3>${esc(s.t)}</h3><div class="fgrid ${s.cls || ''}">${s.f.map((f) => fieldHTML(f, editing && (f.lock || inspLocked(fd, f, erec)))).join('')}</div></div>`).join('')}
           <div class="formfoot">${(fd.mod === 'RNC' || fd.mod === 'RNCC') && allFields(fd).some((f) => f.c === 'Z' || f.c === 'AF') && (editing || fd.pick) ? /* só NCF e NCC têm campo de histórico (no instrumento, Z é o laboratório) */ '<button class="btn" type="button" id="addlog">Acrescentar registro de hoje</button>' : ''}<button class="btn primary" type="submit" id="fx-save" ${cw(MOD[fd.mod].col) ? '' : 'disabled'}>${esc(editing ? 'Salvar alterações' : fd.btn)}</button>${fd.keep && !editing ? `<label class="check"><input type="checkbox" id="keep" checked> Manter ${fd.mod === 'AV' ? 'os dados da nota (data, filial, fornecedor, NF, pedido de compra, conferente)' : 'a data'} para o próximo</label>` : ''}<button class="btn ghost" type="button" id="fx-reset">Desfazer edição</button>${editing && cw(MOD[fd.mod].col) ? '<button class="btn ghost tcrit push" type="button" id="fx-del">Excluir registro</button>' : ''}</div></div>
         </form><aside class="preview" id="pv" aria-live="polite"></aside></div>
       </div></div></section></div>`;
@@ -18375,7 +18410,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ['Lançar os lotes de uma nota', MOL([
         'Menu <b>Lotes (AV)</b> › <b>Novo lote</b>.',
         'Com a NF-e: clicar em <b>Ler XML…</b> (ou arrastar o arquivo XML) ou bipar o código de barras do DANFE no campo <b>Chave da NF-e</b>. A Central preenche fornecedor, nota fiscal, ordem de compra e um bloco por lote/corrida da nota; conferir e completar o que faltar. Sem o XML, a chave preenche só o fornecedor e o número da nota.',
-        'Em <b>Nota fiscal e recebimento</b>, preencher: Data de entrada, Filial, Fornecedor, Nota fiscal, <b>Ordem de compra</b> e <b>Pedido(s) de venda</b> (separados por vírgula). Material para estoque: marcar <b>Estoque (sem pedido de venda)</b>. Quem lança fica registrado pelo login (“Lançado por” na ficha do lote).',
+        'Em <b>Nota fiscal e recebimento</b>, preencher: Data de entrada, Filial, Fornecedor, Nota fiscal, <b>Ordem de compra</b> e <b>Pedido(s) de venda</b> (digitar o número e tocar em <b>+</b>; repetir para cada pedido; o × tira um pedido). Material para estoque: marcar <b>Estoque (sem pedido de venda)</b>. Quem lança fica registrado pelo login (“Lançado por” na ficha do lote).',
         'Em <b>Lotes desta nota</b>, preencher um bloco por material: Descrição, Corrida (use * quando não houver), <b>Quantidade e Unidade</b>, Diâmetro, Espessura, Liga/Tipo, Material e Certificado (* = sem certificado). Use <b>+ Adicionar lote</b> ou <b>Duplicar</b> para os outros materiais da nota.',
         'Os campos com * são obrigatórios: Ordem de compra, Pedido de venda (ou Estoque), Quantidade e Unidade, além dos que já eram. Em lote antigo, editar não exige esses campos.',
         'Conferir os avisos (nota já lançada, possível duplicidade, fornecedor suspenso no IQF, lote sem certificado) e clicar em <b>Gravar lotes</b>.',
