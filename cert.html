@@ -739,8 +739,13 @@ html.ws.cq-embed .ws-body { padding: 0 0 2px; }
 .ws-sech .sp { flex: 1; }
 .ws-sech .ws-bar { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-left: auto; }
 .ws-sech .ws-bar .ws-tb { width: 150px; flex: none; }
+.ws-cnt { display: grid; grid-template-columns: auto 36px 40px 36px auto; align-items: center; gap: 6px; height: 36px; padding: 0 10px; border: 1px solid var(--w-line2); border-radius: 9px; background: var(--w-sf2); }
+.ws-cnt span { font: 600 12px var(--w-body); text-transform: uppercase; letter-spacing: .04em; color: var(--w-ink3); margin-right: 2px; }
+.ws-cnt button { width: 36px; height: 28px; border: 1px solid var(--w-line2); border-radius: 7px; background: var(--w-sf); color: var(--w-ink); font: 700 17px/1 var(--w-body); cursor: pointer; display: grid; place-items: center; padding: 0; }
+.ws-cnt button:hover:not(:disabled) { background: var(--w-sf2); } .ws-cnt button:disabled { opacity: .4; cursor: default; }
+.ws-cnt b { font: 700 18px var(--w-mono); text-align: center; } .ws-cnt small { font: 400 12px var(--w-body); color: var(--w-ink3); }
 .ws-sech .ws-tb { height: 36px; font-size: 13.5px; }
-.ws-sec .ws-gw { flex: none; overflow-x: auto; overflow-y: visible; min-height: 0; margin-top: 10px; }
+.ws-sec .ws-gw { flex: none; overflow: visible; min-height: 0; margin-top: 10px; }   /* sem barra de rolagem lateral */
 .ws-sec .ws-st { margin-top: 8px; }
 .ws-g.est td { cursor: pointer; } .ws-g.est tbody tr:hover td { background: color-mix(in srgb, var(--w-cur) 5%, transparent); }
 .ws-sec.tx .ws-tx { overflow: visible; margin-top: 8px; }
@@ -5990,6 +5995,29 @@ function wsCols(t) {
 const wsBloco = t => (t.ht ? null : BLOCO[t.bloco]);
 const wsLinhas = t => (t.ht ? MAX_ITENS : wsBloco(t).max);
 const wsConta = t => (t.ht ? state.itens : contaDe(state, wsBloco(t)));
+/* v53: na tela só as linhas em uso e uma vazia embaixo para acrescentar (o tratamento térmico acompanha os itens) */
+const wsLinhasVis = t => (GRADES ? wsConta(t) : t.ht ? Math.max(1, wsConta(t)) : Math.min(wsLinhas(t), wsConta(t) + 1));
+/* grades: Produtos, Componentes e Corridas têm contador de linhas (é o que sai no certificado); galvanização e dimensional seguem os produtos */
+const WS_CONTADOR = GRADES ? ['produto', 'comp', 'corr'] : [];
+async function wsContador(id, mais) {
+  wsFecharEd(true);
+  const t = WS_TABS.find(x => x.id === id), b = wsBloco(t), n = wsConta(t);
+  if (mais) {
+    if (n >= b.max) { toast(`A folha já tem o máximo de ${b.max} linhas em ${t.nome}.`, true); return; }
+    if (id === 'produto') { state.itens++; renumerar(); render(); saveDraftSoon(); }
+    else inserirLinha(b, n);
+  } else {
+    if (n <= 1) { toast(`${t.nome} precisa de pelo menos 1 linha.`); return; }
+    if (id === 'produto') { await removerItem(); }
+    else {
+      if (id === 'comp' && camposLinha(b, n).some(f => state.v[f.ref]) && !(await confirmMsg('Tirar linha', `A linha ${n} de Componentes tem dados. Tirar a linha e apagar os dados dela?`, 'Tirar', 'Cancelar'))) return;
+      await removerLinha(b, n);
+    }
+  }
+  if (WS.tab !== id) { WS.tab = id; WS.anc = null; }
+  WS.cur = { r: Math.min(WS.cur.r, wsLinhasVis(t)), c: WS.cur.c };
+  wsRender();
+}
 function wsRef(t, col, n) {
   if (t.ht) return null;
   if (col.corrida) return refOf(BASE.produto + n, 17);
@@ -6284,12 +6312,12 @@ function wsCorpo() {
   const t = wsTab();
   const cols = wsCols(t);
   WS.cols = cols;
-  WS.cur.c = clamp(WS.cur.c, 0, cols.length - 1); WS.cur.r = clamp(WS.cur.r, 1, wsLinhas(t));
+  WS.cur.c = clamp(WS.cur.c, 0, cols.length - 1); WS.cur.r = clamp(WS.cur.r, 1, wsLinhasVis(t));
   const secs = WS_TABS.filter(wsSecVisivel);
   let num = 0;
   const partes = secs.map(x => {
     const lig = wsSecLig(x), n = lig ? ++num : 0, ativa = x.id === t.id, bd = lig ? wsBadge(x) : null;
-    const cab = `<div class="ws-sech">${n ? `<span class="ws-secn">${n}</span>` : ''}<b>${wsEsc(x.id === 'textos' ? (lig ? 'Informações adicionais, responsável e anexos' : 'Responsável e anexos') : x.nome)}</b>${bd ? `<em class="${bd.cls || ''}">${wsEsc(bd.t)}</em>` : ''}<span class="sp"></span>${x.id === 'textos' ? '' : `<div class="ws-bar">${wsBarra(x)}</div>`}</div>`;
+    const cab = `<div class="ws-sech">${n ? `<span class="ws-secn">${n}</span>` : ''}<b>${wsEsc(x.id === 'textos' ? (lig ? 'Informações adicionais, responsável e anexos' : 'Responsável e anexos') : x.nome)}</b>${bd ? `<em class="${bd.cls || ''}">${wsEsc(bd.t)}</em>` : ''}<span class="sp"></span>${WS_CONTADOR.includes(x.id) ? `<div class="ws-cnt" role="group" aria-label="Linhas de ${wsEsc(x.nome)}"><span>Linhas</span><button type="button" data-cnt="-" data-sec="${x.id}" title="Tirar a última linha" aria-label="Tirar a última linha" ${wsConta(x) <= 1 ? 'disabled' : ''}>−</button><b>${wsConta(x)}</b><button type="button" data-cnt="+" data-sec="${x.id}" title="Acrescentar uma linha (máximo ${wsBloco(x).max})" aria-label="Acrescentar uma linha" ${wsConta(x) >= wsBloco(x).max ? 'disabled' : ''}>+</button><small>de ${wsBloco(x).max}</small></div>` : ''}${x.id === 'textos' ? '' : `<div class="ws-bar">${wsBarra(x)}</div>`}</div>`;
     if (x.id === 'textos') return `<section class="ws-sec tx" data-sec="textos">${cab}<div class="ws-txhost"></div></section>`;
     const aviso = wsAviso(x), leg = x.ht ? wsLegenda() : '';
     return `<section class="ws-sec${ativa ? ' on' : ''}" data-sec="${x.id}">${cab}${aviso ? `<div class="ws-aviso${aviso.cls ? ' ' + aviso.cls : ''}">${aviso.html}</div>` : ''}${leg}
@@ -6306,6 +6334,7 @@ function wsCorpo() {
     if (sec && !sec.classList.contains('on')) { wsAtivar(sec.dataset.sec); const nb = main.querySelector(`.ws-sec.on [data-wb="${k}"]`); wsBotao(k, nb || b); return; }
     wsBotao(k, b);
   }));
+  main.querySelectorAll('[data-cnt]').forEach(b => b.addEventListener('click', () => wsContador(b.dataset.sec, b.dataset.cnt === '+')));
   main.querySelectorAll('.ws-hdr [data-hdr]').forEach(i => {
     i.addEventListener('input', () => { setValue(i.dataset.hdr, i.value); saveDraftSoon(); wsTopo(); });
     i.addEventListener('change', () => { setValue(i.dataset.hdr, i.value); saveDraftSoon(); wsRender(); });
@@ -6368,7 +6397,7 @@ function wsLimite(t, col, n0) {
   return a != null && b != null ? `${numBR(a)}–${numBR(b)}` : a != null ? `≥ ${numBR(a)}` : `≤ ${numBR(b)}`;
 }
 function wsTabela(t, cols, alvo, compacta) {
-  const tb = alvo || $('ws-grid'), conta = wsConta(t), N = compacta ? Math.min(wsLinhas(t), Math.max(conta + 1, 2)) : wsLinhas(t);
+  const tb = alvo || $('ws-grid'), conta = wsConta(t), N = wsLinhasVis(t);
   const lim = !t.ht && (t.bloco === 'quimica' || t.bloco === 'mecanica');
   let n0 = 0;
   if (lim) { const r = WS.cur.r <= state.itens && normaDoItem(state, WS.cur.r) ? WS.cur.r : 0; n0 = r || (() => { for (let n = 1; n <= state.itens; n++) if (normaDoItem(state, n)) return n; return 0; })(); }
@@ -6643,7 +6672,7 @@ function wsTeclaEd(e) {
   if (e.key === 'Enter' || e.key === 'Tab') {
     e.preventDefault();
     wsFecharEd(true);
-    const N = wsLinhas(wsTab()), C = WS.cols.length;
+    const N = wsLinhasVis(wsTab()), C = WS.cols.length;
     if (e.key === 'Enter') WS.cur.r = clamp(WS.cur.r + (e.shiftKey ? -1 : 1), 1, N);
     else WS.cur.c = clamp(WS.cur.c + (e.shiftKey ? -1 : 1), 0, C - 1);
     WS.anc = null; wsCursor(); wsStatus(); wsVerCelula(); $('ws-grid').focus({ preventScroll: true });
@@ -6651,14 +6680,14 @@ function wsTeclaEd(e) {
   }
   if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && !e.shiftKey) {
     e.preventDefault(); wsFecharEd(true);
-    WS.cur.r = clamp(WS.cur.r + (e.key === 'ArrowDown' ? 1 : -1), 1, wsLinhas(wsTab())); WS.anc = null;
+    WS.cur.r = clamp(WS.cur.r + (e.key === 'ArrowDown' ? 1 : -1), 1, wsLinhasVis(wsTab())); WS.anc = null;
     wsCursor(); wsStatus(); wsVerCelula(); $('ws-grid').focus({ preventScroll: true });
   }
 }
 /* teclado na planilha (cursor, sem caixa de edição aberta) */
 function wsTecla(e) {
   if (WS.edit || e.target.id !== 'ws-grid') return;
-  const t = wsTab(), N = wsLinhas(t), C = WS.cols.length, ctrl = e.ctrlKey || e.metaKey, k = e.key;
+  const t = wsTab(), N = wsLinhasVis(t), C = WS.cols.length, ctrl = e.ctrlKey || e.metaKey, k = e.key;
   const mover = (dr, dc) => {
     if (e.shiftKey) { if (!WS.anc) WS.anc = { r: WS.cur.r, c: WS.cur.c }; } else WS.anc = null;
     if (ctrl) {
@@ -6752,7 +6781,7 @@ function wsColar(texto) {
 /* linhas (itens) inteiras: inserir, excluir, duplicar, copiar e colar */
 function wsLinhasOp(op) {
   const t = wsTab(), s = wsSelRet(), b = wsBloco(t);
-  if (t.ht || !b) { toast('No tratamento térmico, insira ou exclua itens na aba Produtos.'); return; }
+  if (t.ht || !b) { toast('No tratamento térmico, insira ou exclua itens na parte Produtos.'); return; }
   const qt = s.r2 - s.r1 + 1;
   if (b.conta !== 'itens') {
     if (op === 'acima') { for (let i = 0; i < qt; i++) inserirLinha(b, Math.max(0, s.r1 - 1)); }
