@@ -1193,6 +1193,7 @@ body.tabmode .main { padding: 0 !important; }
 .cqimp { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0; }
 .cqimp > div { display: flex; gap: 10px; align-items: center; padding: 8px 12px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--line); flex: 1 1 200px; }
 .cqimp b { font: 800 26px/1 var(--f-display); } .cqimp span { font-size: 13px; line-height: 1.25; } .cqimp small { display: block; color: var(--ink-3); font-size: 11.5px; }
+.avm-etq { display: grid; grid-template-columns: repeat(2, 160px); justify-content: start; } .avm-etq .btn { justify-content: center; }   /* v53 */
 .cqimp .ok b { color: var(--ok); } .cqimp .rep b { color: var(--warn); } .cqimp .off b { color: var(--ink-3); }
 /* v52: pedido pelo link do Omie; os três botões do topo de Certificados com a mesma largura */
 .vhead .actions:has(> [data-act="cq-link"]) { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -5526,7 +5527,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 51; window.CQ_V = APP_V;
+    const APP_V = 53; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -9001,6 +9002,21 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     };
     fr.srcdoc = html;
   }
+  /* v53: depois de gravar os lotes, a pergunta da etiqueta (precisa responder: não fecha clicando fora nem com Esc) */
+  function avmPerguntaEtiquetas(keys) {
+    if (!keys || !keys.length) return;
+    const n = keys.length, faixa = n === 1 ? keys[0] : n === 2 ? `${keys[0]} e ${keys[1]}` : `${keys[0]} a ${keys[n - 1]}`;
+    $('#layer').innerHTML = `<div class="scrim"></div><div class="modal" role="alertdialog" aria-modal="true" aria-label="Imprimir etiquetas" data-trava="1"><h2>${n === 1 ? 'Lote gravado' : n + ' lotes gravados'}</h2>
+      <p style="margin:0">${esc(faixa)}</p><p style="margin:0;font-weight:600">Imprimir ${n === 1 ? 'a etiqueta' : 'as etiquetas'} agora?</p>
+      <div class="formfoot avm-etq"><button class="btn primary" type="button" id="avm-etq-sim">Sim, imprimir</button><button class="btn" type="button" id="avm-etq-nao">Não</button></div></div>`;
+    $('#avm-etq-sim').focus();
+    $('#avm-etq-nao').onclick = () => closeLayer();
+    $('#avm-etq-sim').onclick = async () => {
+      let lots = []; for (let i = 0; i < 30; i++) { lots = keys.map((k) => findRec('AV', k)).filter(Boolean); if (lots.length === n) break; await sleep(100); }
+      closeLayer();
+      if (lots.length) labelDialog(lots); else toast('Os lotes ainda não chegaram do banco. Use "Imprimir etiquetas" na faixa de lotes gravados.', true);
+    };
+  }
   function labelDialog(lots) {
     if (!lots.length) return;
     const cur = lsGet('cq-etq', '100x50'), curM = lsGet('cq-etq-mod', 'compacta');
@@ -10664,6 +10680,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
           st.last = keys; st.items = [avmBlank()]; if (!keep) st.nota = null;
           if (S.avmNfe) { nfeUsada(S.avmNfe, keys); S.avmNfe = null; }
           await sleep(150); S.stale = false; render(); updateChrome();
+          avmPerguntaEtiquetas(keys);
         } catch (err) {
           console.error(err);
           if (keys.length) { st.last = keys; st.items = items.slice(keys.length); }
@@ -19908,7 +19925,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (af) { S.f.alert = af.dataset.af; render(); }
   });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && $('#layer').innerHTML) closeLayer();
+    if (e.key === 'Escape' && $('#layer').innerHTML && !$('#layer [data-trava]')) closeLayer();
     if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.bar.click, tr[data-open], li[data-open], div[data-open]')) { e.preventDefault(); e.target.click(); }
   });
   const tip = $('#tip');
