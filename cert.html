@@ -744,6 +744,8 @@ html.ws.cq-embed .ws-body { padding: 0 0 2px; }
 .ws-cnt button { width: 36px; height: 28px; border: 1px solid var(--w-line2); border-radius: 7px; background: var(--w-sf); color: var(--w-ink); font: 700 17px/1 var(--w-body); cursor: pointer; display: grid; place-items: center; padding: 0; }
 .ws-cnt button:hover:not(:disabled) { background: var(--w-sf2); } .ws-cnt button:disabled { opacity: .4; cursor: default; }
 .ws-cnt b { font: 700 18px var(--w-mono); text-align: center; } .ws-cnt small { font: 400 12px var(--w-body); color: var(--w-ink3); }
+.ws-fls { max-width: 46vw; } .ws-flsl { font: 600 11.5px var(--w-body); text-transform: uppercase; letter-spacing: .05em; color: var(--w-ink3); padding: 0 6px 0 8px; }
+.ws-fls button.fl { min-width: 92px; } .ws-fls button.nova { padding: 0 12px; font: 600 13.5px var(--w-body); color: var(--w-ink); }
 .ws-sech .ws-tb { height: 36px; font-size: 13.5px; }
 .ws-sec .ws-gw { flex: none; overflow: visible; min-height: 0; margin-top: 10px; }   /* sem barra de rolagem lateral */
 .ws-sec .ws-st { margin-top: 8px; }
@@ -5996,13 +5998,19 @@ const wsBloco = t => (t.ht ? null : BLOCO[t.bloco]);
 const wsLinhas = t => (t.ht ? MAX_ITENS : wsBloco(t).max);
 const wsConta = t => (t.ht ? state.itens : contaDe(state, wsBloco(t)));
 /* v53: na tela só as linhas em uso e uma vazia embaixo para acrescentar (o tratamento térmico acompanha os itens) */
-const wsLinhasVis = t => (GRADES ? wsConta(t) : t.ht ? Math.max(1, wsConta(t)) : Math.min(wsLinhas(t), wsConta(t) + 1));
+const wsLinhasVis = t => (t.ht ? Math.max(1, wsConta(t)) : wsConta(t));   /* a tela mostra exatamente as linhas do contador (as que saem no certificado) */
 /* grades: Produtos, Componentes e Corridas têm contador de linhas (é o que sai no certificado); galvanização e dimensional seguem os produtos */
-const WS_CONTADOR = GRADES ? ['produto', 'comp', 'corr'] : [];
+const WS_CONTADOR = GRADES ? ['produto', 'comp', 'corr'] : ['produto'];
 async function wsContador(id, mais) {
   wsFecharEd(true);
   const t = WS_TABS.find(x => x.id === id), b = wsBloco(t), n = wsConta(t);
   if (mais) {
+    if (n >= b.max && id === 'produto') {
+      const prox = doc.atual < doc.certs.length - 1;
+      if (!(await confirmMsg('Folha cheia', `Esta folha já tem ${b.max} ${NOME_ITEM[1]}. ${prox ? `Ir para a folha ${rotuloFolha(doc.atual + 1)}?` : 'Criar a próxima folha (continuação, com o mesmo cliente, O.C., nota fiscal e data)?'}`, prox ? 'Ir para a folha' : 'Criar folha', 'Cancelar'))) return;
+      if (prox) irParaFolha(doc.atual + 1); else await criarContinuacao();
+      WS.tab = 'produto'; WS.cur = { r: 1, c: 0 }; WS.anc = null; wsRender(); return;
+    }
     if (n >= b.max) { toast(`A folha já tem o máximo de ${b.max} linhas em ${t.nome}.`, true); return; }
     if (id === 'produto') { state.itens++; renumerar(); render(); saveDraftSoon(); }
     else inserirLinha(b, n);
@@ -6232,13 +6240,14 @@ function wsTopo() {
   const sal = WS.central ? `rascunho salvo na Central às ${wsHora(WS.central)}` : WS.lastSave ? `rascunho salvo às ${wsHora(WS.lastSave)}` : 'rascunho';
   $('ws-s').textContent = [`folha ${doc.atual + 1} de ${n}`, `${state.itens} de ${MAX_ITENS} ${NOME_ITEM[1]}`, sal].join(' · ');
   const fl = $('ws-fls');
-  fl.hidden = n < 2;
-  if (n >= 2) {
-    fl.innerHTML = doc.certs.map((c, i) => `<button type="button" class="${i === doc.atual ? 'on' : ''}" data-i="${i}" title="${wsEsc(faixaItens(c))}">${wsEsc(rotuloFolha(i))}</button>`).join('') +
-      `<button type="button" class="mini" data-x="del" title="Remover a última folha (${wsEsc(rotuloFolha(n - 1))})" aria-label="Remover a última folha">×</button><button type="button" class="mini" data-x="add" title="Nova folha de continuação" aria-label="Nova folha">+</button>`;
+  fl.hidden = false;   /* v53: folhas sempre à vista, mesmo com uma só */
+  {
+    fl.innerHTML = `<span class="ws-flsl">Folhas</span>` + doc.certs.map((c, i) => `<button type="button" class="fl${i === doc.atual ? ' on' : ''}" data-i="${i}" title="${wsEsc(faixaItens(c))}">${wsEsc(rotuloFolha(i) || 'Folha ' + (i + 1))}</button>`).join('') +
+      `<button type="button" class="nova" data-x="add" title="Nova folha de continuação (mesmo cliente, O.C., nota fiscal e data)">+ Nova folha</button>` +
+      (n >= 2 ? `<button type="button" class="mini" data-x="del" title="Remover a última folha (${wsEsc(rotuloFolha(n - 1))})" aria-label="Remover a última folha">×</button>` : '');
     fl.querySelectorAll('[data-i]').forEach(b => b.addEventListener('click', () => { wsFecharEd(true); irParaFolha(+b.dataset.i); }));
-    fl.querySelector('[data-x=del]').addEventListener('click', () => { wsFecharEd(true); removerFolha(); });
-    fl.querySelector('[data-x=add]').addEventListener('click', () => { wsFecharEd(true); criarContinuacao(); });
+    const fd = fl.querySelector('[data-x=del]'); if (fd) fd.addEventListener('click', () => { wsFecharEd(true); removerFolha(); });
+    fl.querySelector('[data-x=add]').addEventListener('click', async () => { wsFecharEd(true); await criarContinuacao(); WS.tab = 'produto'; WS.cur = { r: 1, c: 0 }; WS.anc = null; wsRender(); });
   }
   $('ws-undo').disabled = HIST.i <= 0;
   $('ws-redo').disabled = HIST.i >= HIST.pilha.length - 1;
@@ -6317,7 +6326,7 @@ function wsCorpo() {
   let num = 0;
   const partes = secs.map(x => {
     const lig = wsSecLig(x), n = lig ? ++num : 0, ativa = x.id === t.id, bd = lig ? wsBadge(x) : null;
-    const cab = `<div class="ws-sech">${n ? `<span class="ws-secn">${n}</span>` : ''}<b>${wsEsc(x.id === 'textos' ? (lig ? 'Informações adicionais, responsável e anexos' : 'Responsável e anexos') : x.nome)}</b>${bd ? `<em class="${bd.cls || ''}">${wsEsc(bd.t)}</em>` : ''}<span class="sp"></span>${WS_CONTADOR.includes(x.id) ? `<div class="ws-cnt" role="group" aria-label="Linhas de ${wsEsc(x.nome)}"><span>Linhas</span><button type="button" data-cnt="-" data-sec="${x.id}" title="Tirar a última linha" aria-label="Tirar a última linha" ${wsConta(x) <= 1 ? 'disabled' : ''}>−</button><b>${wsConta(x)}</b><button type="button" data-cnt="+" data-sec="${x.id}" title="Acrescentar uma linha (máximo ${wsBloco(x).max})" aria-label="Acrescentar uma linha" ${wsConta(x) >= wsBloco(x).max ? 'disabled' : ''}>+</button><small>de ${wsBloco(x).max}</small></div>` : ''}${x.id === 'textos' ? '' : `<div class="ws-bar">${wsBarra(x)}</div>`}</div>`;
+    const cab = `<div class="ws-sech">${n ? `<span class="ws-secn">${n}</span>` : ''}<b>${wsEsc(x.id === 'textos' ? (lig ? 'Informações adicionais, responsável e anexos' : 'Responsável e anexos') : x.nome)}</b>${bd ? `<em class="${bd.cls || ''}">${wsEsc(bd.t)}</em>` : ''}<span class="sp"></span>${WS_CONTADOR.includes(x.id) ? `<div class="ws-cnt" role="group" aria-label="Linhas de ${wsEsc(x.nome)}"><span>Linhas</span><button type="button" data-cnt="-" data-sec="${x.id}" title="Tirar a última linha" aria-label="Tirar a última linha" ${wsConta(x) <= 1 ? 'disabled' : ''}>−</button><b>${wsConta(x)}</b><button type="button" data-cnt="+" data-sec="${x.id}" title="${wsConta(x) >= wsBloco(x).max && x.id === 'produto' ? 'Folha cheia: criar ou ir para a próxima folha' : 'Acrescentar uma linha (máximo ' + wsBloco(x).max + ')'}" aria-label="Acrescentar uma linha" ${wsConta(x) >= wsBloco(x).max && x.id !== 'produto' ? 'disabled' : ''}>+</button><small>de ${wsBloco(x).max}</small></div>` : ''}${x.id === 'textos' ? '' : `<div class="ws-bar">${wsBarra(x)}</div>`}</div>`;
     if (x.id === 'textos') return `<section class="ws-sec tx" data-sec="textos">${cab}<div class="ws-txhost"></div></section>`;
     const aviso = wsAviso(x), leg = x.ht ? wsLegenda() : '';
     return `<section class="ws-sec${ativa ? ' on' : ''}" data-sec="${x.id}">${cab}${aviso ? `<div class="ws-aviso${aviso.cls ? ' ' + aviso.cls : ''}">${aviso.html}</div>` : ''}${leg}
