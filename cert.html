@@ -714,6 +714,39 @@ html.ws.cq-embed .ws-body { padding: 0 0 2px; }
 .ws-g thead tr.h1 th small { font-size: 9px; }
 .ws-g th.ci { font-size: 10px; }
 .ws-ed { font-size: 10px; padding: 0 6px; }
+.ws-g td { text-align: center; } .ws-g td.ds { text-align: left; }   /* v53 */
+/* v53: tela única com processos */
+.ws-proc { display: grid; gap: 8px; padding: 12px 20px 10px; grid-auto-flow: row; grid-auto-columns: auto; }
+.ws-proct { display: flex; align-items: baseline; gap: 10px; } .ws-proct b { font: 700 16px var(--w-disp); text-transform: uppercase; letter-spacing: .02em; } .ws-proct span { font: 400 12.5px var(--w-body); color: var(--w-ink3); }
+.ws-procg { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 8px; }
+.ws-pr { height: 50px; border-radius: 10px; border: 1.5px solid var(--w-ink); background: var(--w-sf); color: var(--w-ink); display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 0 10px; text-align: left; cursor: pointer; font-family: var(--w-body); }
+.ws-pr i { width: 22px; height: 22px; border-radius: 6px; background: var(--w-ok); color: #fff; display: grid; place-items: center; font: 700 13px var(--w-body); font-style: normal; }
+.ws-pr span { min-width: 0; } .ws-pr b { display: block; font: 600 14px/1.15 var(--w-body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ws-pr small { display: block; font: 400 11.5px var(--w-body); color: var(--w-ink3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-pr em { font: 600 12px var(--w-body); font-style: normal; padding: 2px 8px; border-radius: 10px; background: var(--w-sf2); color: var(--w-ink2); }
+.ws-pr em.ok { background: var(--w-okbg); color: var(--w-ok); } .ws-pr em.cr { background: var(--w-critbg); color: var(--w-crit); } .ws-pr em.wn { background: var(--w-warnbg); color: var(--w-warn); }
+.ws-pr.off { border: 1.5px dashed var(--w-line2); color: var(--w-ink3); } .ws-pr.off i { background: transparent; border: 1.5px solid var(--w-line2); color: var(--w-ink3); }
+.ws-pr.fix { border-color: var(--w-line2); background: var(--w-sf2); } .ws-pr.fix i { background: var(--w-ink3); font-size: 11px; }
+.ws-pr:hover { box-shadow: 0 0 0 3px color-mix(in srgb, var(--w-cur) 18%, transparent); } .ws-pr:focus-visible { outline: 3px solid var(--w-cur); outline-offset: 2px; }
+.ws-main { border-radius: 12px; margin-top: 0; overflow-y: auto; display: block; padding: 14px 16px 16px; }
+.ws-main .ws-hdr { margin-bottom: 14px; }
+.ws-sec { border: 1px solid var(--w-line); border-radius: 10px; padding: 10px 12px 12px; margin-bottom: 14px; background: var(--w-sf); }
+.ws-sec.on { border-color: color-mix(in srgb, var(--w-cur) 55%, var(--w-line)); box-shadow: 0 0 0 2px color-mix(in srgb, var(--w-cur) 14%, transparent); }
+.ws-sech { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; min-height: 42px; }
+.ws-secn { width: 26px; height: 26px; border-radius: 7px; background: var(--w-dk); color: var(--w-sf); display: grid; place-items: center; font: 700 15px var(--w-disp); flex: none; }
+.ws-sech > b { font: 700 19px/1.1 var(--w-disp); text-transform: uppercase; letter-spacing: .02em; white-space: nowrap; }
+.ws-sech > em { font: 600 12px var(--w-body); font-style: normal; padding: 2px 9px; border-radius: 11px; background: var(--w-sf2); color: var(--w-ink2); }
+.ws-sech > em.ok { background: var(--w-okbg); color: var(--w-ok); } .ws-sech > em.cr { background: var(--w-critbg); color: var(--w-crit); } .ws-sech > em.wn { background: var(--w-warnbg); color: var(--w-warn); }
+.ws-sech .sp { flex: 1; }
+.ws-sech .ws-bar { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-left: auto; }
+.ws-sech .ws-bar .ws-tb { width: 150px; flex: none; }
+.ws-sech .ws-tb { height: 36px; font-size: 13.5px; }
+.ws-sec .ws-gw { flex: none; overflow-x: auto; overflow-y: visible; min-height: 0; margin-top: 10px; }
+.ws-sec .ws-st { margin-top: 8px; }
+.ws-g.est td { cursor: pointer; } .ws-g.est tbody tr:hover td { background: color-mix(in srgb, var(--w-cur) 5%, transparent); }
+.ws-sec.tx .ws-tx { overflow: visible; margin-top: 8px; }
+.ws-main > .ws-dica { margin: 2px 2px 0; }
+@media (max-width: 1500px) { .ws-pr small { display: none; } }
+@media (max-width: 1100px) { .ws-sech .ws-bar { justify-content: flex-start; margin-left: 0; } .ws-procg { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 /* v52: recolher a prévia do PDF */
 .ws-ch .ws-rec { margin-left: auto; align-self: center; flex: none; width: 30px; height: 30px; border: 1px solid var(--w-line2); border-radius: 8px; background: var(--w-sf); color: var(--w-ink2); font: 600 16px/1 var(--w-body); cursor: pointer; display: grid; place-items: center; padding: 0; }
 .ws-ch .ws-rec:hover, .ws-faixa:hover i { background: var(--w-sf2); color: var(--w-ink); }
@@ -1576,7 +1609,15 @@ const BLOCOS = GRADES ? [
 ] : Object.entries(BASE).map(([id, base]) => ({ id, base, max: 10, conta: 'itens', numera: true }))
   .concat([{ id: 'trat', base: 58, max: 5, conta: 'fixo', numera: false }]);   // tratamento térmico: 5 grupos, sempre na folha
 const BLOCO = Object.fromEntries(BLOCOS.map(b => [b.id, b]));
-const SECOES = (LAYOUT_INFO && LAYOUT_INFO.SECOES) || {};        // linhas que somem juntas (galvanização)
+/* v53: seções que entram ou saem do certificado (escolhidas por pedido); cada uma vai do espaço antes do título até a última linha dela.
+   Produtos, declaração e assinatura ficam sempre. */
+const SECOES = GRADES ? (() => { const R = LAYOUT_INFO.R;
+  return Object.assign({ comp: [R.esp3, R.esp4 - 1], corr: [R.esp4, R.esp5 - 1], dim: [R.esp6, R.esp7 - 1], textos: [R.esp7, R.esp8 - 1] }, LAYOUT_INFO.SECOES || {}); })()
+  : { quimica: [27, 39], mecanica: [40, 55], trat: [56, 63], textos: [64, 67] };
+/* linhas com o número da seção na coluna A (renumeradas quando uma seção anterior sai) */
+const SEC_ROWS = GRADES ? Object.entries(LAYOUT_INFO.R).filter(([k]) => /^sec\d/.test(k)).map(([, r]) => r) : [14, 28, 41, 57, 65];
+const optPadrao = () => Object.fromEntries(Object.keys(SECOES).map(k => [k, true]));
+const secOn = (cert, k) => !(cert && cert.opt && cert.opt[k] === false);
 const COLS = 'ABCDEFGHIJKLMNOPQR';
 const NCOLS = MODEL.cols.length;        // 18 (A..R)
 const NROWS = MODEL.rows.length;        // 76
@@ -1807,8 +1848,8 @@ function serialToBR(n) {
 /* =====================================================================
  * Estado + rascunho automático
  * ===================================================================== */
-const emptyState = () => (GRADES ? { itens: 1, inicio: 1, comps: 1, corrs: 1, opt: { galv: true }, v: {}, cb: {} }
-  : { itens: 1, inicio: 1, v: {}, cb: {} });
+const emptyState = () => (GRADES ? { itens: 1, inicio: 1, comps: 1, corrs: 1, opt: optPadrao(), v: {}, cb: {} }
+  : { itens: 1, inicio: 1, opt: optPadrao(), v: {}, cb: {} });
 const newCertificate = () => {
   const s = emptyState();
   s.v[REF_DATA] = todayBR();
@@ -1901,8 +1942,8 @@ function sanitizeState(s) {
   if (GRADES) {
     out.comps = clamp(parseInt(s.comps, 10) || 1, 1, BLOCO.comp.max);
     out.corrs = clamp(parseInt(s.corrs, 10) || 1, 1, BLOCO.corr.max);
-    out.opt = { galv: !(s.opt && s.opt.galv === false) };
   }
+  out.opt = Object.fromEntries(Object.keys(SECOES).map(k => [k, secOn(s, k)]));
   const v = Object.assign({}, s.v || {});
   // rascunhos de modelos com o responsável em M73
   if (REF_ASSINANTE !== 'M73' && typeof v.M73 === 'string' && !v[REF_ASSINANTE]) v[REF_ASSINANTE] = v.M73;
@@ -2007,12 +2048,12 @@ const contaDe = (cert, b) => (b.conta === 'itens' ? cert.itens : b.conta === 'fi
 function linhaOculta(cert, r) {
   const x = ROW_BLOCO[r];
   if (x && x.n > contaDe(cert, x.b)) return true;
-  for (const [k, [a, z]] of Object.entries(SECOES)) if (r >= a && r <= z && !(cert.opt && cert.opt[k])) return true;
+  for (const [k, [a, z]] of Object.entries(SECOES)) if (r >= a && r <= z && !secOn(cert, k)) return true;
   return false;
 }
 const campoVisivel = (f, cert = state) => !linhaOculta(cert, f.r1);
 /* folha com todas as linhas (medidas das células) */
-const folhaCheia = () => ({ itens: MAX_ITENS, comps: GRADES ? BLOCO.comp.max : 1, corrs: GRADES ? BLOCO.corr.max : 1, opt: { galv: true } });
+const folhaCheia = () => ({ itens: MAX_ITENS, comps: GRADES ? BLOCO.comp.max : 1, corrs: GRADES ? BLOCO.corr.max : 1, opt: optPadrao() });
 /* texto fixo da célula; na coluna "Item" das tabelas, o Nº conforme a numeração da folha (11, 12… na folha A) */
 function cellFor(cert, r, c) {
   const cell = cellAt(r, c);
@@ -2021,11 +2062,14 @@ function cellFor(cert, r, c) {
   const sec = c === 1 ? numeroSecao(cert, r) : null;
   return sec !== null ? { st: cell.st, t: sec, rich: null } : cell;
 }
-/* grades sem galvanização: as seções seguintes sobem um número (5 → 4, 6 → 5) */
+/* seção que saiu do certificado: as seguintes sobem um número (ex.: sem tratamento térmico, 5 → 4) */
 function numeroSecao(cert, r) {
-  if (!GRADES || (cert.opt && cert.opt.galv)) return null;
+  if (!SEC_ROWS.includes(r)) return null;
   const t = cellAt(r, 1).t;
-  return typeof t === 'number' && r > (SECOES.galv || [Infinity])[1] && LAYOUT_INFO.R && Object.entries(LAYOUT_INFO.R).some(([k, v]) => /^sec\d/.test(k) && v === r) ? t - 1 : null;
+  if (typeof t !== 'number') return null;
+  let menos = 0;
+  for (const [k, [, z]] of Object.entries(SECOES)) if (!secOn(cert, k) && z < r) menos++;
+  return menos ? t - menos : null;
 }
 function layoutFor(cert, print = false) {
   const colW = print ? MODEL.printCols : MODEL.cols;
@@ -3215,7 +3259,7 @@ function novaFolhaVazia() {
   const c = newCertificate();
   for (const ref of SHARED) { if (ant.v[ref]) c.v[ref] = ant.v[ref]; else delete c.v[ref]; }
   for (const ref of SYNC_EXTRA) if (ant.v[ref]) c.v[ref] = ant.v[ref];
-  if (GRADES) c.opt = Object.assign({}, ant.opt);
+  c.opt = Object.assign({}, ant.opt);
   doc.certs.push(c);
   atualizarNumeros();
   return c;
@@ -3473,17 +3517,17 @@ function conferir(certs) {
       }
       const rp = BASE.produto + n;
       for (const [c, nome] of [[2, 'quantidade'], [3, 'descrição'], [14, 'material'], [17, 'corrida']]) if (!v(refOf(rp, c))) add(ci, refOf(rp, c), 'falta', `Item ${num}: ${nome} em branco`);
-      if (!FIELDS.some(f => f.tbl === 'quimica' && f.item === n && cert.v[f.ref])) add(ci, refOf(BASE.quimica + n, 2), 'aviso', `Item ${num}: análise química em branco`);
-      if (!FIELDS.some(f => f.tbl === 'mecanica' && f.item === n && cert.v[f.ref])) add(ci, refOf(BASE.mecanica + n, 2), 'aviso', `Item ${num}: propriedades mecânicas em branco`);
+      if (secOn(cert, 'quimica') && !FIELDS.some(f => f.tbl === 'quimica' && f.item === n && cert.v[f.ref])) add(ci, refOf(BASE.quimica + n, 2), 'aviso', `Item ${num}: análise química em branco`);
+      if (secOn(cert, 'mecanica') && !FIELDS.some(f => f.tbl === 'mecanica' && f.item === n && cert.v[f.ref])) add(ci, refOf(BASE.mecanica + n, 2), 'aviso', `Item ${num}: propriedades mecânicas em branco`);
       for (const f of FIELDS) {
-        if (f.item !== n || (f.tbl !== 'quimica' && f.tbl !== 'mecanica') || !cert.v[f.ref]) continue;
+        if (f.item !== n || (f.tbl !== 'quimica' && f.tbl !== 'mecanica') || !cert.v[f.ref] || !secOn(cert, f.tbl)) continue;
         const L = foraDaNorma(cert, f);
         if (L) add(ci, f.ref, 'norma', `Item ${num}: ${L.nome} ${cert.v[f.ref]} fora da faixa da ${L.nm.nome} (${textoFaixa(L.faixa)})` + (L.ok ? '' : ' · limite ainda não conferido'));
         if (f.tbl === 'mecanica' && f.c1 >= 10 && /^RP$/i.test(v(f.ref))) add(ci, f.ref, 'aviso', `Item ${num}: ${f.label} reprovado (RP)`);
       }
     }
     // tratamento térmico: cada item com dados precisa estar em uma linha
-    if (!GRADES) {
+    if (!GRADES && secOn(cert, 'trat')) {
       const linhas = [];
       for (let k = 1; k <= 5; k++) {
         const r = 58 + k, it = v(refOf(r, 1)), tr = v(refOf(r, 3));
@@ -3885,6 +3929,14 @@ function resultadoGalv(cert = state) {
   }
   return mudou;
 }
+function alternarSecao(k, on) {
+  for (const c of doc.certs) {
+    c.opt = Object.assign(optPadrao(), c.opt || {}, { [k]: on });
+    if (k === 'galv' && on) { const ref = FIELDS.find(f => f.key === 'galvNorma').ref; if (!c.v[ref]) { c.v[ref] = 'ASTM A123 / ABNT NBR 6323'; (c.sug = c.sug || {})[ref] = true; } }
+  }
+  render();
+  saveDraftSoon();
+}
 function alternarGalv(on) {
   for (const c of (doc.syncExtras ? doc.certs : [state])) {
     c.opt.galv = on;
@@ -3952,7 +4004,7 @@ async function criarContinuacao() {
   for (const ref of SHARED) { if (ant.v[ref]) c.v[ref] = ant.v[ref]; else delete c.v[ref]; }
   for (const ref of SYNC_EXTRA) if (ant.v[ref]) c.v[ref] = ant.v[ref];
   c.cb = Object.assign({}, ant.cb);
-  if (GRADES) c.opt = Object.assign({}, ant.opt);
+  c.opt = Object.assign({}, ant.opt);
   doc.certs.push(c);
   atualizarNumeros();
   renumerar();
@@ -4342,9 +4394,8 @@ async function buildXlsx(cert = state) {
     ce.removeAttribute('t');
     writeNumber(ce, cert.inicio + n - 1, null);
   }
-  if (GRADES) {                                   // números das seções depois da galvanização (quando ela sai)
-    for (const [k, r] of Object.entries(LAYOUT_INFO.R)) {
-      if (!/^sec\d/.test(k)) continue;
+  {                                               // números das seções depois de uma seção que saiu
+    for (const r of SEC_ROWS) {
       const t = cellAt(r, 1).t;
       if (typeof t !== 'number') continue;
       const ce = getCell(r, 1);
@@ -4440,12 +4491,12 @@ function interpretarGrades(cells, hidden) {
     }
     return n;
   };
-  const galvRows = SECOES.galv || [0, -1];
-  let galv = false;
-  for (let r = galvRows[0]; r <= galvRows[1]; r++) if (!hidden.has(r) && !ROW_BLOCO[r]) galv = true;
+  /* seção que veio escondida na planilha = seção fora do certificado */
+  const opt = {};
+  for (const [k, [a, z]] of Object.entries(SECOES)) { opt[k] = false; for (let r = a; r <= z; r++) if (!hidden.has(r) && !ROW_BLOCO[r]) opt[k] = true; }
   const ini = parseInt(cells[refOf(BASE.produto + 1, 1)], 10);
   if (!values[REF_ASSINANTE] && config.assinante) values[REF_ASSINANTE] = config.assinante;
-  const out = sanitizeState({ itens: conta(BLOCO.produto), comps: conta(BLOCO.comp), corrs: conta(BLOCO.corr), opt: { galv },
+  const out = sanitizeState({ itens: conta(BLOCO.produto), comps: GRADES ? conta(BLOCO.comp) : 1, corrs: GRADES ? conta(BLOCO.corr) : 1, opt,
     inicio: ini > 0 ? ini : 1, v: values, cb: {} });
   out.formatoAntigo = false;
   return out;
@@ -4628,7 +4679,10 @@ function interpretarPlanilha(cells, hidden, controles = {}) {
     if (hasData || shown) itens = n;
   }
   if (!values[REF_ASSINANTE] && config.assinante) values[REF_ASSINANTE] = config.assinante;
-  const out = sanitizeState({ itens, inicio, v: values, cb: cbState });
+  /* v53: seção escondida na planilha (modelo atual) = seção fora do certificado */
+  const opt = {};
+  if (!formatoAntigo && hidden && hidden.size) for (const [k, [a, z]] of Object.entries(SECOES)) { opt[k] = false; for (let r = a; r <= z; r++) if (!hidden.has(r) && !ROW_BLOCO[r]) opt[k] = true; }
+  const out = sanitizeState({ itens, inicio, opt, v: values, cb: cbState });
   out.formatoAntigo = formatoAntigo;
   return out;
 }
@@ -5466,7 +5520,7 @@ function montarGrades(ped, indices) {
       }
     });
     c.comps = Math.max(1, ci);
-    c.opt = { galv };
+    c.opt = Object.assign(optPadrao(), c.opt || {}, { galv });
     if (galv) put(refNorma, 'ASTM A123 / ABNT NBR 6323', true);
     return c;
   });
@@ -5864,6 +5918,21 @@ const WS_TABS = GRADES ? [
 ];
 WS.tab = WS_TABS[0].id;
 const wsTab = () => WS_TABS.find(t => t.id === WS.tab) || WS_TABS[0];
+/* v53: tela única. Cada parte do certificado é um processo que entra ou sai do pedido (barra no topo);
+   as partes ligadas ficam uma embaixo da outra. A parte com o cursor é a "ativa" (planilha com teclado,
+   copiar/colar, seleção); as outras ficam desenhadas e um clique nelas passa a ativa. */
+const WS_SUB = { produto: 'sempre no certificado', quimica: 'composição por corrida', mecanica: 'tração, dureza e ensaios', trat: 'por item',
+  textos: 'no fim do certificado', comp: 'matéria-prima', corr: 'química e mecânica', galv: 'a fogo', dim: 'medidas' };
+const wsSecK = t => (t.id === 'produto' ? null : t.id);                     /* chave em SECOES (textos = informações adicionais) */
+const wsSecLig = t => { const k = wsSecK(t); return !k || !SECOES[k] || secOn(state, k); };
+const wsSecVisivel = t => t.id === 'textos' || wsSecLig(t);                 /* "Textos e anexos" fica sempre (responsável e anexos) */
+const wsSecNome = t => (t.id === 'textos' ? 'Informações adicionais' : t.nome);
+function wsSecTemDados(t) {
+  const k = wsSecK(t); if (!k) return false;
+  if (k === 'textos') return doc.certs.some(c => FIELDS.some(f => (f.key === 'info1' || f.key === 'info2') && c.v[f.ref]));
+  if (k === 'trat') return doc.certs.some(c => HT_REFS.some(r => c.v[r]));
+  return doc.certs.some(c => FIELDS.some(f => f.tbl === k && c.v[f.ref]));
+}
 const WS_MEC = { 2: ['Escoam.', 'YS (MPa)'], 3: ['Resist.', 'TS (MPa)'], 4: ['Along.', 'El. (%)'], 5: ['Red. área', 'RA (%)'], 6: ['HB 1', 'dureza'], 7: ['HB 2', 'dureza'],
   8: ['Charpy', 'temp. (°C)'], 9: ['Média', 'Charpy (J)'], 10: ['LP', 'PT'], 11: ['PM', 'MT'], 12: ['US', 'UT'], 13: ['RX', 'RT'], 14: ['Corrosão', ''], 15: ['Achatam.', ''],
   16: ['Dobram.', ''], 17: ['Visual', ''], 18: ['Dimens.', ''] };
@@ -6165,11 +6234,38 @@ function wsBadge(t) {
 const temItemDados = n => FIELDS.some(f => f.item === n && state.v[f.ref]);
 function wsAbas() {
   const nav = $('ws-tabs');
-  nav.innerHTML = WS_TABS.filter(t => !(t.id === 'galv' && !(state.opt && state.opt.galv))).map(t => {
-    const bd = wsBadge(t);
-    return `<button type="button" role="tab" aria-selected="${t.id === WS.tab}" class="${t.id === WS.tab ? 'on' : ''}" data-t="${t.id}">${wsEsc(t.nome)}${bd ? `<em class="${bd.cls || ''}">${wsEsc(bd.t)}</em>` : ''}</button>`;
-  }).join('');
-  nav.querySelectorAll('[data-t]').forEach(b => b.addEventListener('click', () => wsIrAba(b.dataset.t)));
+  nav.className = 'ws-proc'; nav.setAttribute('role', 'group'); nav.setAttribute('aria-label', 'Processos deste pedido');
+  nav.style.setProperty('--n', WS_TABS.length);
+  nav.innerHTML = `<div class="ws-proct"><b>Processos deste pedido</b><span>toque para incluir ou tirar; o que sai some da montagem e do certificado</span></div><div class="ws-procg">` + WS_TABS.map(t => {
+    const fixo = !wsSecK(t), on = wsSecLig(t), bd = on ? wsBadge(t) : null;
+    return `<button type="button" class="ws-pr ${fixo ? 'fix' : on ? 'on' : 'off'}" data-pr="${t.id}" aria-pressed="${on}" title="${fixo ? 'Sempre no certificado' : on ? 'Tirar ' + wsEsc(wsSecNome(t)) + ' deste pedido' : 'Incluir ' + wsEsc(wsSecNome(t)) + ' neste pedido'}"><i>${fixo ? '🔒' : on ? '✓' : '+'}</i><span><b>${wsEsc(wsSecNome(t))}</b><small>${on ? WS_SUB[t.id] || '' : 'fora deste pedido'}</small></span>${bd ? `<em class="${bd.cls || ''}">${wsEsc(bd.t)}</em>` : ''}</button>`;
+  }).join('') + '</div>';
+  nav.querySelectorAll('[data-pr]').forEach(b => b.addEventListener('click', () => wsProcesso(b.dataset.pr)));
+}
+async function wsProcesso(id) {
+  const t = WS_TABS.find(x => x.id === id); if (!t) return;
+  wsFecharEd(true);
+  const k = wsSecK(t);
+  if (!k) { wsIrSecao(id); return; }
+  const on = wsSecLig(t);
+  if (on && wsSecTemDados(t) && !(await confirmMsg('Tirar ' + wsSecNome(t), `${wsSecNome(t)} já tem dados neste pedido. A parte sai da montagem e do certificado (PDF e Excel), mas os dados ficam guardados no rascunho: se incluir de novo, eles voltam.`, 'Tirar', 'Cancelar'))) return;
+  alternarSecao(k, !on);
+  if (!on) { if (t.id !== 'textos') WS.tab = id; WS.cur = { r: 1, c: 0 }; WS.anc = null; wsRender(); wsIrSecao(id); }
+  else { if (WS.tab === id) { WS.tab = WS_TABS[0].id; WS.cur = { r: 1, c: 0 }; WS.anc = null; } wsRender(); }
+  toast(on ? `${wsSecNome(t)} saiu deste pedido` : `${wsSecNome(t)} incluída neste pedido`);
+}
+function wsIrSecao(id) {
+  const m = $('ws-main'), el = m && m.querySelector(`[data-sec="${id}"]`); if (!el) return;
+  m.scrollTop += el.getBoundingClientRect().top - m.getBoundingClientRect().top - 6;
+}
+/* passa uma parte a ser a ativa sem a tela pular: a parte clicada fica no mesmo lugar */
+function wsAtivar(id, cur) {
+  const m = $('ws-main'), el0 = m.querySelector(`[data-sec="${id}"]`), y0 = el0 ? el0.getBoundingClientRect().top : 0;
+  wsFecharEd(true);
+  WS.tab = id; WS.cur = cur || { r: 1, c: 0 }; WS.anc = null;
+  wsRender();
+  const el = m.querySelector(`[data-sec="${id}"]`); if (el && el0) m.scrollTop += el.getBoundingClientRect().top - y0;
+  const g = $('ws-grid'); if (g) g.focus({ preventScroll: true });
 }
 function wsIrAba(id) {
   wsFecharEd(true);
@@ -6180,30 +6276,44 @@ function wsIrAba(id) {
 
 /* ---------- corpo da aba: barra de ferramentas, aviso, planilha e rodapé ---------- */
 function wsCorpo() {
-  const t = wsTab(), main = $('ws-main');
-  const scroll = main.querySelector('.ws-gw'); const sx = scroll ? scroll.scrollLeft : 0, sy = scroll ? scroll.scrollTop : 0;
+  const main = $('ws-main');
+  const msy = main.scrollTop;
+  const gw0 = main.querySelector('#ws-grid') ? main.querySelector('#ws-grid').parentElement : null, sx = gw0 ? gw0.scrollLeft : 0;
   const focado = document.activeElement && document.activeElement.id === 'ws-grid';
-  if (t.id === 'textos') { wsTextos(main); return; }
+  if (!wsSecVisivel(wsTab()) || wsTab().id === 'textos') { WS.tab = WS_TABS[0].id; WS.cur = { r: 1, c: 0 }; WS.anc = null; }
+  const t = wsTab();
   const cols = wsCols(t);
   WS.cols = cols;
   WS.cur.c = clamp(WS.cur.c, 0, cols.length - 1); WS.cur.r = clamp(WS.cur.r, 1, wsLinhas(t));
-  const bar = wsBarra(t);
-  const aviso = wsAviso(t);
-  const cab = t.id === 'produto' ? wsCabecalho() : '';
-  const leg = t.ht ? wsLegenda() : '';
-  main.innerHTML = `${cab}<div class="ws-bar">${bar}</div>${aviso ? `<div class="ws-aviso${aviso.cls ? ' ' + aviso.cls : ''}">${aviso.html}</div>` : ''}${leg}
-    <div class="ws-gw"><table class="ws-g" id="ws-grid" tabindex="0" aria-label="${wsEsc(t.nome)}" data-t="${t.id}"></table><div class="ws-cur" id="ws-cur" hidden><i class="fh" id="ws-fh" title="Arraste para copiar"></i></div></div>
-    <p class="ws-dica">${wsEsc(t.ht ? 'Toque no tratamento de um item e escolha na lista; itens com o mesmo tratamento viram uma linha só na folha (até 5 linhas). Ctrl+D repete para baixo.' : 'Setas andam · Shift+setas selecionam · Ctrl+setas pulam até o fim · clique no número do item para pegar a linha inteira · Ctrl+C / Ctrl+V com o Excel (um valor copiado enche toda a seleção) · Ctrl+Enter grava em todas as selecionadas · Ctrl+D / Ctrl+R repetem · botão direito: mais opções')}</p>
-    <div class="ws-st" id="ws-st"></div>`;
+  const secs = WS_TABS.filter(wsSecVisivel);
+  let num = 0;
+  const partes = secs.map(x => {
+    const lig = wsSecLig(x), n = lig ? ++num : 0, ativa = x.id === t.id, bd = lig ? wsBadge(x) : null;
+    const cab = `<div class="ws-sech">${n ? `<span class="ws-secn">${n}</span>` : ''}<b>${wsEsc(x.id === 'textos' ? (lig ? 'Informações adicionais, responsável e anexos' : 'Responsável e anexos') : x.nome)}</b>${bd ? `<em class="${bd.cls || ''}">${wsEsc(bd.t)}</em>` : ''}<span class="sp"></span>${x.id === 'textos' ? '' : `<div class="ws-bar">${wsBarra(x)}</div>`}</div>`;
+    if (x.id === 'textos') return `<section class="ws-sec tx" data-sec="textos">${cab}<div class="ws-txhost"></div></section>`;
+    const aviso = wsAviso(x), leg = x.ht ? wsLegenda() : '';
+    return `<section class="ws-sec${ativa ? ' on' : ''}" data-sec="${x.id}">${cab}${aviso ? `<div class="ws-aviso${aviso.cls ? ' ' + aviso.cls : ''}">${aviso.html}</div>` : ''}${leg}
+      <div class="ws-gw">${ativa ? `<table class="ws-g" id="ws-grid" tabindex="0" aria-label="${wsEsc(x.nome)}" data-t="${x.id}"></table><div class="ws-cur" id="ws-cur" hidden><i class="fh" id="ws-fh" title="Arraste para copiar"></i></div>` : `<table class="ws-g est" data-t="${x.id}" aria-label="${wsEsc(x.nome)} (clique para editar)"></table>`}</div>
+      ${ativa ? '<div class="ws-st" id="ws-st"></div>' : ''}</section>`;
+  });
+  main.innerHTML = `${wsCabecalho()}${partes.join('')}
+    <p class="ws-dica">Setas andam · Shift+setas selecionam · Ctrl+setas pulam até o fim · clique no número do item para pegar a linha inteira · Ctrl+C / Ctrl+V com o Excel (um valor copiado enche toda a seleção) · Ctrl+Enter grava em todas as selecionadas · Ctrl+D / Ctrl+R repetem · botão direito: mais opções</p>`;
   wsTabela(t, cols);
-  main.querySelectorAll('[data-wb]').forEach(b => b.addEventListener('click', () => wsBotao(b.dataset.wb, b)));
-  main.querySelectorAll('[data-hdr]').forEach(i => {
+  main.querySelectorAll('table.ws-g.est').forEach(tb => { const x = WS_TABS.find(y => y.id === tb.dataset.t); if (x) wsTabela(x, wsCols(x), tb, true); });
+  const tx = main.querySelector('.ws-txhost'); if (tx) wsTextos(tx);
+  main.querySelectorAll('.ws-sec:not(.tx) [data-wb]').forEach(b => b.addEventListener('click', () => {
+    const sec = b.closest('.ws-sec'), k = b.dataset.wb;
+    if (sec && !sec.classList.contains('on')) { wsAtivar(sec.dataset.sec); const nb = main.querySelector(`.ws-sec.on [data-wb="${k}"]`); wsBotao(k, nb || b); return; }
+    wsBotao(k, b);
+  }));
+  main.querySelectorAll('.ws-hdr [data-hdr]').forEach(i => {
     i.addEventListener('input', () => { setValue(i.dataset.hdr, i.value); saveDraftSoon(); wsTopo(); });
     i.addEventListener('change', () => { setValue(i.dataset.hdr, i.value); saveDraftSoon(); wsRender(); });
   });
-  const sc = main.querySelector('.ws-gw'); sc.scrollLeft = sx; sc.scrollTop = sy;
+  main.scrollTop = msy;
+  const gw = $('ws-grid') && $('ws-grid').parentElement; if (gw) gw.scrollLeft = sx;
   wsCursor(); wsStatus();
-  if (focado) $('ws-grid').focus({ preventScroll: true });
+  if (focado && $('ws-grid')) $('ws-grid').focus({ preventScroll: true });
 }
 function wsCabecalho() {
   const inp = (ref, rot, ph, cls) => { const f = FIELD[ref]; return `<label class="ws-hf ${cls || ''}"><span>${rot}</span><input data-hdr="${ref}" value="${wsEsc(state.v[ref] || '')}" placeholder="${wsEsc(ph || '')}" autocomplete="off"${f && f.kind === 'date' ? ' inputmode="numeric"' : ''}></label>`; };
@@ -6257,8 +6367,8 @@ function wsLimite(t, col, n0) {
   const [a, b] = L.faixa;
   return a != null && b != null ? `${numBR(a)}–${numBR(b)}` : a != null ? `≥ ${numBR(a)}` : `≤ ${numBR(b)}`;
 }
-function wsTabela(t, cols) {
-  const tb = $('ws-grid'), N = wsLinhas(t), conta = wsConta(t);
+function wsTabela(t, cols, alvo, compacta) {
+  const tb = alvo || $('ws-grid'), conta = wsConta(t), N = compacta ? Math.min(wsLinhas(t), Math.max(conta + 1, 2)) : wsLinhas(t);
   const lim = !t.ht && (t.bloco === 'quimica' || t.bloco === 'mecanica');
   let n0 = 0;
   if (lim) { const r = WS.cur.r <= state.itens && normaDoItem(state, WS.cur.r) ? WS.cur.r : 0; n0 = r || (() => { for (let n = 1; n <= state.itens; n++) if (normaDoItem(state, n)) return n; return 0; })(); }
@@ -6276,7 +6386,7 @@ function wsTabela(t, cols) {
     cols.forEach((c, j) => {
       const v = ghost && !t.ht ? '' : wsVal(t, c, n);
       const ref = t.ht ? null : wsRef(t, c, n), f = ref && FIELD[ref];
-      const cls = [c.mono ? 'mono' : '', c.num || c.mono ? 'r' : '', c.ce ? 'ce' : '', c.so ? 'so' : '',
+      const cls = [c.mono ? 'mono' : '', c.num || c.mono ? 'r' : '', wsDesc(c) ? 'ds' : '', c.ce ? 'ce' : '', c.so ? 'so' : '',
         f && v && foraDaNorma(state, f) ? 'fora' : '', ref && state.sug && state.sug[ref] ? 'sug' : '', f && f.kind === 'select' ? 'sel' : ''].filter(Boolean).join(' ');
       const dot = c.dot && v ? `<i class="dt" style="background:${htCor(v, lista)}"></i>` : '';
       h += `<td data-r="${n}" data-c="${j}" class="${cls}">${dot}${wsEsc(c.dot ? htNome(v) : v)}</td>`;
@@ -6289,8 +6399,11 @@ function wsTabela(t, cols) {
     h += `<tfoot><tr><td colspan="${cols.length + 1}"><button type="button" class="ws-tb" data-wb="folha">${doc.atual === doc.certs.length - 1 ? `+ Folha ${wsEsc(prox || 'de continuação')} (${NOME_ITEM[1]} ${state.inicio + state.itens} em diante)` : `Ir para a folha ${wsEsc(rotuloFolha(doc.atual + 1))} →`}</button></td></tr></tfoot>`;
   }
   tb.innerHTML = h;
+  if (compacta) return;
   const fb = tb.querySelector('[data-wb=folha]'); if (fb) fb.addEventListener('click', () => { wsFecharEd(true); adicionarItem(); });
 }
+/* v53: na grade tudo fica centralizado; só a descrição do produto fica à esquerda */
+const wsDesc = c => c.key === 'desc' || /^descri/i.test(String(c.head || ''));
 const wsTd = (r, c) => { const g = $('ws-grid'); return g && g.querySelector(`td[data-r="${r}"][data-c="${c}"]`); };
 const wsSelRet = () => { const a = WS.anc || WS.cur, b = WS.cur; return { r1: Math.min(a.r, b.r), r2: Math.max(a.r, b.r), c1: Math.min(a.c, b.c), c2: Math.max(a.c, b.c) }; };
 const wsMulti = () => { const s = wsSelRet(); return s.r1 !== s.r2 || s.c1 !== s.c2; };
@@ -6318,6 +6431,8 @@ function wsVerCelula() {
   const tr = td.getBoundingClientRect(), wr = w.getBoundingClientRect(), head = w.querySelector('thead').getBoundingClientRect().height, ci = 46;
   if (tr.left < wr.left + ci) w.scrollLeft -= wr.left + ci - tr.left; else if (tr.right > wr.right) w.scrollLeft += tr.right - wr.right;
   if (tr.top < wr.top + head) w.scrollTop -= wr.top + head - tr.top; else if (tr.bottom > wr.bottom) w.scrollTop += tr.bottom - wr.bottom;
+  const m = $('ws-main'), mr = m.getBoundingClientRect(), t2 = td.getBoundingClientRect();
+  if (t2.top < mr.top + 8) m.scrollTop -= mr.top + 8 - t2.top; else if (t2.bottom > mr.bottom - 8) m.scrollTop += t2.bottom - mr.bottom + 8;
 }
 /* rodapé: seleção, média, mínimo, máximo e soma */
 function wsStatus() {
@@ -6336,7 +6451,7 @@ function wsStatus() {
 function wsFolha() {
   const el = $('ws-folha'); if (!el) return;
   let pags = 1; try { pags = pageSetup(layoutFor(state, true)).pages.length; } catch (e) { /* conta 1 */ }
-  let fora = 0; for (const f of FIELDS) if (f.item && f.item <= state.itens && state.v[f.ref] && foraDaNorma(state, f)) fora++;
+  let fora = 0; for (const f of FIELDS) if (f.item && f.item <= state.itens && state.v[f.ref] && campoVisivel(f) && foraDaNorma(state, f)) fora++;
   const host = wsHost(); let info = null; try { info = host && host.info ? host.info() : null; } catch (e) { info = null; }
   const L = [['Itens', `${state.itens} de ${MAX_ITENS}`],
     ['Cabe em uma folha A4', pags === 1 ? 'sim' : `não · ${pags} páginas`, pags === 1 ? 'ok' : 'wn']];
@@ -6361,7 +6476,6 @@ function wsFrases() {
   try { const x = JSON.parse(localStorage.getItem(WS_FRASES_KEY) || 'null'); return Array.isArray(x) ? pad.concat(x.filter(s => !pad.includes(s))) : pad; } catch (e) { return pad; }
 }
 function wsTextos(main) {
-  WS.cols = null;
   const fI = k => FIELDS.find(f => f.key === k);
   const i1 = fI('info1'), i2 = fI('info2');
   const decl = Object.values(MODEL.cells).map(e => String(e[1] || '')).filter(s => /^Certificamos|^We certify/i.test(s));
@@ -6372,14 +6486,14 @@ function wsTextos(main) {
       <section><div class="ws-sh"><b>Responsável</b><span>assina o certificado</span></div>
         <label class="ws-hf l"><span>Nome do responsável</span><input data-hdr="${ass}" value="${wsEsc(state.v[ass] || '')}" placeholder="Nome do responsável" autocomplete="off"></label>
         <div class="ws-sig">${config.assinatura ? `<img src="${config.assinatura}" alt="Assinatura">` : '<span>sem imagem da assinatura</span>'}<button type="button" class="ws-tb" data-wb="assinatura">${config.assinatura ? 'Trocar a imagem…' : 'Incluir a imagem…'}</button></div></section>
-      ${varias || GRADES ? `<section><div class="ws-sh"><b>Folhas e seções</b></div>
+      ${varias ? `<section><div class="ws-sh"><b>Folhas</b></div>
         ${varias ? `<label class="ws-ck"><input type="checkbox" id="ws-sync" ${doc.syncExtras ? 'checked' : ''}><span>Mesmo tratamento térmico e informações adicionais em todas as folhas</span></label>` : ''}
-        ${GRADES ? `<label class="ws-ck"><input type="checkbox" id="ws-galv" ${state.opt && state.opt.galv ? 'checked' : ''}><span>Galvanizado a fogo (a seção de galvanização sai no certificado)</span></label>` : ''}</section>` : ''}
+</section>` : ''}
       ${GRADES ? '' : `<section><div class="ws-sh"><b>Limites das normas</b><span>só avisam, nunca impedem</span></div><p class="ws-p">A105, A350 LF2, A182 F304L e F316L, A106 B e A234 WPB. Confira cada faixa com a norma da empresa.</p><button type="button" class="ws-tb" data-wb="limites">Limites das normas…</button></section>`}
     </div>
     <div class="ws-col">
       <section><div class="ws-sh"><b>Declaração de conformidade</b><span>texto fixo do certificado</span></div><div class="ws-decl">${decl.map(wsEsc).join('<br>')}</div></section>
-      ${i1 ? `<section><div class="ws-sh"><b>Informações adicionais</b><span>toque para incluir</span></div>
+      ${i1 && secOn(state, 'textos') ? `<section><div class="ws-sh"><b>Informações adicionais</b><span>toque para incluir</span></div>
         <div class="ws-fr">${wsFrases().map(s => `<button type="button" data-fr="${wsEsc(s)}">${wsEsc(s)}</button>`).join('')}<button type="button" class="nova" data-fr="">+ Nova frase</button></div>
         <label class="ws-hf l"><span>Linha 1</span><input data-hdr="${i1.ref}" value="${wsEsc(state.v[i1.ref] || '')}" placeholder="Informações adicionais (opcional)" autocomplete="off"></label>
         ${i2 ? `<label class="ws-hf l"><span>Linha 2</span><input data-hdr="${i2.ref}" value="${wsEsc(state.v[i2.ref] || '')}" autocomplete="off"></label>` : ''}</section>` : ''}
@@ -6394,7 +6508,6 @@ function wsTextos(main) {
   main.querySelectorAll('[data-wb]').forEach(b => b.addEventListener('click', () => wsBotao(b.dataset.wb, b)));
   main.querySelectorAll('[data-fr]').forEach(b => b.addEventListener('click', () => wsFrase(b.dataset.fr)));
   const sy = $('ws-sync'); if (sy) sy.addEventListener('change', () => alternarSync(sy));
-  const gv = $('ws-galv'); if (gv) gv.addEventListener('change', () => { alternarGalv(gv.checked); wsRender(); });
 }
 async function wsFrase(fr) {
   if (!fr) {
@@ -6488,7 +6601,7 @@ function wsEditar(inicial) {
   const td = wsTd(WS.cur.r, WS.cur.c); if (!td) return;
   wsFecharEd(true);
   const w = td.closest('.ws-gw'), gr = w.getBoundingClientRect(), r = td.getBoundingClientRect();
-  const inp = wsEl('input', 'ws-ed' + (col.mono ? ' mono' : '') + (col.num || col.mono ? ' r' : ''));
+  const inp = wsEl('input', 'ws-ed' + (col.mono ? ' mono' : '') + (wsDesc(col) ? '' : ' r'));
   inp.autocomplete = 'off'; inp.spellcheck = false;
   const lista = col.list || (col.f0 && col.f0.list);
   if (lista && lista.length) { const dl = wsEl('datalist'); dl.id = 'ws-dl'; dl.innerHTML = lista.map(o => `<option value="${wsEsc(o)}">`).join(''); w.appendChild(dl); inp.setAttribute('list', 'ws-dl'); }
@@ -6681,6 +6794,14 @@ async function wsCopiarMenu(recortar) {
 /* mouse: clique, arrastar seleção, duplo clique edita, ponto azul copia */
 function wsLigarGrade() {
   const main = $('ws-main');
+  main.addEventListener('mousedown', e => {
+    if (e.button !== 0) return;
+    const sec = e.target.closest('.ws-sec'); if (!sec || sec.classList.contains('on') || sec.classList.contains('tx')) return;
+    const cel = e.target.closest('td[data-r], th[data-rh], th[data-c]'); if (!cel) return;
+    e.preventDefault(); e.stopPropagation();
+    const r = +(cel.dataset.r || cel.dataset.rh || 1), c = cel.dataset.c != null ? +cel.dataset.c : 0;
+    wsAtivar(sec.dataset.sec, { r, c });
+  }, true);
   main.addEventListener('mousedown', e => {
     if (e.button !== 0) return;
     const fh = e.target.closest('#ws-fh');

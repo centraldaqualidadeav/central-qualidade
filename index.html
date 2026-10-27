@@ -80,7 +80,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* ---------- casca ---------- */
 .app { display: grid; grid-template-columns: 248px minmax(0, 1fr); min-height: 100%; }
-.rail { position: sticky; top: env(safe-area-inset-top, 0px); height: 100vh; height: 100dvh; overflow-y: auto; background: var(--surface); border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 18px; padding: 20px 14px 16px; }
+.rail { position: sticky; top: env(safe-area-inset-top, 0px); height: calc(100vh / var(--cqz, 1)); height: calc(100dvh / var(--cqz, 1)); overflow-y: auto; background: var(--surface); border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 18px; padding: 20px 14px 16px; }
 .brand { display: grid; gap: 2px; padding: 0 6px; }
 .brand .eyebrow, .raileyebrow { font: 600 11px/1 var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
 .brand .name { font: 700 26px/1 var(--f-display); letter-spacing: .01em; text-transform: uppercase; }
@@ -103,7 +103,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .pendbox .s { font-size: 12px; color: var(--ink-3); }
 
 .main { min-width: 0; padding-block: 24px 64px; padding-inline: clamp(16px, 3vw, 36px); }
-.view { display: grid; gap: 22px; max-width: 1480px; }
+.view { display: grid; gap: 22px; max-width: none; }   /* v53: ocupa a largura da tela (era 1480 px) */
 .vhead { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 20px; justify-content: space-between; }
 .vhead h1 { margin: 0; font: 700 34px/1 var(--f-display); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
 .vhead p { margin: 6px 0 0; color: var(--ink-2); max-width: 70ch; }
@@ -135,6 +135,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line-2); border-radius: 6px; overflow: hidden; background: var(--surface); }
 .seg button { border: 0; background: transparent; padding: 7px 12px; cursor: pointer; font-weight: 500; color: var(--ink-2); border-right: 1px solid var(--line); }
 .seg button:last-child { border-right: 0; }
+.seg.aptela { display: grid; grid-template-columns: repeat(5, 112px); margin-top: 10px; } .seg.aptela button { text-align: center; }   /* v53 */
 .seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
 
 /* ---------- padrão único (v34): escala de espaço, alturas iguais e grades que fecham ----------
@@ -647,9 +648,9 @@ textarea.cm-body { min-height: 260px; font-family: var(--f-mono, ui-monospace, m
 
 /* listas: a tabela ocupa no máximo a altura da tela e rola por dentro;
    a barra de rolar para o lado fica sempre visível e os títulos das colunas ficam fixos */
-.twrap.twin { max-height: calc(100vh - 96px); max-height: calc(100dvh - 96px); overflow: auto; }
+.twrap.twin { max-height: calc(calc(100vh / var(--cqz, 1)) - 96px); max-height: calc(calc(100dvh / var(--cqz, 1)) - 96px); overflow: auto; }
 .twrap.twin table.t th { z-index: 2; box-shadow: 0 1px 0 var(--line); }
-@media (max-width: 860px) { .twrap.twin { max-height: calc(100dvh - 150px); } }
+@media (max-width: 860px) { .twrap.twin { max-height: calc(calc(100dvh / var(--cqz, 1)) - 150px); } }
 @media print { .twrap.twin { max-height: none; overflow: visible; } }
 .twrap.twin::-webkit-scrollbar { width: 10px; height: 12px; }
 .twrap.twin::-webkit-scrollbar-track { background: var(--surface-2); }
@@ -795,7 +796,7 @@ textarea.cm-body { min-height: 260px; font-family: var(--f-mono, ui-monospace, m
 .sqc dt { color: var(--ink-3); } .sqc dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
 .sqa { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 10px 9px; }
 .sfup { display: grid; grid-template-columns: 112px 1fr; gap: 14px; } .sfup .sfph { width: 112px; height: 140px; }
-.mzwrap { max-height: 70vh; }
+.mzwrap { max-height: calc(70vh / var(--cqz, 1)); }
 table.mz { border-collapse: separate; border-spacing: 0; font-size: 12.5px; }
 table.mz th, table.mz td { padding: 6px 9px; border-bottom: 1px solid var(--line); text-align: center; white-space: nowrap; }
 table.mz thead th { position: sticky; top: 0; background: var(--surface-2); z-index: 1; font-weight: 600; line-height: 1.2; }
@@ -1028,10 +1029,10 @@ body.has-tk .toast { bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
 body.tabmode .app { grid-template-columns: minmax(0, 1fr) !important; }
 body.tabmode .rail, body.tabmode .tk, body.tabmode .tkpill, body.tabmode .railtip { display: none !important; }
 body.tabmode .main { padding: 0 !important; }
-.tbw { min-height: 100dvh; display: flex; flex-direction: column; background: var(--bg); }
+.tbw { min-height: calc(100dvh / var(--cqz, 1)); display: flex; flex-direction: column; background: var(--bg); }
 /* Mapa de processos 3D */
 .m3view { max-width: none; gap: 14px; }
-.m3wrap { position: relative; height: 70vh; min-height: 420px; border-radius: 16px; overflow: hidden; background: #07090b; border: 1px solid var(--line); }
+.m3wrap { position: relative; height: calc(70vh / var(--cqz, 1)); min-height: 420px; border-radius: 16px; overflow: hidden; background: #07090b; border: 1px solid var(--line); }
 .m3wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
 .m3tb { flex: 1 0 auto; display: flex; flex-direction: column; } .m3tb .m3wrap { flex: 1; border-radius: 0; border: 0; }
 @media (max-width: 860px) { .m3view .vhead p { display: none; } .m3wrap { border-radius: 12px; } }
@@ -1123,11 +1124,11 @@ body.tabmode .main { padding: 0 !important; }
 .eqfh .eqbox { width: 300px; height: 200px; } .eqfh .eqbox svg { width: 280px; }
 .eqbox.eqfoto { position: relative; cursor: zoom-in; background: #111; } .eqbox.eqfoto img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .eqbox.eqfoto i { position: absolute; left: 6px; bottom: 6px; font: 600 11px var(--f-body); font-style: normal; color: #fff; background: rgba(0,0,0,.55); padding: 2px 6px; border-radius: 4px; }
-.ibxl { display: grid; gap: 0; max-height: 52vh; overflow: auto; border: 1px solid var(--line); border-radius: 8px; }
+.ibxl { display: grid; gap: 0; max-height: calc(52vh / var(--cqz, 1)); overflow: auto; border: 1px solid var(--line); border-radius: 8px; }
 .ibxr { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 9px 12px; border-top: 1px solid var(--line); font-size: 13.5px; } .ibxr:first-child { border-top: 0; }
 .ibxr .muted { font-size: 12.5px; margin-top: 2px; } .ibxr .chip { margin-left: 4px; }
 .imgzoom { position: fixed; inset: 0; z-index: 400; background: rgba(0,0,0,.85); display: grid; place-items: center; padding: 20px; cursor: zoom-out; }
-.imgzoom img { max-width: 100%; max-height: calc(100vh - 80px); border-radius: 6px; } .imgzoom .btn { position: absolute; top: 14px; right: 14px; }
+.imgzoom img { max-width: 100%; max-height: calc(calc(100vh / var(--cqz, 1)) - 80px); border-radius: 6px; } .imgzoom .btn { position: absolute; top: 14px; right: 14px; }
 .insfotos img[data-zoom] { cursor: zoom-in; }
 .insfotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
 .insfotos figure { position: relative; margin: 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface-2); }
@@ -1289,7 +1290,7 @@ html[data-theme="dark"] .btn.cqgo { color: color-mix(in srgb, var(--tcr) 55%, #f
 .cqst { margin-left: auto; font-size: 12px; color: var(--ink-3); }
 .cqgrid2 { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 14px; align-items: start; }
 .cqsheet { background: #5b6670; border-radius: var(--r); overflow: hidden; border: 1px solid var(--line); }
-.cqsheet iframe { width: 100%; height: calc(100vh - 150px); min-height: 640px; border: 0; display: block; background: #5b6670; }
+.cqsheet iframe { width: 100%; height: calc(calc(100vh / var(--cqz, 1)) - 150px); min-height: 640px; border: 0; display: block; background: #5b6670; }
 /* v42: nome de quem está com o pedido legível no cartão escuro do cliente crítico */
 .cqc.crit .cqwho { color: #eef1f3; } html[data-theme="dark"] .cqc.crit .cqwho { color: var(--ink); }
 .cqtag.aba { background: var(--info); } .cqtag.ras { background: #6c7772; } .cqtag.sal { background: var(--ok); } .cqtag.nf { background: #8a6d1d; }
@@ -1300,9 +1301,9 @@ html[data-theme="dark"] .btn.cqgo { color: color-mix(in srgb, var(--tcr) 55%, #f
 body.cqaba .rail, body.cqaba .tk, body.cqaba .tkpill, body.cqaba .railtip, body.cqaba #tk, body.cqaba #tk-pill { display: none !important; }
 body.cqaba .app { grid-template-columns: minmax(0, 1fr) !important; }
 body.cqaba .main { padding: 0 !important; }
-.cqaba-w { display: grid; grid-template-columns: 300px minmax(0, 1fr); min-height: 100vh; }
+.cqaba-w { display: grid; grid-template-columns: 300px minmax(0, 1fr); min-height: calc(100vh / var(--cqz, 1)); }
 body.filamini .cqaba-w { grid-template-columns: 76px minmax(0, 1fr); }
-.cqfila { position: sticky; top: 0; height: 100vh; overflow: auto; background: var(--surface); border-right: 1px solid var(--line); padding: 14px 12px; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box; }
+.cqfila { position: sticky; top: 0; height: calc(100vh / var(--cqz, 1)); overflow: auto; background: var(--surface); border-right: 1px solid var(--line); padding: 14px 12px; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box; }
 .cqfila > * { flex-shrink: 0; }
 .cqfh { display: flex; align-items: center; gap: 8px; min-height: 40px; }
 .cqfh b { font: 800 22px/1 var(--f-display); letter-spacing: .02em; }
@@ -1346,15 +1347,15 @@ body.filamini .cqfmini { display: grid; gap: 7px; justify-items: center; width: 
 .cqfrom.cqtopo .cqst { margin-left: 8px; }
 .cqfrom.cqtopo .btn { min-width: 128px; }
 .cqfrom.cqtopo .clip { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.cqvazio { display: grid; place-content: center; text-align: center; gap: 8px; min-height: 60vh; color: var(--ink-2); }
+.cqvazio { display: grid; place-content: center; text-align: center; gap: 8px; min-height: calc(60vh / var(--cqz, 1)); color: var(--ink-2); }
 .cqvazio b { font: 700 26px var(--f-display); color: var(--ink); } .cqvazio span { max-width: 460px; }
-body.cqaba .cqws .cqsheet.cqwsf iframe { height: calc(100vh - 98px); }
+body.cqaba .cqws .cqsheet.cqwsf iframe { height: calc(calc(100vh / var(--cqz, 1)) - 98px); }
 /* v41: área de trabalho do certificado ocupa a largura toda (o painel da direita foi para dentro do certificado) */
 .cqws .cqsheet.cqwsf { background: var(--bg); border: 0; border-radius: 0; }
-.cqws .cqsheet.cqwsf iframe { height: calc(100vh - 168px); min-height: 600px; background: transparent; border-radius: 0; }
+.cqws .cqsheet.cqwsf iframe { height: calc(calc(100vh / var(--cqz, 1)) - 168px); min-height: 600px; background: transparent; border-radius: 0; }
 .cqws .cqfrom { margin-bottom: 10px; }
-.cqlotm { display: grid; gap: 6px; max-height: 52vh; overflow: auto; margin: 10px 0; }
-.cqpanel { display: grid; gap: 10px; position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow: auto; }
+.cqlotm { display: grid; gap: 6px; max-height: calc(52vh / var(--cqz, 1)); overflow: auto; margin: 10px 0; }
+.cqpanel { display: grid; gap: 10px; position: sticky; top: 12px; max-height: calc(calc(100vh / var(--cqz, 1)) - 24px); overflow: auto; }
 .cqbox { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 11px 12px; display: grid; gap: 7px; }
 .cqbox h4 { margin: 0; font: 700 11.5px var(--f-body); letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
 .cqbox .btn { width: 100%; justify-content: center; }
@@ -1373,7 +1374,7 @@ body.cqaba .cqws .cqsheet.cqwsf iframe { height: calc(100vh - 98px); }
 .cqnew { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 6px; } .cqnew .inp { width: 220px; max-width: 100%; }
 #cq-rg .inp { width: 100%; min-width: 160px; }
 #cq-cfg .cqwide { grid-column: 1 / -1; } #cq-rg { max-width: 900px; } #cq-rg td:nth-child(3), #cq-rg td:nth-child(4) { width: 1%; white-space: nowrap; }
-@media (max-width: 980px) { .cqgrid2 { grid-template-columns: 1fr; } .cqpanel { position: static; max-height: none; } .cqsheet iframe { height: 75vh; } }
+@media (max-width: 980px) { .cqgrid2 { grid-template-columns: 1fr; } .cqpanel { position: static; max-height: none; } .cqsheet iframe { height: calc(75vh / var(--cqz, 1)); } }
 .cqbox.cqtop { padding: 8px 10px; } .cqbox.cqtop .btn { min-height: 0; padding: 5px 8px; font-size: 13px; }
 
 /* ===== Ficha do fornecedor (IQF) · anel + onde perdeu pontos ===== */
@@ -1773,7 +1774,7 @@ body.tabmode .modal .seg button { min-height: 48px; padding: 0 22px; font-size: 
 /* RIF · medidas com teclado na tela (tablet deitado) */
 .tbb.rtkb, .tbb.rgb { max-width: none; padding: 0; }
 .rtkx { display: grid; grid-template-columns: 300px minmax(0, 1fr) 340px; align-items: start; }
-.rtkside { background: var(--surface); border-right: 1px solid var(--line); padding: 20px 16px 24px; display: grid; gap: 14px; align-content: start; min-height: calc(100dvh - 224px); box-sizing: border-box; }
+.rtkside { background: var(--surface); border-right: 1px solid var(--line); padding: 20px 16px 24px; display: grid; gap: 14px; align-content: start; min-height: calc(calc(100dvh / var(--cqz, 1)) - 224px); box-sizing: border-box; }
 .rtkit b { display: block; font: 700 24px/1.1 var(--f-display); }
 .rtkit span { display: block; font: 400 14px/1.4 var(--f-body); color: var(--ink-2); margin-top: 4px; }
 .rtkam { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; display: grid; gap: 10px; }
@@ -1861,7 +1862,7 @@ body.tabmode .modal .seg button { min-height: 48px; padding: 0 22px; font-size: 
   .rtkr { padding: 20px 25px 20px 0; gap: 11px; } .rtkpad { gap: 11px; } .rtkpad .k { height: 75px; }
   .tbw.rift .rtkgo.btn.big { min-height: 63px; font-size: 18px; }
 }
-.rtkside { padding: 20px 18px 24px; min-height: calc(100dvh - 147px); }
+.rtkside { padding: 20px 18px 24px; min-height: calc(calc(100dvh / var(--cqz, 1)) - 147px); }
 .rtkmid { padding: 20px 24px 24px; gap: 16px; top: 60px; } .rtkr { top: 60px; }
 .rtkhd .cd { min-width: 40px; height: 40px; padding: 0 8px; border-radius: 9px; font-size: 19px; }
 .rtkhd h2 { font-size: 31px; }
@@ -1989,7 +1990,7 @@ body.tbmini .ncsteps > * { font-size: 0; justify-content: center; padding: 0; }
 /* RIR · grade item × lote */
 .rgx { --rgw: 330px; display: grid; grid-template-columns: var(--rgw) minmax(0, 1fr); align-items: start; background: linear-gradient(90deg, var(--surface) 0 calc(var(--rgw) - 1px), var(--line) calc(var(--rgw) - 1px) var(--rgw), transparent var(--rgw)); flex: 1 0 auto; }
 .tbb.rgb { display: flex; flex-direction: column; }
-.rgside { padding: 20px 18px 24px; display: grid; gap: 12px; align-content: start; position: sticky; top: 72px; max-height: calc(100dvh - 156px); overflow-y: auto; box-sizing: border-box; }
+.rgside { padding: 20px 18px 24px; display: grid; gap: 12px; align-content: start; position: sticky; top: 72px; max-height: calc(calc(100dvh / var(--cqz, 1)) - 156px); overflow-y: auto; box-sizing: border-box; }
 .rghd .grow { flex: 1; }
 .rgnf b { display: block; font: 700 30px/1.05 var(--f-display); }
 .rgnf span { display: block; font: 400 14.5px/1.45 var(--f-body); color: var(--ink-2); margin-top: 3px; } .rgnf .chip { margin-top: 6px; }
@@ -2044,7 +2045,7 @@ button.rglot { cursor: pointer; } button.rglot:focus-visible { outline: 3px soli
 .rgr.nc { background: color-mix(in srgb, var(--crit) 4%, var(--surface)); }
 /* v40 · RIR igual à imagem F3: lateral 300, células de 134, "Marcar AP no que falta" em verde, RP com foto e motivo numa linha */
 .rgx { --rgw: 300px; }
-.rgside { top: 60px; max-height: calc(100dvh - 147px); }
+.rgside { top: 60px; max-height: calc(calc(100dvh / var(--cqz, 1)) - 147px); }
 .tbw.rirt .rgmain { padding: 20px 22px 24px; }
 .rghd h2 { font-size: 31px; }
 .tbw .rghd .btn.big.rgap { height: 50px; border: 2px solid var(--ok); color: var(--ok); background: color-mix(in srgb, var(--ok) 12%, var(--surface)); border-radius: 12px; padding: 0 20px; }
@@ -2242,7 +2243,7 @@ body.tvmode .tvbar { display: none !important; }   /* v47: no painel rolando nã
 .cqver > span { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cqver-x { flex: none; }
 .cqver b { font-weight: 700; } .cqver-x { background: #fff; color: #7a4a06; border: 0; border-radius: 6px; padding: 4px 12px; font: 700 12.5px var(--f-body); cursor: pointer; }
 body.cq-ver { padding-top: 36px; }
-body.cq-ver .rail { top: 36px; height: calc(100dvh - 36px); }
+body.cq-ver .rail { top: 36px; height: calc(calc(100dvh / var(--cqz, 1)) - 36px); }
 body.cq-ver .tbhd { top: 36px; }
 @media (max-width: 860px) { body.cq-ver .rail { height: auto; } .cqver-em { display: none; } }
 #fb-gate .gtop { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
@@ -2250,6 +2251,32 @@ body.cq-ver .tbhd { top: 36px; }
 #fb-gate .glogo { max-height: 64px; max-width: 200px; object-fit: contain; }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<script>
+/* v53: ajuste automático à tela. A Central foi desenhada para notebook (~1600 px de largura útil);
+   em tela maior, amplia na proporção (até 130%), nunca diminui sozinha. Recalcula ao mudar a janela de tamanho
+   ou de monitor. Configurações › Este aparelho › Tamanho da tela: Automático, 90%, 100%, 110% ou 125% (por aparelho).
+   Escolha manual nunca deixa a área útil abaixo de 1200 px, para os botões e tabelas não se apertarem. */
+(function () {
+  var REF = 1600, MAX = 1.3, MIN_W = 1200, z = 1;
+  function esc() { try { return localStorage.getItem('cq-tela') || 'auto'; } catch (e) { return 'auto'; } }
+  function calc() {
+    var w = window.innerWidth || 0, e = esc(), v;
+    if (e === 'auto') v = Math.max(1, Math.min(MAX, w / REF));
+    else { v = parseFloat(e) || 1; if (v > 1 && w > 1100) v = Math.min(v, Math.max(1, w / MIN_W)); }
+    return Math.round(v * 100) / 100;
+  }
+  function aplica() { var n = calc(); if (n === z && document.documentElement.style.zoom !== '') return z; z = n; document.documentElement.style.zoom = z === 1 ? '' : String(z); document.documentElement.style.setProperty('--cqz', String(z)); try { window.dispatchEvent(new Event('cq-tela')); } catch (e) { /* segue */ } return z; }
+  var t = null;
+  window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(function () { aplica(); try { var p = document.querySelector('.cfgpane[data-tab="aparelho"]:not([hidden]) .aptela'); if (p && window.CQ_TELA_RD) window.CQ_TELA_RD(); } catch (e) { /* segue */ } }, 120); });
+  window.addEventListener('beforeprint', function () { document.documentElement.style.zoom = ''; });
+  window.addEventListener('afterprint', function () { document.documentElement.style.zoom = z === 1 ? '' : String(z); });
+  window.CQ_TELA = { z: function () { return z; }, escolha: esc, aplica: aplica,
+    muda: function (v) { try { if (v === 'auto') localStorage.removeItem('cq-tela'); else localStorage.setItem('cq-tela', v); } catch (e) { /* sem armazenamento */ } return aplica(); } };
+  aplica();
+})();
+</script>
+<script>function CQZ() { return (window.CQ_TELA && window.CQ_TELA.z()) || 1; }</script>
+<style>@media print { html { zoom: 1 !important; } }</style>
 </head>
 <body>
 <div class="app">
@@ -6891,7 +6918,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (!tip) { tip = document.createElement('div'); tip.className = 'railtip'; document.body.appendChild(tip); }
       const v = a.dataset.v, name = Array.from(a.childNodes).filter((n) => n.nodeType === 3).map((n) => n.textContent).join('').trim(), sub = (S.navTip || {})[v] || '';
       tip.innerHTML = `${esc(name)}${sub ? `<small>${esc(sub)}</small>` : ''}`; tip.hidden = false;
-      const r = a.getBoundingClientRect(); tip.style.top = Math.max(6, r.top + r.height / 2 - tip.offsetHeight / 2) + 'px'; tip.style.left = (r.right + 8) + 'px';
+      const r = a.getBoundingClientRect(), Z = CQZ(); tip.style.top = Math.max(6, (r.top + r.height / 2) / Z - tip.offsetHeight / 2) + 'px'; tip.style.left = (r.right / Z + 8) + 'px';
     }
     const nav = $('#nav'); if (nav) { nav.addEventListener('mouseover', (e) => { const a = e.target.closest('a'); railTip(a); }); nav.addEventListener('mouseleave', () => railTip(null)); nav.addEventListener('focusin', (e) => railTip(e.target.closest('a'))); nav.addEventListener('focusout', () => railTip(null)); }
     applyRail();
@@ -7006,7 +7033,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   let tkSig = '';
   function tkPlace() {
     const el = $('#tk'), m = $('#main'); if (!el || !m) return;
-    el.style.left = (window.innerWidth <= 860 ? 0 : Math.max(0, m.getBoundingClientRect().left)) + 'px';
+    el.style.left = (window.innerWidth <= 860 ? 0 : Math.max(0, m.getBoundingClientRect().left / CQZ())) + 'px';
   }
   function tickerUpdate() {
     let el = $('#tk'), pill = $('#tk-pill');
@@ -7406,7 +7433,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (live) live.classList.toggle('pz', pz);
     if (st) { const t = pz ? (TV.pausa - now > 6e5 ? 'pausado · OK ou espaço continua' : 'pausado · volta sozinho') : TV.vel === 'telas' ? 'ao vivo · troca de tela a cada 15 s' : 'ao vivo · rolando sozinho'; if (st.textContent !== t) st.textContent = t; }
     if (!pz) {
-      if (TV.vel === 'telas') { if (now >= TV.prox) { TV.y += Math.max(200, window.innerHeight - 140); TV.prox = now + TV_TELA_MS; } }
+      if (TV.vel === 'telas') { if (now >= TV.prox) { TV.y += Math.max(200, window.innerHeight / CQZ() - 140); TV.prox = now + TV_TELA_MS; } }
       else TV.y += TV_VEL[TV.vel] * dt;
     } else if (TV.vel === 'telas') TV.prox = Math.max(TV.prox, now + 1000);
     if (now - (TV.medido || 0) > 2000) { TV.medido = now; tvMede(); } /* gráficos e grades podem mudar a altura */
@@ -7450,8 +7477,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     }
     const vk = { 1: 'lento', 2: 'medio', 3: 'rapido', 4: 'telas' }[k];
     if (vk) { e.preventDefault(); TV.vel = vk; lsSet('cq-tv-vel', vk); TV.pausa = 0; TV.prox = performance.now() + TV_TELA_MS; tvDiz('Velocidade: ' + TV_ROT[vk] + (vk === 'telas' ? ' (troca de tela a cada 15 segundos)' : '')); return; }
-    if (k === 'ArrowDown' || k === 'PageDown') { e.preventDefault(); TV.y += k === 'PageDown' ? window.innerHeight - 140 : 160; tvPausa(5000); }
-    if (k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); TV.y -= k === 'PageUp' ? window.innerHeight - 140 : 160; tvPausa(5000); }
+    if (k === 'ArrowDown' || k === 'PageDown') { e.preventDefault(); TV.y += k === 'PageDown' ? window.innerHeight / CQZ() - 140 : 160; tvPausa(5000); }
+    if (k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); TV.y -= k === 'PageUp' ? window.innerHeight / CQZ() - 140 : 160; tvPausa(5000); }
   }, true);
   document.addEventListener('fullscreenchange', () => { if (TV.on && TV.fs && !document.fullscreenElement) tvSai(); });
   document.addEventListener('visibilitychange', () => { if (TV.on && document.visibilityState === 'visible') tvTrava(); });
@@ -10493,7 +10520,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   async function nfeCamera() {
     if (!('BarcodeDetector' in window)) { toast('Este aparelho não lê código de barras pela câmera: use o leitor USB ou digite a chave.', true); return; }
-    openModal('Ler o código de barras do DANFE', '<video id="nfe-v" playsinline muted style="width:100%;border-radius:10px;background:#000;max-height:60vh"></video><p class="muted" style="margin:0">Aponte a câmera para o código de barras da chave de acesso, no alto do DANFE.</p><div class="formfoot"><button class="btn" type="button" data-act="close">Cancelar</button></div>');
+    openModal('Ler o código de barras do DANFE', '<video id="nfe-v" playsinline muted style="width:100%;border-radius:10px;background:#000;max-height:calc(60vh / var(--cqz, 1))"></video><p class="muted" style="margin:0">Aponte a câmera para o código de barras da chave de acesso, no alto do DANFE.</p><div class="formfoot"><button class="btn" type="button" data-act="close">Cancelar</button></div>');
     let st = null, live = true; const stop = () => { live = false; if (st) st.getTracks().forEach((t) => t.stop()); };
     TB.scan = stop;
     try {
@@ -12464,13 +12491,23 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   /* ---------- Configurações › Este aparelho (P8): cópia do banco no aparelho e uso do banco nesta abertura ---------- */
   const AP_NOMES = { av: 'Lotes (AV)', rnc: 'NCF', ins: 'Calibração', serv: 'Serviços', rncc: 'NCC', iqf: 'Avaliação de fornecedores', sold: 'Soldagem', certq: 'Certificados', certd: 'Certificados · rascunhos', rifp: 'RIF · pedidos', rif: 'RIF · relatórios', rifv: 'RIF · validações', pes: 'Equipe (fotos e histórico)', rir: 'RIR', rird: 'RIR · relatórios', acomp: 'Acompanhamento Jurong', trello: 'Trello Jurong', cfg: 'Configurações', 'cfg/main': 'Configurações', 'cfg/logo': 'Logo', 'meta/numeracao': 'Numeração', meta: 'Numeração e controles', rncin: 'Caixa do tablet', usuarios: 'Usuários', perfis: 'Nomes das pessoas', log: 'Histórico', locks: 'Travas', pub: 'Páginas do QR', 'iqf/sit': 'Avaliação de fornecedores' };
+  /* v53: tamanho da tela, por aparelho */
+  function apTelaHTML() {
+    const T = window.CQ_TELA; if (!T) return '';
+    const e = T.escolha(), op = [['auto', 'Automático'], ['0.9', '90%'], ['1', '100%'], ['1.1', '110%'], ['1.25', '125%']];
+    return `<div class="fsec"><h3>Tamanho da tela</h3>
+      <p class="use" style="margin:0;max-width:80ch">No <b>Automático</b>, a Central ocupa a largura toda e amplia na proporção da tela: no notebook fica como sempre; num monitor maior, tudo cresce (até 130%). Ao arrastar a janela para outro monitor, ela se ajusta sozinha. Escolha um tamanho fixo se preferir. Vale só para este aparelho.</p>
+      <div class="seg aptela" role="group" aria-label="Tamanho da tela">${op.map(([k, l]) => `<button type="button" data-act="ap-tela" data-key="${k}" aria-pressed="${e === k}">${l}</button>`).join('')}</div>
+      <p class="muted" style="margin:8px 0 0;font-size:12.5px">Agora: ${Math.round(T.z() * 100)}% · janela com ${NF.format(window.innerWidth)} px de largura.</p></div>`;
+  }
   function apHTML() {
     const B = window.CQ_BANCO;
-    if (!B) return `<section class="sec">${band('GERAL', 'Este aparelho')}<div class="block"><div class="body"><p class="use" style="margin:0">Estas opções existem só na Central publicada (GitHub Pages com Firebase).</p></div></div></section>`;
+    if (!B) return `<section class="sec">${band('GERAL', 'Este aparelho')}<div class="block"><div class="body">${apTelaHTML()}<p class="use" style="margin:0">A cópia do banco e o uso do banco existem só na Central publicada (GitHub Pages com Firebase).</p></div></div></section>`;
     const u = B.uso(), L = Object.entries(u.leituras).sort((x, y) => y[1] - x[1]), tot = L.reduce((t, [, n]) => t + n, 0), min = Math.max(1, Math.round((Date.now() - u.desde) / 60000));
     const esc2 = B.escolha(), ligada = B.cache || esc2 === 'sim';
     const est = B.cache ? 'Ligada neste aparelho.' : esc2 === 'sim' ? 'Ligada: vale a partir da próxima vez que abrir a Central.' : 'Desligada neste aparelho.';
     return `<section class="sec">${band('GERAL', 'Este aparelho', 'vale só para este computador, celular ou tablet')}<div class="block"><div class="body">
+      ${apTelaHTML()}
       <div class="fsec"><h3>Cópia do banco no aparelho</h3>
         <p class="use" style="margin:0;max-width:80ch">Com a cópia ligada, a Central guarda os dados neste aparelho: abre mesmo sem internet (com os últimos dados) e o que for gravado sem internet sobe sozinho quando a conexão volta. Com internet, a Central espera os dados do servidor, como hoje. Vem ligada nos tablets do inspetor. Ao sair da conta com internet, a cópia é apagada. Use só em aparelho da empresa.</p>
         <div class="formfoot"><b>${esc(est)}</b>${!B.pode ? '<span class="muted">Este navegador não guarda cópia.</span>' : ligada ? '<button class="btn" type="button" data-act="ap-cache" data-key="nao">Desligar e apagar a cópia</button>' : '<button class="btn primary" type="button" data-act="ap-cache" data-key="sim">Ligar a cópia neste aparelho</button>'}</div></div>
@@ -12481,7 +12518,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         <div class="formfoot"><button class="btn" type="button" data-act="ap-uso">Atualizar os números</button></div></div>
     </div></div></section>`;
   }
+  window.CQ_TELA_RD = () => { const p = $('.cfgpane[data-tab="aparelho"]'); if (p) p.innerHTML = apHTML(); };
   function apAct(a, key) {
+    if (a === 'ap-tela' && window.CQ_TELA) { window.CQ_TELA.muda(key); const p = $('.cfgpane[data-tab="aparelho"]'); if (p) p.innerHTML = apHTML(); toast(key === 'auto' ? 'Tamanho da tela: automático.' : 'Tamanho da tela: ' + Math.round(parseFloat(key) * 100) + '%.'); return true; }
     if (a === 'ap-uso') { const p = $('.cfgpane[data-tab="aparelho"]'); if (p) p.innerHTML = apHTML(); return true; }
     if (a === 'ap-cache' && window.CQ_BANCO) {
       const sim = key === 'sim';
@@ -13132,6 +13171,20 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     S.cqEd = { k: c ? c.k : null, key, avulso: !c, tipo, lotes: (r && r.lotes) || [], sig: sigJson, saved: 0 };
     S.cqSub = 'ed'; if (S.view !== 'certq') go('certq'); else render();
   }
+  /* v53: com a Central ampliada, o editor (iframe) recebe a mesma ampliação; se a área dele ficar com menos de 1500 px,
+     a ampliação do editor diminui até caber (nunca abaixo do tamanho normal do notebook) */
+  function cqFrameFit() {
+    const f = $('#cq-frame'); if (!f) return;
+    const Z = CQZ(), w0 = f.parentElement ? f.parentElement.clientWidth : 0;
+    const fz = Z > 1 && w0 ? Math.min(1, Math.max(1 / Z, w0 / 1500)) : 1;
+    f.style.zoom = ''; f.style.height = '';
+    if (fz >= 0.999) return;
+    const hv = f.getBoundingClientRect().height;   /* altura que o editor teria (pixels de tela): a mesma, com a ampliação menor */
+    f.style.zoom = String(Math.round(fz * 1000) / 1000);
+    if (hv > 0) f.style.height = Math.round(hv / (Z * fz)) + 'px';
+  }
+  addEventListener('cq-tela', () => setTimeout(cqFrameFit, 0));
+  addEventListener('resize', () => setTimeout(cqFrameFit, 150));
   function cqFrame() { const f = $('#cq-frame'); try { return f && f.contentWindow && f.contentWindow.__cert ? f : null; } catch (e) { return null; } }
   const cqApp = () => { const f = cqFrame(); return f ? f.contentWindow.__cert : null; };
   const cqBtn = (id) => { const f = cqFrame(); const b = f && f.contentDocument.getElementById(id); if (b) b.click(); setTimeout(cqPanelSync, 400); setTimeout(cqPanelSync, 1500); };
@@ -13154,6 +13207,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <div class="cqsheet cqwsf"><iframe id="cq-frame" src="cert.html?v=1&amp;ws=1&amp;k=${encodeURIComponent(ed.key)}" title="Certificado de qualidade"></iframe></div></div>`;
     S.cqLotRow = lotRow; S.cqLots = lots;
     const fr = $('#cq-frame');
+    cqFrameFit();
     fr.onload = () => { cqAposCarregar(); };
     const galv = $('#cq-galv'); if (galv) galv.onchange = () => { const f = cqFrame(); const g = f && f.contentDocument.getElementById('chkGalv'); if (g) { g.click(); setTimeout(cqPanelSync, 300); } };
   }
@@ -16190,7 +16244,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   async function rtScan() {
     if (!('BarcodeDetector' in window)) { toast('Este aparelho não lê QR pela câmera: busque pelo PV.', true); return; }
-    openModal('Ler QR do pedido', '<video id="rt-v" playsinline muted style="width:100%;border-radius:10px;background:#000;max-height:60vh"></video><p class="muted" style="margin:0">Aponte a câmera para o QR ou código de barras do pedido.</p><div class="formfoot"><button class="btn" type="button" data-act="close">Cancelar</button></div>');
+    openModal('Ler QR do pedido', '<video id="rt-v" playsinline muted style="width:100%;border-radius:10px;background:#000;max-height:calc(60vh / var(--cqz, 1))"></video><p class="muted" style="margin:0">Aponte a câmera para o QR ou código de barras do pedido.</p><div class="formfoot"><button class="btn" type="button" data-act="close">Cancelar</button></div>');
     let st = null, live = true;
     const stop = () => { live = false; if (st) st.getTracks().forEach((tr) => tr.stop()); };
     TB.scan = stop;
@@ -17016,7 +17070,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     openModal('Continuidade em lote', `<p style="margin:0">Marque as qualificações que foram usadas (o soldador soldou com aquele processo) e informe a comprovação. Útil na conferência periódica da Qualidade. As que vencem antes aparecem primeiro. Qualificação que já estava vencida na data informada não recebe continuidade: precisa de requalificação.</p>
       <div class="fgrid cm-grid">${sfield('sl-d', 'Data em que soldaram', S.today, { type: 'date', req: 1 })}${sfield('sl-ev', 'Comprovação', '', { req: 1, ph: 'ex.: relatórios de inspeção de solda de setembro' })}</div>
       <div class="formfoot" style="margin:0"><button class="btn small" type="button" id="sl-all">Marcar todas</button><button class="btn small" type="button" id="sl-none">Desmarcar todas</button></div>
-      <div class="ihist" style="max-height:46vh"><table><tbody>${L.map((q, i) => `<tr><td><input type="checkbox" id="sl-c${i}" data-i="${i}"></td><td class="mono nw">${esc(q.sinete || '')}</td><td>${esc(q.nome)}<div class="muted">${esc(soldQLabel(q))}${q.eps ? ' · EPS ' + esc(q.eps) : ''}</div></td><td class="nw">${chipQ(q.status)}<div class="muted">${fD(q.validade)}</div></td></tr>`).join('')}</tbody></table></div>
+      <div class="ihist" style="max-height:calc(46vh / var(--cqz, 1))"><table><tbody>${L.map((q, i) => `<tr><td><input type="checkbox" id="sl-c${i}" data-i="${i}"></td><td class="mono nw">${esc(q.sinete || '')}</td><td>${esc(q.nome)}<div class="muted">${esc(soldQLabel(q))}${q.eps ? ' · EPS ' + esc(q.eps) : ''}</div></td><td class="nw">${chipQ(q.status)}<div class="muted">${fD(q.validade)}</div></td></tr>`).join('')}</tbody></table></div>
       <div class="formfoot"><button class="btn primary" type="button" id="sl-ok">Registrar continuidade</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
     $('#sl-all').onclick = () => $$('[id^="sl-c"]').forEach((c) => { c.checked = true; });
     $('#sl-none').onclick = () => $$('[id^="sl-c"]').forEach((c) => { c.checked = false; });
@@ -17598,7 +17652,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const L = Object.values(d.rows || {}).sort((p, q) => (p.cls ? 0 : 1) - (q.cls ? 0 : 1) || (p.iqf ?? 999) - (q.iqf ?? 999));
     const [y, m] = id.slice(2).split('-').map(Number);
     openModal(`Fechamento de ${MESES_L[m - 1]} de ${y}`, `<p class="muted" style="margin:0;font-size:12.5px">Fechado em ${new Date(d.at).toLocaleDateString('pt-BR')} · 12 meses até ${fD(d.fim)} · pesos ${IQ_CRIT.map(([c, l]) => l + ' ' + ((d.cfg || {}).pesos || {})[c]).join(', ')}</p>
-      <div class="ihist" style="max-height:60vh"><table><thead><tr><th>Fornecedor</th><th>Classe</th><th class="r">IQF</th><th class="r">Lotes</th><th class="r">NCF</th></tr></thead><tbody>${L.map((r) => `<tr><td>${esc(r.nome)}</td><td>${chipCls(r.cls)}</td><td class="r"><b>${r.iqf == null ? '—' : NF1.format(r.iqf)}</b></td><td class="r">${r.lotes}</td><td class="r">${r.rnc}</td></tr>`).join('')}</tbody></table></div>
+      <div class="ihist" style="max-height:calc(60vh / var(--cqz, 1))"><table><thead><tr><th>Fornecedor</th><th>Classe</th><th class="r">IQF</th><th class="r">Lotes</th><th class="r">NCF</th></tr></thead><tbody>${L.map((r) => `<tr><td>${esc(r.nome)}</td><td>${chipCls(r.cls)}</td><td class="r"><b>${r.iqf == null ? '—' : NF1.format(r.iqf)}</b></td><td class="r">${r.lotes}</td><td class="r">${r.rnc}</td></tr>`).join('')}</tbody></table></div>
       <div class="formfoot"><button class="btn" type="button" data-act="close">Fechar</button></div>`);
   }
   function iqPrint(k) {
@@ -17896,7 +17950,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     }
     function altura(b) {
       var m = document.createElement('div'); m.style.cssText = 'position:absolute;left:-10000px;top:0;width:' + cur.clientWidth + 'px'; document.body.appendChild(m);
-      m.appendChild(b); var cs = getComputedStyle(b), h = b.getBoundingClientRect().height + parseFloat(cs.marginTop || 0) + parseFloat(cs.marginBottom || 0);
+      m.appendChild(b); var cs = getComputedStyle(b), h = b.getBoundingClientRect().height / CQZ() + parseFloat(cs.marginTop || 0) + parseFloat(cs.marginBottom || 0);
       m.removeChild(b); m.remove(); return h;
     }
     function split(b) {
@@ -18839,9 +18893,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   function m3Size() {
     const w = $('#m3wrap'); if (!w) return;
-    const top = w.getBoundingClientRect().top + window.scrollY, tk = $('#tk');
+    const Z = CQZ(), top = (w.getBoundingClientRect().top + window.scrollY) / Z, tk = $('#tk');
     const tkH = document.body.classList.contains('has-tk') && tk && !tk.hidden ? tk.offsetHeight : 0; /* letreiro fixo embaixo */
-    w.style.height = Math.max(420, Math.round(window.innerHeight - top - tkH - (tbOnly() ? 0 : 18))) + 'px';
+    w.style.height = Math.max(420, Math.round(window.innerHeight / Z - top - tkH - (tbOnly() ? 0 : 18))) + 'px';
   }
   addEventListener('resize', () => { if (S.view === 'mapa3d') m3Size(); });
   VIEWS.mapa3d = (main) => {
@@ -19267,7 +19321,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* QR da etiqueta do lote (ou do pedido): sem câmera com leitor, digita o número */
   async function thQr() {
     if (!('BarcodeDetector' in window)) { thDigitar(); return; }
-    openModal('Ler QR de etiqueta', '<video id="th-v" playsinline muted style="width:100%;border-radius:10px;background:#000;max-height:60vh"></video><p class="muted" style="margin:0">Aponte a câmera para o QR da etiqueta do lote ou do pedido.</p><div class="formfoot"><button class="btn" type="button" id="th-dig">Digitar o número</button><button class="btn" type="button" data-act="close">Cancelar</button></div>');
+    openModal('Ler QR de etiqueta', '<video id="th-v" playsinline muted style="width:100%;border-radius:10px;background:#000;max-height:calc(60vh / var(--cqz, 1))"></video><p class="muted" style="margin:0">Aponte a câmera para o QR da etiqueta do lote ou do pedido.</p><div class="formfoot"><button class="btn" type="button" id="th-dig">Digitar o número</button><button class="btn" type="button" data-act="close">Cancelar</button></div>');
     let st = null, live = true;
     const stop = () => { live = false; if (st) st.getTracks().forEach((tr) => tr.stop()); };
     TB.scan = stop;
@@ -19494,7 +19548,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   async function tbScan() {
     if (!('BarcodeDetector' in window)) { toast('Este aparelho não lê QR pela câmera: digite o número do lote.', true); return; }
-    openModal('Ler QR da etiqueta', '<video id="tb-v" playsinline muted style="width:100%;border-radius:10px;background:#000;max-height:60vh"></video><p class="muted" style="margin:0">Aponte a câmera para o QR da etiqueta do lote.</p><div class="formfoot"><button class="btn" type="button" data-act="close">Cancelar</button></div>');
+    openModal('Ler QR da etiqueta', '<video id="tb-v" playsinline muted style="width:100%;border-radius:10px;background:#000;max-height:calc(60vh / var(--cqz, 1))"></video><p class="muted" style="margin:0">Aponte a câmera para o QR da etiqueta do lote.</p><div class="formfoot"><button class="btn" type="button" data-act="close">Cancelar</button></div>');
     let st = null, live = true;
     const stop = () => { live = false; if (st) st.getTracks().forEach((tr) => tr.stop()); };
     TB.scan = stop;
@@ -19862,8 +19916,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const el = e.target.closest && e.target.closest('[data-tip]');
     if (!el) { tip.hidden = true; return; }
     tip.textContent = el.dataset.tip; tip.hidden = false;
-    tip.style.left = Math.min(window.innerWidth - tip.offsetWidth - 8, e.clientX + 14) + 'px';
-    tip.style.top = Math.max(8, e.clientY - tip.offsetHeight - 10) + 'px';
+    const Z = CQZ(); tip.style.left = Math.min(window.innerWidth / Z - tip.offsetWidth - 8, e.clientX / Z + 14) + 'px';
+    tip.style.top = Math.max(8, e.clientY / Z - tip.offsetHeight - 10) + 'px';
   });
   /* ponto de extensão: a versão hospedada fora do Claude acrescenta telas (ex.: Usuários) */
   if (typeof window.CQ_PLUGIN === 'function') { try { window.CQ_PLUGIN({ VIEWS, S, DB, head, esc, toast, render, go, openModal, confirmBox, closeLayer, kpiHTML, updateChrome, $, $$, NF, dmy, hhmm }); } catch (e) { console.error('plugin', e); } }
