@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<script>try{if(window.self!==window.top&&window.parent.CQ_CERT_HOST)document.documentElement.classList.add("cq-embed")}catch(e){}</script>
+<script>try{if(window.self!==window.top&&window.parent.CQ_CERT_HOST&&!/[?&]leitor=1/.test(location.search))document.documentElement.classList.add("cq-embed")}catch(e){}</script>
 <style>html.cq-embed .topbar,html.cq-embed .panel,html.cq-embed .panel-hint{display:none!important}html.cq-embed body{min-height:0}html.cq-embed .app{padding:14px 12px 28px}html.cq-embed .folhas{top:0}</style>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -705,6 +705,28 @@ html.ws.cq-embed .ws-body { padding: 0 0 2px; }
 @media (max-width: 1720px) { .ws-tb { font-size: 14.5px; padding: 0 6px; } }
 @media (max-width: 1320px) { .ws-body { grid-template-columns: minmax(0, 1fr) 320px; } .ws-acts { grid-template-columns: repeat(4, 140px) 44px; } .ws-b { padding: 0 8px; font-size: 14.5px; } .ws-b kbd { display: none; } }
 @media (max-width: 1100px) { .ws-body { grid-template-columns: minmax(0, 1fr); overflow: auto; } .ws-side { grid-template-columns: 1fr 1fr; overflow: visible; } .ws-main { min-height: 70vh; } html.ws body { overflow: auto; } .ws { position: static; min-height: 100vh; } .ws-acts { grid-template-columns: repeat(4, minmax(0, 1fr)) 44px; } .ws-top { height: auto; flex-wrap: wrap; padding: 10px 14px; } .ws-hdr { grid-template-columns: 1fr 1fr; } .ws-tx { grid-template-columns: 1fr; } }
+/* v52: grade de edição em 10 px com quebra de linha (só a tela de edição; o PDF e o Excel do certificado não mudam) */
+.ws-g { font-size: 10px; }
+.ws-g td { height: auto; padding: 4px 7px; line-height: 1.25; white-space: normal; overflow-wrap: anywhere; text-overflow: clip; }
+.ws-g td.mono { font-size: 10px; }
+.ws-g tbody tr { height: 30px; }
+.ws-g thead th { font-size: 10px; }
+.ws-g thead tr.h1 th small { font-size: 9px; }
+.ws-g th.ci { font-size: 10px; }
+.ws-ed { font-size: 10px; padding: 0 6px; }
+/* v52: recolher a prévia do PDF */
+.ws-ch .ws-rec { margin-left: auto; align-self: center; flex: none; width: 30px; height: 30px; border: 1px solid var(--w-line2); border-radius: 8px; background: var(--w-sf); color: var(--w-ink2); font: 600 16px/1 var(--w-body); cursor: pointer; display: grid; place-items: center; padding: 0; }
+.ws-ch .ws-rec:hover, .ws-faixa:hover i { background: var(--w-sf2); color: var(--w-ink); }
+.ws-faixa { display: none; }
+.ws-prev .ws-ch span { margin-left: auto; }
+html.ws-semprev .ws-body { grid-template-columns: minmax(0, 1fr) 46px; }
+html.ws-semprev .ws-side .ws-card { display: none; }
+html.ws-semprev .ws-faixa { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 46px; min-height: 260px; padding: 8px 0 12px; border: 1px solid var(--w-line); border-radius: 12px; background: var(--w-sf); color: var(--w-ink3); cursor: pointer; }
+.ws-faixa i { font: 600 16px/1 var(--w-body); font-style: normal; width: 30px; height: 30px; border: 1px solid var(--w-line2); border-radius: 8px; display: grid; place-items: center; color: var(--w-ink2); }
+.ws-faixa span { writing-mode: vertical-rl; font: 700 12px var(--w-body); letter-spacing: .12em; text-transform: uppercase; }
+.ws-faixa em { font: 700 15px/1 var(--w-body); font-style: normal; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--w-critbg); color: var(--w-crit); }
+.ws-faixa em.wn { background: #FFF4E5; color: #8A4B00; }
+@media (max-width: 1100px) { .ws-ch .ws-rec { display: none; } html.ws-semprev .ws-body { grid-template-columns: minmax(0, 1fr); } html.ws-semprev .ws-side .ws-card { display: block; } html.ws-semprev .ws-faixa { display: none; } }
 </style>
 </head>
 <body>
@@ -1516,7 +1538,7 @@ if (typeof module !== 'undefined') module.exports = { lerPedidoOmie, lerOrdemCom
  */
 (() => {
 'use strict';
-const CQ_EMBED = (() => { try { return window.self !== window.top && !!window.parent.CQ_CERT_HOST; } catch (e) { return false; } })();
+const CQ_EMBED = (() => { try { return window.self !== window.top && !!window.parent.CQ_CERT_HOST && !/[?&]leitor=1/.test(location.search); } catch (e) { return false; } })();
 const cqSalvo = (nome) => { if (wsMudo) { wsMudo.push(nome); return; } if (CQ_EMBED) { try { window.parent.CQ_CERT_HOST.salvo(nome); } catch (e) { /* Central fechada */ } } };
 
 /* v42: cada pedido aberto pela Central tem o seu rascunho no navegador (?k=pedido), para duas abas não misturarem */
@@ -6043,8 +6065,9 @@ function wsMontar() {
     <div class="ws-body">
       <section class="ws-main" id="ws-main"></section>
       <aside class="ws-side">
-        <div class="ws-card ws-prev"><div class="ws-ch"><b>Prévia do PDF</b><span>atualiza ao digitar</span></div><button type="button" class="ws-pv" id="ws-pv" title="Abrir a prévia do PDF em tamanho real"></button></div>
+        <div class="ws-card ws-prev"><div class="ws-ch"><b>Prévia do PDF</b><span>atualiza ao digitar</span><button type="button" class="ws-rec" id="ws-rec" title="Recolher a prévia: a grade usa a tela toda" aria-label="Recolher a prévia do PDF">»</button></div><button type="button" class="ws-pv" id="ws-pv" title="Abrir a prévia do PDF em tamanho real"></button></div>
         <div class="ws-card ws-folha" id="ws-folha"></div>
+        <button type="button" class="ws-faixa" id="ws-faixa" title="Abrir a prévia do PDF" aria-label="Abrir a prévia do PDF"><i>«</i><span>Prévia do PDF</span><em id="ws-faixa-av" hidden></em></button>
       </aside>
     </div>`;
   document.body.insertBefore(root, document.body.firstChild);
@@ -6056,6 +6079,9 @@ function wsMontar() {
   $('ws-save').addEventListener('click', () => { wsFecharEd(true); wsSalvar(); });
   $('ws-mais').addEventListener('click', e => wsMenuMais(e.currentTarget));
   $('ws-pv').addEventListener('click', wsPreviaGrande);
+  $('ws-rec').addEventListener('click', () => wsPrevia(false));
+  $('ws-faixa').addEventListener('click', () => wsPrevia(true));
+  wsPrevia(wsPreviaAberta(), true);
   window.addEventListener('resize', wsZoom);
   /* tema igual ao da Central */
   try {
@@ -6063,6 +6089,14 @@ function wsMontar() {
     const sync = () => { const t = ph.dataset.theme; if (t) document.documentElement.dataset.theme = t; };
     if (CQ_EMBED) { sync(); new MutationObserver(sync).observe(ph, { attributes: true, attributeFilter: ['data-theme'] }); }
   } catch (e) { /* sem a Central */ }
+}
+/* v52: recolher a prévia do PDF (cada computador lembra); recolhida, a grade usa a tela toda e a faixa mostra os avisos de "Esta folha" */
+const WS_PREV_KEY = 'certificado-acos-vital/ws-previa';
+function wsPreviaAberta() { try { return localStorage.getItem(WS_PREV_KEY) !== '0'; } catch (e) { return true; } }
+function wsPrevia(abrir, inicio) {
+  document.documentElement.classList.toggle('ws-semprev', !abrir);
+  if (!inicio) { try { localStorage.setItem(WS_PREV_KEY, abrir ? '1' : '0'); } catch (e) { /* sem armazenamento */ } }
+  if (abrir && !inicio) setTimeout(wsZoom, 30);
 }
 function wsZoom() {
   if (!WS.on || !LAYOUT) return;
@@ -6309,6 +6343,7 @@ function wsFolha() {
   if (info && info.lotes != null) L.push(['Lotes da Central ligados', String(info.lotes)]);
   if (!GRADES) L.push(['Fora da norma', fora ? `${fora} célula${fora === 1 ? '' : 's'}` : 'nenhuma', fora ? 'cr' : 'ok']);
   if (doc.certs.length > 1) L.push(['Folhas do certificado', `${doc.certs.length} (${rotuloFolha(0)} a ${rotuloFolha(doc.certs.length - 1)})`]);
+  const av = $('ws-faixa-av'); if (av) { const t = [pags > 1 ? `não cabe em uma folha A4 (${pags} páginas)` : '', !GRADES && fora ? `${fora} célula${fora === 1 ? '' : 's'} fora da norma` : ''].filter(Boolean); av.hidden = !t.length; av.textContent = t.length ? '⚠' : ''; av.className = !GRADES && fora ? 'cr' : 'wn'; av.title = t.join(' · '); $('ws-faixa').title = 'Abrir a prévia do PDF' + (t.length ? ' · ' + t.join(' · ') : ''); }
   el.innerHTML = `<div class="ws-ch"><b>Esta folha</b></div>${L.map(([a, b, c]) => `<div class="ws-kv"><span>${wsEsc(a)}</span><b class="${c || ''}">${wsEsc(b)}</b></div>`).join('')}`;
 }
 /* prévia grande: o PDF de verdade desta folha */
@@ -6872,6 +6907,8 @@ if (savedZoom && savedZoom > 0) applyZoom(savedZoom, false);
 else if (fitZoom() < 1) applyZoom(fitZoom(), false);
 
 if (WS.on) { wsMontar(); wsLigarGrade(); wsRender(); }
+/* v52: pedido posto na fila pelo link do Omie: o editor importa o mesmo PDF ao abrir */
+if (WS.on) { try { const h = wsHost(), lk = h && h.linkPendente ? h.linkPendente() : ''; if (lk && linkOmieDe(lk)) setTimeout(() => importarLinkOmie(linkOmieDe(lk)), 400); } catch (e) { /* sem a Central */ } }
 
 // ganchos para testes automatizados
 window.__cert = {

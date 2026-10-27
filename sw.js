@@ -1,6 +1,6 @@
 /* Central da Qualidade · service worker
    Sempre busca a versão mais nova da página na internet; a cópia guardada só é usada se estiver sem conexão. */
-const CACHE = 'central-cq-v51'; /* v51: retrabalho decidido pelo inspetor no RIR */
+const CACHE = 'central-cq-v52'; /* v52: grade do certificado em 10 px, recolher a prévia do PDF e pedido pelo link do Omie */
 const SHELL = ['./', './index.html', './manifest.webmanifest', './xlsx.full.min.js', './favicon.ico?v=39', './icon-192.png?v=39', './icon-512.png?v=39', './icon-maskable-512.png?v=39', './apple-touch-icon.png?v=39'];
 /* cada arquivo entra sozinho: um que falte não impede os outros de ficarem guardados */
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => Promise.all(SHELL.map((u) => c.add(u).catch(() => {})))).catch(() => {})); self.skipWaiting(); });

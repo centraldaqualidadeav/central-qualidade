@@ -1193,6 +1193,14 @@ body.tabmode .main { padding: 0 !important; }
 .cqimp > div { display: flex; gap: 10px; align-items: center; padding: 8px 12px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--line); flex: 1 1 200px; }
 .cqimp b { font: 800 26px/1 var(--f-display); } .cqimp span { font-size: 13px; line-height: 1.25; } .cqimp small { display: block; color: var(--ink-3); font-size: 11.5px; }
 .cqimp .ok b { color: var(--ok); } .cqimp .rep b { color: var(--warn); } .cqimp .off b { color: var(--ink-3); }
+/* v52: pedido pelo link do Omie; os três botões do topo de Certificados com a mesma largura */
+.vhead .actions:has(> [data-act="cq-link"]) { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.vhead .actions:has(> [data-act="cq-link"]) > .btn { width: 100%; justify-content: center; }
+@media (max-width: 1699px) { .vhead:has(> .actions > [data-act="cq-link"]) > .actions { grid-column: 1 / -1; grid-row: 3; justify-self: end; margin-top: 6px; } }
+.cqlpas { margin: 0 0 12px; padding-left: 20px; line-height: 1.5; color: var(--ink-2); }
+.cqlmsg { min-height: 1.3em; margin: 6px 0 0; font-size: 12.5px; color: var(--warn); }
+.cqlres > div { flex: 1 1 220px; } .cqlres .cqlcli { display: block; font: 600 14px/1.3 var(--f-body); }
+#cql-res .field { margin: 10px 0 0; } #cql-res .warnbox { margin-top: 10px; }
 .cqcol { background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r); padding: 10px; }
 .cqcol > header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 2px 4px 10px; } .cqcol > header > b { font: 700 15px var(--f-body); } .cqcol > header .muted { font-size: 12px; }
 .cqn { font: 700 12px var(--f-mono); background: var(--tcr); color: #fff; border-radius: 10px; padding: 1px 8px; }
@@ -12764,6 +12772,118 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     };
     inp.click();
   }
+  /* ---------- v52: um pedido pelo link do PDF do Omie ----------
+     O link do PDF do pedido (app.omie.com.br/…/pedido_de_venda_25940.pdf) baixa sem login. A leitura do PDF é a do
+     editor do certificado (cert.html), aberto escondido só para ler: PV, cliente, O.C. do cliente e itens.
+     O pedido entra na fila pelas mesmas regras da lista do Omie (cqPlano): repetido barrado, NF que chega completa o cartão,
+     cliente sem certificado vai para Concluídos, regra de cliente distribui. Sem NF entra como "Aguardando NF". */
+  const CQ_RE_LINK = /https:\/\/(?:[a-z0-9-]+\.)*omie\.com\.br\/[^\s"'<>]*?\.pdf(?:\?[^\s"'<>]*)?(?=$|[\s"'<>])/i;
+  const cqLinkDe = (t) => { const m = CQ_RE_LINK.exec(String(t || '')); return m ? m[0] : ''; };
+  const cqLinkTela = (t) => /https?:\/\/(?:[a-z0-9-]+\.)*omie\.com\.br\//i.test(String(t || '')) && !cqLinkDe(t);
+  const CQ_LINKPEND = 'cq-linkpend';
+  function cqLeitor() {   /* cert.html escondido, só para ler o PDF */
+    return new Promise((res, rej) => {
+      const fr = document.createElement('iframe');
+      fr.src = 'cert.html?v=1&ws=0&leitor=1&k=leitor-omie'; fr.title = 'leitor'; fr.setAttribute('aria-hidden', 'true'); fr.tabIndex = -1;
+      fr.style.cssText = 'position:fixed;left:-9999px;top:0;width:1200px;height:800px;visibility:hidden;pointer-events:none';
+      let n = 0;
+      const t = setInterval(() => {
+        n++;
+        try { const w = fr.contentWindow; if (w && w.document.readyState === 'complete' && w.__cert && w.__cert.textoDoPdf && typeof w.lerPedidoOmie === 'function') {   /* o pdf.js fica no fim da página */ clearInterval(t); res({ w, fim: () => fr.remove() }); return; } } catch (e) { /* carregando */ }
+        if (n > 300) { clearInterval(t); fr.remove(); rej(new Error('O leitor do PDF não abriu. Confira a internet e tente de novo.')); }
+      }, 100);
+      document.body.appendChild(fr);
+    });
+  }
+  async function cqLerLink(link) {
+    let r;
+    try { r = await fetch(link, { credentials: 'omit', cache: 'no-store' }); } catch (e) { throw new Error('Não consegui baixar o PDF pelo link. Confira a internet e se o link foi copiado inteiro.'); }
+    if (!r.ok) throw new Error([403, 404, 410].includes(r.status) ? 'Esse link do pedido não vale mais: o Omie apaga o PDF depois de um tempo. Abra o pedido de novo no Omie e copie o link novamente.' : `O Omie não entregou o PDF (erro ${r.status}). Abra o pedido de novo no Omie e copie o link novamente.`);
+    const buf = await r.arrayBuffer();
+    if (String.fromCharCode(...new Uint8Array(buf, 0, Math.min(5, buf.byteLength))) !== '%PDF-') throw new Error('O link não trouxe um PDF. Copie o endereço da aba em que o PDF do pedido está aberto.');
+    const L = await cqLeitor();
+    try {
+      const pages = await L.w.__cert.textoDoPdf({ name: 'pedido.pdf', type: 'application/pdf', arrayBuffer: async () => buf.slice(0) });
+      const ped = L.w.lerPedidoOmie(pages) || {};
+      const mp = /^\s*([\d.]+)(?:\s*[\/-]\s*(\d+))?/.exec(String(ped.pv || ''));   /* 25940 ou 25.940/2 (parte) */
+      let pv = mp ? cqDig(mp[1]) : ''; const seq = mp && mp[2] ? parseInt(mp[2], 10) || 0 : 0;
+      if (!pv) { const m = /pedido_de_venda_(\d+)/i.exec(decodeURIComponent(link)); pv = m ? m[1] : ''; }
+      if (!pv) throw new Error('Não encontrei o número do pedido de venda neste PDF. Confira se é o PDF do pedido de venda do Omie.');
+      return { pv, seq, cli: String(ped.cliente || '').trim(), oc: String(ped.pedidoCliente || '').trim(), itens: (ped.itens || []).length };
+    } finally { L.fim(); }
+  }
+  function cqLink() {
+    openModal('Pedido pelo link do Omie', `<ol class="cqlpas"><li>No Omie, abra o pedido de venda em PDF.</li><li>Clique na barra de endereço do navegador e copie o link (Ctrl+C).</li><li>Cole aqui (Ctrl+V).</li></ol>
+      <label class="field"><span>Link do PDF do pedido</span><input id="cql-link" type="text" autocomplete="off" spellcheck="false" placeholder="https://app.omie.com.br/…/pedido_de_venda_….pdf"></label>
+      <p class="cqlmsg" id="cql-msg" aria-live="polite"></p><div id="cql-res"></div>
+      <div class="formfoot" id="cql-foot"><button class="btn" type="button" data-act="close">Cancelar</button><button class="btn primary" type="button" id="cql-ler" disabled>Ler pedido</button></div>`);
+    const inp = $('#cql-link'), msg = $('#cql-msg'), ler = $('#cql-ler');
+    setTimeout(() => inp.focus(), 0);
+    const conf = () => { const v = inp.value.trim(), ok = !!cqLinkDe(v); ler.disabled = !ok; msg.textContent = !v || ok ? '' : cqLinkTela(v) ? 'Esse é o link da tela do Omie, não do PDF. Abra o pedido em PDF no Omie e copie o endereço da aba do PDF.' : 'Isso não parece o link de um PDF do Omie.'; return ok; };
+    inp.oninput = conf;
+    inp.onpaste = () => setTimeout(() => { if (conf()) ler.click(); }, 0);
+    inp.onkeydown = (e) => { if (e.key === 'Enter' && conf()) { e.preventDefault(); ler.click(); } };
+    ler.onclick = async () => {
+      const link = cqLinkDe(inp.value); if (!link) return;
+      ler.disabled = true; ler.textContent = 'Lendo o pedido…'; inp.disabled = true; msg.textContent = '';
+      let P;
+      try { P = await cqLerLink(link); } catch (err) { msg.textContent = err.message || String(err); ler.disabled = false; ler.textContent = 'Ler pedido'; inp.disabled = false; return; }
+      if (!$('#cql-res')) return;   /* janela fechada enquanto lia */
+      cqLinkRes(link, P);
+    };
+  }
+  function cqLinkRes(link, P) {
+    const res = $('#cql-res'), foot = $('#cql-foot');
+    const k0 = cqKey(P.pv, P.seq), cards = cqCards();
+    const ja = cqFind(k0) || (P.seq ? null : cards.find((c) => cqDig(c.pv) === P.pv && c.st === 'p') || cards.find((c) => cqDig(c.pv) === P.pv)) || null;
+    res.innerHTML = `<div class="cqimp cqlres"><div class="ok"><b class="mono">${esc(P.pv + (P.seq ? '/' + P.seq : ''))}</b><span>pedido de venda<small>${P.itens ? NF.format(P.itens) + ' item(ns) no PDF' : 'itens não lidos'}</small></span></div><div><span><small>Cliente</small><b class="cqlcli">${esc(P.cli || '—')}</b>${P.oc ? `<small>O.C. do cliente ${esc(P.oc)}</small>` : ''}</span></div></div>
+      ${ja && ja.st === 'p' && ja.nf ? '' : `<label class="field"><span>Nota fiscal (opcional)</span><input id="cql-nf" type="text" inputmode="numeric" autocomplete="off" placeholder="sem NF entra como “Aguardando NF”"></label>`}
+      ${ja ? `<div class="warnbox">${ja.st === 'p' ? `O pedido <b>${esc(cqNum(ja))}</b> já está na fila${ja.nf ? ` (NF ${esc(ja.nf)})` : ' como “Aguardando NF”'}.` : `O pedido <b>${esc(cqNum(ja))}</b> já está em Concluídos.`}</div>` : ''}`;
+    const b = (id, l, cls) => `<button class="btn${cls ? ' ' + cls : ''}" type="button" id="${id}">${l}</button>`;
+    let acts;
+    if (ja && ja.st === 'p') acts = (ja.nf ? '' : b('cql-nfok', 'Gravar a NF')) + (cw('certq') ? b('cql-abrir', ja.rasc ? 'Continuar o certificado' : 'Fazer o certificado', 'primary') : '');
+    else if (ja) acts = '';
+    else acts = b('cql-fila', 'Pôr na fila') + b('cql-fazer', 'Pôr na fila e fazer o certificado', 'primary');
+    foot.innerHTML = `<button class="btn" type="button" data-act="close">${acts ? 'Cancelar' : 'Fechar'}</button>${acts}`;
+    const nfv = () => { const i = $('#cql-nf'); const d = i ? cqDig(i.value) : ''; return d ? String(parseInt(d, 10)) : ''; };
+    const travar = (t) => foot.querySelectorAll('button').forEach((x) => { x.disabled = t; });
+    const gravar = async (fazer) => {
+      travar(true);
+      const nf = nfv();
+      const plano = cqPlano([{ pv: P.pv, seq: P.seq, nf, cli: P.cli, sit: '', et: '', fat: nf ? Date.now() : null }]);
+      try {
+        if (!plano.novos.length) { toast('O pedido já está na Central.', true); travar(false); return; }
+        const { k, c } = plano.novos[0];
+        await soldWrite('certq/m-' + cqMes(c.fat || c.imp), { items: { [k]: clean(c) } });
+        logEntry('CERTQ', cqNum(c), 'criado', `Pedido pelo link do Omie: ${c.cli || 'cliente não lido'}${nf ? ' · NF ' + nf : ' · Aguardando NF'}${c.st === 'n' ? ' · cliente não precisa de certificado (Concluídos)' : ''}`, null);
+        if (!fazer || c.st !== 'p') { closeLayer(); toast(c.st === 'p' ? `Pedido ${cqNum(c)} na fila${nf ? '' : ' como “Aguardando NF”'}.` : `Pedido ${cqNum(c)} foi para Concluídos: o cliente não precisa de certificado.`); S.cqSub = 'pend'; render(); return; }
+        let cc = null; for (let i = 0; i < 80 && !cc; i++) { cc = cqFind(k); if (!cc) await new Promise((r) => setTimeout(r, 100)); }
+        closeLayer();
+        if (!cc) { toast(`Pedido ${cqNum(c)} na fila. Abra o certificado pelo cartão.`); render(); return; }
+        cqLinkAbrir(cc, link);
+      } catch (err) { cqErr(err); travar(false); }
+    };
+    const on = (id, f) => { const x = $('#' + id); if (x) x.onclick = f; };
+    on('cql-fila', () => gravar(false));
+    on('cql-fazer', () => gravar(true));
+    on('cql-abrir', () => { closeLayer(); cqLinkAbrir(ja, link); });
+    on('cql-nfok', async () => {
+      const nf = nfv(); if (!nf) { toast('Digite a NF.', true); $('#cql-nf').focus(); return; }
+      travar(true);
+      try { await cqPatch(ja, { nf, fat: Date.now(), anf: null }, `NF ${nf} pelo link do Omie → prazo começa hoje`); closeLayer(); toast(`NF ${nf} gravada no pedido ${cqNum(ja)}.`); } catch (err) { cqErr(err); travar(false); }
+    });
+  }
+  /* o editor importa o mesmo PDF ao abrir (CQ_CERT_HOST.linkPendente) — vale para a Central e para a aba de certificados */
+  function cqLinkAbrir(c, link) {
+    lsSet(CQ_LINKPEND, JSON.stringify({ k: c.k, link, at: Date.now() }));
+    abaFazer(c);
+  }
+  function cqLinkPendente() {
+    const e = S.cqEd; let o = null; try { o = JSON.parse(lsGet(CQ_LINKPEND, '') || 'null'); } catch (err) { o = null; }
+    if (!o || !e || o.k !== e.k) return '';
+    try { localStorage.removeItem(CQ_LINKPEND); } catch (err) { /* sem armazenamento */ }
+    return Date.now() - (o.at || 0) < 10 * 60e3 ? o.link : '';
+  }
 
   /* ---------- cartões ---------- */
   function cqWho(c) {
@@ -12797,7 +12917,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (!CQF.ready) body = '<div class="empty">Carregando a fila…</div>';
     else if (sub === 'pend' || sub === 'aguard') body = cqPendHTML(pend, sub === 'aguard');
     else body = cqConcHTML(L);
-    main.innerHTML = `<div class="view">${head('Certificados de qualidade', 'Os pedidos entram pelo arquivo do Omie (os a faturar como “Aguardando NF”), saem da fila quando o certificado é salvo e vão para Concluídos.', w ? '<button class="btn" type="button" data-act="cq-avulso">Certificado avulso</button><button class="btn primary" type="button" data-act="cq-imp">Importar lista do Omie (Excel ou CSV)</button>' : '')}
+    main.innerHTML = `<div class="view">${head('Certificados de qualidade', 'Os pedidos entram pelo arquivo do Omie (os a faturar como “Aguardando NF”), saem da fila quando o certificado é salvo e vão para Concluídos.', w ? '<button class="btn" type="button" data-act="cq-avulso">Certificado avulso</button><button class="btn" type="button" data-act="cq-link">Pedido pelo link do Omie</button><button class="btn primary" type="button" data-act="cq-imp">Importar lista do Omie (Excel ou CSV)</button>' : '')}
       <div class="seg cqtabs" role="tablist">${tab('pend', `Pendentes <b>${NF.format(pend.length)}</b>`)}${tab('aguard', `Aguardando solução <b class="${npd ? 'am' : ''}">${NF.format(npd)}</b>`)}${tab('conc', 'Concluídos')}</div>
       ${body}</div>`;
     main.dataset.cqed = '';
@@ -13027,6 +13147,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       /* v41: área de trabalho do certificado (imagens G1 a G6) — o que antes ficava no painel da direita vem por aqui */
       info: () => { const e = S.cqEd, cc = e && e.k ? cqFind(e.k) : null; return { lotes: e && e.lotes ? e.lotes.length : 0, pv: cc ? cqNum(cc) : '' }; },
       acao: (k, v) => cqWsAcao(k, v),
+      linkPendente: () => cqLinkPendente(),   /* v52: pedido posto na fila pelo link do Omie */
     };
     main.innerHTML = `<div class="view cqed cqws">
       ${CQ_ABA ? abaFaixa(c) : `<div class="cqfrom"><button class="btn ghost small" type="button" data-act="cq-voltar">‹ Fila</button>${c ? `<b class="cqpv">${esc(cqNum(c))}</b><span class="cqnf mono">NF ${esc(c.nf || '—')}</span>${c.seq ? `<span class="cqparc">parte ${c.seq}</span>` : ''}<span class="clip">${esc(c.cli || '')}</span>${c.porEm ? cqWho(c) : ''}${c.st !== 'p' ? '<span class="chip ok">concluído</span>' : ''}` : '<b>Certificado avulso</b><span class="muted">fora da fila: ao salvar, a Central procura o número na fila</span>'}<span class="cqst" id="cq-st"></span>${c && abaPode() ? '<button class="btn small cqoutra" type="button" data-act="aba-mover" title="Continuar este certificado na aba de certificados (a fila fica ao lado)">⧉ Abrir em outra aba</button>' : ''}</div>`}
@@ -13545,6 +13666,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'cq-mais') { S.cqN = (S.cqN || 0) + 48; render(); return true; }
     if (a === 'cq-mes') { S.cqMes = key; render(); return true; }
     if (a === 'cq-imp') { cqImportar(); return true; }
+    if (a === 'cq-link') { cqLink(); return true; }
     if (a === 'cq-avulso') { cqAbrir(null, true); return true; }
     if (a === 'cq-voltar') { cqDraft(false); S.cqSub = 'pend'; S.cqEd = null; render(); return true; }
     if (a === 'cq-btn') { cqBtn(key); return true; }
