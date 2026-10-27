@@ -5527,7 +5527,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 53; window.CQ_V = APP_V;
+    const APP_V = 54; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -12632,7 +12632,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const CQF = { docs: {}, ready: false, ver: 0 };
   const CQ_MOT = ['OC pendente', 'Aguardando certificado do fornecedor', 'Aguardando cliente / comercial', 'Outro'];
   const CQ_TOM = ['#2d77c1', '#be5615', '#825ddc', '#378267', '#996c21', '#2e7f87', '#5f67e3', '#d9362a', '#6c7772'];
-  const CQ_KEYS = { tipo: 'certificado-acos-vital/tipo', tubos: 'certificado-acos-vital/rascunho-v2', grades: 'certificado-acos-vital/grades-v1', cfg: 'certificado-acos-vital/config' };
+  const CQ_KEYS = { tipo: 'certificado-acos-vital/tipo', tubos: 'certificado-acos-vital/rascunho-v2', grades: 'certificado-acos-vital/grades-v1', valvulas: 'certificado-acos-vital/valvulas-v1', cfg: 'certificado-acos-vital/config' };
+  const CQ_TIPOS = ['tubos', 'grades', 'valvulas'];                         /* v54: certificado de válvulas */
+  const cqTipoApp = (app) => (app && CQ_TIPOS.includes(app.TIPO) ? app.TIPO : 'tubos');
   /* v42: o rascunho de cada pedido tem a sua chave no navegador (o certificado abre com ?k=pedido); assim a aba de
      certificados e a Central podem ter pedidos diferentes abertos sem um gravar por cima do outro. A cópia de verdade é a do banco. */
   const cqNs = (key) => '#' + String(key || '').replace(/[^\w.@-]/g, '_');
@@ -12641,10 +12643,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function cqNsLimpa(atual) {   /* tira do navegador as cópias de pedidos que ninguém mexe há 3 dias */
     let idx = {}; try { idx = JSON.parse(cqLG(CQ_NS_IDX) || '{}') || {}; } catch (e) { idx = {}; }
     const agora = Date.now();
-    Object.keys(idx).forEach((k) => { if (k !== atual && agora - (idx[k] || 0) > 3 * 864e5) { ['tipo', 'tubos', 'grades'].forEach((t) => { try { localStorage.removeItem(cqK(t, k)); } catch (e) { /* sem armazenamento */ } }); delete idx[k]; } });
+    Object.keys(idx).forEach((k) => { if (k !== atual && agora - (idx[k] || 0) > 3 * 864e5) { ['tipo'].concat(CQ_TIPOS).forEach((t) => { try { localStorage.removeItem(cqK(t, k)); } catch (e) { /* sem armazenamento */ } }); delete idx[k]; } });
     idx[atual] = agora; cqLS(CQ_NS_IDX, JSON.stringify(idx));
   }
-  const CQ_MOD = { tubos: 'Principal', grades: 'Grade de piso' };
+  const CQ_MOD = { tubos: 'Principal', grades: 'Grade de piso', valvulas: 'Válvulas' };
   const cqAdm = () => bkPode();
   const cqDig = (v) => docN(v);
   const cqKey = (pv, seq) => cqDig(pv) + (seq ? '-' + seq : '');
@@ -13165,7 +13167,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const v = {};
     if (c) { v.A10 = c.cli || ''; v.M10 = cqNum(c); if (c.nf) v.G12 = c.nf; }
     v.M12 = dmy(Date.now());
-    const s = tipo === 'grades' ? { itens: 1, inicio: 1, comps: 1, corrs: 1, opt: { galv: true }, v, cb: {} } : { itens: 1, inicio: 1, v, cb: {} };
+    if (tipo === 'valvulas') v.I51 = 'Pressão (bar)';
+    const s = tipo === 'grades' ? { itens: 1, inicio: 1, comps: 1, corrs: 1, opt: { galv: true }, v, cb: {} }
+      : tipo === 'valvulas' ? { itens: 1, inicio: 1, comps: 1, corrs: 1, testes: 1, trats: 1, v, cb: {} } : { itens: 1, inicio: 1, v, cb: {} };
     return JSON.stringify(tipo === 'grades' ? { certs: [s], atual: 0, syncExtras: true } : { certs: [s], atual: 0, syncExtras: true, mec: 2 });
   }
   const cqLS = (k, v) => { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { /* sem armazenamento */ } };
@@ -13179,7 +13183,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const tipo = (r && r.tipo) || 'tubos', docs = (r && r.docs) || {};
     cqNsLimpa(key);
     cqLS(cqK('tipo', key), tipo);
-    ['tubos', 'grades'].forEach((t) => cqLS(cqK(t, key), docs[t] || cqDocInicial(t, c)));
+    CQ_TIPOS.forEach((t) => cqLS(cqK(t, key), docs[t] || cqDocInicial(t, c)));
     /* assinatura: sempre a de quem está logado — nunca a da última pessoa que usou este computador */
     let cfgDev = {}; try { cfgDev = JSON.parse(cqLG(CQ_KEYS.cfg) || 'null') || {}; } catch (e) { cfgDev = {}; }
     const sigJson = JSON.stringify(Object.assign({}, cfgDev, { assinante: (sig && sig.assinante) || myPessoa() || DB.meName || '', assinatura: (sig && sig.assinatura) || null }));
@@ -13489,12 +13493,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (td) td.hidden = !(app.doc && app.doc.certs && app.doc.certs.length > 1);
     if (sg) { const cf = app.config || {}; sg.textContent = (cf.assinante || 'sem nome do responsável') + (cf.assinatura ? ' · com imagem da assinatura' : ' · sem imagem da assinatura'); }
   }
-  function cqSalvarLocal() { const app = cqApp(); if (!app) return; cqLS(cqK(app.TIPO === 'grades' ? 'grades' : 'tubos'), JSON.stringify(app.doc)); }
+  function cqSalvarLocal() { const app = cqApp(); if (!app) return; cqLS(cqK(cqTipoApp(app)), JSON.stringify(app.doc)); }
   let cqDraftT = null;
   function cqDraftSoon() { clearTimeout(cqDraftT); cqDraftT = setTimeout(() => cqDraft(false), 1500); }
   async function cqDraft(force) {
     const ed = S.cqEd, app = cqApp(); if (!ed || !app || !cw('certq')) return;
-    const tipo = app.TIPO === 'grades' ? 'grades' : 'tubos', json = JSON.stringify(app.doc);
+    const tipo = cqTipoApp(app), json = JSON.stringify(app.doc);
     if (!force && json === ed.lastJson) return;
     ed.lastJson = json;
     const st = $('#cq-st');
@@ -13509,7 +13513,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* o certificado grava no navegador a cada alteração: a Central copia para o banco */
   window.addEventListener('storage', (e) => {
     if (!S.cqEd || S.cqSub !== 'ed' || S.view !== 'certq') return;
-    if (e.key === cqK('tubos') || e.key === cqK('grades')) { cqDraftSoon(); setTimeout(cqPanelSync, 100); }
+    if (CQ_TIPOS.some((t) => e.key === cqK(t))) { cqDraftSoon(); setTimeout(cqPanelSync, 100); }
     if (e.key === CQ_KEYS.cfg && DB.me && cw('certq')) {
       const v = e.newValue; if (!v || v === S.cqEd.sig) return; S.cqEd.sig = v;
       try { const o = JSON.parse(v); soldWrite('certd/sig-' + DB.me, { assinante: o.assinante || '', assinatura: o.assinatura || null, at: Date.now() }).catch(() => {}); } catch (err) { /* ignora */ }
@@ -13527,7 +13531,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const app = cqApp(), ed = S.cqEd; if (!app || !ed) return;
     const c = ed.k ? cqFind(ed.k) : null, n = (app.doc && app.doc.certs && app.doc.certs.length) || 1;
     confirmBox('Zerar certificado', `Isso apaga ${n > 1 ? 'as ' + n + ' folhas deste certificado' : 'tudo o que foi preenchido neste certificado'}: itens, química, mecânica, tratamento térmico e informações adicionais${c ? '. Ficam só o nº, a nota fiscal, o cliente e a data do pedido' : ''}. O responsável e a assinatura continuam. Já salvou o PDF e o Excel?`, 'Apagar e começar de novo', () => {
-      const tipo = app.TIPO === 'grades' ? 'grades' : 'tubos', d = JSON.parse(cqDocInicial(tipo, c));
+      const tipo = cqTipoApp(app), d = JSON.parse(cqDocInicial(tipo, c));
       const sigRef = (app.FIELDS || []).find((f) => f.key === 'assinante'), cf = app.config || {};
       if (sigRef && cf.assinante) d.certs[0].v[sigRef.ref] = cf.assinante;
       app.doc = d; ed.lotes = [];
@@ -13603,7 +13607,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const espec = (x) => { const n = fil(x.norma); if (!n) return ''; if (/^B\s?16/i.test(n)) return 'ASME ' + n.replace(/\s/g, ''); return /^A-?\d/i.test(n) ? 'ASTM ' + n.replace(/^A-?/i, 'A') : n; };
     const descr = (x) => [fil(x.desc), fil(x.diam), fil(x.esp)].filter(Boolean).join(' ');
     let feitos = 0;
-    if (app.TIPO === 'grades') {
+    if (app.TIPO === 'grades' || app.TIPO === 'valvulas') {
       const max = (app.BLOCO && app.BLOCO.comp && app.BLOCO.comp.max) || 8;
       const comp = F.filter((f) => f.tbl === 'comp'), byL = (n, lab) => comp.find((f) => f.linha === n && f.label === lab);
       let n = 1; while (n <= max && ['Componente', 'Corrida / lote'].some((lab) => { const f = byL(n, lab); return f && s.v[f.ref]; })) n++;
@@ -13634,7 +13638,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     }
     if (!feitos) { toast('Não há linhas livres nesta folha. Remova itens ou use outra folha.', true); return; }
     app.state = s;
-    if (app.TIPO === 'grades' && typeof app.atualizarCorridas === 'function') {
+    if ((app.TIPO === 'grades' || app.TIPO === 'valvulas') && typeof app.atualizarCorridas === 'function') {
       try { app.atualizarCorridas(); } catch (e) { /* segue */ }
       /* tabela de corridas: química e mecânica do certificado da usina */
       const s2 = JSON.parse(JSON.stringify(app.state)), sg2 = s2.sug || (s2.sug = {}), cr = F.filter((g) => g.tbl === 'corr'), MG = { 'escoamento (mpa)': 'esc', 'resistência (mpa)': 'res', 'alongamento (%)': 'along' };
@@ -13710,7 +13714,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const RIFI = cqRifInfo(pv), rifFalta = RIFI ? RIFI.itens.filter((i) => i.st !== 'a') : [];
     if (rifFalta.length && !(ed && ed.justRif)) { if (b) { b.disabled = false; } cqJustRifDialog(rifFalta, () => cqConcluir(c, R, nome, P)); return; }
     const kk = c ? c.k : cqKey(P.pv, P.seq), rev = 'e-' + kk + '-' + Date.now().toString(36), justs = cqJustL().filter((j) => lotes.has(j.lote));
-    const conc = clean({ rev, just: justs.length ? justs : null, rifs: RIFI ? RIFI.itens.map((i) => clean(i)) : null, justRif: rifFalta.length && ed ? ed.justRif || null : null, at: Date.now(), by: DB.me || null, em: cqMe(), nome: cqMeNome(), itens: R.itens, folhas: R.folhas, arq: nome || null, modelo: app && app.TIPO === 'grades' ? 'grades' : 'tubos', lotes: Array.from(lotes), avulso: c ? null : true });
+    const conc = clean({ rev, just: justs.length ? justs : null, rifs: RIFI ? RIFI.itens.map((i) => clean(i)) : null, justRif: rifFalta.length && ed ? ed.justRif || null : null, at: Date.now(), by: DB.me || null, em: cqMe(), nome: cqMeNome(), itens: R.itens, folhas: R.folhas, arq: nome || null, modelo: cqTipoApp(app), lotes: Array.from(lotes), avulso: c ? null : true });
     try {
       /* revisão congelada: o certificado exatamente como foi concluído (não é alterada depois; nova conclusão = nova revisão) */
       await DB.db.doc('certd/' + rev).set(clean({ k: kk, num: R.num || null, modelo: conc.modelo, doc: app ? JSON.stringify(app.doc) : null, lotes: conc.lotes, situacao: conc.lotes.map((id) => { const x = avById(id), a = x && lotCertAviso(x); return { lote: id, aviso: a ? a.t : 'liberado' }; }), just: conc.just, rifs: conc.rifs, justRif: conc.justRif, at: conc.at, by: conc.by, nome: conc.nome, arq: conc.arq }));
