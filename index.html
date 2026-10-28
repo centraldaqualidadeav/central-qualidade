@@ -1315,6 +1315,7 @@ body.filamini .cqaba-w { grid-template-columns: 76px minmax(0, 1fr); }
 .cqfq { width: 100%; box-sizing: border-box; min-height: 40px; }
 .cqfseg { display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .cqfseg button { padding: 0 !important; min-height: 38px; text-align: center; }
+.cqfpend { width: 100%; border: 0; background: none; cursor: pointer; margin-top: 6px; } .cqfpend:hover { color: var(--ink); }
 .cqfsec { display: flex; justify-content: space-between; font: 600 11px/1 var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); padding: 8px 2px 0; }
 .cqfl { display: grid; gap: 8px; }
 .cqfv { margin: 4px 2px; font-size: 13px; }
@@ -6894,7 +6895,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (vis('ins')) { const v = m.ins.filter((x) => x.status === 'VENCIDO' || x.status === 'VENCE HOJE' || x.status === 'BLOQUEADO').length, b = m.ins.filter((x) => x.status === 'VENCE EM BREVE').length; C.cal = v ? [v, 1, `${NF.format(v)} vencido(s) ou bloqueado(s) · ${NF.format(b)} vencem em 30 dias`] : [b, 0, `${NF.format(b)} vencem em até 30 dias`]; }
       if (vis('sold') && SD.ready) { const A = soldAlertData(); if (A) C.sold = A.venc.length ? [A.venc.length, 1, `${A.venc.length} qualificação(ões) vencida(s) · ${A.ren.length} para renovar`] : [A.ren.length, 0, `${A.ren.length} qualificação(ões) para renovar`]; }
       if (vis('rif') && RFI.pedReady) { const P = rfPeds().filter((p) => ['ag', 'pd', 'rp'].includes(rfEtapa(p))); C.rif = [P.length, 0, `${NF.format(P.length)} pedido(s) aguardando inspeção, com pendência ou reprovados`]; }
-      if (vis('certq') && CQF.ready) { const P = cqCards().filter((c) => c.st === 'p'), pd = P.filter((c) => c.pend).length; C.certq = [P.length, 0, `${NF.format(P.length)} pedido(s) na fila${pd ? ' · ' + NF.format(pd) + ' com pendência' : ''}`]; }
+      if (vis('certq') && CQF.ready) { const P = cqCards().filter((c) => c.st === 'p'), pd = P.filter((c) => c.pend).length, af = P.length - pd; C.certq = [af, 0, `${NF.format(af)} pedido(s) a fazer${pd ? ' · ' + NF.format(pd) + ' com pendência' : ''}`]; }
       if (vis('iqf') && IQ.ready && vis('av')) { const P = iqPeriod('12m'), n = iqCalc(P.a, P.b).filter((o) => o.cls === 'C').length; C.iqf = [n, 0, `${NF.format(n)} fornecedor(es) classe C`]; }
     } catch (e) { console.warn(e); }
     S.navTip = {};
@@ -13024,7 +13025,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     else if (sub === 'anf') body = cqPendHTML(anf, false, true);
     else body = cqConcHTML(L);
     main.innerHTML = `<div class="view">${head('Certificados de qualidade', 'Os pedidos entram em “A fazer” pelo arquivo do Omie, com ou sem nota fiscal. Certificado salvo vai para Concluídos; sem a NF, vai para “Aguardando NF” e conclui sozinho quando a nota chega.', w ? '<button class="btn" type="button" data-act="cq-avulso">Certificado avulso</button><button class="btn" type="button" data-act="cq-link">Pedido pelo link do Omie</button><button class="btn primary" type="button" data-act="cq-imp">Importar lista do Omie (Excel ou CSV)</button>' : '')}
-      <div class="seg cqtabs" role="tablist">${tab('pend', `A fazer <b>${NF.format(pend.length)}</b>`)}${tab('aguard', `Pendência <b class="${npd ? 'am' : ''}">${NF.format(npd)}</b>`)}${tab('anf', `Aguardando NF <b class="${anf.length ? 'am' : ''}">${NF.format(anf.length)}</b>`)}${tab('conc', 'Concluídos')}</div>
+      <div class="seg cqtabs" role="tablist">${tab('pend', `A fazer <b>${NF.format(pend.length - npd)}</b>`)}${tab('aguard', `Pendência <b class="${npd ? 'am' : ''}">${NF.format(npd)}</b>`)}${tab('anf', `Aguardando NF <b class="${anf.length ? 'am' : ''}">${NF.format(anf.length)}</b>`)}${tab('conc', 'Concluídos')}</div>
       ${body}</div>`;
     main.dataset.cqed = '';
     const q2 = $('#cq-q2'); if (q2) { let tm; q2.oninput = () => { clearTimeout(tm); tm = setTimeout(() => { S.cqQ2 = q2.value; const p = q2.selectionStart; render(); const q3 = $('#cq-q2'); if (q3) { q3.focus(); try { q3.setSelectionRange(p, p); } catch (e) { /* ok */ } } }, 250); }; }
@@ -13043,15 +13044,16 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   function cqPendHTML(pend, soPend, nfMode) {
     const flt = S.cqFlt || 'todos', qq = E.key(S.cqQ || '');
-    const CR = new Map(pend.map((c) => [c, cqCrit(c)])), nCrit = (soPend ? pend.filter((c) => c.pend) : pend).filter((c) => CR.get(c)).length;
-    const L = cqOrdena(soPend ? pend.filter((c) => c.pend) : pend, flt, qq);
+    const base = nfMode ? pend : soPend ? pend.filter((c) => c.pend) : pend.filter((c) => !c.pend);   /* v55: com pendência fica só na aba Pendência */
+    const CR = new Map(base.map((c) => [c, cqCrit(c)])), nCrit = base.filter((c) => CR.get(c)).length;
+    const L = cqOrdena(base, flt, qq);
     const comP = L.filter((c) => c.pend), resto = L.filter((c) => !c.pend), lim = 48 + (S.cqN || 0), vis2 = resto.slice(0, lim);
     const fb = (k, l) => `<button type="button" data-act="cq-flt" data-key="${k}" aria-pressed="${flt === k}">${l}</button>`;
     if (nfMode) L.sort((a, b) => ((a.npend || {}).at || 0) - ((b.npend || {}).at || 0));
-    return `<section class="cqcol"><header><b>${nfMode ? 'Aguardando NF' : soPend ? 'Pendência' : 'A fazer'}</b><span class="cqn">${NF.format(L.length)}</span><span class="muted">${nfMode ? 'certificado pronto · conclui sozinho quando a NF chegar' : soPend ? 'pedidos com pendência registrada' : 'pendências em cima, depois o que vence primeiro'}${nCrit ? ` · <b>${NF.format(nCrit)} de clientes críticos</b>` : ''}</span>
+    return `<section class="cqcol"><header><b>${nfMode ? 'Aguardando NF' : soPend ? 'Pendência' : 'A fazer'}</b><span class="cqn">${NF.format(L.length)}</span><span class="muted">${nfMode ? 'certificado pronto · conclui sozinho quando a NF chegar' : soPend ? 'pedidos com pendência registrada' : 'o que vence primeiro em cima'}${nCrit ? ` · <b>${NF.format(nCrit)} de clientes críticos</b>` : ''}</span>
         <input id="cq-q" class="inp cqq" type="search" placeholder="PV, NF, cliente, OC…" value="${esc(S.cqQ || '')}" autocomplete="off"><span class="cqflt">${fb('todos', 'Todos')}${fb('livres', 'Livres')}${fb('meus', 'Meus')}${nCrit || flt === 'crit' ? fb('crit', '★ Críticos ' + NF.format(nCrit)) : ''}</span></header>
-      ${!pend.length ? `<div class="empty">${nfMode ? 'Nenhum certificado esperando nota fiscal.' : 'Nenhum pedido na fila. Importe a lista do Omie do dia pelo botão no alto.'}</div>` : !L.length ? '<div class="empty">Nada com esse filtro.</div>' : ''}
-      ${comP.length ? `<div class="cqsec">⚠ Com pendência · esperando solução</div><div class="cqgrid">${comP.map(cqCardHTML).join('')}</div>` : ''}
+      ${!base.length ? `<div class="empty">${nfMode ? 'Nenhum certificado esperando nota fiscal.' : soPend ? 'Nenhum pedido com pendência.' : 'Nenhum pedido a fazer. Importe a lista do Omie do dia pelo botão no alto.'}</div>` : !L.length ? '<div class="empty">Nada com esse filtro.</div>' : ''}
+      ${comP.length ? `${soPend ? '' : '<div class="cqsec">⚠ Com pendência · esperando solução</div>'}<div class="cqgrid">${comP.map(cqCardHTML).join('')}</div>` : ''}
       ${!soPend && resto.length ? `${comP.length ? '<div class="cqsec">Na fila · o que vence primeiro</div>' : ''}<div class="cqgrid">${vis2.map(cqCardHTML).join('')}</div>${resto.length > lim ? `<div class="cqmore"><button class="btn small" type="button" data-act="cq-mais">Mostrar mais ${NF.format(Math.min(48, resto.length - lim))} de ${NF.format(resto.length - lim)}</button></div>` : ''}` : ''}</section>`;
   }
   function cqConcHTML(L) {
@@ -13092,8 +13094,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const eqN = O.reduce((s, o) => s + o.w[W.length - 1].n, 0), eqI = O.reduce((s, o) => s + o.w[W.length - 1].i, 0), eqOk = O.reduce((s, o) => s + o.ok, 0), eqT = O.reduce((s, o) => s + o.tot, 0);
     const nOp = O.length + 1, r5 = nOp % 5;
     return `<div class="kpis sm cq5 topo">
-        ${k({ l: 'A fazer', v: NF.format(pend.length), sub: 'pedidos sem certificado', c: CC, pct: [pend.filter((c) => c.porEm).length, pend.length, 'com operador definido', ''] })}
-        ${k({ l: 'Pendência', v: NF.format(npd), sub: 'pedidos com pendência registrada', c: CC, pct: [npd, pend.length, 'dos a fazer', 'warn'], cls: npd ? 'warn' : '' })}
+        ${k({ l: 'A fazer', v: NF.format(pend.length - npd), sub: 'pedidos sem certificado e sem pendência', c: CC, pct: [pend.filter((c) => c.porEm && !c.pend).length, pend.length - npd, 'com operador definido', ''] })}
+        ${k({ l: 'Pendência', v: NF.format(npd), sub: 'pedidos com pendência registrada', c: CC, pct: [npd, pend.length, 'dos pedidos abertos', 'warn'], cls: npd ? 'warn' : '' })}
         ${k({ l: 'Concluídos no mês', v: NF.format(CM.length), sub: `${NF.format(itensM)} itens · ${NF.format(CMc.length)} certificados · ${NF.format(CMn.length)} sem necessidade`, c: CC, pct: [noPz, base, temCrit() ? `no prazo (${cqCfg().prazo} dia(s); crítico ${cqCfg().prazoCrit})` : `no prazo de ${cqCfg().prazo} dia(s) útil(eis)`, 'ok'] })}
         ${cqHojeKpi(L, CMc)}
         ${cqCritKpi(pend, CMc)}
@@ -13423,13 +13425,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function abaListas() {
     const L = cqCards(), and = ABA.abertos.map((k) => L.find((c) => c.k === k)).filter(Boolean);
     /* v44: na fila lateral não aparece o pedido que outra pessoa já pegou (na Central ele continua aparecendo) */
-    const pend = L.filter((c) => c.st === 'p' && !ABA.abertos.includes(c.k) && !(c.porEm && E.low(c.porEm) !== cqMe()));
-    const fila = cqOrdena(pend, ABA.flt, E.key(ABA.q || ''));
-    return { and, fila, total: and.length + pend.length, nCrit: pend.filter(cqCrit).length };
+    const pend = L.filter((c) => c.st === 'p' && !c.pend && !ABA.abertos.includes(c.k) && !(c.porEm && E.low(c.porEm) !== cqMe()));
+    const comPend = L.filter((c) => c.st === 'p' && c.pend && !ABA.abertos.includes(c.k) && !(c.porEm && E.low(c.porEm) !== cqMe()));
+    const fila = cqOrdena(pend, ABA.flt, E.key(ABA.q || '')), pendL = cqOrdena(comPend, ABA.flt, E.key(ABA.q || ''));
+    return { and, fila, pendL, total: and.length + pend.length, nCrit: pend.filter(cqCrit).length };
   }
   function abaFila() {
     const el = $('#cqfila'); if (!el) return;
-    const { and, fila, total, nCrit } = abaListas(), fb = (k, l, t) => `<button type="button" data-act="aba-flt" data-key="${k}" aria-pressed="${ABA.flt === k}" title="${t || ''}">${l}</button>`;
+    const { and, fila, pendL, total, nCrit } = abaListas(), fb = (k, l, t) => `<button type="button" data-act="aba-flt" data-key="${k}" aria-pressed="${ABA.flt === k}" title="${t || ''}">${l}</button>`;
     const foco = document.activeElement && document.activeElement.id === 'aba-q', pos = foco ? document.activeElement.selectionStart : 0;
     el.innerHTML = `<div class="cqfh"><b>FILA</b><span class="cqn">${NF.format(total)}</span><button class="cqftg" type="button" data-act="aba-mini" title="Recolher a fila" aria-label="Recolher a fila">«</button></div>
       <input id="aba-q" class="inp cqfq" type="search" placeholder="PV, NF, cliente, O.C.…" value="${esc(ABA.q)}" autocomplete="off" aria-label="Procurar na fila">
@@ -13437,6 +13440,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${and.length ? `<div class="cqfsec"><span>Em andamento</span><span>${and.length}</span></div><div class="cqfl">${and.map((c) => abaCard(c, true)).join('')}</div>` : ''}
       <div class="cqfsec"><span>Na fila</span><span>${fila.length}</span></div>
       <div class="cqfl">${fila.length ? fila.slice(0, 80).map((c) => abaCard(c, false)).join('') : `<p class="muted cqfv">${ABA.q || ABA.flt !== 'todos' ? 'Nada com esse filtro.' : 'Nenhum pedido na fila.'}</p>`}${fila.length > 80 ? `<p class="muted cqfv">+ ${fila.length - 80} — use a busca</p>` : ''}</div>
+      ${pendL.length ? `<button type="button" class="cqfsec cqfpend" data-act="aba-pend" aria-expanded="${!!ABA.pendAberta}" title="${ABA.pendAberta ? 'Recolher' : 'Mostrar'} os pedidos com pendência"><span>${ABA.pendAberta ? '▾' : '▸'} Pendência</span><span>${pendL.length}</span></button>${ABA.pendAberta ? `<div class="cqfl">${pendL.slice(0, 80).map((c) => abaCard(c, false)).join('')}</div>` : ''}` : ''}
       <div class="cqfmini"><button class="cqftg" type="button" data-act="aba-mini" title="Abrir a fila" aria-label="Abrir a fila">»</button><span class="cqn">${NF.format(total)}</span>
         ${and.length ? `<small>Abertos</small>${and.map(abaMiniPv).join('')}` : ''}<small>Fila</small>${fila.slice(0, 30).map(abaMiniPv).join('')}</div>`;
     const q = $('#aba-q', el);
@@ -13463,6 +13467,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'aba-abrir') { abaAbrir(key); return true; }
     if (a === 'aba-tirar') { abaTirar(key); return true; }
     if (a === 'aba-flt') { ABA.flt = key; abaFila(); return true; }
+    if (a === 'aba-pend') { ABA.pendAberta = !ABA.pendAberta; abaFila(); return true; }
     if (a === 'aba-mini') { const on = !document.body.classList.contains('filamini'); document.body.classList.toggle('filamini', on); lsSet('cq-aba-mini', on ? '1' : ''); return true; }
     if (a === 'aba-central') { abaVerCentral(); return true; }
     if (a === 'aba-fechar') { abaFechar(); return true; }
