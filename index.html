@@ -1223,21 +1223,22 @@ body.tabmode .main { padding: 0 !important; }
 .cqpv { font: 800 24px/1 var(--f-display); letter-spacing: .01em; color: var(--ink); }
 .cqtag { font: 800 10px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--warn); border-radius: 4px; padding: 2px 6px; white-space: nowrap; }
 .cqtag.ok { background: var(--ok); } .cqtag.late { background: var(--crit); }
-/* cliente crítico: no tema claro, cartão escuro com selo e botão dourados; no tema escuro, moldura dourada com brilho leve (o tamanho do cartão não muda) */
-.cqc.crit { --gold: #f2b705; background: #1c2126; border-color: #1c2126; color: #eef1f3; box-shadow: none; }
-.cqc.crit .cqpv, .cqc.crit .cqcli { color: #fff; } .cqc.crit .muted, .cqc.crit .cqparc, .cqc.crit .cqras { color: #aeb8c1; }
-.cqc.crit .cqnf { background: #2a3138; border-color: #3b444d; color: #e6eaee; }
-.cqc.crit .cqmenu { color: #cfd6dc; }
-.cqc.crit .cqf .btn:not(.cqgo) { background: transparent; color: #e6eaee; border-color: #4b555f; }
-.cqc.crit .btn.cqgo, html[data-theme="dark"] .cqc.crit .btn.cqgo { background: var(--gold); border-color: var(--gold); color: #1c2126; }
+/* v55: cliente crítico em bordô (cartão vermelho escuro, selo e botão brancos); crítico atrasado: selo preto, para não confundir com o vermelho do "atrasado" comum */
+.cqc.crit { --bordo: #7a1f24; background: var(--bordo); border-color: var(--bordo); color: #fff; box-shadow: none; }
+.cqc.crit .cqpv, .cqc.crit .cqcli { color: #fff; } .cqc.crit .muted, .cqc.crit .cqparc, .cqc.crit .cqras { color: #efc9cb; }
+.cqc.crit .cqnf { background: #8f2a30; border-color: #a23a40; color: #fff; }
+.cqc.crit .cqmenu { color: #f3d6d7; }
+.cqc.crit .cqf .btn:not(.cqgo) { background: transparent; color: #fff; border-color: #b5575c; }
+.cqc.crit .btn.cqgo, html[data-theme="dark"] .cqc.crit .btn.cqgo { background: #fff; border-color: #fff; color: #7a1f24; }
 .cqc.crit .cqpb { color: var(--ink); }
-.cqc.crit .chip.warn { background: rgba(242, 183, 5, .16); color: #f5c842; }
-.cqtag.star { background: #f2b705; color: #1c2126; } .cqtag.star.hoje { box-shadow: 0 0 0 2px rgba(242, 183, 5, .4); } .cqtag.star.late { background: var(--crit); color: #fff; }
-html[data-theme="dark"] .cqc.crit { background: color-mix(in srgb, #f2b705 8%, var(--surface)); border-color: #f2b705; box-shadow: 0 0 0 1px #f2b705, 0 0 16px rgba(242, 183, 5, .16); color: var(--ink); }
-html[data-theme="dark"] .cqc.crit .cqpv, html[data-theme="dark"] .cqc.crit .cqcli { color: var(--ink); }
-html[data-theme="dark"] .cqc.crit .muted { color: var(--ink-3); }
-html[data-theme="dark"] .cqc.crit .cqnf { background: var(--surface-2); border-color: var(--line); color: var(--ink); }
-html[data-theme="dark"] .cqc.crit .cqf .btn:not(.cqgo) { color: var(--ink); border-color: var(--line); }
+.cqc.crit .chip.warn { background: rgba(255, 255, 255, .16); color: #ffe7a3; }
+.cqtag.star { background: #7a1f24; color: #fff; } .cqtag.star.hoje { box-shadow: 0 0 0 2px rgba(122, 31, 36, .35); } .cqtag.star.late { background: #1c2126; color: #fff; }
+.cqc.crit .cqtag.star { background: #fff; color: #7a1f24; } .cqc.crit .cqtag.star.hoje { box-shadow: 0 0 0 2px rgba(255, 255, 255, .45); } .cqc.crit .cqtag.star.late { background: #1c2126; color: #fff; }
+html[data-theme="dark"] .cqc.crit { background: #5e1b20; border-color: #8f2a30; box-shadow: 0 0 0 1px #8f2a30; color: #fff; }
+html[data-theme="dark"] .cqc.crit .cqpv, html[data-theme="dark"] .cqc.crit .cqcli { color: #fff; }
+html[data-theme="dark"] .cqc.crit .muted { color: #efc9cb; }
+html[data-theme="dark"] .cqc.crit .cqnf { background: #7a2329; border-color: #9b3a41; color: #fff; }
+html[data-theme="dark"] .cqc.crit .cqf .btn:not(.cqgo) { color: #fff; border-color: #a34a50; }
 .crtg { font: 800 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; border-radius: 4px; padding: 3px 8px; white-space: nowrap; border: 1px dashed var(--line); background: transparent; color: var(--ink-3); cursor: pointer; }
 button.crtg:hover { border-color: var(--ink-2); color: var(--ink); }
 .crtg.on { border: 1px solid #1c2126; background: #1c2126; color: #fff; } .crtg.on::first-letter { color: #f2b705; }
@@ -1293,7 +1294,8 @@ html[data-theme="dark"] .btn.cqgo { color: color-mix(in srgb, var(--tcr) 55%, #f
 .cqsheet { background: #5b6670; border-radius: var(--r); overflow: hidden; border: 1px solid var(--line); }
 .cqsheet iframe { width: 100%; height: calc(calc(100vh / var(--cqz, 1)) - 150px); min-height: 640px; border: 0; display: block; background: #5b6670; }
 /* v42: nome de quem está com o pedido legível no cartão escuro do cliente crítico */
-.cqc.crit .cqwho { color: #eef1f3; } html[data-theme="dark"] .cqc.crit .cqwho { color: var(--ink); }
+.cqc.crit .cqwho { color: #fff; } html[data-theme="dark"] .cqc.crit .cqwho { color: #fff; }
+.cqtag.pronto { background: var(--ok); } .cqc.crit .cqtag.pronto { background: #fff; color: #1d6b3f; }
 .cqtag.aba { background: var(--info); } .cqtag.ras { background: #6c7772; } .cqtag.sal { background: var(--ok); } .cqtag.nf { background: #8a6d1d; }
 .cqfrom .cqoutra { margin-left: 4px; }
 .cqtoast { position: fixed; z-index: 95; left: 50%; bottom: calc(64px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--surface); padding: 8px 8px 8px 16px; border-radius: 10px; box-shadow: var(--shadow); display: flex; gap: 14px; align-items: center; font-weight: 600; font-size: 14px; max-width: min(760px, calc(100% - 32px)); }
@@ -1327,7 +1329,7 @@ body.filamini .cqaba-w { grid-template-columns: 76px minmax(0, 1fr); }
 .cqc.cqm.sel { box-shadow: 0 0 0 3px #f2b705; }
 .cqmx { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; border: 0; border-radius: 6px; background: transparent; color: var(--ink-3); font: 600 16px var(--f-body); cursor: pointer; opacity: 0; }
 .cqmw:hover .cqmx, .cqmx:focus-visible { opacity: 1; } .cqmx:hover { background: var(--surface-2); color: var(--ink); }
-.cqc.crit + .cqmx { color: #cfd6dc; }
+.cqc.crit + .cqmx { color: #f3d6d7; }
 .cqfmini { display: none; }
 body.filamini .cqfila > :not(.cqfmini) { display: none !important; }
 body.filamini .cqfila { padding: 12px 4px; align-items: center; overflow-x: hidden; }
@@ -1337,7 +1339,7 @@ body.filamini .cqfmini { display: grid; gap: 7px; justify-items: center; width: 
 .cqfmini .cqftg { margin: 0; }
 .cqfmini small { font: 600 9.5px/1 var(--f-body); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-top: 6px; }
 .cqfpv { position: relative; width: 54px; height: 40px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--surface); font: 700 13px/1 var(--f-mono); color: var(--ink); cursor: pointer; }
-.cqfpv.crit { background: #1c2126; border-color: #1c2126; color: #fff; }
+.cqfpv.crit { background: #7a1f24; border-color: #7a1f24; color: #fff; }
 .cqfpv.sel { box-shadow: 0 0 0 3px #f2b705; }
 .cqfpv.late::after { content: ''; position: absolute; top: -3px; right: -3px; width: 9px; height: 9px; border-radius: 50%; background: var(--crit); border: 2px solid var(--surface); }
 .cqabam { min-width: 0; padding: 14px 18px 0; }
@@ -5527,7 +5529,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 54; window.CQ_V = APP_V;
+    const APP_V = 55; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -12622,7 +12624,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
 
   /* ================= Certificados de qualidade: fila de pedidos do Omie + emissão do certificado =================
      certq/m-AAAA-MM  { items: { "25940-9": pedido } }  (mês do faturamento; avulsos no mês em que foram salvos)
-       pedido = { pv, seq, nf, cli, sit, et, fat, imp, impBy, st: 'p' pendente | 'c' concluído | 'n' não precisa,
+       pedido = { pv, seq, nf, cli, sit, et, fat, imp, impBy, st: 'p' pendente | 'f' certificado pronto, aguardando NF (v55) | 'c' concluído | 'n' não precisa,
+                  npend: { at, by, nome, conc } (v55: certificado pronto sem NF; conclui sozinho quando a NF chega),
                   porEm, porNome, auto, pend: { m, oc, j, at, by, nome } | null, ph: { id: pendência resolvida },
                   conc: { at, by, em, nome, itens, folhas, arq, modelo, lotes, fora, avulso, motivo }, rasc }
      certd/r-<chave>  rascunho / certificado salvo do pedido { tipo, docs: { tubos, grades }, lotes, at, by }
@@ -12709,6 +12712,31 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const desde = cqSer(c.pend.at || 0);
     return S.model.av.find((x) => docMatch(x.pc, oc) && x.data != null && Math.floor(x.data) >= desde) || null;
   }
+  /* v55: "nota pendente" — o certificado ficou pronto sem NF; quando a NF chega (lista do Omie ou link), o pedido conclui sozinho */
+  function cqConcPorNF(c, nf, fat) {
+    const np = c.npend || {}, cc = np.conc || { at: Date.now(), by: DB.me || null, em: cqMe(), nome: cqMeNome() };
+    return { nf, fat: fat || Date.now(), anf: null, st: 'c', npend: null, pend: null, conc: clean(Object.assign({}, cc, { at: Date.now(), nfDepois: true, prontoEm: np.at || null, nfBy: DB.me || null })) };
+  }
+  /* depois de concluir: a NF entra no certificado guardado do pedido e fica a revisão congelada, como na conclusão normal */
+  async function cqNfNoCertificado(c, nf) {
+    const cc = (c.npend && c.npend.conc) || {};
+    try {
+      const d = await DB.db.doc('certd/r-' + c.k).get(), r = d && d.exists ? d.data() : null;
+      const tipo = (r && r.tipo) || cc.modelo || 'tubos';
+      let json = r && r.docs ? r.docs[tipo] || null : null, num = null;
+      if (json) {
+        const o = JSON.parse(json);
+        (o.certs || []).forEach((x) => { x.v = x.v || {}; x.v.G12 = String(nf); });
+        num = ((o.certs || [])[0] || {}).v ? o.certs[0].v.M10 || null : null;
+        json = JSON.stringify(o);
+        await soldWrite('certd/r-' + c.k, { tipo, docs: { [tipo]: json }, at: Date.now(), by: DB.me || null, k: c.k });
+      }
+      if (cc.rev) {
+        const lotes = cc.lotes || [];
+        await DB.db.doc('certd/' + cc.rev).set(clean({ k: c.k, num: num || cqNum(c), modelo: tipo, doc: json, lotes, situacao: lotes.map((id) => { const x = avById(id), a = x && lotCertAviso(x); return { lote: id, aviso: a ? a.t : 'liberado' }; }), just: cc.just || null, rifs: cc.rifs || null, justRif: cc.justRif || null, at: Date.now(), by: cc.by || null, nome: cc.nome || null, arq: cc.arq || null, nfDepois: true }));
+      }
+    } catch (e) { /* o pedido já está concluído; a NF no certificado guardado é complementar */ }
+  }
   async function cqPatch(c, patch, label) {
     await soldWrite('certq/' + c.doc, { items: { [c.k]: clean(Object.assign({}, patch, { _u: Date.now(), _ub: DB.me || null })) } });
     if (label) logEntry('CERTQ', cqNum(c), 'alterado', label, null);
@@ -12760,7 +12788,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const cf = cqCfg(), cards = cqCards(), seen = new Set(), usados = new Set();
     const efk = new Map(); cards.forEach((c) => { efk.set(c.k, c); efk.set(cqKey(c.pv, c.seq), c); });
     const novos = [], rep = [], fora = {}, semCert = [], muda = [];
-    let auto = 0, aFat = 0, nfChegou = 0;
+    let auto = 0, aFat = 0, nfChegou = 0, concNF = 0;
     const cancelado = (o) => /cancel/i.test(String(o.sit || '') + ' ' + String(o.et || ''));
     const orcamento = (o) => /or[cç]amento/i.test(String(o.sit || '') + ' ' + String(o.et || ''));
     const nfPatch = (o) => ({ nf: o.nf, fat: o.fat || Date.now(), anf: null });
@@ -12768,12 +12796,17 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const k = cqKey(o.pv, o.seq);
       let c0 = efk.get(k) || null;
       /* 1ª parte faturada de um pedido que entrou a faturar (sem parte): usa o mesmo cartão */
-      if (!c0 && o.seq && o.nf) { const cb = efk.get(cqKey(o.pv, 0)); if (cb && cb.st === 'p' && !cb.nf && !cb.seq && !usados.has(cb.k)) c0 = cb; }
+      if (!c0 && o.seq && o.nf) { const cb = efk.get(cqKey(o.pv, 0)); if (cb && (cb.st === 'p' || cb.st === 'f') && !cb.nf && !cb.seq && !usados.has(cb.k)) c0 = cb; }
       if (c0 && seen.has(c0.k)) { rep.push(o); return; }
+      /* v55: certificado pronto aguardando NF — a NF chegou: conclui sozinho e a NF entra no certificado guardado */
+      if (c0 && c0.st === 'f') {
+        if (cancelado(o)) { muda.push({ c: c0, txt: 'pedido cancelado no Omie → sai de Aguardando NF', patch: { st: 'n', npend: null, conc: { at: Date.now(), by: DB.me || null, em: cqMe(), nome: cqMeNome(), motivo: 'Cancelado no Omie' } } }); seen.add(c0.k); return; }
+        if (o.nf) { usados.add(c0.k); nfChegou++; concNF++; muda.push({ c: c0, txt: `NF ${o.nf} chegou → certificado concluído (estava em Aguardando NF)`, patch: Object.assign(cqConcPorNF(c0, o.nf, o.fat), o.seq && !c0.seq ? { seq: o.seq } : {}), depois: () => cqNfNoCertificado(c0, o.nf) }); seen.add(c0.k); return; }
+      }
       /* pedido que já está na fila, ainda pendente: o Omie manda o que mudou */
       if (c0 && c0.st === 'p') {
         if (cancelado(o)) { muda.push({ c: c0, txt: 'pedido cancelado no Omie → sai da fila', patch: { st: 'n', conc: { at: Date.now(), by: DB.me || null, em: cqMe(), nome: cqMeNome(), motivo: 'Cancelado no Omie' } } }); seen.add(c0.k); return; }
-        if (!o.nf && c0.nf) { if (!c0.pend) muda.push({ c: c0, txt: `NF ${c0.nf} cancelada ou estornada no Omie → vai para Aguardando solução`, patch: { pend: { m: 'Outro', j: `NF ${c0.nf} cancelada ou estornada no Omie (importação de ${dmy(Date.now())})`, at: Date.now(), by: DB.me || null, nome: cqMeNome() } } }); seen.add(c0.k); return; }
+        if (!o.nf && c0.nf) { if (!c0.pend) muda.push({ c: c0, txt: `NF ${c0.nf} cancelada ou estornada no Omie → vai para Pendência`, patch: { pend: { m: 'Outro', j: `NF ${c0.nf} cancelada ou estornada no Omie (importação de ${dmy(Date.now())})`, at: Date.now(), by: DB.me || null, nome: cqMeNome() } } }); seen.add(c0.k); return; }
         if (o.nf && !c0.nf) { usados.add(c0.k); nfChegou++; muda.push({ c: c0, txt: `NF ${o.nf} chegou${o.seq && !c0.seq ? ` (parte ${o.seq})` : ''} → prazo começa no faturamento`, patch: Object.assign(nfPatch(o), o.seq && !c0.seq ? { seq: o.seq } : {}) }); seen.add(c0.k); return; }
         if (o.nf && docN(o.nf) !== docN(c0.nf)) { muda.push({ c: c0, txt: `NF ${c0.nf || '—'} → ${o.nf}`, patch: { nf: o.nf } }); seen.add(c0.k); return; }
       }
@@ -12790,7 +12823,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       else if (rg && rg.em) { c.porEm = E.low(rg.em); c.porNome = rg.nome || rg.em; c.auto = true; auto++; }
       novos.push({ k, c });
     });
-    return { novos, rep, fora, semCert, auto, muda, aFat, nfChegou, pedidos: new Set(L.map((o) => o.pv)).size };
+    return { novos, rep, fora, semCert, auto, muda, aFat, nfChegou, concNF, pedidos: new Set(L.map((o) => o.pv)).size };
   }
   function cqImportar() {
     const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.xlsx,.xls,.csv';
@@ -12806,13 +12839,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
           <div class="ok"><b>${NF.format(nf)}</b><span>faturados entram na fila<small>com nota fiscal${P.auto ? ` · ${NF.format(P.auto)} já com operador (regra)` : ''}</small></span></div>
           ${af ? `<div class="ok"><b>${NF.format(af)}</b><span>a faturar entram na fila<small>“Aguardando NF”: sem prazo até faturar</small></span></div>` : ''}
           <div class="rep"><b>${NF.format(P.rep.length)}</b><span>repetidos barrados<small>já estavam na Central</small></span></div>
-          ${P.muda.length ? `<div class="ok"><b>${NF.format(P.muda.length)}</b><span>atualizados<small>pedidos da fila que mudaram no Omie</small></span></div>` : ''}
+          ${P.muda.length ? `<div class="ok"><b>${NF.format(P.muda.length)}</b><span>atualizados<small>pedidos da fila que mudaram no Omie${P.concNF ? ` · ${NF.format(P.concNF)} de Aguardando NF concluem sozinhos` : ''}</small></span></div>` : ''}
           ${P.semCert.length ? `<div><b>${NF.format(P.semCert.length)}</b><span>não precisam de certificado<small>vão direto para Concluídos</small></span></div>` : ''}
           ${foraTxt ? `<div class="off"><b>${NF.format(Object.values(P.fora).reduce((a, b) => a + b, 0))}</b><span>ficam de fora<small>orçamento ou cancelado · ${foraTxt}</small></span></div>` : ''}
         </div>
         ${R.temSeq ? '' : '<div class="warnbox">O arquivo não tem a coluna <b>Sequencial</b> (nem o número com a parte, ex.: 25940/1). Pedidos faturados em partes (25940/1, /2…) podem ser barrados como repetidos. No Omie, deixe a coluna Sequencial visível antes de exportar.</div>'}
         ${P.muda.length ? `<div class="twrap" style="max-height:180px;overflow:auto"><table class="t"><tbody>${P.muda.map((m) => `<tr><td class="mono nw">${esc(cqNum(m.c))}</td><td>${esc(m.txt)}</td></tr>`).join('')}</tbody></table></div>` : ''}
-        <p class="muted" style="margin:0;font-size:12.5px">Repetido = mesmo pedido e mesma parte (ex.: 25940/9). Pedido a faturar entra como “Aguardando NF”; quando vier faturado num arquivo novo, a Central só acrescenta a NF (a 1ª parte faturada usa o mesmo cartão). Orçamento e pedido cancelado não entram. Pedido da fila que o Omie mostrar cancelado ou com outra NF é atualizado.</p>
+        <p class="muted" style="margin:0;font-size:12.5px">Repetido = mesmo pedido e mesma parte (ex.: 25940/9). Pedido a faturar entra em “A fazer” com o selo “Aguardando NF”; quando vier faturado num arquivo novo, a Central só acrescenta a NF (a 1ª parte faturada usa o mesmo cartão). Pedido com o certificado pronto na aba “Aguardando NF” conclui sozinho quando a NF chega. Orçamento e pedido cancelado não entram. Pedido da fila que o Omie mostrar cancelado ou com outra NF é atualizado.</p>
         <div class="formfoot"><button class="btn" type="button" data-act="close">Cancelar</button><button class="btn primary" type="button" id="cq-imp-ok" ${P.novos.length + P.muda.length ? '' : 'disabled'}>${P.novos.length + P.muda.length ? `Gravar ${NF.format(P.novos.length)} novo(s)${P.muda.length ? ' e ' + NF.format(P.muda.length) + ' atualização(ões)' : ''}` : 'Nada novo para colocar'}</button></div>`);
       const ok = $('#cq-imp-ok'); if (!ok) return;
       ok.onclick = async () => {
@@ -12821,9 +12854,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
           const byDoc = {};
           P.novos.forEach(({ k, c }) => { const d = 'm-' + cqMes(c.fat || c.imp); (byDoc[d] = byDoc[d] || {})[k] = clean(c); });
           for (const d of Object.keys(byDoc)) await soldWrite('certq/' + d, { items: byDoc[d] });
-          for (const m of P.muda) await cqPatch(m.c, m.patch, 'Omie: ' + m.txt);
+          for (const m of P.muda) { await cqPatch(m.c, m.patch, 'Omie: ' + m.txt); if (m.depois) await m.depois(); }
           logEntry('CERTQ', 'importacao', 'importado', `Lista do Omie: ${P.novos.length} pedido(s) novo(s), ${P.muda.length} atualizado(s), ${P.rep.length} repetido(s) barrado(s)`, null);
-          closeLayer(); toast(`${NF.format(P.novos.length)} pedido(s) na Central${P.nfChegou ? ` · NF chegou em ${NF.format(P.nfChegou)}` : ''} · ${NF.format(P.rep.length)} repetido(s) barrado(s).`);
+          closeLayer(); toast(`${NF.format(P.novos.length)} pedido(s) na Central${P.nfChegou ? ` · NF chegou em ${NF.format(P.nfChegou)}` : ''}${P.concNF ? ` · ${NF.format(P.concNF)} concluído(s) sozinho(s) (estavam em Aguardando NF)` : ''} · ${NF.format(P.rep.length)} repetido(s) barrado(s).`);
           S.cqSub = 'pend'; render();
         } catch (err) { cqErr(err); ok.disabled = false; ok.textContent = 'Tentar de novo'; }
       };
@@ -12895,11 +12928,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const k0 = cqKey(P.pv, P.seq), cards = cqCards();
     const ja = cqFind(k0) || (P.seq ? null : cards.find((c) => cqDig(c.pv) === P.pv && c.st === 'p') || cards.find((c) => cqDig(c.pv) === P.pv)) || null;
     res.innerHTML = `<div class="cqimp cqlres"><div class="ok"><b class="mono">${esc(P.pv + (P.seq ? '/' + P.seq : ''))}</b><span>pedido de venda<small>${P.itens ? NF.format(P.itens) + ' item(ns) no PDF' : 'itens não lidos'}</small></span></div><div><span><small>Cliente</small><b class="cqlcli">${esc(P.cli || '—')}</b>${P.oc ? `<small>O.C. do cliente ${esc(P.oc)}</small>` : ''}</span></div></div>
-      ${ja && ja.st === 'p' && ja.nf ? '' : `<label class="field"><span>Nota fiscal (opcional)</span><input id="cql-nf" type="text" inputmode="numeric" autocomplete="off" placeholder="sem NF entra como “Aguardando NF”"></label>`}
-      ${ja ? `<div class="warnbox">${ja.st === 'p' ? `O pedido <b>${esc(cqNum(ja))}</b> já está na fila${ja.nf ? ` (NF ${esc(ja.nf)})` : ' como “Aguardando NF”'}.` : `O pedido <b>${esc(cqNum(ja))}</b> já está em Concluídos.`}</div>` : ''}`;
+      ${(ja && ja.st === 'p' && ja.nf) || (ja && ja.st !== 'p' && ja.st !== 'f') ? '' : `<label class="field"><span>Nota fiscal (opcional)</span><input id="cql-nf" type="text" inputmode="numeric" autocomplete="off" placeholder="sem NF entra como “Aguardando NF”"></label>`}
+      ${ja ? `<div class="warnbox">${ja.st === 'f' ? `O pedido <b>${esc(cqNum(ja))}</b> está em <b>Aguardando NF</b> com o certificado pronto: com a NF, ele conclui.` : ja.st === 'p' ? `O pedido <b>${esc(cqNum(ja))}</b> já está na fila${ja.nf ? ` (NF ${esc(ja.nf)})` : ' como “Aguardando NF”'}.` : `O pedido <b>${esc(cqNum(ja))}</b> já está em Concluídos.`}</div>` : ''}`;
     const b = (id, l, cls) => `<button class="btn${cls ? ' ' + cls : ''}" type="button" id="${id}">${l}</button>`;
     let acts;
-    if (ja && ja.st === 'p') acts = (ja.nf ? '' : b('cql-nfok', 'Gravar a NF')) + (cw('certq') ? b('cql-abrir', ja.rasc ? 'Continuar o certificado' : 'Fazer o certificado', 'primary') : '');
+    if (ja && ja.st === 'f') acts = b('cql-nfok', 'Gravar a NF e concluir', 'primary');
+    else if (ja && ja.st === 'p') acts = (ja.nf ? '' : b('cql-nfok', 'Gravar a NF')) + (cw('certq') ? b('cql-abrir', ja.rasc ? 'Continuar o certificado' : 'Fazer o certificado', 'primary') : '');
     else if (ja) acts = '';
     else acts = b('cql-fila', 'Pôr na fila') + b('cql-fazer', 'Pôr na fila e fazer o certificado', 'primary');
     foot.innerHTML = `<button class="btn" type="button" data-act="close">${acts ? 'Cancelar' : 'Fechar'}</button>${acts}`;
@@ -12928,7 +12962,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     on('cql-nfok', async () => {
       const nf = nfv(); if (!nf) { toast('Digite a NF.', true); $('#cql-nf').focus(); return; }
       travar(true);
-      try { await cqPatch(ja, { nf, fat: Date.now(), anf: null }, `NF ${nf} pelo link do Omie → prazo começa hoje`); closeLayer(); toast(`NF ${nf} gravada no pedido ${cqNum(ja)}.`); } catch (err) { cqErr(err); travar(false); }
+      try {
+        if (ja.st === 'f') { await cqPatch(ja, cqConcPorNF(ja, nf, Date.now()), `NF ${nf} pelo link do Omie → certificado concluído (estava em Aguardando NF)`); await cqNfNoCertificado(ja, nf); closeLayer(); toast(`NF ${nf} gravada: pedido ${cqNum(ja)} concluído.`); render(); return; }
+        await cqPatch(ja, { nf, fat: Date.now(), anf: null }, `NF ${nf} pelo link do Omie → prazo começa hoje`); closeLayer(); toast(`NF ${nf} gravada no pedido ${cqNum(ja)}.`);
+      } catch (err) { cqErr(err); travar(false); }
     });
   }
   /* o editor importa o mesmo PDF ao abrir (CQ_CERT_HOST.linkPendente) — vale para a Central e para a aba de certificados */
@@ -12948,9 +12985,19 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const t = cqTom(c.porEm);
     return `<button type="button" class="cqwho${c.auto ? ' auto' : ''}" data-act="cq-pass" data-key="${esc(c.k)}" style="--q:${t}" title="${c.auto ? 'Distribuído automaticamente pela regra do cliente · ' : ''}Passar para outra pessoa"><i>${esc(cqIni(c.porNome))}</i><span>${esc(c.porNome || c.porEm)}</span></button>`;
   }
+  /* v55: cartão da aba Aguardando NF (certificado pronto) */
+  function cqCardNF(c, crit) {
+    const w = cw('certq'), np = c.npend || {}, naAba = !CQ_ABA && abaTem(c.k);
+    return `<div class="cqc on${crit ? ' crit' : ''}" style="--q:${cqTom(c.porEm || np.by)}">
+      <div class="cqh"><b class="cqpv">${esc(cqNum(c))}</b><span class="cqtag pronto">${crit ? '★ ' : ''}certificado pronto</span>${w ? `<button type="button" class="cqmenu" data-act="cq-menu" data-key="${esc(c.k)}" title="Outras ações" aria-label="Outras ações">⋯</button>` : ''}</div>
+      <div class="cqs"><span class="chip warn" title="Conclui sozinho quando a NF chegar na atualização do Omie">Aguardando NF</span>${c.seq ? `<span class="cqparc">parte ${c.seq}</span>` : ''}<span class="muted">pronto ${esc(cqDH(np.at))}</span></div>
+      <div class="cqcli" title="${esc(c.cli)}">${esc(c.cli || '—')}</div>
+      <div class="cqf">${c.porEm ? cqWho(c) : '<span class="muted">' + esc(np.nome || '') + '</span>'}${w ? (naAba ? `<button class="btn small cqgo" type="button" data-act="cq-iraba" data-key="${esc(c.k)}">Ir para a aba</button>` : `<button class="btn small cqgo" type="button" data-act="cq-fazer" data-key="${esc(c.k)}">Abrir certificado</button>`) : ''}</div></div>`;
+  }
   function cqCardHTML(c) {
     const w = cw('certq'), p = c.pend, cheg = p ? cqChegou(c) : null, adm = cqAdm();
     const crit = cqCrit(c), late = adm && !p && cqDias(c) > cqCfg().prazo;
+    if (c.st === 'f') return cqCardNF(c, crit);
     const tag = crit ? cqSeloCrit(c) : p ? `<span class="cqtag${cheg ? ' ok' : ''}">${cheg ? 'material chegou' : 'pendência'}</span>` : late ? `<span class="cqtag late" title="Mais de ${cqCfg().prazo} dia(s) útil(eis) desde o faturamento">atrasado</span>` : '';
     const pb = p ? `<div class="cqpb"><b>⚠ ${esc(p.m || 'Pendência')}</b>${p.oc ? ` <span class="mono">OC ${esc(p.oc)}</span>` : ''}${p.j ? `<p>${esc(p.j)}</p>` : ''}<small>desde ${esc(cqDH(p.at))}${p.nome ? ' · ' + esc(p.nome) : ''}</small>${cheg ? `<div class="cqok">✓ Chegou o lote <button type="button" class="lnk" data-open="AV:${esc(cheg.id)}">${esc(cheg.id)}</button> da OC ${esc(p.oc)}: conferir e resolver</div>` : ''}</div>` : '';
     const foot = c.porEm ? cqWho(c) : (w ? `<button class="btn small" type="button" data-act="cq-pegar" data-key="${esc(c.k)}">Pegar</button>` : '<span class="muted">livre</span>');
@@ -12968,15 +13015,16 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (CQ_ABA) { abaView(main); return; }
     if (S.cqSub === 'ed' && S.cqEd) { cqEditor(main); return; }
     const adm = cqAdm(), w = cw('certq'), L = cqCards();
-    const pend = L.filter((c) => c.st === 'p'), npd = pend.filter((c) => c.pend).length;
+    const pend = L.filter((c) => c.st === 'p'), npd = pend.filter((c) => c.pend).length, anf = L.filter((c) => c.st === 'f');
     let sub = S.cqSub || 'pend'; if (sub === 'ind' || sub === 'ed') sub = 'pend'; S.cqSub = sub;
     const tab = (k, l) => `<button type="button" role="tab" data-act="cq-sub" data-key="${k}" aria-pressed="${sub === k}">${l}</button>`;
     let body = '';
     if (!CQF.ready) body = '<div class="empty">Carregando a fila…</div>';
     else if (sub === 'pend' || sub === 'aguard') body = cqPendHTML(pend, sub === 'aguard');
+    else if (sub === 'anf') body = cqPendHTML(anf, false, true);
     else body = cqConcHTML(L);
-    main.innerHTML = `<div class="view">${head('Certificados de qualidade', 'Os pedidos entram pelo arquivo do Omie (os a faturar como “Aguardando NF”), saem da fila quando o certificado é salvo e vão para Concluídos.', w ? '<button class="btn" type="button" data-act="cq-avulso">Certificado avulso</button><button class="btn" type="button" data-act="cq-link">Pedido pelo link do Omie</button><button class="btn primary" type="button" data-act="cq-imp">Importar lista do Omie (Excel ou CSV)</button>' : '')}
-      <div class="seg cqtabs" role="tablist">${tab('pend', `Pendentes <b>${NF.format(pend.length)}</b>`)}${tab('aguard', `Aguardando solução <b class="${npd ? 'am' : ''}">${NF.format(npd)}</b>`)}${tab('conc', 'Concluídos')}</div>
+    main.innerHTML = `<div class="view">${head('Certificados de qualidade', 'Os pedidos entram em “A fazer” pelo arquivo do Omie, com ou sem nota fiscal. Certificado salvo vai para Concluídos; sem a NF, vai para “Aguardando NF” e conclui sozinho quando a nota chega.', w ? '<button class="btn" type="button" data-act="cq-avulso">Certificado avulso</button><button class="btn" type="button" data-act="cq-link">Pedido pelo link do Omie</button><button class="btn primary" type="button" data-act="cq-imp">Importar lista do Omie (Excel ou CSV)</button>' : '')}
+      <div class="seg cqtabs" role="tablist">${tab('pend', `A fazer <b>${NF.format(pend.length)}</b>`)}${tab('aguard', `Pendência <b class="${npd ? 'am' : ''}">${NF.format(npd)}</b>`)}${tab('anf', `Aguardando NF <b class="${anf.length ? 'am' : ''}">${NF.format(anf.length)}</b>`)}${tab('conc', 'Concluídos')}</div>
       ${body}</div>`;
     main.dataset.cqed = '';
     const q2 = $('#cq-q2'); if (q2) { let tm; q2.oninput = () => { clearTimeout(tm); tm = setTimeout(() => { S.cqQ2 = q2.value; const p = q2.selectionStart; render(); const q3 = $('#cq-q2'); if (q3) { q3.focus(); try { q3.setSelectionRange(p, p); } catch (e) { /* ok */ } } }, 250); }; }
@@ -12993,15 +13041,16 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     L.sort((a, b) => (b.pend ? 1 : 0) - (a.pend ? 1 : 0) || FZ.get(a) - FZ.get(b) || (CR.get(b) ? 1 : 0) - (CR.get(a) ? 1 : 0) || (a.fat || 9e15) - (b.fat || 9e15) || cmp(a.pv, b.pv) || (a.seq || 0) - (b.seq || 0));
     return L;
   }
-  function cqPendHTML(pend, soPend) {
+  function cqPendHTML(pend, soPend, nfMode) {
     const flt = S.cqFlt || 'todos', qq = E.key(S.cqQ || '');
     const CR = new Map(pend.map((c) => [c, cqCrit(c)])), nCrit = (soPend ? pend.filter((c) => c.pend) : pend).filter((c) => CR.get(c)).length;
     const L = cqOrdena(soPend ? pend.filter((c) => c.pend) : pend, flt, qq);
     const comP = L.filter((c) => c.pend), resto = L.filter((c) => !c.pend), lim = 48 + (S.cqN || 0), vis2 = resto.slice(0, lim);
     const fb = (k, l) => `<button type="button" data-act="cq-flt" data-key="${k}" aria-pressed="${flt === k}">${l}</button>`;
-    return `<section class="cqcol"><header><b>${soPend ? 'Aguardando solução' : 'Pendentes'}</b><span class="cqn">${NF.format(L.length)}</span><span class="muted">${soPend ? 'pedidos com pendência registrada' : 'pendências em cima, depois o que vence primeiro'}${nCrit ? ` · <b>${NF.format(nCrit)} de clientes críticos</b>` : ''}</span>
+    if (nfMode) L.sort((a, b) => ((a.npend || {}).at || 0) - ((b.npend || {}).at || 0));
+    return `<section class="cqcol"><header><b>${nfMode ? 'Aguardando NF' : soPend ? 'Pendência' : 'A fazer'}</b><span class="cqn">${NF.format(L.length)}</span><span class="muted">${nfMode ? 'certificado pronto · conclui sozinho quando a NF chegar' : soPend ? 'pedidos com pendência registrada' : 'pendências em cima, depois o que vence primeiro'}${nCrit ? ` · <b>${NF.format(nCrit)} de clientes críticos</b>` : ''}</span>
         <input id="cq-q" class="inp cqq" type="search" placeholder="PV, NF, cliente, OC…" value="${esc(S.cqQ || '')}" autocomplete="off"><span class="cqflt">${fb('todos', 'Todos')}${fb('livres', 'Livres')}${fb('meus', 'Meus')}${nCrit || flt === 'crit' ? fb('crit', '★ Críticos ' + NF.format(nCrit)) : ''}</span></header>
-      ${!pend.length ? '<div class="empty">Nenhum pedido na fila. Importe a lista do Omie do dia pelo botão no alto.</div>' : !L.length ? '<div class="empty">Nada com esse filtro.</div>' : ''}
+      ${!pend.length ? `<div class="empty">${nfMode ? 'Nenhum certificado esperando nota fiscal.' : 'Nenhum pedido na fila. Importe a lista do Omie do dia pelo botão no alto.'}</div>` : !L.length ? '<div class="empty">Nada com esse filtro.</div>' : ''}
       ${comP.length ? `<div class="cqsec">⚠ Com pendência · esperando solução</div><div class="cqgrid">${comP.map(cqCardHTML).join('')}</div>` : ''}
       ${!soPend && resto.length ? `${comP.length ? '<div class="cqsec">Na fila · o que vence primeiro</div>' : ''}<div class="cqgrid">${vis2.map(cqCardHTML).join('')}</div>${resto.length > lim ? `<div class="cqmore"><button class="btn small" type="button" data-act="cq-mais">Mostrar mais ${NF.format(Math.min(48, resto.length - lim))} de ${NF.format(resto.length - lim)}</button></div>` : ''}` : ''}</section>`;
   }
@@ -13010,7 +13059,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const D = L.filter((c) => (c.st === 'c' || c.st === 'n') && c.conc && c.conc.at && cqMes(c.conc.at) === mes).sort((a, b) => b.conc.at - a.conc.at);
     const [y, m] = mes.split('-').map(Number), prev = cqMes(new Date(y, m - 2, 15).getTime()), next = cqMes(new Date(y, m, 15).getTime()), isNow = mes === cqMes(Date.now());
     const qq = E.key(S.cqQ2 || ''), F = qq ? D.filter((c) => E.key([cqNum(c), c.nf, c.cli, c.conc.nome].join(' ')).includes(qq)) : D;
-    const res = (c) => (c.st === 'n' ? `<span class="chip off">Não precisa</span> <span class="muted">${esc(c.conc.motivo || '')}</span>` : `${NF.format(c.conc.itens || 0)} ite${c.conc.itens === 1 ? 'm' : 'ns'}${c.conc.folhas > 1 ? ` · ${c.conc.folhas} folhas` : ''}${c.conc.fora ? ' · <span class="muted">feito fora da Central</span>' : ''}${c.conc.avulso ? ' · <span class="muted">avulso</span>' : ''}`);
+    const res = (c) => (c.st === 'n' ? `<span class="chip off">Não precisa</span> <span class="muted">${esc(c.conc.motivo || '')}</span>` : `${NF.format(c.conc.itens || 0)} ite${c.conc.itens === 1 ? 'm' : 'ns'}${c.conc.folhas > 1 ? ` · ${c.conc.folhas} folhas` : ''}${c.conc.fora ? ' · <span class="muted">feito fora da Central</span>' : ''}${c.conc.avulso ? ' · <span class="muted">avulso</span>' : ''}${c.conc.nfDepois ? ' · <span class="chip warn" title="O certificado ficou pronto antes da nota; a NF entrou no certificado guardado quando chegou">NF incluída depois</span>' : ''}`);
     const pz = (c) => { if (c.st !== 'c' || c.conc.avulso) return ''; const d = cqDias(c), p = cqCfg().prazo; return d <= p ? '<span class="chip ok">no prazo</span>' : `<span class="chip warn">${d - p} dia(s) de atraso</span>`; };
     return `<section class="cqcol"><header><b>Concluídos</b><span class="cqn">${NF.format(D.length)}</span><span class="muted">${MESES_L[m - 1]} de ${y}</span>
         <input id="cq-q2" class="inp cqq" type="search" placeholder="PV, NF, cliente…" value="${esc(S.cqQ2 || '')}" autocomplete="off">
@@ -13043,8 +13092,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const eqN = O.reduce((s, o) => s + o.w[W.length - 1].n, 0), eqI = O.reduce((s, o) => s + o.w[W.length - 1].i, 0), eqOk = O.reduce((s, o) => s + o.ok, 0), eqT = O.reduce((s, o) => s + o.tot, 0);
     const nOp = O.length + 1, r5 = nOp % 5;
     return `<div class="kpis sm cq5 topo">
-        ${k({ l: 'Pendentes', v: NF.format(pend.length), sub: 'pedidos faturados sem certificado', c: CC, pct: [pend.filter((c) => c.porEm).length, pend.length, 'com operador definido', ''] })}
-        ${k({ l: 'Aguardando solução', v: NF.format(npd), sub: 'pedidos com pendência registrada', c: CC, pct: [npd, pend.length, 'dos pendentes', 'warn'], cls: npd ? 'warn' : '' })}
+        ${k({ l: 'A fazer', v: NF.format(pend.length), sub: 'pedidos sem certificado', c: CC, pct: [pend.filter((c) => c.porEm).length, pend.length, 'com operador definido', ''] })}
+        ${k({ l: 'Pendência', v: NF.format(npd), sub: 'pedidos com pendência registrada', c: CC, pct: [npd, pend.length, 'dos a fazer', 'warn'], cls: npd ? 'warn' : '' })}
         ${k({ l: 'Concluídos no mês', v: NF.format(CM.length), sub: `${NF.format(itensM)} itens · ${NF.format(CMc.length)} certificados · ${NF.format(CMn.length)} sem necessidade`, c: CC, pct: [noPz, base, temCrit() ? `no prazo (${cqCfg().prazo} dia(s); crítico ${cqCfg().prazoCrit})` : `no prazo de ${cqCfg().prazo} dia(s) útil(eis)`, 'ok'] })}
         ${cqHojeKpi(L, CMc)}
         ${cqCritKpi(pend, CMc)}
@@ -13094,12 +13143,23 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   function cqMenu(c) {
     const adm = cqAdm();
+    if (c.st === 'f') {
+      openModal(`Pedido ${cqNum(c)}`, `<p class="muted" style="margin:0">Aguardando NF · certificado pronto ${esc(cqDH((c.npend || {}).at))}${(c.npend || {}).nome ? ' por ' + esc(c.npend.nome) : ''} · ${esc(c.cli || '')}</p>
+        <div class="cqacts">
+          <button class="btn" type="button" data-act="cq-anf-volta" data-key="${esc(c.k)}">Voltar para A fazer</button>
+          <button class="btn" type="button" data-act="cq-pass" data-key="${esc(c.k)}">Passar para outra pessoa</button>
+          <button class="btn" type="button" data-act="cq-nao" data-key="${esc(c.k)}">Não precisa de certificado</button>
+          ${adm ? `<button class="btn ghost tcrit" type="button" data-act="cq-del" data-key="${esc(c.k)}">Tirar da fila (importado por engano)</button>` : ''}
+        </div><div class="formfoot"><button class="btn" type="button" data-act="close">Fechar</button></div>`);
+      return;
+    }
     openModal(`Pedido ${cqNum(c)}`, `<p class="muted" style="margin:0">NF ${esc(c.nf || '—')} · ${esc(c.cli || '')}</p>
       <div class="cqacts">
         <button class="btn" type="button" data-act="cq-pend" data-key="${esc(c.k)}">${c.pend ? 'Editar a pendência' : '⚠ Registrar pendência'}</button>
         ${c.pend ? `<button class="btn" type="button" data-act="cq-resolver" data-key="${esc(c.k)}">✓ Pendência resolvida</button>` : ''}
         <button class="btn" type="button" data-act="cq-pass" data-key="${esc(c.k)}">Passar para outra pessoa</button>
         <button class="btn" type="button" data-act="cq-fora" data-key="${esc(c.k)}">Marcar como concluído (feito fora da Central)</button>
+        ${!c.nf ? `<button class="btn" type="button" data-act="cq-anf" data-key="${esc(c.k)}">Nota pendente → Aguardando NF</button>` : ''}
         <button class="btn" type="button" data-act="cq-nao" data-key="${esc(c.k)}">Não precisa de certificado</button>
         ${adm ? `<button class="btn ghost tcrit" type="button" data-act="cq-del" data-key="${esc(c.k)}">Tirar da fila (importado por engano)</button>` : ''}
       </div><div class="formfoot"><button class="btn" type="button" data-act="close">Fechar</button></div>`);
@@ -13681,17 +13741,19 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const L = cqCards().filter((c) => cqDig(c.pv) === P.pv && (P.seq == null || (c.seq || 0) === P.seq));
     const pendL = L.filter((c) => c.st === 'p'), feito = L.find((c) => c.st !== 'p');
     if (!pendL.length) {
+      if (feito && feito.st === 'f') { toast(`Arquivo salvo. O pedido ${cqNum(feito)} está em Aguardando NF: conclui sozinho quando a nota chegar.`); return; }
       if (feito) { toast(`Arquivo salvo. O pedido ${cqNum(feito)} já foi concluído${feito.conc && feito.conc.nome ? ' por ' + feito.conc.nome : ''} em ${cqDH(feito.conc && feito.conc.at)}.`); return; }
-      openModal('Arquivo salvo', `<p style="margin:0">O certificado <b class="mono">${esc(R.num)}</b> não está na fila de pendentes.</p><p class="muted" style="margin:0">Quer registrar como <b>certificado avulso</b>? Ele entra em Concluídos no seu nome, com ${NF.format(R.itens)} item(ns).</p>
+      openModal('Arquivo salvo', `<p style="margin:0">O certificado <b class="mono">${esc(R.num)}</b> não está na fila (A fazer).</p><p class="muted" style="margin:0">Quer registrar como <b>certificado avulso</b>? Ele entra em Concluídos no seu nome, com ${NF.format(R.itens)} item(ns).</p>
         <div class="formfoot"><button class="btn" type="button" data-act="close">Não, só salvar</button><button class="btn primary" type="button" id="cq-avok">Registrar avulso</button></div>`);
       $('#cq-avok').onclick = async () => { await cqConcluir(null, R, nome, P); };
       return;
     }
     const alvo = pendL.find((c) => c.k === ed.k) || (pendL.length === 1 ? pendL[0] : null);
     const resumo = `<ul class="cqul"><li>Operador: <b>${esc(cqMeNome())}</b></li><li>Itens no certificado: <b>${NF.format(R.itens)}</b> · folhas: <b>${R.folhas}</b></li><li>Vai para <b>Concluídos</b> com a data de hoje</li></ul>`;
+    if (alvo && !alvo.nf) { cqNotaPendDialog(alvo, R, nome); return; }
     if (alvo) {
-      openModal(`${/\.pdf e .+\.xlsx$/i.test(nome || '') ? 'PDF e Excel salvos' : /\.pdf$/i.test(nome || '') ? 'PDF salvo' : /\.zip$/i.test(nome || '') ? 'Arquivos salvos' : 'Excel salvo'} · concluir o pedido?`, `<div class="cqdlg"><b class="cqpv">${esc(cqNum(alvo))}</b><span class="cqnf mono">NF ${esc(alvo.nf || '—')}</span><span>${esc(alvo.cli || '')}</span></div>
-        <p style="margin:0">Esse pedido está na fila de pendentes. Quer marcar como <b>concluído</b>?</p>${resumo}
+      openModal(`${cqTitSalvo(nome)} · concluir o pedido?`, `<div class="cqdlg"><b class="cqpv">${esc(cqNum(alvo))}</b><span class="cqnf mono">NF ${esc(alvo.nf || '—')}</span><span>${esc(alvo.cli || '')}</span></div>
+        <p style="margin:0">Esse pedido está na fila (A fazer). Quer marcar como <b>concluído</b>?</p>${resumo}
         <div class="formfoot"><button class="btn" type="button" data-act="close">Ainda não, só salvar</button><button class="btn primary" type="button" id="cq-cok">Sim, concluir</button></div>`);
       $('#cq-cok').onclick = async () => { await cqConcluir(alvo, R, nome); };
     } else {
@@ -13699,8 +13761,44 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         <div class="cqch">${pendL.map((c, i) => `<label><input type="radio" name="cq-pt" value="${esc(c.k)}" ${i ? '' : 'checked'}><b class="mono">${esc(cqNum(c))}</b> · NF ${esc(c.nf || '—')} · fat. ${esc(cqDH(c.fat))}</label>`).join('')}</div>${resumo}
         <p class="muted" style="margin:0;font-size:12.5px">Com o nº completo (ex.: ${esc(cqNum(pendL[0]))}) a Central acha a parte sozinha.</p>
         <div class="formfoot"><button class="btn" type="button" data-act="close">Ainda não, só salvar</button><button class="btn primary" type="button" id="cq-cok">Concluir</button></div>`);
-      $('#cq-cok').onclick = async () => { const k = ($('input[name="cq-pt"]:checked') || {}).value; const c = pendL.find((x) => x.k === k); if (c) await cqConcluir(c, R, nome); };
+      $('#cq-cok').onclick = async () => { const k = ($('input[name="cq-pt"]:checked') || {}).value; const c = pendL.find((x) => x.k === k); if (c && !c.nf) { cqNotaPendDialog(c, R, nome); return; } if (c) await cqConcluir(c, R, nome); };
     }
+  }
+  const cqTitSalvo = (nome) => (/\.pdf e .+\.xlsx$/i.test(nome || '') ? 'PDF e Excel salvos' : /\.pdf$/i.test(nome || '') ? 'PDF salvo' : /\.zip$/i.test(nome || '') ? 'Arquivos salvos' : 'Excel salvo');
+  /* v55: certificado salvo de pedido sem NF → "Nota pendente": vai para Aguardando NF e conclui sozinho quando a nota chegar */
+  function cqNotaPendDialog(c, R, nome) {
+    openModal(`${cqTitSalvo(nome)} · nota fiscal pendente`, `<div class="cqdlg"><b class="cqpv">${esc(cqNum(c))}</b><span class="cqnf mono">sem NF</span><span>${esc(c.cli || '')}</span></div>
+      <p style="margin:0">Este pedido ainda não tem nota fiscal. O certificado fica pronto e o pedido vai para <b>Aguardando NF</b>.</p>
+      <ul class="cqul"><li>Operador: <b>${esc(cqMeNome())}</b></li>${R ? `<li>Itens no certificado: <b>${NF.format(R.itens)}</b> · folhas: <b>${R.folhas}</b></li>` : ''}<li>Quando a NF chegar na atualização do Omie, o pedido <b>conclui sozinho</b> e a NF entra no certificado guardado</li></ul>
+      <div class="formfoot"><button class="btn" type="button" data-act="close">Ainda não, só salvar</button><button class="btn primary" type="button" id="cq-npok">Nota pendente → enviar para Aguardando NF</button></div>`);
+    $('#cq-npok').onclick = () => cqNotaPendente(c, R, nome);
+  }
+  /* as mesmas conferências da conclusão (lotes com aviso, RIF), feitas agora: quando a NF chegar, nada trava */
+  async function cqNotaPendente(c, R, nome) {
+    const ed = S.cqEd, app = cqApp(), b = $('#cq-npok');
+    if (b) { b.disabled = true; b.textContent = 'Gravando…'; }
+    const pv = cqDig(c.pv), corr = (R && R.corr) || new Set();
+    const lotes = new Set((ed && ed.k === c.k && ed.lotes) || []);
+    if (S.model) S.model.av.forEach((x) => { if (docMatch(x.pv, pv) && E.filled(x.corrida) && corr.has(E.key(x.corrida))) lotes.add(x.id); });
+    const bloq = cqSemJust(Array.from(lotes).map(avById));
+    if (bloq.length) { if (b) { b.disabled = false; } cqJustDialog(bloq, () => cqNotaPendente(c, R, nome)); return; }
+    const RIFI = cqRifInfo(pv), rifFalta = RIFI ? RIFI.itens.filter((i) => i.st !== 'a') : [];
+    if (rifFalta.length && !(ed && ed.justRif)) { if (b) { b.disabled = false; } cqJustRifDialog(rifFalta, () => cqNotaPendente(c, R, nome)); return; }
+    const rev = 'e-' + c.k + '-' + Date.now().toString(36), justs = cqJustL().filter((j) => lotes.has(j.lote));
+    const conc = clean({ rev, just: justs.length ? justs : null, rifs: RIFI ? RIFI.itens.map((i) => clean(i)) : null, justRif: rifFalta.length && ed ? ed.justRif || null : null, at: Date.now(), by: DB.me || null, em: cqMe(), nome: cqMeNome(), itens: R ? R.itens : null, folhas: R ? R.folhas : null, arq: nome || null, modelo: app ? cqTipoApp(app) : null, lotes: Array.from(lotes), fora: R ? null : true });
+    try {
+      await cqPatch(c, { st: 'f', npend: clean({ at: Date.now(), by: DB.me || null, nome: cqMeNome(), conc }), pend: null, porEm: c.porEm || cqMe(), porNome: c.porNome || cqMeNome() }, 'Certificado pronto · nota fiscal pendente (Aguardando NF)');
+      closeLayer(); toast(`Pedido ${cqNum(c)} foi para Aguardando NF: conclui sozinho quando a nota chegar.`);
+      const st = $('#cq-st'); if (st) st.textContent = 'aguardando NF ' + hhmm(Date.now());
+    } catch (err) { cqErr(err); if (b) { b.disabled = false; b.textContent = 'Tentar de novo'; } }
+  }
+  /* menu ⋯: certificado já feito (na Central ou fora) de pedido sem NF */
+  function cqNotaPendForm(c) {
+    openModal('Nota pendente', `<p class="muted" style="margin:0"><b class="mono">${esc(cqNum(c))}</b> · sem NF · ${esc(c.cli || '')}</p>
+      <label class="field"><span>Quantos itens o certificado tem</span><input id="cq-npi" class="inp" type="number" min="0" step="1" value="1"></label>
+      <p class="muted" style="margin:0;font-size:12.5px">Use quando o certificado já está pronto e só falta a nota fiscal. O pedido vai para <b>Aguardando NF</b> e conclui sozinho, no seu nome, quando a NF chegar na atualização do Omie.</p>
+      <div class="formfoot"><button class="btn" type="button" data-act="close">Cancelar</button><button class="btn primary" type="button" id="cq-npok">Enviar para Aguardando NF</button></div>`);
+    $('#cq-npok').onclick = async () => { const it = Math.max(0, parseInt($('#cq-npi').value, 10) || 0); await cqNotaPendente(c, { itens: it, folhas: 1, corr: new Set() }, null); render(); };
   }
   async function cqConcluir(c, R, nome, P) {
     const ed = S.cqEd, app = cqApp(), b = $('#cq-cok') || $('#cq-avok');
@@ -13758,9 +13856,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'cq-pass') { cqPassForm(c); return true; }
     if (a === 'cq-pend') { cqPendForm(c); return true; }
     if (a === 'cq-resolver') { cqResolver(c); return true; }
-    if (a === 'cq-fora') { if (!c.nf) { toast(`O pedido ${cqNum(c)} ainda não tem nota fiscal: só dá para concluir depois que a NF entrar.`, true); return true; } cqConcForm(c, false); return true; }
+    if (a === 'cq-fora') { if (!c.nf) { toast(`O pedido ${cqNum(c)} ainda não tem nota fiscal: use “Nota pendente → Aguardando NF”; ele conclui sozinho quando a NF entrar.`, true); return true; } cqConcForm(c, false); return true; }
     if (a === 'cq-nao') { cqConcForm(c, true); return true; }
-    if (a === 'cq-reabrir') { cqPatch(c, { st: 'p', conc: null }, 'Voltou para a fila').then(() => { closeLayer(); toast(`Pedido ${cqNum(c)} voltou para Pendentes.`); render(); }).catch(cqErr); return true; }
+    if (a === 'cq-anf') { cqNotaPendForm(c); return true; }
+    if (a === 'cq-anf-volta') { cqPatch(c, { st: 'p', npend: null }, 'Voltou de Aguardando NF para A fazer').then(() => { closeLayer(); toast(`Pedido ${cqNum(c)} voltou para A fazer.`); render(); }).catch(cqErr); return true; }
+    if (a === 'cq-reabrir') { cqPatch(c, { st: 'p', conc: null }, 'Voltou para a fila').then(() => { closeLayer(); toast(`Pedido ${cqNum(c)} voltou para A fazer.`); render(); }).catch(cqErr); return true; }
     if (a === 'cq-del') { confirmBox('Tirar da fila', `Tirar o pedido ${cqNum(c)} da Central? Use só para pedido importado por engano. Se ele vier de novo num arquivo do Omie, entra outra vez.`, 'Tirar da fila', () => { soldWrite('certq/' + c.doc, { items: { [c.k]: { _del: true, _u: Date.now(), _ub: DB.me || null } } }).then(() => { logEntry('CERTQ', cqNum(c), 'excluido', 'Tirado da fila', null); toast('Pedido tirado da fila.'); render(); }).catch(cqErr); }, true); return true; }
     return false;
   }
@@ -18749,9 +18849,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ]) + MP('Referência: Ajuda Omie — “Acessando, filtrando e exportando informações no Omie”.')],
       ['Fila de pedidos', MOL(['Menu <b>Certificados</b> › <b>Importar lista do Omie (Excel ou CSV)</b> › escolher o arquivo exportado. Conferir o resumo (faturados, a faturar, atualizados, repetidos) e gravar.',
         'Pedido faturado entra com a NF; o prazo (2 dias úteis) conta da data de faturamento.',
-        'Pedido a faturar entra como <b>Aguardando NF</b>: sem prazo e sem atraso. Dá para pegar e preparar o certificado; para <b>concluir</b>, o pedido precisa ter NF.',
+        'Todo pedido entra na aba <b>A fazer</b>, com ou sem NF. O pedido a faturar aparece com o selo <b>Aguardando NF</b>: sem prazo e sem atraso, e dá para fazer o certificado.',
+        'Ao salvar o certificado de um pedido sem NF, a Central oferece <b>Nota pendente → enviar para Aguardando NF</b> (também no menu ⋯ do cartão). O pedido vai para a aba <b>Aguardando NF</b> com o certificado pronto e <b>conclui sozinho</b> quando a NF chegar na atualização do Omie (ou pelo link do pedido): a NF entra no certificado guardado e o pedido aparece em Concluídos com “NF incluída depois”.',
         'Quando o mesmo pedido vier faturado num arquivo novo, a Central só acrescenta a NF e a data de faturamento no cartão que já existe (quem pegou continua com ele). Faturado em partes: a 1ª parte usa o cartão do pedido; as outras partes entram como cartões novos.',
-        'Orçamento e pedido cancelado não entram. Reimportar a lista atualiza a fila: pedido cancelado no Omie sai da fila; NF cancelada vai para “Aguardando solução”; NF trocada é atualizada. Importar o mesmo pedido de novo não duplica (repetido = mesmo pedido e mesma parte).'])],
+        'Orçamento e pedido cancelado não entram. Reimportar a lista atualiza a fila: pedido cancelado no Omie sai da fila; NF cancelada vai para “Pendência”; NF trocada é atualizada. Importar o mesmo pedido de novo não duplica (repetido = mesmo pedido e mesma parte).'])],
       ['Emitir o certificado', MOL([
         'No cartão do pedido, <b>Fazer certificado</b> (abrir um pedido livre já pega o pedido para você). No computador, o certificado abre na <b>aba de certificados</b> (seção abaixo); no celular e no tablet, abre dentro da Central.',
         'O editor tem em cima o número do certificado e o cliente, e os botões <b>Desfazer</b>, <b>Refazer</b>, <b>Conferir</b>, <b>Salvar PDF e Excel</b> e <b>⋯</b> (mais ações). Embaixo ficam as abas <b>Produtos</b>, <b>Química</b>, <b>Mecânica e ensaios</b>, <b>Tratamento térmico</b> e <b>Textos e anexos</b>. À direita, a <b>Prévia do PDF</b> (atualiza ao digitar) e <b>Esta folha</b> (itens, se cabe em uma A4, lotes ligados, fora da norma).',
