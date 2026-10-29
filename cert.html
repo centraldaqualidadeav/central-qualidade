@@ -681,12 +681,16 @@ html.ws .modal { font-family: var(--w-body); }
 .ws-cols .ws-colg { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; margin-top: 12px; }
 .ws-colg label { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 12px; border: 1px solid var(--w-line2); border-radius: 9px; cursor: pointer; font: 600 15px var(--w-body); }
 .ws-colg label.tem { opacity: .7; cursor: default; } .ws-colg input { accent-color: var(--w-or); width: 18px; height: 18px; }
-.ws-dlg { max-width: 860px !important; }
+.ws-dlg { max-width: 1100px !important; }
+.modal.wide.ws-dlg { width: min(1100px, 100%); }                     /* v57: conferência mais larga (até 1100 px) */
 .modal.ws-dlg h2 { font: 700 30px/1.1 var(--w-disp); margin-bottom: 4px; }
 .ws-conf { position: relative; display: grid; gap: 12px; }
+/* v57: lista grande rola dentro da caixa; título, selo e botões ficam sempre à vista */
+.modal.wide > .ws-conf { min-height: 0; flex: 0 1 auto; grid-template-rows: auto minmax(0, 1fr) auto; }
 .ws-imp { position: absolute; top: -46px; right: 0; font: 600 14px var(--w-body); font-style: normal; padding: 5px 12px; border-radius: 14px; background: var(--w-critbg); color: var(--w-crit); }
 .ws-imp.ok { background: var(--w-okbg); color: var(--w-ok); }
 .ws-cl { display: grid; gap: 10px; }
+.ws-conf .ws-cl { overflow-y: auto; min-height: 0; padding-right: 4px; }
 .ws-ci { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 12px 16px; border: 1px solid var(--w-line); border-radius: 10px; }
 .ws-ci i { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 700 16px var(--w-body); font-style: normal; color: #fff; background: var(--w-ok); }
 .ws-ci b { display: block; font: 600 16px var(--w-body); } .ws-ci span { display: block; font: 400 14.5px/1.4 var(--w-body); color: var(--w-ink2); margin-top: 2px; }
