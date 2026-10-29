@@ -499,6 +499,10 @@ select.fld option { color: #000; font-weight: normal; }
 .pv-table .pv-full summary { cursor: pointer; width: max-content; color: var(--brand); }
 .pv-table .pv-full span { display: block; margin-top: 2px; line-height: 1.4; }
 .pv-table .pv-alerta { display: block; font-size: 11px; color: var(--warn); font-weight: bold; }
+.pv-table .pv-alerta[hidden] { display: none; }
+.pv-table .pv-orig { display: block; margin-top: 3px; font-size: 11.5px; line-height: 1.4; color: var(--muted); }
+.pv-table .pv-orig b { font-weight: bold; color: var(--brand); }
+.pv-table .pv-link { border: 0; background: none; padding: 0; margin-left: 8px; font: inherit; font-weight: bold; color: var(--brand); text-decoration: underline; cursor: pointer; white-space: nowrap; }
 .pv-table .pv-sug { display: block; font-size: 11.5px; margin-top: 2px; color: var(--text); }
 .pv-table tr.pv-grp td { background: var(--brand); color: #FFFFFF; font-weight: bold; font-size: 12.5px; padding: 6px 10px; }
 .pv-table tr.pv-grp.outro td { background: #3B6CB0; }
@@ -697,6 +701,14 @@ html.ws .modal { font-family: var(--w-body); }
 .ws-ci.x { background: var(--w-critbg); border-color: color-mix(in srgb, var(--w-crit) 50%, var(--w-line)); } .ws-ci.x i { background: var(--w-crit); }
 .ws-ci.\! { background: var(--w-warnbg); border-color: color-mix(in srgb, var(--w-warn) 45%, var(--w-line)); } .ws-ci.\! i { background: var(--w-warn); }
 .ws-ci .ws-b { min-width: 170px; }
+.ws-enc-l { max-height: calc(100vh - 290px); overflow: auto; border: 1px solid var(--w-line); border-radius: 10px; margin-top: 10px; }
+.ws-enc-l table { width: 100%; border-collapse: collapse; font: 400 14px/1.35 var(--w-body); }
+.ws-enc-l th { position: sticky; top: 0; background: var(--w-sf2, var(--w-sf)); text-align: left; font: 600 13px var(--w-body); color: var(--w-ink2); padding: 8px 10px; border-bottom: 1px solid var(--w-line); }
+.ws-enc-l td { padding: 7px 10px; border-bottom: 1px solid var(--w-line); vertical-align: middle; }
+.ws-enc-l td.n { font-family: var(--w-mono); white-space: nowrap; color: var(--w-ink2); }
+.ws-enc-l td.a { color: var(--w-ink2); width: 46%; } .ws-enc-l td.a em { display: inline-block; margin-left: 6px; font: 600 11.5px var(--w-body); font-style: normal; color: var(--w-crit); }
+.ws-enc-l td .ws-in { width: 100%; box-sizing: border-box; height: 36px; font: 600 14px var(--w-body); }
+.ws-enc-l input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--w-or); }
 .ws-just { display: grid; gap: 6px; font: 600 14px var(--w-body); color: var(--w-ink2); }
 .ws-just textarea { font: 400 15px var(--w-body); border: 1px solid var(--w-line2); border-radius: 8px; padding: 10px 12px; resize: vertical; background: var(--w-sf); color: var(--w-ink); }
 /* dentro da Central: mesmo fundo da Central e sem a margem de fora (a faixa do pedido fica logo acima) */
@@ -1464,8 +1476,8 @@ function lerOrdemCompra(pages) {
 /* Sugestão de especificação (norma dimensional do produto) e material, lidos da descrição do item.
  * Ex.: "TUBO … ASTM A106 GR.B/API5L GR.B PSL1 ASME B36.10,2" X S-XS" → espec "ASME B36.10",
  *      material "ASTM A-106 GR.B / API 5L GR.B PSL1". Só usa o que está escrito; o resto fica em branco. */
-const NUMEROS_ASTM = new Set(('36 53 105 106 179 181 182 192 193 194 210 213 216 234 240 249 252 269 283 285 312 320 333 334 335 350 ' +
-  '351 358 369 376 403 420 479 500 515 516 524 537 572 588 671 672 691 694 707 790 815 860 961 995').split(' '));
+const NUMEROS_ASTM = new Set(('36 47 53 105 106 179 181 182 192 193 194 210 213 216 234 240 249 252 269 283 285 312 320 333 334 335 350 ' +
+  '351 358 369 376 403 420 479 500 515 516 524 537 572 588 671 672 691 694 707 790 815 860 961 995 126 197 395 536').split(' '));
 function sugerirNormas(texto) {
   const t = ' ' + String(texto || '').toUpperCase().replace(/[“”]/g, '"').replace(/\s+/g, ' ') + ' ';
   const achados = [];                                   // [posição, tipo, texto, chave]
@@ -5232,10 +5244,8 @@ function casarComLista(valor, lista) {
   const k = chaveNorma(valor);
   return lista.find(x => chaveNorma(x) === k) || valor;
 }
-function prepararNormas(ped) {
-  const kRef = refOf(BASE.produto + 1, 11), nRef = refOf(BASE.produto + 1, 14);
-  /* não coube: tira as normas do meio, mas a NACE MR0175 fica (ex.: "ASME B16.11 / NACE MR0175") */
-  const ajustar = (partes, ref) => {
+/* não coube: tira as normas do meio, mas a NACE MR0175 fica (ex.: "ASME B16.11 / NACE MR0175") */
+function normaQueCabe(partes, ref) {
     let v = casarComLista(partes.join(' / '), FIELD[ref].list);
     if (v && !cabeNaCelula(ref, v) && partes.length > 1) {
       const nace = partes.filter((x) => /NACE/.test(x)), outras = partes.filter((x) => !/NACE/.test(x));
@@ -5244,7 +5254,10 @@ function prepararNormas(ped) {
       if (!cabeNaCelula(ref, v) && curto.length > 1) v = casarComLista(curto[0], FIELD[ref].list);
     }
     return v;
-  };
+}
+function prepararNormas(ped) {
+  const kRef = refOf(BASE.produto + 1, 11), nRef = refOf(BASE.produto + 1, 14);
+  const ajustar = normaQueCabe;
   for (const it of ped.itens) {
     if (it.tipoCert && it.tipoCert !== 'tubos') continue;
     const s = sugerirNormas(it.descricaoCompleta || it.descricao || '');
@@ -5341,26 +5354,115 @@ function descPadrao(txt) {
   if (has(/COM\s+COSTURA|WELDED|\bWX\b/) && !/TUBO SEM/.test(prod)) ext.push('COM COSTURA');
   return [prod, medTxt, ext.join(' ')].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
 }
+/* v58: descrição sugerida no padrão da Qualidade: PRODUTO + tipo + face/pontas + classe + SCH + bitola (bitola no fim).
+   Norma, material, acabamento e observações saem (norma e material vão em Especificação e Material).
+   Só entra o que está no texto; produto que a Central não reconhece devolve ''. */
+function descSugerida(txt) {
+  let t = String(txt || '').toUpperCase().replace(/[“”″]/g, '"').replace(/''/g, '"').replace(/\s+/g, ' ').trim();
+  for (let i = t.indexOf('('); i > 10; i = t.indexOf('(', i + 1)) {          // SAP: texto técnico repetido num parêntese longo
+    const f = t.indexOf(')', i), dentro = f < 0 ? t.slice(i + 1) : t.slice(i + 1, f);
+    if (dentro.length > 40) { t = t.slice(0, i).trim(); break; }
+  }
+  const a = t.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[ºª]/g, '°');
+  const has = re => re.test(a);
+  const ang = () => { const m = /\b(\d{2,3})\s*(?:°|GRAUS?\b|DEG\b)/.exec(a) || /\b(45|90|180)\b(?!\s*(?:LBS?|#|MM))/.exec(a); return m ? m[1] + '°' : ''; };
+  const raio = () => (has(/RAIO\s+LONGO|\bRL\b|\bLR\b/) ? 'RL' : has(/RAIO\s+CURTO|\bRC\b|\bSR\b/) ? 'RC' : (/\b([2-9])\s?D\b/.exec(a) || [])[1] ? /\b([2-9])\s?D\b/.exec(a)[1] + 'D' : '');
+  const face = () => (has(/\bRTJ\b|JUNTA\s+TIPO\s+ANEL|RING\s+JOINT/) ? 'RTJ' : has(/FACE\s+(COM\s+)?RESSALT|\bRF\b|RAISED\s+FACE/) ? 'RF' : has(/FACE\s+(PLANA|PLENA|LISA)|\bFF\b|\bFP\b|FLAT\s+FACE/) ? 'FF' : '');
+  const pontas = () => (has(/\bBSP\b/) ? 'BSP' : has(/ROSC|\bNPT\b|THREAD/) ? 'NPT' : has(/ENCAIXE|SOCKET|\bSW\b/) ? 'SW'
+    : has(/BISEL\w*\s*X\s*(PLANA|LISA)|\bBW\s*X\s*PE\b/) ? 'BW X PE' : has(/BISEL|SOLDA\s+DE\s+TOPO|\bBWE?\b|BUTT\s*WELD/) ? 'BW' : has(/PONTAS?\s+(LISAS?|PLANAS?)|\bPE\b/) ? 'PE' : '');
+  const P = [
+    [/\bFLANGE\b/, () => {
+      const f = a.slice(a.search(/\bFLANGE\b/));
+      const tipo = /\bREDUCAO\b/.test(f) ? 'DE REDUÇÃO' : /\bCEG[OA]\b|\bBLIND\b/.test(f) ? 'CEGO' : /PESCOCO|WELD\s*-?\s*NECK|\bWN\b/.test(f) ? 'WN'
+        : /ENCAIXE|SOCKET|\bSW\b/.test(f) ? 'SW' : /ROSC|\bNPT\b|THREAD/.test(f) ? 'ROSCADO NPT' : /LAP\s*JOINT|\bLJ\b|\bSOLTO\b/.test(f) ? 'LJ'
+        : /SOBREPOST|SLIP\s*-?\s*ON|\bSO\b|\bLISO\b/.test(f) ? 'SO' : '';
+      return { p: ['FLANGE', tipo, /COMPACT/.test(f) ? 'COMPACTO' : ''], ext: face() };
+    }],
+    [/\bJUNTA\b/, () => {
+      const m = has(/ESPIRAL/) ? 'ESPIRALADA' : has(/\bRTJ\b|RING\s+JOINT|OCTOGONAL|\bOVAL\b|\bANEL\s+R-?\s?\d/) ? 'RTJ' : has(/PAPELAO/) ? 'PAPELÃO HIDRÁULICO' : has(/GRAFIT/) ? 'GRAFITE'
+        : has(/PTFE|TEFLON/) ? 'PTFE' : has(/\bEPDM\b/) ? 'EPDM' : has(/NEOPREN/) ? 'NEOPRENE' : has(/\bNBR\b|BORRACHA/) ? 'NBR' : '';
+      const r = /\bR-?\s?(\d{2,3})\b/.exec(a);
+      const e = /ESP(?:ESSURA)?\.?\s*:?\s*(\d+(?:[.,]\d+)?)\s*MM/.exec(a);
+      return { p: ['JUNTA', m, m === 'RTJ' && r ? 'R-' + r[1] : ''], ext: m === 'RTJ' ? '' : face(), esp: e ? 'ESP. ' + e[1] + 'MM' : '' };
+    }],
+    [/\b(CURVA|COTOVELO|ELBOW)\b/, () => ({ p: ['CURVA', ang(), raio()], ext: pontas() })],
+    [/\bJOELHO\b/, () => ({ p: ['JOELHO', ang()], ext: pontas() })],
+    [/\bTE\s+(DE\s+)?RED(UCAO|\.)?\b/, () => ({ p: ['TÊ DE REDUÇÃO'], ext: pontas() })],
+    [/\bTE\b|\bTEE\b/, () => ({ p: ['TÊ'], ext: pontas(), te: true })],
+    [/\bNIPLE\s+(DE\s+)?REDUCAO\s*EXCENTRIC/, () => ({ p: ['NIPLE DE REDUÇÃO EXCÊNTRICO'], ext: pontas() })],
+    [/\bNIPLE\s+(DE\s+)?REDUCAO\b/, () => ({ p: ['NIPLE DE REDUÇÃO CONCÊNTRICO'], ext: pontas() })],
+    [/\bBUCHA\s+(DE\s+)?REDUCAO\b/, () => ({ p: ['BUCHA DE REDUÇÃO'], ext: pontas() })],
+    [/\bREDUCAO\s*EXCENTRIC/, () => ({ p: ['REDUÇÃO EXCÊNTRICA'], ext: pontas() })],
+    [/\bREDUCAO\s*CONCENTRIC|\bREDUCAO\b/, () => ({ p: ['REDUÇÃO CONCÊNTRICA'], ext: pontas() })],
+    [/\b(SOCKOLET|WELDOLET|THREDOLET|THREADOLET|ELBOLET|LATROLET|NIPOLET|SWEEPOLET)\b/, () => ({ p: [/(SOCKOLET|WELDOLET|THREDOLET|THREADOLET|ELBOLET|LATROLET|NIPOLET|SWEEPOLET)/.exec(a)[1]], ext: '' })],
+    [/\bLUVA\s+(DE\s+)?REDUCAO\b/, () => ({ p: ['LUVA DE REDUÇÃO'], ext: pontas() })],
+    [/\bMEIA\s+LUVA\b/, () => ({ p: ['MEIA LUVA'], ext: pontas() })],
+    [/\bLUVA\b/, () => ({ p: ['LUVA'], ext: pontas() })],
+    [/\b(TAMPAO|CAP)\b/, () => ({ p: ['TAMPÃO'], ext: pontas() })],
+    [/\bBUJAO\b|\bPLUG\b/, () => ({ p: ['BUJÃO'], ext: pontas() })],
+    [/\bUNIAO\b/, () => ({ p: ['UNIÃO'], ext: pontas() })],
+    [/\bCRUZETA\b/, () => ({ p: ['CRUZETA'], ext: pontas() })],
+    [/\bNIPLE\b/, () => { const c = /\bX\s*(\d{2,4})\s*MM\b/.exec(a); return { p: ['NIPLE'], ext: pontas(), fim: c ? 'X ' + c[1] + 'MM' : '' }; }],
+    [/\bTUBO\b/, () => ({ p: ['TUBO', has(/SEM\s+COSTURA|\bS\/C\b|\bSMLS\b|SEAMLESS/) ? 'S/C' : has(/COM\s+COSTURA|\bC\/C\b|\bERW\b|WELDED/) ? 'C/C' : ''], ext: pontas() })],
+  ];
+  let r = null;
+  for (const [re, f] of P) if (re.test(a)) { r = f(); break; }
+  if (!r) return '';
+  /* classe de pressão: 150LBS, 300#, CLASSE 600, CL 3000 */
+  let classe = '';
+  const mc = /\b(\d{3,4})\s*(?:LBS?|LIBRAS|#)/.exec(a) || /CLASSE\s*(?:DE\s+PRESSAO\s*)?:?\s*(\d{3,4})\b/.exec(a) || /\bCL\.?\s*(\d{3,4})\b/.exec(a) || /#\s*(\d{3,4})\b/.exec(a);
+  if (mc) classe = mc[1] + 'LBS';
+  /* SCH: SCH 40, SCH.40S, SCH40, S-40S, SCHEDULE 80, XS/XXS/STD */
+  const sch = [];
+  const reS = /\bSCH(?:EDULE)?[\s.:-]*(\d{1,3}S?|XXS|XS|STD)\b|\bS-(\d{1,3}S?)\b/g;
+  let m;
+  while ((m = reS.exec(a))) sch.push(m[1] || m[2]);
+  if (!sch.length) { const x = /\b(XXS|XS|STD)\b/.exec(a); if (x) sch.push(x[1]); }
+  const sch1 = sch.filter((v, i) => sch.indexOf(v) === i);
+  const schTxt = sch1.map(v => 'SCH.' + v).join(' X ');
+  /* bitola: 4", 1/2", 1 1/2", 1-1/2", 1.1/2", 0.5", 4 POL, DN 100 */
+  const med = [];
+  const reM = /(?<![A-WYZ\d.\/-])(\d{1,2}\s\d{1,2}\/\d{1,2}|\d{1,2}[-.]\d{1,2}\/\d{1,2}|\d{1,2}\/\d{1,2}|\d*[.,]\d+|\d{1,3})\s*(?:"|POL(?:EGADAS?)?\b|IN\b)/g;
+  while ((m = reM.exec(a))) {
+    let v = m[1].replace(/^(\d+)[-.](\d+\/\d+)$/, '$1 $2').replace(',', '.');
+    if (/^\./.test(v)) v = '0' + v;
+    const d = /^(\d+)\.(\d+)$/.exec(v), fr = { 5: '1/2', 25: '1/4', 75: '3/4', 125: '1/8', 375: '3/8' };
+    if (d && fr[d[2]] && d[2].length <= 3 && !/^0\.\d{3}$/.test(v)) v = (d[1] === '0' ? '' : d[1] + ' ') + fr[d[2]];
+    v += '"';
+    if (!med.includes(v)) med.push(v);
+  }
+  if (!med.length) { const dn = /\bDN\s?(\d{2,4})\b/.exec(a); if (dn) med.push('DN ' + dn[1]); }
+  const ehEsp = v => /^0\.\d{3}"$/.test(v);
+  const dims = med.filter(v => !ehEsp(v)), esp = med.filter(ehEsp);
+  let p = r.p.filter(Boolean).join(' ');
+  if (r.te && dims.length > 1 && dims[0] !== dims[1]) p = 'TÊ DE REDUÇÃO';
+  const espTxt = r.esp || (esp.length ? 'ESP. ' + esp.join(' X ') : '');
+  return [p, r.ext, classe, schTxt, espTxt, dims.join(' X '), r.fim].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
+}
 /* O.C.: a descrição do SAP vem com a medida antes do produto e repete o texto técnico inteiro entre parênteses.
  * Vira a descrição padronizada (produto primeiro; norma e material vão nas colunas próprias). Produto que a Central
  * não reconhece: quando não cabe, fica só o trecho antes do parêntese. O texto completo continua na tela de conferência. */
-function prepararDescricoesOC(ped) {
+/* v58: vale para todas as vias (PV e link do Omie, O.C.): tubos e conexões recebem a descrição sugerida no padrão da Qualidade.
+   O texto do pedido fica guardado (descricaoCompleta) e a tela de conferência deixa voltar para ele item a item. */
+function prepararDescricoes(ped) {
   for (const it of ped.itens) {
     it.descricaoCompleta = it.descricaoCompleta || it.descricao || '';
     it.descricao = it.descricaoCompleta;
     it.resumida = false;
     it.padrao = false;
     it.naoCabe = false;
+    it.sugerida = '';
     if (!it.descricao) continue;
-    const pad = ehGrade(it.descricao) ? '' : descPadrao(it.descricao);
-    if (pad) { it.descricao = pad; it.resumida = true; it.padrao = true; }
-    else if (!descricaoCabe(it.descricao)) {
+    const pad = it.tipoCert === 'tubos' ? descSugerida(it.descricao) : '';
+    if (pad && pad !== cleanText(it.descricao).trim()) { it.sugerida = pad; it.resumida = true; it.padrao = true; if (!it.usarOriginal) it.descricao = pad; }
+    else if (ped.tipo === 'oc' && !descricaoCabe(it.descricao)) {
       const i = it.descricao.indexOf(' (');
       if (i >= 15) { it.descricao = it.descricao.slice(0, i).trim(); it.resumida = true; }
     }
-    it.naoCabe = !descricaoCabe(it.descricao);
+    it.naoCabe = it.tipoCert === TIPO && !LYT && !descricaoCabe(it.descricao);
   }
 }
+const prepararDescricoesOC = prepararDescricoes;
 
 /* PDF do pedido de venda (Omie) ou da ordem de compra do cliente (SAP/Jurong): o tipo é reconhecido
  * pelo conteúdo; "preferir" só decide qual leitura vem primeiro (botão usado) */
@@ -5440,7 +5542,7 @@ function distribuirGrades(itens) {
 /* conferência + montagem de um pedido já lido (também o que ficou esperando no outro tipo de certificado) */
 async function importarPed(ped) {
   for (const it of ped.itens) it.tipoCert = tipoDoItem(it.descricaoCompleta || it.descricao);
-  if (ped.tipo === 'oc') prepararDescricoesOC(ped);
+  prepararDescricoes(ped);
   if (!LYT) prepararNormas(ped);
   prepararGrades(ped);
   for (const it of ped.itens) if (it.tipoCert === 'valvulas') it.valv = sugerirValvula(it.descricaoCompleta || it.descricao || '');
@@ -5552,6 +5654,9 @@ function conferirPedido(ped) {
   };
   let ultimo = -1;
   const rows = [];
+  const pintaDesc = [];
+  let optDesc = null;
+  const marcaOpt = () => { if (!optDesc) return; const P = ped.itens.filter(x => x.padrao), k = P.filter(x => !x.usarOriginal).length; optDesc.checked = k === P.length; optDesc.indeterminate = k > 0 && k < P.length; };
   ordem.forEach((i, p) => {
     const it = ped.itens[i];
     const outro = it.tipoCert !== TIPO;
@@ -5568,17 +5673,42 @@ function conferirPedido(ped) {
     chk.setAttribute('aria-label', `Incluir o item ${oc && it.itemOC ? it.itemOC + ' da O.C.' : i + 1}`);
     td0.appendChild(chk);
     const desc = el('td');
-    desc.append(document.createTextNode(it.descricao || '—'));
+    const descTxt = document.createTextNode(it.descricao || '—');
+    desc.append(descTxt);
     if (it.grade) desc.appendChild(el('span', it.grade.tipo, 'pv-tipo'));
     if (it.valv && (it.valv.tipo || it.valv.bitola || it.valv.classe) && it.tipoCert === TIPO) desc.appendChild(el('span', [it.valv.tipo, it.valv.bitola, it.valv.classe, it.valv.ext].filter(Boolean).join(' · '), 'pv-tipo'));
-    if (it.resumida) {
+    let alertaCabe = null;
+    if (it.padrao) {
+      /* v58: descrição sugerida no padrão; a original do pedido aparece embaixo e um toque troca */
+      const o = el('span', '', 'pv-orig'), rot = el('b'), outra = el('span'), bt = el('button', '', 'pv-link');
+      bt.type = 'button';
+      o.append(rot, outra, bt);
+      const pinta = () => {
+        it.descricao = it.usarOriginal ? it.descricaoCompleta : it.sugerida;
+        descTxt.textContent = it.descricao;
+        rot.textContent = it.usarOriginal ? 'Original do pedido · sugerida: ' : 'Sugerida no padrão · original: ';
+        outra.textContent = it.usarOriginal ? it.sugerida : it.descricaoCompleta;
+        bt.textContent = it.usarOriginal ? 'usar a sugerida' : 'usar a original';
+        it.naoCabe = it.tipoCert === TIPO && !LYT && !descricaoCabe(it.descricao);
+        if (alertaCabe) alertaCabe.hidden = !it.naoCabe;
+      };
+      bt.addEventListener('click', () => { it.usarOriginal = !it.usarOriginal; pinta(); marcaOpt(); });
+      pintaDesc.push(pinta);
+      pinta();
+      desc.appendChild(o);
+      /* o material escrito no pedido sai da descrição: se a Central não reconheceu, avisa para conferir o Material */
+      if (!it.material && /A\s?-?\s?\d{2,4}|AISI|INOX|(304|316)L?|CARBONO|LIGA/.test(it.descricaoCompleta.toUpperCase()) && !outro)
+        desc.appendChild(el('span', 'material do pedido não reconhecido: confira o Material na folha', 'pv-alerta'));
+    } else if (it.resumida) {
       // texto completo da O.C. ao lado (passar o mouse ou clicar em "ver completa")
       const det = el('details', '', 'pv-full');
       det.append(el('summary', it.padrao ? 'padronizada · ver a descrição da O.C.' : 'resumida · ver completa'), el('span', it.descricaoCompleta));
       det.title = it.descricaoCompleta;
       desc.appendChild(det);
     }
-    if (it.naoCabe) desc.appendChild(el('span', 'não cabe em 2 linhas: ajuste o texto na folha', 'pv-alerta'));
+    alertaCabe = el('span', 'não cabe em 2 linhas: ajuste o texto na folha', 'pv-alerta');
+    alertaCabe.hidden = !it.naoCabe;
+    desc.appendChild(alertaCabe);
     if (it.codigo) desc.appendChild(el('span', (oc ? 'Código do cliente: ' : '') + it.codigo, 'pv-cod'));
     if (it.grade) {
       const sg = el('span', '', 'pv-sug');
@@ -5631,7 +5761,18 @@ function conferirPedido(ped) {
     lb.append(optNormas, el('span', `Preencher especificação e material com a sugestão lida da descrição (${comSugestao} de ${nAqui} ${nAqui === 1 ? 'item' : 'itens'}) — ficam marcados em amarelo na folha para você conferir`));
     optNormas.addEventListener('change', () => wrap.classList.toggle('sem-sug', !optNormas.checked));
   }
+  /* v58: todas as descrições sugeridas de uma vez (o mesmo que "usar a original / usar a sugerida" em cada item) */
+  const comDesc = ped.itens.filter(it => it.padrao).length;
+  if (comDesc) {
+    const lb = el('label', '', 'pv-opt');
+    optDesc = document.createElement('input');
+    optDesc.type = 'checkbox';
+    marcaOpt();
+    lb.append(optDesc, el('span', `Usar a descrição sugerida no padrão da Qualidade: produto, tipo, face, classe, SCH e bitola (${comDesc} de ${N} ${N === 1 ? 'item' : 'itens'}) — norma e material vão para Especificação e Material`));
+    optDesc.addEventListener('change', () => { ped.itens.forEach(it => { if (it.padrao) it.usarOriginal = !optDesc.checked; }); pintaDesc.forEach(f => f()); });
+  }
   wrap.append(head, resumo, tw);
+  if (optDesc) wrap.appendChild(optDesc.parentNode);
   if (optNormas) wrap.appendChild(optNormas.parentNode);
   wrap.appendChild(nota);
   if (nAqui && !isEmptyDoc()) wrap.appendChild(el('p', 'Os dados que estão na tela serão substituídos.', 'pv-warn'));
@@ -6892,6 +7033,7 @@ async function wsBotao(k, btn) {
   if (k === 'importar') { wsMenu(btn, [['Importar PV (PDF)…', () => $('btnPedido').click()], ['Importar O.C. (PDF)…', () => $('btnOC').click()], ['Colar link do Omie…', () => $('btnLinkOmie').click()], ['Abrir Excel…', () => $('btnAbrir').click()]]); return; }
   if (k === 'cols') { wsEscolherColunas(t); return; }
   if (k === 'ordenar') { wsOrdenar(); return; }
+  if (k === 'encurtar') { wsEncurtar(); return; }
   if (k === 'achar') { wsLocalizar(); return; }
   if (k === 'htcorr') { wsHtCorrida(); return; }
   if (k === 'agrupar') { wsHtAgrupar(); return; }
@@ -6959,6 +7101,7 @@ function wsMenuMais(btn) {
   const trocar = t => { if (h && h.acao) h.acao('tipo', t); else trocarTipo(t); };
   wsMenu(btn, [
     ['Importar PV (PDF)…', () => $('btnPedido').click()], ['Importar O.C. (PDF)…', () => $('btnOC').click()], ['Colar link do Omie…', () => $('btnLinkOmie').click()], ['Abrir Excel…', () => $('btnAbrir').click()],
+    ...(LYT ? [] : [['Encurtar descrições…', () => wsEncurtar()]]),
     null,
     [varias ? 'Salvar só o PDF desta folha' : 'Salvar só o PDF', () => $('btnPdf').click()], [varias ? 'Salvar só o Excel desta folha' : 'Salvar só o Excel', () => $('btnXlsx').click()],
     ['PDF com os certificados da usina…', () => $('btnUsina').click()],
@@ -7272,6 +7415,52 @@ async function wsHtColunas() {
   WS.cur = { r: WS.cur.r, c: 0 }; WS.anc = null;
   wsRender();
 }
+/* v58: descrições sugeridas para os itens que já estão nas folhas (colados, digitados ou de rascunho antigo) */
+async function wsEncurtar() {
+  if (LYT) return;
+  const L = [];
+  doc.certs.forEach((c, ci) => {
+    for (let n = 1; n <= c.itens; n++) {
+      const ref = refOf(BASE.produto + n, 3), atual = cleanText(c.v[ref] || '').trim();
+      if (!atual) continue;
+      const s = descSugerida(atual);
+      if (s && s !== atual) L.push({ c, ci, n, ref, atual, s, cabe: cabeNaCelula(ref, atual) });
+    }
+  });
+  if (!L.length) { toast('Nada para encurtar: as descrições já estão no padrão ou a Central não reconheceu o produto (essas ficam como estão).'); return; }
+  const varias = doc.certs.length > 1;
+  const wrap = wsEl('div', 'ws-enc');
+  wrap.innerHTML = `<p class="ws-p">Descrição no padrão da Qualidade: produto, tipo, face, classe, SCH e bitola. Norma e material saem da descrição; quando Especificação ou Material estão vazios, vão para lá (em amarelo para conferir). Dá para corrigir a sugerida antes de usar e desfazer com Ctrl+Z.</p>
+    <div class="ws-enc-l"><table><thead><tr><th><input type="checkbox" checked data-todos aria-label="Marcar todos"></th><th>Item</th><th>Agora</th><th>Sugerida</th></tr></thead><tbody>${L.map((x, i) => `<tr>
+      <td><input type="checkbox" checked data-i="${i}" aria-label="Usar a sugerida no item ${x.c.inicio + x.n - 1}"></td>
+      <td class="n">${varias ? wsEsc(rotuloFolha(x.ci)) + ' · ' : ''}${x.c.inicio + x.n - 1}</td>
+      <td class="a">${wsEsc(x.atual)}${x.cabe ? '' : '<em>não cabe</em>'}</td>
+      <td><input class="ws-in" data-s="${i}" value="${wsEsc(x.s)}"></td></tr>`).join('')}</tbody></table></div>`;
+  const ok = await showDialog({ title: `Encurtar descrições (${L.length} ${L.length === 1 ? 'item' : 'itens'})`, content: wrap, wide: true,
+    buttons: [{ label: 'Cancelar', value: false }, { label: 'Usar as marcadas', value: true, primary: true }],
+    init: ({ box }) => {
+      box.classList.add('ws-dlg');
+      const todos = wrap.querySelector('[data-todos]'), cks = [...wrap.querySelectorAll('[data-i]')];
+      todos.addEventListener('change', () => cks.forEach(c => { c.checked = todos.checked; }));
+      cks.forEach(c => c.addEventListener('change', () => { todos.checked = cks.every(x => x.checked); }));
+    } });
+  if (!ok) return;
+  const usar = L.map((x, i) => ({ x, on: wrap.querySelector(`[data-i="${i}"]`).checked, v: cleanText(wrap.querySelector(`[data-s="${i}"]`).value).trim() })).filter(y => y.on && y.v);
+  if (!usar.length) return;
+  wsLote(() => {
+    for (const { x, v } of usar) {
+      const s = sugerirNormas(x.atual);
+      x.c.v[x.ref] = v;
+      for (const [col, partes] of [[11, s.especs], [14, s.materiais]]) {
+        const ref = refOf(BASE.produto + x.n, col);
+        if (x.c.v[ref] || !partes.length) continue;
+        const val = normaQueCabe(partes, ref);
+        if (val) { x.c.v[ref] = val; (x.c.sug = x.c.sug || {})[ref] = true; }
+      }
+    }
+    return usar.length;
+  }, k => `${k} ${k === 1 ? 'descrição encurtada' : 'descrições encurtadas'} no padrão da Qualidade`);
+}
 async function wsOrdenar() {
   if (LYT) { toast(VALV ? 'Uma válvula por folha: a ordem é a das folhas.' : 'No modelo de grades a ordem dos produtos fica como está.'); return; }
   const wrap = wsEl('div', 'ws-ord');
@@ -7370,10 +7559,11 @@ async function wsConferir(certs, titulo, sempre) {
     <div class="ws-cl">${G.map((g, i) => {
       const x = g.L[0];
       const sub = g.st === 'ok' ? g.ok() : g.L.slice(0, 2).map(y => (nf > 1 ? rotuloFolha(y.ci) + ' · ' : '') + y.msg).join(' · ') + (g.L.length > 2 ? ` · e mais ${g.L.length - 2}` : '');
-      return `<div class="ws-ci ${g.st}"><i aria-hidden="true">${g.st === 'ok' ? '✓' : g.st === 'x' ? '✕' : '!'}</i><div><b>${wsEsc(g.t)}</b><span>${wsEsc(sub)}</span></div>${x ? `<button type="button" class="ws-b" data-ir="${i}">Ir para a célula</button>` : ''}</div>`;
+      const enc = g.id === 'txt' && x && !LYT && doc.certs.some(c => { for (let n = 1; n <= c.itens; n++) { const a = cleanText(c.v[refOf(BASE.produto + n, 3)] || '').trim(); const s = a && descSugerida(a); if (s && s !== a) return true; } return false; });
+      return `<div class="ws-ci ${g.st}"><i aria-hidden="true">${g.st === 'ok' ? '✓' : g.st === 'x' ? '✕' : '!'}</i><div><b>${wsEsc(g.t)}</b><span>${wsEsc(sub)}</span></div>${enc ? '<button type="button" class="ws-b" data-enc="1">✂ Encurtar</button>' : x ? `<button type="button" class="ws-b" data-ir="${i}">Ir para a célula</button>` : ''}</div>`;
     }).join('')}</div>
     <label class="ws-just" hidden><span>Por que emitir assim? (fica registrado no rascunho do pedido)</span><textarea rows="2" placeholder="Ex.: a usina confirmou o Mn por e-mail em 24/10"></textarea></label>`;
-  let irPara = null;
+  let irPara = null, encurtar = false;
   const r = await showDialog({
     title: sempre ? 'Conferir antes de emitir' : titulo, content: wrap, wide: true,
     buttons: sempre ? [{ label: 'Fechar', value: false, primary: true }]
@@ -7381,6 +7571,7 @@ async function wsConferir(certs, titulo, sempre) {
     init: ({ box, buttons, close }) => {
       box.classList.add('ws-dlg');
       wrap.querySelectorAll('[data-ir]').forEach(b => b.addEventListener('click', () => { irPara = G[+b.dataset.ir].L[0]; close(false); }));
+      wrap.querySelectorAll('[data-enc]').forEach(b => b.addEventListener('click', () => { encurtar = true; close(false); }));
       if (sempre) return;
       const [, bj, be] = buttons;
       be.disabled = !!imp; be.classList.add('or');
@@ -7391,6 +7582,7 @@ async function wsConferir(certs, titulo, sempre) {
     },
   });
   if (irPara) { if (irPara.ci !== doc.atual && irPara.ci >= 0) irParaFolha(irPara.ci); setTimeout(() => wsIrPara(irPara.ref), 30); return false; }
+  if (encurtar) { setTimeout(() => wsEncurtar(), 30); return false; }
   if (r === 'just') { doc.just = { txt: WS.just || '', em: todayBR(), por: cleanText(state.v[REF_ASSINANTE] || config.assinante || ''), itens: L.filter(x => x.tipo !== 'aviso').map(x => x.msg).slice(0, 12) }; saveDraft(); return true; }
   return r === true && !sempre;
 }
@@ -7440,7 +7632,7 @@ window.__cert = {
   importarPed, montarGrades, montarValvulas, sugerirValvula, valvAplicarModelo, valvTrocarUnid, tipoDoItem, trocarTipo, inserirLinha, removerLinha, atualizarCorridas, BLOCO, TIPO,
   FIELDS, CHECKS, layoutFor, pageSetup,
   conferir, opItem, desfazer, refazerHist, HIST, selCampos, LIMITES, limiteDe, foraDaNorma, carregarPdfLib, juntarUsina, ED,
-  WS, htPorItem, htLinhas, htVis, wsRender, wsIrPara,
+  WS, htPorItem, htLinhas, htVis, wsRender, wsIrPara, descSugerida, wsEncurtar,
 };
 })();
 

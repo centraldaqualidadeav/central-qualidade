@@ -1078,6 +1078,22 @@ body.tabmode .main { padding: 0 !important; }
 .tbnum button { border: 0; background: var(--surface-2); font: 700 26px var(--f-body); color: var(--ink-2); cursor: pointer; }
 .tbnum input { border: 0; text-align: center; font: 700 26px var(--f-mono); color: var(--crit); background: var(--surface); width: 100%; min-width: 0; }
 .tbnote { font: 500 15px/1.45 var(--f-body); color: var(--ink-3); }
+/* v60: nomes de fornecedor fora do cadastro */
+.effora { display: grid; gap: 8px; margin: 0 0 10px; } .effh { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; } .effh .grow { flex: 1; }
+.effl { display: grid; gap: 6px; max-height: 360px; overflow: auto; }
+.effr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(200px, 280px) 96px 96px; gap: 8px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; }
+.effr small { display: block; color: var(--ink-3); font-size: 12px; } .effr .btn { width: 96px; justify-content: center; }
+.effin { height: 32px; border: 1px solid var(--line-2); border-radius: 6px; padding: 0 8px; font: inherit; background: var(--surface); color: var(--ink); }
+@media (max-width: 760px) { .effr { grid-template-columns: 1fr 1fr; } .effr > div { grid-column: 1 / -1; } }
+/* v59: Abrir NCF da fila · dados e fotos do RIR */
+.abrir { display: grid; gap: 8px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--surface-2); }
+.abrh { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; } .abrh .grow { flex: 1; }
+.abrp { margin: 0; padding-left: 0; list-style: none; display: grid; gap: 3px; font-size: 12.5px; } .abrp b { display: inline-block; min-width: 26px; color: var(--crit); }
+.abfot { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; max-height: 260px; overflow: auto; }
+.abfot label { position: relative; display: block; cursor: pointer; border-radius: 8px; overflow: hidden; border: 2px solid var(--line); aspect-ratio: 4 / 3; }
+.abfot img { width: 100%; height: 100%; object-fit: cover; display: block; } .abfot input { position: absolute; opacity: 0; pointer-events: none; }
+.abfot i { position: absolute; top: 5px; right: 5px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font: 700 13px var(--f-body); font-style: normal; color: #fff; background: rgba(0, 0, 0, .35); border: 2px solid #fff; }
+.abfot label:has(input:checked) { border-color: var(--rnc); } .abfot label:has(input:checked) i { background: var(--rnc); }
 .tbfotos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 .tbfotos .ft { aspect-ratio: 1; border-radius: 10px; overflow: hidden; position: relative; border: 2px solid var(--line); }
 .tbfotos .ft img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -5530,7 +5546,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 57; window.CQ_V = APP_V;
+    const APP_V = 60; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7280,7 +7296,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (S.model && v !== S.view && VIEWS[S.view] && viewOk(S.view)) { toast('Essa tela não está liberada para você.'); return; }
       v = firstView() || 'painel';
     }
-    if (v !== 'cadastro') { S.editKey = null; S.linkBack = null; }
+    if (v !== 'cadastro') { S.editKey = null; S.linkBack = null; S.rncRir = null; }
     S.view = v; S.stale = false;
     try { if (replace) history.replaceState(null, '', '#' + v); else history.pushState(null, '', '#' + v); } catch (e) { /* sem histórico */ }
     $$('#nav a').forEach((a) => { if (a.dataset.v === navOf(v)) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
@@ -8766,10 +8782,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${lotChipsHTML(all, pend, 'ab-lots')}
       <label class="abro"><input type="radio" name="abr" value="1"><span><b>${esc(ABR[1])} (${all.length} ${all.length === 1 ? 'lote' : 'lotes'})</b><small>Todos os lotes da NF ${esc(disp(g.nf) || '')}. Lotes desta NF lançados depois entram sozinhos.${aprov.length ? ` <b style="color:var(--warn)">${esc(plural(aprov.length, 'lote que não estava reprovado também será reprovado', 'lotes que não estavam reprovados também serão reprovados'))}: você confirma ao salvar a NCF.</b>` : ''}</small></span></label>
       <label class="field" id="ab-jf" hidden><input id="ab-just" type="hidden"></label>
-      <p class="muted" style="margin:0;font-size:12.5px">A NCF abre já preenchida com fornecedor, NF, pedidos e o motivo escrito pelo inspetor. Os 48 h começam ao salvar a NCF.</p>
+      <div id="ab-rir"></div>
+      <p class="muted" style="margin:0;font-size:12.5px">A NCF abre já preenchida com fornecedor, NF, pedidos, o motivo escrito pelo inspetor e o que foi marcado RP no RIR. Os 48 h começam ao salvar a NCF.</p>
       <div class="formfoot"><button class="btn primary" type="button" id="ab-ok">Continuar para a NCF</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
     const upd = () => { const v = $('input[name="abr"]:checked').value; $('#ab-jf').hidden = v !== '2'; $('#ab-lots').style.opacity = v === '0' ? '' : '.45'; };
     const selK = wireChips('ab-lots', () => { $('input[name="abr"][value="0"]').checked = true; upd(); });
+    /* v59: o RIR dos lotes reprovados (itens RP e fotos); a operadora marca as fotos que vão para a NCF */
+    const RX = { rels: [], fotos: [] };
+    rncRirCarrega(g.items, RX);
     $$('input[name="abr"]').forEach((r) => { r.onchange = upd; }); upd();
     $('#ab-ok').onclick = () => {
       const v = $('input[name="abr"]:checked').value, ks = selK(), just = $('#ab-just').value.trim();
@@ -8777,11 +8797,43 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (v === '2' && !just) { toast('Escreva a justificativa.', true); $('#ab-just').focus(); return; }
       const lots = v === '0' ? all.filter((a) => ks.includes(a.key)) : v === '1' ? all : [];
       const rep = g.items.filter((x) => v !== '0' || ks.includes(x.key)), x0 = g.items[0] || all[0] || {};
-      const txt = rep.length ? 'Reprovado na inspeção de recebimento: ' + rep.map((x) => `${x.id} (${lotTxt(x)}${E.filled(x.corrida) && !E.isStar(x.corrida) ? ', corrida ' + x.corrida : ''})${motRepOf(x) ? ': ' + motRepOf(x) : ''}`).join('; ') + '.' : '';
+      const nums = uniq(rep.map((x) => (lotSt(x).insp || {}).rir).filter(Boolean));
+      const txt = rep.length ? `Reprovado na inspeção de recebimento${nums.length ? ' (' + nums.join(', ') + ')' : ''}: ` + rep.map((x) => `${x.id} (${lotTxt(x)}${E.filled(x.corrida) && !E.isStar(x.corrida) ? ', corrida ' + x.corrida : ''})${motRepOf(x) ? ': ' + motRepOf(x) : ''}`).join('; ') + '.' : '';
+      const fotos = RX.fotos.filter((f, i) => { const c = $(`#ab-rir [data-rf="${i}"]`); return c && c.checked; }).map((f) => f.img);
+      const rp = rncRirRP(RX, rep);
+      S.rncRir = nums.length ? { rir: nums.join(', '), fotos, desc: [txt, rp.length ? 'Itens RP no RIR: ' + rp.join('; ') + '.' : ''].filter(Boolean).join('\n'), insp: uniq(RX.rels.map((r) => r.inspetor).filter(Boolean)).join(', ') } : null;
       S.form = 'rnc'; S.editKey = null;
       S.prefill = { G: g.forn || x0.forn || '', I: g.nf == null ? '' : String(g.nf), K: x0.pc == null ? '' : String(x0.pc), J: x0.pv == null ? '' : String(x0.pv), AD: ABR[+v], AE: v === '2' ? just : '', AC: lots.map((a) => a.id).join(', '), Z: txt };
       $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro');
     };
+  }
+  /* v59: RIR dos lotes reprovados → itens marcados RP (com medida e anotação) */
+  function rncRirRP(RX, lots) {
+    const out = [];
+    RX.rels.forEach((rel) => (rel.itens || []).forEach((it) => {
+      const ck = (rel.ck || {})[it.id] || {};
+      if (it.esc === 'nf') { const a = ck.nf || {}; if (a.r === 'NC') out.push(`${it.t}${a.v ? ' (' + a.v + ')' : ''}${a.o ? ' — ' + a.o : ''}`); return; }
+      lots.forEach((x) => { const a = ck[x.key] || {}; if (a.r === 'NC') out.push(`${x.id}: ${it.t}${a.v ? ' (' + a.v + ')' : ''}${a.o ? ' — ' + a.o : ''}`); });
+    }));
+    return out;
+  }
+  async function rncRirCarrega(lots, RX) {
+    const box = () => $('#ab-rir');
+    const rids = uniq(lots.map((x) => (lotSt(x).insp || {}).rid).filter(Boolean));
+    if (!rids.length || !box()) return;
+    box().innerHTML = '<div class="abrir"><span class="muted">Carregando o RIR…</span></div>';
+    for (const rid of rids) {
+      try { const d = await DB.db.doc('rird/' + rid).get(); if (d && d.exists) RX.rels.push(Object.assign({ id: rid }, d.data())); } catch (e) { /* segue sem o RIR */ }
+      try { (await FT.list('rirf', rid)).forEach((f) => RX.fotos.push({ img: f.img, rid })); } catch (e) { /* segue sem as fotos */ }
+    }
+    const el = box(); if (!el) return;
+    const rp = rncRirRP(RX, lots), nome = (rid) => (RX.rels.find((r) => r.id === rid) || {}).numero || 'RIR';
+    el.innerHTML = `<div class="abrir"><div class="abrh"><b>Do ${esc(RX.rels.map((r) => r.numero).filter(Boolean).join(', ') || 'RIR')}</b><span class="muted">${esc(uniq(RX.rels.map((r) => r.inspetor).filter(Boolean)).join(', ') ? 'inspecionado por ' + uniq(RX.rels.map((r) => r.inspetor).filter(Boolean)).join(', ') : '')}</span></div>
+      ${rp.length ? `<ul class="abrp">${rp.map((t) => `<li><b>RP</b> ${esc(t)}</li>`).join('')}</ul>` : ''}
+      ${RX.fotos.length ? `<div class="abrh"><b>Fotos do RIR</b><span class="muted">marque as que vão para a NCF</span><span class="grow"></span><button class="btn small" type="button" id="ab-rft">Marcar todas</button><button class="btn small" type="button" id="ab-rfn">Nenhuma</button></div>
+        <div class="abfot">${RX.fotos.map((f, i) => `<label title="${esc(nome(f.rid))}"><input type="checkbox" data-rf="${i}"><img src="${f.img}" alt=""><i aria-hidden="true">✓</i></label>`).join('')}</div>` : '<p class="muted" style="margin:0">O RIR não tem fotos.</p>'}</div>`;
+    const marca = (on) => $$('#ab-rir [data-rf]').forEach((c) => { c.checked = on; });
+    const t1 = $('#ab-rft'), t0 = $('#ab-rfn'); if (t1) t1.onclick = () => marca(true); if (t0) t0.onclick = () => marca(false);
   }
   /* confirmação ao salvar uma NCF que pega lotes que não estavam reprovados */
   function rncConfirm(c, nov) {
@@ -10177,7 +10229,26 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const cfgL = (n) => (S.model.cfg[n] || []).map(String);
   const uniq = (a) => { const s = new Set(), o = []; a.forEach((v) => { const k = E.low(v); if (v && !s.has(k)) { s.add(k); o.push(v); } }); return o; };
   const inativosDe = (info) => new Set((info || []).filter((o) => o.inativo).map((o) => E.key(o.nome)));
-  const fornList = () => { const ina = inativosDe(S.model.cfg.FORN_INFO); return uniq(cfgL('GER_FORNECEDORES').concat(distinct(S.model.av, (x) => x.forn), distinct(S.model.rnc, (x) => x.forn), distinct(S.model.serv, (x) => x.forn))).filter((n) => !ina.has(E.key(n))); };
+  /* v60: só fornecedores cadastrados (Configurações › Fornecedores); nomes digitados nos registros antigos não entram mais */
+  const fornList = () => { const ina = inativosDe(S.model.cfg.FORN_INFO); return uniq(cfgL('GER_FORNECEDORES')).filter((n) => !ina.has(E.key(n))); };
+  /* nome oficial do fornecedor cadastrado (pelo nome ou por um apelido, sem ligar para maiúsculas, acentos e pontos); '' = não cadastrado ou inativo */
+  function fornCad(nome) {
+    if (!E.filled(nome) || !S.model) return '';
+    const o = entResolve('forn', nome);
+    if (o) return o.inativo ? '' : o.nome;
+    const k = E.key(nome), n0 = cfgL('GER_FORNECEDORES').find((x) => E.key(x) === k);
+    return n0 && !inativosDe(S.model.cfg.FORN_INFO).has(k) ? n0 : '';
+  }
+  const fornInativo = (nome) => { const o = E.filled(nome) && S.model ? entResolve('forn', nome) : null; return !!(o && o.inativo); };
+  /* v60: fornecedor fora do cadastro não grava; quem lança lotes pode cadastrar na hora, com CNPJ */
+  function fornBloqueio(nome, campo, depois) {
+    const ina = fornInativo(nome), pode = cw('av') || cfgMode() !== 'ver';
+    openModal(ina ? 'Fornecedor inativo' : 'Fornecedor não cadastrado', `<p style="margin:0">${ina ? `<b>${esc(nome)}</b> está inativo em Configurações › Fornecedores. Escolha outro da lista ou peça para a Qualidade reativar.` : `<b>${esc(nome)}</b> não está em Configurações › Fornecedores. O lançamento só aceita fornecedor cadastrado, para o mesmo fornecedor não aparecer com nomes diferentes.`}</p>
+      <p class="muted" style="margin:0;font-size:12.5px">Confira na lista do campo: o fornecedor pode estar cadastrado com outra grafia.${!ina && pode ? ' Se for mesmo um fornecedor novo, cadastre com o CNPJ.' : !ina ? ' Fornecedor novo: peça o cadastro para a Qualidade.' : ''}</p>
+      <div class="formfoot">${!ina && pode ? '<button class="btn primary" type="button" id="fb-cad">Cadastrar fornecedor (com CNPJ)</button>' : ''}<button class="btn${!ina && pode ? '' : ' primary'}" type="button" id="fb-lista">Escolher da lista</button></div>`);
+    const cad = $('#fb-cad'); if (cad) cad.onclick = () => { closeLayer(); entDrawer('forn', null, false, { pre: { nome, cnpj: S.avmNfe && !S.avmNfe.forn ? S.avmNfe.cnpj : '' }, rapido: true, depois }); };
+    $('#fb-lista').onclick = () => { closeLayer(); const el = $('#ff-' + campo) || $('#' + campo); if (el) { el.value = ''; el.focus(); } };
+  }
   const cliList = (extra) => { const ina = inativosDe(S.model.cfg.CLI_INFO); return uniq(cfgL('GER_CLIENTES').concat(extra || [])).filter((n) => !ina.has(E.key(n))); };
   const lst = (n, mod, f) => () => uniq(cfgL(n).concat(distinct(listOf(mod), (x) => x[f])));
   const SEC = {
@@ -10633,7 +10704,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       let html = `<div class="pv"><h3>Lotes que serão criados</h3><div class="big mono">${items.length > 1 ? `${avIdFmt(nx)} a ${avIdFmt(nx + items.length - 1)}` : avIdFmt(nx)}</div><span class="muted" style="font-size:12px">${items.length} lote(s). Os números são confirmados na hora de gravar.</span></div>`;
       if (n.L) { const same = S.model.av.filter((x) => E.key(x.nf) === E.key(n.L) && (!n.K || E.key(x.forn) === E.key(n.K))); if (same.length) w.push(`Esta NF já tem ${same.length} lote(s): ${same.slice(-5).map((x) => esc(x.id)).join(', ')}${same.length > 5 ? '…' : ''}.`); }
       avmDupes(n, items).forEach((d) => w.push('<b>Possível duplicidade:</b> ' + d));
-      if (n.K && !cfgL('GER_FORNECEDORES').some((f) => E.low(f) === E.low(n.K))) w.push('Fornecedor fora da lista de Configurações › Fornecedores.');
+      if (n.K && !fornCad(n.K)) w.push(fornInativo(n.K) ? '<b>Fornecedor inativo</b> em Configurações › Fornecedores: escolha outro da lista.' : '<b>Fornecedor não cadastrado.</b> Escolha da lista; se for um fornecedor novo, ao gravar dá para cadastrar com o CNPJ.');
       const semc = items.filter((it) => !it.O || E.isStar(it.O)).length; if (semc) w.push(`${semc} lote(s) sem certificado: vão aparecer em Alertas para cobrança.`);
       if (rirOn()) w.push('O resultado da inspeção sai do <b>RIR</b> desta nota: depois de gravar, os lotes aparecem em RIR › Aguardando.');
       if (n.K && fornSit(n.K) === 'Suspenso') w.push('<b>Fornecedor suspenso no IQF.</b> Confira com a Qualidade antes de receber.');
@@ -10665,6 +10736,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       items.forEach((it, i) => { if (E.low(it.U) === 'reprovado' && !it.V) mark(`it${i}-V`, 'Obrigatório para lote reprovado.'); });
       items.forEach((it, i) => itf.forEach((f) => { if (f.req && !it[f.c]) mark(`it${i}-${f.c}`, 'Obrigatório.'); if (f.store === 'num' && it[f.c] && !isFinite(Number(String(it[f.c]).replace(',', '.')))) mark(`it${i}-${f.c}`, 'Use só números.'); }));
       if (errs.length) { toast(`Falta(m) ${errs.length} campo(s) obrigatório(s).`, true); const el = $('#' + errs[0]); if (el) el.focus(); return; }
+      if (n.K) {   /* v60: fornecedor só do cadastro; apelido vira o nome oficial */
+        const of = fornCad(n.K);
+        if (!of) { mark('ff-K', fornInativo(n.K) ? 'Fornecedor inativo.' : 'Fornecedor não cadastrado.'); fornBloqueio(n.K, 'K', (nn) => { const el = $('#ff-K'); if (el) { el.value = nn; sync(); avmPreview(); } }); return; }
+        if (of !== n.K) { n.K = of; const el = $('#ff-K'); if (el) el.value = of; }
+      }
       const go2 = async () => {
         const btn = $('#fx-save'); btn.disabled = true; btn.textContent = 'Gravando…';
         const fm = FMAP.AV, all = nota.f.concat(itf), keys = [];
@@ -10801,6 +10877,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       else { const m = /^(?:RNCF?|NCF)-(\d{4})-(\d+)$/.exec(vals.A); if (m && +m[2] <= +((DB.numer.rnc || {})[+m[1]] || 0)) errs.A = 'Esse número já foi usado antes da virada.'; }
     }
     if (fd.mod === 'RNC' && vals.AC) { const bad = lotTokens(vals.AC).filter((s) => !avById(s)); if (bad.length) errs.AC = (bad.length > 1 ? 'Lotes não encontrados: ' : 'Lote não encontrado: ') + bad.slice(0, 4).join(', '); }
+    { const FL = { AV: 'K', SERV: 'D', RNC: 'G' }[fd.mod], fv = FL ? vals[FL] : null;   /* v60: fornecedor só do cadastro (registro novo ou fornecedor trocado) */
+      if (FL && E.filled(fv) && !errs[FL] && (isNew || (FMAP[fd.mod][FL] in changes)) && !fornCad(fv)) errs[FL] = fornInativo(fv) ? 'Fornecedor inativo: escolha outro da lista.' : 'Fornecedor não cadastrado: escolha da lista.'; }
     if (fd.mod === 'AV') {
       const novoInsp = isNew || 'insp' in changes;
       if (novoInsp && E.low(vals.U) === 'reprovado' && !vals.V) errs.V = 'Obrigatório para lote reprovado.';
@@ -10856,7 +10934,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         const dup = same.filter((x) => E.filled(vals.E) && E.key(x.corrida) === E.key(vals.E) && E.key(x.desc) === E.key(vals.F) && E.key(x.diam) === E.key(vals.G));
         if (dup.length) warn.push(`<b>Possível duplicidade:</b> mesma NF, corrida, descrição e diâmetro em ${dup.map((x) => x.id).join(', ')}.`);
       }
-      if (vals.K && !cfgL('GER_FORNECEDORES').some((f) => E.low(f) === E.low(vals.K))) warn.push('Fornecedor fora da lista de Configurações › Fornecedores.');
+      if (vals.K && !fornCad(vals.K)) warn.push('<b>Fornecedor não cadastrado.</b> Escolha da lista; se for um fornecedor novo, ao gravar dá para cadastrar com o CNPJ.');
       if (vals.O === '*' || !vals.O) warn.push('Lote sem certificado: vai aparecer em Alertas para cobrança.');
     } else if (fd.mod === 'SERV' && isNew) {
       html += `<div class="pv"><h3>Serviço que será criado</h3><div class="big mono">SV-${E.pad(Math.max(0, ...S.model.serv.map((x) => keyNum(x.key))) + 1, 4)}</div><span class="muted" style="font-size:12px">O número é confirmado na hora de gravar.</span></div>`;
@@ -10903,6 +10981,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     $$('#fx .field').forEach((l) => { l.classList.remove('err'); const m = l.querySelector('.errmsg'); if (m) m.hidden = true; });
     const keys = Object.keys(c.errs);
     if (keys.length) {
+      { const FL = { AV: 'K', SERV: 'D', RNC: 'G' }[fd.mod]; if (FL && c.errs[FL] && /cadastrado|inativo/.test(c.errs[FL])) { const v = ($('#ff-' + FL) || {}).value || ''; setTimeout(() => fornBloqueio(v.trim(), FL, (nn) => { const el = $('#ff-' + FL); if (el) { el.value = nn; el.dispatchEvent(new Event('input', { bubbles: true })); } }), 0); } }
       keys.forEach((k) => { const el = k === 'pick' ? $('#pick') : $(`#ff-${k}`); if (!el) return; const l = el.closest('.field'); l.classList.add('err'); const m = l.querySelector('.errmsg'); if (m) { m.textContent = c.errs[k]; m.hidden = false; } });
       if (c.errs._) toast(c.errs._, true);
       const first = keys.find((k) => k !== '_'); if (first) { const el = first === 'pick' ? $('#pick') : $(`#ff-${first}`); if (el) el.focus(); }
@@ -10916,8 +10995,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const btn = $('#fx-save'); btn.disabled = true; const old = btn.textContent; btn.textContent = 'Gravando…';
     try {
       const calP = fd.mod === 'INS' && (S.form === 'cal' || (c.isNew && c.vals.E)) ? insCalPrep(c, c.isNew ? null : c.rec) : null;
+      const RR = fd.mod === 'RNC' && c.isNew ? S.rncRir : null;
+      if (RR) { S.rncRir = null; Object.assign(c.fields, clean({ descNc: c.fields.descNc || RR.desc, origem: c.fields.origem || 'Recebimento', rir: RR.rir, nFotos: RR.fotos.length || undefined, info: appendInfo(c.fields.info || '', `Aberta a partir do ${RR.rir}${RR.insp ? ' (inspecionado e assinado por ' + RR.insp + ')' : ''}${RR.fotos.length ? ', com ' + RR.fotos.length + ' foto(s) do RIR' : ''}.`) })); }
       if (c.isNew) {
         const key = await createRecord(fd.mod, c.fields);
+        if (RR && RR.fotos.length) { try { await rncFotosAdd(key, RR.fotos.map((img) => ({ img }))); } catch (e) { toast('A NCF foi gravada, mas as fotos do RIR não subiram: inclua pela NCF.', true); } }
         if (calP && calP.ev) { try { await addInsEvent(key, calP.ev); } catch (e) { console.warn('histórico do instrumento não gravado', e); } }
         pubQueueLots(fd.mod, c.fields, {});
         if (fd.mod === 'RNC' && S.linkBack) { const lb = S.linkBack; S.linkBack = null; try { await updateRecord('RNCC', lb, { rncf: key }); logEntry('RNCC', lb, 'alterado', 'Vínculo com ' + key, { rncf: [null, key] }); } catch (e) { console.warn(e); } }
@@ -11352,7 +11434,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         ${kind === 'cli' ? `<label class="field"><span>Prioridade</span><select id="ep-${kind}"><option value="">Todos</option><option value="crit" ${f.pr === 'crit' ? 'selected' : ''}>★ Só críticos</option></select></label>` : ''}
         <label class="field"><span>Situação</span><select id="es-${kind}"><option value="ativos" ${f.sit === 'ativos' ? 'selected' : ''}>Ativos</option><option value="inativos" ${f.sit === 'inativos' ? 'selected' : ''}>Inativos</option><option value="todos" ${f.sit === 'todos' ? 'selected' : ''}>Todos</option></select></label>
         <div class="entbtns">${nwBtn}<button class="btn" type="button" id="ex-${kind}">Exportar (.xlsx)</button></div></div>
+      ${kind === 'forn' && !ro ? '<div id="ef-fora"></div>' : ''}
       <div id="el-${kind}"></div>`;
+    if (kind === 'forn' && !ro) fornForaHTML();
     const draw = () => {
       const q = E.key(f.q || ''), qa = cnpjRaw(f.q || '');
       const rows = names.map((n) => ({ nome: n, i: info.get(E.key(n)) || {}, s: st.get(E.key(n)) || {} })).filter((r) => (f.sit === 'todos' || (f.sit === 'inativos' ? r.i.inativo : !r.i.inativo)) && (!f.em || (f.em === 'com' ? !!r.i.email : !r.i.email)) && (kind !== 'cli' || f.pr !== 'crit' || !!r.i.critico) && (kind !== 'forn' || !f.tp || (f.tp === 'sem' ? !r.i.tipo : r.i.tipo === f.tp))
@@ -11373,6 +11457,42 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const ib = $('#ei-' + kind); if (ib) ib.onclick = () => entImport(kind);
     $('#ex-' + kind).onclick = () => exportRows(D.plural.charAt(0).toUpperCase() + D.plural.slice(1), [{ k: 'cod', l: 'Código', w: 10, x: (r) => r.i.cod || '' }, { k: 'nome', l: D.Um, w: 34 }, { k: 'cj', l: 'CNPJ', w: 21, x: (r) => r.i.cnpj || (r.i.estrangeiro ? 'Estrangeiro' : '') }].concat(kind === 'forn' ? [{ k: 'tp', l: 'Tipo', w: 15, x: (r) => tipoNome(r.i.tipo) }] : []).concat([{ k: 'e', l: 'E-mail', w: 36, x: (r) => r.i.email || '' }, { k: 'c', l: 'Contato', w: 22, x: (r) => r.i.contato || '' }, { k: 't', l: 'Telefone', w: 16, x: (r) => r.i.tel || '' }, { k: 'o', l: 'Observação', w: 30, x: (r) => r.i.obs || '' }, { k: 's', l: 'Situação', x: (r) => (r.i.inativo ? 'Inativo' : 'Ativo') }]), S['entRows' + kind] || []);
     draw();
+  }
+  /* v60: nomes de fornecedor gravados nos lotes, serviços e NCFs que não são de nenhuma ficha (nem apelido) */
+  function fornForaHTML() {
+    const host = $('#ef-fora'); if (!host) return;
+    const m = new Map();
+    [['AV', S.model.av, 'lote'], ['SERV', S.model.serv, 'serviço'], ['RNC', S.model.rnc, 'NCF']].forEach(([, L, rot]) => (L || []).forEach((x) => {
+      const v = x.forn; if (!E.filled(v) || entResolve('forn', v) || cfgL('GER_FORNECEDORES').some((f) => E.key(f) === E.key(v))) return;
+      const k = E.key(v), o = m.get(k) || { nome: String(v).trim(), n: {} }; o.n[rot] = (o.n[rot] || 0) + 1; m.set(k, o);
+    }));
+    const L = Array.from(m.values()).sort((a, b) => Object.values(b.n).reduce((p, q) => p + q, 0) - Object.values(a.n).reduce((p, q) => p + q, 0));
+    if (!L.length) { host.innerHTML = ''; return; }
+    const ab = !!S.fornForaOpen;
+    host.innerHTML = `<div class="warnbox effora"><div class="effh"><b>${NF.format(L.length)} ${L.length === 1 ? 'nome usado que não está' : 'nomes usados que não estão'} no cadastro</b><span class="muted">digitados nos lotes, serviços e NCFs antigos</span><span class="grow"></span><button class="btn small" type="button" id="ef-tg">${ab ? 'Fechar' : 'Arrumar'}</button></div>
+      ${ab ? `<p class="muted" style="margin:0;font-size:12.5px">Juntar: o nome vira apelido do fornecedor escolhido e todos os registros passam para o nome oficial. Cadastrar: cria a ficha nova (com CNPJ).</p>
+      <datalist id="ef-dl">${optList(fornList())}</datalist>
+      <div class="effl">${L.map((o, i) => `<div class="effr"><div><b>${esc(o.nome)}</b><small>${Object.entries(o.n).map(([r, q]) => `${NF.format(q)} ${r}${q > 1 ? (r === 'NCF' ? 's' : r === 'serviço' ? 's' : 's') : ''}`).join(' · ')}</small></div>
+        <input class="effin" list="ef-dl" data-ef="${i}" placeholder="juntar com… (fornecedor cadastrado)" autocomplete="off"><button class="btn small" type="button" data-efj="${i}">Juntar</button><button class="btn small" type="button" data-efc="${i}">Cadastrar</button></div>`).join('')}</div>` : ''}</div>`;
+    $('#ef-tg').onclick = () => { S.fornForaOpen = !ab; fornForaHTML(); };
+    $$('#ef-fora [data-efc]').forEach((b) => { b.onclick = () => entDrawer('forn', null, false, { pre: { nome: L[+b.dataset.efc].nome } }); });
+    $$('#ef-fora [data-efj]').forEach((b) => { b.onclick = async () => {
+      const o = L[+b.dataset.efj], alvo = fornCad(($(`#ef-fora [data-ef="${b.dataset.efj}"]`) || {}).value || '');
+      if (!alvo) { toast('Escolha na lista um fornecedor cadastrado para juntar.', true); return; }
+      b.disabled = true;
+      try {
+        const ok = await saveEnt('forn', (names, info) => {
+          const ii = info.findIndex((x) => E.key(x.nome) === E.key(alvo)); if (ii < 0) info.push({ nome: alvo, apelidos: [o.nome] });
+          else { const f = Object.assign({}, info[ii]); f.apelidos = (f.apelidos || []).concat([o.nome]).filter((a, j, A) => A.findIndex((q) => E.key(q) === E.key(a)) === j); info[ii] = f; }
+          return { names, info };
+        }, `Fornecedor: "${o.nome}" juntado com ${alvo} (vira apelido)`);
+        if (!ok) { b.disabled = false; return; }
+        const fic = (S.entUlt || []).find((x) => E.key(x.nome) === E.key(alvo));
+        const q = fic ? await entPropagate('forn', fic, [o.nome]) : 0;
+        toast(`"${o.nome}" juntado com ${alvo}${q ? ` · ${NF.format(q)} registro(s) passaram para o nome oficial` : ''}.`);
+        await sleep(250); S.stale = false; render();
+      } catch (err) { b.disabled = false; toast(err && (err.code === 'invalid_argument' || err.code === 'permission_denied') ? TXT.cfgDenied : 'Não foi possível juntar: ' + ((err && (err.message || err.code)) || err), true); }
+    }; });
   }
   /* grava a lista de nomes e as fichas juntas (o que estiver na tela de outra pessoa não se perde: lê o atual antes) */
   /* cliente crítico: liga e desliga direto na lista (o resto da ficha não muda) */
@@ -11419,8 +11539,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       catch (e) { S.codRun = false; /* tenta de novo na próxima carga */ }
     }
   }
-  function entDrawer(kind, nome, ro) {
-    const D = ENT[kind], novo = !nome, i = (nome && entInfo(kind, nome)) || {}, st = nome ? (D.stats().get(E.key(nome)) || {}) : {};
+  function entDrawer(kind, nome, ro, op) {
+    op = op || {};
+    const D = ENT[kind], novo = !nome, i = (nome && entInfo(kind, nome)) || (op.pre ? { cnpj: op.pre.cnpj ? cnpjFmt(op.pre.cnpj) : '' } : {}), st = nome ? (D.stats().get(E.key(nome)) || {}) : {};
     const uso = nome ? D.uso.reduce((n, pr) => n + usageOf([pr], nome), 0) : 0;
     const dis = ro ? 'disabled' : '';
     /* tipo do fornecedor: sem tipo ainda, sugere pelo que já foi registrado (lotes = matéria-prima; serviços = serviço) */
@@ -11430,7 +11551,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <div class="fgrid cm-grid"><div class="field"><span>Código</span><div class="entcod">${i.cod ? esc(i.cod) : '<span class="muted">gerado ao cadastrar</span>'}</div></div>
         <label class="field"><span>CNPJ</span><input id="ed-cnpj" value="${esc(i.cnpj || '')}" placeholder="00.000.000/0000-00" maxlength="18" autocomplete="off" autocapitalize="characters" spellcheck="false" inputmode="text" ${ro || i.estrangeiro ? 'disabled' : ''}><small class="cjm" id="ed-cnpj-m"></small></label></div>
       <label class="check"><input type="checkbox" id="ed-estr" ${i.estrangeiro ? 'checked' : ''} ${dis}> Sem CNPJ (empresa estrangeira)</label>
-      <label class="field"><span>Nome <b>*</b></span><input id="ed-nome" value="${esc(nome || '')}" autocomplete="off" ${dis}></label>
+      ${op.rapido ? '<div class="okbox" style="border-color:var(--info)">Fornecedor novo, cadastrado pelo lançamento: o <b>CNPJ é obrigatório</b>. Se o CNPJ já estiver em outra ficha, a Central mostra qual é, para não cadastrar o mesmo fornecedor duas vezes.</div>' : ''}
+      <label class="field"><span>Nome <b>*</b></span><input id="ed-nome" value="${esc(nome || (op.pre && op.pre.nome ? upTxt(op.pre.nome) : ''))}" autocomplete="off" ${dis}></label>
       ${kind === 'forn' ? `<div class="field"><span>Tipo <b>*</b>${sug ? ' <small class="muted">· sugerido pelos registros</small>' : ''}</span><div class="seg" id="ed-tipo">${FORN_TIPOS.map(([k, l]) => `<button type="button" data-t="${k}" aria-pressed="${tp === k}" ${dis}>${l}</button>`).join('')}</div></div>` : ''}
       <label class="field"><span>${esc(D.mail)}</span><input id="ed-email" value="${esc(i.email || '')}" placeholder="qualidade@empresa.com.br, vendas@empresa.com.br" autocomplete="off" ${dis}></label>
       <div class="fgrid cm-grid"><label class="field"><span>Contato</span><input id="ed-contato" value="${esc(i.contato || '')}" placeholder="nome da pessoa" autocomplete="off" ${dis}></label><label class="field"><span>Telefone</span><input id="ed-tel" value="${esc(i.tel || '')}" placeholder="(11) 0000-0000" autocomplete="off" ${dis}></label></div>
@@ -11454,6 +11576,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const nn = upTxt($('#ed-nome').value), email = normMails($('#ed-email').value);
       const estr = $('#ed-estr').checked, cj = estr ? '' : cnpjFmt(cjIn.value);
       if (cj && !cnpjOk(cj)) { toast('CNPJ inválido: confira os números.', true); cjIn.focus(); return; }
+      if (op.rapido && !cj && !estr) { toast('Informe o CNPJ do fornecedor (ou marque “Sem CNPJ” se for empresa estrangeira).', true); cjIn.focus(); return; }
+      if (op.rapido && cj) { const dup = (S.model.cfg[D.info] || []).find((o) => o.cnpj && cnpjRaw(o.cnpj) === cnpjRaw(cj)); if (dup) { closeLayer(); confirmBox('Fornecedor já cadastrado', `O CNPJ ${cj} já é de ${dup.nome}${dup.cod ? ' (' + dup.cod + ')' : ''}. Usar ${dup.nome} no lançamento?`, 'Usar ' + dup.nome, () => { if (op.depois) op.depois(dup.nome); }); return; } }
       if (cj) { const dup = (S.model.cfg[D.info] || []).find((o) => E.key(o.nome) !== E.key(nome || '') && o.cnpj && cnpjRaw(o.cnpj) === cnpjRaw(cj)); if (dup) { toast(`Esse CNPJ já está na ficha de ${dup.nome}${dup.cod ? ' (' + dup.cod + ')' : ''}. Se for a mesma empresa, use aquela ficha e ponha este nome como apelido.`, true); cjIn.focus(); return; } }
       const tipo = kind === 'forn' ? (($('#ed-tipo [aria-pressed="true"]') || {}).dataset || {}).t || '' : '';
       if (kind === 'forn' && !tipo) { toast('Escolha o tipo do fornecedor: matéria-prima, serviço ou laboratório.', true); return; }
@@ -11480,6 +11604,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         if (!ok) { btn.disabled = false; btn.textContent = novo ? 'Cadastrar' : 'Salvar'; return; }
         const fic = (S.entUlt || []).find((o) => E.key(o.nome) === E.key(nn));
         closeLayer(); toast(`${nn} ${novo ? 'cadastrado' : 'salvo'}${fic && fic.cod ? ' · código ' + fic.cod : ''}.`);
+        if (op.depois) { await sleep(250); S.stale = false; op.depois(nn); return; }
         if (fic) { try { const n = await entPropagate(kind, fic, nome ? [nome] : []); if (n) toast(`${NF.format(n)} registro(s) ligados a ${nn}.`); } catch (e) { toast('Ficha salva, mas os registros não foram atualizados: ' + ((e && (e.message || e.code)) || e), true); } }
         await sleep(250); S.stale = false; render();
       } catch (err) { toast(err && (err.code === 'invalid_argument' || err.code === 'permission_denied') ? TXT.cfgDenied : 'Não foi possível salvar: ' + ((err && (err.message || err.code)) || err), true); btn.disabled = false; btn.textContent = novo ? 'Cadastrar' : 'Salvar'; }
@@ -12876,7 +13001,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function cqLeitor() {   /* cert.html escondido, só para ler o PDF */
     return new Promise((res, rej) => {
       const fr = document.createElement('iframe');
-      fr.src = 'cert.html?v=1&ws=0&leitor=1&k=leitor-omie'; fr.title = 'leitor'; fr.setAttribute('aria-hidden', 'true'); fr.tabIndex = -1;
+      fr.src = 'cert.html?v=' + (window.CQ_V || 1) + '&ws=0&leitor=1&k=leitor-omie';   /* v58: nº da versão no endereço: cada atualização busca o cert.html novo */ fr.title = 'leitor'; fr.setAttribute('aria-hidden', 'true'); fr.tabIndex = -1;
       fr.style.cssText = 'position:fixed;left:-9999px;top:0;width:1200px;height:800px;visibility:hidden;pointer-events:none';
       let n = 0;
       const t = setInterval(() => {
@@ -13287,7 +13412,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     };
     main.innerHTML = `<div class="view cqed cqws">
       ${CQ_ABA ? abaFaixa(c) : `<div class="cqfrom"><button class="btn ghost small" type="button" data-act="cq-voltar">‹ Fila</button>${c ? `<b class="cqpv">${esc(cqNum(c))}</b><span class="cqnf mono">NF ${esc(c.nf || '—')}</span>${c.seq ? `<span class="cqparc">parte ${c.seq}</span>` : ''}<span class="clip">${esc(c.cli || '')}</span>${c.porEm ? cqWho(c) : ''}${c.st !== 'p' ? '<span class="chip ok">concluído</span>' : ''}` : '<b>Certificado avulso</b><span class="muted">fora da fila: ao salvar, a Central procura o número na fila</span>'}<span class="cqst" id="cq-st"></span>${c && abaPode() ? '<button class="btn small cqoutra" type="button" data-act="aba-mover" title="Continuar este certificado na aba de certificados (a fila fica ao lado)">⧉ Abrir em outra aba</button>' : ''}</div>`}
-      <div class="cqsheet cqwsf"><iframe id="cq-frame" src="cert.html?v=1&amp;ws=1&amp;k=${encodeURIComponent(ed.key)}" title="Certificado de qualidade"></iframe></div></div>`;
+      <div class="cqsheet cqwsf"><iframe id="cq-frame" src="cert.html?v=${window.CQ_V || 1}&amp;ws=1&amp;k=${encodeURIComponent(ed.key)}" title="Certificado de qualidade"></iframe></div></div>`;
     S.cqLotRow = lotRow; S.cqLots = lots;
     const fr = $('#cq-frame');
     cqFrameFit();
@@ -13690,7 +13815,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       for (const x of lots) {
         while (n <= max && usado(n)) n++;
         if (n > max) break;
-        put(byI(n, 'desc'), descr(x)); put(byI(n, 'espec'), espec(x)); put(byI(n, 'material'), fil(x.liga)); put(byI(n, 'corrida'), fil(x.corrida));
+        put(byI(n, 'desc'), (app.descSugerida && app.descSugerida(descr(x))) || descr(x));   /* v58: descrição no padrão da Qualidade */ put(byI(n, 'espec'), espec(x)); put(byI(n, 'material'), fil(x.liga)); put(byI(n, 'corrida'), fil(x.corrida));
         const d = CD[x.id];
         if (corrTem(d)) {
           const MC = { 2: 'esc', 3: 'res', 4: 'along', 5: 'red', 6: 'dur', 9: 'chT', 10: 'chJ' };
@@ -18051,7 +18176,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     var kids = function (el) { return Array.prototype.slice.call(el.children); };
     var hd = src.querySelector(':scope > [data-pg=hd]'), ft = src.querySelector(':scope > [data-pg=ft]'), flow = src.querySelector(':scope > [data-pg=flow]'), wm = src.querySelector('[data-pg=wm]');
     if (wm) wm.remove(); /* marca d'água (RASCUNHO) sai em todas as páginas */
-    var pages = [], cur = null, fresh = true;
+    var pages = [], cur = null, fresh = true, copia = flow.cloneNode(true);   /* v59: se algo falhar, o relatório sai inteiro sem paginar */
     function newPage() {
       var pg = document.createElement('div'); pg.className = 'pgA4';
       if (wm) pg.appendChild(wm.cloneNode(true));
@@ -18076,7 +18201,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     }
     function altura(b) {
       var m = document.createElement('div'); m.style.cssText = 'position:absolute;left:-10000px;top:0;width:' + cur.clientWidth + 'px'; document.body.appendChild(m);
-      m.appendChild(b); var cs = getComputedStyle(b), h = b.getBoundingClientRect().height / CQZ() + parseFloat(cs.marginTop || 0) + parseFloat(cs.marginBottom || 0);
+      m.appendChild(b); var cs = getComputedStyle(b), h = b.getBoundingClientRect().height / (typeof CQZ === 'function' ? CQZ() : 1) +   /* v59: na folha de impressão (iframe) não existe CQZ: o erro apagava o corpo do relatório */ parseFloat(cs.marginTop || 0) + parseFloat(cs.marginBottom || 0);
       m.removeChild(b); m.remove(); return h;
     }
     function split(b) {
@@ -18123,7 +18248,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         newPage(); kids(flow).forEach(place);
         var N = pages.length, pf = src.getAttribute('data-pag') || 'Página {i} de {n}'; pages.forEach(function (pg, i) { var pn = pg.querySelector('.pgn'); if (pn) pn.textContent = pf.replace(/\{i\}/g, i + 1).replace(/\{n\}/g, N); });
         src.remove(); document.documentElement.classList.add('pagin');
-      } catch (e) { pages.forEach(function (pg) { pg.remove(); }); src.style.display = ''; }
+      } catch (e) { pages.forEach(function (pg) { pg.remove(); }); flow.replaceWith(copia); src.style.display = ''; }
       window.__pgPronto = true;
     }
     /* com fonte da internet (relatório diário/mensal), espera a fonte chegar para medir certo */
@@ -18668,7 +18793,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         [M_PAPEIS.adm, 'Libera o acesso das pessoas (Usuários), mantém as configurações, aprova os documentos deste manual e guarda as cópias de segurança.'],
         [M_PAPEIS.qual, 'Lança e acompanha lotes, NCF, NCC, certificados, calibração, soldagem e avaliação de fornecedores; decide o destino do material reprovado; acompanha os Alertas.'],
         [M_PAPEIS.conf, 'Confere a nota e o material e lança os lotes; imprime e cola as etiquetas.'],
-        [M_PAPEIS.insr, 'Faz o RIR de cada nota recebida e abre a NCF dos lotes reprovados, pelo tablet.'],
+        [M_PAPEIS.insr, 'Faz o RIR de cada nota recebida (o lote reprovado vai sozinho para a fila da NCF) e abre NCF pelo tablet só para problema encontrado fora do RIR.'],
         [M_PAPEIS.insu, 'Faz o RIF de cada item usinado, pelo tablet.'],
         [M_PAPEIS.comp, 'Recebe as cobranças da NCF e trata com o fornecedor a disposição e a ação corretiva.']
       ])],
@@ -18677,7 +18802,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ['Descrição das etapas', MOL([
         '<b>Recebimento</b> (Conferente · Lotes AV). Conferir a NF com o material e lançar um lote AV para cada material da nota, com corrida, quantidade e certificado da usina. Imprimir a etiqueta com QR code e colar no material. Lançar os dados da corrida (química e mecânica) do certificado da usina. Saída: lotes “aguardando RIR”.',
         '<b>Inspeção de recebimento</b> (Inspetor de recebimento · RIR). Fazer o checklist da nota no tablet, marcando AP, RP ou N/A, anotando medidas com instrumento calibrado e tirando fotos. Concluir e assinar. Saída: cada lote Aprovado ou Reprovado; o reprovado fica bloqueado e entra na fila da NCF.',
-        '<b>Não conformidade</b> (Inspetor + Qualidade · NCF). O inspetor abre a NCF do lote reprovado no tablet; a Qualidade numera, trata com o fornecedor (disposição, causa, ação corretiva), registra o destino do lote (devolvido, retrabalhado ou sucateado) e conclui após a verificação de eficácia. A liberação sob concessão é decidida na fila de reprovados, antes de abrir a NCF.',
+        '<b>Não conformidade</b> (Inspetor + Qualidade · NCF). O lote reprovado no RIR vai para a fila; a Qualidade abre a NCF na Central, já com os itens RP do RIR e as fotos que escolher (problema encontrado fora do RIR o inspetor abre pelo tablet); a Qualidade numera, trata com o fornecedor (disposição, causa, ação corretiva), registra o destino do lote (devolvido, retrabalhado ou sucateado) e conclui após a verificação de eficácia. A liberação sob concessão é decidida na fila de reprovados, antes de abrir a NCF.',
         '<b>Produção e usinagem</b>. A chegada das peças para inspeção é registrada no quadro do RIF (pedido de venda e itens).',
         '<b>Inspeção final</b> (Inspetor de usinagem · RIF). Medir as cotas da norma ou do desenho, fazer a inspeção visual, informar instrumentos e soldador e assinar. Saída: RIF-AAAA-NNNNN aprovado ou reprovado; item reprovado é reinspecionado.',
         '<b>Certificado de qualidade</b> (Qualidade · Certificados). Os pedidos faturados entram na fila pela lista do Omie. O certificado puxa os lotes do pedido e os dados da corrida e confere o RIF. Lote bloqueado só entra com justificativa. Saída: certificado emitido e revisão guardada.',
@@ -18767,7 +18892,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     { id: 'it03', cod: 'IT-QUA-03', tipo: 'Instrução de trabalho', tit: 'Não conformidade de fornecedor (NCF) e destino do lote', cols: ['rnc', 'rnctab'], sec: [
       ['Objetivo', MP('Registrar e tratar a não conformidade de material de fornecedor, decidir o destino do material reprovado e verificar a eficácia da ação corretiva, dentro dos prazos.')],
       ['Aplicação', MP('Lotes reprovados no recebimento, na inspeção de processo ou na inspeção final, e não conformidades de fornecedor sem lote (com justificativa).')],
-      ['Responsabilidades', MRESP([[M_PAPEIS.insr, 'Abre a NCF do lote reprovado pelo tablet, com descrição e fotos, e assina a abertura.'], [M_PAPEIS.qual, 'Numera e trata a NCF (disposição, contenção, causa, ação corretiva, eficácia), decide o destino do lote e aprova.'], [M_PAPEIS.comp, 'Recebe as cobranças e obtém do fornecedor a disposição e a causa raiz.']])],
+      ['Responsabilidades', MRESP([[M_PAPEIS.insr, 'Reprova o lote no RIR, com anotações e fotos (a NCF sai do RIR, aberta na Central). Problema achado fora do RIR: abre a NCF pelo tablet, com descrição e fotos, e assina a abertura.'], [M_PAPEIS.qual, 'Numera e trata a NCF (disposição, contenção, causa, ação corretiva, eficácia), decide o destino do lote e aprova.'], [M_PAPEIS.comp, 'Recebe as cobranças e obtém do fornecedor a disposição e a causa raiz.']])],
       ['Abrir a NCF pelo tablet (inspetor)', MOL([
         'No tablet, abrir <b>NCF</b> (cartão <b>Abrir NCF</b> do início do tablet; o lote tocado na <b>Fila de hoje</b> já abre a NCF dele). O cartão “Lotes reprovados esperando NCF” lista os lotes reprovados; tocar em <b>Abrir NCF →</b>. Para outro lote, usar <b>Ler QR de etiqueta</b> (início) ou <b>Ler etiqueta e abrir NCF</b>, ou digitar o número (AV-26-20000 ou só 20000).',
         'No tablet, deitado ou em pé, a tela tem o <b>painel da esquerda</b> com os passos (Material, Problema, Assinar e enviar) e o lote; <b>«</b> recolhe o painel (ficam só os números dos passos) e <b>»</b> abre de novo.',
@@ -19528,18 +19653,20 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const pend = tbPendNcf().sort((a, b) => (lotMeta(b).inspEm || lotMeta(b)._u || 0) - (lotMeta(a).inspEm || lotMeta(a)._u || 0));
     const mine = S.model.rnc.filter((r) => { const m = rmeta(r); return m.abAss && m.abAss.uid && m.abAss.uid === DB.me; }).sort((a, b) => b.data - a.data).slice(0, 12);
     const dr = tbDrafts();
-    const lotRow = (a) => { const lm = lotMeta(a), at = ((lotSt(a).insp || {}).at) || lm.inspEm || lm._u || lm._c; return `<div class="tblr"><div><div class="t"><b>${esc(a.id)}</b><span class="chip crit"><i>✕</i>Reprovado</span></div><div class="d">${esc(lotTxt(a))}</div><div class="m">${esc(a.forn || 'sem fornecedor')} · NF ${esc(disp(a.nf) || '—')}${a.quant != null ? ' · ' + esc(disp(a.quant)) + ' ' + esc(a.und || '') : ''}</div>${motRepOf(a) ? `<div class="w">“${esc(motRepOf(a))}”</div>` : ''}<div class="w">${at ? 'reprovado ' + (dmy(at) === dmy(Date.now()) ? 'hoje' : 'em ' + dmy(at)) + ' às ' + hhmm(at) : ''}${lm._ub || lm._cb ? ' por ' + esc(who(lm._ub || lm._cb)) : ''}</div></div><button class="btn red" type="button" data-act="tb-lot" data-key="${esc(a.key)}">Abrir NCF →</button></div>`; };
+    const lotRow = (a) => { const lm = lotMeta(a), at = ((lotSt(a).insp || {}).at) || lm.inspEm || lm._u || lm._c; return `<div class="tblr"><div><div class="t"><b>${esc(a.id)}</b><span class="chip crit"><i>✕</i>Reprovado</span></div><div class="d">${esc(lotTxt(a))}</div><div class="m">${esc(a.forn || 'sem fornecedor')} · NF ${esc(disp(a.nf) || '—')}${a.quant != null ? ' · ' + esc(disp(a.quant)) + ' ' + esc(a.und || '') : ''}</div>${motRepOf(a) ? `<div class="w">“${esc(motRepOf(a))}”</div>` : ''}<div class="w">${at ? 'reprovado ' + (dmy(at) === dmy(Date.now()) ? 'hoje' : 'em ' + dmy(at)) + ' às ' + hhmm(at) : ''}${lm._ub || lm._cb ? ' por ' + esc(who(lm._ub || lm._cb)) : ''}</div></div><span class="chip">NCF pela Central</span></div>`; };
     const drRow = (o) => { const ls = (o.lots || []).map((k) => S.model.av.find((a) => a.key === k)).filter(Boolean), pendCad = !ls.length && !o.semLote && o.lotTxt; return `<div class="tblr"><div><div class="t"><b style="font-family:var(--f-body)">${pendCad ? 'Lote ' + esc(o.lotTxt) + ' ainda não cadastrado' : ls.length ? esc(ls.map((a) => a.id).join(', ')) : o.semLote ? 'Sem lote' : 'Rascunho'}</b>${pendCad ? (tbFindLot(o.lotTxt) ? '<span class="chip ok"><i>✓</i>lote cadastrado</span>' : '<span class="chip warn"><i>!</i>aguardando cadastro</span>') : ''}</div><div class="m">${esc([o.motivo, o.desc].filter(Boolean).join(' · ').slice(0, 90)) || 'sem descrição'} · ${(o.fotos || []).length} foto(s)</div><div class="w">salvo ${dmy(o.upd)} às ${hhmm(o.upd)}</div></div><div style="display:grid;gap:6px"><button class="btn" type="button" data-act="tb-cont" data-key="${esc(o.id)}">Continuar</button><button class="btn ghost small" type="button" data-act="tb-del" data-key="${esc(o.id)}">Descartar</button></div></div>`; };
     return {
       body: `<div class="tbrow2"><button class="btn dk big" type="button" data-act="tb-nova">▣&nbsp; Ler etiqueta e abrir NCF</button><button class="btn big" type="button" data-act="tb-mine">☰&nbsp; Minhas NCFs</button></div>
-        <div class="tbcard"><div class="ch">Lotes reprovados esperando NCF<span class="cnt">${pend.length}</span></div>${pend.length ? pend.map(lotRow).join('') : '<div class="tbnone">Nenhum lote reprovado esperando NCF. 👍</div>'}</div>
+        <div class="tbcard"><div class="ch">Lotes reprovados no RIR<span class="cnt">${pend.length}</span></div><div class="tbnote" style="padding:10px 16px 0">A NCF destes lotes é aberta na Central pela Qualidade, com os dados e as fotos do RIR. Aqui no tablet, abra NCF só para problema encontrado fora do RIR.</div>${pend.length ? pend.map(lotRow).join('') : '<div class="tbnone">Nenhum lote reprovado esperando NCF. 👍</div>'}</div>
         ${dr.length ? `<div class="tbcard"><div class="ch gr">Rascunhos neste tablet</div>${dr.map(drRow).join('')}</div>` : ''}
         ${!cw('rnc') ? tbMineInsp() : `<div class="tbcard" id="tb-mine"><div class="ch gr">Minhas NCFs</div>${mine.length ? mine.map((r) => `<div class="tblr"><div><div class="t"><b>${esc(r.num)}</b>${chipRnc(r.status)}</div><div class="m">${esc(r.forn || '—')} · ${esc(r.motivo || '')}</div><div class="w">aberta em ${esc(fmtTs(r.data))}</div></div><button class="btn" type="button" data-act="rr-print" data-key="${esc(r.key)}">Imprimir</button></div>`).join('') : '<div class="tbnone">Você ainda não abriu NCF pelo tablet.</div>'}</div>`}`,
       foot: `<span class="tbnet"><i></i>a lista atualiza sozinha</span>`,
     };
   }
+  /* v59: lote reprovado no RIR e ainda sem NCF: a NCF é aberta na Central (com o RIR), não no tablet */
+  const tbDoRir = (a) => { const st = a && lotSt(a); return st && st.st === 'pend' && st.insp && st.insp.rid ? st.insp : null; };
   function tbS1() {
-    const d = TB.d, ls = tbLots(d), a0 = ls[0];
+    const d = TB.d, ls = tbLots(d), a0 = ls[0], rirA = ls.map(tbDoRir).find(Boolean);
     const sug = a0 ? S.model.av.filter((a) => a.key !== a0.key && E.filled(a0.nf) && E.key(a.forn) === E.key(a0.forn) && String(a.nf) === String(a0.nf)).slice(0, 30) : [];
     const found = a0 ? `<div class="tbfound"><div class="t">✓ Lote encontrado<em>preenchido sozinho</em></div>
       <div class="kv2"><span>Fornecedor</span><b>${esc(a0.forn || '—')}</b></div><div class="kv2"><span>Nota fiscal</span><b class="mono">${esc(disp(a0.nf) || '—')}</b></div>
@@ -19552,7 +19679,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     return {
       body: `<div class="tbcard"><div class="ch">Qual é o lote?<span>leia o QR da etiqueta ou digite</span></div><div class="cb">
         <div class="tbrowq"><input id="tb-lot" class="tbin big" placeholder="AV-26-20000 ou só 20000" value="${esc(a0 ? a0.id : d.lotTxt)}" autocomplete="off" inputmode="text"><button class="btn dk big" type="button" data-act="tb-scan" ${'BarcodeDetector' in window ? '' : 'hidden'}>▣&nbsp; Ler QR</button><button class="btn big" type="button" data-act="tb-busca">Buscar</button></div>
-        ${found}<label class="tbsl"><input type="checkbox" id="tb-sl" ${d.semLote ? 'checked' : ''}> Esta NCF não tem lote</label></div></div>
+        ${rirA ? `<div class="tbwarn">Este lote foi reprovado no <b>${esc(rirA.rir || 'RIR')}</b>. A NCF dele é aberta na Central pela Qualidade, com os dados e as fotos do RIR: não precisa abrir aqui.</div>` : ''}${found}<label class="tbsl"><input type="checkbox" id="tb-sl" ${d.semLote ? 'checked' : ''}> Esta NCF não tem lote</label></div></div>
         <div class="tbcard"><div class="ch">Onde foi encontrado?</div><div class="cb"><div class="tbchips">${RN_ORIG.map((o) => `<button type="button" class="chip2${d.origem === o ? ' on' : ''}" data-act="tb-orig" data-key="${esc(o)}">${esc(o)}</button>`).join('')}</div></div></div>
         <div class="tbcard"><div class="ch">Setor responsável</div><div class="cb"><div class="tbchips">${cfgL('RNC_DEPTOS').map((o) => `<button type="button" class="chip2${d.setor === o ? ' on' : ''}" data-act="tb-setor" data-key="${esc(o)}">${esc(o)}</button>`).join('')}</div></div></div>`,
       foot: `${tbRasc()}<span class="grow"></span><button class="btn big" type="button" data-act="tb-home">Cancelar</button><button class="btn red big" type="button" data-act="tb-next">Problema</button>`,
@@ -19635,6 +19762,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (!d.desc.trim()) { toast('Descreva a não conformidade (passo 2).', true); return; }
     if (!ls.length && !d.semLote) { toast('O lote ainda não foi cadastrado.', true); return; }
     if (d.semLote && (!d.forn.trim() || !d.just.trim())) { toast('Sem lote: informe o fornecedor e a justificativa (passo 1).', true); return; }
+    if (d.semLote) { const of = fornCad(d.forn); if (!of) { toast(`${d.forn.trim()} não está cadastrado em Fornecedores: escolha da lista ou peça o cadastro para a Qualidade.`, true); return; } d.forn = of; }
     if (!d.ok) { toast('Marque a confirmação antes de enviar.', true); return; }
     const b = $('[data-act="tb-send"]'); if (b) { b.disabled = true; b.textContent = 'Enviando…'; }
     TB.err = null;
@@ -19702,7 +19830,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'tb-ir') { closeLayer(); if (key === 'central') go(firstView() || 'painel'); else go(key); return true; }
     if (a === 'tb-pc') { tbPedirCorr(key); return true; }
     if (a === 'tb-nova') { TB.d = tbNew([]); TB.step = 1; TB.err = null; tbPersist(); render(); window.scrollTo(0, 0); return true; }
-    if (a === 'tb-lot') { TB.d = tbNew([key]); const lt = S.model.av.find((x) => x.key === key); if (lt) TB.d.forn = lt.forn || ''; TB.step = 2; TB.err = null; tbPersist(); render(); window.scrollTo(0, 0); return true; }
+    if (a === 'tb-lot') { const lt0 = S.model.av.find((x) => x.key === key); if (tbDoRir(lt0)) { toast('Lote reprovado no RIR: a NCF é aberta na Central, com o RIR.', true); return true; } TB.d = tbNew([key]); const lt = S.model.av.find((x) => x.key === key); if (lt) TB.d.forn = lt.forn || ''; TB.step = 2; TB.err = null; tbPersist(); render(); window.scrollTo(0, 0); return true; }
     if (a === 'tb-cont') { const o = tbDrafts().find((q) => q.id === key); if (!o) return true; TB.d = Object.assign(tbNew([]), o); if (!TB.d.lots.length && TB.d.lotTxt) { const lt = tbFindLot(TB.d.lotTxt); if (lt) { TB.d.lots = [lt.key]; TB.d.forn = lt.forn || ''; } } TB.step = TB.d.lots.length || TB.d.semLote ? 3 : 1; TB.err = null; render(); window.scrollTo(0, 0); return true; }
     if (a === 'tb-del') { confirmBox('Descartar rascunho', 'O rascunho e as fotos dele saem deste tablet.', 'Descartar', () => { tbDropDraft(key); render(); }, true); return true; }
     if (a === 'tb-home') { if (TB.scan) TB.scan(); if (d && (d.desc || d.fotos.length || d.lots.length || d.lotTxt)) tbPersist(); TB.d = null; TB.step = 0; S.stale = false; render(); return true; }
@@ -19723,7 +19851,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'tb-qset') { d.qtdRep = String(key); tbPersist(); const y = window.scrollY; render(); window.scrollTo(0, y); return true; }
     if (a === 'tb-qdig') { const q = $('#tb-q'); if (q) { q.focus(); q.select(); } return true; }
     if (a === 'tb-fdel') { d.fotos.splice(Number(key), 1); tbPersist(); const y = window.scrollY; render(); window.scrollTo(0, y); return true; }
-    if (a === 'tb-next') { tbGo(TB.step + 1); return true; }
+    if (a === 'tb-next') { if (TB.step === 1 && TB.d && tbLots(TB.d).some(tbDoRir)) { toast('Lote reprovado no RIR: a NCF é aberta na Central, com o RIR.', true); return true; } tbGo(TB.step + 1); return true; }
     if (a === 'tb-passo') { const k = +key; if (k >= 1 && k < TB.step) tbGo(k); return true; }
     if (a === 'tb-back') { tbGo(TB.step - 1); return true; }
     if (a === 'tb-send') { tbSend(); return true; }
