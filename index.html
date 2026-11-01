@@ -1085,6 +1085,8 @@ body.tabmode .main { padding: 0 !important; }
 .effr small { display: block; color: var(--ink-3); font-size: 12px; } .effr .btn { width: 96px; justify-content: center; }
 .effin { height: 32px; border: 1px solid var(--line-2); border-radius: 6px; padding: 0 8px; font: inherit; background: var(--surface); color: var(--ink); }
 @media (max-width: 760px) { .effr { grid-template-columns: 1fr 1fr; } .effr > div { grid-column: 1 / -1; } }
+.effr.calr { grid-template-columns: minmax(0, 1fr) minmax(180px, 260px) 136px; }   /* v63 */
+@media (max-width: 760px) { .effr.calr { grid-template-columns: 1fr 136px; } .effr.calr > div:first-child { grid-column: 1 / -1; } .effr.calr > div:nth-child(2) { grid-column: 1; } }
 /* v59: Abrir NCF da fila · dados e fotos do RIR */
 .abrir { display: grid; gap: 8px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--surface-2); }
 .abrh { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; } .abrh .grow { flex: 1; }
@@ -2210,6 +2212,18 @@ body.tvmode .tvbar { display: none !important; }   /* v47: no painel rolando nã
 .rtseg button.ap { background: var(--ok); color: #fff; } .rtseg button.rp { background: var(--crit); color: #fff; } .rtseg button.na { background: #5b6560; color: #fff; }
 .rtc .jst .rtseg button { height: 48px; min-width: 64px; font-size: 15px; }
 .rtins { display: flex; flex-wrap: wrap; gap: 9px; }
+.riinsadd { display: grid; gap: 10px; margin-top: 10px; width: 100%; flex: 1 0 100%; grid-column: 1 / -1; } .riinsrec { display: grid; gap: 6px; } .riinsrec > span { font-size: 13px; }
+.riv .chip2 { min-height: 48px; padding: 0 14px; font-size: 14.5px; }
+.riinsadd .rtins { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 8px; }
+.riinsadd .rtins .chip2 { width: 100%; justify-content: flex-start; text-align: left; padding: 6px 16px; line-height: 1.3; }
+.riinsadd .rtins .tbnote { grid-column: 1 / -1; }
+.riinsadd .chip2.venc { border-style: dashed; color: var(--crit); opacity: 1; }
+.fxins { display: grid; gap: 12px; } .fxins .riinsadd { margin-top: 0; } .fxfoot { display: grid; grid-template-columns: minmax(0, 1fr); } .fxfoot .btn { justify-content: center; min-height: 44px; }   /* v63 */
+.riinsl { display: grid; gap: 8px; } .riinsl .lchip.sel { display: grid; grid-template-columns: auto minmax(0, 1fr) 32px; align-items: center; column-gap: 10px; min-height: 48px; padding: 4px 6px 4px 14px; border-radius: 12px; } .riinsl .lchip.sel .x { width: 32px; height: 32px; display: grid; place-items: center; }   /* v63 */
+.calav { display: grid; gap: 10px; } .calav:empty { display: none; } .calav .effora { margin: 0; } .calav .effh .btn, .calav .effr .btn { width: 136px; justify-content: center; } .calav .effh { padding-right: 9px; }   /* v63 */
+.cjsrow .pvs-in { width: 210px; } .cjsjt { font: 500 11px var(--f-body); color: var(--warn); margin-left: 4px; }   /* v64 */
+.cjsq { display: grid; gap: 10px; margin-top: 8px; } .cjsqb { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .cjsqb .btn { justify-content: center; min-height: 40px; white-space: normal; }
+.instag { font-style: normal; font-weight: 600; font-size: 12px; color: var(--cal); margin-left: 6px; white-space: nowrap; }   /* v63: seu / uso comum */
 .rtins:empty { display: none; }
 .rtres { display: grid; place-items: center; gap: 4px; border-radius: 14px; padding: 18px; background: var(--ok); color: #fff; text-align: center; }
 .rtres.rp { background: var(--crit); } .rtres.pd { background: #5b6560; }
@@ -5546,7 +5560,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 60; window.CQ_V = APP_V;
+    const APP_V = 64; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -5932,7 +5946,7 @@ var ENGINE = (function () {
       var x = { mod: 'INS', row: r, key: o.__k, codigo: str(o.A), desc: str(o.B), marca: str(o.C), cert: str(o.D), dataCal: toSerial(o.E), freq: (typeof o.F === 'number' ? o.F : (o.F == null ? null : +o.F)),
         resp: str(o.K), depto: str(o.L), obs: str(o.M), tipo: str(o.P), resCal: o.Q, situacao: str(o.S), pending: mins.pend.get(r) || null, raw: o,
         serie: str(o.U), faixa: str(o.V), resol: str(o.W), emaInst: num(o.X), incert: num(o.Y), lab: str(o.Z), custo: num(o.AA), local: str(o.AB),
-        envio: toSerial(o.AC), prevRet: toSerial(o.AD), verifFreq: num(o.AE), verifData: toSerial(o.AF), baixaData: toSerial(o.AG), baixaMotivo: str(o.AH) };
+        envio: toSerial(o.AC), prevRet: toSerial(o.AD), verifFreq: num(o.AE), verifData: toSerial(o.AF), baixaData: toSerial(o.AG), baixaMotivo: str(o.AH), com: str(o.AI) };
       var t = tipos[low(o.P)];
       /* critério de aceitação = Erro Máximo Admissível (EMA): o do instrumento ou, se vazio, o do tipo de equipamento */
       x.emaTipo = (t && typeof t.ema === 'number') ? t.ema : null;
@@ -6061,14 +6075,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     AV: { A: 'id', B: 'data', C: 'filial', D: 'volume', E: 'corrida', F: 'desc', G: 'diam', H: 'esp', I: 'liga', J: 'norma', K: 'forn', L: 'nf', M: 'pc', N: 'pv', O: 'cert', P: 'conf', Q: 'retrab', R: 'quant', S: 'und', T: 'certLink', U: 'insp', V: 'motRep' },
     SERV: { A: 'data', B: 'desc', C: 'nf', D: 'forn', E: 'pc', F: 'pv', G: 'cert' },
     RNC: { A: 'num', B: 'data', D: 'comprador', E: 'filial', F: 'emissor', G: 'forn', H: 'cliente', I: 'nf', J: 'pv', K: 'oc', L: 'depto', M: 'motivo', P: 'disp', Q: 'fechDisp', R: 'corretiva', T: 'nivel', V: 'analise', X: 'conclusao', Y: 'cancel', Z: 'info', AA: 'emPara', AB: 'emCc', AC: 'lotesAV', AD: 'abrang', AE: 'abrJust' },
-    INS: { A: 'codigo', B: 'desc', C: 'marca', D: 'cert', E: 'dataCal', F: 'freq', K: 'resp', L: 'depto', M: 'obs', P: 'tipo', Q: 'resCal', S: 'situacao', U: 'serie', V: 'faixa', W: 'resol', X: 'emaInst', Y: 'incert', Z: 'lab', AA: 'custo', AB: 'local', AC: 'envio', AD: 'prevRet', AE: 'verifFreq', AF: 'verifData', AG: 'baixaData', AH: 'baixaMotivo' },
+    INS: { A: 'codigo', B: 'desc', C: 'marca', D: 'cert', E: 'dataCal', F: 'freq', K: 'resp', L: 'depto', M: 'obs', P: 'tipo', Q: 'resCal', S: 'situacao', U: 'serie', V: 'faixa', W: 'resol', X: 'emaInst', Y: 'incert', Z: 'lab', AA: 'custo', AB: 'local', AC: 'envio', AD: 'prevRet', AE: 'verifFreq', AF: 'verifData', AG: 'baixaData', AH: 'baixaMotivo', AI: 'com' },
     RNCC: { A: 'num', B: 'data', C: 'filial', D: 'emissor', E: 'cliente', F: 'contato', G: 'canal', H: 'nf', I: 'pv', J: 'lotes', K: 'produto', L: 'qtd', M: 'desc', N: 'motivo', O: 'gravidade', P: 'procedente', Q: 'contencao', R: 'contData', S: 'disp', T: 'setor', U: 'origem', V: 'rncf', W: 'causa', X: 'acao', Y: 'resp', Z: 'acaoPrazo', AA: 'respData', AB: 'eficacia', AC: 'eficData', AD: 'conclusao', AE: 'cancel', AF: 'info' }
   };
   const FLABEL = {
     id: 'ID', data: 'Data', filial: 'Filial', volume: 'Volume', corrida: 'Corrida', desc: 'Descrição', diam: 'Diâmetro', esp: 'Espessura', liga: 'Liga/Tipo', norma: 'Material', forn: 'Fornecedor', nf: 'Nota fiscal', pc: 'Pedido de compra', pv: 'Pedido de venda',
     cert: 'Certificado', conf: 'Conferido', retrab: 'Retrabalho', num: 'Número', comprador: 'Comprador', emissor: 'Emissor', cliente: 'Cliente', oc: 'Ordem de compra', depto: 'Departamento', motivo: 'Motivo', disp: 'Disposição',
     fechDisp: 'Fechamento da disposição', corretiva: 'Corretiva?', nivel: 'Nível do prazo', analise: 'Análise crítica', conclusao: 'Conclusão', cancel: 'Cancelada', info: 'Informações', codigo: 'Código', marca: 'Marca', dataCal: 'Data da calibração',
-    freq: 'Frequência', resp: 'Responsável', obs: 'Observação', tipo: 'Tipo de equipamento', resCal: 'Maior erro encontrado', situacao: 'Situação', serie: 'Nº de série', faixa: 'Faixa de medição', resol: 'Resolução', emaInst: 'EMA do instrumento', incert: 'Incerteza (U)', lab: 'Laboratório', custo: 'Custo da calibração', local: 'Local / com quem está', envio: 'Enviado ao laboratório em', prevRet: 'Previsão de retorno', verifFreq: 'Verificação intermediária (meses)', verifData: 'Última verificação intermediária', baixaData: 'Data da baixa', baixaMotivo: 'Motivo da baixa',
+    freq: 'Frequência', resp: 'Responsável', obs: 'Observação', tipo: 'Tipo de equipamento', resCal: 'Maior erro encontrado', situacao: 'Situação', serie: 'Nº de série', faixa: 'Faixa de medição', resol: 'Resolução', emaInst: 'EMA do instrumento', incert: 'Incerteza (U)', lab: 'Laboratório', custo: 'Custo da calibração', local: 'Local', com: 'Com quem está', envio: 'Enviado ao laboratório em', prevRet: 'Previsão de retorno', verifFreq: 'Verificação intermediária (meses)', verifData: 'Última verificação intermediária', baixaData: 'Data da baixa', baixaMotivo: 'Motivo da baixa',
     contato: 'Contato', canal: 'Canal', lotes: 'Lotes / corridas', produto: 'Produto', qtd: 'Quantidade afetada', gravidade: 'Gravidade', procedente: 'Procedente', contencao: 'Contenção', contData: 'Data da contenção', setor: 'Setor responsável',
     origem: 'Origem da causa', quant: 'Quantidade', und: 'Unidade', certLink: 'Link do certificado', insp: 'Resultado da inspeção', rncf: 'NCF vinculada', causa: 'Causa raiz', acao: 'Ação corretiva', acaoPrazo: 'Prazo da ação', respData: 'Resposta ao cliente', eficacia: 'Eficácia', eficData: 'Data da verificação', emPara: 'E-mails (Para)', emCc: 'E-mails (Cópia)', lotesAV: 'Lotes afetados', motRep: 'Motivo da reprovação', abrang: 'Abrangência da NCF', abrJust: 'Justificativa (sem lote)'
   };
@@ -7218,7 +7232,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       await resolveNames(insEvOf(x).map((e) => e.by));
       const ic = insCert(x), w = cw('ins'), sit = E.low(x.situacao);
       pairs = [['Código', `<span class="mono">${esc(x.codigo)}</span>`], ['Status', chipIns(x.status)], ['Descrição', t(x.desc)], ['Tipo de equipamento', t(x.tipo)], ['Marca', t(x.marca)], ['Nº de série', t(x.serie)], ['Faixa de medição', t(x.faixa)], ['Resolução', t(x.resol)],
-        ['Setor', t(x.depto)], ['Local / com quem está', t(x.local)], ['Situação operacional', t(x.situacao)],
+        ['Setor', t(x.depto)], ['Com quem está', t(x.com)], ['Local', t(x.local)], ['Situação operacional', t(x.situacao)],
         ['Data da calibração', fD(x.dataCal)], ['Laboratório', t(x.lab)], ['Nº do certificado', t(x.cert)],
         ['Certificado (arquivo)', ic.certUrl ? `<a class="btn small" href="${esc(ic.certUrl)}" target="_blank" rel="noopener noreferrer">Ver certificado ↗</a> <span class="muted">${esc(ic.certArq || '')}${ic.certEm ? ' · enviado em ' + dmy(ic.certEm) : ''}</span>` : '<span class="muted">nenhum arquivo enviado</span>'],
         ['Frequência', x.freq ? x.freq + ' meses' : ''], ['Validade', fD(x.validade) + (x.dias != null && x.emUso ? ` <span class="muted">(${x.dias < 0 ? 'vencido há ' + NF.format(-x.dias) + ' dia(s)' : x.dias === 0 ? 'vence hoje' : 'faltam ' + NF.format(x.dias) + ' dia(s)'})</span>` : '')],
@@ -9058,9 +9072,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     fr.srcdoc = html;
   }
   /* v53: depois de gravar os lotes, a pergunta da etiqueta (precisa responder: não fecha clicando fora nem com Esc) */
-  function avmPerguntaEtiquetas(keys) {
+  function avmPerguntaEtiquetas(keys, ids) {
     if (!keys || !keys.length) return;
-    const n = keys.length, faixa = n === 1 ? keys[0] : n === 2 ? `${keys[0]} e ${keys[1]}` : `${keys[0]} a ${keys[n - 1]}`;
+    const I = ids && ids.length === keys.length ? ids : keys, n = keys.length, faixa = n === 1 ? I[0] : n === 2 ? `${I[0]} e ${I[1]}` : `${I[0]} a ${I[n - 1]}`;
     $('#layer').innerHTML = `<div class="scrim"></div><div class="modal" role="alertdialog" aria-modal="true" aria-label="Imprimir etiquetas" data-trava="1"><h2>${n === 1 ? 'Lote gravado' : n + ' lotes gravados'}</h2>
       <p style="margin:0">${esc(faixa)}</p><p style="margin:0;font-weight:600">Imprimir ${n === 1 ? 'a etiqueta' : 'as etiquetas'} agora?</p>
       <div class="formfoot avm-etq"><button class="btn primary" type="button" id="avm-etq-sim">Sim, imprimir</button><button class="btn" type="button" id="avm-etq-nao">Não</button></div></div>`;
@@ -9250,7 +9264,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       { k: 'codigo', l: 'Código', cls: 'mono', w: 10, f: (x) => esc(x.codigo) + (insCert(x).certUrl ? ` <a class="pdfmk" href="${esc(insCert(x).certUrl)}" target="_blank" rel="noopener noreferrer" title="Ver certificado (${esc(insCert(x).certArq || '')})" data-noopen="1">PDF</a>` : '') }, { k: 'desc', l: 'Descrição', cls: 'clip', w: 34 }, { k: 'status', l: 'Status', f: (x) => chipIns(x.status), x: (x) => (INS_ST.find((o) => o[0] === x.status) || [0, 0, 0, x.status])[3], w: 18 },
       { k: 'validade', l: 'Validade', f: (x) => fD(x.validade), x: (x) => dateCell(x.validade), w: 11 }, { k: 'dias', l: 'Dias', r: 1, f: (x) => x.dias == null || !x.emUso ? '' : NF.format(x.dias) },
       { k: 'dataCal', l: 'Calibração', f: (x) => fD(x.dataCal), x: (x) => dateCell(x.dataCal), w: 11 }, { k: 'resultado', l: 'Resultado', f: (x) => (x.status === 'FORA DE USO' || x.status === 'DESCARTADO' ? '' : chipRes(x.resultado)), x: (x) => resTxt(x.resultado) },
-      { k: 'depto', l: 'Setor', cls: 'clip', w: 22 }, { k: 'local', l: 'Local / com quem está', cls: 'clip', w: 22 }, { k: 'lab', l: 'Laboratório', cls: 'clip', w: 20 }, { k: 'tipo', l: 'Tipo', cls: 'clip', w: 22 },
+      { k: 'depto', l: 'Setor', cls: 'clip', w: 22 }, { k: 'local', l: 'Com quem está / local', cls: 'clip', w: 22, s: (x) => insOnde(x), f: (x) => esc(insOnde(x)), x: (x) => insOnde(x) }, { k: 'lab', l: 'Laboratório', cls: 'clip', w: 20 }, { k: 'tipo', l: 'Tipo', cls: 'clip', w: 22 },
       { k: 'resCal', l: 'Maior erro', r: 1, f: (x) => esc(fNum(x.resCal)) }, { k: 'incert', l: 'Incerteza', r: 1, f: (x) => esc(fNum(x.incert)) }, { k: 'ema', l: 'EMA (±)', r: 1, f: (x) => esc(fNum(x.ema)) },
       { k: 'freq', l: 'Freq. (meses)', r: 1 }, { k: 'situacao', l: 'Situação' }, { k: 'resp', l: 'Responsável', cls: 'clip' }, { k: 'marca', l: 'Marca', cls: 'clip' }, { k: 'serie', l: 'Nº de série', cls: 'mono' }, { k: 'cert', l: 'Nº do certificado', cls: 'clip', w: 24 }]
   };
@@ -9577,7 +9591,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const n = S.calN || 60, sl = rows.slice(0, n);
     return `<div class="swall eqwall">${sl.map((x) => {
       const dt = insDiasTxt(x), lab = x.status === 'NO LABORATÓRIO' && x.lab ? 'no laboratório ' + esc(x.lab) : '';
-      return `<button type="button" class="scard eqcard st-${insCls(x)}" data-open="INS:${esc(x.key)}">${eqBox(x)}<span class="scb"><span class="scs mono">${esc(x.codigo || '—')}</span><b>${esc(x.desc || 'Instrumento')}</b><span>${chipIns(x.status)}</span><span class="eqmeta"><b>Validade</b> ${fD(x.validade) || '—'}${dt ? ' · ' + dt : ''}<br>${lab || esc([x.depto, x.resp].filter(Boolean).join(' · ') || '—')}</span></span></button>`;
+      return `<button type="button" class="scard eqcard st-${insCls(x)}" data-open="INS:${esc(x.key)}">${eqBox(x)}<span class="scb"><span class="scs mono">${esc(x.codigo || '—')}</span><b>${esc(x.desc || 'Instrumento')}</b><span>${chipIns(x.status)}</span><span class="eqmeta"><b>Validade</b> ${fD(x.validade) || '—'}${dt ? ' · ' + dt : ''}<br>${lab || esc([x.depto, x.com ? (insComum(x) ? 'uso comum' : 'com ' + x.com) : x.resp].filter(Boolean).join(' · ') || '—')}</span></span></button>`;
     }).join('')}</div>${rows.length > n ? `<div class="formfoot" style="justify-content:center;margin-top:12px"><button class="btn" type="button" data-act="cal-more">Mostrar mais ${NF.format(Math.min(60, rows.length - n))} (de ${NF.format(rows.length - n)} restantes)</button></div>` : ''}`;
   }
   function eqFichaHTML(x) {
@@ -9592,10 +9606,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (sub === 'crono') { main.innerHTML = `<div class="view">${head('Calibração', desc, acts)}${subBar}${calCronoHTML(M)}</div>`; return; }
     if (sub === 'custos') { main.innerHTML = `<div class="view">${head('Calibração', desc, acts)}${subBar}${calCustoHTML(M)}</div>`; return; }
     main.innerHTML = `<div class="view">${head('Calibração', desc, acts)}${subBar}
+      <div id="cal-avisos" class="calav"></div>
       ${multiChips('Status', INS_ST.map((o) => [o[0], o[3]]), f.status)}
       <div class="filters">${ftext('fc-q', 'Buscar', f.q, 'código, descrição, nº de série, certificado…', 1)}${fsel('fc-depto', 'Setor', distinct(M.ins, (x) => x.depto), f.depto)}${fsel('fc-resp', 'Responsável', distinct(M.ins, (x) => x.resp), f.resp)}${fsel('fc-tipo', 'Tipo de equipamento', distinct(M.ins, (x) => x.tipo), f.tipo)}${fsel('fc-res', 'Resultado', ['APROVADO', 'AGUARDANDO ANÁLISE', 'SEM CRITÉRIO', 'REPROVADO'], f.res)}<button class="btn ghost" type="button" id="f-clear">Limpar filtros</button></div><div id="tbl"></div></div>`;
     const draw = () => {
-      const rows = M.ins.filter((x) => (f.status && f.status.length ? f.status.includes(x.status) : x.status !== 'DESCARTADO') && txtMatch(f.q, [x.codigo, x.desc, x.cert, x.marca, x.serie, x.local, x.lab]) && eqL(x.depto, f.depto) && eqL(x.resp, f.resp) && eqL(x.tipo, f.tipo) && (!f.res || x.resultado === f.res));
+      const rows = M.ins.filter((x) => (f.status && f.status.length ? f.status.includes(x.status) : x.status !== 'DESCARTADO') && txtMatch(f.q, [x.codigo, x.desc, x.cert, x.marca, x.serie, x.local, x.com, x.lab]) && eqL(x.depto, f.depto) && eqL(x.resp, f.resp) && eqL(x.tipo, f.tipo) && (!f.res || x.resultado === f.res));
       const vista = lsGet('cq-cal-vista', 'cartoes'), tog = `<div class="eqtog" role="group" aria-label="Mostrar como"><button type="button" data-act="cal-vista" data-key="cartoes" aria-pressed="${vista === 'cartoes'}">▦ Cartões</button><button type="button" data-act="cal-vista" data-key="lista" aria-pressed="${vista !== 'cartoes'}">☰ Lista</button></div>`;
       if (vista !== 'cartoes') { $('#tbl').innerHTML = `<div class="eqtogbar">${tog}</div><div id="tbl2"></div>`; mountTable($('#tbl2'), { id: 'cal', rows, total: M.ins.filter(insVivo).length, noun: 'instrumentos', open: true, sort: 'dias', dir: 1, cols: COLS.INS, export: 'Instrumentos' }); return; }
       const st = S.t.cal || (S.t.cal = { sort: 'dias', dir: 1, page: 0 }), col = COLS.INS.find((c) => c.k === st.sort), sf = col ? col.s || ((x) => x[col.k]) : null;
@@ -9605,9 +9620,50 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       $('#cal-exp').onclick = () => exportRows('Instrumentos', COLS.INS.filter((c) => !c.nosort), R);
     };
     S.calDraw = draw;
+    calAvisos();
     wireFilters('cal', [['fc-q', 'q'], ['fc-depto', 'depto'], ['fc-resp', 'resp'], ['fc-tipo', 'tipo'], ['fc-res', 'res']], () => { S.calN = 60; draw(); });
     draw();
   };
+  /* v63: textos antigos do "Local / com quem está" que citam uma pessoa da Equipe: sugere ligar o instrumento a ela */
+  function insSugPessoa(x) {
+    if (E.filled(x.com) || !E.filled(x.local)) return null;
+    const P = (S.model.cfg.PESSOAS || []).filter((p) => !p.inativo && E.filled(p.nome)), loc = ' ' + E.key(x.local) + ' ';
+    const cheio = P.filter((p) => loc.includes(' ' + E.key(p.nome) + ' '));
+    if (cheio.length === 1) return cheio[0].nome;
+    const prim = (p) => E.key(p.nome).split(' ')[0];
+    const L = P.filter((p) => prim(p).length > 2 && loc.includes(' ' + prim(p) + ' '));
+    return L.length === 1 && P.filter((p) => prim(p) === prim(L[0])).length === 1 ? L[0].nome : null;   /* primeiro nome só quando não há dois iguais */
+  }
+  /* o local que só falava da pessoa ("inspetor Silson") fica vazio depois de ligar; outro texto ("armário - Silson") fica */
+  function insLocalSem(local, nome) {
+    const tira = new Set(['inspetor', 'inspetora', 'com', 'o', 'a', 'do', 'da', 'de', 'sr', 'sra'].concat(E.key(nome).split(' ')));
+    return E.key(local).split(' ').filter((w) => w && !tira.has(w)).length ? local : '';
+  }
+  function calAvisos() {
+    const host = $('#cal-avisos'); if (!host) return;
+    if (!cw('ins')) { host.innerHTML = ''; return; }
+    const L = S.model.ins.filter(insVivo).map((x) => ({ x, nome: insSugPessoa(x) })).filter((o) => o.nome);
+    /* v63: em uso e sem faixa (ou faixa sem número): sem ela a Central não avisa medida maior que o instrumento */
+    const SF = S.model.ins.filter((x) => insVivo(x) && x.emUso && !/\d/.test(String(x.faixa || ''))).sort((a, b) => String(a.codigo).localeCompare(String(b.codigo), 'pt-BR'));
+    const abF = !!S.calFaixaOpen;
+    const sfHTML = SF.length ? `<div class="warnbox effora"><div class="effh"><b>${NF.format(SF.length)} ${SF.length === 1 ? 'instrumento em uso sem' : 'instrumentos em uso sem'} faixa de medição</b><span class="muted">sem a faixa (ex.: 0 a 150 mm) a Central não avisa quando a medida passa do que o instrumento mede</span><span class="grow"></span><button class="btn small" type="button" id="cf-tg">${abF ? 'Fechar' : 'Ver quais'}</button></div>
+      ${abF ? `<div class="rils">${SF.map((x) => `<button type="button" class="lchip" data-open="INS:${esc(x.key)}">${esc(x.codigo)} <small>${esc(x.desc || '')}</small></button>`).join('')}</div>` : ''}</div>` : '';
+    if (!L.length) { host.innerHTML = sfHTML; const tf = $('#cf-tg'); if (tf) tf.onclick = () => { S.calFaixaOpen = !abF; calAvisos(); }; return; }
+    const ab = !!S.calLigaOpen;
+    host.innerHTML = sfHTML + `<div class="warnbox effora"><div class="effh"><b>${NF.format(L.length)} ${L.length === 1 ? 'instrumento cita' : 'instrumentos citam'} uma pessoa da Equipe no local</b><span class="muted">ligado à pessoa, o instrumento já entra no RIR e no RIF dela</span><span class="grow"></span>
+      ${ab ? `<button class="btn small primary" type="button" id="cl-todos">Ligar todos (${NF.format(L.length)})</button>` : ''}<button class="btn small" type="button" id="cl-tg">${ab ? 'Fechar' : 'Ver e ligar'}</button></div>
+      ${ab ? `<div class="effl">${L.map((o, i) => `<div class="effr calr"><div><b class="mono">${esc(o.x.codigo)}</b> ${esc(o.x.desc || '')}<small>hoje: “${esc(o.x.local)}”</small></div><div>→ <b>${esc(o.nome)}</b></div><button class="btn small" type="button" data-cl="${i}">Ligar</button></div>`).join('')}</div>` : ''}</div>`;
+    $('#cl-tg').onclick = () => { S.calLigaOpen = !ab; calAvisos(); };
+    { const tf = $('#cf-tg'); if (tf) tf.onclick = () => { S.calFaixaOpen = !abF; calAvisos(); }; }
+    const liga = async (lst) => {
+      for (const o of lst) await updateRecord('INS', o.x.key, { com: o.nome, local: insLocalSem(o.x.local, o.nome) || null });
+      toast(lst.length === 1 ? `${lst[0].x.codigo} ligado a ${lst[0].nome}.` : `${NF.format(lst.length)} instrumentos ligados às pessoas.`);
+      await sleep(250); S.stale = false; render();
+    };
+    const run = async (b, lst) => { b.disabled = true; try { await liga(lst); } catch (err) { b.disabled = false; toast('Não foi possível ligar: ' + ((err && (err.message || err.code)) || err), true); } };
+    $$('#cal-avisos [data-cl]').forEach((b) => { b.onclick = () => run(b, [L[+b.dataset.cl]]); });
+    const t = $('#cl-todos'); if (t) t.onclick = () => run(t, L);
+  }
   /* cronograma: o que vence em cada um dos próximos 12 meses (para juntar os envios ao laboratório) */
   const insLastCost = (x) => { const c = insEvOf(x).filter((h) => h.t === 'cal' && h.custo != null).pop(); return c ? c.custo : x.custo != null ? x.custo : null; };
   function calCronoHTML(M) {
@@ -10331,7 +10387,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       { c: 'V', l: 'Faixa de medição', type: 'text', store: 'text', ph: 'ex.: 0 a 150 mm' }, { c: 'W', l: 'Resolução', type: 'text', store: 'text', ph: 'ex.: 0,02 mm' },
       { c: 'X', l: 'EMA próprio (±)', type: 'text', store: 'num', help: 'Só se este instrumento tiver EMA diferente do tipo. Vazio = usa o EMA do tipo.' },
       { c: 'L', l: 'Setor', type: 'list', opts: () => cfgL('GER_SETORES'), help: 'Escolha um setor da lista de Configurações.' },
-      { c: 'AB', l: 'Local / com quem está', type: 'list', opts: () => distinct(S.model.ins, (x) => x.local), ph: 'ex.: armário da Qualidade, inspetor Silson' },
+      /* v63: com quem está = uma pessoa da Equipe (entra sozinho no RIR e no RIF dela) ou "Uso comum" (todos usam; a Central sugere quando a medida passa da faixa) */
+      { c: 'AI', l: 'Com quem está', type: 'select', opts: () => [INS_COMUM].concat(pessoasL()), help: 'Pessoa: o instrumento já entra no RIR e no RIF dela. Uso comum: qualquer um usa; a Central sugere quando a medida passa da faixa. Vazio: guardado no local.' },
+      { c: 'AB', l: 'Local', type: 'list', opts: () => distinct(S.model.ins, (x) => x.local), ph: 'ex.: armário da Qualidade, bancada' },
       { c: 'S', l: 'Situação operacional', type: 'select', opts: () => cfgL('CAL_SITUACAO'), def: () => 'Em uso', req: 1, help: 'No dia a dia a situação muda sozinha pelos botões da ficha (enviar para calibração, bloquear, dar baixa).' },
       { c: 'AE', l: 'Verificação intermediária a cada', type: 'select', store: 'num', opts: () => ['1', '2', '3', '6'], help: 'Meses. Opcional: só para instrumentos críticos.' }] }),
     insCal: (req) => {
@@ -10493,7 +10551,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (dv !== +ch[43]) return { ch, ok: false };
     return { ch, ok: true, uf: NFE_UF[+ch.slice(0, 2)] || ch.slice(0, 2), aa: ch.slice(2, 4), mm: ch.slice(4, 6), cnpj: ch.slice(6, 20), mod: ch.slice(20, 22), serie: String(+ch.slice(22, 25)), nf: String(+ch.slice(25, 34)) };
   }
-  const nfeFornCnpj = (cnpj) => { const x = cnpjRaw(cnpj); return x ? ((S.model.cfg.FORN_INFO || []).find((o) => o.cnpj && cnpjRaw(o.cnpj) === x) || null) : null; };
+  const nfeFornCnpj = (cnpj) => { const x = cnpjRaw(cnpj); return x ? ((S.model.cfg.FORN_INFO || []).find((o) => entCnpjs(o).some((c) => cnpjRaw(c) === x)) || null) : null; }   /* v64: qualquer CNPJ da ficha (filiais) */;
   const NFE_UN = { PC: 'PÇ', PCS: 'PÇ', PECA: 'PÇ', PECAS: 'PÇ', 'PÇ': 'PÇ', UN: 'UN', UND: 'UN', UNID: 'UN', KG: 'KG', KGS: 'KG', MT: 'M', M: 'M', MTS: 'M', M2: 'M²', 'M²': 'M²', T: 'T', TON: 'T', BR: 'BARRA', BRR: 'BARRA', BARRA: 'BARRA', BARRAS: 'BARRA' };
   function nfeUnidade(u) {
     const L = cfgL('AV_UNIDADES'), k = E.key(u).replace(/[^A-Z0-9²Ç]/g, '');
@@ -10560,7 +10618,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   function nfePendHTML() {
     if (!NFE.idx) return '';
-    const jaTem = (o) => S.model.av.some((x) => String(docN(x.nf)) === String(docN(o.nf)) && ((o.forn && E.key(x.forn) === E.key(o.forn)) || (o.cnpj && (entResolve('forn', x.forn) || {}).cnpj && cnpjRaw(entResolve('forn', x.forn).cnpj) === cnpjRaw(o.cnpj))));
+    const jaTem = (o) => S.model.av.some((x) => String(docN(x.nf)) === String(docN(o.nf)) && ((o.forn && E.key(x.forn) === E.key(o.forn)) || (o.cnpj && entCnpjs(entResolve('forn', x.forn) || {}).some((c) => cnpjRaw(c) === cnpjRaw(o.cnpj)))));
     const L = Object.entries(NFE.idx).filter(([, o]) => o && !o.usado && !jaTem(o)).sort((a, b) => String(b[1].data || '').localeCompare(String(a[1].data || ''))).slice(0, 12);
     return L.length ? `<span class="muted">XML guardado, ainda sem lote:</span> ${L.map(([ch, o]) => `<button type="button" class="btn small" data-act="nfe-abrir" data-key="${esc(ch)}" title="${esc(o.emit || '')}">NF ${esc(o.nf)} · ${esc(o.forn || o.emit || cnpjFmt(o.cnpj))}</button>`).join(' ')}` : '';
   }
@@ -10676,7 +10734,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     main.innerHTML = `<div class="view">${head(MOD.AV.name, 'Cada lançamento é gravado na hora no banco da Qualidade e aparece para toda a equipe.')}
       ${roBanner()}
       <div class="formfoot"><button class="btn" type="button" id="avm-back">‹ Voltar</button></div>
-      ${st.last ? `<div class="okbox avm-done"><b>${st.last.length} lote(s) gravado(s):</b> ${st.last.map((k) => `<button class="btn small ghost mono" type="button" data-open="AV:${esc(k)}">${esc(k)}</button>`).join(' ')} <button class="btn small" type="button" id="avm-labels">Imprimir etiquetas (${st.last.length})</button> <button class="btn small ghost" type="button" id="avm-done-x">Fechar</button></div>` : ''}
+      ${st.last ? `<div class="okbox avm-done"><b>${st.last.length} lote(s) gravado(s):</b> ${st.last.map((k) => `<button class="btn small ghost mono" type="button" data-open="AV:${esc(k)}">${esc((findRec('AV', k) || {}).id || k)}</button>`).join(' ')} <button class="btn small" type="button" id="avm-labels">Imprimir etiquetas (${st.last.length})</button> <button class="btn small ghost" type="button" id="avm-done-x">Fechar</button></div>` : ''}
       <section class="sec">${band('AV', 'Novo lançamento de lotes (AV)')}<div class="block"><div class="body">
         <div class="formwrap"><form id="fx" novalidate>${dl}
           <div class="fsec"><h3>${esc(nota.t)}</h3>${cw('av') ? nfeHTML() : ''}<div class="fgrid ${nota.cls || ''}">${nota.f.map((f) => fieldHTML(f, false)).join('')}</div></div>
@@ -10743,7 +10801,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       }
       const go2 = async () => {
         const btn = $('#fx-save'); btn.disabled = true; btn.textContent = 'Gravando…';
-        const fm = FMAP.AV, all = nota.f.concat(itf), keys = [];
+        const fm = FMAP.AV, all = nota.f.concat(itf), keys = [], ids = [];
         try {
           for (const it of items) {
             const fields = {};
@@ -10751,15 +10809,15 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
             if (E.low(fields.insp) !== 'reprovado') delete fields.motRep;
             if (fields.insp) fields.inspEm = Date.now();
             const key = await createRecord('AV', fields);
-            keys.push(key);
+            keys.push(key); ids.push(fields.id || key);   /* v63: o número do lote (AV-26-00007), não a chave interna */
             logEntry('AV', key, 'novo', `Lote ${key} · ${it.F || ''} · NF ${n.L || ''}`, null);
           }
-          toast(`${keys.length} lote(s) gravado(s): ${keys[0]}${keys.length > 1 ? ' a ' + keys[keys.length - 1] : ''}.`);
+          toast(`${keys.length} lote(s) gravado(s): ${ids[0]}${ids.length > 1 ? ' a ' + ids[ids.length - 1] : ''}.`);
           const keep = $('#keep') && $('#keep').checked;
           st.last = keys; st.items = [avmBlank()]; if (!keep) st.nota = null;
           if (S.avmNfe) { nfeUsada(S.avmNfe, keys); S.avmNfe = null; }
           await sleep(150); S.stale = false; render(); updateChrome();
-          avmPerguntaEtiquetas(keys);
+          avmPerguntaEtiquetas(keys, ids);
         } catch (err) {
           console.error(err);
           if (keys.length) { st.last = keys; st.items = items.slice(keys.length); }
@@ -11370,6 +11428,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const tipoDe = (txt) => { const k = E.key(txt).replace(/[^a-z]/g, ''); if (!k) return ''; if (/^(mp|mat)/.test(k)) return 'mp'; if (/^serv/.test(k)) return 'serv'; if (/^lab/.test(k)) return 'lab'; return null; };
   const cnpjRaw = (v) => String(v || '').toUpperCase().replace(/[^0-9A-Z]/g, '');
   /* 00.000.000/0000-00 enquanto digita; aceita o CNPJ novo da Receita, com letras nas 12 primeiras posições */
+  /* v64: uma ficha pode ter vários CNPJs (matriz e filiais): o principal (cnpj) e os outros (cnpjs) */
+  const entCnpjs = (o) => [o && o.cnpj].concat((o && Array.isArray(o.cnpjs) && o.cnpjs) || []).filter((v) => E.filled(v));
+  const cnpjRaiz = (v) => cnpjRaw(v).slice(0, 8);
+  function entPorCnpj(kind, cj, menos) { const x = cnpjRaw(cj); return x ? (S.model.cfg[ENT[kind].info] || []).find((o) => (!menos || E.key(o.nome) !== E.key(menos)) && entCnpjs(o).some((c) => cnpjRaw(c) === x)) || null : null; }
+  function entPorRaiz(kind, cj, menos) { const r = cnpjRaiz(cj); return r.length === 8 ? (S.model.cfg[ENT[kind].info] || []).find((o) => (!menos || E.key(o.nome) !== E.key(menos)) && !o.inativo && entCnpjs(o).some((c) => cnpjRaiz(c) === r)) || null : null; }
   function cnpjFmt(v) { const x = cnpjRaw(v).slice(0, 14); let o = x.slice(0, 2); if (x.length > 2) o += '.' + x.slice(2, 5); if (x.length > 5) o += '.' + x.slice(5, 8); if (x.length > 8) o += '/' + x.slice(8, 12); if (x.length > 12) o += '-' + x.slice(12, 14); return o; }
   /* dígitos verificadores (no CNPJ com letras, cada caractere vale o código dele menos 48, regra da Receita) */
   function cnpjOk(v) {
@@ -11401,8 +11464,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     return fields;
   }
   /* depois de cadastrar ou renomear: grava nome oficial + id em todos os registros dessa ficha (um documento por vez) */
-  async function entPropagate(kind, o, nomesAntigos) {
-    const F = ENT_FIELD[kind], ks = new Set([o.nome].concat(o.apelidos || [], nomesAntigos || []).map((n) => E.key(n)).filter(Boolean));
+  async function entPropagate(kind, o, nomesAntigos, idsAntigos) {
+    const F = ENT_FIELD[kind], ks = new Set([o.nome].concat(o.apelidos || [], nomesAntigos || []).map((n) => E.key(n)).filter(Boolean)), ia = new Set(idsAntigos || []);
     let n = 0;
     for (const mod of F.mods) {
       const docs = DB.docs[mod] || {};
@@ -11411,7 +11474,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         const patch = {};
         Object.keys(its).forEach((k) => {
           const r = its[k]; if (!r || r._del || !E.filled(r[F.f])) return;
-          const meu = r[F.id] ? r[F.id] === o.id : ks.has(E.key(r[F.f]));
+          const meu = r[F.id] ? (r[F.id] === o.id || ia.has(r[F.id])) : ks.has(E.key(r[F.f]));
           if (meu && (r[F.f] !== o.nome || r[F.id] !== o.id)) patch[k] = { [F.f]: o.nome, [F.id]: o.id, _u: Date.now(), _ub: DB.me || null };
         });
         if (Object.keys(patch).length) { await DB.db.doc(MOD[mod].col + '/' + docId).update({ items: patch }); n += Object.keys(patch).length; }
@@ -11440,10 +11503,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const draw = () => {
       const q = E.key(f.q || ''), qa = cnpjRaw(f.q || '');
       const rows = names.map((n) => ({ nome: n, i: info.get(E.key(n)) || {}, s: st.get(E.key(n)) || {} })).filter((r) => (f.sit === 'todos' || (f.sit === 'inativos' ? r.i.inativo : !r.i.inativo)) && (!f.em || (f.em === 'com' ? !!r.i.email : !r.i.email)) && (kind !== 'cli' || f.pr !== 'crit' || !!r.i.critico) && (kind !== 'forn' || !f.tp || (f.tp === 'sem' ? !r.i.tipo : r.i.tipo === f.tp))
-        && (!q || E.key(r.nome).includes(q) || E.key(r.i.email || '').includes(q) || E.key(r.i.contato || '').includes(q) || E.key(r.i.cod || '').includes(q) || (qa.length >= 3 && cnpjRaw(r.i.cnpj).includes(qa))));
+        && (!q || E.key(r.nome).includes(q) || E.key(r.i.email || '').includes(q) || E.key(r.i.contato || '').includes(q) || E.key(r.i.cod || '').includes(q) || (qa.length >= 3 && entCnpjs(r.i).some((c) => cnpjRaw(c).includes(qa)))));
       const sem = rows.filter((r) => !r.i.email).length, semCj = rows.filter((r) => !r.i.cnpj && !r.i.estrangeiro).length, semTp = kind === 'forn' ? rows.filter((r) => !r.i.tipo).length : 0, dash = '<span class="muted">—</span>';
       $('#el-' + kind).innerHTML = `<p style="margin:0 0 6px;font-size:12.5px;color:var(--ink-2)"><b>${NF.format(rows.length)}</b> ${rows.length === 1 ? D.one : D.plural}${sem ? ` · <b style="color:var(--warn)">${NF.format(sem)} sem e-mail</b>` : ''}${semCj ? ` · <b style="color:var(--warn)">${NF.format(semCj)} sem CNPJ</b>` : ''}${semTp ? ` · <b style="color:var(--warn)">${NF.format(semTp)} sem tipo</b>` : ''} · clique no nome para ${ro ? 'ver' : 'editar'}</p>
-        <div class="twrap twin"><table class="t pft"><thead><tr><th>Código</th><th>${esc(D.Um)}</th><th>CNPJ</th>${kind === 'forn' ? '<th>Tipo</th>' : ''}<th>${esc(D.mailCol)}</th><th>Contato</th>${D.cols.map(([l]) => `<th class="r">${esc(l)}</th>`).join('')}${kind === 'cli' ? '<th>Prioridade</th>' : ''}<th>Situação</th></tr></thead><tbody>${rows.slice(0, 600).map((r) => `<tr class="click" data-ent="${esc(r.nome)}" tabindex="0"><td class="mono">${r.i.cod ? esc(r.i.cod) : dash}</td><td><b>${esc(r.nome)}</b></td><td class="mono">${r.i.cnpj ? esc(r.i.cnpj) : r.i.estrangeiro ? '<span class="chip info">estrangeiro</span>' : dash}</td>${kind === 'forn' ? `<td>${r.i.tipo ? esc(tipoNome(r.i.tipo)) : '<span class="chip warn">sem tipo</span>'}</td>` : ''}<td>${r.i.email ? esc(r.i.email) : '<span class="chip warn">sem e-mail</span>'}</td><td>${r.i.contato ? esc(r.i.contato) : dash}</td>${D.cols.map(([, fn, cl]) => { const v = fn(r.s) || 0; return `<td class="r">${v ? (cl ? `<span class="chip ${cl}">${NF.format(v)}</span>` : NF.format(v)) : dash}</td>`; }).join('')}${kind === 'cli' ? `<td>${ro ? (r.i.critico ? '<span class="crtg on">★ Crítico</span>' : dash) : `<button type="button" class="crtg${r.i.critico ? ' on' : ''}" data-crit="${esc(r.nome)}" title="${r.i.critico ? 'Tirar de cliente crítico' : 'Marcar como cliente crítico (atenção máxima na fila de certificados)'}">${r.i.critico ? '★ Crítico' : '☆ marcar'}</button>`}</td>` : ''}<td>${r.i.inativo ? '<span class="chip off">Inativo</span>' : '<span class="chip ok">Ativo</span>'}</td></tr>`).join('') || `<tr><td colspan="${7 + D.cols.length}" class="muted">Nenhum ${D.one} com esses filtros.</td></tr>`}</tbody></table></div>${rows.length > 600 ? `<p class="muted" style="font-size:12px">Mostrando 600 de ${NF.format(rows.length)}. Use a busca para achar os outros.</p>` : ''}`;
+        <div class="twrap twin"><table class="t pft"><thead><tr><th>Código</th><th>${esc(D.Um)}</th><th>CNPJ</th>${kind === 'forn' ? '<th>Tipo</th>' : ''}<th>${esc(D.mailCol)}</th><th>Contato</th>${D.cols.map(([l]) => `<th class="r">${esc(l)}</th>`).join('')}${kind === 'cli' ? '<th>Prioridade</th>' : ''}<th>Situação</th></tr></thead><tbody>${rows.slice(0, 600).map((r) => `<tr class="click" data-ent="${esc(r.nome)}" tabindex="0"><td class="mono">${r.i.cod ? esc(r.i.cod) : dash}</td><td><b>${esc(r.nome)}</b></td><td class="mono">${r.i.cnpj ? esc(r.i.cnpj) + ((r.i.cnpjs || []).length ? ` <small class="muted" title="${esc(r.i.cnpjs.join(' · '))}">+${r.i.cnpjs.length} ${r.i.cnpjs.length === 1 ? 'filial' : 'filiais'}</small>` : '') : r.i.estrangeiro ? '<span class="chip info">estrangeiro</span>' : dash}</td>${kind === 'forn' ? `<td>${r.i.tipo ? esc(tipoNome(r.i.tipo)) : '<span class="chip warn">sem tipo</span>'}</td>` : ''}<td>${r.i.email ? esc(r.i.email) : '<span class="chip warn">sem e-mail</span>'}</td><td>${r.i.contato ? esc(r.i.contato) : dash}</td>${D.cols.map(([, fn, cl]) => { const v = fn(r.s) || 0; return `<td class="r">${v ? (cl ? `<span class="chip ${cl}">${NF.format(v)}</span>` : NF.format(v)) : dash}</td>`; }).join('')}${kind === 'cli' ? `<td>${ro ? (r.i.critico ? '<span class="crtg on">★ Crítico</span>' : dash) : `<button type="button" class="crtg${r.i.critico ? ' on' : ''}" data-crit="${esc(r.nome)}" title="${r.i.critico ? 'Tirar de cliente crítico' : 'Marcar como cliente crítico (atenção máxima na fila de certificados)'}">${r.i.critico ? '★ Crítico' : '☆ marcar'}</button>`}</td>` : ''}<td>${r.i.inativo ? '<span class="chip off">Inativo</span>' : '<span class="chip ok">Ativo</span>'}</td></tr>`).join('') || `<tr><td colspan="${7 + D.cols.length}" class="muted">Nenhum ${D.one} com esses filtros.</td></tr>`}</tbody></table></div>${rows.length > 600 ? `<p class="muted" style="font-size:12px">Mostrando 600 de ${NF.format(rows.length)}. Use a busca para achar os outros.</p>` : ''}`;
       $$('#el-' + kind + ' [data-ent]').forEach((tr) => { const open = () => entDrawer(kind, tr.dataset.ent, ro); tr.onclick = open; tr.onkeydown = (e) => { if (e.key === 'Enter') open(); }; });
       $$('#el-' + kind + ' [data-crit]').forEach((b) => { b.onclick = async (e) => { e.stopPropagation(); b.disabled = true; try { await entCritToggle(b.dataset.crit); } catch (err) { toast(err && (err.code === 'invalid_argument' || err.code === 'permission_denied') ? TXT.cfgDenied : 'Não foi possível salvar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; } }; b.onkeydown = (e) => e.stopPropagation(); });
       S['entRows' + kind] = rows;
@@ -11455,7 +11518,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const tsel = $('#et-' + kind); if (tsel) tsel.onchange = (e) => { f.tp = e.target.value; draw(); };
     const nb = $('#en-' + kind); if (nb) nb.onclick = () => entDrawer(kind, null, ro);
     const ib = $('#ei-' + kind); if (ib) ib.onclick = () => entImport(kind);
-    $('#ex-' + kind).onclick = () => exportRows(D.plural.charAt(0).toUpperCase() + D.plural.slice(1), [{ k: 'cod', l: 'Código', w: 10, x: (r) => r.i.cod || '' }, { k: 'nome', l: D.Um, w: 34 }, { k: 'cj', l: 'CNPJ', w: 21, x: (r) => r.i.cnpj || (r.i.estrangeiro ? 'Estrangeiro' : '') }].concat(kind === 'forn' ? [{ k: 'tp', l: 'Tipo', w: 15, x: (r) => tipoNome(r.i.tipo) }] : []).concat([{ k: 'e', l: 'E-mail', w: 36, x: (r) => r.i.email || '' }, { k: 'c', l: 'Contato', w: 22, x: (r) => r.i.contato || '' }, { k: 't', l: 'Telefone', w: 16, x: (r) => r.i.tel || '' }, { k: 'o', l: 'Observação', w: 30, x: (r) => r.i.obs || '' }, { k: 's', l: 'Situação', x: (r) => (r.i.inativo ? 'Inativo' : 'Ativo') }]), S['entRows' + kind] || []);
+    $('#ex-' + kind).onclick = () => exportRows(D.plural.charAt(0).toUpperCase() + D.plural.slice(1), [{ k: 'cod', l: 'Código', w: 10, x: (r) => r.i.cod || '' }, { k: 'nome', l: D.Um, w: 34 }, { k: 'cj', l: 'CNPJ', w: 21, x: (r) => r.i.cnpj || (r.i.estrangeiro ? 'Estrangeiro' : '') }, { k: 'cjs', l: 'Outros CNPJs', w: 30, x: (r) => (r.i.cnpjs || []).join(', ') }].concat(kind === 'forn' ? [{ k: 'tp', l: 'Tipo', w: 15, x: (r) => tipoNome(r.i.tipo) }] : []).concat([{ k: 'e', l: 'E-mail', w: 36, x: (r) => r.i.email || '' }, { k: 'c', l: 'Contato', w: 22, x: (r) => r.i.contato || '' }, { k: 't', l: 'Telefone', w: 16, x: (r) => r.i.tel || '' }, { k: 'o', l: 'Observação', w: 30, x: (r) => r.i.obs || '' }, { k: 's', l: 'Situação', x: (r) => (r.i.inativo ? 'Inativo' : 'Ativo') }]), S['entRows' + kind] || []);
     draw();
   }
   /* v60: nomes de fornecedor gravados nos lotes, serviços e NCFs que não são de nenhuma ficha (nem apelido) */
@@ -11551,6 +11614,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <div class="fgrid cm-grid"><div class="field"><span>Código</span><div class="entcod">${i.cod ? esc(i.cod) : '<span class="muted">gerado ao cadastrar</span>'}</div></div>
         <label class="field"><span>CNPJ</span><input id="ed-cnpj" value="${esc(i.cnpj || '')}" placeholder="00.000.000/0000-00" maxlength="18" autocomplete="off" autocapitalize="characters" spellcheck="false" inputmode="text" ${ro || i.estrangeiro ? 'disabled' : ''}><small class="cjm" id="ed-cnpj-m"></small></label></div>
       <label class="check"><input type="checkbox" id="ed-estr" ${i.estrangeiro ? 'checked' : ''} ${dis}> Sem CNPJ (empresa estrangeira)</label>
+      <div class="field" id="ed-cjs-f"><span>Outros CNPJs (filiais da mesma empresa)</span><div class="pvsrow cjsrow"><span class="pvschips" id="ed-cjs-l"></span>${ro ? '' : '<input id="ed-cjs-in" class="pvs-in" placeholder="00.000.000/0000-00" maxlength="18" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="btn pvsadd" type="button" id="ed-cjs-add" aria-label="Adicionar CNPJ">+</button>'}</div><small class="cjm" id="ed-cjs-m"></small><div id="ed-cjs-q"></div></div>
       ${op.rapido ? '<div class="okbox" style="border-color:var(--info)">Fornecedor novo, cadastrado pelo lançamento: o <b>CNPJ é obrigatório</b>. Se o CNPJ já estiver em outra ficha, a Central mostra qual é, para não cadastrar o mesmo fornecedor duas vezes.</div>' : ''}
       <label class="field"><span>Nome <b>*</b></span><input id="ed-nome" value="${esc(nome || (op.pre && op.pre.nome ? upTxt(op.pre.nome) : ''))}" autocomplete="off" ${dis}></label>
       ${kind === 'forn' ? `<div class="field"><span>Tipo <b>*</b>${sug ? ' <small class="muted">· sugerido pelos registros</small>' : ''}</span><div class="seg" id="ed-tipo">${FORN_TIPOS.map(([k, l]) => `<button type="button" data-t="${k}" aria-pressed="${tp === k}" ${dis}>${l}</button>`).join('')}</div></div>` : ''}
@@ -11559,10 +11623,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <label class="field"><span>Apelidos (outras grafias)</span><input id="ed-apel" value="${esc((i.apelidos || []).join(', '))}" placeholder="ex.: como vem na nota fiscal, nome antigo" autocomplete="off" ${dis}></label>
       <label class="field"><span>Observação</span><textarea id="ed-obs" style="min-height:64px" ${dis}>${esc(i.obs || '')}</textarea></label>
       <div class="field"><span>Situação</span><div class="seg" id="ed-sit"><button type="button" data-s="1" aria-pressed="${!i.inativo}" ${dis}>Ativo</button><button type="button" data-s="0" aria-pressed="${!!i.inativo}" ${dis}>Inativo</button></div></div>
-      <div class="okbox" style="border-color:var(--info)">Para mais de um e-mail ou apelido, separe com vírgula. Quem digitar um apelido grava o nome oficial. Renomear atualiza o nome em todos os registros. Inativo some das listas de escolha${uso ? `, mas continua nos ${NF.format(uso)} registro(s) em que aparece` : ''}.</div>
+      <div class="okbox" style="border-color:var(--info)">Para mais de um e-mail ou apelido, separe com vírgula. Filial da mesma empresa: ponha o CNPJ dela em Outros CNPJs (não precisa de outra ficha). Quem digitar um apelido grava o nome oficial. Renomear atualiza o nome em todos os registros. Inativo some das listas de escolha${uso ? `, mas continua nos ${NF.format(uso)} registro(s) em que aparece` : ''}.</div>
+      <div id="ed-grupo"></div>
       ${ro ? '' : `<div class="formfoot"><button class="btn primary" type="button" id="ed-save">${novo ? 'Cadastrar' : 'Salvar'}</button><button class="btn" type="button" data-act="close">Cancelar</button>${novo ? '' : '<button class="btn ghost tcrit push" type="button" id="ed-del">Excluir</button>'}</div>`}
     </div>`, D.cor);
-    if (ro) return;
+    if (ro) { const l = $('#ed-cjs-l'); if (l) l.innerHTML = (i.cnpjs || []).map((c) => `<span class="pvschip mono">${esc(c)}</span>`).join('') || '<span class="muted">nenhum</span>'; return; }
     $$('#ed-sit [data-s]').forEach((b) => { b.onclick = () => $$('#ed-sit [data-s]').forEach((x) => x.setAttribute('aria-pressed', x === b)); });
     $$('#ed-tipo [data-t]').forEach((b) => { b.onclick = () => $$('#ed-tipo [data-t]').forEach((x) => x.setAttribute('aria-pressed', x === b)); });
     const cjIn = $('#ed-cnpj'), cjM = $('#ed-cnpj-m');
@@ -11570,6 +11635,56 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (cjIn.disabled || !n) return; if (n < 14) { cjM.textContent = `${n} de 14`; return; }
       if (cnpjOk(v)) { cjM.textContent = 'CNPJ válido'; cjM.classList.add('ok'); } else { cjM.textContent = 'CNPJ inválido: confira os números'; cjM.classList.add('bad'); } };
     cjIn.addEventListener('input', () => { const a = cjIn.value, f2 = cnpjFmt(a); if (f2 !== a) cjIn.value = f2; cjMsg(); });
+    /* v64: outros CNPJs (filiais). CNPJ que já é de outra ficha: junta aquela ficha nesta ao salvar */
+    const CJS = ((i.cnpjs || []).slice()), JUNTA = [], JUNTA_IDS = [], JUNTA_NOMES = [];
+    let grupoOk = false;
+    const grupoBox = (g, cj, nn) => {
+      const gb = $('#ed-grupo');
+      gb.innerHTML = `<div class="warnbox cjsq"><span>O CNPJ <b class="mono">${esc(cj)}</b> é do mesmo grupo de <b>${esc(g.nome)}</b>${g.cod ? ' (' + esc(g.cod) + ')' : ''}: a raiz <span class="mono">${esc(cnpjFmt(cj).slice(0, 10))}</span> é a mesma. Se for uma filial, adicione o CNPJ na ficha de ${esc(g.nome)}: a nota e os registros ficam juntos.</span><div class="cjsqb"><button class="btn small primary" type="button" id="ed-gr-fil">Adicionar como filial de ${esc(g.nome)}</button><button class="btn small" type="button" id="ed-gr-sep">Cadastrar como ficha separada</button></div></div>`;
+      gb.scrollIntoView({ block: 'nearest' });
+      $('#ed-gr-sep').onclick = () => { grupoOk = true; gb.innerHTML = ''; $('#ed-save').click(); };
+      $('#ed-gr-fil').onclick = async (e) => {
+        const b = e.currentTarget; b.disabled = true;
+        try {
+          const ok = await saveEnt(kind, (names, info) => {
+            const ii = info.findIndex((o) => E.key(o.nome) === E.key(g.nome)); if (ii < 0) return null;
+            const f = Object.assign({}, info[ii]);
+            if (!entCnpjs(f).some((x) => cnpjRaw(x) === cnpjRaw(cj))) f.cnpjs = (f.cnpjs || []).concat([cj]);
+            if (nn && E.key(nn) !== E.key(f.nome) && !(f.apelidos || []).some((a) => E.key(a) === E.key(nn))) f.apelidos = (f.apelidos || []).concat([nn]);
+            info[ii] = f; return { names, info };
+          }, `${D.Um} ${g.nome}: CNPJ ${cj} (filial) adicionado`);
+          if (!ok) { b.disabled = false; return; }
+          closeLayer(); toast(`CNPJ ${cj} adicionado como filial de ${g.nome}.`);
+          await sleep(250); S.stale = false;
+          if (op.depois) { op.depois(g.nome); return; }
+          render();
+        } catch (err) { b.disabled = false; toast(err && (err.code === 'invalid_argument' || err.code === 'permission_denied') ? TXT.cfgDenied : 'Não foi possível salvar: ' + ((err && (err.message || err.code)) || err), true); }
+      };
+    };
+    const cjsL = $('#ed-cjs-l'), cjsIn = $('#ed-cjs-in'), cjsM = $('#ed-cjs-m');
+    const cjsDraw = () => {
+      cjsL.innerHTML = CJS.map((c, j) => { const jt = JUNTA.find((o) => entCnpjs(o).some((x) => cnpjRaw(x) === cnpjRaw(c))); return `<span class="pvschip mono">${esc(c)}${jt ? ` <small class="cjsjt">junta ${esc(jt.nome)}</small>` : ''}${ro ? '' : `<button type="button" data-cjx="${j}" aria-label="Tirar o CNPJ ${esc(c)}">×</button>`}</span>`; }).join('') || (ro ? '<span class="muted">nenhum</span>' : '');
+      $$('#ed-cjs-l [data-cjx]').forEach((b) => { b.onclick = () => { const c = CJS.splice(+b.dataset.cjx, 1)[0]; const jj = JUNTA.findIndex((o) => entCnpjs(o).some((x) => cnpjRaw(x) === cnpjRaw(c))); if (jj >= 0 && !CJS.some((x) => entCnpjs(JUNTA[jj]).some((y) => cnpjRaw(y) === cnpjRaw(x)))) JUNTA.splice(jj, 1); cjsDraw(); }; });
+    };
+    const cjsPoe = () => {
+      const c = cnpjFmt(cjsIn.value); cjsM.className = 'cjm'; cjsM.textContent = '';
+      if (!cnpjRaw(c)) { cjsIn.focus(); return; }
+      if (!cnpjOk(c)) { cjsM.textContent = 'CNPJ inválido: confira os números'; cjsM.classList.add('bad'); cjsIn.focus(); return; }
+      if (cnpjRaw(c) === cnpjRaw(cjIn.value) || CJS.some((x) => cnpjRaw(x) === cnpjRaw(c))) { cjsM.textContent = 'Esse CNPJ já está nesta ficha.'; cjsM.classList.add('bad'); return; }
+      const outra = entPorCnpj(kind, c, nome || '');
+      const poe = () => { CJS.push(c); cjsIn.value = ''; cjsDraw(); cjsIn.focus(); };
+      if (!outra) { poe(); return; }
+      const uo = D.uso.reduce((n, pr) => n + usageOf([pr], outra.nome), 0), qb = $('#ed-cjs-q');
+      qb.innerHTML = `<div class="warnbox cjsq"><span>O CNPJ <b class="mono">${esc(c)}</b> é da ficha <b>${esc(outra.nome)}</b>${outra.cod ? ' (' + esc(outra.cod) + ')' : ''}. Se é a mesma empresa, ao salvar: ${esc(outra.nome)} vira apelido desta ficha, os CNPJs e e-mails dela entram aqui${uo ? ` e os ${NF.format(uo)} registro(s) dela passam para esta ficha` : ''}; a ficha ${esc(outra.nome)} sai do cadastro.</span><div class="cjsqb"><button class="btn small primary" type="button" id="ed-cjs-sim">Juntar ao salvar</button><button class="btn small" type="button" id="ed-cjs-nao">Não juntar</button></div></div>`;
+      $('#ed-cjs-nao').onclick = () => { qb.innerHTML = ''; cjsIn.focus(); };
+      $('#ed-cjs-sim').onclick = () => {
+        if (!JUNTA.some((o) => E.key(o.nome) === E.key(outra.nome))) JUNTA.push(outra);
+        entCnpjs(outra).forEach((x) => { if (cnpjRaw(x) !== cnpjRaw(cjIn.value) && !CJS.some((y) => cnpjRaw(y) === cnpjRaw(x))) CJS.push(cnpjFmt(x)); });
+        qb.innerHTML = ''; cjsIn.value = ''; cjsDraw();
+      };
+    };
+    if (cjsIn) { cjsIn.addEventListener('input', () => { const a = cjsIn.value, f2 = cnpjFmt(a); if (f2 !== a) cjsIn.value = f2; }); cjsIn.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); cjsPoe(); } }; $('#ed-cjs-add').onclick = cjsPoe; }
+    cjsDraw();
     $('#ed-estr').onchange = (e) => { cjIn.disabled = e.target.checked; if (e.target.checked) cjIn.value = ''; cjMsg(); };
     cjMsg();
     $('#ed-save').onclick = async () => {
@@ -11577,8 +11692,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const estr = $('#ed-estr').checked, cj = estr ? '' : cnpjFmt(cjIn.value);
       if (cj && !cnpjOk(cj)) { toast('CNPJ inválido: confira os números.', true); cjIn.focus(); return; }
       if (op.rapido && !cj && !estr) { toast('Informe o CNPJ do fornecedor (ou marque “Sem CNPJ” se for empresa estrangeira).', true); cjIn.focus(); return; }
-      if (op.rapido && cj) { const dup = (S.model.cfg[D.info] || []).find((o) => o.cnpj && cnpjRaw(o.cnpj) === cnpjRaw(cj)); if (dup) { closeLayer(); confirmBox('Fornecedor já cadastrado', `O CNPJ ${cj} já é de ${dup.nome}${dup.cod ? ' (' + dup.cod + ')' : ''}. Usar ${dup.nome} no lançamento?`, 'Usar ' + dup.nome, () => { if (op.depois) op.depois(dup.nome); }); return; } }
-      if (cj) { const dup = (S.model.cfg[D.info] || []).find((o) => E.key(o.nome) !== E.key(nome || '') && o.cnpj && cnpjRaw(o.cnpj) === cnpjRaw(cj)); if (dup) { toast(`Esse CNPJ já está na ficha de ${dup.nome}${dup.cod ? ' (' + dup.cod + ')' : ''}. Se for a mesma empresa, use aquela ficha e ponha este nome como apelido.`, true); cjIn.focus(); return; } }
+      if (op.rapido && cj) { const dup = entPorCnpj(kind, cj); if (dup) { closeLayer(); confirmBox('Fornecedor já cadastrado', `O CNPJ ${cj} já é de ${dup.nome}${dup.cod ? ' (' + dup.cod + ')' : ''}. Usar ${dup.nome} no lançamento?`, 'Usar ' + dup.nome, () => { if (op.depois) op.depois(dup.nome); }); return; } }
+      if (cj) { const dup = entPorCnpj(kind, cj, nome || ''); if (dup && JUNTA.some((o) => E.key(o.nome) === E.key(dup.nome))) { /* será juntada */ } else if (dup) { toast(`Esse CNPJ já está na ficha de ${dup.nome}${dup.cod ? ' (' + dup.cod + ')' : ''}. Se for a mesma empresa, use aquela ficha e ponha este nome como apelido.`, true); cjIn.focus(); return; } }
       const tipo = kind === 'forn' ? (($('#ed-tipo [aria-pressed="true"]') || {}).dataset || {}).t || '' : '';
       if (kind === 'forn' && !tipo) { toast('Escolha o tipo do fornecedor: matéria-prima, serviço ou laboratório.', true); return; }
       if (!nn) { toast('Informe o nome.', true); $('#ed-nome').focus(); return; }
@@ -11587,10 +11702,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const apel = $('#ed-apel').value.split(/\s*[;,]\s*/).map((s) => upTxt(s)).filter(Boolean);
       if (!novo && E.key(nn) !== E.key(nome)) apel.push(nome);
       if (apel.length) ni.apelidos = apel.filter((a, j) => apel.findIndex((b) => E.key(b) === E.key(a)) === j);
-      const outro = (S.model.cfg[D.info] || []).find((o) => E.key(o.nome) !== E.key(nome || '') && [o.nome].concat(o.apelidos || []).some((a) => [nn].concat(ni.apelidos || []).some((b) => E.key(a) === E.key(b))));
+      const outro = (S.model.cfg[D.info] || []).find((o) => E.key(o.nome) !== E.key(nome || '') && !JUNTA.some((jt) => E.key(jt.nome) === E.key(o.nome)) && [o.nome].concat(o.apelidos || []).some((a) => [nn].concat(ni.apelidos || []).some((b) => E.key(a) === E.key(b))));
       if (outro) { toast(`“${outro.nome}” já usa esse nome ou apelido.`, true); return; }
       [['contato', 'ed-contato'], ['tel', 'ed-tel'], ['obs', 'ed-obs']].forEach(([k, id]) => { const v = $('#' + id).value.trim(); if (v) ni[k] = v; });
       if ($('#ed-sit [data-s="0"]').getAttribute('aria-pressed') === 'true') ni.inativo = true;
+      if (CJS.length) ni.cnpjs = CJS.slice();   /* v64 */
+      /* v64: ficha nova com CNPJ do mesmo grupo (mesma raiz) de uma ficha que já existe: provável filial */
+      if (novo && cj && !grupoOk) { const g = entPorRaiz(kind, cj); if (g) { grupoBox(g, cj, nn); return; } }
       const btn = $('#ed-save'); btn.disabled = true; btn.textContent = 'Salvando…';
       try {
         const ok = await saveEnt(kind, (names, info) => {
@@ -11599,13 +11717,26 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
           if (iN >= 0) names[iN] = nn; else names.push(nn);
           const ii = info.findIndex((o) => E.key(o.nome) === E.key(nome || nn));
           if (ii >= 0) { ni.id = info[ii].id; if (info[ii].cod) ni.cod = info[ii].cod; if (info[ii].critico) ni.critico = true; info[ii] = ni; } else info.push(ni);
+          /* v64: fichas juntadas nesta: nome e apelidos viram apelidos, CNPJs e e-mails entram; a ficha sai */
+          JUNTA.forEach((jt) => {
+            const jk = E.key(jt.nome), o = info.find((x) => E.key(x.nome) === jk) || jt;
+            ni.apelidos = (ni.apelidos || []).concat([o.nome], o.apelidos || []).filter((a, j2, A) => E.key(a) !== E.key(nn) && A.findIndex((b) => E.key(b) === E.key(a)) === j2);
+            entCnpjs(o).forEach((x) => { if (cnpjRaw(x) !== cnpjRaw(ni.cnpj || '') && !(ni.cnpjs || []).some((y) => cnpjRaw(y) === cnpjRaw(x))) ni.cnpjs = (ni.cnpjs || []).concat([cnpjFmt(x)]); });
+            if (o.email) ni.email = normMails([ni.email, o.email].filter(Boolean).join(', ')).split(', ').filter((m, j2, A) => A.findIndex((b) => E.low(b) === E.low(m)) === j2).join(', ');
+            if (o.critico) ni.critico = true;
+            if (!ni.cnpj && entCnpjs(o).length && !ni.estrangeiro) { ni.cnpj = cnpjFmt(entCnpjs(o)[0]); ni.cnpjs = (ni.cnpjs || []).filter((y) => cnpjRaw(y) !== cnpjRaw(ni.cnpj)); }
+            JUNTA_IDS.push(o.id); JUNTA_NOMES.push(o.nome);
+            for (let a = names.length - 1; a >= 0; a--) if (E.key(names[a]) === jk) names.splice(a, 1);
+            for (let a = info.length - 1; a >= 0; a--) if (E.key(info[a].nome) === jk) info.splice(a, 1);
+          });
+          if (ni.cnpjs && !ni.cnpjs.length) delete ni.cnpjs;
           return { names, info };
         }, `${D.Um} ${novo ? 'cadastrado' : 'alterado'}: ${nn}${ni.inativo ? ' (inativo)' : ''}`);
         if (!ok) { btn.disabled = false; btn.textContent = novo ? 'Cadastrar' : 'Salvar'; return; }
         const fic = (S.entUlt || []).find((o) => E.key(o.nome) === E.key(nn));
         closeLayer(); toast(`${nn} ${novo ? 'cadastrado' : 'salvo'}${fic && fic.cod ? ' · código ' + fic.cod : ''}.`);
         if (op.depois) { await sleep(250); S.stale = false; op.depois(nn); return; }
-        if (fic) { try { const n = await entPropagate(kind, fic, nome ? [nome] : []); if (n) toast(`${NF.format(n)} registro(s) ligados a ${nn}.`); } catch (e) { toast('Ficha salva, mas os registros não foram atualizados: ' + ((e && (e.message || e.code)) || e), true); } }
+        if (fic) { try { const n = await entPropagate(kind, fic, (nome ? [nome] : []).concat(JUNTA_NOMES), JUNTA_IDS.filter(Boolean)); if (n) toast(`${NF.format(n)} registro(s) ligados a ${nn}.`); } catch (e) { toast('Ficha salva, mas os registros não foram atualizados: ' + ((e && (e.message || e.code)) || e), true); } }
         await sleep(250); S.stale = false; render();
       } catch (err) { toast(err && (err.code === 'invalid_argument' || err.code === 'permission_denied') ? TXT.cfgDenied : 'Não foi possível salvar: ' + ((err && (err.message || err.code)) || err), true); btn.disabled = false; btn.textContent = novo ? 'Cadastrar' : 'Salvar'; }
     };
@@ -11655,7 +11786,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
           else { cj = cnpjFmt(cnpjPlan(cjT)); if (!cnpjOk(cj)) { prob.push([`linha ${ix + 2}`, 'CNPJ inválido: ' + cjT]); return; } }
         }
         if (cj) {
-          const rw = cnpjRaw(cj), outra = (c[D.info] || []).find((x) => E.key(x.nome) !== k && x.cnpj && cnpjRaw(x.cnpj) === rw);
+          const rw = cnpjRaw(cj), outra = (c[D.info] || []).find((x) => E.key(x.nome) !== k && entCnpjs(x).some((v) => cnpjRaw(v) === rw));
           if (outra) { prob.push([`linha ${ix + 2}`, `CNPJ ${cj} já está na ficha de ${outra.nome}`]); return; }
           if (seenCj.has(rw)) { prob.push([`linha ${ix + 2}`, `CNPJ ${cj} repetido na planilha (${seenCj.get(rw)})`]); return; }
           seenCj.set(rw, nm);
@@ -12557,7 +12688,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       M.rnc.map((x) => [x.num, dateCell(x.data), v(x.status), v(x.comprador), v(x.filial), v(x.emissor), v(x.forn), v(x.cliente), v(x.nf), v(x.pv), v(x.oc), v(x.depto), v(x.motivo), v(x.reinc), dateCell(x.prazoDisp), v(x.disp), dateCell(x.fechDisp), v(x.corretiva), dateCell(x.prazoAcao), v(x.nivel), dateCell(x.prazoFechar), v(x.analise), dateCell(x.prazoFinal), dateCell(x.conclusao), v(x.cancel), v(x.info)]),
       [16, 11, 13, 18, 20, 18, 22, 20, 11, 11, 11, 12, 14, 8, 11, 12, 11, 9, 11, 10, 11, 12, 11, 11, 9, 60]);
     if (vis('ins')) sheet('INSTRUMENTOS', 'CADASTRO E CONTROLE DE CALIBRAÇÃO', ['CÓDIGO', 'DESCRIÇÃO', 'MARCA', 'Nº DE SÉRIE', 'FAIXA', 'RESOLUÇÃO', 'Nº CERTIFICADO', 'LABORATÓRIO', 'DATA CALIBRAÇÃO', 'FREQ. (MESES)', 'VALIDADE', 'DIAS PARA VENCER', 'MAIOR ERRO', 'INCERTEZA (U)', 'EMA (±)', 'RESULTADO', 'STATUS', 'RESPONSÁVEL', 'SETOR', 'LOCAL / COM QUEM ESTÁ', 'TIPO DE EQUIPAMENTO', 'SITUAÇÃO', 'CUSTO', 'OBSERVAÇÃO'],
-      M.ins.map((x) => [x.codigo, v(x.desc), v(x.marca), v(x.serie), v(x.faixa), v(x.resol), v(x.cert), v(x.lab), dateCell(x.dataCal), v(x.freq), dateCell(x.validade), v(x.dias), v(x.resCal), v(x.incert), v(x.ema), v(x.resultado), v((INS_ST.find((o) => o[0] === x.status) || [0, 0, 0, x.status])[3]), v(x.resp), v(x.depto), v(x.local), v(x.tipo), v(x.situacao), v(x.custo), v(x.obs)]), [10, 36, 14, 14, 14, 10, 18, 22, 12, 8, 12, 8, 10, 10, 10, 18, 20, 18, 22, 22, 24, 18, 10, 30]);
+      M.ins.map((x) => [x.codigo, v(x.desc), v(x.marca), v(x.serie), v(x.faixa), v(x.resol), v(x.cert), v(x.lab), dateCell(x.dataCal), v(x.freq), dateCell(x.validade), v(x.dias), v(x.resCal), v(x.incert), v(x.ema), v(x.resultado), v((INS_ST.find((o) => o[0] === x.status) || [0, 0, 0, x.status])[3]), v(x.resp), v(x.depto), v(insOnde(x)), v(x.tipo), v(x.situacao), v(x.custo), v(x.obs)]), [10, 36, 14, 14, 14, 10, 18, 22, 12, 8, 12, 8, 10, 10, 10, 18, 20, 18, 22, 22, 24, 18, 10, 30]);
     if (vis('ins')) { const H = insHistAll().filter((h) => inY(h.d)); sheet('HIST. CALIBRAÇÃO', 'HISTÓRICO DOS INSTRUMENTOS', ['CÓDIGO', 'DATA', 'EVENTO', 'DETALHES', 'LANÇADO POR', 'LANÇADO EM'], H.map((h) => [h.codigo, dateCell(h.d), insEvName(h), insEvTxt(h), v(DB.names[h.by] || ''), v(new Date(h.at).toLocaleString('pt-BR'))]), [10, 12, 22, 70, 22, 18]); }
     const c = M.cfg, lists = CFG_LISTS.map((l) => l[0]);
     soldExport(sheet, v);
@@ -14463,12 +14594,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (ja) { toast(`Esta nota já tem um RIR em andamento${ja.nome ? ' (' + ja.nome + ')' : ''}. Abrindo o rascunho.`); riAbrir(ja.id); return; }
     const x0 = lots[0], id = 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), at = Date.now();
     const res = { nf: x0.nf == null ? null : String(x0.nf), forn: x0.forn || null, fornId: lotEnt(x0) || null, pc: x0.pc == null ? null : String(x0.pc), lotes: lots.map((l) => l.key), ids: lots.map((l) => l.id), st: 'r', at, by: DB.me || null, nome: myPessoa() || DB.meName || '' };
-    const rel = Object.assign({ id, mes: mesId(at), status: 'rascunho', itens: rirItensCfg().map((o) => Object.assign({}, o)), ck: {}, lotRes: {}, ins: [], obs: '', nFotos: 0 }, res);
+    const MEUS = insMeus();   /* v63 */
+    const rel = Object.assign({ id, mes: mesId(at), status: 'rascunho', itens: rirItensCfg().map((o) => Object.assign({}, o)), ck: {}, lotRes: {}, ins: MEUS.ok, obs: '', nFotos: 0 }, res);
     try {
       await DB.db.doc('rird/' + id).set(rel);
       await soldWrite('rir/m-' + rel.mes, { items: { [id]: res } });
       logEntry('RIR', id, 'novo', `RIR iniciado · NF ${res.nf || '—'} · ${res.forn || ''} · ${res.ids.join(', ')}`, null);
-      RI.ed = { rel, ro: false, fotos: null }; RI.salvo = Date.now(); RI.sub = 'ed'; RI.tpasso = 1; RI.tlote = 0; closeLayer();
+      RI.ed = { rel, ro: false, fotos: null }; RI.salvo = Date.now(); RI.sub = 'ed'; RI.tpasso = 1; RI.tlote = 0; closeLayer(); insMeusAviso(MEUS.fora);
       if (S.view !== 'rir' && S.view !== 'rirtab') go(document.body.classList.contains('tabmode') ? 'rirtab' : 'rir'); else { render(); window.scrollTo(0, 0); }
     } catch (err) { toast('Não foi possível começar o RIR: ' + ((err && (err.message || err.code)) || err), true); }
   }
@@ -14545,6 +14677,23 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       rel.itens = rel.itens.filter((o) => o.id !== id); if (rel.ck) delete rel.ck[id];
       riAgendar(); render();
     });
+  }
+  /* v52: instrumento do RIR digitando o código ou o nome (igual ao RIF); os últimos usados aparecem primeiro */
+  const riInsChip = (x) => `<button type="button" class="chip2${x.venc ? ' venc' : ''}" data-act="ri-insp" data-key="${esc(x.id)}" ${x.venc ? 'disabled' : ''}>${esc(x.codigo)} · ${esc(x.desc)}${x.venc ? ' · calibração vencida' : ''}${insTagHTML(x.tag)}</button>`;
+  function riInsBusca(q, sel) {
+    const k = E.key(q || ''); if (!k) return '';
+    const L = rfInstr().filter((x) => !sel.has(x.id) && E.key(x.codigo + ' ' + x.desc).includes(k)).sort((a, b) => (E.key(b.codigo).startsWith(k) ? 1 : 0) - (E.key(a.codigo).startsWith(k) ? 1 : 0));
+    return L.length ? L.slice(0, 10).map(riInsChip).join('') + (L.length > 10 ? `<span class="tbnote">+ ${L.length - 10} · continue digitando</span>` : '') : '<span class="tbnote">Nenhum instrumento em uso com esse código ou nome.</span>';
+  }
+  function riInsRecHTML(sel) {
+    const I = rfInstr(), rec = rtInsRec().map((id) => I.find((x) => x.id === id)).filter((x) => x && !sel.has(x.id)).slice(0, 6);
+    return rec.length ? `<div class="riinsrec"><span class="muted">Últimos que você usou</span><div class="rtins">${rec.map(riInsChip).join('')}</div></div>` : '';
+  }
+  function riInsPoe(id) {
+    const ed = RI.ed; if (!ed || ed.ro) return; const r = ed.rel, x = rfInstr().find((y) => y.id === id); if (!x || x.venc) return;
+    if (!(r.ins || []).some((y) => y.id === x.id)) r.ins = (r.ins || []).concat([{ id: x.id, codigo: x.codigo, desc: x.desc, val: x.val }]);
+    lsSet(RT_INSREC, JSON.stringify([id].concat(rtInsRec().filter((z) => z !== id)).slice(0, 12)));
+    RI.insQ = ''; riAgendar(); riRender();
   }
   async function riPuxar() {
     const ed = RI.ed; if (!ed || ed.ro) return; const rel = ed.rel, L = riNovosDe(rel); if (!L.length) return;
@@ -14657,7 +14806,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       body = `<div class="filters"><label class="field"><span>Buscar</span><input id="ri-q" type="search" placeholder="RIR, NF, fornecedor ou lote…" value="${esc(RI.q || '')}" autocomplete="off"></label></div>
         ${L.length ? `<div class="twrap"><table class="t"><thead><tr><th>RIR</th><th>Concluído</th><th>NF</th><th>Fornecedor</th><th>Lotes</th><th>Resultado</th><th>Inspetor</th></tr></thead><tbody>${L.slice(0, 300).map((c) => {
           const v = Object.values(c.res || {}), nr = v.filter((r) => r === 'Reprovado').length;
-          return `<tr class="click" data-act="ri-abrir" data-key="${esc(c.id)}"><td class="mono">${esc(c.num || '')}</td><td class="nw">${esc(dmy(c.fin || c.at))}</td><td class="mono">${esc(c.nf || '—')}</td><td>${esc(c.forn || '')}</td><td class="mono">${esc((c.ids || []).join(', '))}</td><td>${nr ? `<span class="chip crit"><i>✕</i>${nr} reprovado(s)</span>` : '<span class="chip ok"><i>✓</i>aprovado</span>'}</td><td>${esc(c.nome || '')}</td></tr>`;
+          return `<tr class="click" data-act="ri-abrir" data-key="${esc(c.id)}"><td class="mono">${esc(c.num || '')}</td><td class="nw">${esc(dmy(c.fin || c.at))}</td><td class="mono">${esc(c.nf || '—')}</td><td>${esc(c.forn || '')}</td><td class="mono nw" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</td><td>${nr ? `<span class="chip crit"><i>✕</i>${nr} reprovado(s)</span>` : '<span class="chip ok"><i>✓</i>aprovado</span>'}</td><td>${esc(c.nome || '')}</td></tr>`;
         }).join('')}</tbody></table></div>` : '<div class="empty">Nenhum RIR concluído' + (q ? ' com essa busca' : '') + '.</div>'}`;
     }
     main.innerHTML = `<div class="view">${head(MOD.RIR.full, 'RIR · checklist da nota fiscal recebida, com o resultado de cada lote. Lote reprovado aqui vai sozinho para a fila da NCF.', w ? '<button class="btn" type="button" data-go=\'{"v":"rirtab"}\'>Tela do tablet</button>' : '')}
@@ -14677,8 +14826,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const bate = (txt) => !q || E.key(txt).includes(q);
     const lotTx = (L) => L.map((x) => x.id + (lotTxt(x) ? ' · ' + lotTxt(x) : '')).join(' — ');
     const agRow = (g, i) => `<div class="tblr"><div><div class="t"><b>NF ${esc(disp(g.nf) || '—')}</b>${riSitForn(g.forn)}</div><div class="d">${esc(g.forn || 'sem fornecedor')}</div><div class="m">${g.lots.length} ${g.lots.length === 1 ? 'lote' : 'lotes'}: ${esc(lotTx(g.lots))}</div><div class="w">recebido ${esc(fD(g.data))}${g.pc ? ' · pedido de compra ' + esc(disp(g.pc)) : ''}</div></div><button class="btn rirb big" type="button" data-act="ri-novo" data-key="${i}" ${w ? '' : 'disabled'}>Inspecionar esta nota</button></div>`;
-    const rasRow = (c) => `<div class="tblr"><div><div class="t"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>em andamento</span></div><div class="d">${esc(c.forn || 'sem fornecedor')}</div><div class="m">${esc((c.ids || []).join(', '))}</div><div class="w">${esc(c.nome || '')} · começado ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${w ? 'Continuar' : 'Ver'}</button></div>`;
-    const finRow = (c) => { const nr = Object.values(c.res || {}).filter((r) => r === 'Reprovado').length; return `<div class="tblr"><div><div class="t"><b>${esc(c.num || 'RIR')}</b>${nr ? `<span class="chip crit"><i>✕</i>${nr} reprovado(s)</span>` : '<span class="chip ok"><i>✓</i>aprovado</span>'}</div><div class="d">NF ${esc(c.nf || '—')} · ${esc(c.forn || '')}</div><div class="m">${esc((c.ids || []).join(', '))}</div><div class="w">concluído ${esc(dmy(c.fin || c.at))} às ${esc(hhmm(c.fin || c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">Ver</button></div>`; };
+    const rasRow = (c) => `<div class="tblr"><div><div class="t"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>em andamento</span></div><div class="d">${esc(c.forn || 'sem fornecedor')}</div><div class="m" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</div><div class="w">${esc(c.nome || '')} · começado ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${w ? 'Continuar' : 'Ver'}</button></div>`;
+    const finRow = (c) => { const nr = Object.values(c.res || {}).filter((r) => r === 'Reprovado').length; return `<div class="tblr"><div><div class="t"><b>${esc(c.num || 'RIR')}</b>${nr ? `<span class="chip crit"><i>✕</i>${nr} reprovado(s)</span>` : '<span class="chip ok"><i>✓</i>aprovado</span>'}</div><div class="d">NF ${esc(c.nf || '—')} · ${esc(c.forn || '')}</div><div class="m" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</div><div class="w">concluído ${esc(dmy(c.fin || c.at))} às ${esc(hhmm(c.fin || c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">Ver</button></div>`; };
     const ag = P.map((g, i) => [g, i]).filter(([g]) => bate([g.nf, g.forn, g.pc, g.lots.map((x) => x.id).join(' ')].join(' ')));
     const rs = ras.filter((c) => bate([c.nf, c.forn, (c.ids || []).join(' ')].join(' ')));
     const body = !RI.ready ? '<div class="loading"><span class="spin"></span><span>Carregando…</span></div>' : `
@@ -14775,8 +14924,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     };
     const item = (it) => `<div class="riit"><div class="rit"><span>${esc(it.t)}</span>${it.med ? '<small>medida</small>' : ''}${it.extra && !ro ? `<button class="btn small ghost" type="button" data-act="ri-mdel" data-key="${esc(it.id)}">Remover medida</button>` : ''}${!ro && it.esc !== 'nf' && rel.lotes.length > 1 ? `<button class="btn small ghost" type="button" data-act="ri-todos" data-key="${esc(it.id)}">todos AP</button>` : ''}</div>${riEscopos(rel, it).map((sc) => linha(it, sc)).join('')}</div>`;
     const insSel = new Set((rel.ins || []).map((i) => i.id)), insL = rfInstr();
-    const insHTML = `${(rel.ins || []).map((i) => { const x = insL.find((y) => y.id === i.id); return `<span class="lchip sel">${esc(i.codigo)} <small>${esc(i.desc || '')}${!x ? ' · <b style="color:var(--crit)">bloqueado/sem uso</b>' : x.venc ? ' · <b style="color:var(--crit)">vencido</b>' : ' · val. ' + esc(fD(E.fromIso(x.val)))}</small>${ro ? '' : `<button type="button" class="x" data-act="ri-ins" data-key="${esc(i.id)}" aria-label="Tirar">×</button>`}</span>`; }).join('') || '<span class="muted">Nenhum instrumento informado.</span>'}
-      ${ro ? '' : `<div class="field" style="margin-top:8px"><span>Adicionar instrumento</span><select id="ri-insadd"><option value="">— escolha pelo código —</option>${insL.filter((x) => !insSel.has(x.id) && !x.venc).map((x) => `<option value="${esc(x.id)}">${esc(x.codigo)} · ${esc(x.desc)}</option>`).join('')}</select></div>`}`;
+    const insHTML = `<div class="riinsl">${(rel.ins || []).map((i) => { const x = insL.find((y) => y.id === i.id); return `<span class="lchip sel">${esc(i.codigo)} <small>${esc(i.desc || '')}${x && x.tag ? ' · ' + esc(x.tag) : ''}${!x ? ' · <b style="color:var(--crit)">bloqueado/sem uso</b>' : x.venc ? ' · <b style="color:var(--crit)">vencido</b>' : ' · val. ' + esc(fD(E.fromIso(x.val)))}</small>${ro ? '' : `<button type="button" class="x" data-act="ri-ins" data-key="${esc(i.id)}" aria-label="Tirar">×</button>`}</span>`; }).join('') || '<span class="muted">Nenhum instrumento informado.</span>'}</div>
+      ${ro ? '' : `<div class="riinsadd">${riInsRecHTML(insSel)}<label class="field"><span>Adicionar instrumento</span><input id="ri-insq" class="inp" placeholder="⌕  digite o código ou o nome (ex.: PAQ-002, paquímetro)" value="${esc(RI.insQ || '')}" autocomplete="off"></label><div class="rtins" id="ri-insr">${riInsBusca(RI.insQ, insSel)}</div></div>`}`;
     const resHTML = rel.lotes.map((k) => {
       const x = findRec('AV', k), r = riRes(rel, k), o = (rel.lotRes || {})[k] || {}, sug = riSug(rel, k), mot = o.mot != null ? o.mot : (r === 'Reprovado' ? riMotSug(rel, k) : '');
       return `<div class="rires"><div><b class="mono">${esc(lotId(k))}</b><span class="muted">${x ? esc(lotTxt(x)) + (E.filled(x.corrida) ? ' · corrida ' + esc(x.corrida) : '') : ''}</span>${sug && !o.man ? '<small class="muted">sugerido pelo checklist</small>' : ''}</div>
@@ -14807,9 +14956,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       : `<div class="view riv" id="rix">${corpo}</div>`;
     if (!ro) riSalvoTxt();
     if (novosHTML) { const host = $('.tbw.rirt .tbb') || $('#rix'); if (host) host.insertAdjacentHTML('afterbegin', novosHTML); }
+    { const iq = $('#ri-insq'); if (iq) iq.onkeydown = (e) => { if (e.key !== 'Enter') return; e.preventDefault(); const b = $('#ri-insr [data-act="ri-insp"]:not([disabled])'); if (b) riInsPoe(b.dataset.key); }; }
     const box = $('#rix');
     box.addEventListener('input', (e) => {
       const t = e.target, r = RI.ed && RI.ed.rel; if (!r || RI.ed.ro) return;
+      if (t.id === 'ri-insq') { RI.insQ = t.value; const rr = $('#ri-insr'); if (rr) rr.innerHTML = riInsBusca(t.value, new Set((r.ins || []).map((y) => y.id))); return; }
       const slot = (id, sc) => { r.ck = r.ck || {}; r.ck[id] = r.ck[id] || {}; r.ck[id][sc] = r.ck[id][sc] || {}; return r.ck[id][sc]; };
       if (t.dataset.riv) {
         const sl = slot(t.dataset.riv, t.dataset.sc); sl.v = t.value.trim();
@@ -14827,8 +14978,24 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (t.id === 'ri-insadd' && t.value) { const x = rfInstr().find((y) => y.id === t.value); if (x && !(r.ins || []).some((y) => y.id === x.id)) { r.ins = (r.ins || []).concat([{ id: x.id, codigo: x.codigo, desc: x.desc, val: x.val }]); riAgendar(); riRender(); } }
       if (t.id === 'ri-foto') { const fs = Array.from(t.files || []); t.value = ''; if (fs.length) riFotosAdd(fs); }
       if (t.dataset.riv || t.dataset.rio || t.dataset.rimot) riFaltaSync();
+      if (t.dataset.riv && t.value.trim()) insFaixaConf(r, t.value, () => { riAgendar(); riRender(); });   /* v63 */
     });
     if (rel.nFotos) riFotosShow();
+  }
+  /* v61: lotes numa linha só — sequência vira intervalo (AV-26-20100 a 20108), soltos: 3 primeiros + "+ N lotes"; title com todos */
+  function lotesResumo(ids, max) {
+    const L = (ids || []).filter(Boolean).map(String); max = max || 3;
+    if (!L.length) return { txt: '—', full: '' };
+    const parse = (id) => { const m = /^(.*?)(\d+)$/.exec(id); return m ? { p: m[1], n: +m[2], id } : { p: id, n: NaN, id }; };
+    const P = L.map(parse).sort((a, b) => (a.p < b.p ? -1 : a.p > b.p ? 1 : (a.n || 0) - (b.n || 0)));
+    const grupos = [];
+    P.forEach((x) => { const g = grupos[grupos.length - 1]; if (g && g.p === x.p && isFinite(x.n) && x.n === g.fim.n + 1) g.fim = x; else grupos.push({ p: x.p, ini: x, fim: x }); });
+    const txtG = (g) => (g.ini === g.fim ? g.ini.id : g.fim.n - g.ini.n === 1 ? `${g.ini.id}, ${g.fim.id}` : `${g.ini.id} a ${g.fim.n}`);
+    const tot = `${NF.format(L.length)} ${L.length === 1 ? 'lote' : 'lotes'}`;
+    let txt;
+    if (grupos.length <= max) txt = grupos.map(txtG).join(', ') + (grupos.some((g) => g.fim.n - g.ini.n >= 2) ? ' · ' + tot : '');
+    else { const vis = grupos.slice(0, max), n = grupos.slice(max).reduce((k, g) => k + (g.fim.n - g.ini.n + 1 || 1), 0); txt = vis.map(txtG).join(', ') + ` + ${NF.format(n)} ${n === 1 ? 'lote' : 'lotes'}`; }
+    return { txt, full: L.join(', ') };
   }
   function riRender() { const y = window.scrollY; render(); window.scrollTo(0, y); }
   function riFaltaSync() { const ed = RI.ed; if (!ed || ed.ro) return; const f = riFalta(ed.rel), b = $('[data-act="ri-fin"]'); if (b) b.disabled = !!f.length; }
@@ -14892,6 +15059,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'ri-todos') { rel.ck = rel.ck || {}; rel.ck[key] = rel.ck[key] || {}; rel.lotes.forEach((k) => { if (!(rel.ck[key][k] || {}).r) rel.ck[key][k] = Object.assign({}, rel.ck[key][k] || {}, { r: 'C' }); }); riAgendar(); riRender(); return true; }
     if (a === 'ri-ret') { rel.lotRes = rel.lotRes || {}; rel.lotRes[key] = Object.assign({}, rel.lotRes[key] || {}, { ret: el.dataset.v }); riAgendar(); riRender(); return true; }
     if (a === 'ri-res') { rel.lotRes = rel.lotRes || {}; const v = el.dataset.v; rel.lotRes[key] = Object.assign({}, rel.lotRes[key] || {}, { res: v, man: true }); if (v === 'Reprovado' && !rel.lotRes[key].mot) rel.lotRes[key].mot = riMotSug(rel, key); riAgendar(); riRender(); return true; }
+    if (a === 'ri-insp') { riInsPoe(key); return true; }
     if (a === 'ri-ins') { rel.ins = (rel.ins || []).filter((i) => i.id !== key); riAgendar(); riRender(); return true; }
     if (a === 'ri-fadd') { const i = $('#ri-foto'); if (i) i.click(); return true; }
     if (a === 'ri-rped') { RI.rpEd = key; riRender(); const [k1, s1] = String(key).split('|'); setTimeout(() => { const i = $(`[data-rio="${k1}"][data-sc="${s1}"]`); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }, 30); return true; }
@@ -15023,10 +15191,68 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
 
   /* ---------- instrumentos da Calibração ---------- */
+  /* v63: instrumento de cada pessoa */
+  const INS_COMUM = 'Uso comum';
+  const insOnde = (x) => [x.com, x.local].filter((v) => E.filled(v)).join(' · ');
+  const insComum = (x) => E.key(x.com) === E.key(INS_COMUM);
+  const insDe = (x, nome) => !!(nome && E.filled(x.com) && !insComum(x) && E.key(x.com) === E.key(nome));
+  /* v63: instrumentos que estão com a pessoa logada: entram sozinhos ao começar o RIR e o RIF; o que não pode ser usado fica de fora, com aviso */
+  function insMeus() {
+    const eu = myPessoa(), ok = [], fora = []; if (!eu || !S.model) return { ok, fora };
+    const hoje = E.isoDate(S.today);
+    (S.model.ins || []).filter((x) => insVivo(x) && x.codigo && insDe(x, eu)).forEach((x) => {
+      const val = x.validade != null ? E.isoDate(x.validade) : '';
+      if (x.status === 'BLOQUEADO') fora.push(x.codigo + ' (bloqueado)');
+      else if (!x.emUso) fora.push(x.codigo + ' (' + E.low(x.situacao || 'fora de uso') + ')');
+      else if (val && val < hoje) fora.push(x.codigo + ' (calibração vencida)');
+      else ok.push({ id: x.key, codigo: x.codigo, desc: x.desc || '', val });
+    });
+    ok.sort((a, b) => a.codigo.localeCompare(b.codigo, 'pt-BR'));
+    return { ok, fora };
+  }
+  const insMeusAviso = (fora) => { if (fora.length) toast(`${fora.length === 1 ? 'Seu instrumento ' + fora[0] + ' não entrou' : 'Seus instrumentos ' + fora.join(', ') + ' não entraram'}. Fale com a Qualidade.`, true); };
+  const insTagHTML = (t) => (t ? ` <em class="instag">${esc(t)}</em>` : '');
+  /* v63: o maior valor da faixa de medição, em mm ("0 a 150 mm", "0-300mm", "25 a 50", "0 a 6 pol", "0 a 5 m"); null = sem faixa ou não é comprimento */
+  function insFaixaMax(f) {
+    const t = String(f || '').toLowerCase().replace(/\s+/g, ' ').trim(); if (!t) return null;
+    const ns = (t.match(/\d+(?:[.,]\d+)?/g) || []).map((v) => parseFloat(v.replace(',', '.'))).filter((v) => isFinite(v));
+    if (!ns.length) return null;
+    const mx = Math.max.apply(null, ns), u = ' ' + t.replace(/\d+(?:[.,]\d+)?/g, ' ').replace(/[-–—\/]/g, ' ').replace(/(^|\s)(a|até|ate|de)(?=\s|$)/g, ' ') + ' ';
+    if (/°|ºc|bar|psi|kgf|\bn\b|hr[abc]?|hb|%|lux|rpm|v\b|kpa|mpa/.test(u)) return null;   /* temperatura, pressão, dureza… não é comprimento */
+    if (/pol|"|''|\bin\b/.test(u)) return Math.round(mx * 25.4 * 10) / 10;
+    if (/\bcm\b/.test(u)) return mx * 10;
+    if (/\bm\b|metro/.test(u) && !/mm/.test(u)) return mx * 1000;
+    return mx;   /* mm ou sem unidade */
+  }
+  /* v63: a medida passou do que os instrumentos do relatório medem? pergunta qual instrumento foi usado (sugere os de uso comum que medem) */
+  const INS_FX = { rel: null, ate: 0 };
+  function insFaixaConf(rel, v, depois) {
+    const n = parseFloat(String(v == null ? '' : v).replace(',', '.'));
+    if (!rel || rel.status === 'finalizado' || !isFinite(n) || n <= 0) return;
+    if (INS_FX.rel === rel.id && n <= INS_FX.ate) return;   /* já respondeu para esse tamanho neste relatório */
+    const I = rfInstr(), sel = (rel.ins || []).map((i) => I.find((y) => y.id === i.id)).filter(Boolean);
+    if (!sel.length || sel.some((x) => x.max == null || x.max >= n) || $('#fx-ins')) return;
+    const fmt = (m) => NF.format(Math.round(m * 100) / 100) + ' mm';
+    const ja = new Set(sel.map((x) => x.id));
+    const cabe = I.filter((x) => !ja.has(x.id) && x.max != null && x.max >= n).sort((a, b) => (b.tag === 'uso comum') - (a.tag === 'uso comum') || a.max - b.max || a.codigo.localeCompare(b.codigo, 'pt-BR'));
+    const chip = (x) => `<button type="button" class="chip2${x.venc ? ' venc' : ''}" data-fxi="${esc(x.id)}" ${x.venc ? 'disabled' : ''}>${esc(x.codigo)} · ${esc(x.desc)} · até ${fmt(x.max)}${x.venc ? ' · calibração vencida' : ''}${insTagHTML(x.tag)}</button>`;
+    const busca = (q) => { const k = E.key(q || ''); if (!k) return ''; const L = I.filter((x) => !ja.has(x.id) && E.key(x.codigo + ' ' + x.desc).includes(k)).slice(0, 8); return L.length ? L.map(chip).join('') : '<span class="tbnote">Nenhum instrumento em uso com esse código ou nome.</span>'; };
+    openModal('Medida maior que o instrumento', `<div id="fx-ins" class="fxins"><p style="margin:0">A medida <b>${esc(fmt(n))}</b> passa do que ${sel.length === 1 ? 'o' : 'os'} <b>${esc(sel.map((x) => x.codigo + ' (até ' + fmt(x.max) + ')').join(', '))}</b> ${sel.length === 1 ? 'mede' : 'medem'}. <b>Qual instrumento você usou?</b></p>
+      ${cabe.length ? `<div class="riinsadd"><span class="muted">Medem esse tamanho</span><div class="rtins">${cabe.slice(0, 8).map(chip).join('')}</div></div>` : '<div class="warnbox">Nenhum instrumento com faixa cadastrada mede esse tamanho. Procure pelo nome abaixo.</div>'}
+      <div class="riinsadd"><label class="field"><span>Outro instrumento</span><input id="fx-q" class="inp" placeholder="⌕  digite o código ou o nome" autocomplete="off"></label><div class="rtins" id="fx-r"></div></div>
+      <div class="formfoot fxfoot"><button class="btn" type="button" id="fx-nao">A medida está certa com o meu</button></div></div>`);
+    const fim = (ok) => { INS_FX.rel = rel.id; INS_FX.ate = Math.max(INS_FX.rel === rel.id ? INS_FX.ate : 0, n); closeLayer(); if (ok && depois) depois(); };
+    const poe = (id) => { const x = I.find((y) => y.id === id); if (!x || x.venc) return; if (!(rel.ins || []).some((y) => y.id === x.id)) rel.ins = (rel.ins || []).concat([{ id: x.id, codigo: x.codigo, desc: x.desc, val: x.val }]); lsSet(RT_INSREC, JSON.stringify([id].concat(rtInsRec().filter((z) => z !== id)).slice(0, 12))); toast(`${x.codigo} entrou no relatório.`); fim(true); };
+    const box = $('#fx-ins');
+    box.addEventListener('click', (e) => { const b = e.target.closest('[data-fxi]'); if (b && !b.disabled) poe(b.dataset.fxi); });
+    $('#fx-q').oninput = (e) => { $('#fx-r').innerHTML = busca(e.target.value); };
+    $('#fx-nao').onclick = () => fim(false);
+  }
   function rfInstr() {
     const hoje = E.isoDate(S.today);
+    const eu = myPessoa();
     return ((S.model && S.model.ins) || []).filter((x) => x.codigo && x.emUso && x.status !== 'BLOQUEADO')
-      .map((x) => { const val = x.validade != null ? E.isoDate(x.validade) : ''; return { id: x.key, codigo: x.codigo, desc: x.desc || '', val, venc: !!(val && val < hoje) }; })
+      .map((x) => { const val = x.validade != null ? E.isoDate(x.validade) : ''; return { id: x.key, codigo: x.codigo, desc: x.desc || '', val, venc: !!(val && val < hoje), tag: insDe(x, eu) ? 'seu' : insComum(x) ? 'uso comum' : '', max: insFaixaMax(x.faixa) }; })
       .sort((a, b) => a.codigo.localeCompare(b.codigo, 'pt-BR'));
   }
 
@@ -15149,6 +15375,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ident: { cli: (p.cli || '').toLocaleUpperCase('pt-BR'), pv: rfDig(p.pv), vend: (p.vend || '').toLocaleUpperCase('pt-BR'), qtd: item.q ? String(item.q) : '', mat: '', corrida: '', lote: '', des: '', sinete: '' },
       pecas, cotas: [], visual: rfVisualBase([]), ins: [], fotos: [], resultado: null, obs: '', inspetor: rfMe().toLocaleUpperCase('pt-BR')
     };
+    if (!base) { const M = insMeus(); rel.ins = M.ok; insMeusAviso(M.fora); }   /* v63: os instrumentos da pessoa já entram */
     if (base) { /* reinspeção: mesma peça e identificação, medidas em branco */
       ['modo', 'norma', 'sel', 'chave', 'desc', 'normaNome', 'notaLinha', 'prodId', 'ref', 'pecas'].forEach((k) => { if (base[k] !== undefined) rel[k] = rfClone(base[k]); });
       rel.ident = Object.assign(rfClone(base.ident || {}), { pv: rel.ident.pv });
@@ -15339,7 +15566,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${L.some((v) => !v.r) ? '<div><button class="btn small" type="button" data-act="rf-visresto">Marcar o resto como AP</button></div>' : ''}`;
   }
   /* 5 · instrumentos */
-  const rfInsCard = (x, on) => `<label class="${on ? 'on' : ''}${x.venc ? ' venc' : ''}"><input type="checkbox" data-rins="${esc(x.id)}" ${on ? 'checked' : ''} ${x.venc && !on ? 'disabled' : ''}><b>${esc(x.codigo)}</b><span>${esc(x.desc)}${x.val ? ' · até ' + esc(x.val.split('-').reverse().join('/')) : ''}${x.venc ? ' · <b style="color:var(--crit)">calibração vencida</b>' : ''}</span></label>`;
+  const rfInsCard = (x, on) => `<label class="${on ? 'on' : ''}${x.venc ? ' venc' : ''}"><input type="checkbox" data-rins="${esc(x.id)}" ${on ? 'checked' : ''} ${x.venc && !on ? 'disabled' : ''}><b>${esc(x.codigo)}</b><span>${esc(x.desc)}${x.val ? ' · até ' + esc(x.val.split('-').reverse().join('/')) : ''}${x.venc ? ' · <b style="color:var(--crit)">calibração vencida</b>' : ''}${x.tag ? ' · ' + esc(x.tag) : ''}</span></label>`;
   function rfInsBusca(q) {
     const rel = RFI.ed.rel, sel = new Set(rel.ins.map((x) => x.id)), k = E.key(q || '');
     if (!k) return '';
@@ -15435,6 +15662,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     fx.addEventListener('change', (e) => {
       const t = e.target, rel = RFI.ed && RFI.ed.rel; if (!rel) return;
       if (t.dataset.ri && t.dataset.ri !== 'qtd') { t.value = t.value.toLocaleUpperCase('pt-BR'); }
+      if (t.dataset.rm !== undefined && t.value.trim()) insFaixaConf(rel, t.value, () => { rfAgendar(); rfSec('ins'); rfAside(); });   /* v63 */
       if (t.dataset.rsel !== undefined) { rfTrocaSel(t.dataset.rsel, t.value, t); return; }
       if (t.dataset.rprod !== undefined) { rfTrocaProd(t.value, t); return; }
       if (t.dataset.rins !== undefined) {
@@ -16251,7 +16479,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* termina a medida que estava sendo digitada (vírgula sobrando sai) */
   function rtTecFecha() {
     const rel = RFI.ed && RFI.ed.rel, c = rel && rel.cotas[RT.kc];
-    if (c && RT.kj >= 0 && c.medidas[RT.kj] != null) { const v = rfLimpaNum(c.medidas[RT.kj]).replace(/,$/, ''); if (v !== c.medidas[RT.kj]) { c.medidas[RT.kj] = v; rfAgendar(); } }
+    if (c && RT.kj >= 0 && c.medidas[RT.kj] != null) { const v = rfLimpaNum(c.medidas[RT.kj]).replace(/,$/, ''); if (v !== c.medidas[RT.kj]) { c.medidas[RT.kj] = v; rfAgendar(); } if (v && c.sit !== 'na') insFaixaConf(rel, v, () => rfAgendar()); }   /* v63 */
     RT.kbuf = null; RT.kdig = false;
   }
   function rtTecMeio(rel) {
@@ -16351,7 +16579,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   });
 
   /* ---------- 3 · visual, instrumentos e fotos ---------- */
-  function rtInsChip(x, on) { return `<button type="button" class="chip2${on ? ' on' : ''}${x.venc ? ' venc' : ''}" data-act="rt-ins" data-key="${esc(x.id)}" ${x.venc && !on ? 'disabled' : ''}>${on ? '✓ ' : ''}${esc(x.codigo)} · ${esc(x.desc)}${x.venc ? ' · calibração vencida' : ''}</button>`; }
+  function rtInsChip(x, on) { return `<button type="button" class="chip2${on ? ' on' : ''}${x.venc ? ' venc' : ''}" data-act="rt-ins" data-key="${esc(x.id)}" ${x.venc && !on ? 'disabled' : ''}>${on ? '✓ ' : ''}${esc(x.codigo)} · ${esc(x.desc)}${x.venc ? ' · calibração vencida' : ''}${insTagHTML(x.tag)}</button>`; }
   function rtInsBusca(q) {
     const rel = RFI.ed.rel, sel = new Set(rel.ins.map((x) => x.id)), k = E.key(q || '');
     if (!k) return '';
@@ -16432,6 +16660,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (i === null) return;
       const v = rfLimpaNum(t.value); if (v !== t.value) t.value = v;
       rtCotaRefresh(i);
+      if (t.dataset.rtm !== undefined && v) { const rl = RFI.ed && RFI.ed.rel; insFaixaConf(rl, v, () => rfAgendar()); }   /* v63 */
       if (RFI.saveT || RFI.sujo) rfAgendar(1500);
     });
     m.addEventListener('change', (e) => {
@@ -16781,6 +17010,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (vis('av')) { const x = n([['AV', 'conf']]); if (x) L.push(['var(--av)', x, 'lotes conferidos']); }
     if (vis('rncc')) { const x = n([['RNCC', 'resp']]); if (x) L.push(['var(--rncc)', x, 'NCC como responsável']); }
     if (vis('ins')) { const x = n([['INS', 'resp']]); if (x) L.push(['var(--cal)', x, 'instrumentos sob responsabilidade']); }
+    if (vis('ins')) { const x = n([['INS', 'com']]); if (x) L.push(['var(--cal)', x, 'instrumentos com a pessoa (entram sozinhos no RIR e no RIF)']); }   /* v63 */
     return L;
   }
   function eqCaminho(p) { const L = []; let g = eqBy(p.gestor), lim = 0; while (g && lim++ < 12) { L.unshift(g); g = g.gestor && g.gestor !== g.id ? eqBy(g.gestor) : null; } return L; }
@@ -16939,7 +17169,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     };
   }
   /* nome de funcionário alterado: atualiza os campos de nome dos registros (assinaturas ficam como foram feitas) */
-  const PES_CAMPOS = { AV: ['conf'], RNC: ['comprador', 'emissor'], RNCC: ['emissor', 'resp'], INS: ['resp'] };
+  const PES_CAMPOS = { AV: ['conf'], RNC: ['comprador', 'emissor'], RNCC: ['emissor', 'resp'], INS: ['resp', 'com'] };
   async function pesPropagate(antigo, novo) {
     const ka = E.key(antigo); let n = 0;
     for (const mod of Object.keys(PES_CAMPOS)) {
@@ -18876,7 +19106,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         'Se for lançado um lote novo de uma nota que já está em inspeção, ele não abre outra nota: aparece dentro do RIR aberto, com o aviso “Chegou 1 lote novo desta nota”. Tocar em <b>Puxar para este RIR</b>.',
         'No tablet, deitado ou em pé, a tela tem o <b>painel da esquerda</b> com a nota, os lotes (com o resultado de cada um) e os instrumentos; o botão <b>«</b> recolhe o painel numa faixa fina só com o fim do número de cada lote e o <b>»</b> abre de novo (o tablet lembra a escolha). No checklist, cada lote é uma coluna (até 3 lotes lado a lado; com mais lotes, no tablet pequeno em pé ou no celular, um lote por vez, com <b>Copiar do lote</b> anterior). Tocar no quadro troca a resposta: <b>AP</b> (aprovado) → <b>RP</b> (reprovado) → <b>N/A</b> (não aplicável) → em branco. Itens da “nota inteira” têm um quadro só. <b>Marcar AP no que falta</b> marca os itens ainda em branco (as medidas continuam para digitar). Na Central (computador), os mesmos itens aparecem em lista, com AP, RP e N/A lado a lado e <b>todos AP</b>.',
         'Nos itens de medida, digitar o valor medido (o item fica AP; tocar no AP para trocar). Quando um lote precisa de uma medida que não está no checklist, tocar em <b>+ Medida</b> na parte Dimensional: dar o nome (ex.: Diâmetro interno) e marcar os lotes que levam a medida (nos outros ela fica N/A). A medida vale só para este RIR e pode ser removida enquanto ele não for concluído. Em todo item RP, descrever o que foi encontrado (vai para a NCF) e, se preciso, tirar foto.',
-        'Tocar em <b>Continuar</b> (o botão mostra quantas respostas faltam). Na <b>Conclusão</b>, adicionar o instrumento usado nas medidas pelo código (só aparecem instrumentos em uso e com calibração válida) e tirar as fotos do material (até 12).',
+        'Tocar em <b>Continuar</b> (o botão mostra quantas respostas faltam). Os instrumentos que estão com você (Calibração › <b>Com quem está</b>) já entram no RIR; o vencido ou bloqueado não entra e a Central avisa. Se uma medida passar da faixa dos instrumentos do RIR, a Central pergunta qual instrumento foi usado e mostra primeiro os de <b>uso comum</b> que medem esse tamanho. Na <b>Conclusão</b>, conferir os instrumentos (tirar o que não foi usado), adicionar outro digitando o código ou o nome (ex.: PAQ-002, paquímetro) e tocando nele; os últimos que você usou aparecem primeiro (só aparecem instrumentos em uso e com calibração válida) e tirar as fotos do material (até 12).',
         'Em <b>Resultado por lote</b>, conferir o resultado sugerido (algum RP = Reprovado; tudo respondido sem RP = Aprovado) e o motivo da reprovação, que vai para a NCF. Marcar também o <b>Retrabalho</b> de cada lote (Sim ou Não; começa em Não): quem decide é o inspetor, e o resultado aparece no lote (lista, ficha e Painel).',
         'Tocar em <b>Concluir e assinar</b> e confirmar. O RIR recebe o número e não pode mais ser alterado.'
       ]) + MNOTA('O rascunho é salvo sozinho a cada alteração. Se o RIR for concluído em outro aparelho, o rascunho desta tela não é gravado.')],
@@ -18954,7 +19184,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ['Fazer o RIF no tablet', MOL([
         '<b>Peça</b>: buscar o pedido (QR ou PV/cliente), escolher o item e a norma com seus seletores (tipo, classe, NPS/DN, face…) ou o modo manual (descrição e referência). Preencher a identificação: material, corrida e lote da matéria-prima (os lotes recebidos para o PV aparecem para tocar), nº do desenho, sinete e soldador quando há solda.',
         '<b>Medidas</b>: medir as cotas nas peças (padrão 3). No tablet, deitado ou em pé, uma cota por vez: o painel da esquerda mostra a peça, a amostra e a lista de cotas; ao lado ficam o nominal, a faixa aceita, as peças e o teclado (no tablet em pé, o teclado fica embaixo da cota). Digitar a medida no teclado da tela e tocar em <b>Gravar peça … e ir para …</b>. A Central compara com a tolerância e marca AP ou RP; fora da faixa, a peça fica vermelha e aparece <b>Medir de novo</b>. Tocar numa cota da lista ou numa peça vai direto a ela; <b>Cota não se aplica</b> marca N/A. O botão <b>«</b> recolhe o painel numa faixa só com os códigos das cotas e o <b>»</b> abre de novo (o tablet lembra a escolha). No celular e no computador, as cotas aparecem em lista; no tablet, <b>Ver as cotas em lista</b> mostra a lista só até sair daquele RIF. Cota sem tolerância: marcar AP ou RP; desvio grande pede justificativa.',
-        '<b>Visual e fotos</b>: marcar AP, RP ou N/A em cada item visual (RP exige descrição), informar os instrumentos usados e tirar as fotos.',
+        '<b>Visual e fotos</b>: marcar AP, RP ou N/A em cada item visual (RP exige descrição), conferir os instrumentos usados e tirar as fotos. Os instrumentos que estão com você (Calibração › <b>Com quem está</b>) já entram no RIF; se uma medida passar da faixa deles, a Central pergunta qual instrumento foi usado e mostra primeiro os de <b>uso comum</b> que medem esse tamanho.',
         '<b>Resultado</b>: conferir a <b>Prévia</b>, escolher Aprovado ou Reprovado, escrever a observação e tocar em <b>Assinar e finalizar</b>.'
       ]) + MNOTA('O RIF recebe o número RIF-AAAA-NNNNN na assinatura e não pode mais ser alterado. Item reprovado: usar <b>Reinspecionar</b>, que abre um RIF novo com as mesmas cotas.')],
       ['O que impede assinar', MUL(['Peça não escolhida ou sem cotas; nominal ou medida faltando.', 'Cota sem tolerância sem AP/RP; desvio sem justificativa.', 'Item visual sem marcação ou RP sem descrição.', 'Resultado Aprovado com cota ou item RP sem observação.', 'Nenhum instrumento, ou instrumento vencido ou bloqueado (IT-QUA-07).', 'Soldador sem qualificação válida na Soldagem (IT-QUA-08).'])],
@@ -19014,7 +19244,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ['Responsabilidades', MRESP([['<b>Responsável pela calibração</b> (função na Equipe, com “Lança” em Calibração)', 'Cadastra os instrumentos, envia ao laboratório, registra as calibrações e verificações, faz a análise de impacto e libera ou dá baixa.'], [M_PAPEIS.insr + ' / ' + M_PAPEIS.insu, 'Só usam instrumento em uso e com calibração válida; a Central não aceita outro.']])],
       ['Critério de aceitação', MP('O instrumento é <b>aprovado</b> quando |maior erro encontrado| + incerteza ≤ EMA (erro máximo admissível). O EMA vem do instrumento ou, se vazio, do tipo de equipamento (Configurações › Calibração). Validade = data da calibração + frequência.')],
       ['Atividades', MOL([
-        '<b>Novo instrumento</b>: código, descrição, tipo, marca, nº de série, faixa, resolução, setor, local, situação e, se houver, a calibração atual e a verificação intermediária.',
+        '<b>Novo instrumento</b>: código, descrição, tipo, marca, nº de série, faixa (ex.: 0 a 150 mm), resolução, setor, <b>com quem está</b>, local, situação e, se houver, a calibração atual e a verificação intermediária.',
+        '<b>Com quem está</b>: uma pessoa da Equipe (o instrumento já entra nos RIR e RIF dela) ou <b>Uso comum</b> (qualquer um usa; a Central sugere quando a medida passa da faixa). Vazio: guardado no local. A Calibração avisa os textos antigos que citam uma pessoa (“Ver e ligar”) e os instrumentos em uso sem faixa.',
         '<b>Etiqueta QR</b>: imprimir e fixar no instrumento. A página do QR mostra se pode usar.',
         '<b>Enviar para calibração</b>: data do envio, laboratório e previsão de retorno.',
         '<b>Registrar calibração</b> no retorno: data, laboratório, nº do certificado, frequência, maior erro e incerteza. A Central calcula o resultado e a validade. Enviar o certificado (PDF) para o Google Drive quando perguntado.',
@@ -20185,7 +20416,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   $$('#nav a').forEach((a) => { if (a.dataset.v === navOf(S.view)) a.setAttribute('aria-current', 'page'); });
   setInterval(() => { if (S.model && E.todaySerial() !== S.today) scheduleRebuild(); else refreshBanner(); }, 60000);
   boot();
-  window.__CQ = { S, DB, go, openRecord, lotSt, T: { cqAbrirTeste: (k) => cqAbrir(cqFind(k)), abaEstado: () => abaEstado(), nomeArq, relEn, rcEn, avFind, normLotes, avIdFmt, caseVal, nomeProprio, listNorm, cqPlano, iqCalc, fornSit, cqConcluir, cqResumoDoc, cqApp, cqFind, lotCertAviso, numMax, insImpPend, nextRnc, nextRncc, createRecord, updateRecord, deleteRecord, addDecisions, addInsEvent, FT, docMatch, docList, entResolve, entPropagate, saveEnt, pesPropagate, corrGet, corrId, rncFotos, findRec, related, destDialog, cfgSeed } };
+  window.__CQ = { S, DB, go, openRecord, lotSt, T: { entDrawer, nfeFornCnpj, entPorCnpj, entPorRaiz, cqAbrirTeste: (k) => cqAbrir(cqFind(k)), abaEstado: () => abaEstado(), nomeArq, relEn, rcEn, avFind, normLotes, avIdFmt, caseVal, nomeProprio, listNorm, cqPlano, iqCalc, fornSit, cqConcluir, cqResumoDoc, cqApp, cqFind, lotCertAviso, numMax, insImpPend, nextRnc, nextRncc, createRecord, updateRecord, deleteRecord, addDecisions, addInsEvent, FT, docMatch, docList, entResolve, entPropagate, saveEnt, pesPropagate, corrGet, corrId, rncFotos, findRec, related, destDialog, cfgSeed } };
 })();
 
 </script>

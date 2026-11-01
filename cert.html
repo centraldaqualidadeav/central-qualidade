@@ -2162,6 +2162,17 @@ function itemOfRow(r) {
   const x = ROW_BLOCO[r];
   return x && x.b.numera ? x.n : 0;
 }
+/* v62: célula de tabela em branco numa linha em uso sai com "-" no PDF e no Excel (no editor continua vazia).
+   Linha em uso: item do pedido (até o nº de itens da folha) ou linha de bloco com algum dado (componente, corrida, ensaio, tratamento…).
+   Campos soltos (cabeçalho, informações adicionais, responsável) não entram. */
+function valorSaida(cert, f) {
+  const v = cert.v[f.ref];
+  if (v) return v;
+  if (!f || f.key || linhaOculta(cert, f.r1)) return '';
+  if (f.item) return f.item <= cert.itens ? '-' : '';
+  if (f.linha && f.bloco && BLOCO[f.bloco]) return camposLinha(BLOCO[f.bloco], f.linha).some(g => cert.v[g.ref]) ? '-' : '';
+  return '';
+}
 const contaDe = (cert, b) => (b.conta === 'itens' ? cert.itens : b.conta === 'fixo' ? b.max : b.conta === 'ht' ? (cert.v ? htVis(cert) : b.max) : cert[b.conta] || 1);
 /* v56: linhas do tratamento térmico na folha: as 5 de sempre e, da 6ª à 10ª, até a última usada */
 function htVis(cert) {
@@ -4441,10 +4452,11 @@ function drawCertPdf(pdf, cert, novaPagina) {
       if (g.h <= 0 || !hits(g) || b.check) continue;
       const { st, t, rich } = cellFor(cert, b.r1, b.c1);
       if (b.field) {
-        const val = cert.v[b.field.ref];
+        const val = valorSaida(cert, b.field);
         if (!val) continue;
         const isNum = b.field.numeric && parseNumberBR(val) !== null;
-        drawText(g, st, val, null, { isNum, clip: true });
+        const traco = val === '-' && !cert.v[b.field.ref];          // v62: "-" das células em branco sai centralizado
+        drawText(g, traco ? Object.assign({}, st, { h: 'center' }) : st, val, null, { isNum, clip: true });
       } else if (t !== undefined && t !== null && t !== '') {
         const isNum = typeof t === 'number';
         drawText(g, st, isNum ? formatNumberBR(t) : t, rich, { isNum, shrink: b.merged, clip: b.merged });
@@ -4580,6 +4592,20 @@ async function buildXlsx(cert = state) {
     return (xfCache[key] = xfs.length);
   };
 
+  /* v62: mesmo estilo da célula, centralizado (o "-" das células em branco) */
+  const styleCentro = (s) => {
+    const key = s + '|centro';
+    if (xfCache[key] !== undefined) return xfCache[key];
+    const xfs = kids(cellXfs, 'xf');
+    const xf = (xfs[s] || xfs[0]).cloneNode(true);
+    let al = kids(xf, 'alignment')[0];
+    if (!al) { al = stDoc.createElementNS(NS_MAIN, 'alignment'); xf.appendChild(al); }
+    al.setAttribute('horizontal', 'center'); al.removeAttribute('indent');
+    xf.setAttribute('applyAlignment', '1');
+    cellXfs.appendChild(xf);
+    cellXfs.setAttribute('count', xfs.length + 1);
+    return (xfCache[key] = xfs.length);
+  };
   const writeNumber = (ce, value, fmt) => {
     const v = sdoc.createElementNS(NS_MAIN, 'v');
     v.textContent = String(value);
@@ -4630,8 +4656,9 @@ async function buildXlsx(cert = state) {
   }
   for (const f of FIELDS) {
     if (linhaOculta(cert, f.r1)) continue;
-    const val = cert.v[f.ref];
+    const val = valorSaida(cert, f);
     if (val) setCell(f.r1, f.c1, val, f);
+    if (val === '-' && !cert.v[f.ref]) { const ce = getCell(f.r1, f.c1); ce.setAttribute('s', styleCentro(+(ce.getAttribute('s') || 0))); }
   }
   for (const cb of CHECKS) setCell(cb.r, cb.c, cert.cb[cb.ref] ? CHECK_ON : CHECK_OFF, null);
   for (const sv of sdoc.getElementsByTagNameNS(NS_MAIN, 'sheetView')) sv.setAttribute('topLeftCell', 'A1');
@@ -4779,7 +4806,7 @@ async function lerCelulas(file) {
         txt = !Number.isFinite(num) ? vEl.textContent : isDateFormat(code) ? serialToBR(num) : formatNumberBR(num, code);
       }
       txt = txt.replace(/\r?\n/g, ' ').trim();
-      if (txt) cells[refOf(p.r, p.c)] = txt;
+      if (txt && txt !== '-' && txt !== '–') cells[refOf(p.r, p.c)] = txt;   // v62: o "-" das células em branco volta a ser vazio
     }
   }
   // caixas de seleção de formulário (planilha antiga): nome → marcada
