@@ -5560,7 +5560,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 64; window.CQ_V = APP_V;
+    const APP_V = 65; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -13416,7 +13416,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         <button class="btn" type="button" data-act="cq-pend" data-key="${esc(c.k)}">${c.pend ? 'Editar a pendência' : '⚠ Registrar pendência'}</button>
         ${c.pend ? `<button class="btn" type="button" data-act="cq-resolver" data-key="${esc(c.k)}">✓ Pendência resolvida</button>` : ''}
         <button class="btn" type="button" data-act="cq-pass" data-key="${esc(c.k)}">Passar para outra pessoa</button>
-        <button class="btn" type="button" data-act="cq-fora" data-key="${esc(c.k)}">Marcar como concluído (feito fora da Central)</button>
+        ${adm ? `<button class="btn" type="button" data-act="cq-fora" data-key="${esc(c.k)}">Marcar como concluído (feito fora da Central)</button>` : ''}
         ${!c.nf ? `<button class="btn" type="button" data-act="cq-anf" data-key="${esc(c.k)}">Nota pendente → Aguardando NF</button>` : ''}
         <button class="btn" type="button" data-act="cq-nao" data-key="${esc(c.k)}">Não precisa de certificado</button>
         ${adm ? `<button class="btn ghost tcrit" type="button" data-act="cq-del" data-key="${esc(c.k)}">Tirar da fila (importado por engano)</button>` : ''}
@@ -14117,7 +14117,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'cq-pass') { cqPassForm(c); return true; }
     if (a === 'cq-pend') { cqPendForm(c); return true; }
     if (a === 'cq-resolver') { cqResolver(c); return true; }
-    if (a === 'cq-fora') { if (!c.nf) { toast(`O pedido ${cqNum(c)} ainda não tem nota fiscal: use “Nota pendente → Aguardando NF”; ele conclui sozinho quando a NF entrar.`, true); return true; } cqConcForm(c, false); return true; }
+    if (a === 'cq-fora') { if (!cqAdm()) { toast('Só administradores marcam um pedido como feito fora da Central.', true); return true; } if (!c.nf) { toast(`O pedido ${cqNum(c)} ainda não tem nota fiscal: use “Nota pendente → Aguardando NF”; ele conclui sozinho quando a NF entrar.`, true); return true; } cqConcForm(c, false); return true; }
     if (a === 'cq-nao') { cqConcForm(c, true); return true; }
     if (a === 'cq-anf') { cqNotaPendForm(c); return true; }
     if (a === 'cq-anf-volta') { cqPatch(c, { st: 'p', npend: null }, 'Voltou de Aguardando NF para A fazer').then(() => { closeLayer(); toast(`Pedido ${cqNum(c)} voltou para A fazer.`); render(); }).catch(cqErr); return true; }
@@ -19233,7 +19233,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         '<b>«</b> recolhe a fila numa coluna só com os números (crítico escuro, bolinha vermelha = atrasado); <b>»</b> abre de novo. A escolha fica lembrada.'
       ])],
       ['Bloqueios e justificativas', MUL(['Lote reprovado, com NCF aberta, em contenção, com destino registrado ou em análise: o certificado só segue com justificativa (mínimo 10 caracteres).', 'Item usinado do pedido sem RIF aprovado: justificativa obrigatória.', 'Lote liberado sob concessão, sem resultado de inspeção ou sem certificado do fornecedor: só aviso.'])],
-      ['Pendências', MP('No menu do cartão (⋯): <b>Registrar pendência</b> (motivo, nº da OC, justificativa), <b>Pendência resolvida</b>, <b>Passar para outra pessoa</b>, <b>Marcar como concluído (feito fora da Central)</b> e <b>Não precisa de certificado</b>. O prazo padrão é 2 dias úteis.')],
+      ['Pendências', MP('No menu do cartão (⋯): <b>Registrar pendência</b> (motivo, nº da OC, justificativa), <b>Pendência resolvida</b>, <b>Passar para outra pessoa</b>, <b>Marcar como concluído (feito fora da Central)</b> (só administradores) e <b>Não precisa de certificado</b>. O prazo padrão é 2 dias úteis.')],
       ['Registros', MREG([['Certificado de qualidade', 'Nº do PV (e parte; folhas de continuação com letra)', 'Certificados › Concluídos'], ['Revisão congelada do certificado', 'Lotes, situação dos lotes e justificativas no momento da conclusão', 'Banco da Central e backup'], ['Lotes do certificado', 'Ficha do lote › Certificados emitidos', 'Lotes (AV)']])],
       ['Referências', MREF(['ABNT NBR ISO 9001:2015 — 8.5.2, 8.6 e 7.5', 'IT-QUA-01 · IT-QUA-05'])]
     ] },
