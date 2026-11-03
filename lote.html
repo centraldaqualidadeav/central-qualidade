@@ -79,7 +79,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 var(
     var x = {}; Object.keys(d.fields).forEach(function (k) { x[k] = val(d.fields[k]); });
     if (x.k === 'ins') { insPage(x); return; }
     var ins = String(x.insp || '').trim().toLowerCase();
-    var st = ins === 'aprovado' ? ['ok', '✓ Aprovado na inspeção'] : ins === 'reprovado' ? ['crit', '✕ Reprovado na inspeção'] : (ins === 'em análise' || ins === 'em analise') ? ['warn', '! Em análise na inspeção'] : ins === 'liberado sob concessão' ? ['warn', '! Liberado sob concessão'] : null;
+    var st = ins === 'aprovado' ? ['ok', '✓ Aprovado na inspeção'] : ins === 'reprovado' ? ['crit', '✕ Reprovado na inspeção'] : (ins === 'em análise' || ins === 'em analise') ? ['warn', '! Em análise na inspeção'] : ins === 'liberado sob concessão' ? ['warn', '! Liberado sob concessão'] : ins === 'liberado' ? ['ok', '✓ Liberado'] : null;   /* v67: "Liberado" (concessão ou retrabalho, sem detalhes para quem é de fora) */
     /* lote reprovado, liberado sob concessão ou ligado a uma RNC: blocos em vermelho */
     var cc = ins === 'liberado sob concessão'; /* concessão: blocos em amarelo */
     var nc = !cc && (x.rnc === '1' || ins === 'reprovado');

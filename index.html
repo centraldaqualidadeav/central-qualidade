@@ -2225,6 +2225,7 @@ body.tvmode .tvbar { display: none !important; }   /* v47: no painel rolando nã
 .cjsq { display: grid; gap: 10px; margin-top: 8px; } .cjsqb { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .cjsqb .btn { justify-content: center; min-height: 40px; white-space: normal; }
 .cqforal { display: grid; gap: 6px; margin-top: 8px; } .cqforar { display: grid; grid-template-columns: minmax(0, 1fr) 128px 96px; gap: 8px; align-items: center; } .cqforar .btn { justify-content: center; }   /* v66 */
 @media (max-width: 700px) { .cqforar { grid-template-columns: 1fr 1fr; } .cqforar > span { grid-column: 1 / -1; } }
+.rrdest { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .rrdest .btn { justify-content: center; white-space: normal; min-height: 36px; }   /* v67 */
 .instag { font-style: normal; font-weight: 600; font-size: 12px; color: var(--cal); margin-left: 6px; white-space: nowrap; }   /* v63: seu / uso comum */
 .rtins:empty { display: none; }
 .rtres { display: grid; place-items: center; gap: 4px; border-radius: 14px; padding: 18px; background: var(--ok); color: #fff; text-align: center; }
@@ -5562,7 +5563,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 66; window.CQ_V = APP_V;
+    const APP_V = 67; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7221,7 +7222,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         ['Quantidade', x.quant == null || x.quant === '' ? '' : t(x.quant) + (x.und ? ' ' + t(x.und) : '')], ['Diâmetro', t(x.diam)], ['Espessura', t(x.esp)], ['Liga/Tipo', t(x.liga)], ['Material', t(x.norma)], ['Fornecedor', t(x.forn)], ['Nota fiscal', t(x.nf)], ['Ordem de compra', t(x.pc)], ['Pedido de venda', t(x.pv)], ['Certificado', (semCert(x) ? '<span class="chip warn"><i>!</i>sem certificado</span>' : t(x.cert)) + link], ['Conferido', t(x.conf)], ['Retrabalho', t(avRet(x))]];
       acts = (rirOn() && cw('rir') && !E.filled(x.insp) && !lotSt(x).insp ? `<button class="btn primary" type="button" data-act="ri-lote" data-key="${esc(key)}">${riCards().some((c) => c.st === 'r' && (c.lotes || []).includes(key)) ? 'Continuar RIR' : 'Fazer RIR'}</button>` : '') + (cw(MOD[mod].col) ? `<button class="btn" type="button" data-act="av-similar" data-key="${esc(key)}">Lançar parecido</button>` : '') + `<button class="btn" type="button" data-act="av-label" data-key="${esc(key)}">Etiqueta</button>`
         + (cw('rnc') && lotSt(x).st === 'pend' ? `<button class="btn tcrit" type="button" data-act="av-to-rncf" data-key="${esc(key)}">Abrir NCF</button><button class="btn" type="button" data-act="av-conc" data-key="${esc(key)}">Liberar sob concessão</button><button class="btn ghost" type="button" data-act="av-lib" data-key="${esc(key)}">Desbloquear (erro)</button>` : '')
-        + (cw('rnc') && lotSt(x).st === 'rnc' ? `<button class="btn" type="button" data-act="av-dest" data-key="${esc(key)}">Registrar destino</button>` : '')
+        + (cw('rnc') && lotSt(x).st === 'rnc' ? `<button class="btn" type="button" data-act="av-dest" data-key="${esc(key)}">Registrar destino</button><button class="btn" type="button" data-act="av-conc" data-key="${esc(key)}">Liberar sob concessão</button>` : '')   /* v67: concessão também depois da NCF */
         + (cw('rnc') && !lotSt(x).lock && ['em análise', 'em analise'].includes(E.low(x.insp)) ? `<button class="btn" type="button" data-act="av-conc" data-key="${esc(key)}">Liberar sob concessão</button>` : '') + editBtn;
       await resolveNames(lotSt(x).evs.map((e) => e.by));
       if (decHist(x)) pairs.push(['Decisões da NCF', decHist(x)]);
@@ -8867,7 +8868,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const rncs = []; lots.forEach((l) => lotRncs(l).filter((o) => o.rec.mod === 'RNC').forEach((o) => { if (!rncs.includes(o.rec)) rncs.push(o.rec); }));
     const opts = rncs.map((r) => `<option value="${esc(r.num)}">${esc(r.num)} · ${esc(r.status === 'Concluida' ? 'concluída' : 'aberta')}</option>`).join('')
       + '<option value="__nova">Abrir uma NCF nova depois de salvar</option><option value="">Sem NCF</option>';
-    openModal('Liberar sob concessão · ' + (one ? x.id : `NF ${disp(x.nf) || '—'}`), `${one ? `<p style="margin:0">O lote <b>${esc(x.id)}</b> (${esc(x.desc || '')}) está <b>${esc(x.insp)}</b>. Registre quem autorizou o uso ou envio mesmo assim.</p>` : `<p style="margin:0">Marque os lotes liberados e registre quem autorizou o uso ou envio mesmo assim.</p>${lotChipsHTML(lots, new Set(lots.map((l) => l.key)), 'cc-lots')}`}
+    openModal('Liberar sob concessão · ' + (one ? x.id : `NF ${disp(x.nf) || '—'}`), `${one ? `<p style="margin:0">O lote <b>${esc(x.id)}</b> (${esc(x.desc || '')}) está <b>${esc(lotSt(x).eff || x.insp || 'Reprovado')}</b>. Registre quem autorizou o uso ou envio mesmo assim.</p>` : `<p style="margin:0">Marque os lotes liberados e registre quem autorizou o uso ou envio mesmo assim.</p>${lotChipsHTML(lots, new Set(lots.map((l) => l.key)), 'cc-lots')}`}
       <datalist id="dl-conc-p">${optList((S.model.cfg.PESSOAS || []).filter((pp) => !pp.inativo).map((pp) => pp.nome))}</datalist><datalist id="dl-conc-c">${optList(cliList())}</datalist>
       <div class="fgrid cm-grid"><label class="field"><span>Autorizado por <b>*</b></span><input id="cc-aut" list="dl-conc-p" autocomplete="off"></label>
       <label class="field"><span>Data da autorização <b>*</b></span><input id="cc-data" type="date" value="${E.isoDate(S.today)}"></label></div>
@@ -8989,6 +8990,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (nc) o.forn = s(x.forn); /* o fornecedor só vai para a página de lote com NCF */
     const ds = lotSt(x).dest; if (ds && DEST[ds.dest]) o.dest = DEST[ds.dest][0] + (ds.data != null ? ' em ' + fD(ds.data) : '');
     if (lotSt(x).st === 'cont') o.bloq = 'Em contenção — não usar até a liberação da Qualidade';
+    /* v67: para quem é de fora (o cliente pode ler o QR), concessão e retrabalho aparecem só como "Liberado"; os detalhes ficam na Central */
+    const ds2 = lotSt(x).dest;
+    if (lotSt(x).st === 'conc' || (lotSt(x).st === 'dest' && ds2 && ds2.dest === 'ret')) { o.insp = 'Liberado'; o.rnc = ''; delete o.forn; delete o.dest; }
     return o;
   }
   async function pubWrite(x, tok) { try { await DB.db.doc('pub/' + tok).set(pubData(x)); } catch (e) { console.warn('página do lote não atualizada', e); } }
@@ -9010,6 +9014,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   /* depois de editar um lote que já tem página, a cópia pública é atualizada */
   function pubSync() {
+    if (PUB() && S.model && !S.pubV67 && (cw('av') || cw('rnc')) && lsGet('cq-pub-v67', '') !== '1') {   /* v67: páginas antigas com concessão/retrabalho ficam neutras */
+      S.pubV67 = true; S.model.av.forEach((x) => { const st = lotSt(x); if ((st.st === 'conc' || (st.st === 'dest' && st.dest && st.dest.dest === 'ret')) && pubTok(x)) PUBQ.add(x.key); }); lsSet('cq-pub-v67', '1');
+    }
     if (!PUB() || !PUBQ.size || !(cw('av') || cw('rnc') || cw('rir') || cw('rncc'))) { PUBQ.clear(); return; }
     Array.from(PUBQ).forEach((k) => { PUBQ.delete(k); const x = findRec('AV', k), tok = x && pubTok(x); if (tok) pubWrite(x, tok); });
   }
@@ -9029,7 +9036,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* faixa preta na etiqueta: lote reprovado ou liberado sob concessão */
   /* lote com problema (reprovado, concessão ou com NCF): só nesses o fornecedor aparece na etiqueta e na página do QR */
   function lotNC(x) { return E.low(x.insp) === 'reprovado' || E.low(x.insp) === E.low(CONC) || lotRncs(x).length > 0; }
-  function labelBand(x) { const s = E.low(x.insp); return s === 'reprovado' ? 'REPROVADO' : s === E.low(CONC) ? 'LIBERADO SOB CONCESSÃO' : ''; }
+  function labelBand(x) { const s = E.low(x.insp); return s === 'reprovado' && lotSt(x).st !== 'conc' ? 'REPROVADO' : ''; }   /* v67: concessão não aparece na etiqueta (ela pode ir para o cliente) */
   const bandHTML = (txt, wmm, fsMax) => (txt ? `<div class="bnd" style="font-size:${Math.min(fsMax, wmm / (txt.length * 0.62))}mm">${txt}</div>` : '');
   function labelHTMLc(x, W, H, tok) {
     const pad = Math.max(1.2, Math.min(W, H) * 0.05), id = esc(String(x.id || '')), n = Math.max(6, String(x.id || '').length), bd = labelBand(x);
@@ -18309,9 +18316,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function rrLotesHTML(x) {
     const L = lotTokens(x.lotesAV).map(avById).filter(Boolean); if (!L.length) return '';
     const falta = L.filter((l) => lotSt(l).st === 'rnc');
+    const dConc = /concess/i.test(String(x.disp || ''));   /* v67: disposição "uso como está (concessão)" com lote ainda bloqueado */
     return `<div class="fsec"><h3>Destino dos lotes${falta.length ? ` · <span style="color:var(--warn)">${falta.length} sem destino</span>` : ''}</h3>
       <div class="rel">${L.map((l) => `<button type="button" style="--c:${MOD.AV.c}" data-open="AV:${esc(l.key)}"><span class="mono">${esc(l.id)}</span> ${lockChip(l)}</button>`).join('')}</div>
-      ${falta.length && cw('rnc') ? `<div class="formfoot"><button class="btn small" type="button" data-act="rr-dest" data-key="${esc(x.key)}">Registrar destino (devolvido, retrabalhado, sucateado)</button></div>` : ''}</div>`;
+      ${falta.length && dConc ? `<div class="warnbox" style="margin-top:8px">A disposição é <b>${esc(x.disp)}</b>, mas ${falta.length === 1 ? `o lote ${esc(falta[0].id)} continua bloqueado` : `${falta.length} lotes continuam bloqueados`}. Registre a concessão para liberar.</div>` : ''}
+      ${falta.length && cw('rnc') ? `<div class="formfoot rrdest"><button class="btn small${dConc ? '' : ' primary'}" type="button" data-act="rr-dest" data-key="${esc(x.key)}">Registrar destino (devolvido, retrabalhado, sucateado)</button><button class="btn small${dConc ? ' primary' : ''}" type="button" data-act="rr-conc" data-key="${esc(x.key)}">Liberar sob concessão (uso como está)</button></div>` : ''}</div>`;
   }
   const rv2 = (id) => { const el = $('#' + id); return el ? el.value.trim() : undefined; };
   const rnNum = (s) => { if (s == null || s === '') return null; const n = Number(String(s).replace(',', '.')); return isFinite(n) ? n : null; };
@@ -20404,6 +20413,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (a === 'av-label') { const x = findRec('AV', key); if (x) labelDialog([x]); return; }
       if (a === 'av-corr') { avCorrEdit(key); return; }
       if (a === 'av-dest') { const x = findRec('AV', key); if (x) destDialog([x]); return; }
+      if (a === 'rr-conc') { const r = findRec('RNC', key); if (r) { const L = lotTokens(r.lotesAV).map(avById).filter((l) => l && lotSt(l).st === 'rnc'); if (L.length) { avConcDialog(L.length === 1 ? L[0] : L); const sel = $('#cc-rnc'); if (sel && Array.from(sel.options).some((o) => o.value === r.num)) sel.value = r.num; } } return; }
       if (a === 'rr-dest') { const r = findRec('RNC', key); if (r) { const L = lotTokens(r.lotesAV).map(avById).filter((l) => l && lotSt(l).st === 'rnc'); if (L.length) destDialog(L, r.num); else toast('Nenhum lote desta NCF aguardando destino.'); } return; }
       if (a === 'av-similar') { const x = findRec('AV', key); if (!x) return; const r = x.raw || {}; const nota = {}; 'CKLMNP'.split('').forEach((c) => { if (r[c] != null) nota[c] = String(r[c]); }); nota.B = E.isoDate(S.today); const it = {}; 'FEDRSGHIJOTQU'.split('').forEach((c) => { if (r[c] != null) it[c] = String(r[c]); }); if (!it.U) it.U = 'Aprovado'; S.avmPrefill = { nota, items: [it] }; S.form = 'av'; S.editKey = null; $('#layer').innerHTML = ''; document.body.style.overflow = ''; go('cadastro'); toast('Formulário preenchido com os dados de ' + x.id + '. Altere o que for diferente (corrida, certificado…).'); return; }
       if (a === 'av-to-rncf') { const x = findRec('AV', key); if (x) rncFromLots(groupOf(x)); return; }
