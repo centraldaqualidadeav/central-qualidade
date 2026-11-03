@@ -2226,6 +2226,7 @@ body.tvmode .tvbar { display: none !important; }   /* v47: no painel rolando nã
 .cqforal { display: grid; gap: 6px; margin-top: 8px; } .cqforar { display: grid; grid-template-columns: minmax(0, 1fr) 128px 96px; gap: 8px; align-items: center; } .cqforar .btn { justify-content: center; }   /* v66 */
 @media (max-width: 700px) { .cqforar { grid-template-columns: 1fr 1fr; } .cqforar > span { grid-column: 1 / -1; } }
 .rrdest { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .rrdest .btn { justify-content: center; white-space: normal; min-height: 36px; }   /* v67 */
+.diagtx { text-align: left; white-space: pre-wrap; word-break: break-word; font: 12px/1.45 var(--f-mono, ui-monospace, monospace); background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin: 10px 0 0; max-height: 46vh; overflow: auto; } .formfoot.diagb { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; width: 100%; justify-self: stretch; } .formfoot.diagb.d3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } .diagb .btn { justify-content: center; }   /* v71 */
 .instag { font-style: normal; font-weight: 600; font-size: 12px; color: var(--cal); margin-left: 6px; white-space: nowrap; }   /* v63: seu / uso comum */
 .rtins:empty { display: none; }
 .rtres { display: grid; place-items: center; gap: 4px; border-radius: 14px; padding: 18px; background: var(--ok); color: #fff; text-align: center; }
@@ -5346,27 +5347,13 @@ re2js/build/index.js:
     uso: () => ({ desde: USO.desde, leituras: Object.assign({}, USO.leit), gravacoes: USO.grav, velhos: Array.from(USO.velho) }),
     /* ligar vale na próxima abertura; desligar também apaga a cópia guardada (só com internet, para não perder o que ainda não subiu) */
     liga: async (sim) => {
-      if (sim) { lsS('cq-cache', 'sim'); lsS('cq-cache-manual', '1'); return 'recarregar'; }
+      if (sim) { lsS('cq-cache', 'sim'); lsS('cq-cache-manual', '1'); lsS('cq-cache-off-manual', ''); return 'recarregar'; }
       if (CACHE_ON && navigator.onLine === false) throw { message: 'Sem internet agora: a cópia ainda pode ter algo para subir. Desligue com internet.' };
-      lsS('cq-cache', 'nao');
+      lsS('cq-cache', 'nao'); lsS('cq-cache-off-manual', '1');
       if (CACHE_ON) { try { await SDK.terminate(fs); await SDK.clearIndexedDbPersistence(fs); } catch (e) { console.warn(e); } }
       return 'recarregar';
     }
   };
-  /* v70: computador com a cópia ligada sozinha pelo login de tablet: assim que o banco responder e não houver nada para subir,
-     desliga (vale na próxima abertura) e recarrega se ninguém estiver no meio de um relatório */
-  function cacheDesligaPc() {
-    let n = 0;
-    const tenta = () => {
-      if (++n > 120) return;
-      if (navigator.onLine === false || !USO.servAt || USO.velho.size || USO.pend.size) { setTimeout(tenta, 5000); return; }
-      lsS('cq-cache', 'nao'); lsS('cq-cache-limpar', '1');
-      const ocupado = () => (window.CQ_OCUPADO ? window.CQ_OCUPADO() : false);
-      const rec = () => { if (ocupado()) { setTimeout(rec, 10000); return; } location.reload(); };
-      setTimeout(rec, 1500);
-    };
-    setTimeout(tenta, 4000);
-  }
   /* sair da conta: com internet, apaga a cópia do aparelho (outra pessoa pode entrar depois neste aparelho) */
   async function sairConta() {
     if (CACHE_ON && navigator.onLine !== false) { try { await SDK.terminate(fs); await SDK.clearIndexedDbPersistence(fs); } catch (e) { /* segue para sair */ } }
@@ -5557,8 +5544,8 @@ re2js/build/index.js:
           window.CQ_PREVIEW = { email: PREV.email, nome: PREV.nome };
         }
       }
-      if (!PREV && CACHE_PODE && pareceTablet(ME.tab) && APAR_TABLET && lsG('cq-cache') === null) lsS('cq-cache', 'sim'); /* tablet do inspetor: cópia no aparelho a partir da próxima abertura (v70: só no tablet de verdade) */
-      if (!PREV && CACHE_ON && !APAR_TABLET && pareceTablet(ME.tab) && lsG('cq-cache-manual') !== '1') cacheDesligaPc();   /* v70: computador do inspetor */
+      /* v71: login de tablet tem a cópia no aparelho (como antes da v70). Onde a v70 desligou sozinha, volta (uma vez); quem desligar no botão fica desligado. */
+      if (!PREV && CACHE_PODE && pareceTablet(ME.tab) && (lsG('cq-cache') === null || (lsG('cq-cache') === 'nao' && lsG('cq-cache-off-manual') !== '1' && lsG('cq-v71-volta') !== '1'))) { lsS('cq-cache', 'sim'); lsS('cq-v71-volta', '1'); }
       names[ME.uid] = PREV ? PREV.quem : ME.nome;
       if (!PREV) SDK.setDoc(SDK.doc(fs, 'perfis/' + ME.uid), { nome: ME.nome, email, at: Date.now() }, { merge: true }).catch(() => {}); /* merge: mantém a escolha do modo escuro */
       started = true; hideGate(); resolveReady(); fireMe();
@@ -5590,7 +5577,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 70; window.CQ_V = APP_V;
+    const APP_V = 71; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -6570,7 +6557,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); });
         DB.docs[mod] = o;
         scheduleRebuild();
-      }, (err) => { DB.state = 'off'; updateChrome(); toast('Conexão com o banco interrompida (' + (err && err.code) + '). Recarregue a página.', true); });
+      }, (err) => {   /* v71: o erro fica registrado (diagnóstico); sem permissão de um módulo, o resto da Central abre */
+        const code = String((err && err.code) || 'erro').replace(/^firestore\//, '').replace(/_/g, '-'); DB.erros = DB.erros || {}; DB.erros[MOD[mod].col] = { code, at: Date.now() };
+        if (/permission/.test(code)) { DB.ready[mod] = true; DB.docs[mod] = DB.docs[mod] || {}; scheduleRebuild(); updateChrome(); toast(`Seu acesso não deixa ler ${modTitle(mod)} (${code}). Confira em Usuários.`, true); return; }
+        DB.state = 'off'; DB.parou = true; updateChrome(); diagParado();
+      });
     });
     if (CQ_ABA) { IQ.ready = true; SD.ready = true; RI.ready = true; RFI.valReady = true; }
     if (!CQ_ABA) db.collection('iqf').onSnapshot((snap) => {
@@ -6578,20 +6569,20 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (autoOk()) setTimeout(iqSitSync, 2000);
       if (!S.model) return;
       if (['iqf', 'painel'].includes(S.view)) { const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
-    }, () => { IQ.ready = true; });
+    }, (e) => { anotaErro('iqf', e);  IQ.ready = true; });
     if (!CQ_ABA) db.collection('sold').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); SD.docs = o; SD.ready = true; SD.ver++;
       if (!S.model) return;
       updateChrome();
       if (['sold', 'painel', 'alertas', 'equipe'].includes(S.view)) { const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
-    }, () => { SD.ready = true; });
+    }, (e) => { anotaErro('sold', e);  SD.ready = true; });
     db.collection('certq').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); CQF.docs = o; CQF.ready = true; CQF.ver++;
       if (!S.model) return;
       updateChrome();
       if (S.view === 'certq' || S.view === 'painel') { if (S.view === 'certq' && S.cqSub === 'ed') { cqPanelSync(); if (CQ_ABA) abaFila(); else if (!S.cqEd) render(); return; } const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
-    }, () => { CQF.ready = true; });
-    db.collection('rifp').onSnapshot((snap) => {
+    }, (e) => { anotaErro('certq', e);  CQF.ready = true; });
+    if (accBanco('rif') === 'nao' && accBanco('certq') === 'nao' && accBanco('rncc') === 'nao') { RFI.ped = {}; RFI.pedReady = true; } else db.collection('rifp').onSnapshot((snap) => {   /* v71: só quem pode ler (regras) */
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RFI.ped = o; RFI.pedReady = true;
       if (!S.model) return;
       rtSnap();
@@ -6603,7 +6594,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         else if ($('#layer').innerHTML) S.stale = true;
         else { const busca = document.activeElement && document.activeElement.id === 'rf-q'; render(); if (busca) { const i = $('#rf-q'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } } }
       }
-    }, () => { RFI.pedReady = true; });
+    }, (e) => { anotaErro('rifp', e);  RFI.pedReady = true; });
     if (!CQ_ABA) db.collection('rir').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RI.docs = o; RI.ready = true;
       if (!S.model) return;
@@ -6611,18 +6602,19 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const ae = document.activeElement, digitando = ae && ae.id === 'rit-q';
       if ((S.view === 'rir' || S.view === 'rirtab' || S.view === 'tabhome') && (RI.sub !== 'ed' || S.view === 'tabhome') && !$('#layer').innerHTML && !digitando) render();
       else if (S.view === 'painel' && !$('#layer').innerHTML) render();
-    }, () => { RI.ready = true; });
-    db.doc('iqf/sit').onSnapshot((snap) => { IQSIT.s = (snap.exists && (snap.data() || {}).s) || {}; }, () => {});
-    if (!CQ_ABA) db.collection('rifv').onSnapshot((snap) => {
+    }, (e) => { anotaErro('rir', e);  RI.ready = true; });
+    db.doc('iqf/sit').onSnapshot((snap) => { IQSIT.s = (snap.exists && (snap.data() || {}).s) || {}; }, (e) => { anotaErro('iqf/sit', e); });
+    if (!CQ_ABA && accBanco('rif') === 'nao') { RFI.val = {}; RFI.valReady = true; } else if (!CQ_ABA) db.collection('rifv').onSnapshot((snap) => {   /* v71 */
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RFI.val = o; RFI.valReady = true;
       rtSnap();
       if (S.view === 'config' && S.cfgTab === 'rif' && !$('#layer').innerHTML) rfCfgPane();
       if (S.view === 'rif' && S.rif && S.rif.sub === 'ed' && RFI.ed && RFI.ed.rel.status !== 'finalizado') rfSec('prod');
-    }, () => { RFI.valReady = true; });
-    db.doc('cfg/logo').onSnapshot((snap) => { DB.logo = snap.exists ? (snap.data().img || null) : null; if (!PREVIEW()) lsSet('cq-logo', DB.logo || ''); applyLogo(); if (S.model && (S.view === 'config' || S.view === 'relatorio') && !$('#layer').innerHTML) render(); }, () => {});
-    db.doc('meta/numeracao').onSnapshot((snap) => { DB.numer = snap.exists ? snap.data() : {}; }, () => {});
-    db.doc('cfg/main').onSnapshot((snap) => { DB.cfg = snap.exists ? snap.data() : null; DB.ready.cfg = true; if (DB.cfg && DB.cfg.geracao) geracaoCheck(DB.cfg.geracao); scheduleRebuild(); }, () => { DB.ready.cfg = true; scheduleRebuild(); });
-    setTimeout(() => { if (!allReady()) renderStatus('Carregando os dados… A primeira abertura pode levar alguns segundos.'); }, 2500);
+    }, (e) => { anotaErro('rifv', e);  RFI.valReady = true; });
+    db.doc('cfg/logo').onSnapshot((snap) => { DB.logo = snap.exists ? (snap.data().img || null) : null; if (!PREVIEW()) lsSet('cq-logo', DB.logo || ''); applyLogo(); if (S.model && (S.view === 'config' || S.view === 'relatorio') && !$('#layer').innerHTML) render(); }, (e) => { anotaErro('cfg/logo', e); });
+    db.doc('meta/numeracao').onSnapshot((snap) => { DB.numer = snap.exists ? snap.data() : {}; }, (e) => { anotaErro('meta/numeracao', e); });
+    db.doc('cfg/main').onSnapshot((snap) => { DB.cfg = snap.exists ? snap.data() : null; DB.ready.cfg = true; if (DB.cfg && DB.cfg.geracao) geracaoCheck(DB.cfg.geracao); scheduleRebuild(); }, (err) => { DB.erros = DB.erros || {}; DB.erros['cfg/main'] = { code: String((err && err.code) || 'erro').replace(/^firestore\//, '').replace(/_/g, '-'), at: Date.now() }; DB.ready.cfg = true; scheduleRebuild(); });
+    setTimeout(() => { if (!allReady()) { if (DB.parou || DB.state === 'off') diagParado(); else renderStatus('Carregando os dados… A primeira abertura pode levar alguns segundos.'); } }, 2500);
+    setTimeout(() => { if (!allReady() && !S.model) diagParado(); }, 25000);   /* v71: 25 s sem dados: mostra o diagnóstico em vez de girar para sempre */
   }
   /* P8: fotos da Equipe e as importações do Jurong são pesadas e só servem nas telas delas: o banco só é ouvido quando a tela abre */
   const OUVE = {};
@@ -6664,6 +6656,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const ocultos = () => { const o = ((DB.cfg || {}).ocultos) || {}; return Object.assign({}, TESTE_DEF, o); };
   const emTeste = (col) => !!ocultos()[col];
   window.CQ_EMTESTE = (col) => emTeste(col); /* Usuários avisa quando a ferramenta do tablet ainda está em teste */
+  /* v71: o que as regras do banco deixam ler (sem o "em teste", que é só da tela) */
+  function accBanco(col) { try { return typeof window.CQ_ACCESS === 'function' ? window.CQ_ACCESS(col) : 'lanca'; } catch (e) { return 'lanca'; } }
   const ACC = (col) => (!DB.owner && emTeste(col) ? 'nao' : typeof window.CQ_ACCESS === 'function' ? window.CQ_ACCESS(col) : 'lanca');
   const vis = (col) => ACC(col) !== 'nao';
   const cw = (col) => canWrite() && ACC(col) === 'lanca';
@@ -7431,6 +7425,35 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     $$('.band[data-bmod]', root).forEach((b) => { if (!visMod(b.dataset.bmod)) { const sec = b.closest('.sec'); if (sec) sec.remove(); } });
     $$('.report [style^="--c:var(--"]', root).forEach((el) => { const m = /--c:(var\(--[a-z]+\))/.exec(el.getAttribute('style') || ''); if (m && COLOR_COL[m[1]] && !vis(COLOR_COL[m[1]])) el.remove(); });
   }
+  /* v71: diagnóstico da conexão deste aparelho (para copiar e mandar) */
+  const DIAG_COD = { 'permission-denied': 'o acesso desta pessoa (Usuários) não deixa ler essa parte do banco', 'resource-exhausted': 'o limite diário de leituras do banco (plano grátis do Firebase) acabou: volta sozinho depois da meia-noite (horário do Pacífico)', 'unauthenticated': 'o login expirou e não renovou (internet): saia e entre de novo', 'unavailable': 'o aparelho não alcança o banco (internet ou rede bloqueando)', 'failed-precondition': 'a cópia do banco no aparelho não abriu' };
+  function anotaErro(nome, e) { const code = String((e && e.code) || 'erro').replace(/^firestore\//, '').replace(/_/g, '-'); DB.erros = DB.erros || {}; DB.erros[nome] = { code, at: Date.now() }; console.warn('banco recusou', nome, code); }   /* v71: toda leitura recusada fica no diagnóstico */
+  function diagTexto() {
+    const B = window.CQ_BANCO || {}, E2 = DB.erros || {}, hh = (t) => (t ? new Date(t).toLocaleString('pt-BR') : '—');
+    const pr = (q) => { try { return matchMedia(q).matches ? 'sim' : 'não'; } catch (e) { return '?'; } };
+    const L = [
+      'DIAGNÓSTICO · Central da Qualidade v' + (window.CQ_V || '?') + ' · ' + new Date().toLocaleString('pt-BR'),
+      'Pessoa: ' + (DB.meName || '—') + ' · ' + (DB.meEmail || '—') + ' · tela: ' + (document.body.classList.contains('tabmode') ? 'tablet' : S.model ? 'computador' : 'ainda não abriu'),
+      'Aparelho: toque=' + (navigator.maxTouchPoints || 0) + ' · pointer coarse=' + pr('(pointer: coarse)') + ' · mouse/caneta=' + pr('(any-pointer: fine)') + ' · tela ' + screen.width + 'x' + screen.height + ' · ' + (navigator.userAgent || '').replace(/\s+/g, ' ').slice(0, 120),
+      'Internet do navegador: ' + (navigator.onLine === false ? 'desligada' : 'ligada') + ' · banco: ' + (DB.state || '—') + ' · última resposta do banco: ' + hh(B.servAt && B.servAt()),
+      'Cópia no aparelho: ' + (B.cache ? 'ligada' : 'desligada') + ' (escolha: ' + ((B.escolha && B.escolha()) || 'nenhuma') + ')' + ' · dados da cópia em: ' + (((B.uso && B.uso().velhos) || []).join(', ') || 'nenhum'),
+      'Prontos: ' + MODS.map((m) => m + '=' + (DB.ready[m] ? 'ok' : 'esperando')).join(' ') + ' · cfg=' + (DB.ready.cfg ? 'ok' : 'esperando'),
+      'Erros do banco: ' + (Object.keys(E2).length ? Object.keys(E2).map((k) => k + '=' + E2[k].code + ' (' + hh(E2[k].at) + ')').join(' · ') : 'nenhum')
+    ];
+    return L.join('\n');
+  }
+  function diagHTML(fechar) {
+    const E2 = DB.erros || {}, cods = Array.from(new Set(Object.values(E2).map((o) => o.code)));
+    return `${cods.length ? `<div class="warnbox crit" style="text-align:left"><b>O banco recusou: ${esc(cods.join(', '))}</b>${cods.map((c) => DIAG_COD[c] ? `<div class="muted" style="margin-top:4px">${esc(c)}: ${esc(DIAG_COD[c])}.</div>` : '').join('')}</div>` : ''}
+      <pre class="diagtx">${esc(diagTexto())}</pre>
+      <div class="formfoot diagb${fechar ? ' d3' : ''}"><button class="btn primary" type="button" data-act="diag-copiar">Copiar diagnóstico</button><button class="btn" type="button" data-act="diag-recarregar">Tentar de novo</button>${fechar ? '<button class="btn" type="button" data-act="close">Fechar</button>' : ''}</div>`;
+  }
+  function diagParado() {
+    if (S.model && allReady()) return;
+    $('#main').innerHTML = `<div class="landing"><div class="drop" style="max-width:720px"><span class="mtag" style="--c:var(--crit)">Não carregou</span><h2>Central da Qualidade</h2><p>Os dados não chegaram. Veja abaixo o motivo; se precisar, toque em <b>Copiar diagnóstico</b> e mande para a Qualidade.</p>${diagHTML()}</div></div>`;
+  }
+  function diagAbrir() { openModal('Conexão deste aparelho', diagHTML(true)); }
+  window.CQ_DIAG = diagTexto;
   function renderStatus(msg, bad) {
     $('#main').innerHTML = `<div class="landing"><div class="drop">${bad ? '<span class="mtag" style="--c:var(--crit)">Sem acesso aos dados</span>' : '<div class="loading"><span class="spin"></span><span>Carregando</span></div>'}<h2>${bad ? 'Abra pela Central da Qualidade' : 'Central da Qualidade'}</h2><p>${esc(msg)}</p></div></div>`;
   }
@@ -19821,6 +19844,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const B = window.CQ_BANCO, copia = !B ? '' : `<div>Dados no tablet</div><div>${B.cache ? 'guardados no tablet (abre sem internet)' : B.escolha() === 'sim' ? 'passam a ser guardados na próxima abertura' : 'não guardados (só com internet)'}</div>`;
     openModal('Sua conta', `<div class="kv"><div>Nome</div><div>${esc(nome)}</div><div>E-mail</div><div>${esc(DB.meEmail || '—')}</div>${copia}</div>
       ${L.length > 1 ? `<div class="tbtiles">${L.map(([k, sg, n, d, c]) => `<button type="button" class="tbtile" style="--k:${c}" data-act="tb-ir" data-key="${k}"><i>${sg}</i><span><b>${esc(n)}</b><small>${esc(d)}</small></span></button>`).join('')}</div>` : ''}
+      ${B && B.pode ? `<div class="field"><span>Guardar dados neste aparelho</span><div class="seg" role="group" aria-label="Guardar dados neste aparelho"><button type="button" data-act="tb-cache" data-key="sim" aria-pressed="${B.escolha() === 'sim'}">Sim</button><button type="button" data-act="tb-cache" data-key="nao" aria-pressed="${B.escolha() !== 'sim'}">Não</button></div></div>` : ''}
       <div class="field"><span>Tema deste tablet</span><div class="seg" role="group" aria-label="Tema deste tablet"><button type="button" data-act="tb-tema" data-key="claro" aria-pressed="${tabTema() === 'claro'}">Claro</button><button type="button" data-act="tb-tema" data-key="escuro" aria-pressed="${tabTema() === 'escuro'}">Escuro</button></div></div>
       <div class="formfoot"><button class="btn primary" type="button" id="tb-logout">Sair da conta</button><button class="btn" type="button" data-act="close">Fechar</button></div>`);
     $('#tb-logout').onclick = () => confirmBox('Sair da conta', 'Você vai sair da sua conta Google neste aparelho. Os rascunhos guardados no tablet continuam aqui.', 'Sair', () => { if (typeof window.CQ_SAIR === 'function') window.CQ_SAIR(); else toast('Sair só funciona na Central publicada.', true); });
@@ -20223,8 +20247,18 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'tb-sair' && S.view === 'rirtab') { if (!tbOnly()) { if (RI.saveT) riGravar().catch(() => {}); RI.ed = null; RI.sub = 'ag'; go('rir'); } return true; }
     if (a === 'tb-sair') { if (!tbOnly()) go(S.view === 'tabhome' ? 'painel' : cw('rnc') ? 'rnc' : 'painel'); return true; }
     if (a === 'tb-mini') { const on = !document.body.classList.contains('tbmini'); document.body.classList.toggle('tbmini', on); lsSet('cq-tb-mini', on ? '1' : ''); return true; }
-    if (a === 'tb-reconn') { if (tbOn()) { toast('Conectado ao banco.'); return; } const ocup = (RI.ed && !RI.ed.ro && (RI.falhou || RI.saveT)) || (RFI.ed && (RFI.sujo || RFI.saveT)); if (ocup) { toast('Há respostas ainda não enviadas: elas vão junto assim que o banco responder.', true); return; } location.reload(); return; }   /* v70 */
+    if (a === 'diag-copiar') { const t = diagTexto(); (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast('Diagnóstico copiado: cole numa mensagem para a Qualidade.')).catch(() => { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); toast('Diagnóstico copiado.'); } catch (e) { toast('Não deu para copiar: tire uma foto da tela.', true); } ta.remove(); }); return; }
+    if (a === 'diag-recarregar') { location.reload(); return; }
+    if (a === 'tb-reconn') { diagAbrir(); return; }   /* v71: o aviso de conexão abre o diagnóstico */
     if (a === 'tb-trocar') { if (viewOk('tabhome') && S.view !== 'tabhome') { if (S.view === 'riftab') rtSalvaAntes().catch(() => {}); if (S.view === 'rirtab' && RI.saveT) riGravar().catch(() => {}); go('tabhome'); } else tbTrocar(); return true; }
+    if (a === 'tb-cache' && window.CQ_BANCO) {   /* v71: o inspetor escolhe se este aparelho guarda os dados */
+      const sim = key === 'sim'; if ((window.CQ_BANCO.escolha() === 'sim') === sim) return true;
+      confirmBox(sim ? 'Guardar dados neste aparelho' : 'Não guardar dados neste aparelho', sim ? 'A Central guarda os dados neste aparelho a partir da próxima vez que abrir: abre mesmo sem internet. Use só em aparelho da empresa.' : 'A cópia guardada neste aparelho é apagada e a Central recarrega. Daqui em diante, ela só abre com internet.', sim ? 'Guardar' : 'Não guardar', async () => {
+        try { await window.CQ_BANCO.liga(sim); if (sim) { toast('Combinado. Vale na próxima vez que abrir a Central.'); tbConta(); } else location.reload(); }
+        catch (e) { toast((e && e.message) || String(e), true); }
+      }, !sim);
+      return true;
+    }
     if (a === 'tb-tema') { lsSet('cq-tab-tema', key === 'escuro' ? 'escuro' : 'claro'); applyTheme(); $$('[data-act="tb-tema"]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.key === tabTema()))); return true; }
     if (a === 'tb-conta') { tbConta(); return true; }
     if (a === 'tb-ir') { closeLayer(); if (key === 'central') go(firstView() || 'painel'); else go(key); return true; }
