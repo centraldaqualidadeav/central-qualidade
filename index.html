@@ -5563,7 +5563,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 67; window.CQ_V = APP_V;
+    const APP_V = 68; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -6702,6 +6702,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const docId = DB.where[mod][key]; if (!docId) throw new Error('Registro não encontrado. Atualize a tela.');
     entStamp(mod, changes); caseNorm(mod, changes);
     if (mod === 'AV' && !('qr' in changes)) PUBQ.add(key);
+    if (mod === 'AV' && ['forn', 'nf', 'pc'].some((f) => f in changes)) setTimeout(() => riSyncLote(key), 1200);   /* v68: RIR em andamento segue o lote */
     if (mod === 'INS' && !('qr' in changes)) INSQ.add(key);
     await DB.db.doc(MOD[mod].col + '/' + docId).update({ items: { [key]: clean(Object.assign({}, changes, { _u: Date.now(), _ub: DB.me || null })) } });
   }
@@ -14572,7 +14573,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function riPend() {
     if (!S.model) return [];
     const emRasc = new Set(); riCards().filter((c) => c.st === 'r').forEach((c) => (c.lotes || []).forEach((k) => emRasc.add(k)));
-    const rascK = new Set(riCards().filter((c) => c.st === 'r' && docN(c.nf)).map(riRascK));
+    const rascK = new Set(riCards().filter((c) => c.st === 'r').map((c) => riCabAtual(c)).filter((c) => docN(c.nf)).map(riRascK));   /* v68: com o fornecedor/NF de hoje do lote */
     const g = new Map();
     S.model.av.forEach((x) => {
       if (E.filled(x.insp) || lotSt(x).insp || emRasc.has(x.key)) return;
@@ -14622,6 +14623,32 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const riSitForn = (forn) => { const s = fornSit(forn); return s === 'Suspenso' ? '<span class="chip crit"><i>!</i>fornecedor suspenso no IQF</span>' : s === 'Em desenvolvimento' ? '<span class="chip warn"><i>!</i>fornecedor em desenvolvimento</span>' : ''; };
 
   /* ---------- criar / abrir / gravar ---------- */
+  /* v68: fornecedor, NF e pedido de compra do RIR em andamento seguem o lote (corrigir o lote corrige o RIR) */
+  function riCabDe(lots) {
+    const x0 = lots.find(Boolean); if (!x0) return null;
+    return { nf: x0.nf == null ? null : String(x0.nf), forn: x0.forn || null, fornId: lotEnt(x0) || null, pc: x0.pc == null ? null : String(x0.pc) };
+  }
+  const riCabDif = (a, b) => ['nf', 'forn', 'fornId', 'pc'].filter((f) => (a[f] || null) !== (b[f] || null));
+  /* na lista: rascunho mostra o fornecedor e a NF de hoje do lote */
+  function riCabAtual(c) { if (!c || c.st !== 'r' || !S.model) return c; const cab = riCabDe((c.lotes || []).map((k) => findRec('AV', k))); return cab && riCabDif(cab, c).length ? Object.assign({}, c, cab) : c; }
+  async function riSyncCab(rel, motivo) {
+    if (!rel || rel.status === 'finalizado' || !cw('rir')) return false;
+    const cab = riCabDe((rel.lotes || []).map((k) => findRec('AV', k))); if (!cab) return false;
+    const dif = riCabDif(cab, rel); if (!dif.length) return false;
+    const antes = `NF ${rel.nf || '—'} · ${rel.forn || '—'}${rel.pc ? ' · OC ' + rel.pc : ''}`;
+    Object.assign(rel, cab);
+    await DB.db.doc('rird/' + rel.id).setIf(rel, (cur) => !cur || cur.status !== 'finalizado');
+    await soldWrite('rir/m-' + rel.mes, { items: { [rel.id]: cab } });
+    logEntry('RIR', rel.id, 'alterado', `RIR em andamento atualizado pelo lote (${motivo || 'lote corrigido'}): ${antes} → NF ${cab.nf || '—'} · ${cab.forn || '—'}${cab.pc ? ' · OC ' + cab.pc : ''}`, null);
+    return true;
+  }
+  /* depois de editar o fornecedor, a NF ou o pedido de compra de um lote: corrige os RIR em andamento dele */
+  async function riSyncLote(key) {
+    if (!cw('rir') || !RI.docs) return;
+    for (const c of riCards().filter((o) => o.st === 'r' && (o.lotes || []).includes(key))) {
+      try { const d = await DB.db.doc('rird/' + c.id).get(); if (d && d.exists) { const rel = d.data(); if (await riSyncCab(rel, 'lote ' + ((findRec('AV', key) || {}).id || key) + ' corrigido') && RI.ed && RI.ed.rel && RI.ed.rel.id === rel.id) Object.assign(RI.ed.rel, riCabDe(rel.lotes.map((k) => findRec('AV', k)))); } } catch (e) { /* corrige quando o RIR for aberto */ }
+    }
+  }
   async function riNovo(lots) {
     if (!cw('rir')) { toast('Seu acesso ao RIR é só de consulta.', true); return; }
     if (!lots.length) return;
@@ -14666,6 +14693,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const s = await DB.db.doc('rird/' + id).get(); if (!s.exists) { toast('RIR não encontrado.', true); return; }
       const rel = s.data();
       if (!full && rel.status === 'finalizado') { RI.ed = { rel, ro: true, fotos: null }; riFicha(rel); return; }
+      if (rel.status !== 'finalizado') { try { if (await riSyncCab(rel, 'ao abrir')) toast(`RIR atualizado com o lote: ${rel.forn || ''} · NF ${rel.nf || '—'}.`); } catch (e) { /* segue com o que está gravado */ } }   /* v68 */
       if (rel.status !== 'finalizado' && cw('rir') && !riMeu(rel) && !RI.assumindo) {
         confirmBox('Nota com outro inspetor', `${rel.nome || 'Outro inspetor'} está inspecionando a NF ${rel.nf || '—'} desde ${dmy(rel.at)} às ${hhmm(rel.at)}. Se você continuar, a nota passa para você (as respostas já dadas ficam no RIR).`, 'Assumir a nota', async () => {
           try {
@@ -14826,9 +14854,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const grp = (g, i) => `<div class="ricard"><div class="rih"><b>NF ${esc(disp(g.nf) || '—')}</b>${riSitForn(g.forn)}<span class="muted">${esc(g.forn || 'sem fornecedor')}</span></div>
       <div class="rils">${g.lots.map((x) => `<button type="button" class="lchip" data-open="AV:${esc(x.key)}">${esc(x.id)} <small>${esc(lotTxt(x))}</small></button>`).join('')}</div>
       <div class="rif"><span class="muted">recebido ${fD(g.data)}</span>${w ? `<button class="btn primary" type="button" data-act="ri-novo" data-key="${i}">Inspecionar esta nota</button>` : ''}</div></div>`;
-    const rasc = (c) => `<div class="ricard em"><div class="rih"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>${riMeu(c) ? 'com você' : 'com ' + esc((c.nome || 'outro inspetor').split(' ')[0])}</span><span class="muted">${esc(c.forn || '')}</span></div>
+    const rasc = (c0) => { const c = riCabAtual(c0); return `<div class="ricard em"><div class="rih"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>${riMeu(c) ? 'com você' : 'com ' + esc((c.nome || 'outro inspetor').split(' ')[0])}</span><span class="muted">${esc(c.forn || '')}</span></div>
       <div class="rils">${(c.ids || []).map((id) => `<span class="lchip">${esc(id)}</span>`).join('')}</div>
-      <div class="rif"><span class="muted">${esc(c.nome || '')} · ${esc(dmy(c.at))}</span><button class="btn ${riMeu(c) ? 'primary' : ''}" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${!w ? 'Ver' : riMeu(c) ? 'Continuar' : 'Assumir'}</button></div></div>`;
+      <div class="rif"><span class="muted">${esc(c.nome || '')} · ${esc(dmy(c.at))}</span><button class="btn ${riMeu(c) ? 'primary' : ''}" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${!w ? 'Ver' : riMeu(c) ? 'Continuar' : 'Assumir'}</button></div></div>`; };
     let body;
     if (!RI.ready) body = '<div class="loading"><span class="spin"></span><span>Carregando…</span></div>';
     else if (sub === 'ag') {
@@ -14861,7 +14889,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const bate = (txt) => !q || E.key(txt).includes(q);
     const lotTx = (L) => L.map((x) => x.id + (lotTxt(x) ? ' · ' + lotTxt(x) : '')).join(' — ');
     const agRow = (g, i) => `<div class="tblr"><div><div class="t"><b>NF ${esc(disp(g.nf) || '—')}</b>${riSitForn(g.forn)}</div><div class="d">${esc(g.forn || 'sem fornecedor')}</div><div class="m">${g.lots.length} ${g.lots.length === 1 ? 'lote' : 'lotes'}: ${esc(lotTx(g.lots))}</div><div class="w">recebido ${esc(fD(g.data))}${g.pc ? ' · pedido de compra ' + esc(disp(g.pc)) : ''}</div></div><button class="btn rirb big" type="button" data-act="ri-novo" data-key="${i}" ${w ? '' : 'disabled'}>Inspecionar esta nota</button></div>`;
-    const rasRow = (c) => `<div class="tblr"><div><div class="t"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>em andamento</span></div><div class="d">${esc(c.forn || 'sem fornecedor')}</div><div class="m" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</div><div class="w">${esc(c.nome || '')} · começado ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${w ? 'Continuar' : 'Ver'}</button></div>`;
+    const rasRow = (c0) => { const c = riCabAtual(c0); return `<div class="tblr"><div><div class="t"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>em andamento</span></div><div class="d">${esc(c.forn || 'sem fornecedor')}</div><div class="m" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</div><div class="w">${esc(c.nome || '')} · começado ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${w ? 'Continuar' : 'Ver'}</button></div>`; };
     const finRow = (c) => { const nr = Object.values(c.res || {}).filter((r) => r === 'Reprovado').length; return `<div class="tblr"><div><div class="t"><b>${esc(c.num || 'RIR')}</b>${nr ? `<span class="chip crit"><i>✕</i>${nr} reprovado(s)</span>` : '<span class="chip ok"><i>✓</i>aprovado</span>'}</div><div class="d">NF ${esc(c.nf || '—')} · ${esc(c.forn || '')}</div><div class="m" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</div><div class="w">concluído ${esc(dmy(c.fin || c.at))} às ${esc(hhmm(c.fin || c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">Ver</button></div>`; };
     const ag = P.map((g, i) => [g, i]).filter(([g]) => bate([g.nf, g.forn, g.pc, g.lots.map((x) => x.id).join(' ')].join(' ')));
     const rs = ras.filter((c) => bate([c.nf, c.forn, (c.ids || []).join(' ')].join(' ')));
