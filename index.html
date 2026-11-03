@@ -2223,6 +2223,8 @@ body.tvmode .tvbar { display: none !important; }   /* v47: no painel rolando nã
 .calav { display: grid; gap: 10px; } .calav:empty { display: none; } .calav .effora { margin: 0; } .calav .effh .btn, .calav .effr .btn { width: 136px; justify-content: center; } .calav .effh { padding-right: 9px; }   /* v63 */
 .cjsrow .pvs-in { width: 210px; } .cjsjt { font: 500 11px var(--f-body); color: var(--warn); margin-left: 4px; }   /* v64 */
 .cjsq { display: grid; gap: 10px; margin-top: 8px; } .cjsqb { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .cjsqb .btn { justify-content: center; min-height: 40px; white-space: normal; }
+.cqforal { display: grid; gap: 6px; margin-top: 8px; } .cqforar { display: grid; grid-template-columns: minmax(0, 1fr) 128px 96px; gap: 8px; align-items: center; } .cqforar .btn { justify-content: center; }   /* v66 */
+@media (max-width: 700px) { .cqforar { grid-template-columns: 1fr 1fr; } .cqforar > span { grid-column: 1 / -1; } }
 .instag { font-style: normal; font-weight: 600; font-size: 12px; color: var(--cal); margin-left: 6px; white-space: nowrap; }   /* v63: seu / uso comum */
 .rtins:empty { display: none; }
 .rtres { display: grid; place-items: center; gap: 4px; border-radius: 14px; padding: 18px; background: var(--ok); color: #fff; text-align: center; }
@@ -5560,7 +5562,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 65; window.CQ_V = APP_V;
+    const APP_V = 66; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -9139,7 +9141,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const pick = { todas: ab, venc, atras, disp: dispV, soon, h24, h48, minhas: mine || [] }[filt] || ab;
     const sA = soldAlertData(), nada = !riAtrasadas().length && !(sA && (sA.venc.length || sA.ren.length)) && !pendLots().length && !atras.length && !dispV.length && !soon.length && !lanes.some((ln) => ln.l.length) && !lanesB.slice(0, 3).some((ln) => ln.l.length) && !sem.length && !(M.rncc || []).some((x) => x.aberta && (x.status === 'Atrasado' || (x.respData == null && x.prazoResp != null && S.today > x.prazoResp)));
     main.innerHTML = `<div class="view">${head('Alertas', 'O que precisa de ação hoje. Os prazos de NCF usam dias úteis e os feriados de Configurações.', (vis('rnc') ? '<button class="btn" type="button" data-act="rnc-resumo">Resumo das NCFs</button>' : '') + '<button class="btn" type="button" data-act="msg-cal">Texto do alerta de calibração</button>')}
-      ${vyAvisosHTML()}${cqCritAlertHTML()}${rirAlertHTML()}${cw('rnc') && rncRelOn() ? inbCorrsAlert() : ''}
+      ${vyAvisosHTML()}${cqForaAlertHTML()}${cqCritAlertHTML()}${rirAlertHTML()}${cw('rnc') && rncRelOn() ? inbCorrsAlert() : ''}
       ${nada ? okSeal('Nenhum alerta urgente', 'Sem NCF atrasada, calibração vencida ou lote sem certificado. Tudo certo por aqui.') : ''}
       <div class="kpis">
         ${vis('rnc') && pendLots().length ? kpiHTML({ l: 'Lotes aguardando decisão', v: NF.format(pendLots().length), sub: 'reprovados e bloqueados', c: MOD.RNC.c, cls: 'crit' }) : ''}
@@ -12958,6 +12960,31 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   /* pedidos de cliente crítico que passaram do prazo do crítico (Alertas e contador do menu) */
   const cqCritAtras = () => (CQF.ready && vis('certq') ? cqCards().filter((c) => c.st === 'p' && !c.pend && c.fat && cqCrit(c) && cqFalta(c) < 0) : []);
+  /* v66: "feito fora da Central" marcado por quem não é administrador (versão antiga aberta, ou gravado por fora da tela).
+     Desde a v65 a opção é só de administradores; o aviso aparece só para eles, até tocarem em "Ciente". */
+  const CQ_FORA_DESDE = Date.UTC(2026, 10, 2), CQ_FORA_ACK = 'cq-fora-ciente', CQ_DONA = 'centraldaqualidade.av@gmail.com';
+  function cqForaAdmLoad() {
+    if (S.cqAdmEm || S.cqAdmEmL || !cqAdm() || !DB.db) return;
+    S.cqAdmEmL = true;
+    DB.db.collection('usuarios').get().then((q) => {
+      S.cqAdmEm = new Set([CQ_DONA].concat(q.docs.filter((d) => (d.data() || {}).perfil === 'admin').map((d) => E.low(d.id))));
+      if (S.view === 'alertas') render();
+    }).catch(() => { S.cqAdmEmL = false; });
+  }
+  const cqForaAck = () => { try { return JSON.parse(lsGet(CQ_FORA_ACK, '[]')) || []; } catch (e) { return []; } };
+  const cqForaId = (c) => c.k + '@' + ((c.conc || {}).at || 0);
+  function cqForaSuspeitos() {
+    if (!cqAdm() || !S.cqAdmEm || !vis('certq') || !CQF.ready) return [];
+    const ack = cqForaAck();
+    return cqCards().filter((c) => c.st === 'c' && c.conc && c.conc.fora && (c.conc.at || 0) >= CQ_FORA_DESDE && !S.cqAdmEm.has(E.low(c.conc.em || '')) && !ack.includes(cqForaId(c)))
+      .sort((a, b) => (b.conc.at || 0) - (a.conc.at || 0));
+  }
+  function cqForaAlertHTML() {
+    cqForaAdmLoad();
+    const L = cqForaSuspeitos(); if (!L.length) return '';
+    return `<div class="rrwarn vyaviso cqfora" style="border-left-color:var(--crit)"><b>${L.length === 1 ? '1 pedido marcado' : L.length + ' pedidos marcados'} como “feito fora da Central” por quem não é administrador</b><div class="muted" style="margin-top:3px">Desde a v65 só administradores usam essa opção. Confira se o certificado existe mesmo.</div>
+      <div class="cqforal">${L.slice(0, 12).map((c) => `<div class="cqforar"><span><b class="mono">${esc(cqNum(c))}</b> · ${esc(c.cli || '')} · por <b>${esc(c.conc.nome || c.conc.em || 'pessoa desconhecida')}</b>${c.conc.em && c.conc.nome ? ` <span class="muted">(${esc(c.conc.em)})</span>` : ''} em ${esc(cqDH(c.conc.at))}</span><button class="btn small" type="button" data-act="cq-ver" data-key="${esc(c.k)}">Ver o pedido</button><button class="btn small" type="button" data-act="cq-fora-ok" data-key="${esc(cqForaId(c))}">Ciente</button></div>`).join('')}</div></div>`;
+  }
   function cqCritAlertHTML() {
     const L = cqCritAtras(); if (!L.length) return '';
     return `<div class="rrwarn vyaviso" style="border-left-color:#c99a06"><b>★ ${L.length === 1 ? '1 pedido de cliente crítico passou' : L.length + ' pedidos de clientes críticos passaram'} do prazo de ${cqCfg().prazoCrit} dia(s) útil(eis)</b><div class="muted" style="margin-top:3px">${L.slice(0, 8).map((c) => esc(cqNum(c)) + ' · ' + esc(c.cli || '') + ' · atrasado ' + (-cqFalta(c)) + ' dia(s)').join(' · ')}${L.length > 8 ? '…' : ''}</div><div style="margin-top:8px"><button class="btn small" type="button" data-act="cq-critgo">Abrir a fila de certificados</button></div></div>`;
@@ -14096,6 +14123,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const c = key ? cqFind(key) : null;
     if (a === 'cq-sub') { S.cqSub = key; S.cqN = 0; render(); return true; }
     if (a === 'cq-flt') { S.cqFlt = key; S.cqN = 0; render(); return true; }
+    if (a === 'cq-fora-ok') { const L = cqForaAck(); if (!L.includes(key)) L.push(key); lsSet(CQ_FORA_ACK, JSON.stringify(L.slice(-300))); render(); return true; }
     if (a === 'cq-critgo') { S.cqFlt = 'crit'; S.cqSub = 'pend'; S.cqN = 0; go('certq'); return true; }
     if (a === 'cq-mais') { S.cqN = (S.cqN || 0) + 48; render(); return true; }
     if (a === 'cq-mes') { S.cqMes = key; render(); return true; }
