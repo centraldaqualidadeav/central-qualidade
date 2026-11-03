@@ -5563,7 +5563,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 68; window.CQ_V = APP_V;
+    const APP_V = 69; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -14623,6 +14623,37 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const riSitForn = (forn) => { const s = fornSit(forn); return s === 'Suspenso' ? '<span class="chip crit"><i>!</i>fornecedor suspenso no IQF</span>' : s === 'Em desenvolvimento' ? '<span class="chip warn"><i>!</i>fornecedor em desenvolvimento</span>' : ''; };
 
   /* ---------- criar / abrir / gravar ---------- */
+  /* v69: o mesmo RIR/RIF aberto em dois aparelhos. Cada gravação confere a versão (rev): quem está com a versão velha
+     não grava por cima, recebe o aviso e abre a mais nova. "ed" diz qual aparelho gravou por último. */
+  const DEV_ID = (() => { let d = ''; try { d = localStorage.getItem('cq-dev') || ''; if (!d) { d = 'd' + Math.random().toString(36).slice(2, 10); localStorage.setItem('cq-dev', d); } } catch (e) { d = 'd' + Math.random().toString(36).slice(2, 10); } return d; })();
+  const devOnde = () => (document.body.classList.contains('tabmode') ? 'tablet' : 'computador');
+  const relEd = () => ({ dev: DEV_ID, onde: devOnde(), nome: myPessoa() || DB.meName || '', at: Date.now() });
+  function relOutroAparelho(rel) { const e = rel && rel.ed; return e && e.dev && e.dev !== DEV_ID && rel.status !== 'finalizado' && Date.now() - (e.at || 0) < 30 * 60000 ? e : null; }
+  async function relGravar(col, ed, rel) {
+    let motivo = null; const rev = rel.rev || 0;
+    const doc = Object.assign({}, rel, { rev: rev + 1, ed: relEd() });
+    try {
+      await DB.db.doc(col + '/' + rel.id).setIf(doc, (cur) => { if (!cur) return true; if (cur.status === 'finalizado') { motivo = 'fin'; return false; } if ((cur.rev || 0) !== rev) { motivo = { outro: cur.ed || null }; return false; } return true; });
+    } catch (e) { if (e && e.code === 'failed-precondition') e.motivo = motivo || 'fin'; throw e; }
+    if (ed && ed.rel) { ed.rel.rev = rev + 1; ed.rel.ed = doc.ed; }
+    relBkDel(col, rel.id);
+  }
+  function relConflito(tipo, mot, abrir) {
+    const o = (mot && mot.outro) || {};
+    openModal(`${tipo} alterado em outro aparelho`, `<p style="margin:0">${o.nome ? `<b>${esc(o.nome)}</b> gravou` : 'Foi gravada'} uma versão mais nova deste ${tipo}${o.onde ? ` no <b>${esc(o.onde)}</b>` : ''}${o.at ? ` às ${hhmm(o.at)}` : ''}.</p><p style="margin:0">Para não apagar o trabalho do outro aparelho, o que foi feito aqui depois disso <b>não foi gravado</b>. Abra a versão mais nova e confira.</p>
+      <div class="formfoot"><button class="btn primary" type="button" id="cf-nova">Abrir a versão mais nova</button><button class="btn" type="button" data-act="close">Fechar</button></div>`);
+    $('#cf-nova').onclick = () => { closeLayer(); abrir(); };
+  }
+  /* cópia no aparelho do que não foi enviado (internet ruim): volta ao abrir o relatório de novo */
+  const relBkK = (col, id) => 'cq-bk-' + col + '-' + id;
+  function relBkSet(col, rel) { try { localStorage.setItem(relBkK(col, rel.id), JSON.stringify({ at: Date.now(), rel })); } catch (e) { /* sem espaço: segue */ } }
+  function relBkDel(col, id) { try { localStorage.removeItem(relBkK(col, id)); } catch (e) { /* ok */ } }
+  function relBkGet(col, rel) {
+    let b = null; try { b = JSON.parse(localStorage.getItem(relBkK(col, rel.id)) || 'null'); } catch (e) { b = null; }
+    if (!b || !b.rel || rel.status === 'finalizado') return null;
+    if ((b.rel.rev || 0) !== (rel.rev || 0)) { relBkDel(col, rel.id); return null; }   /* outro aparelho já gravou depois: a cópia ficou velha */
+    return b;
+  }
   /* v68: fornecedor, NF e pedido de compra do RIR em andamento seguem o lote (corrigir o lote corrige o RIR) */
   function riCabDe(lots) {
     const x0 = lots.find(Boolean); if (!x0) return null;
@@ -14637,7 +14668,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const dif = riCabDif(cab, rel); if (!dif.length) return false;
     const antes = `NF ${rel.nf || '—'} · ${rel.forn || '—'}${rel.pc ? ' · OC ' + rel.pc : ''}`;
     Object.assign(rel, cab);
-    await DB.db.doc('rird/' + rel.id).setIf(rel, (cur) => !cur || cur.status !== 'finalizado');
+    await relGravar('rird', { rel }, rel);
     await soldWrite('rir/m-' + rel.mes, { items: { [rel.id]: cab } });
     logEntry('RIR', rel.id, 'alterado', `RIR em andamento atualizado pelo lote (${motivo || 'lote corrigido'}): ${antes} → NF ${cab.nf || '—'} · ${cab.forn || '—'}${cab.pc ? ' · OC ' + cab.pc : ''}`, null);
     return true;
@@ -14699,7 +14730,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
           try {
             const nome = myPessoa() || null;
             rel.by = DB.me || null; rel.nome = nome;
-            await DB.db.doc('rird/' + rel.id).setIf(rel, (cur) => !cur || cur.status !== 'finalizado');
+            await relGravar('rird', { rel }, rel);
             await soldWrite('rir/m-' + rel.mes, { items: { [rel.id]: { by: DB.me || null, nome } } });
             logEntry('RIR', rel.id, 'alterado', `RIR da NF ${rel.nf || '—'} assumido por ${nome || 'outra pessoa'}`, null);
             RI.assumindo = true; await riAbrir(id, full);
@@ -14707,11 +14738,17 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         });
         return;
       }
+      if (rel.status !== 'finalizado' && cw('rir') && !RI.devOk) {   /* v69 */
+        const ou = relOutroAparelho(rel);
+        if (ou) { confirmBox('RIR aberto em outro aparelho', `${ou.nome || 'Alguém'} gravou este RIR no ${ou.onde || 'outro aparelho'} às ${hhmm(ou.at)}. Se continuar aqui, este aparelho passa a ser o que vale: o ${ou.onde || 'outro aparelho'} não consegue mais gravar por cima e avisa quem estiver nele.`, 'Continuar aqui', async () => { RI.devOk = true; try { await relGravar('rird', { rel }, rel); await riAbrir(id, full); } catch (err) { toast('Não foi possível abrir: ' + ((err && (err.message || err.code)) || err), true); } finally { RI.devOk = false; } }); return; }
+      }
+      const bk = rel.status !== 'finalizado' && cw('rir') ? relBkGet('rird', rel) : null;
       RI.ed = { rel, ro: rel.status === 'finalizado' || !cw('rir'), fotos: null }; RI.salvo = 0; RI.sub = 'ed'; RI.tpasso = 1; RI.tlote = 0; closeLayer();
+      if (bk) setTimeout(() => confirmBox('Respostas não enviadas', `Este aparelho tem respostas deste RIR feitas às ${hhmm(bk.at)} que não chegaram ao banco (internet). Recuperar e enviar agora?`, 'Recuperar e enviar', () => { if (RI.ed && RI.ed.rel.id === bk.rel.id) { RI.ed.rel = Object.assign(bk.rel, { rev: RI.ed.rel.rev, ed: RI.ed.rel.ed }); riRender(); riAgendar(); } }), 300);
       if (S.view !== 'rir' && S.view !== 'rirtab') go(document.body.classList.contains('tabmode') ? 'rirtab' : 'rir'); else { render(); window.scrollTo(0, 0); }
     } catch (err) { toast('Não foi possível abrir: ' + ((err && (err.message || err.code)) || err), true); }
   }
-  function riAgendar() { clearTimeout(RI.saveT); riSalvoTxt('salvando…'); RI.saveT = setTimeout(() => { riGravar().then(() => { RI.falhou = false; }).catch((e) => { RI.falhou = true; if (semNet(e)) { riSalvoTxt('sem internet · grava quando voltar'); return; } riSalvoTxt('não salvo'); toast('Não foi possível salvar o rascunho: ' + ((e && (e.message || e.code)) || e), true); }); }, 800); }
+  function riAgendar() { clearTimeout(RI.saveT); riSalvoTxt('salvando…'); RI.saveT = setTimeout(() => { riGravar().then(() => { RI.falhou = false; }).catch((e) => { RI.falhou = true; if (semNet(e)) { riSalvoTxt('⚠ sem internet · não enviado · tentando de novo'); return; } riSalvoTxt('não salvo'); toast('Não foi possível salvar o rascunho: ' + ((e && (e.message || e.code)) || e), true); }); }, 800); }
   /* v49: "+ Medida": medida a mais só neste RIR (ex.: Diâmetro interno, Ovalização), escolhendo os lotes que levam a medida;
      nos outros lotes ela já fica N/A. O checklist padrão (Configurações › RIR) não muda. */
   function riMedidaNova(sec) {
@@ -14770,26 +14807,38 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   async function riGravar() {
     clearTimeout(RI.saveT); RI.saveT = null;
+    while (RI.gravando) { try { await RI.gravando; } catch (e) { /* a anterior falhou; esta tenta de novo */ } }
+    const p = riGravarJa(); RI.gravando = p;
+    try { await p; } finally { if (RI.gravando === p) RI.gravando = null; }
+  }
+  async function riGravarJa() {
     const ed = RI.ed; if (!ed || ed.ro || ed.rel.status === 'finalizado') return;
     const rel = JSON.parse(JSON.stringify(ed.rel));
-    try { await DB.db.doc('rird/' + rel.id).setIf(rel, (cur) => !cur || cur.status !== 'finalizado'); }
-    catch (e) { if (e && e.code === 'failed-precondition') { RI.ed = null; RI.sub = 'ag'; toast('Este RIR já foi concluído em outro aparelho. O rascunho desta tela não foi gravado.', true); render(); return; } throw e; }
+    try { await relGravar('rird', ed, rel); }
+    catch (e) {
+      if (e && e.code === 'failed-precondition') {
+        if (e.motivo === 'fin') { RI.ed = null; RI.sub = 'ag'; toast('Este RIR já foi concluído em outro aparelho. O rascunho desta tela não foi gravado.', true); render(); return; }
+        ed.ro = true; RI.falhou = false; riSalvoTxt('não gravado: alterado em outro aparelho'); relConflito('RIR', e.motivo, () => { RI.ed = null; riAbrir(rel.id); }); return;
+      }
+      relBkSet('rird', rel); throw e;
+    }
     RI.salvo = Date.now(); riSalvoTxt();
   }
-  function riSalvoTxt(t) { const el = $('#rie-salvo'); if (el && el.classList.contains('tbsalvo')) { el.innerHTML = `<i></i>${esc(t || (RI.salvo ? 'salvo no tablet ' + hhmm(RI.salvo) : 'rascunho'))}`; el.className = 'tbsalvo ' + (t === 'não salvo' ? 'crit' : t ? 'off' : 'ok'); return; } if (el) { el.textContent = t || (RI.salvo ? 'rascunho salvo às ' + hhmm(RI.salvo) : 'rascunho'); el.className = 'chip ' + (t === 'não salvo' ? 'crit' : t ? 'off' : 'ok'); } }
+  function riSalvoTxt(t) { const el = $('#rie-salvo'); if (el && el.classList.contains('tbsalvo')) { el.innerHTML = `<i></i>${esc(t || (RI.salvo ? 'enviado às ' + hhmm(RI.salvo) : 'rascunho'))}`; el.className = 'tbsalvo ' + (t === 'não salvo' || /não (enviado|gravado)/.test(t || '') ? 'crit' : t ? 'off' : 'ok'); return; } if (el) { el.textContent = t || (RI.salvo ? 'rascunho enviado às ' + hhmm(RI.salvo) : 'rascunho'); el.className = 'chip ' + (t === 'não salvo' || /não (enviado|gravado)/.test(t || '') ? 'crit' : t ? 'off' : 'ok'); } }
   async function riFinalizar() {
     const ed = RI.ed; if (!ed || ed.ro) return; const rel = ed.rel, f = riFalta(rel);
     if (f.length) { toast('Falta para concluir: ' + f.join('; ') + '.', true); return; }
     const rep = rel.lotes.filter((k) => riRes(rel, k) === 'Reprovado').map((k) => (findRec('AV', k) || {}).id || k);
     confirmBox('Concluir e assinar o RIR', `O resultado vai para cada lote${rep.length ? ` e ${rep.length === 1 ? 'o lote reprovado ' + rep[0] + ' entra' : 'os lotes reprovados (' + rep.join(', ') + ') entram'} na fila da NCF` : ''}. O relatório sai com a sua assinatura eletrônica (${myPessoa() || DB.meName || 'você'}) e não pode mais ser alterado.`, 'Concluir e assinar', async () => {
       try {
-        clearTimeout(RI.saveT); RI.saveT = null;
+        clearTimeout(RI.saveT); RI.saveT = null; while (RI.gravando) { try { await RI.gravando; } catch (e) { /* segue */ } }   /* v69 */
         await lock('RIR');
         const ano = new Date().getFullYear(), nref = DB.db.doc('rir/n-' + ano), ns = await nref.get(), seq = (ns.exists ? +(ns.data().ultimo || 0) : 0) + 1;
         const numero = 'RIR-' + ano + '-' + E.pad(seq, 5), at = Date.now();
         const lotRes = {}; rel.lotes.forEach((k) => { const r = riRes(rel, k), o = (rel.lotRes || {})[k] || {}; lotRes[k] = clean({ res: r, mot: r === 'Reprovado' ? String(o.mot || riMotSug(rel, k)).trim() : null, man: o.man || null }); });
         const fin = Object.assign(JSON.parse(JSON.stringify(rel)), { status: 'finalizado', numero, ano, seq, lotRes, fin: at, inspetor: myPessoa() || DB.meName || '', assin: meSig(S.view === 'rirtab' ? 'tablet' : 'central') });
-        await DB.db.doc('rird/' + rel.id).setIf(fin, (cur) => !cur || cur.status !== 'finalizado');
+        { let outro = null; try { await DB.db.doc('rird/' + rel.id).setIf(fin, (cur) => { if (!cur) return true; if (cur.status === 'finalizado') return false; if ((cur.rev || 0) !== (rel.rev || 0)) { outro = cur.ed || {}; return false; } return true; }); }
+          catch (e2) { if (e2 && e2.code === 'failed-precondition' && outro) { relConflito('RIR', { outro }, () => { RI.ed = null; riAbrir(rel.id); }); throw new Error('alterado em outro aparelho: abra a versão mais nova'); } throw e2; } }   /* v69 */
         await nref.set({ ano, ultimo: seq, _u: at, _ub: DB.me || null });
         const res = {}; rel.lotes.forEach((k) => { res[k] = lotRes[k].res; });
         await soldWrite('rir/m-' + rel.mes, { items: { [rel.id]: { st: 'f', num: numero, fin: at, res, nome: fin.inspetor } } });
@@ -15365,6 +15414,18 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (fin) patch.h = rfH(`${rel.numero} ${rel.resultado === 'aprovado' ? 'aprovado' : 'reprovado'} · ${rfItTxt(Object.assign({}, cur, sum))}`);
     await rfWrite('rifp/' + pk, patch);
   }
+  function rfAbrirAvisos(r) {
+    if (!r || r.rel.status === 'finalizado' || !cw('rif')) return;
+    const ou = RFI.semAviso === r.rel.id ? null : relOutroAparelho(r.rel), bk = relBkGet('rif', r.rel);
+    RFI.semAviso = null;   /* quem acabou de ser avisado do conflito e abriu a versão nova não é perguntado de novo */
+    if (ou) setTimeout(() => {
+      openModal('RIF aberto em outro aparelho', `<p style="margin:0">${esc(ou.nome || 'Alguém')} gravou este RIF no ${esc(ou.onde || 'outro aparelho')} às ${hhmm(ou.at)}. Se continuar aqui, este aparelho passa a ser o que vale: o ${esc(ou.onde || 'outro aparelho')} não consegue mais gravar por cima e avisa quem estiver nele.</p>
+        <div class="formfoot"><button class="btn primary" type="button" id="cf-ok">Continuar aqui</button><button class="btn" type="button" id="cf-volta">Voltar</button></div>`);
+      $('#cf-ok').onclick = () => { closeLayer(); if (RFI.ed && RFI.ed.rel.id === r.rel.id) rfGravar().catch((err) => toast('Não foi possível salvar: ' + rfErr(err), true)); };
+      $('#cf-volta').onclick = () => { closeLayer(); if (S.view === 'riftab') { RFI.ed = null; RT.rel = null; RT.step = RT.pk ? 1 : 0; render(); } else rfVoltar(); };
+    }, 300);
+    else if (bk) setTimeout(() => confirmBox('Medidas não enviadas', `Este aparelho tem um rascunho deste RIF feito às ${hhmm(bk.at)} que não chegou ao banco (internet). Recuperar e enviar agora?`, 'Recuperar e enviar', () => { if (RFI.ed && RFI.ed.rel.id === bk.rel.id) { RFI.ed.rel = Object.assign(bk.rel, { rev: RFI.ed.rel.rev, ed: RFI.ed.rel.ed }); render(); rfAgendar(200); } }), 300);
+  }
   async function rfCarregar(id) {
     const s = await DB.db.doc('rif/' + id).get();
     if (!s.exists) return null;
@@ -15386,7 +15447,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     RFI.saveT = setTimeout(rfGravarAuto, at - Date.now());
   }
   const semNet = (e) => navigator.onLine === false || !!(e && /unavailable|offline/i.test(String(e.code || e.message || '')));
-  function rfGravarAuto() { rfGravar().catch((err) => { if (semNet(err)) { rfSalvoTxt('sem internet · grava quando voltar'); return; } rfSalvoTxt('não salvo'); toast('Não foi possível salvar o rascunho: ' + rfErr(err), true); }); }
+  function rfGravarAuto() { rfGravar().catch((err) => { if (semNet(err)) { rfSalvoTxt('⚠ sem internet · não enviado · tentando de novo'); return; } rfSalvoTxt('não salvo'); toast('Não foi possível salvar o rascunho: ' + rfErr(err), true); }); }
+  setInterval(() => {   /* v69 */
+    if (RI.ed && !RI.ed.ro && RI.falhou && !RI.saveT && !RI.gravando) riAgendar();
+    if (RFI.ed && RFI.sujo && !RFI.saveT && !RFI.gravando) rfAgendar(300);
+  }, 20000);
+  window.addEventListener('beforeunload', (e) => { if ((RI.ed && !RI.ed.ro && (RI.falhou || RI.saveT)) || (RFI.ed && (RFI.sujo || RFI.saveT))) { e.preventDefault(); e.returnValue = ''; } });
   window.addEventListener('online', () => { setTimeout(() => { if (RFI.ed && (RFI.saveT || RFI.sujo)) rfAgendar(500); if (RI.ed && !RI.ed.ro && RI.falhou) riAgendar(); }, 1500); });
   async function rfGravar() {
     clearTimeout(RFI.saveT); RFI.saveT = null;
@@ -15408,10 +15474,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const ed = RFI.ed; if (!ed || ed.rel.status === 'finalizado') { RFI.sujo = false; return; }
     RFI.sujo = false;
     const rel = rfClone(ed.rel);
-    try { await DB.db.doc('rif/' + rel.id).setIf(rel, (cur) => !cur || cur.status !== 'finalizado'); }
+    try { await relGravar('rif', ed, rel); }
     catch (e) {
-      if (e && e.code === 'failed-precondition') { RFI.ed = null; toast('Este RIF já foi assinado e finalizado em outro aparelho. O rascunho desta tela não foi gravado.', true); render(); return; }
-      RFI.sujo = true; throw e;
+      if (e && e.code === 'failed-precondition') {
+        if (e.motivo === 'fin') { RFI.ed = null; toast('Este RIF já foi assinado e finalizado em outro aparelho. O rascunho desta tela não foi gravado.', true); render(); return; }
+        RFI.ed = null; RFI.sujo = false; rfSalvoTxt('não gravado: alterado em outro aparelho'); relConflito('RIF', e.motivo, () => { RFI.semAviso = rel.id; render(); }); return;
+      }
+      RFI.sujo = true; relBkSet('rif', rel); throw e;
     }
     RFI.salvo = Date.now(); if (!RFI.sujo) rfSalvoTxt();
     await rfSyncItem(rel, false);
@@ -15421,12 +15490,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function rfSalvoTxt(t) {
     const el = $('#rfe-salvo'); if (!el) return;
     const chave = t || (RFI.salvo ? 's' + RFI.salvo : '-'); if (el.dataset.t === chave) return; el.dataset.t = chave;
-    if (el.classList.contains('tbsalvo')) { /* tablet (F2): "● salvo no tablet 19:41" */
-      el.innerHTML = `<i></i>${t ? esc(t) : RFI.salvo ? 'salvo no tablet ' + hhmm(RFI.salvo) : 'rascunho'}`;
-      el.className = 'tbsalvo ' + (t === 'não salvo' ? 'crit' : t ? 'off' : 'ok'); return;
+    const ruim = t === 'não salvo' || /não (enviado|gravado)/.test(t || '');
+    if (el.classList.contains('tbsalvo')) { /* tablet: "● enviado às 19:41" (v69: era "salvo no tablet") */
+      el.innerHTML = `<i></i>${t ? esc(t) : RFI.salvo ? 'enviado às ' + hhmm(RFI.salvo) : 'rascunho'}`;
+      el.className = 'tbsalvo ' + (ruim ? 'crit' : t ? 'off' : 'ok'); return;
     }
-    el.innerHTML = t ? `<i>●</i>${esc(t)}` : RFI.salvo ? `<i>●</i>rascunho salvo às ${hhmm(RFI.salvo)}` : '<i>●</i>rascunho';
-    el.className = 'chip ' + (t === 'não salvo' ? 'crit' : t ? 'off' : 'ok');
+    el.innerHTML = t ? `<i>●</i>${esc(t)}` : RFI.salvo ? `<i>●</i>rascunho enviado às ${hhmm(RFI.salvo)}` : '<i>●</i>rascunho';
+    el.className = 'chip ' + (ruim ? 'crit' : t ? 'off' : 'ok');
   }
 
   /* ---------- começar / abrir / sair ---------- */
@@ -15498,6 +15568,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         if (!r) { toast('Este RIF não existe mais.', true); rfVoltar(); return; }
         RFI.ed = r; RFI.salvo = r.rel._u || Date.now();
         if (r.rel.status !== 'finalizado' && rfSincCorrecoes(r.rel)) { toast('A Qualidade validou esta combinação: os valores corrigidos já estão no rascunho.'); rfAgendar(); }
+        rfAbrirAvisos(r);   /* v69 */
         if (S.view === 'rif' && S.rif && S.rif.rel === id) render();
       }).catch((err) => { RFI.carregando = null; toast('Não foi possível abrir o RIF: ' + rfErr(err), true); rfVoltar(); });
       return;
@@ -15821,7 +15892,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         const v = rel.modo === 'norma' ? rfValDe(rel.chave) : null;
         Object.assign(rel, { status: 'finalizado', ano, seq, numero: 'RIF-' + ano + '-' + E.pad(seq, 5), resultado: res, finalizadoEm: Date.now(), inspetor: rfMe().toLocaleUpperCase('pt-BR'),
           assin: { nome: rfMe(), uid: DB.me || null, email: DB.meEmail || '', em: Date.now() }, valid: v ? { resp: v.responsavel, data: v.data, corr: rel.cotas.filter((c) => c.corrigida).length } : null });
-        await DB.db.doc('rif/' + rel.id).setIf(rfClone(rel), (cur) => !cur || cur.status !== 'finalizado');
+        { const rv = rel.rev || 0; let outro = null; try { await DB.db.doc('rif/' + rel.id).setIf(rfClone(rel), (cur) => { if (!cur) return true; if (cur.status === 'finalizado') return false; if ((cur.rev || 0) !== rv) { outro = cur.ed || {}; return false; } return true; }); }
+          catch (e2) { if (e2 && e2.code === 'failed-precondition' && outro) { Object.assign(rel, { status: 'rascunho', numero: null }); RFI.ed = null; relConflito('RIF', { outro }, () => render()); throw new Error('alterado em outro aparelho: abra a versão mais nova'); } throw e2; } }   /* v69 */
         if (v) { const vv = RFI.val[rfVid(rel.chave)] || {}; try { await rfWrite('rifv/' + rfVid(rel.chave), { uso: (vv.uso || 0) + 1, rifs: { [rel.numero]: Date.now() } }); } catch (e) { /* contagem de uso não gravada */ } }
         await rfSyncItem(rel, true);
         for (const i of rel.ins || []) { try { await addInsEvent(i.id, { t: 'uso', d: S.today, tipo: 'RIF', doc: rel.numero, pk: rel.ped ? rel.ped.k : null, ref: `PV ${rfDig(rel.ident.pv)} · ${rel.desc || ''}`.trim() }); } catch (e) { /* histórico do instrumento é complementar */ } }
@@ -16364,6 +16436,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         if (!r) { toast('Este RIF não existe mais.', true); RT.rel = null; RT.step = RT.pk ? 1 : 0; render(); return; }
         RFI.ed = r; RFI.salvo = r.rel._u || Date.now();
         if (r.rel.status !== 'finalizado' && rfSincCorrecoes(r.rel)) { toast('A Qualidade validou esta combinação: os valores corrigidos já estão no rascunho.'); rfAgendar(); }
+        rfAbrirAvisos(r);   /* v69 */
         if (S.view === 'riftab' && RT.rel === id) render();
       }).catch((err) => { RFI.carregando = null; toast('Não foi possível abrir o RIF: ' + rfErr(err), true); RT.rel = null; render(); });
       return;
