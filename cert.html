@@ -586,6 +586,7 @@ html.ws .app, html.ws .topbar, html.ws .panel, html.ws .panel-hint { display: no
 .ws-b { height: 42px; border-radius: 9px; border: 1px solid var(--w-line2); background: var(--w-sf); color: var(--w-ink); font: 600 15px var(--w-body); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 0 12px; white-space: nowrap; }
 .ws-b kbd { font: 500 11.5px var(--w-mono); color: var(--w-ink3); border: 1px solid var(--w-line2); border-radius: 4px; padding: 1px 5px; }
 .ws-b:disabled { opacity: .45; cursor: default; }
+.ws-b.ws-iogp { width: 100%; margin-top: 10px; }   /* v77 */
 .ws-b.dk { background: var(--w-dk); border-color: var(--w-dk); color: var(--w-sf); }
 .ws-b.or, .modal .btn.or { background: var(--w-or); border-color: var(--w-or); color: #fff; }
 .ws-b.busy { opacity: .6; pointer-events: none; }
@@ -837,6 +838,7 @@ html.ws-semprev .ws-faixa { display: flex; flex-direction: column; align-items: 
     <button type="button" class="btn secondary" id="btnAbrir" title="Carregar certificados salvos em Excel (.xlsx ou .xlsm). Selecione várias folhas de uma vez (26027, 26027A…) para abrir o conjunto.">Abrir Excel…</button>
     <button type="button" class="btn secondary" id="btnAssinatura" title="Incluir a imagem da assinatura do responsável (PNG ou JPG)">Assinatura…</button>
     <button type="button" class="btn secondary" id="btnLimites" title="Faixas de química e mecânica das normas mais usadas (A105, A350 LF2, A182 F304L/F316L, A106 B, A234 WPB): conferir e marcar como conferidas">Limites das normas…</button>
+    <button type="button" class="btn secondary" id="btnIogp" hidden title="Jurong e Polar 1: Material Data Sheets da IOGP S-563 de cada item">IOGP S-563…</button>
     <input type="file" id="usinaInput" multiple accept=".pdf,application/pdf" hidden>
     <input type="file" id="pvInput" accept=".pdf,application/pdf" hidden>
     <input type="file" id="ocInput" accept=".pdf,application/pdf" hidden>
@@ -2033,6 +2035,8 @@ function sanitizeState(s) {
   for (const [r, val] of Object.entries(VALOR_PADRAO)) if (!out.v[r]) out.v[r] = val;
   derivar(out);
   // campos preenchidos com sugestão lida da descrição (marcados na tela até a pessoa conferir)
+  if (s.iogp === 'sim' || s.iogp === 'nao') out.iogp = s.iogp;   /* v77: IOGP S-563 */
+  if (s.mds && typeof s.mds === 'object') { const m = {}; for (const [k, x] of Object.entries(s.mds)) if (/^\d+$/.test(k) && +k <= out.itens && typeof x === 'string' && IOGP_OK(x)) m[k] = x; if (Object.keys(m).length) out.mds = m; }
   const sug = s.sug && typeof s.sug === 'object' ? s.sug : {};
   for (const ref of Object.keys(sug)) {
     const f = FIELD[ref];
@@ -2193,6 +2197,7 @@ const folhaCheia = () => Object.assign({ itens: MAX_ITENS, comps: 1, corrs: 1, o
 /* texto fixo da célula; na coluna "Item" das tabelas, o Nº conforme a numeração da folha (11, 12… na folha A) */
 function cellFor(cert, r, c) {
   const cell = cellAt(r, c);
+  if (c === 1 && IOGP_DECL[r] && cell.t && iogpAtivo(cert)) return { st: cell.st, t: iogpDeclTxt(cell.t, IOGP_DECL[r]), rich: null };   /* v77 */
   const n = c === 1 ? itemOfRow(r) : 0;
   if (n) return { st: cell.st, t: cert.inicio + n - 1, rich: null };
   const sec = c === 1 ? numeroSecao(cert, r) : null;
@@ -2845,6 +2850,7 @@ function renderCheck(cb, L) {
 }
 
 function render() {
+  { const bi = document.getElementById('btnIogp'); if (bi) bi.hidden = LYT || !(iogpAtivo(state) || state.iogp === 'sim' || state.iogp === 'nao'); }   /* v77 */
   derivar(state);
   const L = LAYOUT = layoutFor(state);
   for (const k of Object.keys(fieldEls)) delete fieldEls[k];
@@ -2866,6 +2872,7 @@ function render() {
   }
   frag.appendChild(renderBorders(L));      // bordas por cima do realce dos campos
   for (const im of MODEL.images) frag.appendChild(renderImage(im, L));
+  if (iogpAtivo(state)) for (const el of iogpDom(iogpPrims(state, L, measureScreen), L.U)) frag.appendChild(el);   /* v77: IOGP S-563 */
   const sg = signatureRect(L);
   if (sg) {
     const img = document.createElement('img');
@@ -3640,6 +3647,266 @@ function itensDoTexto(t, cert) {
   }
   return nums.length ? { todos: false, nums } : { invalido: true, nums: [] };
 }
+/* =====================================================================
+ * v77: IOGP S-563 (dez/2018) · Material Data Sheets (MDS)
+ *  - liga sozinha para os clientes que pedem a IOGP (Jurong / Seatrium e Polar 1); dá para ligar ou desligar na tela
+ *  - a MDS de cada item sai da norma e do grau; "NACE MR0175" na descrição = serviço sour (sufixo S); dá para corrigir
+ *  - no certificado: etiqueta "IOGP S-563" na faixa do título, a MDS de cada item em Informações adicionais
+ *    e a declaração citando a S-563 (nada muda na tabela de itens nem na área da assinatura)
+ *  - na conferência: os limites da MDS (avisam, não impedem emitir)
+ * ===================================================================== */
+const IOGP_CLI = /JURONG|SEATRIUM|POLAR\s*-?\s*(1|I)\b/i;
+const IOGP_OR = '#E85D22';
+const IOGP_SH = ['IC002', 'IC003', 'IC005', 'IC102', 'IC103', 'IC105'];
+const IOGP_IDS = ['IC001', 'IC002', 'IC003', 'IC004', 'IC005', 'IC006', 'IC007', 'IC101', 'IC102', 'IC103', 'IC104', 'IC105', 'IC106', 'IC107',
+  'ID141', 'ID142', 'ID143', 'ID144', 'ID145', 'ID146', 'ID147', 'ID148', 'IS101', 'IS102', 'IS103', 'IS104', 'IS105', 'IS106', 'IS107', 'IS108',
+  'IS221', 'IS222', 'IS223', 'IS224', 'IS225', 'IS226', 'IS227', 'IS228', 'IX100', 'IX109', 'IX110', 'IX120'];
+const IOGP_OK = (x) => x === '-' || (IOGP_IDS.includes(String(x).replace(/SH?$/, '')) && (!/SH$/.test(x) || IOGP_SH.includes(String(x).slice(0, 5))));
+/* células do modelo: o texto da faixa do título e a declaração */
+const IOGP_TIT = (() => { if (LYT) return null; for (const [ref, e] of Object.entries(MODEL.cells)) if (typeof e[1] === 'string' && /QUALITY CERTIFICATE/.test(e[1])) return parseRef(ref); return null; })();
+const IOGP_DECL = (() => { const o = {}; if (LYT) return o; for (const [ref, e] of Object.entries(MODEL.cells)) if (typeof e[1] === 'string' && /^(Certificamos que|We certify that)/.test(e[1])) { const p = parseRef(ref); o[p.r] = /^We/.test(e[1]) ? 'en' : 'pt'; } return o; })();
+const iogpDeclTxt = (t, lang) => String(t).replace(/\.\s*$/, '') + (lang === 'en' ? ' and IOGP S-563.' : ' e com a IOGP S-563.');
+function iogpAtivo(cert) {
+  if (LYT || !cert || !cert.v) return false;
+  if (cert.iogp === 'nao') return false;
+  if (cert.iogp === 'sim') return true;
+  return IOGP_CLI.test(cleanText(cert.v[REF_CLIENTE] || ''));
+}
+const iogpTxt = (cert, n) => [3, 11, 14].map(c => cleanText(cert.v[refOf(BASE.produto + n, c)] || '')).join(' ').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase();
+/* MDS pela norma e pelo grau (texto da descrição, especificação e material do item) */
+function iogpAuto(t) {
+  if (!t || !t.trim()) return '';
+  const tem = re => re.test(t), A = n => new RegExp('\\bA\\s*-?\\s*(' + n + ')\\b').test(t);
+  const sold = tem(/COM COSTURA|WELDED|SOLDAD|\bEFW\b|\bERW\b|\bSAW\b|\bWPBW\b|\bWPL6W\b|\bWP-?W\b|\bWX\b/);
+  const barra = tem(/\bBARRA|\bBARS?\b|TARUGO/), galv = tem(/GALVAN|\bHDG\b|ZINCAD/);
+  let id = '';
+  const inox = (p) => (A(312) ? (sold ? p[1] : p[0]) : A(358) ? p[1] : A(403) ? p[2] : A(240) ? p[4] : A(351) || tem(/\bCF[38]M?\b/) ? p[5] : A('276|479') ? p[6] : A(269) ? p[7] : A(182) ? (barra ? p[6] : p[3]) : '');
+  if (tem(/S31803|S32205|\bF\s*-?\s*5[1]\b|\bF\s*-?\s*60\b|\b2205\b|DUPLEX/)) {
+    id = A(790) ? 'ID141' : A(928) ? 'ID142' : A(815) ? 'ID143' : A(240) ? 'ID145' : A(995) || tem(/\b4A\b/) ? 'ID146' : A('276|479') || barra ? 'ID147' : A(789) ? 'ID148' : A(182) ? 'ID144' : '';
+  } else if (tem(/\b(TP|WP|F|CF8|CF3)?\s*-?\s*316/) || tem(/\bCF[38]M\b/)) id = inox(['IS101', 'IS102', 'IS103', 'IS104', 'IS105', 'IS106', 'IS107', 'IS108']);
+  else if (tem(/\b(TP|WP|F)?\s*-?\s*304/) || tem(/\bCF[38]\b/)) id = inox(['IS221', 'IS222', 'IS223', 'IS224', 'IS225', 'IS226', 'IS227', 'IS228']);
+  else if (A(333)) id = 'IC101';
+  else if (A(671)) id = 'IC102';
+  else if (A(420) || tem(/\bWPL\s*-?\s*6/)) id = 'IC103';
+  else if (A(350) || tem(/\bLF\s*-?\s*[26]\b/)) id = barra ? 'IC107' : 'IC104';
+  else if (A(352) || tem(/\bLCC\b/)) id = 'IC106';
+  else if (A(516)) id = tem(/\bS5\b|CHARPY|IMPACT|-\s*46/) ? 'IC105' : 'IC005';
+  else if (A(106)) id = 'IC001';
+  else if (tem(/\bAPI\s*-?\s*5\s*L\b/)) id = sold ? 'IC002' : 'IC001';
+  else if (A(672)) id = 'IC002';
+  else if (A(234) || tem(/\bWPBW?\b/)) id = 'IC003';
+  else if (A(105)) id = barra ? 'IC007' : 'IC004';
+  else if (A(216) || tem(/\bWC[BC]\b/)) id = 'IC006';
+  else if (A(696)) id = tem(/\bS5\b/) ? 'IC107' : 'IC007';
+  else if (A(193) || tem(/\bB7M?\b|\b2HM?\b/)) id = galv ? 'IX120' : 'IX110';
+  else if (A(320) || tem(/\bL7M?\b|\bL43\b/)) id = galv ? 'IX100' : 'IX109';
+  if (!id) return '';
+  if (/\bHIC\b/.test(t) && IOGP_SH.includes(id)) return id + 'SH';
+  if (/NACE|MR\s*-?\s*0?\s*1\s*-?\s*75|MR\s*-?\s*0175|15156|MR\s*-?\s*0103|17945/.test(t)) return id + 'S';
+  return id;
+}
+function iogpMds(cert, n) {
+  const o = cert.mds && cert.mds[n];
+  if (o === '-') return '';
+  if (o) return o;
+  let id = iogpAuto(iogpTxt(cert, n));
+  if (/^IC005/.test(id) && FIELDS.some(f => f.tbl === 'mecanica' && f.item === n && (f.c1 === 8 || f.c1 === 9) && cert.v[f.ref])) id = id.replace('IC005', 'IC105');
+  return id;
+}
+const iogpLista = (ns) => (ns.length === 1 ? String(ns[0]) : ns.slice(0, -1).join(', ') + ' e ' + ns[ns.length - 1]);
+/* itens agrupados por MDS, na ordem em que aparecem */
+function iogpGrupos(cert) {
+  const G = new Map();
+  for (let n = 1; n <= cert.itens; n++) {
+    if (!FIELDS.some(f => f.item === n && cert.v[f.ref])) continue;
+    const m = iogpMds(cert, n); if (!m) continue;
+    if (!G.has(m)) G.set(m, { mds: m, nums: [], mat: [cleanText(cert.v[refOf(BASE.produto + n, 11)] || ''), cleanText(cert.v[refOf(BASE.produto + n, 14)] || '')].filter(Boolean).join(' ') });
+    G.get(m).nums.push(cert.inicio + n - 1);
+  }
+  return [...G.values()];
+}
+const iogpGrupoTxt = (g, mat) => `${g.nums.length > 1 ? 'itens' : 'item'} ${iogpLista(g.nums)}${mat && g.mat ? ' · ' + g.mat : ''}`;
+const iogpLegenda = (gs) => 'Material Data Sheets da IOGP S-563 (dez/2018)' + (gs.some(g => /S$/.test(g.mds)) ? '. S = serviço sour (NACE MR0175 / ISO 15156)' : '') + (gs.some(g => /SH$/.test(g.mds)) ? '; SH = sour com ensaio HIC' : '') + '.';
+/* linhas livres de Informações adicionais: a 1ª leva a etiqueta e as MDS; a seguinte, a legenda */
+const IOGP_INFO = LYT ? [] : BOXES.filter(b => b.field && /^info\d/.test(b.field.key || '')).sort((a, b) => a.r1 - b.r1);
+function iogpLinhas(cert) {
+  const livres = IOGP_INFO.filter(b => !cleanText(cert.v[b.field.ref] || '').trim());
+  if (!livres.length) return null;
+  const i = IOGP_INFO.indexOf(livres[0]), prox = IOGP_INFO[i + 1];
+  return { main: livres[0], leg: prox && livres.includes(prox) ? prox : null };
+}
+/* desenho (tela e PDF): formas nas unidades do layout L */
+function iogpPrims(cert, L, measure) {
+  const U = L.U, out = [];
+  const F = (sz, b) => ({ sz, b: !!b, i: false, u: false, color: NAVY });
+  const tw = (t, sz, b) => measure(t, F(sz, b));
+  const pill = (x, yc, t, sz, o) => {
+    const h = (o.h || 9.6) * U, dot = o.dot !== false, w = tw(t, sz, true) + (dot ? 13 : 8) * U;
+    out.push({ k: 'pill', x, y: yc - h / 2, w, h, t, sz, fill: o.fill || null, stroke: o.stroke || null, color: o.color, dot, tx: x + (dot ? 9 : 4) * U, dx: 5.3 * U, dr: 1.5 * U });
+    return w;
+  };
+  if (IOGP_TIT) {
+    const bt = BOXES.find(b => !b.field && b.r1 === IOGP_TIT.r && b.c1 === IOGP_TIT.c);
+    if (bt) {
+      const g = boxRect(L, bt), c0 = cellAt(bt.r1, bt.c1);
+      if (g.h > 0) {
+        const ln = layoutText(L, measure, runsFor(c0.st, c0.t, c0.rich), c0.st, g, {}).lines[0];
+        if (ln) { const w = tw('IOGP S-563', 5.8, true) + 13 * U; pill(ln.x - 8 * U - w, g.y + g.h / 2, 'IOGP S-563', 5.8, { stroke: '#FFFFFF', color: '#FFFFFF', h: Math.min(10.5, (g.h / U) * 0.72) }); }
+      }
+    }
+  }
+  const gs = iogpGrupos(cert), lin = iogpLinhas(cert);
+  if (!gs.length || !lin) return out;
+  const g = boxRect(L, lin.main), gl = lin.leg ? boxRect(L, lin.leg) : null;
+  if (g.h <= 0) return out;
+  out.push({ k: 'box', x: g.x + 2 * U, y: g.y + 1.2 * U, w: g.w - 4 * U, h: (gl && gl.h > 0 ? gl.y + gl.h - g.y : g.h) - 2.4 * U, fill: '#EDF2F8' });
+  const x0 = g.x + 5 * U, x1 = g.x + g.w - 5 * U, yc = g.y + g.h / 2;
+  const larg = (k, mat, L0 = gs) => tw('IOGP S-563', 5.6 * k, true) + 13 * U + L0.reduce((s, q) => s + 8 * U + tw(q.mds, 5.2 * k, true) + 8 * U + 3 * U + tw(iogpGrupoTxt(q, mat), 5.5 * k, false), 0) + (L0.length < gs.length ? 10 * U : 0);
+  let k = 1, mat = true, lista = gs;
+  if (larg(1, true) > x1 - x0) { mat = false; while (k > 0.76 && larg(k, false) > x1 - x0) k -= 0.04; }
+  while (lista.length > 1 && larg(k, mat, lista) > x1 - x0) lista = lista.slice(0, -1);   /* muitas MDS: corta e põe "…" */
+  let x = x0 + pill(x0, yc, 'IOGP S-563', 5.6 * k, { fill: NAVY, color: '#FFFFFF', h: 9.6 * k }) + 8 * U;
+  for (const q of lista) {
+    x += pill(x, yc, q.mds, 5.2 * k, { fill: '#FFFFFF', stroke: NAVY, color: NAVY, dot: false, h: 9.2 * k }) + 3 * U;
+    const t = iogpGrupoTxt(q, mat);
+    out.push({ k: 'text', x, y: yc, t, sz: 5.5 * k, b: false, color: NAVY });
+    x += tw(t, 5.5 * k, false) + 8 * U;
+  }
+  if (lista.length < gs.length) out.push({ k: 'text', x, y: yc, t: '…', sz: 5.5 * k, b: true, color: NAVY });
+  if (gl && gl.h > 0) out.push({ k: 'text', x: x0, y: gl.y + gl.h / 2, t: iogpLegenda(gs), sz: 5.4, b: false, color: '#586980' });
+  return out;
+}
+function iogpPdf(pdf, prims, X, Y, S) {
+  for (const p of prims) {
+    if (p.k === 'box') {
+      pdf.setFillColor(...hexRgb(p.fill)); pdf.setDrawColor(...hexRgb(NAVY)); pdf.setLineWidth(0.6);
+      pdf.rect(X(p.x), Y(p.y), p.w * S, p.h * S, 'FD');
+    } else if (p.k === 'pill') {
+      const r = (p.h * S) / 2;
+      if (p.fill) pdf.setFillColor(...hexRgb(p.fill));
+      if (p.stroke) { pdf.setDrawColor(...hexRgb(p.stroke)); pdf.setLineWidth(0.7); }
+      pdf.roundedRect(X(p.x), Y(p.y), p.w * S, p.h * S, r, r, p.fill && p.stroke ? 'FD' : p.fill ? 'F' : 'S');
+      if (p.dot) { pdf.setFillColor(...hexRgb(IOGP_OR)); pdf.circle(X(p.x + p.dx), Y(p.y + p.h / 2), p.dr * S, 'F'); }
+      pdf.setFont('helvetica', 'bold'); pdf.setFontSize(p.sz * S); pdf.setTextColor(...hexRgb(p.color));
+      pdf.text(pdfSafe(p.t), X(p.tx), Y(p.y + p.h / 2 + p.sz * 0.36), { baseline: 'alphabetic' });
+    } else if (p.k === 'text') {
+      pdf.setFont('helvetica', p.b ? 'bold' : 'normal'); pdf.setFontSize(p.sz * S); pdf.setTextColor(...hexRgb(p.color));
+      pdf.text(pdfSafe(p.t), X(p.x), Y(p.y + p.sz * 0.36), { baseline: 'alphabetic' });
+    }
+  }
+}
+function iogpDom(prims, U) {
+  return prims.map(p => {
+    const d = document.createElement('div');
+    d.className = 'iogp-' + p.k;
+    d.style.cssText = `position:absolute;left:${p.x}px;top:${p.k === 'text' ? p.y - p.sz * U : p.y}px;pointer-events:none;box-sizing:border-box;white-space:nowrap;`;
+    if (p.k === 'box') Object.assign(d.style, { width: p.w + 'px', height: p.h + 'px', background: p.fill, border: '0.8px solid ' + NAVY });
+    else if (p.k === 'pill') {
+      Object.assign(d.style, { width: p.w + 'px', height: p.h + 'px', borderRadius: p.h / 2 + 'px', background: p.fill || 'transparent', border: p.stroke ? '0.9px solid ' + p.stroke : '0', color: p.color, font: `bold ${p.sz}pt ${FONT_FAMILY}`, display: 'flex', alignItems: 'center', paddingLeft: (p.tx - p.x) + 'px' });
+      if (p.dot) { const i = document.createElement('i'); i.style.cssText = `position:absolute;left:${p.dx - p.dr}px;top:${p.h / 2 - p.dr}px;width:${2 * p.dr}px;height:${2 * p.dr}px;border-radius:50%;background:${IOGP_OR};`; d.appendChild(i); }
+      d.appendChild(document.createTextNode(p.t));
+    } else { Object.assign(d.style, { height: 2 * p.sz * U + 'px', lineHeight: 2 * p.sz * U + 'px', color: p.color, font: `${p.b ? 'bold ' : ''}${p.sz}pt ${FONT_FAMILY}` }); d.textContent = p.t; }
+    return d;
+  });
+}
+/* Excel: os mesmos textos, sem desenho */
+function iogpXlsx(cert, setCell) {
+  if (IOGP_TIT) { const c0 = cellAt(IOGP_TIT.r, IOGP_TIT.c); if (c0.t) setCell(IOGP_TIT.r, IOGP_TIT.c, 'IOGP S-563   ·   ' + c0.t, null); }
+  for (const [r, lang] of Object.entries(IOGP_DECL)) { const c0 = cellAt(+r, 1); if (c0.t) setCell(+r, 1, iogpDeclTxt(c0.t, lang), null); }
+  const gs = iogpGrupos(cert), lin = iogpLinhas(cert);
+  if (!gs.length || !lin) return;
+  setCell(lin.main.r1, lin.main.c1, 'IOGP S-563 · ' + gs.map(g => `${g.mds}: ${iogpGrupoTxt(g, true)}`).join(' · '), null);
+  if (lin.leg) setCell(lin.leg.r1, lin.leg.c1, iogpLegenda(gs), null);
+}
+/* conferência: limites das MDS (IOGP S-563 Annex A) */
+const IOGP_HRC = { 22: 237, 28: 271 };   /* conversão aproximada HRC → HB (ASTM E140) só para avisar; vale a medição em HRC */
+function iogpConferir(cert, ci, add) {
+  if (!iogpAtivo(cert)) return;
+  const v = ref => cleanText(cert.v[ref] || '').trim();
+  const qf = (n, el) => FIELDS.find(f => f.tbl === 'quimica' && f.item === n && String(cellAt(BASE.quimica, f.c1).t || '').trim().toUpperCase() === el.toUpperCase());
+  const q = (n, el) => { const f = qf(n, el); return f ? numDe(cert.v[f.ref] || '') : null; };
+  const mf = (n, c) => FIELDS.find(f => f.tbl === 'mecanica' && f.item === n && f.c1 === c);
+  const m = (n, c) => { const f = mf(n, c); return f ? numDe(cert.v[f.ref] || '') : null; };
+  const ht = secOn(cert, 'trat') ? htPorItem(cert).out : {};
+  let algum = false;
+  for (let n = 1; n <= cert.itens; n++) {
+    if (!FIELDS.some(f => f.item === n && cert.v[f.ref])) continue;
+    const num = cert.inicio + n - 1, rp = refOf(BASE.produto + n, 14), id = iogpMds(cert, n);
+    if (!id) {
+      if (!(cert.mds && cert.mds[n] === '-')) add(ci, rp, 'aviso', `Item ${num}: IOGP S-563 · não achei a MDS pela norma e o grau. Escolha em "IOGP S-563 › Ajustar" (ou marque "nenhuma")`);
+      continue;
+    }
+    algum = true;
+    const base = id.slice(0, 5), sour = /S$|SH$/.test(id), tit = `Item ${num}: IOGP ${id}`;
+    const txt = iogpTxt(cert, n), qref = (el, ref0) => { const f = qf(n, el); return f ? f.ref : ref0; };
+    const lim = (el, max, txtLim) => { const x = q(n, el); if (x != null && x > max + 1e-9) add(ci, qref(el, rp), 'norma', `${tit} · ${el} ${numBR(x)} acima do máximo da MDS (${txtLim || el + ' ≤ ' + numBR(max)})`); };
+    const tt = ht[n];
+    /* tratamento térmico informado (todas as MDS pedem a condição de tratamento no certificado) */
+    if (!tt || !tt.t) add(ci, refOf(59, 3), 'norma', `${tit} · o certificado precisa informar a condição de tratamento térmico do item`);
+    if (base[1] === 'C') {
+      lim('C', 0.23); lim('P', 0.025);
+      const sMax = sour ? (['IC002', 'IC005', 'IC102', 'IC105'].includes(base) ? 0.003 : ['IC001', 'IC003', 'IC101', 'IC103'].includes(base) ? 0.010 : 0.020) : 0.020;
+      lim('S', sMax, `S ≤ ${numBR(sMax)}${sour && sMax !== 0.020 ? ' (serviço sour)' : ''}`);
+      let ce = q(n, 'CE');
+      if (ce == null && q(n, 'C') != null && q(n, 'Mn') != null) { const z = el => q(n, el) || 0; ce = z('C') + z('Mn') / 6 + (z('Cr') + z('Mo') + z('V')) / 5 + (z('Ni') + z('Cu')) / 15; }
+      if (ce != null && ce > 0.43 + 1e-9) add(ci, qref('CE', rp), 'norma', `${tit} · CE ${numBR(Math.round(ce * 100) / 100)} acima do máximo da MDS (CE ≤ 0,43)`);
+      const lf6 = /\bLF\s*-?\s*6\b/.test(txt);
+      if (!lf6) for (const [el, mx] of [['Nb', 0.01], ['Ti', 0.01], ['B', 0.0005], ['V', 0.02]]) { const x = q(n, el); if (x != null && x > mx) add(ci, qref(el, rp), 'aviso', `${tit} · ${el} ${numBR(x)}: a MDS não deixa adicionar Nb, V, Ti ou B. Confirme com a usina que é residual`); }
+      for (const l of (secOn(cert, 'trat') ? htLinhas(cert) : [])) {   /* revenido linha a linha (normalizado 900 + revenido 600 não pode passar) */
+        if (!/REVEN|TEMPER/i.test(l.t)) continue;
+        const its = itensDoTexto(l.itens, cert); if (!its || its.invalido || !its.nums.includes(num)) continue;
+        const ts = (String(l.temp || '').match(/\d{3,4}/g) || []).map(Number);
+        if (ts.length && Math.max(...ts) < 620) add(ci, refOf(58 + l.k, 10), 'norma', `${tit} · revenido abaixo de 620 °C (${l.temp})`);
+      }
+      if (/^IC1/.test(base) || base === 'IC105') {
+        const tMax = lf6 && base === 'IC104' ? -51 : -46, tC = m(n, 8), cv = m(n, 9), jMin = 27;
+        if (tC == null && cv == null) add(ci, (mf(n, 8) || {}).ref || rp, 'norma', `${tit} · Charpy obrigatório a ${tMax} °C (média ≥ ${jMin} J) para espessura ≥ 6 mm`);
+        else {
+          if (tC != null && tC > tMax + 1e-9) add(ci, mf(n, 8).ref, 'norma', `${tit} · Charpy a ${numBR(tC)} °C: a MDS pede ${tMax} °C (ou mais frio)`);
+          if (cv != null && cv < jMin - 1e-9) add(ci, mf(n, 9).ref, 'norma', `${tit} · Charpy média ${numBR(cv)} J abaixo de ${jMin} J`);
+        }
+      }
+      if (base === 'IC103') for (const c of [6, 7]) { const x = m(n, c); if (x != null && x > 197) add(ci, mf(n, c).ref, 'norma', `${tit} · dureza ${numBR(x)} HB acima de 197 HBW`); }
+      if (sour && ['IC001', 'IC005', 'IC006', 'IC007', 'IC101', 'IC105', 'IC106', 'IC107'].includes(base)) for (const c of [6, 7]) { const x = m(n, c); if (x != null && x > IOGP_HRC[22]) add(ci, mf(n, c).ref, 'aviso', `${tit} · dureza ${numBR(x)} HB: serviço sour pede no máximo 22 HRC (≈ ${IOGP_HRC[22]} HB)`); }
+    } else if (base[1] === 'S') {
+      const l316 = base[2] === '1', mat = l316 ? '316' : '304';
+      lim('C', 0.030, `C ≤ 0,030: dupla certificação ${mat}/${mat}L`);
+      if (!new RegExp(mat + '\\s*L').test(txt)) add(ci, rp, 'aviso', `${tit} · a MDS pede dupla certificação ${mat}/${mat}L: escreva o material como ${base === 'IS104' || base === 'IS224' ? 'F' : ''}${mat}/${mat}L`);
+      if (sour) for (const c of [6, 7]) { const x = m(n, c); if (x != null && x > IOGP_HRC[22]) add(ci, mf(n, c).ref, 'aviso', `${tit} · dureza ${numBR(x)} HB: serviço sour pede no máximo 22 HRC (≈ ${IOGP_HRC[22]} HB)`); }
+    } else if (base[1] === 'D') {
+      if (/S31803|\bF\s*-?\s*51\b/.test(txt)) { const x = q(n, 'N'); if (x == null) add(ci, qref('N', rp), 'aviso', `${tit} · informe o N: a MDS pede N de 0,14 a 0,20 % (S31803)`); else if (x < 0.14 - 1e-9 || x > 0.20 + 1e-9) add(ci, qref('N', rp), 'norma', `${tit} · N ${numBR(x)} fora de 0,14 a 0,20 % (S31803)`); }
+      if (tt && (!tt.temp || !tt.tempo || !tt.resf)) add(ci, refOf(59, 10), 'norma', `${tit} · informe a temperatura de solubilização, o tempo e o meio de resfriamento (têmpera)`);
+      if (sour) for (const c of [6, 7]) { const x = m(n, c); if (x != null && x > IOGP_HRC[28]) add(ci, mf(n, c).ref, 'aviso', `${tit} · dureza ${numBR(x)} HB: serviço sour pede no máximo 28 HRC (≈ ${IOGP_HRC[28]} HB)`); }
+    } else if (base[1] === 'X' && sour) {
+      if ((base === 'IX110' || base === 'IX120') && /\bB7\b(?!M)|\b2H\b(?!M)/.test(txt)) add(ci, rp, 'norma', `${tit} · serviço sour: só B7M / 2HM`);
+      if ((base === 'IX100' || base === 'IX109') && /\bL7\b(?!M)|\bL43\b|\b7\b(?!M)/.test(txt) && !/L7M/.test(txt)) add(ci, rp, 'norma', `${tit} · serviço sour: só L7M / 7M`);
+    }
+  }
+  if (algum && !iogpLinhas(cert)) add(ci, (IOGP_INFO[0] || {}).field ? IOGP_INFO[0].field.ref : REF_CLIENTE, 'aviso', 'IOGP S-563: as duas linhas de Informações adicionais estão ocupadas; a linha com as MDS não cabe no certificado');
+}
+/* tela: ligar, desligar e corrigir a MDS de cada item */
+async function iogpAjustar() {
+  const wrap = document.createElement('div');
+  wrap.className = 'iogp-aj';
+  const modo = state.iogp === 'sim' || state.iogp === 'nao' ? state.iogp : 'auto';
+  const linhas = [];
+  for (let n = 1; n <= state.itens; n++) {
+    if (!FIELDS.some(f => f.item === n && state.v[f.ref])) continue;
+    const auto = (() => { const s0 = state.mds; state.mds = null; const x = iogpMds(state, n); state.mds = s0; return x; })();
+    linhas.push({ n, auto, atual: state.mds && state.mds[n] ? state.mds[n] : '', desc: cleanText(state.v[refOf(BASE.produto + n, 3)] || '').slice(0, 70), mat: [11, 14].map(c => cleanText(state.v[refOf(BASE.produto + n, c)] || '')).filter(Boolean).join(' ') });
+  }
+  const opts = ['', '-'].concat(IOGP_IDS.flatMap(x => [x, x + 'S'].concat(IOGP_SH.includes(x) ? [x + 'SH'] : [])));
+  const nome = x => (x === '' ? 'automática' : x === '-' ? 'nenhuma' : x);
+  wrap.innerHTML = `<p style="margin:0 0 8px">Para Jurong e Polar 1 a IOGP liga sozinha. A MDS sai da norma e do grau de cada item; "NACE MR0175" na descrição = serviço sour (S).</p>
+    <label style="display:flex;gap:8px;align-items:center;margin:0 0 10px"><b>Usar a IOGP S-563</b><select id="iogp-modo"><option value="auto"${modo === 'auto' ? ' selected' : ''}>Automático (pelo cliente)</option><option value="sim"${modo === 'sim' ? ' selected' : ''}>Sempre neste certificado</option><option value="nao"${modo === 'nao' ? ' selected' : ''}>Não usar</option></select></label>
+    <table class="iogp-tb" style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr><th style="text-align:left">Item</th><th style="text-align:left">Produto</th><th>Automática</th><th>Usar</th></tr></thead><tbody>${linhas.map(l => `<tr><td>${state.inicio + l.n - 1}</td><td>${wsEsc(l.desc)}<br><small style="opacity:.7">${wsEsc(l.mat)}</small></td><td style="text-align:center"><b>${wsEsc(l.auto || '—')}</b></td><td><select data-n="${l.n}">${opts.map(x => `<option value="${x}"${x === l.atual ? ' selected' : ''}>${nome(x)}</option>`).join('')}</select></td></tr>`).join('') || '<tr><td colspan="4">Nenhum item preenchido.</td></tr>'}</tbody></table>`;
+  const r = await showDialog({ title: 'IOGP S-563 · Material Data Sheets', content: wrap, wide: true, buttons: [{ label: 'Cancelar', value: null }, { label: 'Aplicar', primary: true, value: () => ({ modo: wrap.querySelector('#iogp-modo').value, mds: [...wrap.querySelectorAll('select[data-n]')].map(s => [s.dataset.n, s.value]) }) }] });
+  if (!r) return;
+  for (const c of doc.certs) { if (r.modo === 'auto') delete c.iogp; else c.iogp = r.modo; }
+  const mds = {}; for (const [n, x] of r.mds) if (x && IOGP_OK(x)) mds[n] = x;
+  if (Object.keys(mds).length) state.mds = mds; else delete state.mds;
+  render(); saveDraftSoon();
+}
 function conferir(certs) {
   const out = [];
   const add = (ci, ref, tipo, msg) => out.push({ ci, ref, tipo, msg });
@@ -3671,6 +3938,7 @@ function conferir(certs) {
         if (f.tbl === 'mecanica' && f.c1 >= 10 && /^RP$/i.test(v(f.ref))) add(ci, f.ref, 'aviso', `Item ${num}: ${f.label} reprovado (RP)`);
       }
     }
+    if (!LYT) iogpConferir(cert, ci, add);   /* v77: IOGP S-563 */
     // tratamento térmico: cada item com dados precisa estar em uma linha
     // válvulas: ensaios do teste de pressão
     if (VALV && secOn(cert, 'teste')) {
@@ -4484,6 +4752,7 @@ function drawCertPdf(pdf, cert, novaPagina) {
       if (im.link) pdf.link(X(g.x), Y(g.y), g.w * S, g.h * S, { url: im.link });      // rodapé: clicar abre o site
       for (const k of im.links || []) pdf.link(X(g.x + k.x * g.w), Y(g.y + k.y * g.h), k.w * g.w * S, k.h * g.h * S, { url: k.url });   // cabeçalho: redes sociais
     }
+    if (iogpAtivo(cert)) iogpPdf(pdf, iogpPrims(cert, L, measure).filter(p => p.y < y1 && p.y + (p.h || 1) > y0), X, Y, S);   /* v77: IOGP S-563 */
     const sg = signatureRect(L);
     if (sg && hits(sg)) pdf.addImage(config.assinatura, 'PNG', X(sg.x), Y(sg.y), sg.w * S, sg.h * S, 'assinatura', 'MEDIUM');
     // 5) opções de tratamento térmico
@@ -4661,6 +4930,7 @@ async function buildXlsx(cert = state) {
     if (val === '-' && !cert.v[f.ref]) { const ce = getCell(f.r1, f.c1); ce.setAttribute('s', styleCentro(+(ce.getAttribute('s') || 0))); }
   }
   for (const cb of CHECKS) setCell(cb.r, cb.c, cert.cb[cb.ref] ? CHECK_ON : CHECK_OFF, null);
+  if (iogpAtivo(cert)) iogpXlsx(cert, setCell);   /* v77: IOGP S-563 */
   for (const sv of sdoc.getElementsByTagNameNS(NS_MAIN, 'sheetView')) sv.setAttribute('topLeftCell', 'A1');
   /* v56: mais de 5 linhas de tratamento térmico: o Excel também ajusta a folha para uma página */
   if (!LYT && htVis(cert) > 5) for (const ps of sdoc.getElementsByTagNameNS(NS_MAIN, 'pageSetup')) ps.setAttribute('fitToHeight', '1');
@@ -6090,6 +6360,7 @@ $('btnTodos').addEventListener('click', salvarTodos);
 $('btnConferir').addEventListener('click', () => conferirAntes(doc.certs, 'Conferir antes de emitir', true));
 $('btnLimites').addEventListener('click', dialogoLimites);
 $('btnLimites').hidden = LYT;
+$('btnIogp').addEventListener('click', iogpAjustar);   /* v77 */
 $('btnUsina').addEventListener('click', () => { if (!$('btnUsina').classList.contains('busy')) $('usinaInput').click(); });
 $('usinaInput').addEventListener('change', e => { const fs = [...(e.target.files || [])]; e.target.value = ''; if (fs.length) juntarUsina(fs); });
 $('btnNovo').addEventListener('click', novoCertificado);
@@ -6978,9 +7249,11 @@ function wsFolha() {
     ['Cabe em uma folha A4', pags === 1 ? 'sim' : `não · ${pags} páginas`, pags === 1 ? 'ok' : 'wn']];
   if (info && info.lotes != null) L.push(['Lotes da Central ligados', String(info.lotes)]);
   if (!LYT) L.push(['Fora da norma', fora ? `${fora} célula${fora === 1 ? '' : 's'}` : 'nenhuma', fora ? 'cr' : 'ok']);
+  if (!LYT) { const at = iogpAtivo(state), gs = at ? iogpGrupos(state) : []; L.push(['IOGP S-563', at ? (gs.length ? gs.map(g => g.mds).join(' · ') : 'ligada') : 'desligada', at ? 'ok' : '']); }   /* v77 */
   if (doc.certs.length > 1) L.push(['Folhas do certificado', `${doc.certs.length} (${rotuloFolha(0)} a ${rotuloFolha(doc.certs.length - 1)})`]);
   const av = $('ws-faixa-av'); if (av) { const t = [pags > 1 ? `não cabe em uma folha A4 (${pags} páginas)` : '', !LYT && fora ? `${fora} célula${fora === 1 ? '' : 's'} fora da norma` : ''].filter(Boolean); av.hidden = !t.length; av.textContent = t.length ? '⚠' : ''; av.className = !LYT && fora ? 'cr' : 'wn'; av.title = t.join(' · '); $('ws-faixa').title = 'Abrir a prévia do PDF' + (t.length ? ' · ' + t.join(' · ') : ''); }
-  el.innerHTML = `<div class="ws-ch"><b>Esta folha</b></div>${L.map(([a, b, c]) => `<div class="ws-kv"><span>${wsEsc(a)}</span><b class="${c || ''}">${wsEsc(b)}</b></div>`).join('')}`;
+  el.innerHTML = `<div class="ws-ch"><b>Esta folha</b></div>${L.map(([a, b, c]) => `<div class="ws-kv"><span>${wsEsc(a)}</span><b class="${c || ''}">${wsEsc(b)}</b></div>`).join('')}${LYT ? '' : '<button type="button" class="ws-b ws-iogp" id="ws-iogp">IOGP S-563 · ajustar</button>'}`;
+  const bi = $('ws-iogp'); if (bi) bi.addEventListener('click', () => { wsFecharEd(true); iogpAjustar(); });
 }
 /* prévia grande: o PDF de verdade desta folha */
 async function wsPreviaGrande() {
@@ -7134,7 +7407,7 @@ function wsMenuMais(btn) {
     ['PDF com os certificados da usina…', () => $('btnUsina').click()],
     null,
     ...outros.map(t => [`Trocar o modelo para ${TIPOS[t]}`, () => trocar(t)]),
-    ...(LYT ? [] : [['Limites das normas…', async () => { await dialogoLimites(); wsRender(); }]]),
+    ...(LYT ? [] : [['Limites das normas…', async () => { await dialogoLimites(); wsRender(); }], ['IOGP S-563…', () => iogpAjustar()]]),
     ['Assinatura…', () => $('btnAssinatura').click()],
     ...(h && h.acao ? [['RIF do pedido', () => h.acao('rif')]] : []),
     null,

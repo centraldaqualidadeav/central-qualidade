@@ -5593,7 +5593,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 76; window.CQ_V = APP_V;
+    const APP_V = 77; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -15303,11 +15303,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const extra = `.sh{background:#fff!important;color:#000!important;border-bottom:1.6px solid #000}.sh span{color:#333!important}.sec{border:1.4px solid #000}td.k{background:#fff!important}.apv{background:#fff!important}
       .ck td.l1,.ck td.l2,.ck td.l3,.ck td.l4,.ck td.lt,.ck td.nfc{border-left:3px solid #000}.ck td.lt{vertical-align:top;padding:1.4mm 1.5mm 1mm;border-bottom:1.8px solid #000}
       .lnum{display:block;font:700 10.5pt Arial;letter-spacing:.08em;color:#000}.lav{display:block;font-size:6.6pt;color:#555;margin-top:.4mm}
-      .ck td{padding:.7mm 1.3mm;font-size:8.5pt;line-height:1.22;vertical-align:middle}.c{text-align:center}
+      .ck td{padding:.5mm 1.3mm;font-size:8.5pt;line-height:1.22;vertical-align:middle}.c{text-align:center}
       .ss td{border-top:1.6px solid #000;font-weight:700;font-size:7.8pt;text-transform:uppercase;letter-spacing:.05em;color:#000;padding:.5mm 2mm}
       .tri{white-space:nowrap}.bx{display:inline-block;width:3.8mm;height:3.8mm;border:1.5px solid #000;border-radius:.6mm;margin-right:.8mm;vertical-align:-.8mm;background:#fff}.op{margin:0 1.1mm;font-size:8pt}
       .ln{display:inline-block;border-bottom:1px solid #444;width:20mm;height:4.2mm}.med{font-size:7.6pt;color:#444;margin-bottom:.8mm}.nt{color:#777;font-size:7.2pt;margin-left:1.5mm}
-      .lt{width:31mm}.ln.lot{display:block;width:auto;margin:1.5mm 1mm 0;height:5mm}td.vz{height:7.6mm}`;
+      .lt{width:31mm}.ln.lot{display:block;width:auto;margin:1.5mm 1mm 0;height:5mm}td.vz{height:7.2mm}`;   /* v77: linha da corrida (v74) cabendo em uma página */
     return relDocHTML({ titulo: 'RIR-folha-caneta', cor: '#000', nome: 'RELATÓRIO DE INSPEÇÃO DE RECEBIMENTO', sub: 'Folha para anotar à caneta · depois passar para a Central', num: 'RIR',
       linhas: '<div><span>Data</span><b>____/____/______</b></div>', corpo,
       aprov: '<div class="sec"><table class="apv"><tr><td class="k">Assinatura do inspetor</td><td><span class="ass"></span></td><td class="k" style="width:30mm">Passado para a Central em</td><td style="width:30mm">____/____/______</td></tr></table></div>',
