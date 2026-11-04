@@ -5593,7 +5593,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 75; window.CQ_V = APP_V;
+    const APP_V = 76; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -10219,7 +10219,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${sec('D8', 'Encerramento', kv([['Resposta ao cliente', T(fD(x.respData))], ['Retorno do cliente', V(x.aceite)], ['Conclusão', T(fD(x.conclusao))]]))}`;
     printHTML(relDocHTML({ en: true, titulo: '8D-' + esc(x.num), cor: '#492f88', nome: 'RELATÓRIO DE ANÁLISE DE RECLAMAÇÃO (8D)', sub: 'Reclamação de cliente', subEn: esc(relEn('Reclamação de cliente')), num: esc(x.num),
       linhas: `<div><span>${biL('Abertura')}</span><b>${fD(x.data)}</b></div><div><span>${biL('Cliente')}</span><b>${T(x.cliente)}</b></div><div><span>${biL('Situação')}</span><b>${sit ? biL(sit, null, sit === 'Concluída' ? 'Concluída (situação)' : null) : ''}</b></div>`,
-      co: 'AÇOS VITAL COM. DE TUBOS HIDRÁULICOS EIRELI · Rod. Pedro Eroles, nº 1855 KM49 - Jd Aracy, Mogi das Cruzes - SP, CEP 08770-490 · Tel. +55 (11) 4797-2352 · qualidade@acosvital.com.br',
+      co: 'AÇOS VITAL COM. DE TUBOS HIDRÁULICOS LTDA · Rod. Pedro Eroles, nº 1855 KM49 - Jd Aracy, Mogi das Cruzes - SP, CEP 08770-490 · Tel. +55 (11) 4797-2352 · qualidade@acosvital.com.br',
       extra: '.fot.c3{grid-template-columns:repeat(3,1fr)}.fot figure{margin:0}.fot figcaption{font-size:7.5pt;color:#444;margin-top:.6mm}.fot.c3 img{aspect-ratio:auto;height:42mm}',
       corpo, form: 'NCC', rodape: 'Aços Vital · Qualidade · Relatório de Análise de Reclamação (8D)', rodNum: esc(x.num),
       aprov: apvHTML([{ papel: 'Qualidade — Aços Vital', nome: x.emissor || null, dia: x.respData != null ? x.respData : x.conclusao, linha: true }, { papel: 'Cliente (ciência)', branco: true }], null, true) }));
@@ -18489,7 +18489,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const eu = { nome: myPessoa() || DB.meName || '', email: DB.meEmail || null };
     printHTML(relDocHTML({ titulo: 'Desempenho ' + esc(o.nome), cor: '#5b6560', nome: 'RELATÓRIO DE DESEMPENHO DO FORNECEDOR', sub: esc(P.l), num: 'IQF ' + v(o.iqf),
       linhas: `<div><span>Classe</span><b>${o.cls || '—'}</b></div><div><span>Lotes</span><b>${o.lotes}</b></div>`,
-      co: 'AÇOS VITAL COM. DE TUBOS HIDRÁULICOS EIRELI · Qualidade · qualidade@acosvital.com.br · (11) 4797-2352',
+      co: 'AÇOS VITAL COM. DE TUBOS HIDRÁULICOS LTDA · Qualidade · qualidade@acosvital.com.br · (11) 4797-2352',
       extra: 'td.r,.k.r{text-align:right}.sc{display:flex;gap:5mm;align-items:center;padding:3mm}.big{font:700 26pt Arial;border:2px solid #111;border-radius:2mm;padding:1mm 4mm}',
       corpo, form: 'IQF', rodape: 'Aços Vital · Qualidade · Relatório de Desempenho do Fornecedor', rodNum: esc(o.nome),
       aprov: apvHTML([{ papel: 'Emitido por (Qualidade)', nome: eu.nome || null, cargo: cargoDe(eu), quando: Date.now(), linha: true }]) }));
