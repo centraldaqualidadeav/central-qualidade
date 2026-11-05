@@ -2739,7 +2739,7 @@ function applyFieldAlign(ref) {
   const foraN = foraDaNorma(state, fe.field);
   fe.box.classList.toggle('fora', !!foraN && !over && !bad);
   const sug = !!(state.sug && state.sug[ref]);
-  fe.input.title = foraN && !over && !bad ? `${fe.field.label}\nFora da faixa da ${foraN.nm.nome}: ${textoFaixa(foraN.faixa)}${foraN.ok ? '' : ' (limite a conferir)'}. Só um aviso.`
+  fe.input.title = foraN && !over && !bad ? `${fe.field.label}\nFora da faixa da ${foraN.nm.nome}: ${textoFaixa(foraN.faixa)}${foraN.nota || ''}${foraN.ok ? '' : ' (limite a conferir)'}. Só um aviso.`
     : bad ? `${fe.field.label}\nUse o formato dd/mm/aaaa.`
     : over ? `${fe.field.label}\nTexto maior que a célula: será cortado no PDF e no Excel.`
     : sug ? `${fe.field.label}\nSugestão lida da descrição do pedido/O.C. — confira (a marca some ao clicar ou editar).` : fe.field.label;
@@ -3064,6 +3064,7 @@ function setValue(ref, value, { updateInput = true } = {}) {
   applyFieldAlign(ref);
   const fx = FIELD[ref];
   if (fx && fx.tbl === 'produto' && fx.item && (fx.c1 === 14 || fx.c1 === 11)) for (const g of FIELDS) if (g.item === fx.item && (g.tbl === 'quimica' || g.tbl === 'mecanica')) applyFieldAlign(g.ref);
+  if (fx && fx.tbl === 'quimica' && fx.item && String(cellAt(BASE.quimica, fx.c1).t).trim() === 'C') for (const g of FIELDS) if (g.item === fx.item && g.tbl === 'quimica' && String(cellAt(BASE.quimica, g.c1).t).trim() === 'Mn') applyFieldAlign(g.ref);   /* v82: o C muda o limite do Mn (A105 nota 1) */
   if (ref === REF_NUMERO || ref === REF_CLIENTE) { updateTitle(); updateItemUI(); renderTabs(); }
   if (ref === REF_ASSINANTE) { config.assinante = v; saveConfig(); }
   if (VALV && ref === REF_VTIPO && v && valvAplicarModelo(state, v, true)) { render(); toast(`Componentes e ensaios da válvula ${v.toLowerCase()} incluídos (dá para mudar)`); }
@@ -3530,6 +3531,8 @@ const LIM_KEY = 'certificado-acos-vital/limites-conferidos';
 const LIMITES = [
   { id: 'A105', nome: 'ASTM A105', re: /A\s*-?\s*105\b/i,
     q: { C: [null, '0.35'], Mn: ['0.60', '1.05'], P: [null, '0.035'], S: [null, '0.040'], Si: ['0.10', '0.35'], Cu: [null, '0.40'], Ni: [null, '0.40'], Cr: [null, '0.30'], Mo: [null, '0.12'], V: [null, '0.08'] },
+    /* v82: Nota 1 da Tabela 1 (A105/A105M-23/24): a cada 0,01% de C abaixo de 0,35%, +0,06% de Mn acima de 1,05%, até 1,65% */
+    mnNota: { cMax: 0.35, mnMax: 1.05, passo: 0.06, teto: 1.65, txt: 'nota 1 da Tabela 1' },
     m: { ys: ['250', null], ts: ['485', null], el: ['22', null], ra: ['30', null], hb: ['137', '187'] } },
   { id: 'LF2', nome: 'ASTM A350 LF2 classe 1', re: /A\s*-?\s*350\b.*LF\s*-?\s*2\b|\bLF\s*-?\s*2\b/i,
     q: { C: [null, '0.30'], Mn: ['0.60', '1.35'], P: [null, '0.035'], S: [null, '0.040'], Si: ['0.15', '0.30'], Ni: [null, '0.40'], Cr: [null, '0.30'], Mo: [null, '0.12'], Cu: [null, '0.40'], Nb: [null, '0.02'], V: [null, '0.08'] },
@@ -3542,9 +3545,11 @@ const LIMITES = [
     m: { ys: ['170', null], ts: ['485', null], el: ['30', null], ra: ['50', null] } },
   { id: 'A106B', nome: 'ASTM A106 grau B', re: /A\s*-?\s*106\b.*\b(GR\.?\s*)?B\b/i,
     q: { C: [null, '0.30'], Mn: ['0.29', '1.06'], P: [null, '0.035'], S: [null, '0.035'], Si: ['0.10', null], Cr: [null, '0.40'], Cu: [null, '0.40'], Mo: [null, '0.15'], Ni: [null, '0.40'], V: [null, '0.08'] },
+    mnNota: { cMax: 0.30, mnMax: 1.06, passo: 0.06, teto: 1.35, txt: 'nota A da Tabela 1' },   /* v82: A106/A106M-08 */
     m: { ys: ['240', null], ts: ['415', null] } },
   { id: 'WPB', nome: 'ASTM A234 WPB', re: /\bWPB\b/i,
     q: { C: [null, '0.30'], Mn: ['0.29', '1.06'], P: [null, '0.050'], S: [null, '0.058'], Si: ['0.10', null], Cr: [null, '0.40'], Mo: [null, '0.15'], Ni: [null, '0.40'], Cu: [null, '0.40'], V: [null, '0.08'] },
+    mnNota: { cMax: 0.30, mnMax: 1.06, passo: 0.06, teto: 1.35, txt: 'nota D da Tabela 1' },   /* v82: A234/A234M-07 */
     m: { ys: ['240', null], ts: ['415', '585'], el: ['22', null], hb: [null, '197'] } },
 ];
 const M_COL = { 2: 'ys', 3: 'ts', 4: 'el', 5: 'ra', 6: 'hb', 7: 'hb', 9: 'cv' };
@@ -3552,16 +3557,27 @@ const M_NOME = { ys: 'Escoamento (MPa)', ts: 'Resistência (MPa)', el: 'Alongame
 const limOk = () => { try { return JSON.parse(localStorage.getItem(LIM_KEY) || '{}') || {}; } catch (e) { return {}; } };
 function normaDoItem(cert, n) {
   if (LYT) return null;
-  const t = [cert.v[refOf(BASE.produto + n, 14)], cert.v[refOf(BASE.produto + n, 11)]].filter(Boolean).join(' ');
-  return t ? LIMITES.find(L => L.re.test(t)) || null : null;
+  const mat = cert.v[refOf(BASE.produto + n, 14)], esp = cert.v[refOf(BASE.produto + n, 11)];
+  const t = [mat, esp].filter(Boolean).join(' '), t2 = [esp, mat].filter(Boolean).join(' ');   /* v82: "GR B" no material e "ASTM A106" na especificação também vale */
+  return t ? LIMITES.find(L => L.re.test(t) || L.re.test(t2)) || null : null;
 }
 function limiteDe(cert, f) {
   if (LYT || !f || !f.item || (f.tbl !== 'quimica' && f.tbl !== 'mecanica')) return null;
   const nm = normaDoItem(cert, f.item);
   if (!nm) return null;
   const k = f.tbl === 'quimica' ? String(cellAt(BASE.quimica, f.c1).t) : M_COL[f.c1];
-  const faixa = k && (f.tbl === 'quimica' ? nm.q[k] : nm.m[k]);
-  return faixa ? { nm, k, faixa, nome: f.tbl === 'quimica' ? k + ' (%)' : M_NOME[k], ok: !!limOk()[nm.id] } : null;
+  let faixa = k && (f.tbl === 'quimica' ? nm.q[k] : nm.m[k]), nota = '';
+  if (faixa && k === 'Mn' && nm.mnNota) {   /* v82: Mn sobe quando o C fica abaixo do máximo */
+    const N = nm.mnNota, fc = FIELDS.find(g => g.tbl === 'quimica' && g.item === f.item && String(cellAt(BASE.quimica, g.c1).t).trim() === 'C');
+    const c = fc ? numDe(cert.v[fc.ref] || '') : null;
+    const vMn = numDe(cert.v[f.ref] || '');
+    if (c != null && c < N.cMax - 1e-9) {
+      const passos = Math.floor(Math.round((N.cMax - c) * 10000) / 100 + 1e-9);
+      const mx = Math.min(N.teto, Math.round((N.mnMax + passos * N.passo) * 100) / 100);
+      if (mx > N.mnMax) { faixa = [faixa[0], mx.toFixed(2)]; if (vMn == null || vMn > N.mnMax + 1e-9) nota = ` · ${N.txt}: C ${cleanText(cert.v[fc.ref] || '').trim()} permite Mn até ${numBR(mx.toFixed(2))}`; }
+    }
+  }
+  return faixa ? { nm, k, faixa, nota, nome: f.tbl === 'quimica' ? k + ' (%)' : M_NOME[k], ok: !!limOk()[nm.id] } : null;
 }
 const numBR = x => String(x).replace('.', ',');
 /* número digitado: 0,18 (padrão do certificado) ou 0.18 (colado de outro lugar) */
@@ -3589,7 +3605,7 @@ function mostrarDica(ref) {
   if (!L) { dicaEl.remove(); return; }
   const fora = foraDaNorma(state, fe.field);
   dicaEl.className = 'dica-norma' + (fora ? ' fora' : '');
-  dicaEl.textContent = `${L.nm.nome} · ${L.nome}: ${textoFaixa(L.faixa)}` + (fora ? ' · fora da faixa' : '') + (L.ok ? '' : ' · limite a conferir');
+  dicaEl.textContent = `${L.nm.nome} · ${L.nome}: ${textoFaixa(L.faixa)}${L.nota || ''}` + (fora ? ' · fora da faixa' : '') + (L.ok ? '' : ' · limite a conferir');
   const b = fe.box;
   dicaEl.style.left = b.style.left;
   dicaEl.style.top = (parseFloat(b.style.top) + parseFloat(b.style.height) + 3) + 'px';
@@ -3616,7 +3632,7 @@ async function dialogoLimites() {
     h.append(c, ' ', L.nome + ' — conferido');
     const t = document.createElement('div');
     t.className = 'lim-t';
-    t.textContent = Object.entries(L.q).map(([k, v]) => `${k} ${textoFaixa(v)}`).join(' · ') + ' (%)  |  ' + Object.entries(L.m).map(([k, v]) => `${M_NOME[k]} ${textoFaixa(v)}`).join(' · ');
+    t.textContent = Object.entries(L.q).map(([k, v]) => `${k} ${textoFaixa(v)}${k === 'Mn' && L.mnNota ? ` (até ${numBR(L.mnNota.teto.toFixed(2))} com C abaixo de ${numBR(L.mnNota.cMax.toFixed(2))}: +${numBR(L.mnNota.passo.toFixed(2))} de Mn a cada 0,01 de C · ${L.mnNota.txt})` : ''}`).join(' · ') + ' (%)  |  ' + Object.entries(L.m).map(([k, v]) => `${M_NOME[k]} ${textoFaixa(v)}`).join(' · ');
     sec.append(h, t);
     if (ok[L.id] && ok[L.id].em) { const s = document.createElement('div'); s.className = 'lim-s'; s.textContent = `conferido em ${ok[L.id].em}${ok[L.id].por ? ' por ' + ok[L.id].por : ''}`; sec.appendChild(s); }
     wrap.appendChild(sec);
@@ -3934,7 +3950,7 @@ function conferir(certs) {
       for (const f of FIELDS) {
         if (f.item !== n || (f.tbl !== 'quimica' && f.tbl !== 'mecanica') || !cert.v[f.ref] || !secOn(cert, f.tbl)) continue;
         const L = foraDaNorma(cert, f);
-        if (L) add(ci, f.ref, 'norma', `Item ${num}: ${L.nome} ${cert.v[f.ref]} fora da faixa da ${L.nm.nome} (${textoFaixa(L.faixa)})` + (L.ok ? '' : ' · limite ainda não conferido'));
+        if (L) add(ci, f.ref, 'norma', `Item ${num}: ${L.nome} ${cert.v[f.ref]} fora da faixa da ${L.nm.nome} (${textoFaixa(L.faixa)}${L.nota || ''})` + (L.ok ? '' : ' · limite ainda não conferido'));
         if (f.tbl === 'mecanica' && f.c1 >= 10 && /^RP$/i.test(v(f.ref))) add(ci, f.ref, 'aviso', `Item ${num}: ${f.label} reprovado (RP)`);
       }
     }
@@ -7141,7 +7157,7 @@ function wsAviso(t) {
   if (!G.size) return null;
   const g = [...G.values()][0], its = g.its.length === 1 ? `Item ${g.its[0]}` : `Itens ${g.its.slice(0, -1).join(', ')} e ${g.its[g.its.length - 1]}`;
   const un = t.bloco === 'quimica' ? '%' : '';
-  return { html: `${its}${g.corr ? ' · corrida ' + wsEsc(g.corr) : ''}: ${wsEsc(g.L.nome.replace(/ \(%\)$/, ''))} ${wsEsc(g.v)}${un} passa do limite da ${wsEsc(g.L.nm.nome)} (${wsEsc(textoFaixa(g.L.faixa))}${un}). Confira o certificado da usina antes de emitir.${G.size > 1 ? ` <b>+ ${G.size - 1} outro${G.size > 2 ? 's' : ''}</b>` : ''}${g.L.ok ? '' : ' <span>(limite ainda não conferido)</span>'}` };
+  return { html: `${its}${g.corr ? ' · corrida ' + wsEsc(g.corr) : ''}: ${wsEsc(g.L.nome.replace(/ \(%\)$/, ''))} ${wsEsc(g.v)}${un} passa do limite da ${wsEsc(g.L.nm.nome)} (${wsEsc(textoFaixa(g.L.faixa))}${un}${wsEsc(g.L.nota || '')}). Confira o certificado da usina antes de emitir.${G.size > 1 ? ` <b>+ ${G.size - 1} outro${G.size > 2 ? 's' : ''}</b>` : ''}${g.L.ok ? '' : ' <span>(limite ainda não conferido)</span>'}` };
 }
 function wsLegenda() {
   const por = (WS.htCache || {}).out || {}, cont = new Map();

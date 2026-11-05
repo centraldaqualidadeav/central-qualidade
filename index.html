@@ -195,6 +195,27 @@ button.kpi:hover { border-color: var(--ink-3); }
 .rikp .k-rir b { color: var(--rir); } .rikp .k-atr b { color: var(--ink-3); } .rikp .k-atr.on b { color: var(--crit); } .rikp .k-ok b { color: var(--ok); }
 @media (max-width: 1100px) { .rikp { grid-template-columns: repeat(2, minmax(0, 1fr)); } .rikp > div:nth-child(3) { border-left: 0; } .rikp > div:nth-child(n+3) { border-top: 1px solid var(--line); } }
 @media (max-width: 520px) { .rikp { grid-template-columns: minmax(0, 1fr); } .rikp > div { border-left: 0; } .rikp > div:nth-child(n+2) { border-top: 1px solid var(--line); } }
+/* v81: indicadores do RIR no Painel (Mês | Dia, período, inspetor) */
+.rindbar { display: grid; grid-template-columns: auto auto minmax(0, 1fr) 220px; gap: 10px; align-items: center; }
+.rindm { display: inline-grid; grid-template-columns: repeat(2, 96px); }
+.rindm button { height: var(--h-in); min-height: var(--h-in); } .rindm button[aria-pressed="true"] { background: color-mix(in srgb, var(--rir) 22%, transparent); color: var(--ink); font-weight: 600; }
+.rindn { display: inline-grid; grid-template-columns: 40px 190px 40px; height: var(--h-in); border: 1px solid var(--line-2); border-radius: 6px; overflow: hidden; background: var(--surface); }
+.rindn .btn { height: 100%; min-height: 0; border: 0; border-radius: 0; padding: 0; justify-content: center; font-size: 18px; }
+.rindn b { display: flex; align-items: center; justify-content: center; border-left: 1px solid var(--line); border-right: 1px solid var(--line); font-weight: 600; white-space: nowrap; }
+.rindh { font-size: 12.5px; color: var(--ink-3); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rindbar .inp { height: var(--h-in); min-height: var(--h-in); }
+.kpis.rindk { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.kpis.rindk .kpi.has-ring .sub { padding-right: 64px; }
+.rindt { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.rindt th { text-align: left; font: 600 11px/1.2 var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.rindt td { padding: 8px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.rindt .n { text-align: right; } .rindt .pp { width: 32%; } .rindt td.crit { color: var(--crit); }
+.rindt tbody tr:last-child td { border-bottom: 0; } .rindt tfoot td { font-weight: 600; border-top: 1px solid var(--line-2); border-bottom: 0; }
+.rindw { display: flex; align-items: center; gap: 8px; }
+.rindp { display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 8px; align-items: center; } .rindp span { height: 8px; border-radius: 4px; background: var(--sunken); border: 1px solid var(--line); overflow: hidden; } .rindp i { display: block; height: 100%; background: var(--rir); }
+.rindp em { font: 600 12.5px var(--f-mono); font-style: normal; color: var(--ink-2); text-align: right; }
+@media (max-width: 1280px) { .kpis.rindk { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 980px) { .rindbar { grid-template-columns: auto minmax(0, 1fr); } .rindbar .rindh { display: none; } .rindn { grid-template-columns: 40px minmax(0, 1fr) 40px; } .rindbar .inp { grid-column: 1 / -1; } .kpis.rindk { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 /* v78 etapa 3: tabela compacta da lista do RIR (mesmas colunas em todas as linhas) */
 .ritb { border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--surface); margin-bottom: 18px; }
 .rirw { display: grid; grid-template-columns: 128px 84px minmax(0, 1fr) 84px 150px 140px 132px; column-gap: 14px; align-items: center; min-height: 58px; padding: 6px 14px; border-top: 1px solid var(--line); }
@@ -5645,7 +5666,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 80; window.CQ_V = APP_V;
+    const APP_V = 82; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7868,28 +7889,83 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* ================= PAINEL · faixas de RIR, NCC, RIF e visão do processo ================= */
   const msSer = (ms) => { const d = new Date(ms); return E.serialFromYMD(d.getFullYear(), d.getMonth() + 1, d.getDate()); };
   const pctTxt = (a, b) => (b ? NF1.format(Math.round((a / b) * 1000) / 10) + '%' : '—');
+  /* v81: indicadores do RIR no Painel (opção A): um bloco só, por Mês ou por Dia, filtro de inspetor e % no canto de cada cartão.
+     "Aguardando" e "Atrasadas" são sempre de agora. Os gráficos de 6 e 12 meses de antes continuam embaixo. */
+  const RIND = { m: 'm', mes: null, dia: null, ins: '' };
+  const riUtil = (d, hol) => { const w = E.dow(d); return w !== 0 && w !== 6 && !hol.has(d); };
+  function rindPer(hol) {
+    const hoje = S.today, o = E.ymd(hoje);
+    if (RIND.m === 'd') { let d = RIND.dia == null ? hoje : Math.min(RIND.dia, hoje); return { a: d, b: d, d, hoje: d === hoje, fim: d >= hoje }; }
+    const [y, m] = RIND.mes ? RIND.mes.split('-').map(Number) : [o.y, o.m];
+    const a = E.serialFromYMD(y, m, 1), b = E.serialFromYMD(m === 12 ? y + 1 : y, m === 12 ? 1 : m + 1, 1) - 1;
+    return { a, b: Math.min(b, hoje), y, mm: m, hoje: y === o.y && m === o.m, fim: y > o.y || (y === o.y && m >= o.m) };
+  }
+  function rindNav(k) {
+    const hol = (S.model || {}).hol || new Set(), hoje = S.today, o = E.ymd(hoje);
+    if (k === 'm' || k === 'd') { RIND.m = k; return; }
+    const st = Number(k);
+    if (RIND.m === 'd') { let d = RIND.dia == null ? hoje : RIND.dia; do { d += st; } while (!riUtil(d, hol) && d > hoje - 4000); RIND.dia = Math.min(d, hoje); return; }
+    const [y, m] = RIND.mes ? RIND.mes.split('-').map(Number) : [o.y, o.m], t = (y * 12 + m - 1) + st, ny = Math.floor(t / 12), nm = (t % 12) + 1;
+    if (ny > o.y || (ny === o.y && nm > o.m)) return;
+    RIND.mes = ny + '-' + String(nm).padStart(2, '0');
+  }
+  document.addEventListener('change', (e) => { const t = e.target; if (t && t.id === 'rind-ins') { RIND.ins = t.value; render(); } });
   function riPainelHTML() {
     if (!rirOn() || !vis('rir') || !RI.ready || !S.model) return '';
-    const C = riCards().filter((c) => c.st === 'f' && c.fin), P = riPend(), atr = riAtrasadas(), mes = mesId(Date.now()), hol = S.model.hol;
+    const Ct = riCards(), C = Ct.filter((c) => c.st === 'f' && c.fin), P = riPend(), atr = riAtrasadas(), hol = S.model.hol;
     if (!C.length && !P.length) return '';
-    const doMes = C.filter((c) => mesId(c.fin) === mes), lotMes = doMes.reduce((n, c) => n + Object.keys(c.res || {}).length, 0);
-    const lim = Date.now() - 365 * 864e5, C12 = C.filter((c) => c.fin >= lim);
-    const res12 = []; C12.forEach((c) => Object.entries(c.res || {}).forEach(([k, r]) => res12.push({ k, r, forn: c.forn || '(sem fornecedor)' })));
-    const rep12 = res12.filter((o) => o.r === 'Reprovado').length;
-    /* tempo da entrada do lote até o RIR concluído, em dias úteis */
-    const tempos = []; C12.forEach((c) => (c.lotes || []).forEach((k) => { const x = findRec('AV', k); if (x && x.data != null) tempos.push(Math.max(0, E.workdaysBetween(Math.floor(x.data), msSer(c.fin), hol))); }));
-    const tMed = tempos.length ? Math.round((tempos.reduce((a, b) => a + b, 0) / tempos.length) * 10) / 10 : null;
+    const go = { v: 'rir' }, per = rindPer(hol), dia = RIND.m === 'd';
+    const insOpc = new Map(); C.forEach((c) => { const k = E.key(c.nome || ''); if (k && !insOpc.has(k)) insOpc.set(k, String(c.nome).trim()); });
+    const okI = (c) => !RIND.ins || E.key(c.nome || '') === RIND.ins;
+    const CP = C.filter((c) => { const d = msSer(c.fin); return d >= per.a && d <= per.b; }), CI = CP.filter(okI);
+    const lots = (L) => L.reduce((n, c) => n + Object.keys(c.res || {}).length, 0), reps = (L) => L.reduce((n, c) => n + Object.values(c.res || {}).filter((r) => r === 'Reprovado').length, 0);
+    const tempos = (L) => { const T = []; L.forEach((c) => (c.lotes || []).forEach((k) => { const x = findRec('AV', k); if (x && x.data != null) T.push(Math.max(0, E.workdaysBetween(Math.floor(x.data), msSer(c.fin), hol))); })); return T; };
+    const med = (T) => (T.length ? Math.round((T.reduce((a, b) => a + b, 0) / T.length) * 10) / 10 : null);
+    const nL = lots(CI), nR = reps(CI), T = tempos(CI), tM = med(T), nOk = T.filter((v) => v <= 2).length;
+    const lotP = P.reduce((n, g) => n + g.lots.length, 0), lotA = atr.reduce((n, g) => n + g.lots.length, 0);
+    const ras = Ct.filter((c) => c.st === 'r').filter(okI);
+    const qual = dia ? (per.hoje ? 'hoje' : 'no dia') : 'no mês';
+    const k1 = kpiHTML({ l: 'RIR ' + qual, v: NF.format(CI.length), sub: `${NF.format(nL)} lote(s) inspecionado(s)`, c: MOD.RIR.c, go, ...(nL ? { pct: [nL - nR, nL, 'lotes aprovados', 'ok'] } : {}) });
+    const k2 = kpiHTML({ l: 'Reprovados ' + qual, v: NF.format(nR), sub: nL ? `lote(s) de ${NF.format(nL)} inspecionado(s)` : 'nenhum lote inspecionado', c: MOD.RIR.c, cls: nR ? 'warn' : 'ok', go, ...(nL ? { pct: [nR, nL, 'reprovação', nR ? 'warn' : 'ok'] } : {}) });
+    const k3 = kpiHTML({ l: 'Tempo até o RIR', v: tM == null ? '—' : NF1.format(tM) + ' d', sub: 'média em dias úteis, da entrada do lote ao RIR', c: MOD.RIR.c, go, ...(T.length ? { pct: [nOk, T.length, 'em até 2 dias úteis', nOk / T.length >= 0.8 ? 'ok' : 'warn'] } : {}) });
+    const k4 = kpiHTML({ l: 'Notas aguardando · agora', v: NF.format(P.length), sub: NF.format(lotP) + ' lote(s) sem resultado', c: MOD.RIR.c, cls: P.length ? 'warn' : 'ok', go, ...(P.length ? { pct: [atr.length, P.length, 'atrasadas', atr.length ? 'crit' : 'ok'] } : {}) });
+    const k5 = dia
+      ? kpiHTML({ l: 'Em andamento · agora', v: NF.format(ras.length), sub: ras.length ? Array.from(ras.reduce((m, c) => m.set((c.nome || '—').split(' ')[0], (m.get((c.nome || '—').split(' ')[0]) || 0) + 1), new Map())).map(([n, q]) => `${q} com ${n}`).join(' · ') : 'nenhum RIR começado', c: MOD.RIR.c, go, ...(CI.length + ras.length ? { pct: [CI.length, CI.length + ras.length, 'notas do dia já fechadas', 'ok'] } : {}) })
+      : kpiHTML({ l: 'Atrasadas · agora', v: NF.format(atr.length), sub: '2 dias úteis ou mais sem RIR', c: MOD.RIR.c, cls: atr.length ? 'crit' : 'ok', go, ...(lotP ? { pct: [lotA, lotP, 'dos lotes parados', lotA ? 'crit' : 'ok'] } : {}) });
+    /* gráfico do período */
+    let gTit, gSub, gItems;
+    if (dia) {
+      const hs = CI.map((c) => new Date(c.fin).getHours()), h0 = Math.min(7, ...hs), h1 = Math.max(17, ...hs);
+      gItems = []; for (let h = h0; h <= h1; h++) gItems.push({ label: h + 'h', tip: `${h}h às ${h + 1}h`, value: hs.filter((x) => x === h).length });
+      gTit = 'RIR concluídos por hora'; gSub = E.fmtDate(per.d);
+    } else {
+      gItems = []; for (let d = per.a; d <= per.b; d++) if (riUtil(d, hol) || CI.some((c) => msSer(c.fin) === d)) gItems.push({ label: String(E.ymd(d).d), tip: E.fmtDate(d), value: CI.filter((c) => msSer(c.fin) === d).length });
+      gTit = 'RIR por dia útil'; gSub = MESES_L[per.mm - 1] + ' ' + per.y;
+    }
+    /* por inspetor */
+    const im = new Map(); CP.forEach((c) => { const k = E.key(c.nome || '') || '—'; const v = im.get(k) || { k, nome: String(c.nome || '(sem inspetor)').trim(), L: [] }; v.L.push(c); im.set(k, v); });
+    const IL = Array.from(im.values()).sort((a, b) => b.L.length - a.L.length || a.nome.localeCompare(b.nome, 'pt-BR')).filter((v) => !RIND.ins || v.k === RIND.ins);
+    const ini = (n) => { const p = n.split(/\s+/).filter(Boolean); return p.length > 1 ? p[0][0] + p[p.length - 1][0] : (p[0] || '—').slice(0, 2); };
+    const iRow = (v) => { const l = lots(v.L), r = reps(v.L), t = med(tempos(v.L)), pc = CP.length ? Math.round((v.L.length / CP.length) * 100) : 0;
+      return `<tr><td><div class="rindw"><span class="riav">${esc(ini(v.nome))}</span>${esc(v.nome)}</div></td><td class="n">${NF.format(v.L.length)}</td><td class="n">${NF.format(l)}</td><td class="n${r ? ' crit' : ''}">${NF.format(r)}</td><td class="n">${t == null ? '—' : NF1.format(t) + ' d'}</td><td><div class="rindp"><span><i style="width:${pc}%"></i></span><em>${pc}%</em></div></td></tr>`; };
+    const tab = IL.length ? `<table class="rindt"><thead><tr><th>Inspetor</th><th class="n">RIR</th><th class="n">Lotes</th><th class="n">Reprovados</th><th class="n">Tempo médio</th><th class="pp">Participação nos RIR</th></tr></thead><tbody>${IL.map(iRow).join('')}</tbody>
+      ${IL.length > 1 ? `<tfoot><tr><td>Total</td><td class="n">${NF.format(CI.length)}</td><td class="n">${NF.format(nL)}</td><td class="n">${NF.format(nR)}</td><td class="n">${tM == null ? '—' : NF1.format(tM) + ' d'}</td><td></td></tr></tfoot>` : ''}</table>` : `<div class="empty">Nenhum RIR concluído ${dia ? 'neste dia' : 'neste mês'}.</div>`;
+    /* 6 e 12 meses (como antes) */
+    const lim = Date.now() - 365 * 864e5, res12 = []; C.filter((c) => c.fin >= lim).forEach((c) => Object.entries(c.res || {}).forEach(([k, r]) => res12.push({ k, r, forn: c.forn || '(sem fornecedor)' })));
     const porMes = monthsBack(6).map((m) => ({ label: m.label, tip: MESES_L[m.m - 1] + ' ' + m.y, value: C.filter((c) => mesId(c.fin) === m.y + '-' + String(m.m).padStart(2, '0')).length }));
     const fm = new Map(); res12.forEach((o) => { const k = E.key(o.forn); const v = fm.get(k) || { label: o.forn, n: 0, rp: 0 }; v.n++; if (o.r === 'Reprovado') v.rp++; fm.set(k, v); });
     const repForn = Array.from(fm.values()).filter((v) => v.rp).map((v) => ({ label: v.label, value: Math.round((v.rp / v.n) * 100), tip: `${v.label}: ${v.rp} de ${v.n} lote(s) reprovado(s)` })).sort((a, b) => b.value - a.value).slice(0, 10);
-    const go = { v: 'rir' };
+    const perTxt = dia ? `${['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'][E.dow(per.d)]}, ${E.fmtDate(per.d)}` : `${MESES_L[per.mm - 1]} ${per.y}`;
+    const bar = `<div class="rindbar"><div class="seg rindm" role="group" aria-label="Período"><button type="button" data-act="ri-ind" data-key="m" aria-pressed="${!dia}">Mês</button><button type="button" data-act="ri-ind" data-key="d" aria-pressed="${dia}">Dia</button></div>
+      <div class="rindn"><button type="button" class="btn" data-act="ri-ind" data-key="-1" aria-label="${dia ? 'Dia útil anterior' : 'Mês anterior'}">‹</button><b>${esc(perTxt)}</b><button type="button" class="btn" data-act="ri-ind" data-key="1" aria-label="${dia ? 'Próximo dia útil' : 'Próximo mês'}" ${per.fim ? 'disabled' : ''}>›</button></div>
+      <span class="rindh">${dia ? 'o mesmo bloco, só o dia escolhido' : '"Aguardando" e "Atrasadas" são sempre de agora'}</span>
+      <select id="rind-ins" class="inp" aria-label="Inspetor"><option value="">Inspetor: todos</option>${Array.from(insOpc).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR')).map(([k, n]) => `<option value="${esc(k)}"${k === RIND.ins ? ' selected' : ''}>${esc(n)}</option>`).join('')}</select></div>`;
     return `<section class="sec">${band('RIR', 'Indicadores de inspeção de recebimento (RIR)')}<div class="block"><div class="body">
-      <div class="kpis sm">
-        ${kpiHTML({ l: 'Notas aguardando RIR', v: NF.format(P.length), sub: NF.format(P.reduce((n, g) => n + g.lots.length, 0)) + ' lote(s) sem resultado', c: MOD.RIR.c, cls: P.length ? 'warn' : 'ok', go })}
-        ${kpiHTML({ l: 'Atrasadas', v: NF.format(atr.length), sub: '2 dias úteis ou mais sem RIR', c: MOD.RIR.c, cls: atr.length ? 'crit' : 'ok', go })}
-        ${kpiHTML({ l: 'RIR no mês', v: NF.format(doMes.length), sub: NF.format(lotMes) + ' lote(s) inspecionado(s)', c: MOD.RIR.c, go })}
-        ${kpiHTML({ l: 'Reprovação no recebimento', v: pctTxt(rep12, res12.length), sub: `${NF.format(rep12)} de ${NF.format(res12.length)} lote(s) · 12 meses`, c: MOD.RIR.c, cls: rep12 ? 'warn' : 'ok', go })}
-        ${kpiHTML({ l: 'Tempo até o RIR', v: tMed == null ? '—' : NF1.format(tMed) + ' d', sub: 'média em dias úteis, da entrada do lote ao RIR concluído', c: MOD.RIR.c, go })}
+      ${bar}
+      <div class="kpis sm rindk">${k1}${k2}${k3}${k4}${k5}</div>
+      <div class="charts">
+        ${chartHTML(gTit, colsHTML(gItems, MOD.RIR.c), gSub + (RIND.ins ? ' · ' + (insOpc.get(RIND.ins) || '') : ''))}
+        ${chartHTML('Por inspetor', tab, dia ? (per.hoje ? 'hoje' : E.fmtDate(per.d)) : gSub)}
       </div>
       <div class="charts">
         ${chartHTML('RIR concluídos por mês', colsHTML(porMes, MOD.RIR.c), 'últimos 6 meses')}
@@ -15448,6 +15524,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   function riAct(a, key, el) {
     if (a === 'ri-sub') { RI.sub = key; RI.fx = key === 'conc' ? 'conc' : 'todas'; render(); return true; }
+    if (a === 'ri-ind') { rindNav(key); render(); return true; }   /* v81: indicadores do RIR no Painel */
     if (a === 'ri-fx') { RI.fx = key; RI.sub = key === 'conc' ? 'conc' : 'ag'; render(); return true; }   /* v78 etapa 2 */
     if (a === 'ri-tlimpa') { RI.tq = ''; render(); return true; }
     if (a === 'ri-caneta') { if (DB.owner || DB.admin === true) printHTML(riCanetaHTML()); return true; }   /* v72 */
