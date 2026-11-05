@@ -1087,6 +1087,26 @@ body.has-tk .toast { bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
 .rrro { padding: 7px 0; font-size: 14px; }
 .rrchips { display: flex; flex-wrap: wrap; gap: 6px; }
 .rrfotos { display: flex; flex-wrap: wrap; gap: 8px; }
+/* v83: evidências do tratamento da NCF */
+.rrev { display: grid; gap: 8px; } .rrev > span small { font-weight: 400; margin-left: 6px; } .rrev.busy { opacity: .6; pointer-events: none; }
+.rrevd { display: grid; grid-template-columns: auto minmax(0, 1fr) 170px 170px; gap: 12px; align-items: center; border: 1.5px dashed var(--line-2); border-radius: var(--r); padding: 12px 14px; background: var(--sunken); }
+.rrevd.on { border-color: var(--info); background: color-mix(in srgb, var(--info) 10%, var(--sunken)); }
+.rrevd .ci { width: 36px; height: 36px; border-radius: 8px; display: grid; place-items: center; background: color-mix(in srgb, var(--info) 18%, transparent); color: var(--info); }
+.rrevd b { display: block; font-size: 14px; } .rrevd small { display: block; font-size: 12.5px; color: var(--ink-3); font-weight: 400; }
+.rrevd .btn { justify-content: center; width: 100%; }
+.rrevf { display: flex; flex-wrap: wrap; gap: 6px; }
+.rrevf button { height: 32px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; border: 1px solid var(--line-2); border-radius: 6px; background: var(--surface); color: var(--ink-2); font-size: 13px; cursor: pointer; }
+.rrevf button[aria-pressed="true"] { background: color-mix(in srgb, var(--info) 20%, transparent); color: var(--ink); font-weight: 600; }
+.rrevf i { font-style: normal; font: 11.5px var(--f-mono); color: var(--ink-3); }
+.rrevl { border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.rrevr { display: grid; grid-template-columns: 44px minmax(0, 1fr) 170px 84px 84px; gap: 12px; align-items: center; padding: 8px 12px; border-top: 1px solid var(--line); font-size: 13.5px; }
+.rrevr:first-child { border-top: 0; } .rrevr[hidden] { display: none; }
+.rrevi { display: grid; place-items: center; width: 40px; height: 30px; border-radius: 5px; font: 700 10.5px var(--f-mono); --k: var(--info); color: var(--k); background: color-mix(in srgb, var(--k) 15%, transparent); border: 1px solid color-mix(in srgb, var(--k) 35%, transparent); }
+.rrevi.pdf { --k: var(--crit); }
+.rrevr .nm { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; } .rrevr .nm small { display: block; font-weight: 400; color: var(--ink-3); font-size: 12px; }
+.rrevr select.inp { height: var(--h-btn); min-height: var(--h-btn); } .rrevr .btn { justify-content: center; width: 100%; } .rrevr .rrevx { color: var(--crit); }
+.rrevp { font-size: 12.5px; color: var(--ink-2); }
+@media (max-width: 760px) { .rrevd { grid-template-columns: auto minmax(0, 1fr); } .rrevd .btn { grid-column: span 1; } .rrevr { grid-template-columns: 44px minmax(0, 1fr) 84px; } .rrevr select.inp, .rrevr .rrevp { grid-column: 2 / -1; grid-row: 2; } .rrevr .rrevx { grid-column: 3; grid-row: 2; } }
 .rrfotos figure { margin: 0; position: relative; }
 .rrfotos img { width: 104px; height: 104px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); display: block; cursor: zoom-in; }
 .rrfotos .x { position: absolute; top: 4px; right: 4px; width: 24px; height: 24px; border-radius: 50%; border: 0; background: rgba(0, 0, 0, .6); color: #fff; cursor: pointer; font-size: 12px; }
@@ -5666,7 +5686,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 82; window.CQ_V = APP_V;
+    const APP_V = 83; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -6822,7 +6842,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const meta0 = Object.assign({}, (DB.meta[mod] || {})[key] || {});
     if (mod === 'AV' && PUB()) { const tok = ((DB.meta.AV || {})[key] || {}).qr; if (tok) DB.db.doc('pub/' + tok).delete().catch(() => {}); }
     await DB.db.doc(MOD[mod].col + '/' + docId).update({ items: { [key]: { _del: true, _u: Date.now(), _ub: DB.me || null } } });
-    if (mod === 'RNC') { FT.delAll('rncfot', key).catch(() => {}); rncTabLimpar(key, meta0).catch((e) => console.warn('tablet não limpo', e)); }
+    if (mod === 'RNC') { FT.delAll('rncfot', key).catch(() => {}); evDelAll(key).catch(() => {}); rncTabLimpar(key, meta0).catch((e) => console.warn('tablet não limpo', e)); }
     if (mod === 'INS') { FT.delAll('insfot', key).catch(() => {}); delete INSF[key]; }
     if (mod === 'RNCC') FT.delAll('rnccf', key).catch(() => {});
   }
@@ -18705,6 +18725,104 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     catch (e) { RFOT[key] = []; }
     return RFOT[key];
   }
+  /* v83: evidências do tratamento da NCF (opção C): fotos e PDF, cada arquivo ligado a uma parte do tratamento.
+     Ficam junto das fotos da NCF (coleção rncfot, mesmas regras), num índice próprio "ev-<chave>"; o conteúdo vai em
+     pedaços de até 700 mil letras (um PDF de 5 MB vira uns 10 pedaços), porque cada documento do banco aceita até 1 MB. */
+  const EV_PARTES = ['Contenção', 'Disposição', 'Causa raiz', 'Ação corretiva', 'Outro'], EV_MAX = 10, EV_MB = 5, EV_PED = 700000;
+  const REV = {}, evK = (key) => 'ev-' + key;
+  const evMerge = async (ref, body) => { if (typeof ref.merge === 'function') await ref.merge(body); else { try { await ref.update(body); } catch (e) { await ref.set(body); } } };
+  async function evList(key, force) {
+    if (REV[key] && !force) return REV[key];
+    const f = await FT.idx('rncfot', evK(key));
+    REV[key] = Object.keys(f).filter((id) => f[id] && !f[id]._del).map((id) => Object.assign({ id }, f[id])).sort((a, b) => (a.at || 0) - (b.at || 0) || (a.id < b.id ? -1 : 1));
+    return REV[key];
+  }
+  async function evDados(key, o) {
+    const P = [];
+    for (let i = 0; i < (o.n || 1); i++) { const sn = await DB.db.doc('rncfot/' + evK(key) + '__' + o.id + '__' + i).get(); P.push(sn.exists ? (sn.data() || {}).d || '' : ''); }
+    return P.join('');
+  }
+  const evLer = (file) => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(r.error); r.readAsDataURL(file); });
+  const evTam = (b) => (b >= 1048576 ? NF1.format(b / 1048576) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB');
+  async function evAdd(key, files, parte) {
+    const cur = await evList(key, true), ok = [];
+    for (const f of files) {
+      const pdf = /pdf$/i.test(f.type) || /\.pdf$/i.test(f.name), img = /^image\//i.test(f.type);
+      if (!pdf && !img) { toast(`${f.name}: só fotos e PDF.`, true); continue; }
+      if (f.size > EV_MB * 1048576) { toast(`${f.name} tem ${evTam(f.size)}: o limite é ${EV_MB} MB por arquivo.`, true); continue; }
+      if (cur.length + ok.length >= EV_MAX) { toast(`Limite de ${EV_MAX} evidências nesta NCF. Exclua alguma antes.`, true); break; }
+      let d; try { d = img ? await shrinkPhoto(f) : await evLer(f); } catch (e) { toast('Não foi possível abrir ' + f.name, true); continue; }
+      ok.push({ nome: f.name || (img ? 'foto.jpg' : 'arquivo.pdf'), tipo: img ? 'img' : 'pdf', d, tam: img ? Math.round((d.length - d.indexOf(',') - 1) * 0.75) : f.size });
+    }
+    const at = Date.now(), idx = {};
+    for (let i = 0; i < ok.length; i++) {
+      const o = ok[i], id = FT.nid(i), n = Math.max(1, Math.ceil(o.d.length / EV_PED));
+      for (let j = 0; j < n; j++) await DB.db.doc('rncfot/' + evK(key) + '__' + id + '__' + j).set({ d: o.d.slice(j * EV_PED, (j + 1) * EV_PED), k: evK(key) });
+      idx[id] = clean({ at: at + i, by: DB.me || null, quem: myPessoa() || DB.meName || null, nome: o.nome, tipo: o.tipo, tam: o.tam, parte: EV_PARTES.includes(parte) ? parte : 'Outro', n });
+    }
+    if (ok.length) await evMerge(DB.db.doc('rncfot/' + evK(key)), { f: idx });
+    delete REV[key];
+    return ok.length;
+  }
+  async function evDel(key, o) {
+    for (let j = 0; j < (o.n || 1); j++) await DB.db.doc('rncfot/' + evK(key) + '__' + o.id + '__' + j).delete().catch(() => {});
+    await evMerge(DB.db.doc('rncfot/' + evK(key)), { f: { [o.id]: { _del: true } } }); delete REV[key];
+  }
+  async function evDelAll(key) { const f = await FT.idx('rncfot', evK(key)); for (const [id, o] of Object.entries(f)) if (o && !o._del) await evDel(key, Object.assign({ id }, o)).catch(() => {}); await DB.db.doc('rncfot/' + evK(key)).delete().catch(() => {}); delete REV[key]; }
+  const EV_CLIP = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 11.5l-8.6 8.6a5 5 0 0 1-7.1-7.1l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9"/></svg>';
+  function evAreaHTML(key, evs, ed) {
+    const fil = (RREV[key] && (RREV[key] === 'Todas' || evs.some((o) => o.parte === RREV[key]))) ? RREV[key] : 'Todas';
+    const cnt = (p) => evs.filter((o) => p === 'Todas' || o.parte === p).length;
+    const chips = ['Todas'].concat(EV_PARTES.filter((p) => cnt(p))).map((p) => `<button type="button" data-act="rr-evfil" data-key="${esc(key)}" data-p="${esc(p)}" aria-pressed="${p === fil}">${esc(p)}<i>${cnt(p)}</i></button>`).join('');
+    const row = (o) => `<div class="rrevr" data-parte="${esc(o.parte || 'Outro')}"${fil !== 'Todas' && o.parte !== fil ? ' hidden' : ''}><span class="rrevi ${o.tipo === 'pdf' ? 'pdf' : 'img'}">${o.tipo === 'pdf' ? 'PDF' : 'JPG'}</span>
+      <div class="nm" title="${esc(o.nome)}">${esc(o.nome)}<small>${esc(evTam(o.tam || 0))} · ${esc((o.quem || '').split(' ')[0] || '—')} · ${esc(dmy(o.at))} ${esc(hhmm(o.at))}</small></div>
+      ${ed ? `<select class="inp" data-evparte="${esc(key)}" data-id="${esc(o.id)}" aria-label="Parte do tratamento">${EV_PARTES.map((p) => `<option${p === (o.parte || 'Outro') ? ' selected' : ''}>${p}</option>`).join('')}</select>` : `<span class="rrevp">${esc(o.parte || 'Outro')}</span>`}
+      <button class="btn" type="button" data-act="rr-evver" data-key="${esc(key)}" data-id="${esc(o.id)}">Abrir</button>${ed ? `<button class="btn rrevx" type="button" data-act="rr-evdel" data-key="${esc(key)}" data-id="${esc(o.id)}">Excluir</button>` : ''}</div>`;
+    return `<div class="field rrev" id="rr-ev" style="grid-column:1/-1"><span>Evidências do tratamento <small class="muted">cada arquivo diz a que parte do tratamento ele se refere</small></span>
+      ${ed ? `<div class="rrevd" data-evdrop="${esc(key)}"><span class="ci">${EV_CLIP}</span><div><b>Arraste aqui ou escolha os arquivos</b><small>Fotos e PDF (8D, resposta do fornecedor, e-mail salvo em PDF) · até ${EV_MAX} arquivos · cada um até ${EV_MB} MB</small></div>
+        <button class="btn" type="button" data-act="rr-evadd" data-key="${esc(key)}">Escolher arquivos</button><button class="btn" type="button" data-act="rr-evcam" data-key="${esc(key)}">Tirar foto</button>
+        <input type="file" id="rr-evf" data-key="${esc(key)}" accept="image/*,application/pdf,.pdf" multiple hidden><input type="file" id="rr-evc" data-key="${esc(key)}" accept="image/*" capture="environment" hidden></div>` : ''}
+      ${evs.length ? `<div class="rrevf" role="group" aria-label="Filtrar evidências">${chips}</div><div class="rrevl">${evs.map(row).join('')}</div>` : ed ? '' : '<span class="muted">Nenhuma evidência anexada.</span>'}
+      ${ed && evs.length ? `<small class="muted">Arquivo novo entra como "${esc(fil === 'Todas' ? 'Outro' : fil)}": troque a parte na lista. No relatório impresso as evidências saem agrupadas por parte.</small>` : ''}</div>`;
+  }
+  const RREV = {};
+  async function evRefresh(key) {
+    const el = document.getElementById('rr-ev'); if (!el) return;
+    const x = findRec('RNC', key), ed = !!x && cw('rnc') && x.status !== 'Concluida' && x.status !== 'Cancelada';
+    el.outerHTML = evAreaHTML(key, await evList(key, true), ed);
+  }
+  async function evSubir(key, files) {
+    if (!files || !files.length) return;
+    const el = document.getElementById('rr-ev'); if (el) el.classList.add('busy');
+    const fil = RREV[key] && RREV[key] !== 'Todas' ? RREV[key] : 'Outro';
+    try { const n = await evAdd(key, Array.from(files), fil); if (n) { logEntry('RNC', key, 'alterado', `${(findRec('RNC', key) || {}).num || key} · ${n} evidência(s) do tratamento`, null); toast(n === 1 ? 'Evidência anexada.' : n + ' evidências anexadas.'); } }
+    catch (err) { toast('Não foi possível anexar: ' + ((err && (err.message || err.code)) || err), true); }
+    await evRefresh(key);
+  }
+  async function evAbrir(key, id) {
+    const o = (await evList(key)).find((e) => e.id === id); if (!o) return;
+    const win = window.open('', '_blank');   /* abre já no clique (senão o navegador bloqueia) e depois coloca o arquivo */
+    try {
+      const d = await evDados(key, o), bin = atob(d.slice(d.indexOf(',') + 1)), u8 = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+      const url = URL.createObjectURL(new Blob([u8], { type: o.tipo === 'pdf' ? 'application/pdf' : 'image/jpeg' }));
+      if (win) win.location.href = url; else window.open(url, '_blank');
+      setTimeout(() => URL.revokeObjectURL(url), 120000);
+    } catch (err) { if (win) win.close(); toast('Não foi possível abrir: ' + ((err && (err.message || err.code)) || err), true); }
+  }
+  document.addEventListener('change', async (e) => {
+    const t = e.target; if (!t) return;
+    if ((t.id === 'rr-evf' || t.id === 'rr-evc') && t.dataset.key) { const fs = Array.from(t.files || []); t.value = ''; await evSubir(t.dataset.key, fs); return; }
+    if (t.dataset && t.dataset.evparte) {
+      const key = t.dataset.evparte, id = t.dataset.id, p = t.value;
+      try { await evMerge(DB.db.doc('rncfot/' + evK(key)), { f: { [id]: { parte: p } } }); delete REV[key]; logEntry('RNC', key, 'alterado', `${(findRec('RNC', key) || {}).num || key} · evidência ligada a ${p}`, null); }
+      catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
+      await evRefresh(key);
+    }
+  });
+  document.addEventListener('dragover', (e) => { const z = e.target && e.target.closest && e.target.closest('[data-evdrop]'); if (z) { e.preventDefault(); z.classList.add('on'); } });
+  document.addEventListener('dragleave', (e) => { const z = e.target && e.target.closest && e.target.closest('[data-evdrop]'); if (z) z.classList.remove('on'); });
+  document.addEventListener('drop', (e) => { const z = e.target && e.target.closest && e.target.closest('[data-evdrop]'); if (!z) return; e.preventDefault(); z.classList.remove('on'); evSubir(z.dataset.evdrop, (e.dataTransfer || {}).files); });
   async function rncFotosAdd(key, imgs) {
     await FT.add('rncfot', key, imgs);
     delete RFOT[key];
@@ -18735,7 +18853,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const x = findRec('RNC', key); if (!x) return;
     const m = rmeta(x), w = cw('rnc'), fechada = x.status === 'Concluida' || x.status === 'Cancelada';
     await resolveNames([m._cb, m._ub]);
-    const fotos = await rncFotos(key);
+    const fotos = await rncFotos(key), evs = await evList(key, true);   /* v83 */
     const t = (v) => esc(disp(v)), stg = x.aberta ? rncStage(x) : null;
     const lots = lotTokens(x.lotesAV).map((id) => { const a = avById(id); return a ? `<button class="btn small ghost mono" type="button" data-open="AV:${esc(a.key)}">${esc(a.id)}</button>` : `<span class="mono">${esc(id)}</span>`; }).join(' ');
     const a0 = lotTokens(x.lotesAV).map(avById).find(Boolean) || {};
@@ -18773,6 +18891,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${rnFld('Causa raiz (resposta do fornecedor)', ro ? `<div class="rrro" style="white-space:pre-wrap">${t(m.causa) || '<span class="muted">—</span>'}</div>` : `<textarea id="rr-causa" style="min-height:60px" placeholder="Cole ou resuma a resposta do fornecedor">${esc(m.causa || '')}</textarea>`, 1)}
       ${rnFld('Ação corretiva necessária?', ro ? v(0, x.corretiva) : rnSel('rr-corr', x.corretiva || '', cfgL('RNC_CORRETIVA')))}${rnFld('Nível do prazo', ro ? v(0, x.nivel) : rnSel('rr-nivel', x.nivel || '', cfgL('RNC_NIVEL_PRAZO')), 0, 'Necessário quando há ação corretiva.')}${rnFld('Responsável pela ação', ro ? v(0, m.acaoResp) : `<input id="rr-aresp" value="${esc(m.acaoResp || '')}">`)}
       ${rnFld('Ação corretiva (o que será feito)', ro ? `<div class="rrro" style="white-space:pre-wrap">${t(m.acaoTxt) || '<span class="muted">—</span>'}</div>` : `<textarea id="rr-atxt" style="min-height:60px">${esc(m.acaoTxt || '')}</textarea>`, 1)}
+      ${evAreaHTML(key, evs, !ro)}
     </div></div>`;
     const efic = `<div class="rrbox"><div class="rrg3">
       ${rnFld('Resultado', ro ? v(0, x.analise) : rnSel('rr-efic', x.analise || '', cfgL('RNC_ANALISE_CRITICA')))}${rnFld('Data da verificação', ro ? v(0, fD(m.eficData)) : `<input type="date" id="rr-edata" value="${rnDate(m.eficData)}">`)}${rnFld('Lote verificado', ro ? v(0, m.eficLote) : `<input id="rr-elote" value="${esc(m.eficLote || '')}" placeholder="ex.: AV-26-20015">`)}
@@ -19143,6 +19262,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     "Reprovada:": "Rejected:",
     "Reincidência": "Recurrence",
     "Tratamento da não conformidade": "Nonconformity handling",
+    "Evidências · Contenção": "Evidence · Containment", "Evidências · Disposição": "Evidence · Disposition", "Evidências · Causa raiz": "Evidence · Root cause", "Evidências · Ação corretiva": "Evidence · Corrective action", "Evidências · Outro": "Evidence · Other",   /* v83 */
     "Qualidade": "Quality",
     "Contenção": "Containment",
     "Resp. / data": "Resp. / date",
@@ -19464,6 +19584,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   async function rncRelPrint(key) {
     const x = findRec('RNC', key); if (!x) return; const m = rmeta(x), fotos = await rncFotos(key);
+    const evs = await evList(key, true), evImg = {}; for (const o of evs) if (o.tipo === 'img') { try { evImg[o.id] = await evDados(key, o); } catch (e) { /* sem a imagem */ } }   /* v83 */
     const a0 = lotTokens(x.lotesAV).map(avById).find(Boolean) || {}, t = (v) => esc(disp(v)) || '—', motOut = Array.isArray(m.motOutros) ? m.motOutros : [];
     const mots = uniq(cfgL('RNC_MOTIVOS').concat(x.motivo ? [x.motivo] : []).concat(motOut));
     const L = (pt) => biL(pt), V = (v) => (E.filled(v) ? biL(String(v)) : '—');
@@ -19489,7 +19610,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         <tr><td class="k">${L('Disposição')}</td><td>${V(x.disp)}</td><td class="k">${L('Data')}</td><td>${fD(x.fechDisp) || '—'}</td></tr>
         <tr><td class="k">${L('Contenção')}</td><td>${t(m.contTxt)}</td><td class="k">${L('Resp. / data')}</td><td>${t(m.contResp)}${m.contData ? ' · ' + fD(m.contData) : ''}</td></tr>
         <tr><td class="k">${L('Causa raiz')}</td><td colspan="3" class="pre">${t(m.causa)}</td></tr>
-        <tr><td class="k">${L('Ação corretiva')}</td><td colspan="3"><span class="pre">${E.low(x.corretiva) === 'não' ? L('Não necessária') : t(m.acaoTxt)}</span>${E.low(x.corretiva) === 'sim' ? `<br><span style="color:#555">${biI('Responsável:')} ${t(m.acaoResp)} · ${biI('prazo:')} ${fD(x.prazoFechar) || '—'}${x.nivel ? ' (' + biI(x.nivel) + ')' : ''}</span>` : ''}</td></tr></table></div>
+        <tr><td class="k">${L('Ação corretiva')}</td><td colspan="3"><span class="pre">${E.low(x.corretiva) === 'não' ? L('Não necessária') : t(m.acaoTxt)}</span>${E.low(x.corretiva) === 'sim' ? `<br><span style="color:#555">${biI('Responsável:')} ${t(m.acaoResp)} · ${biI('prazo:')} ${fD(x.prazoFechar) || '—'}${x.nivel ? ' (' + biI(x.nivel) + ')' : ''}</span>` : ''}</td></tr></table>
+        ${evs.length ? EV_PARTES.filter((p) => evs.some((o) => (o.parte || 'Outro') === p)).map((p) => { const L = evs.filter((o) => (o.parte || 'Outro') === p), I = L.filter((o) => o.tipo === 'img' && evImg[o.id]), D = L.filter((o) => !(o.tipo === 'img' && evImg[o.id]));
+          return `<div class="sh l">${biS('', 'Evidências · ' + p)}</div>${I.length ? `<div class="fot">${I.map((o) => `<img src="${evImg[o.id]}" alt="">`).join('')}</div>` : ''}${D.length ? `<table>${D.map((o) => `<tr><td class="k">${o.tipo === 'pdf' ? 'PDF' : 'Arquivo'}</td><td colspan="3">${esc(o.nome)} <span style="color:#555">· ${esc(evTam(o.tam || 0))} · ${esc(o.quem || '')} · ${esc(dmy(o.at))}</span></td></tr>`).join('')}</table>` : ''}`; }).join('') : ''}</div>
       <div class="sec"><div class="sh q">${biS('4', 'Verificação de eficácia')}</div><table>
         <tr><td class="k">${L('Resultado')}</td><td>${efics.map((v) => chk(v === x.analise, v)).join('')}</td><td class="k">${L('Data / lote')}</td><td>${fD(m.eficData) || '—'}${m.eficLote ? ' · ' + esc(m.eficLote) : ''}</td></tr>
         <tr><td class="k">${L('Observação')}</td><td colspan="3" class="pre">${t(m.eficObs)}</td></tr></table></div>
@@ -20837,6 +20960,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         if (a === 'rr-print') { if (key) rncRelPrint(key); return; }
         if (a === 'rr-fadd') { rrFotoAdd(key); return; }
         if (a === 'rr-fdel') { rrFotoDel(key, act.dataset.id); return; }
+        if (a === 'rr-evadd' || a === 'rr-evcam') { const i = document.getElementById(a === 'rr-evadd' ? 'rr-evf' : 'rr-evc'); if (i) i.click(); return; }   /* v83: evidências */
+        if (a === 'rr-evver') { evAbrir(key, act.dataset.id); return; }
+        if (a === 'rr-evfil') { RREV[key] = act.dataset.p; const ar = document.getElementById('rr-ev'); if (ar) { ar.querySelectorAll('[data-act=rr-evfil]').forEach((b) => b.setAttribute('aria-pressed', b === act)); ar.querySelectorAll('.rrevr').forEach((r) => { r.hidden = act.dataset.p !== 'Todas' && r.dataset.parte !== act.dataset.p; }); const sm = ar.querySelector(':scope > small'); if (sm) sm.innerHTML = `Arquivo novo entra como "${esc(act.dataset.p === 'Todas' ? 'Outro' : act.dataset.p)}": troque a parte na lista. No relatório impresso as evidências saem agrupadas por parte.`; } return; }
+        if (a === 'rr-evdel') {   /* confirma no próprio botão (uma janela por cima fecharia a NCF e perderia o que não foi salvo) */
+          if (act.dataset.conf !== '1') { act.dataset.conf = '1'; act.textContent = 'Confirmar?'; act.classList.add('danger'); setTimeout(() => { if (act.isConnected) { act.dataset.conf = ''; act.textContent = 'Excluir'; act.classList.remove('danger'); } }, 4000); return; }
+          const id = act.dataset.id; act.disabled = true;
+          (async () => { try { const o = (await evList(key, true)).find((e) => e.id === id); if (o) { await evDel(key, o); logEntry('RNC', key, 'alterado', `${(findRec('RNC', key) || {}).num || key} · evidência excluída: ${o.nome}`, null); toast('Evidência excluída.'); } } catch (err) { toast('Não foi possível excluir: ' + ((err && (err.message || err.code)) || err), true); } await evRefresh(key); })();
+          return; }
         if (a === 'rr-absave') { rrSaveAbertura(key, false); return; }
         if (a === 'rr-absign') { rrSaveAbertura(key, true); return; }
         if (a === 'rr-save') { rrSaveTratamento(key, false); return; }
