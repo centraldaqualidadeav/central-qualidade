@@ -185,6 +185,58 @@ button.kpi:hover { border-color: var(--ink-3); }
 .kpi.warn .val { color: var(--warn); }
 .kpi.ok .val { color: var(--ok); }
 .kpis.sm .kpi .val { font-size: 32px; }
+/* v78: faixa de números do RIR (opção A): uma caixa, 4 células do mesmo tamanho */
+.rikp { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); overflow: hidden; margin-bottom: 12px; }
+.rikp > div { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto; column-gap: 12px; row-gap: 3px; align-items: baseline; padding: 12px 18px; border-left: 1px solid var(--line); min-width: 0; }
+.rikp > div:first-child { border-left: 0; }
+.rikp b { grid-row: 1 / span 2; font: 600 34px/1 var(--f-display); font-variant-numeric: tabular-nums; color: var(--ink); align-self: center; }
+.rikp span { font: 500 12.5px/1.2 var(--f-display); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+.rikp small { font-size: 12px; line-height: 1.3; color: var(--ink-3); overflow-wrap: anywhere; }
+.rikp .k-rir b { color: var(--rir); } .rikp .k-atr b { color: var(--ink-3); } .rikp .k-atr.on b { color: var(--crit); } .rikp .k-ok b { color: var(--ok); }
+@media (max-width: 1100px) { .rikp { grid-template-columns: repeat(2, minmax(0, 1fr)); } .rikp > div:nth-child(3) { border-left: 0; } .rikp > div:nth-child(n+3) { border-top: 1px solid var(--line); } }
+@media (max-width: 520px) { .rikp { grid-template-columns: minmax(0, 1fr); } .rikp > div { border-left: 0; } .rikp > div:nth-child(n+2) { border-top: 1px solid var(--line); } }
+/* v78 etapa 3: tabela compacta da lista do RIR (mesmas colunas em todas as linhas) */
+.ritb { border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--surface); margin-bottom: 18px; }
+.rirw { display: grid; grid-template-columns: 128px 84px minmax(0, 1fr) 84px 150px 140px 132px; column-gap: 14px; align-items: center; min-height: 58px; padding: 6px 14px; border-top: 1px solid var(--line); }
+.rirw.h { min-height: 36px; border-top: 0; background: var(--surface-2); font: 600 11px/1.2 var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.rirw:not(.h):hover { background: color-mix(in srgb, var(--ink) 3%, transparent); }
+.rigr { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; padding: 7px 14px; background: var(--sunken); border-top: 1px solid var(--line); font: 600 12.5px/1.3 var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+.rigr b { color: var(--rir); } .rigr small { font: 400 12px var(--f-body); letter-spacing: 0; text-transform: none; color: var(--ink-3); }
+.rinone { padding: 14px; border-top: 1px solid var(--line); color: var(--ink-3); }
+.rirw .c-fo { min-width: 0; } .rirw .fn { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .rirw .nfn, .rirw .riwn { display: none; }
+.rirw .sb { font-size: 12.5px; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; } .rirw .sb .chip { margin-right: 6px; }
+.rilk { font: 500 12px var(--f-mono); color: var(--rir); background: none; border: 0; padding: 0; } button.rilk { cursor: pointer; } button.rilk:hover { text-decoration: underline; }
+.risit { display: inline-flex; align-items: center; gap: 7px; height: 26px; padding: 0 10px; border-radius: 13px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.risit::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.risit.and { color: var(--info); background: color-mix(in srgb, var(--info) 15%, transparent); }
+.risit.agu { color: var(--ink-2); background: color-mix(in srgb, var(--ink-3) 18%, transparent); }
+.risit.atr { color: var(--crit); background: color-mix(in srgb, var(--crit) 15%, transparent); }
+.riage { display: inline-flex; align-items: center; justify-content: center; height: 24px; min-width: 64px; padding: 0 8px; border-radius: 12px; font: 600 12px var(--f-mono); color: var(--ink-3); }
+.riage.a0 { color: var(--ink-2); background: color-mix(in srgb, var(--ink-3) 16%, transparent); }
+.riage.a1 { color: var(--warn); background: color-mix(in srgb, var(--warn) 16%, transparent); }
+.riage.a2 { color: var(--crit); background: color-mix(in srgb, var(--crit) 16%, transparent); }
+.ripg { display: grid; grid-template-columns: minmax(0, 1fr) 46px; gap: 8px; align-items: center; }
+.ripg .bar { display: block; height: 6px; border-radius: 3px; background: var(--sunken); border: 1px solid var(--line); overflow: hidden; } .ripg .bar i { display: block; height: 100%; background: var(--rir); }
+.ripg em { font: 12px var(--f-mono); font-style: normal; color: var(--ink-2); text-align: right; }
+.riwho { display: flex; align-items: center; gap: 8px; min-width: 0; } .riwho > span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.riav { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font: 700 11px var(--f-display); letter-spacing: .03em; text-transform: uppercase; background: color-mix(in srgb, var(--rir) 25%, transparent); color: var(--ink); }
+.rirw .c-bt .btn { width: 100%; }
+@media (max-width: 1180px) { .rirw { grid-template-columns: 120px minmax(0, 1fr) 76px 110px 120px; column-gap: 12px; } .rirw > .c-who, .rirw > .c-nf, .rirw.h > div:nth-child(2), .rirw.h > div:nth-child(6) { display: none; } .rirw .riwn, .rirw .nfn { display: inline; } }
+@media (max-width: 760px) { .rirw { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "fo fo" "sit age" "pg pg" "bt bt"; row-gap: 8px; padding: 10px 12px; } .rirw.h { display: none; }
+  .rirw .c-fo { grid-area: fo; } .rirw .c-sit { grid-area: sit; } .rirw .c-age { grid-area: age; justify-self: end; } .rirw .c-pg { grid-area: pg; } .rirw .c-bt { grid-area: bt; } .rirw .c-nf { display: none; } .rirw .nfn { display: inline; } }
+/* v78 etapa 2: busca e filtros fixos no alto da lista do RIR. Linha 1: busca · inspetor · fornecedor; linha 2: os 5 filtros do mesmo tamanho.
+   Tela bem larga: tudo em uma linha */
+.rifb { position: sticky; top: 0; z-index: 5; display: grid; grid-template-columns: minmax(0, 1fr) 210px 250px; gap: 10px; align-items: center; padding: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); margin: 0 0 14px; }
+.rifb .inp { height: var(--h-in); min-height: var(--h-in); }
+.rifb .rifx { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.rifx button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; white-space: nowrap; height: var(--h-in); min-height: var(--h-in); padding: 0 10px; }
+.rifx button i { font: 500 11.5px var(--f-mono); font-style: normal; color: var(--ink-3); }
+.rifx button[aria-pressed="true"] { background: color-mix(in srgb, var(--rir) 22%, transparent); color: var(--ink); font-weight: 600; }
+.rifx button[aria-pressed="true"] i { color: var(--ink-2); }
+@media (min-width: 1760px) { .rifb { grid-template-columns: minmax(0, 1fr) 640px 210px 250px; } .rifb .rifx { grid-column: 2; grid-row: 1; } .rifb #ri-fi { grid-column: 3; } .rifb #ri-ff { grid-column: 4; } }
+@media (max-width: 1180px) { .rifb { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); } }
+@media (max-width: 860px) { .rifb { position: static; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .rifb #ri-q { grid-column: 1 / -1; } .rifb .rifx { grid-row: 3; overflow-x: auto; grid-template-columns: repeat(5, minmax(96px, 1fr)); } }
+@media (max-width: 520px) { .rifb { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- gráficos ---------- */
 .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 14px; }
@@ -5593,7 +5645,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 77; window.CQ_V = APP_V;
+    const APP_V = 80; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -14925,6 +14977,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       relBkSet('rird', rel); throw e;
     }
     RI.salvo = Date.now(); riSalvoTxt();
+    try { const n = riConta(rel); (RI.prog = RI.prog || {})[rel.id] = { t: Date.now(), ok: n.ok, tot: n.tot }; } catch (e) { /* só a lista */ }   /* v78 etapa 3 */
   }
   function riSalvoTxt(t) { const el = $('#rie-salvo'); if (el && el.classList.contains('tbsalvo')) { el.innerHTML = `<i></i>${esc(t || (RI.salvo ? 'enviado às ' + hhmm(RI.salvo) : 'rascunho'))}`; el.className = 'tbsalvo ' + (t === 'não salvo' || /não (enviado|gravado)/.test(t || '') ? 'crit' : t ? 'off' : 'ok'); return; } if (el) { el.textContent = t || (RI.salvo ? 'rascunho enviado às ' + hhmm(RI.salvo) : 'rascunho'); el.className = 'chip ' + (t === 'não salvo' || /não (enviado|gravado)/.test(t || '') ? 'crit' : t ? 'off' : 'ok'); } }
   async function riFinalizar() {
@@ -14992,6 +15045,29 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     }, true);
   }
 
+  /* v78: faixa de números do RIR (opção A): aguardando · em andamento · atrasadas (+5 dias) · concluídos hoje.
+     O que estava nos cartões antigos (RIR no mês e % reprovados) fica na linha de baixo de "Concluídos hoje". */
+  const RI_ATRASO = 5;
+  function riProgBusca(ids) {
+    RI.prog = RI.prog || {}; if (RI.progBusy || !DB.db) return;
+    const falta = ids.filter((id) => !RI.prog[id] || Date.now() - RI.prog[id].t > 60000); if (!falta.length) return;
+    RI.progBusy = true;
+    let mudou = false;   /* só redesenha a lista se algum número mudou */
+    Promise.all(falta.map((id) => DB.db.doc('rird/' + id).get().then((sn) => { const n = sn.exists ? riConta(sn.data()) : null, a = RI.prog[id]; RI.prog[id] = { t: Date.now(), ok: n ? n.ok : 0, tot: n ? n.tot : null }; if (!a || a.ok !== RI.prog[id].ok || a.tot !== RI.prog[id].tot) mudou = mudou || RI.prog[id].tot != null; }).catch(() => { RI.prog[id] = { t: Date.now(), ok: 0, tot: null }; })))
+      .then(() => { RI.progBusy = false; if (mudou && S.view === 'rir' && RI.sub !== 'ed') render(); });
+  }
+  const riDias = (g) => (g && g.data != null ? Math.max(0, Math.floor(S.today - g.data)) : null);
+  function riFaixa(P, ras, C, doMes, lotM, repM) {
+    const hoje = dmy(Date.now()), conc = C.filter((c) => c.st === 'f' && c.fin && dmy(c.fin) === hoje);
+    const lotH = conc.reduce((s0, c) => s0 + Object.keys(c.res || {}).length, 0);
+    const atr = P.filter((g) => (riDias(g) || 0) > RI_ATRASO), lotP = P.reduce((s0, g) => s0 + g.lots.length, 0);
+    const meus = ras.filter(riMeu).length, velha = atr.length ? Math.max(...atr.map(riDias)) : 0;
+    const cel = (cls, n, l, sub) => `<div class="${cls}"><b>${NF.format(n)}</b><span>${l}</span><small>${sub}</small></div>`;
+    return `<div class="rikp" role="group" aria-label="Resumo do RIR">${cel('k-rir', P.length, 'Aguardando RIR', `${NF.format(lotP)} lote${lotP === 1 ? '' : 's'} sem inspeção`)}`
+      + cel('k-and', ras.length, 'Em andamento', ras.length ? `${NF.format(meus)} com você · ${NF.format(ras.length - meus)} com outros` : 'nenhum começado')
+      + cel(atr.length ? 'k-atr on' : 'k-atr', atr.length, `Atrasadas · +${RI_ATRASO} dias`, atr.length ? `a mais antiga chegou há ${NF.format(velha)} dias` : 'nenhuma nota esperando há mais de ' + RI_ATRASO + ' dias')
+      + cel('k-ok', conc.length, 'Concluídos hoje', `${NF.format(lotH)} lote${lotH === 1 ? '' : 's'} hoje · no mês: ${NF.format(doMes.length)} RIR · ${lotM ? NF1.format(repM / lotM * 100) + '% reprovados' : 'sem lotes'}`) + '</div>';
+  }
   /* ---------- tela: lista ---------- */
   VIEWS.rir = (main) => {
     const noTablet = S.view === 'rirtab';
@@ -15000,32 +15076,61 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const w = cw('rir'), C = riCards(), P = riPend(), ras = C.filter((c) => c.st === 'r'), q = E.key(RI.q || '');
     const mes = mesId(Date.now()), doMes = C.filter((c) => c.st === 'f' && mesId(c.fin || c.at) === mes);
     const lotM = doMes.reduce((s, c) => s + Object.keys(c.res || {}).length, 0), repM = doMes.reduce((s, c) => s + Object.values(c.res || {}).filter((r) => r === 'Reprovado').length, 0);
-    let sub = RI.sub === 'conc' ? 'conc' : 'ag'; RI.sub = sub;
-    const tab = (k, l) => `<button type="button" data-act="ri-sub" data-key="${k}" aria-pressed="${sub === k}">${l}</button>`;
-    const grp = (g, i) => `<div class="ricard"><div class="rih"><b>NF ${esc(disp(g.nf) || '—')}</b>${riSitForn(g.forn)}<span class="muted">${esc(g.forn || 'sem fornecedor')}</span></div>
-      <div class="rils">${g.lots.map((x) => `<button type="button" class="lchip" data-open="AV:${esc(x.key)}">${esc(x.id)} <small>${esc(lotTxt(x))}</small></button>`).join('')}</div>
-      <div class="rif"><span class="muted">recebido ${fD(g.data)}</span>${w ? `<button class="btn primary" type="button" data-act="ri-novo" data-key="${i}">Inspecionar esta nota</button>` : ''}</div></div>`;
-    const rasc = (c0) => { const c = riCabAtual(c0); return `<div class="ricard em"><div class="rih"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>${riMeu(c) ? 'com você' : 'com ' + esc((c.nome || 'outro inspetor').split(' ')[0])}</span><span class="muted">${esc(c.forn || '')}</span></div>
-      <div class="rils">${(c.ids || []).map((id) => `<span class="lchip">${esc(id)}</span>`).join('')}</div>
-      <div class="rif"><span class="muted">${esc(c.nome || '')} · ${esc(dmy(c.at))}</span><button class="btn ${riMeu(c) ? 'primary' : ''}" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${!w ? 'Ver' : riMeu(c) ? 'Continuar' : 'Assumir'}</button></div></div>`; };
+    /* v78 etapa 2: busca e filtros fixos no alto (Todas · Aguardando · Em andamento · Atrasadas · Concluídos, inspetor, fornecedor) */
+    const fx = ['todas', 'ag', 'and', 'atr', 'conc'].includes(RI.fx) ? RI.fx : RI.sub === 'conc' ? 'conc' : 'todas'; RI.fx = fx;
+    const sub = fx === 'conc' ? 'conc' : 'ag'; RI.sub = sub;
+    const fi = RI.fi || '', ff = RI.ff || '', filtra = !!(q || fi || ff);
+    const bate = (txt) => !q || E.key(txt).includes(q), okI = (n) => !fi || E.key(n || '') === fi, okF = (f) => !ff || E.key(f || '') === ff;
+    const agF = P.map((g, i) => [g, i]).filter(([g]) => !fi && okF(g.forn) && bate([g.nf, g.forn, g.pc, g.lots.map((x) => x.id + ' ' + lotTxt(x)).join(' ')].join(' ')));
+    const atrF = agF.filter(([g]) => (riDias(g) || 0) > RI_ATRASO);
+    const rasF = ras.filter((c0) => { const c = riCabAtual(c0); return okI(c.nome) && okF(c.forn) && bate([c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')); });
+    const concF = C.filter((c) => c.st === 'f' && okI(c.nome) && okF(c.forn) && bate([c.num, c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')));
+    const opc = (L) => { const m = new Map(); L.forEach((n) => { const k = E.key(n || ''); if (k && !m.has(k)) m.set(k, String(n).trim()); }); return Array.from(m).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR')); };
+    const insps = opc(C.filter((c) => c.st === 'r' || c.st === 'f').map((c) => (c.st === 'r' ? riCabAtual(c) : c).nome));
+    const forns = opc([...P.map((g) => g.forn), ...ras.map((c) => riCabAtual(c).forn), ...C.filter((c) => c.st === 'f').map((c) => c.forn)]);
+    const sel = (id, rot, L, v) => `<select id="${id}" class="inp" aria-label="${rot}"><option value="">${rot}: todos</option>${L.map(([k, n]) => `<option value="${esc(k)}"${k === v ? ' selected' : ''}>${esc(n)}</option>`).join('')}${v && !L.some(([k]) => k === v) ? `<option value="${esc(v)}" selected>${esc(v)}</option>` : ''}</select>`;
+    const chip = (k, l, n) => `<button type="button" data-act="ri-fx" data-key="${k}" aria-pressed="${fx === k}">${l}<i>${NF.format(n)}</i></button>`;
+    const barra = `<div class="rifb" role="search"><input id="ri-q" class="inp" type="search" placeholder="Buscar NF, fornecedor, lote AV ou RIR…" value="${esc(RI.q || '')}" autocomplete="off" aria-label="Buscar">
+      <div class="seg rifx" role="group" aria-label="Mostrar">${chip('todas', 'Todas', agF.length + rasF.length)}${chip('ag', 'Aguardando', agF.length)}${chip('and', 'Em andamento', rasF.length)}${chip('atr', 'Atrasadas', atrF.length)}${chip('conc', 'Concluídos', concF.length)}</div>
+      ${sel('ri-fi', 'Inspetor', insps, fi)}${sel('ri-ff', 'Fornecedor', forns, ff)}</div>`;
+    /* v78 etapa 3: tabela compacta (Situação · NF · Fornecedor e lotes · Chegada · Progresso · Inspetor · botão) */
+    const itCfg = rirItensCfg(), nNf = itCfg.filter((o) => o.esc === 'nf').length, nLt = itCfg.length - nNf;
+    const idade = (d, quando) => (d == null ? '<span class="riage">—</span>' : `<span class="riage ${d > RI_ATRASO ? 'a2' : d >= 3 ? 'a1' : 'a0'}" title="${esc(quando || '')}">${d === 0 ? 'hoje' : NF.format(d) + (d === 1 ? ' dia' : ' dias')}</span>`);
+    const prog = (ok, tot) => `<div class="ripg"><span class="bar"><i style="width:${tot ? Math.round((ok / tot) * 100) : 0}%"></i></span><em>${tot == null ? '—' : ok + '/' + tot}</em></div>`;
+    const quem = (nome, eu) => { const p = String(nome || '').trim().split(/\s+/).filter(Boolean); if (!p.length) return '<span class="muted">—</span>'; const ini = eu ? 'VC' : p.length > 1 ? p[0][0] + p[p.length - 1][0] : p[0].slice(0, 2); return `<div class="riwho"><span class="riav">${esc(ini)}</span><span>${esc(eu ? 'você' : p[0])}</span></div>`; };
+    const lotLn = (L) => (L.length <= 3 ? L.map((x) => (x.key ? `<button type="button" class="rilk" data-open="AV:${esc(x.key)}" title="Abrir o lote">${esc(x.id)}</button>` : `<span class="rilk">${esc(x.id)}</span>`)).join(' ') : `<span class="rilk" title="${esc(lotesResumo(L.map((x) => x.id)).full)}">${esc(lotesResumo(L.map((x) => x.id)).txt)}</span>`);
+    const linha = (sit, nf, fo, sb, age, pg, who, bt) => `<div class="rirw" role="row"><div class="c-sit">${sit}</div><div class="c-nf mono">${esc(nf || '—')}</div><div class="c-fo"><div class="fn"><span class="nfn">NF ${esc(nf || '—')} · </span>${esc(fo || 'sem fornecedor')}</div><div class="sb">${sb}</div></div><div class="c-age">${age}</div><div class="c-pg">${pg}</div><div class="c-who">${who}</div><div class="c-bt">${bt}</div></div>`;
+    const grp = (g, i) => { const d = riDias(g), atr = (d || 0) > RI_ATRASO, n = g.lots.length;
+      return linha(atr ? '<span class="risit atr">Atrasada</span>' : '<span class="risit agu">Aguardando</span>', disp(g.nf), g.forn,
+        `${riSitForn(g.forn)}${lotLn(g.lots)} · ${esc(lotTxt(g.lots[0]) || (n + (n === 1 ? ' lote' : ' lotes')))}${n > 1 && lotTxt(g.lots[0]) ? ' + ' + (n - 1) : ''}${g.pc ? ' · OC ' + esc(disp(g.pc)) : ''}`,
+        idade(d, 'recebido ' + fD(g.data)), prog(0, nNf + nLt * n), quem(''), w ? `<button class="btn" type="button" data-act="ri-novo" data-key="${i}">Iniciar RIR</button>` : ''); };
+    const rasc = (c0) => { const c = riCabAtual(c0), eu = riMeu(c), L = (c.lotes || []).map((k, j) => { const x = findRec('AV', k); return { key: x ? k : '', id: (x && x.id) || (c.ids || [])[j] || k, x }; });
+      const ds = L.map((o) => o.x && o.x.data).filter((v) => v != null), d0 = ds.length ? Math.min(...ds) : null, pr = (RI.prog || {})[c.id];
+      return linha('<span class="risit and">Em andamento</span>', c.nf, c.forn, `${lotLn(L)} · ${L.length} ${L.length === 1 ? 'lote' : 'lotes'} · começado ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}<span class="riwn"> · ${esc(eu ? 'com você' : c.nome || '')}</span>`,
+        idade(d0 == null ? null : Math.max(0, Math.floor(S.today - d0)), d0 == null ? '' : 'recebido ' + fD(d0)), pr && pr.tot != null ? prog(pr.ok, pr.tot) : prog(0, null), quem(c.nome, eu),
+        `<button class="btn ${eu ? 'primary' : ''}" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${!w ? 'Ver' : eu ? 'Continuar' : 'Assumir'}</button>`); };
     let body;
     if (!RI.ready) body = '<div class="loading"><span class="spin"></span><span>Carregando…</span></div>';
     else if (sub === 'ag') {
       RI.pend = P;
-      body = `${ras.length ? `<h3 class="rist">Em andamento <b>${ras.length}</b></h3><div class="rigrid">${ras.map(rasc).join('')}</div>` : ''}
-        <h3 class="rist">Aguardando RIR <b>${P.length}</b><small>lotes lançados sem resultado de inspeção, agrupados por nota fiscal</small></h3>
-        ${P.length ? `<div class="rigrid">${P.map(grp).join('')}</div>` : '<div class="empty">Nenhuma nota aguardando inspeção de recebimento.</div>'}`;
+      const verR = fx === 'todas' || fx === 'and', verA = fx !== 'and', LA = fx === 'atr' ? atrF : agF;
+      const vazioA = fi ? 'As notas aguardando ainda não têm inspetor: escolha "Inspetor: todos" para vê-las.' : filtra ? 'Nenhuma nota aguardando com esses filtros.' : fx === 'atr' ? `Nenhuma nota esperando há mais de ${RI_ATRASO} dias.` : 'Nenhuma nota aguardando inspeção de recebimento.';
+      riProgBusca(rasF.map((c) => c.id));
+      body = `<div class="ritb" role="table"><div class="rirw h" role="row"><div>Situação</div><div>NF</div><div>Fornecedor · lotes</div><div>Chegada</div><div>Progresso</div><div>Inspetor</div><div></div></div>
+        ${verR && (rasF.length || fx === 'and') ? `<div class="rigr">Em andamento <b>${rasF.length}</b></div>${rasF.length ? rasF.map(rasc).join('') : `<div class="rinone">${filtra ? 'Nenhum RIR em andamento com esses filtros.' : 'Nenhum RIR em andamento.'}</div>`}` : ''}
+        ${verA ? `<div class="rigr">${fx === 'atr' ? `Atrasadas · +${RI_ATRASO} dias` : 'Aguardando RIR'} <b>${LA.length}</b><small>lotes lançados sem resultado de inspeção, agrupados por nota fiscal · a mais antiga primeiro</small></div>
+        ${LA.length ? LA.map(([g, i]) => grp(g, i)).join('') : `<div class="rinone">${vazioA}</div>`}` : ''}</div>`;
     } else {
-      const L = C.filter((c) => c.st === 'f' && (!q || E.key([c.num, c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')).includes(q)));
-      body = `<div class="filters"><label class="field"><span>Buscar</span><input id="ri-q" type="search" placeholder="RIR, NF, fornecedor ou lote…" value="${esc(RI.q || '')}" autocomplete="off"></label></div>
-        ${L.length ? `<div class="twrap"><table class="t"><thead><tr><th>RIR</th><th>Concluído</th><th>NF</th><th>Fornecedor</th><th>Lotes</th><th>Resultado</th><th>Inspetor</th></tr></thead><tbody>${L.slice(0, 300).map((c) => {
+      const L = concF;
+      body = `${L.length ? `<div class="twrap"><table class="t"><thead><tr><th>RIR</th><th>Concluído</th><th>NF</th><th>Fornecedor</th><th>Lotes</th><th>Resultado</th><th>Inspetor</th></tr></thead><tbody>${L.slice(0, 300).map((c) => {
           const v = Object.values(c.res || {}), nr = v.filter((r) => r === 'Reprovado').length;
           return `<tr class="click" data-act="ri-abrir" data-key="${esc(c.id)}"><td class="mono">${esc(c.num || '')}</td><td class="nw">${esc(dmy(c.fin || c.at))}</td><td class="mono">${esc(c.nf || '—')}</td><td>${esc(c.forn || '')}</td><td class="mono nw" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</td><td>${nr ? `<span class="chip crit"><i>✕</i>${nr} reprovado(s)</span>` : '<span class="chip ok"><i>✓</i>aprovado</span>'}</td><td>${esc(c.nome || '')}</td></tr>`;
-        }).join('')}</tbody></table></div>` : '<div class="empty">Nenhum RIR concluído' + (q ? ' com essa busca' : '') + '.</div>'}`;
+        }).join('')}</tbody></table></div>` : '<div class="empty">Nenhum RIR concluído' + (filtra ? ' com esses filtros' : '') + '.</div>'}`;
     }
     main.innerHTML = `<div class="view">${head(MOD.RIR.full, 'RIR · checklist da nota fiscal recebida, com o resultado de cada lote. Lote reprovado aqui vai sozinho para a fila da NCF.', ((DB.owner || DB.admin === true) ? '<button class="btn" type="button" data-act="ri-caneta">Imprimir folha à caneta</button>' : '') + (w ? '<button class="btn" type="button" data-go=\'{"v":"rirtab"}\'>Tela do tablet</button>' : ''))}
-      <div class="kpis sm">${kpiHTML({ l: 'Notas aguardando RIR', v: NF.format(P.length), c: MOD.RIR.c, cls: P.length ? 'warn' : 'ok' })}${kpiHTML({ l: 'RIR no mês', v: NF.format(doMes.length), sub: NF.format(lotM) + ' lote(s) inspecionado(s)', c: MOD.RIR.c })}${kpiHTML({ l: 'Reprovados no recebimento', v: lotM ? NF1.format(repM / lotM * 100) + '%' : '—', sub: `${repM} de ${lotM} lote(s) no mês`, c: MOD.RIR.c, cls: repM ? 'crit' : '' })}</div>
-      <div class="seg" role="group" aria-label="Ver" style="margin:6px 0 12px">${tab('ag', `Aguardando e em andamento <b>${P.length + ras.length}</b>`)}${tab('conc', 'Concluídos')}</div>${body}</div>`;
+      ${riFaixa(P, ras, C, doMes, lotM, repM)}
+      ${RI.ready ? barra : ''}${body}</div>`;
+    const fs = (id, k) => { const e = $('#' + id); if (e) e.onchange = () => { RI[k] = e.value; render(); }; }; fs('ri-fi', 'fi'); fs('ri-ff', 'ff');
     const qi = $('#ri-q'); if (qi) { let tm; qi.oninput = () => { clearTimeout(tm); tm = setTimeout(() => { RI.q = qi.value; const p = qi.selectionStart; render(); const q2 = $('#ri-q'); if (q2) { q2.focus(); try { q2.setSelectionRange(p, p); } catch (e) { /* ok */ } } }, 250); }; }
   };
 
@@ -15342,7 +15447,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       form: 'RIR', rodape: 'Aços Vital · Qualidade · Relatório de Inspeção de Recebimento', rodNum: esc(rel.numero || 'Rascunho') }));
   }
   function riAct(a, key, el) {
-    if (a === 'ri-sub') { RI.sub = key; render(); return true; }
+    if (a === 'ri-sub') { RI.sub = key; RI.fx = key === 'conc' ? 'conc' : 'todas'; render(); return true; }
+    if (a === 'ri-fx') { RI.fx = key; RI.sub = key === 'conc' ? 'conc' : 'ag'; render(); return true; }   /* v78 etapa 2 */
     if (a === 'ri-tlimpa') { RI.tq = ''; render(); return true; }
     if (a === 'ri-caneta') { if (DB.owner || DB.admin === true) printHTML(riCanetaHTML()); return true; }   /* v72 */
     if (a === 'ri-voltar') { if (RI.saveT) riGravar().catch(() => {}); RI.ed = null; RI.sub = 'ag'; render(); return true; }
