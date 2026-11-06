@@ -2,7 +2,93 @@
 <html lang="pt-BR">
 <head>
 <script>try{if(window.self!==window.top&&window.parent.CQ_CERT_HOST&&!/[?&]leitor=1/.test(location.search))document.documentElement.classList.add("cq-embed")}catch(e){}</script>
-<style>html.cq-embed .topbar,html.cq-embed .panel,html.cq-embed .panel-hint{display:none!important}html.cq-embed body{min-height:0}html.cq-embed .app{padding:14px 12px 28px}html.cq-embed .folhas{top:0}</style>
+<style>html.cq-embed .topbar,html.cq-embed .panel,html.cq-embed .panel-hint{display:none!important}html.cq-embed body{min-height:0}html.cq-embed .app{padding:14px 12px 28px}html.cq-embed .folhas{top:0}/* v85: Documento completo (NF + certificado Aços Vital + certificados de origem) */
+.dc-ov { position: fixed; inset: 0; z-index: 3000; background: rgba(8, 20, 34, .55); display: grid; place-items: start center; overflow: auto; padding: 24px 16px; }
+.dc-dlg { position: relative; width: min(1180px, 100%); background: #fff; color: #17212b; border-radius: 12px; box-shadow: 0 18px 50px rgba(0, 0, 0, .3); overflow: hidden; font-family: inherit; }
+.dc-dh { display: flex; align-items: center; gap: 14px; padding: 16px 22px; border-bottom: 1px solid #d6dbe1; flex-wrap: wrap; }
+.dc-dh h2 { margin: 0; font-size: 22px; letter-spacing: .02em; text-transform: uppercase; color: var(--marinho); }
+.dc-cli { margin-left: auto; font-size: 13px; color: #5d6874; }
+.dc-close { width: 36px; height: 36px; border: 1px solid #d6dbe1; border-radius: 8px; background: #fff; cursor: pointer; font-size: 15px; color: #5d6874; }
+.dc-mut { font-size: 12.5px; color: #5d6874; }
+.dc-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-bottom: 1px solid #d6dbe1; }
+.dc-steps > div { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; font-weight: 600; color: #5d6874; border-left: 1px solid #d6dbe1; padding: 4px 8px; text-align: center; }
+.dc-steps > div:first-child { border-left: 0; }
+.dc-steps b { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; border: 2px solid #d6dbe1; font-size: 13px; flex: none; }
+.dc-steps span small { display: block; font-weight: 400; font-size: 11px; color: #8a949e; }
+.dc-steps .on { color: var(--marinho); box-shadow: inset 0 -3px 0 var(--laranja); } .dc-steps .on b { background: var(--laranja); border-color: var(--laranja); color: #fff; }
+.dc-steps .off { opacity: .55; }
+.dc-bd { padding: 16px 22px; display: grid; gap: 14px; }
+.dc-grp { border: 1px solid #d6dbe1; border-radius: 10px; overflow: hidden; }
+.dc-gh { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: #eef1f4; font-weight: 700; min-height: 52px; flex-wrap: wrap; }
+.dc-gh .n { width: 26px; height: 26px; border-radius: 6px; background: var(--marinho); color: #fff; display: grid; place-items: center; font-size: 13px; }
+.dc-gh small { font-weight: 400; color: #5d6874; } .dc-gh .r { margin-left: auto; display: flex; gap: 8px; }
+.dc-it { display: grid; grid-template-columns: 24px 64px minmax(0, 1fr) minmax(0, 330px) 170px; gap: 14px; align-items: center; padding: 10px 14px; border-top: 1px solid #d6dbe1; background: #fff; }
+.dc-it[draggable] { cursor: grab; } .dc-it.arr { opacity: .45; } .dc-it.alvo { box-shadow: inset 0 3px 0 var(--laranja); }
+.dc-g { color: #9aa4ae; font-weight: 700; letter-spacing: -2px; }
+.dc-it img, .dc-th0 { width: 64px; height: 88px; object-fit: contain; object-position: top; border: 1px solid #d6dbe1; border-radius: 3px; background: #fff; display: block; }
+.dc-nm { font-weight: 600; min-width: 0; overflow-wrap: anywhere; } .dc-nm small { display: block; font-weight: 400; color: #5d6874; font-size: 12.5px; margin-top: 2px; }
+.dc-ac { display: flex; gap: 6px; justify-content: flex-end; } .dc-ac .btn { min-width: 76px; justify-content: center; }
+.dc-x { color: #b3261e !important; }
+.dc-tag { display: inline-flex; align-items: center; min-height: 26px; border-radius: 13px; padding: 2px 10px; font-size: 12.5px; font-weight: 600; background: #e7f3ec; color: #1e7b4f; }
+.dc-tag.w { background: #fdeee6; color: #b5410f; }
+.dc-drop { margin: 10px 14px; border: 1.5px dashed #b7c0ca; border-radius: 8px; padding: 12px 14px; color: #5d6874; font-size: 13px; }
+.dc-drop.on { border-color: var(--laranja); background: #fdf3ee; }
+.dc-ft { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; align-items: end; padding: 14px 22px; border-top: 1px solid #d6dbe1; background: #fafbfc; }
+.dc-ft.p3 { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; }
+.dc-fn, .dc-fl { display: grid; gap: 4px; } .dc-fn span, .dc-fl span { font-size: 12.5px; font-weight: 600; color: #5d6874; }
+.dc-in { height: 40px; border: 1px solid #c3ccd6; border-radius: 7px; padding: 0 12px; font: 500 13.5px ui-monospace, Menlo, Consolas, monospace; width: 100%; background: #fff; color: #17212b; }
+.dc-ft .btn, .dc-gh .btn { height: 40px; }
+.dc-l3 { display: grid; grid-template-columns: minmax(0, 1fr) 330px; min-height: 560px; }
+.dc-strip { background: #e4e8ec; padding: 14px 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.dc-pgs { display: flex; gap: 12px; overflow-x: auto; padding: 4px 2px 8px; }
+.dc-pg { flex: none; border: 0; background: none; padding: 0; cursor: pointer; display: grid; gap: 5px; justify-items: center; font-size: 12px; color: #5d6874; }
+.dc-pg img { width: 110px; height: 150px; object-fit: contain; background: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, .18); outline: 3px solid transparent; outline-offset: 2px; }
+.dc-pg.on img { outline-color: var(--laranja); }
+.dc-pg span { max-width: 120px; text-align: center; } .dc-pg i { font-style: normal; display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--marinho); color: #fff; font-size: 11px; font-weight: 700; margin-right: 5px; }
+.dc-big { display: grid; place-items: start center; } .dc-big img { max-width: 100%; width: 640px; background: #fff; box-shadow: 0 4px 18px rgba(0, 0, 0, .18); }
+.dc-sd { border-left: 1px solid #d6dbe1; padding: 16px; display: grid; gap: 12px; align-content: start; }
+.dc-sd h3 { margin: 0; font-size: 16px; text-transform: uppercase; letter-spacing: .05em; color: var(--marinho); }
+.dc-kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 13.5px; } .dc-kv span { color: #5d6874; } .dc-kv b { text-align: right; }
+.dc-ck { display: grid; gap: 8px; font-size: 13.5px; } .dc-ck div { display: flex; gap: 8px; align-items: flex-start; } .dc-ck i { font-style: normal; font-weight: 700; flex: none; width: 14px; }
+.dc-ck .ok i { color: #1e7b4f; } .dc-ck .aviso { color: #b5410f; } .dc-ck .mut { color: #8a949e; }
+.dc-op { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: #3b444d; } .dc-op input { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--laranja); flex: none; }
+.dc-save { height: 46px; justify-content: center; font-size: 15px; }
+/* v86: passo 2 · etiquetas */
+.dc-l2 { display: grid; grid-template-columns: 170px minmax(0, 1fr) 330px; min-height: 600px; }
+.dc-th2 { border-right: 1px solid #d6dbe1; background: #fafbfc; padding: 12px; display: grid; gap: 10px; align-content: start; max-height: 760px; overflow: auto; }
+.dc-cap { font-size: 11.5px; font-weight: 700; color: #5d6874; text-transform: uppercase; letter-spacing: .06em; }
+.dc-t2 { border: 2px solid transparent; border-radius: 8px; padding: 6px; display: grid; gap: 4px; background: none; cursor: pointer; text-align: left; font: inherit; font-size: 12px; color: #5d6874; }
+.dc-t2.on { border-color: var(--laranja); background: #fff; } .dc-t2 img { width: 100%; border: 1px solid #d6dbe1; background: #fff; }
+.dc-t2 b { color: #17212b; font-size: 12.5px; overflow-wrap: anywhere; } .dc-t2 .ok { color: #1e7b4f; font-weight: 600; }
+.dc-cv { position: relative; background: #e4e8ec; padding: 46px 16px 18px; display: grid; justify-items: center; align-content: start; min-width: 0; overflow: auto; }
+.dc-hint { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: var(--marinho); color: #fff; font-size: 12.5px; padding: 6px 12px; border-radius: 16px; white-space: nowrap; max-width: calc(100% - 20px); overflow: hidden; text-overflow: ellipsis; }
+.dc-page { position: relative; background: #fff; box-shadow: 0 4px 18px rgba(0, 0, 0, .18); cursor: crosshair; touch-action: none; user-select: none; }
+.dc-page > img { width: 100%; height: 100%; display: block; pointer-events: none; }
+.dc-et { position: absolute; cursor: move; outline: 2px dashed transparent; outline-offset: 4px; }
+.dc-et img { width: 100%; height: 100%; display: block; pointer-events: none; } .dc-et.on { outline-color: var(--laranja); }
+.dc-rs { position: absolute; right: -9px; bottom: -9px; width: 16px; height: 16px; background: #fff; border: 3px solid var(--laranja); border-radius: 4px; cursor: nwse-resize; }
+.dc-sd2 { border-left: 1px solid #d6dbe1; padding: 14px; display: grid; gap: 12px; align-content: start; }
+.dc-sd2 h3 { margin: 0; font-size: 16px; text-transform: uppercase; letter-spacing: .05em; color: var(--marinho); }
+.dc-cd { border: 1px solid #d6dbe1; border-left: 4px solid #d6dbe1; border-radius: 10px; padding: 12px; display: grid; gap: 10px; } .dc-cd.on { border-left-color: var(--laranja); }
+.dc-cdh { display: flex; align-items: center; justify-content: space-between; gap: 8px; } .dc-cdh .btn { height: 34px; }
+.dc-lin { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 36px; gap: 8px; align-items: end; }
+.dc-lin label { display: grid; gap: 3px; min-width: 0; } .dc-lin span { font-size: 11.5px; font-weight: 600; color: #5d6874; }
+.dc-lin .dc-in { height: 38px; font-weight: 600; color: var(--marinho); padding: 0 8px; }
+.dc-lx { height: 38px; border: 1px solid #d6dbe1; border-radius: 7px; background: #fff; color: #b3261e; font-weight: 700; cursor: pointer; }
+.dc-add { border: 1.5px dashed #b7c0ca; border-radius: 7px; height: 36px; background: #fff; color: var(--laranja); font-weight: 600; cursor: pointer; font: inherit; font-weight: 600; }
+.dc-tam { display: grid; gap: 4px; } .dc-tam > span { font-size: 11.5px; font-weight: 600; color: #5d6874; }
+.dc-tam > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #d6dbe1; border-radius: 7px; overflow: hidden; }
+.dc-tam button { height: 34px; border: 0; border-left: 1px solid #d6dbe1; background: #fff; color: #5d6874; font: inherit; font-weight: 600; font-size: 13px; cursor: pointer; } .dc-tam button:first-child { border-left: 0; }
+.dc-tam button[aria-pressed="true"] { background: #fdeee6; color: var(--marinho); }
+.dc-sd2 > .btn { height: 40px; justify-content: center; }
+.dc-tip { font-size: 12.5px; color: #5d6874; line-height: 1.5; background: #eef1f4; border-radius: 8px; padding: 10px 12px; }
+.dc-ft.p2 { grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; }
+.dc-okt { color: #1e7b4f; } .dc-wt { color: #b5410f; } .btn.dc-conf { color: #b3261e !important; border-color: #b3261e !important; }
+@media (max-width: 1100px) { .dc-l2 { grid-template-columns: 130px minmax(0, 1fr); } .dc-sd2 { grid-column: 1 / -1; border-left: 0; border-top: 1px solid #d6dbe1; } }
+.dc-busy { position: absolute; inset: 0; background: rgba(255, 255, 255, .75); display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 600; color: var(--marinho); z-index: 5; }
+.dc-spin { width: 22px; height: 22px; border-radius: 50%; border: 3px solid #d6dbe1; border-top-color: var(--laranja); animation: dcspin .8s linear infinite; } @keyframes dcspin { to { transform: rotate(360deg); } }
+@media (max-width: 900px) { .dc-it { grid-template-columns: 20px 54px minmax(0, 1fr); } .dc-it .dc-lk, .dc-it .dc-ac { grid-column: 2 / -1; justify-content: flex-start; } .dc-l3 { grid-template-columns: minmax(0, 1fr); } .dc-sd { border-left: 0; border-top: 1px solid #d6dbe1; } .dc-ft { grid-template-columns: minmax(0, 1fr); } }
+</style>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Certificado de Qualidade – Aços Vital</title>
@@ -819,6 +905,7 @@ html.ws-semprev .ws-faixa { display: flex; flex-direction: column; align-items: 
     <button type="button" class="btn primary" id="btnPdf">Salvar PDF</button>
     <button type="button" class="btn primary" id="btnXlsx">Salvar Excel</button>
     <button type="button" class="btn secondary" id="btnUsina" title="PDF do certificado (todas as folhas) com os PDFs dos certificados da usina no fim, num arquivo só">PDF + usina…</button>
+    <button type="button" class="btn secondary" id="btnDoc" title="Nota fiscal + certificado Aços Vital + certificados de origem, nesta ordem, num PDF só, com o nome padrão">Documento completo…</button>
     <button type="button" class="btn secondary" id="btnConferir" title="Lista o que falta e os valores fora da faixa das normas, com o atalho para cada célula">Conferir</button>
     <button type="button" class="btn secondary" id="btnNovo">Novo certificado</button>
     <div class="panel-gap"></div>
@@ -4091,6 +4178,449 @@ async function juntarUsina(arquivos) {
   });
 }
 
+/* ---------- v85: "Documento completo" = NF + certificado Aços Vital + certificados de origem, nesta ordem, num PDF só ----------
+   Passo 1: arquivos e ordem · Passo 2 (v86): etiquetas de rastreabilidade · Passo 3: conferir e salvar.
+   Nada é guardado na Central: os arquivos ficam só nesta tela até salvar. */
+const DC = { ov: null, passo: 1, nf: null, cert: null, orig: [], nome: '', nomeMexido: false, final: null, finalPdf: null, sel: 0, arr: -1, cur: null, selE: null, simb: null };
+const DC_STOP = new Set(['ESTALEIRO', 'ESTALEIROS', 'COMERCIO', 'COMÉRCIO', 'INDUSTRIA', 'INDÚSTRIA', 'CIA', 'COMPANHIA', 'CONSTRUCAO', 'CONSTRUÇÃO', 'CONSTRUTORA', 'EMPRESA', 'GRUPO', 'DE', 'DA', 'DO', 'DOS', 'DAS', 'E', 'THE', 'A', 'O']);
+function dcCliCurto(cli) {
+  const P = cleanText(cli || '').toUpperCase().replace(/[^\wÀ-Ú0-9 ]+/g, ' ').split(/\s+/).filter(Boolean);
+  const i = P.findIndex(w => !DC_STOP.has(w));
+  if (i < 0) return '';
+  return P[i] + (P[i + 1] && /^\d+$/.test(P[i + 1]) ? P[i + 1] : '');   /* POLAR 1 → POLAR1 */
+}
+const dcNfDig = () => cleanText(state.v[REF_NF] || '').replace(/\D+/g, '');
+function dcNomePadrao() {
+  const nf = dcNfDig(), cli = dcCliCurto(state.v[REF_CLIENTE]);
+  const base = nf ? `NF ${nf} Documentação Completa` : `${nomeArquivo(state) || 'Certificado'} Documentação Completa`;
+  return limparNome(base + (cli ? '_' + cli : '')) + '.pdf';
+}
+const dcTam = b => (b >= 1048576 ? (b / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB');
+const dcEsc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+async function dcPdfJs(bytes) {
+  const lib = await carregarPdfJs();
+  return lib.getDocument({ data: bytes.slice(0), isEvalSupported: false, useSystemFonts: true, verbosity: 0 }).promise;
+}
+async function dcRender(pdf, n, w) {
+  const p = await pdf.getPage(n), v0 = p.getViewport({ scale: 1 }), k = (w / v0.width) * Math.min(2, window.devicePixelRatio || 1);
+  const vp = p.getViewport({ scale: k }), c = document.createElement('canvas');
+  c.width = Math.ceil(vp.width); c.height = Math.ceil(vp.height);
+  const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
+  await p.render({ canvasContext: g, viewport: vp }).promise;
+  return c.toDataURL('image/jpeg', 0.82);
+}
+/* foto vira uma página de PDF (A4 em pé ou deitado, conforme a foto) */
+async function dcFotoPdf(file) {
+  const lib = await carregarPdfLib();
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+    const c = document.createElement('canvas'), mx = 2400, k = Math.min(1, mx / Math.max(img.naturalWidth, img.naturalHeight));
+    c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+    const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
+    const jpg = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.88));
+    const doc = await lib.PDFDocument.create(), em = await doc.embedJpg(await jpg.arrayBuffer());
+    const deitada = c.width > c.height, W = deitada ? 841.89 : 595.28, H = deitada ? 595.28 : 841.89, m = 18;
+    const s = Math.min((W - 2 * m) / c.width, (H - 2 * m) / c.height), pg = doc.addPage([W, H]);
+    pg.drawImage(em, { x: (W - c.width * s) / 2, y: (H - c.height * s) / 2, width: c.width * s, height: c.height * s });
+    return new Uint8Array(await doc.save());
+  } finally { URL.revokeObjectURL(url); }
+}
+async function dcLer(file) {
+  const pdf = /pdf$/i.test(file.type) || /\.pdf$/i.test(file.name);
+  if (!pdf && !/^image\//i.test(file.type)) throw new Error('só PDF ou foto');
+  const bytes = pdf ? new Uint8Array(await file.arrayBuffer()) : await dcFotoPdf(file);
+  const doc = await dcPdfJs(bytes);
+  return { nome: file.name || 'arquivo.pdf', tam: file.size || bytes.length, bytes, pags: doc.numPages, thumb: await dcRender(doc, 1, 120), doc, foto: !pdf };
+}
+/* a NF do certificado aparece no PDF da nota? (DANFE gerada pelo sistema tem texto; escaneada não) */
+async function dcConfereNf(o) {
+  const nf = dcNfDig();
+  if (!nf) return { st: 'sem', txt: 'o certificado está sem nº de NF' };
+  let t = '';
+  try { for (let i = 1; i <= Math.min(2, o.doc.numPages); i++) { const p = await o.doc.getPage(i); t += ' ' + (await p.getTextContent()).items.map(x => x.str).join(' '); } }
+  catch (e) { t = ''; }
+  if (!t.replace(/\s+/g, '')) return { st: 'ler', txt: `não deu para ler o PDF (escaneado): confira a NF ${nf} na tela` };
+  const re = new RegExp('(^|[^\\d.])' + nf.split('').join('[.\\s]?') + '(?![\\d])');
+  return re.test(t) ? { st: 'ok', txt: `NF ${nf} confere com o certificado` } : { st: 'aviso', txt: `não achei a NF ${nf} neste PDF` };
+}
+function dcFechar() { if (DC.ov) { DC.ov.remove(); DC.ov = null; document.removeEventListener('keydown', dcTecla, true); } }
+const dcTemEtq = () => DC.orig.some(o => Object.values(o.etq || {}).some(L => L.length));
+function dcTecla(e) { if (e.key === 'Escape' && DC.ov && !DC.ov.querySelector('.dc-busy') && !dcTemEtq()) { e.preventDefault(); dcFechar(); } }   /* com etiquetas postas, o Esc não fecha */
+function dcVer(bytes) {
+  const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+  const w = window.open(url, '_blank'); if (!w) toast('O navegador bloqueou a janela nova.', true);
+  setTimeout(() => URL.revokeObjectURL(url), 120000);
+}
+async function abrirDocCompleto() {
+  if (!nomeArquivo(state)) { await exigirNumero('Documento completo'); return; }
+  dcFechar();
+  Object.assign(DC, { passo: 1, nf: null, cert: null, orig: [], nome: dcNomePadrao(), nomeMexido: false, final: null, finalPdf: null, sel: 0, arr: -1, cur: null, selE: null });
+  const ov = document.createElement('div'); ov.className = 'dc-ov'; DC.ov = ov; document.body.appendChild(ov);
+  document.addEventListener('keydown', dcTecla, true);
+  dcDesenhar();
+  try {
+    const certs = doc.certs.length > 1 ? doc.certs : [state];
+    const bytes = new Uint8Array(await buildPdf(certs).arrayBuffer()), d = await dcPdfJs(bytes);
+    DC.cert = { nome: (certs.length > 1 ? nomeConjunto() : nomeArquivo(state)) + '.pdf', bytes, pags: d.numPages, thumb: await dcRender(d, 1, 120), doc: d };
+  } catch (e) { console.error(e); DC.cert = { erro: String(e && e.message || e) }; }
+  if (DC.ov === ov) dcDesenhar();
+}
+function dcDesenhar() {
+  const ov = DC.ov; if (!ov) return;
+  const certNum = cleanText(state.v[REF_NUMERO] || ''), cli = cleanText(state.v[REF_CLIENTE] || '');
+  const passos = [['Arquivos e ordem', 1], ['Etiquetas nos certificados de origem', 2], ['Conferir e salvar', 3]].map(([t, n]) => `<div class="${DC.passo === n ? 'on' : ''}${n === 2 && !DC.orig.length ? ' off' : ''}"><b>${n}</b><span>${t}${n === 2 && !DC.orig.length ? '<small>sem certificado de origem</small>' : ''}</span></div>`).join('');
+  const it = (o, extra, acts, grip, i) => `<div class="dc-it"${grip ? ` draggable="true" data-i="${i}"` : ''}><span class="dc-g" aria-hidden="true">${grip ? '⋮⋮' : ''}</span>${o && o.thumb ? `<img src="${o.thumb}" alt="">` : '<span class="dc-th0"></span>'}<div class="dc-nm">${dcEsc(o ? o.nome : '')}<small>${o && o.pags ? `${o.pags} página${o.pags > 1 ? 's' : ''}` : ''}${o && o.tam ? ' · ' + dcTam(o.tam) : ''}${o && o.foto ? ' · foto' : ''}</small></div><div class="dc-lk">${extra || ''}</div><div class="dc-ac">${acts || ''}</div></div>`;
+  let corpo;
+  if (DC.passo === 1) {
+    const nfTag = DC.nf && DC.nf.conf ? `<span class="dc-tag ${DC.nf.conf.st === 'ok' ? '' : 'w'}">${DC.nf.conf.st === 'ok' ? '✓ ' : '⚠ '}${dcEsc(DC.nf.conf.txt)}</span>` : '';
+    const ct = DC.cert ? (DC.cert.erro ? `<span class="dc-tag w">⚠ não deu para gerar: ${dcEsc(DC.cert.erro)}</span>` : `<span class="dc-tag">✓ ${(doc.certs.length > 1 ? doc.certs.length + ' folhas' : '1 folha')}${(typeof iogpAtivo === 'function' && iogpAtivo(state)) ? ' · IOGP S-563' : ''}</span>`) : '<span class="dc-mut">gerando…</span>';
+    corpo = `<div class="dc-bd">
+      <div class="dc-grp"><div class="dc-gh"><span class="n">1</span>Nota fiscal <small>PDF da DANFE</small><div class="r"><button type="button" class="btn secondary" data-dc="nf">${DC.nf ? 'Trocar' : 'Escolher PDF da nota'}</button></div></div>
+        ${DC.nf ? it(DC.nf, nfTag, '<button type="button" class="btn secondary" data-dc="ver-nf">Ver</button><button type="button" class="btn secondary dc-x" data-dc="tira-nf">Tirar</button>') : '<div class="dc-drop" data-drop="nf">Arraste aqui o PDF da nota fiscal, ou use "Escolher PDF da nota".</div>'}</div>
+      <div class="dc-grp"><div class="dc-gh"><span class="n">2</span>Certificado Aços Vital <small>sai pronto deste certificado (o mesmo do "Salvar PDF")</small></div>
+        ${it(DC.cert && !DC.cert.erro ? DC.cert : { nome: (nomeArquivo(state) || 'Certificado') + '.pdf' }, ct, DC.cert && DC.cert.bytes ? '<button type="button" class="btn secondary" data-dc="ver-cert">Ver</button>' : '')}</div>
+      <div class="dc-grp"><div class="dc-gh"><span class="n">3</span>Certificados de origem <small>${DC.orig.length > 1 ? 'arraste para mudar a ordem' : 'da usina ou do fornecedor'}</small><div class="r"><button type="button" class="btn accent" data-dc="orig">+ Adicionar PDF ou foto</button></div></div>
+        <div class="dc-ol">${DC.orig.map((o, i) => it(o, '', `<button type="button" class="btn secondary" data-dc="ver-o" data-i="${i}">Ver</button><button type="button" class="btn secondary dc-x" data-dc="tira-o" data-i="${i}">Tirar</button>`, DC.orig.length > 1, i)).join('')}</div>
+        <div class="dc-drop" data-drop="orig">Arraste aqui os certificados de origem (PDF ou foto). Pode escolher vários de uma vez.</div></div>
+      <input type="file" id="dc-fnf" accept=".pdf,application/pdf,image/*" hidden><input type="file" id="dc-for" accept=".pdf,application/pdf,image/*" multiple hidden></div>`;
+  } else if (DC.passo === 2) {
+    corpo = dcCorpo2();
+  } else {
+    const F = DC.final, nfC = DC.nf && DC.nf.conf;
+    const ck = [['ok', 'Ordem: NF, certificado Aços Vital, certificados de origem'],
+      DC.nf ? [nfC && nfC.st === 'ok' ? 'ok' : 'aviso', nfC ? nfC.txt : 'nota fiscal anexada'] : ['aviso', 'sem o PDF da nota fiscal'],
+      DC.orig.length ? ['ok', `${DC.orig.length} certificado${DC.orig.length > 1 ? 's' : ''} de origem`] : ['aviso', 'nenhum certificado de origem'],
+      ...dcChecaEtq()];
+    const host = wsHost();
+    corpo = `<div class="dc-l3"><div class="dc-strip">${F ? `<div class="dc-pgs">${F.thumbs.map((t, i) => `<button type="button" class="dc-pg${i === DC.sel ? ' on' : ''}" data-dc="pg" data-i="${i}"><img src="${t.img}" alt=""><span><i>${i + 1}</i>${dcEsc(t.rot)}</span></button>`).join('')}</div>
+        <div class="dc-big">${F.big ? `<img src="${F.big}" alt="Página ${DC.sel + 1}">` : '<span class="dc-mut">carregando…</span>'}</div>` : '<div class="dc-mut" style="padding:30px">Montando o PDF…</div>'}</div>
+      <div class="dc-sd"><h3>Conferir</h3>
+        <div class="dc-kv"><span>Páginas</span><b>${F ? F.pags : '—'}</b><span>Tamanho</span><b>${F ? '≈ ' + dcTam(F.bytes.length) : '—'}</b></div>
+        <div class="dc-ck">${ck.map(([s, t]) => `<div class="${s}"><i>${s === 'ok' ? '✓' : s === 'aviso' ? '⚠' : '·'}</i>${dcEsc(t)}</div>`).join('')}</div>
+        <label class="dc-fl"><span>Nome do arquivo</span><input id="dc-nome" class="dc-in" value="${dcEsc(DC.nome)}" spellcheck="false"></label>
+        ${host && host.acao ? '<label class="dc-op"><input type="checkbox" id="dc-log" checked><span>Registrar no histórico do certificado quem gerou e quando (o PDF não fica guardado na Central)</span></label>' : ''}
+        <button type="button" class="btn primary dc-save" data-dc="salvar" ${F ? '' : 'disabled'}>Salvar PDF completo</button>
+        <span class="dc-mut">Clique numa página para ver grande. Para mudar uma etiqueta, volte ao passo 2.</span></div></div>`;
+  }
+  const pe = DC.passo === 1
+    ? `<label class="dc-fn"><span>Nome do arquivo</span><input id="dc-nome" class="dc-in" value="${dcEsc(DC.nome)}" spellcheck="false"></label><button type="button" class="btn secondary" data-dc="fechar">Cancelar</button><button type="button" class="btn primary" data-dc="${DC.orig.length ? 'ir2' : 'ir3'}" ${DC.cert && DC.cert.bytes ? '' : 'disabled'}>${DC.orig.length ? 'Próximo: etiquetas →' : 'Próximo: conferir →'}</button>`
+    : DC.passo === 2
+    ? `<button type="button" class="btn secondary" data-dc="ir1">← Voltar</button><span class="dc-mut" style="text-align:center"><b class="${dcComEtq() === DC.orig.length ? 'dc-okt' : 'dc-wt'}">${dcComEtq()} de ${DC.orig.length}</b> certificado${DC.orig.length > 1 ? 's' : ''} de origem com etiqueta</span><button type="button" class="btn secondary" data-dc="fechar">Cancelar</button><button type="button" class="btn primary" data-dc="ir3">Próximo: conferir →</button>`
+    : `<button type="button" class="btn secondary" data-dc="${DC.orig.length ? 'ir2' : 'ir1'}">← Voltar</button><span></span><button type="button" class="btn secondary" data-dc="fechar">Cancelar</button>`;
+  ov.innerHTML = `<div class="dc-dlg" role="dialog" aria-modal="true" aria-label="Documento completo">
+    <div class="dc-dh"><h2>Documento completo</h2><span class="dc-mut">NF + certificado Aços Vital + certificados de origem, nesta ordem</span><span class="dc-cli">${dcEsc(cli)}${certNum ? ' · certificado ' + dcEsc(certNum) : ''}</span><button type="button" class="dc-close" data-dc="fechar" aria-label="Fechar">✕</button></div>
+    <div class="dc-steps">${passos}</div>${corpo}<div class="dc-ft${DC.passo === 1 ? '' : DC.passo === 2 ? ' p2' : ' p3'}">${pe}</div></div>`;
+  dcLigar(); if (DC.passo === 2) dcLigar2();
+}
+function dcLigar() {
+  const ov = DC.ov; if (!ov) return;
+  const nm = ov.querySelector('#dc-nome'); if (nm) nm.oninput = () => { DC.nome = nm.value; DC.nomeMexido = true; };
+  const fnf = ov.querySelector('#dc-fnf'), fo = ov.querySelector('#dc-for');
+  if (fnf) fnf.onchange = () => { const f = fnf.files[0]; fnf.value = ''; if (f) dcPorNf(f); };
+  if (fo) fo.onchange = () => { const fs = [...fo.files]; fo.value = ''; if (fs.length) dcPorOrig(fs); };
+  ov.querySelectorAll('[data-drop]').forEach(z => {
+    z.ondragover = e => { if (e.dataTransfer && [...e.dataTransfer.types].includes('Files')) { e.preventDefault(); z.classList.add('on'); } };
+    z.ondragleave = () => z.classList.remove('on');
+    z.ondrop = e => { e.preventDefault(); z.classList.remove('on'); const fs = [...((e.dataTransfer || {}).files || [])]; if (!fs.length) return; if (z.dataset.drop === 'nf') dcPorNf(fs[0]); else dcPorOrig(fs); };
+  });
+  ov.querySelectorAll('.dc-it[draggable]').forEach(r => {
+    r.ondragstart = e => { DC.arr = +r.dataset.i; r.classList.add('arr'); try { e.dataTransfer.setData('text/plain', r.dataset.i); e.dataTransfer.effectAllowed = 'move'; } catch (x) { /* ok */ } };
+    r.ondragend = () => { DC.arr = -1; r.classList.remove('arr'); };
+    r.ondragover = e => { if (DC.arr >= 0) { e.preventDefault(); r.classList.add('alvo'); } };
+    r.ondragleave = () => r.classList.remove('alvo');
+    r.ondrop = e => { if (DC.arr < 0) return; e.preventDefault(); const de = DC.arr, para = +r.dataset.i; DC.arr = -1; if (de !== para) { const [o] = DC.orig.splice(de, 1); DC.orig.splice(para, 0, o); } dcDesenhar(); };
+  });
+  ov.onclick = async e => {
+    const b = e.target.closest('[data-dc]'); if (!b) { if (e.target === ov) { /* clique fora não fecha: não perder os arquivos */ } return; }
+    const a = b.dataset.dc, i = +b.dataset.i;
+    if (a === 'fechar') {   /* com etiquetas postas, pede para clicar de novo */
+      if (dcTemEtq() && b.dataset.conf !== '1') { b.dataset.conf = '1'; const t0 = b.textContent; b.textContent = b.classList.contains('dc-close') ? '?' : 'Fechar sem salvar?'; b.classList.add('dc-conf'); setTimeout(() => { if (b.isConnected) { b.dataset.conf = ''; b.textContent = t0; b.classList.remove('dc-conf'); } }, 4000); return; }
+      dcFechar();
+    }
+    else if (await dcAcao2(a, b)) { /* passo 2 */ }
+    else if (a === 'ir2') dcIr2();
+    else if (a === 'nf') ov.querySelector('#dc-fnf').click();
+    else if (a === 'orig') ov.querySelector('#dc-for').click();
+    else if (a === 'tira-nf') { DC.nf = null; dcAtuNome(); dcDesenhar(); }
+    else if (a === 'tira-o') { DC.orig.splice(i, 1); dcDesenhar(); }
+    else if (a === 'ver-nf') dcVer(DC.nf.bytes);
+    else if (a === 'ver-cert') dcVer(DC.cert.bytes);
+    else if (a === 'ver-o') dcVer(DC.orig[i].bytes);
+    else if (a === 'ir1') { DC.passo = 1; dcDesenhar(); }
+    else if (a === 'ir2b') dcIr2();
+    else if (a === 'ir3') dcIr3();
+    else if (a === 'pg') dcVerPagina(i);
+    else if (a === 'salvar') dcSalvar(b);
+  };
+}
+function dcAtuNome() { if (!DC.nomeMexido) DC.nome = dcNomePadrao(); }
+async function dcComBusy(txt, fn) {
+  const ov = DC.ov; if (!ov) return;
+  const b = document.createElement('div'); b.className = 'dc-busy'; b.innerHTML = `<span class="dc-spin"></span>${dcEsc(txt)}`; ov.querySelector('.dc-dlg').appendChild(b);
+  try { await fn(); } catch (e) { console.error(e); toast('Não foi possível: ' + (e && e.message ? e.message : e), true); } finally { b.remove(); }
+}
+async function dcPorNf(f) {
+  await dcComBusy('Lendo a nota fiscal…', async () => {
+    try { const o = await dcLer(f); o.conf = await dcConfereNf(o); DC.nf = o; }
+    catch (e) { toast(`${f.name}: não deu para abrir (${e && e.message ? e.message : e}).`, true); }
+  });
+  dcDesenhar();
+}
+async function dcPorOrig(fs) {
+  await dcComBusy(`Lendo ${fs.length > 1 ? fs.length + ' arquivos' : 'o arquivo'}…`, async () => {
+    for (const f of fs) { try { DC.orig.push(await dcLer(f)); } catch (e) { toast(`${f.name}: não deu para abrir (${e && e.message ? e.message : e}).`, true); } }
+  });
+  dcDesenhar();
+}
+async function dcMontar() {
+  const lib = await carregarPdfLib(), out = await lib.PDFDocument.create(), rot = [];
+  const partes = [...(DC.nf ? [[DC.nf, 'Nota fiscal']] : []), [DC.cert, 'Certificado Aços Vital'], ...DC.orig.map((o, i) => [o, DC.orig.length > 1 ? `Origem ${i + 1}` : 'Certificado de origem', true])];
+  if (DC.orig.some(o => o.etq)) { await dcFontes(); DC.simb = DC.simb || await dcSimb(); }
+  const falhas = [];
+  for (const [o, r, orig] of partes) {
+    try {
+      const src = await lib.PDFDocument.load(o.bytes, { ignoreEncryption: true });
+      const pgs = await out.copyPages(src, src.getPageIndices());
+      pgs.forEach((p, k) => { out.addPage(p); rot.push(r + (pgs.length > 1 ? ` · p. ${k + 1}` : '')); });
+      if (orig) await dcCarimbar(lib, out, pgs, o);   /* v86: etiquetas */
+    } catch (e) { console.error(e); falhas.push(o.nome); }
+  }
+  out.setTitle(DC.nome.replace(/\.pdf$/i, '')); out.setCreator('Certificado de Qualidade – Aços Vital'); out.setProducer('Aços Vital');
+  return { bytes: new Uint8Array(await out.save()), rot, falhas };
+}
+async function dcIr2() {
+  if (!DC.orig.length) { dcIr3(); return; }
+  let pronto = false;
+  await dcComBusy('Abrindo os certificados de origem…', async () => { await dcPrepPasso2(); pronto = true; });
+  if (pronto) { DC.passo = 2; dcDesenhar(); }
+}
+function dcChecaEtq() {
+  if (!DC.orig.length) return [];
+  const n = dcComEtq(), C = new Set(dcCorridas().map(dcNorm)), vaz = [], fora = [];
+  DC.orig.forEach(o => Object.values(o.etq || {}).forEach(L => L.forEach(e => e.lin.forEach(r => { if (!cleanText(r.lote || '').trim() || !cleanText(r.cor || '').trim()) vaz.push(1); else if (C.size && !C.has(dcNorm(r.cor))) fora.push(cleanText(r.cor).trim()); }))));
+  const out = [[n === DC.orig.length ? 'ok' : 'aviso', `${n} de ${DC.orig.length} certificado${DC.orig.length > 1 ? 's' : ''} de origem com etiqueta`]];
+  if (vaz.length) out.push(['aviso', `${vaz.length} linha${vaz.length > 1 ? 's' : ''} de etiqueta com lote ou corrida em branco`]);
+  if (fora.length) out.push(['aviso', `corrida ${[...new Set(fora)].join(', ')} não está no certificado Aços Vital`]);
+  else if (n && !vaz.length && C.size) out.push(['ok', 'Corridas das etiquetas iguais às do certificado Aços Vital']);
+  return out;
+}
+async function dcIr3() {
+  DC.passo = 3; DC.final = null; DC.sel = 0; dcDesenhar();
+  await dcComBusy('Montando o PDF completo…', async () => {
+    const m = await dcMontar(), d = await dcPdfJs(m.bytes), thumbs = [];
+    for (let i = 1; i <= Math.min(d.numPages, 60); i++) thumbs.push({ img: await dcRender(d, i, 110), rot: m.rot[i - 1] || '' });
+    DC.final = { bytes: m.bytes, pags: d.numPages, thumbs, big: await dcRender(d, 1, 640), doc: d };
+    if (m.falhas.length) toast('Não deu para juntar: ' + m.falhas.join(', '), true);
+  });
+  dcDesenhar();
+}
+async function dcVerPagina(i) {
+  if (!DC.final) return; DC.sel = i; DC.final.big = null; dcDesenhar();
+  try { DC.final.big = await dcRender(DC.final.doc, i + 1, 640); } catch (e) { /* fica sem */ }
+  dcDesenhar();
+}
+async function dcSalvar(btn) {
+  if (!DC.final || btn.disabled) return;
+  let nome = cleanText(DC.nome || '').trim() || dcNomePadrao();
+  if (!/\.pdf$/i.test(nome)) nome += '.pdf';
+  const log = DC.ov.querySelector('#dc-log'), querLog = !!(log && log.checked);
+  btn.disabled = true;
+  try {
+    const salvo = await saveFile(async () => new Blob([DC.final.bytes], { type: 'application/pdf' }), nome, TIPO_PDF);
+    if (!salvo) { btn.disabled = false; return; }
+    if (querLog) { try { const h = wsHost(); const ne = DC.orig.reduce((n, o) => n + Object.values(o.etq || {}).reduce((m, L) => m + L.length, 0), 0); if (h && h.acao) h.acao('log', `Documento completo salvo: ${salvo} · ${DC.final.pags} página(s)${DC.nf ? ' · com a NF' : ' · sem a NF'} · ${DC.orig.length} certificado(s) de origem · ${ne} etiqueta(s)`); } catch (e) { /* só o histórico */ } }
+    toast(`Documento completo salvo: ${salvo} (${DC.final.pags} páginas)`);
+    dcFechar();
+  } catch (e) { console.error(e); toast('Não foi possível salvar: ' + (e && e.message ? e.message : e), true); btn.disabled = false; }
+}
+
+/* ---------- v86: etiqueta de rastreabilidade (C2 com a faixa laranja) nos certificados de origem ----------
+   Cada etiqueta: posição e largura em pontos da página como ela aparece na tela (x, y do canto de cima à esquerda),
+   e de 1 a 6 linhas "lote Aços Vital + corrida da usina". A etiqueta é desenhada num canvas (300 dpi) e entra no PDF
+   como imagem, já de pé mesmo em página girada. */
+const DC_SIMB = 'data:image/png;base64,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';
+const DC_LMAX = 6, DC_TAM = { P: 180, M: 228, G: 280 };
+let dcSimbImg = null;
+function dcSimb() { if (!dcSimbImg) { dcSimbImg = new Image(); dcSimbImg.src = DC_SIMB; } return dcSimbImg.complete ? Promise.resolve(dcSimbImg) : new Promise(r => { dcSimbImg.onload = () => r(dcSimbImg); dcSimbImg.onerror = () => r(null); }); }
+async function dcFontes() {
+  if (!document.fonts || !document.fonts.load) return;
+  try { await Promise.race([Promise.all(['700 14px "Barlow Condensed"', '600 10px "IBM Plex Sans"', '500 16px "IBM Plex Mono"'].map(f => document.fonts.load(f))), new Promise(r => setTimeout(r, 1500))]); } catch (e) { /* usa a letra que tiver */ }
+}
+const dcEtqAlt = n => (n <= 1 ? 112 : 30 + 6 + 13 + n * 26 + 3 + 22);   /* altura na base de 300 de largura */
+function dcEtqCanvas(lin, px, simb) {
+  const n = Math.max(1, lin.length), H = dcEtqAlt(n), k = px / 300;
+  const c = document.createElement('canvas'); c.width = Math.round(300 * k); c.height = Math.round(H * k);
+  const g = c.getContext('2d'); g.scale(k, k);
+  const AZ = '#02203A', OR = '#E85D22', CZ = '#5a6b7d', LN = '#c9d1da';
+  const rr = (x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); };
+  const sp = (v) => { try { g.letterSpacing = v; } catch (e) { /* navegador sem espaçamento */ } };
+  const txt = (s, x, y, font, cor, ls, al, maxW) => {
+    g.font = font; g.fillStyle = cor; sp(ls || '0px'); g.textAlign = al || 'left'; g.textBaseline = 'alphabetic';
+    if (maxW && g.measureText(s).width > maxW) { const m = /(\d+(?:\.\d+)?)px/.exec(font), z = m ? +m[1] : 16; const z2 = Math.max(8, z * maxW / g.measureText(s).width); g.font = font.replace(/(\d+(?:\.\d+)?)px/, z2.toFixed(2) + 'px'); }
+    g.fillText(s, x, y);
+  };
+  g.save(); rr(0.8, 0.8, 298.4, H - 1.6, 10); g.fillStyle = '#fff'; g.fill(); g.clip();
+  g.fillStyle = AZ; g.fillRect(0, 0, 300, 30); g.fillStyle = OR; g.fillRect(0, 27, 300, 3);
+  if (simb) g.drawImage(simb, 10, 4.5, 21 * simb.naturalWidth / simb.naturalHeight, 21);
+  txt('RASTREABILIDADE', 40, 20.5, '700 14px "Barlow Condensed", "Arial Narrow", Arial, sans-serif', '#fff', '2px');
+  txt('AÇOS VITAL', 290, 19.5, '600 10px "IBM Plex Sans", Arial, sans-serif', '#f7b08f', '1px', 'right');
+  const caixa = (x, y, w, h, r) => { rr(x, y, w, h, r); g.fillStyle = '#fff'; g.fill(); g.lineWidth = 1.2; g.strokeStyle = LN; g.stroke(); g.save(); rr(x, y, w, h, r); g.clip(); g.fillStyle = OR; g.fillRect(x, y, 3, h); g.restore(); };
+  const val = (s, x, y, z, maxW) => txt(s || '—', x, y, `700 ${z}px "IBM Plex Mono", Consolas, "Courier New", monospace`, AZ, '0px', 'left', maxW);
+  if (n === 1) {
+    const L = lin[0] || {};
+    caixa(10, 37, 135, 46, 7); caixa(155, 37, 135, 46, 7);
+    txt('LOTE AÇOS VITAL', 19, 52, '600 9px "IBM Plex Sans", Arial, sans-serif', CZ, '0.9px');
+    txt('CORRIDA DA USINA', 164, 52, '600 9px "IBM Plex Sans", Arial, sans-serif', CZ, '0.9px');
+    val(L.lote, 19, 73, 17, 120); val(L.cor, 164, 73, 17, 120);
+  } else {
+    txt('LOTE AÇOS VITAL', 19, 45.5, '600 9px "IBM Plex Sans", Arial, sans-serif', CZ, '0.9px');
+    txt('CORRIDA DA USINA', 164, 45.5, '600 9px "IBM Plex Sans", Arial, sans-serif', CZ, '0.9px');
+    lin.forEach((L, i) => { const y = 49 + i * 26; caixa(10, y, 135, 22, 6); caixa(155, y, 135, 22, 6); val(L.lote, 19, y + 16, 15, 120); val(L.cor, 164, y + 16, 15, 120); });
+  }
+  g.fillStyle = OR; g.fillRect(0, H - 22, 300, 22);
+  g.font = '700 10.5px "IBM Plex Sans", Arial, sans-serif'; sp('1.4px'); const tw = g.measureText('CERTIFICADO APROVADO').width, x0 = 150 - (tw + 14) / 2;
+  g.strokeStyle = '#fff'; g.lineWidth = 1.8; g.lineCap = 'round'; g.lineJoin = 'round'; g.beginPath(); g.moveTo(x0, H - 11); g.lineTo(x0 + 3.2, H - 7.8); g.lineTo(x0 + 9, H - 14.5); g.stroke();
+  txt('CERTIFICADO APROVADO', x0 + 14, H - 7.2, '700 10.5px "IBM Plex Sans", Arial, sans-serif', '#fff', '1.4px');
+  g.restore(); rr(0.8, 0.8, 298.4, H - 1.6, 10); g.lineWidth = 1.6; g.strokeStyle = AZ; g.stroke();
+  return c;
+}
+/* corridas do certificado Aços Vital (coluna Corrida Nº de todas as folhas) e os lotes do pedido (vindos da Central) */
+const dcNorm = s => cleanText(s || '').toUpperCase().replace(/[^A-Z0-9]+/g, '');
+function dcCorridas() {
+  const out = [];
+  for (const c of (doc.certs.length ? doc.certs : [state])) for (const f of FIELDS) if (f.tbl === 'produto' && f.col === 'corrida' && f.item && f.item <= c.itens) { const v = cleanText(c.v[f.ref] || '').trim(); if (v && !out.some(o => dcNorm(o) === dcNorm(v))) out.push(v); }
+  return out;
+}
+function dcLotes() { try { const h = wsHost(); return h && typeof h.lotesAV === 'function' ? (h.lotesAV() || []) : []; } catch (e) { return []; } }
+function dcLotePorCorrida(cor) { const k = dcNorm(cor); if (!k) return ''; const l = dcLotes().find(x => dcNorm(x.corrida) === k); return l ? String(l.id || '') : ''; }
+function dcUsadas() { const u = new Set(); DC.orig.forEach(o => Object.values(o.etq || {}).forEach(L => L.forEach(e => e.lin.forEach(r => { if (r.cor) u.add(dcNorm(r.cor)); })))); return u; }
+/* corrida sugerida: a que aparece no nome do arquivo; senão a primeira sem etiqueta que não está no nome de outro arquivo */
+function dcCorSug(o) {
+  const C = dcCorridas(), us = dcUsadas(), nm = dcNorm(o.nome), noNome = (q, c) => dcNorm(c).length >= 3 && dcNorm(q.nome).includes(dcNorm(c));
+  return C.find(c => noNome(o, c) && !us.has(dcNorm(c))) || C.find(c => !us.has(dcNorm(c)) && !DC.orig.some(q => q !== o && noNome(q, c))) || C.find(c => !us.has(dcNorm(c))) || '';
+}
+function dcSugestao(o) { const cor = dcCorSug(o); return { lote: dcLotePorCorrida(cor), cor }; }
+/* ---------- passo 2: colocar as etiquetas ---------- */
+let dcSeq = 0;
+const dcEtqs = (o, pi) => ((o.etq || (o.etq = {}))[pi] || (o.etq[pi] = []));
+const dcComEtq = () => DC.orig.filter(o => Object.values(o.etq || {}).some(L => L.length)).length;
+async function dcPrepPasso2() {
+  await dcFontes(); const simb = await dcSimb(); DC.simb = simb;
+  for (const o of DC.orig) {
+    o.vp = o.vp || []; o.thumbs = o.thumbs || [];
+    for (let p = 1; p <= o.pags; p++) {
+      if (!o.vp[p - 1]) { const pg = await o.doc.getPage(p), v = pg.getViewport({ scale: 1 }); o.vp[p - 1] = { w: v.width, h: v.height }; }
+      if (!o.thumbs[p - 1]) o.thumbs[p - 1] = p === 1 && o.thumb ? o.thumb : await dcRender(o.doc, p, 120);
+    }
+  }
+  if (!DC.cur || !DC.orig[DC.cur.oi] || DC.cur.pi >= DC.orig[DC.cur.oi].pags) DC.cur = { oi: 0, pi: 0 };
+  await dcBigAtual();
+}
+async function dcBigAtual() {
+  const o = DC.orig[DC.cur.oi]; if (!o) return;
+  o.big = o.big || [];
+  if (!o.big[DC.cur.pi]) o.big[DC.cur.pi] = await dcRender(o.doc, DC.cur.pi + 1, 700);
+}
+function dcEscala() {   /* a página cabe na coluna do meio (em pé até 560 px, deitada até 700 px) */
+  const o = DC.orig[DC.cur.oi], v = o.vp[DC.cur.pi], dw = Math.min(1180, window.innerWidth - 32), livre = dw - (window.innerWidth <= 1100 ? 130 : 500) - 34;
+  const W = Math.max(280, Math.min(v.w >= v.h ? 700 : 560, livre)); return { s: W / v.w, W, H: v.h * W / v.w, v };
+}
+function dcEtqImg(e, px) { return dcEtqCanvas(e.lin, px, DC.simb).toDataURL('image/png'); }
+function dcEtqHTML(e, s) {
+  const w = e.w * s, h = w * dcEtqAlt(e.lin.length) / 300;
+  return `<div class="dc-et${DC.selE === e.id ? ' on' : ''}" data-e="${e.id}" style="left:${(e.x * s).toFixed(1)}px;top:${(e.y * s).toFixed(1)}px;width:${w.toFixed(1)}px;height:${h.toFixed(1)}px"><img src="${dcEtqImg(e, Math.round(w * 2))}" alt="Etiqueta" draggable="false"><span class="dc-rs" data-rs="1" title="Puxe para mudar o tamanho"></span></div>`;
+}
+function dcCorpo2() {
+  const o = DC.orig[DC.cur.oi], L = dcEtqs(o, DC.cur.pi), E = dcEscala();
+  const th = DC.orig.map((q, oi) => Array.from({ length: q.pags }, (_, pi) => { const n = (q.etq && q.etq[pi] || []).length; return `<button type="button" class="dc-t2${oi === DC.cur.oi && pi === DC.cur.pi ? ' on' : ''}" data-dc="p2" data-oi="${oi}" data-pi="${pi}"><img src="${q.thumbs[pi]}" alt=""><b>${dcEsc(q.nome.replace(/\.(pdf|jpe?g|png)$/i, ''))}${q.pags > 1 ? ' · pág. ' + (pi + 1) : ''}</b><span class="${n ? 'ok' : ''}">${n ? `✓ ${n} etiqueta${n > 1 ? 's' : ''}` : 'sem etiqueta'}</span></button>`; }).join('')).join('');
+  const card = (e, k) => `<div class="dc-cd${DC.selE === e.id ? ' on' : ''}" data-card="${e.id}"><div class="dc-cdh"><b>Etiqueta ${k + 1}</b><button type="button" class="btn secondary dc-x" data-dc="etq-" data-e="${e.id}">Remover etiqueta</button></div>
+    ${e.lin.map((r, i) => `<div class="dc-lin"><label><span>Lote Aços Vital</span><input class="dc-in" data-lin="${e.id}:${i}:lote" value="${dcEsc(r.lote)}" placeholder="ex.: AV-26-00004" autocomplete="off"></label><label><span>Corrida da usina</span><input class="dc-in" data-lin="${e.id}:${i}:cor" value="${dcEsc(r.cor)}" autocomplete="off"></label>${e.lin.length > 1 ? `<button type="button" class="dc-lx" data-dc="lin-" data-e="${e.id}" data-k="${i}" title="Tirar esta linha" aria-label="Tirar esta linha">✕</button>` : '<span></span>'}</div>`).join('')}
+    ${e.lin.length < DC_LMAX ? `<button type="button" class="dc-add" data-dc="lin+" data-e="${e.id}">+ Mais um lote / corrida nesta etiqueta</button>` : `<span class="dc-mut">Máximo de ${DC_LMAX} linhas por etiqueta: use outra etiqueta.</span>`}
+    <div class="dc-tam"><span>Tamanho</span><div>${[['P', 'Pequena'], ['M', 'Média'], ['G', 'Grande']].map(([t, l]) => `<button type="button" data-dc="tam" data-e="${e.id}" data-t="${t}" aria-pressed="${Math.abs(e.w - DC_TAM[t]) < 1}">${l}</button>`).join('')}</div></div></div>`;
+  return `<div class="dc-l2"><div class="dc-th2"><div class="dc-cap">Certificados de origem</div>${th}</div>
+    <div class="dc-cv"><span class="dc-hint">${L.length ? 'Arraste a etiqueta para mover · puxe o canto laranja para mudar o tamanho' : 'Clique na página, num lugar em branco, para pôr a etiqueta'}</span>
+      <div class="dc-page" id="dc-page" style="width:${E.W.toFixed(0)}px;height:${E.H.toFixed(0)}px">${o.big && o.big[DC.cur.pi] ? `<img src="${o.big[DC.cur.pi]}" alt="" draggable="false">` : ''}${L.map(e => dcEtqHTML(e, E.s)).join('')}</div></div>
+    <div class="dc-sd2"><h3>Etiquetas nesta página</h3>${L.map(card).join('') || '<p class="dc-mut" style="margin:0">Nenhuma etiqueta nesta página. Clique num lugar em branco da página.</p>'}
+      <button type="button" class="btn secondary" data-dc="etq+">+ ${L.length ? 'Outra etiqueta nesta página' : 'Etiqueta nesta página'}</button>
+      <div class="dc-tip">Um certificado com mais de uma corrida da nota pode ter várias linhas na mesma etiqueta. A Central sugere a corrida do certificado Aços Vital (e o lote, dentro da Central); confira e corrija se precisar.</div></div></div>`;
+}
+function dcNovaEtq(x, y) {
+  const o = DC.orig[DC.cur.oi], v = o.vp[DC.cur.pi], L = dcEtqs(o, DC.cur.pi), sg = dcSugestao(o), w = DC_TAM.M, h = w * dcEtqAlt(1) / 300;
+  let px = x == null ? v.w - w - 24 : x - w / 2, py = y == null ? v.h - h - 24 : y - h / 2;
+  if (x == null) { let k = 0; while (k < 6 && L.some(e => Math.abs(e.y - py) < h && Math.abs(e.x - px) < w)) { py -= h + 10; k++; } }
+  const e = { id: 'e' + (++dcSeq), x: Math.max(0, Math.min(v.w - w, px)), y: Math.max(0, Math.min(v.h - h, py)), w, lin: [sg] };
+  L.push(e); DC.selE = e.id; return e;
+}
+function dcAchaEtq(id) { for (const o of DC.orig) for (const [pi, L] of Object.entries(o.etq || {})) { const i = L.findIndex(e => e.id === id); if (i >= 0) return { o, pi: +pi, L, i, e: L[i] }; } return null; }
+function dcAtuEtqDom(e) {
+  const el = DC.ov && DC.ov.querySelector(`.dc-et[data-e="${e.id}"]`); if (!el) return;
+  const s = dcEscala().s, w = e.w * s, h = w * dcEtqAlt(e.lin.length) / 300;
+  el.style.left = (e.x * s) + 'px'; el.style.top = (e.y * s) + 'px'; el.style.width = w + 'px'; el.style.height = h + 'px';
+  el.querySelector('img').src = dcEtqImg(e, Math.round(w * 2));
+}
+function dcLigar2() {
+  const ov = DC.ov, pg = ov && ov.querySelector('#dc-page'); if (!pg) return;
+  ov.querySelectorAll('[data-lin]').forEach(inp => {
+    inp.oninput = () => { const [id, i, c] = inp.dataset.lin.split(':'), a = dcAchaEtq(id); if (!a) return; a.e.lin[+i][c] = inp.value;
+      if (c === 'cor' && !a.e.lin[+i].loteMexido) { const l = dcLotePorCorrida(inp.value); if (l) { a.e.lin[+i].lote = l; const li = ov.querySelector(`[data-lin="${id}:${i}:lote"]`); if (li) li.value = l; } }
+      if (c === 'lote') a.e.lin[+i].loteMexido = true;
+      clearTimeout(DC.tEtq); DC.tEtq = setTimeout(() => dcAtuEtqDom(a.e), 120); };
+    inp.onfocus = () => { const id = inp.dataset.lin.split(':')[0]; if (DC.selE !== id) { DC.selE = id; ov.querySelectorAll('.dc-et,.dc-cd').forEach(x => x.classList.toggle('on', (x.dataset.e || x.dataset.card) === id)); } };
+  });
+  pg.onpointerdown = ev => {
+    if (ev.button !== 0) return;
+    const E = dcEscala(), r = pg.getBoundingClientRect(), et = ev.target.closest('.dc-et');
+    if (!et) {   /* clique na página: põe uma etiqueta (se a página ainda não tem nenhuma) */
+      const o = DC.orig[DC.cur.oi];
+      if (!dcEtqs(o, DC.cur.pi).length) { dcNovaEtq((ev.clientX - r.left) / E.s, (ev.clientY - r.top) / E.s); dcDesenhar(); }
+      else { DC.selE = null; ov.querySelectorAll('.dc-et.on,.dc-cd.on').forEach(x => x.classList.remove('on')); }
+      return;
+    }
+    ev.preventDefault();
+    const a = dcAchaEtq(et.dataset.e); if (!a) return;
+    DC.selE = a.e.id; ov.querySelectorAll('.dc-et,.dc-cd').forEach(x => x.classList.toggle('on', (x.dataset.e || x.dataset.card) === a.e.id));
+    const rs = !!ev.target.closest('[data-rs]'), v = E.v, x0 = ev.clientX, y0 = ev.clientY, e0 = { x: a.e.x, y: a.e.y, w: a.e.w };
+    try { pg.setPointerCapture(ev.pointerId); } catch (x) { /* ok */ }
+    const mv = m => {
+      const dx = (m.clientX - x0) / E.s, dy = (m.clientY - y0) / E.s;
+      if (rs) { a.e.w = Math.max(120, Math.min(Math.min(420, v.w - a.e.x), e0.w + dx)); const h = a.e.w * dcEtqAlt(a.e.lin.length) / 300; if (a.e.y + h > v.h) a.e.w = (v.h - a.e.y) * 300 / dcEtqAlt(a.e.lin.length); }
+      else { const h = a.e.w * dcEtqAlt(a.e.lin.length) / 300; a.e.x = Math.max(0, Math.min(v.w - a.e.w, e0.x + dx)); a.e.y = Math.max(0, Math.min(v.h - h, e0.y + dy)); }
+      const s = E.s, w = a.e.w * s; et.style.left = (a.e.x * s) + 'px'; et.style.top = (a.e.y * s) + 'px'; et.style.width = w + 'px'; et.style.height = (w * dcEtqAlt(a.e.lin.length) / 300) + 'px';
+    };
+    const up = () => { pg.removeEventListener('pointermove', mv); pg.removeEventListener('pointerup', up); pg.removeEventListener('pointercancel', up); if (rs) dcDesenhar(); };
+    pg.addEventListener('pointermove', mv); pg.addEventListener('pointerup', up); pg.addEventListener('pointercancel', up);
+  };
+}
+async function dcAcao2(a, b) {
+  if (a === 'p2') { DC.cur = { oi: +b.dataset.oi, pi: +b.dataset.pi }; DC.selE = null; await dcComBusy('Abrindo a página…', dcBigAtual); dcDesenhar(); return true; }
+  if (a === 'etq+') { dcNovaEtq(); dcDesenhar(); return true; }
+  const f = b.dataset.e && dcAchaEtq(b.dataset.e);
+  if (a === 'etq-' && f) { f.L.splice(f.i, 1); if (DC.selE === f.e.id) DC.selE = null; dcDesenhar(); return true; }
+  if (a === 'lin+' && f && f.e.lin.length < DC_LMAX) {
+    const cor = dcCorSug(f.o);
+    f.e.lin.push({ lote: dcLotePorCorrida(cor), cor });
+    const v = f.o.vp[f.pi], h = f.e.w * dcEtqAlt(f.e.lin.length) / 300; if (f.e.y + h > v.h) f.e.y = Math.max(0, v.h - h);
+    dcDesenhar(); return true;
+  }
+  if (a === 'lin-' && f && f.e.lin.length > 1) { f.e.lin.splice(+b.dataset.k, 1); dcDesenhar(); return true; }
+  if (a === 'tam' && f) { const v = f.o.vp[f.pi]; f.e.w = DC_TAM[b.dataset.t]; const h = f.e.w * dcEtqAlt(f.e.lin.length) / 300; f.e.x = Math.max(0, Math.min(v.w - f.e.w, f.e.x)); f.e.y = Math.max(0, Math.min(v.h - h, f.e.y)); dcDesenhar(); return true; }
+  return false;
+}
+/* põe as etiquetas nas páginas já copiadas para o PDF final (de pé, mesmo em página girada) */
+async function dcCarimbar(lib, out, pgs, o) {
+  for (const [pi, L] of Object.entries(o.etq || {})) {
+    const page = pgs[+pi]; if (!page || !L.length) continue;
+    const vp = (await o.doc.getPage(+pi + 1)).getViewport({ scale: 1 });
+    for (const e of L) {
+      const h = e.w * dcEtqAlt(e.lin.length) / 300, px = Math.min(1800, Math.round(e.w / 72 * 300));
+      const c = dcEtqCanvas(e.lin, px, DC.simb), img = await out.embedPng(await (await new Promise(r => c.toBlob(r, 'image/png'))).arrayBuffer());
+      const [ax, ay] = vp.convertToPdfPoint(e.x, e.y + h), rot = ((vp.rotation % 360) + 360) % 360;
+      page.drawImage(img, { x: ax, y: ay, width: e.w, height: h, rotate: lib.degrees(rot) });
+    }
+  }
+}
+
 /* ---------- menu do botão direito ---------- */
 let menuEl = null;
 function fecharMenu() { if (menuEl) { menuEl.remove(); menuEl = null; } }
@@ -6377,6 +6907,7 @@ $('btnConferir').addEventListener('click', () => conferirAntes(doc.certs, 'Confe
 $('btnLimites').addEventListener('click', dialogoLimites);
 $('btnLimites').hidden = LYT;
 $('btnIogp').addEventListener('click', iogpAjustar);   /* v77 */
+$('btnDoc').addEventListener('click', () => abrirDocCompleto());   /* v85 */
 $('btnUsina').addEventListener('click', () => { if (!$('btnUsina').classList.contains('busy')) $('usinaInput').click(); });
 $('usinaInput').addEventListener('change', e => { const fs = [...(e.target.files || [])]; e.target.value = ''; if (fs.length) juntarUsina(fs); });
 $('btnNovo').addEventListener('click', novoCertificado);
@@ -7421,6 +7952,7 @@ function wsMenuMais(btn) {
     null,
     [varias ? 'Salvar só o PDF desta folha' : 'Salvar só o PDF', () => $('btnPdf').click()], [varias ? 'Salvar só o Excel desta folha' : 'Salvar só o Excel', () => $('btnXlsx').click()],
     ['PDF com os certificados da usina…', () => $('btnUsina').click()],
+    ['Documento completo (NF + certificado + origem)…', () => abrirDocCompleto()],
     null,
     ...outros.map(t => [`Trocar o modelo para ${TIPOS[t]}`, () => trocar(t)]),
     ...(LYT ? [] : [['Limites das normas…', async () => { await dialogoLimites(); wsRender(); }], ['IOGP S-563…', () => iogpAjustar()]]),
@@ -7949,6 +8481,7 @@ window.__cert = {
   FIELDS, CHECKS, layoutFor, pageSetup,
   conferir, opItem, desfazer, refazerHist, HIST, selCampos, LIMITES, limiteDe, foraDaNorma, carregarPdfLib, juntarUsina, ED,
   WS, htPorItem, htLinhas, htVis, wsRender, wsIrPara, descSugerida, wsEncurtar,
+  dcCliCurto, dcNomePadrao, abrirDocCompleto, dcEtqCanvas, DC,
 };
 })();
 
