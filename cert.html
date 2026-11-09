@@ -45,6 +45,16 @@
 .dc-pg img { width: 110px; height: 150px; object-fit: contain; background: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, .18); outline: 3px solid transparent; outline-offset: 2px; }
 .dc-pg.on img { outline-color: var(--laranja); }
 .dc-pg span { max-width: 120px; text-align: center; } .dc-pg i { font-style: normal; display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--marinho); color: #fff; font-size: 11px; font-weight: 700; margin-right: 5px; }
+.dc-pgw { flex: none; display: grid; gap: 4px; justify-items: center; }
+.dc-pgw .dc-pg span { min-height: 34px; } .dc-pgb { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 116px; }
+.dc-pgg { height: 28px; padding: 0 6px; border: 1px solid #c3ccd6; border-radius: 6px; background: #fff; color: var(--marinho); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+.dc-pgb .dc-pgx { padding: 0 6px; }
+.dc-bar { position: absolute; top: 8px; left: 12px; right: 12px; display: flex; align-items: center; gap: 8px; z-index: 2; } .dc-bar .dc-hint { position: static; transform: none; min-width: 0; flex: 0 1 auto; max-width: none; } .dc-gir { display: flex; gap: 6px; flex: none; margin-left: auto; } .dc-gir .btn { height: 32px; padding: 0 10px; font-size: 13px; }
+.dc-pgx { height: 28px; padding: 0 10px; border: 1px solid #e5b4ae; border-radius: 6px; background: #fff; color: #b3261e; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+.dc-pgx:hover { background: #fdecea; }
+.dc-exl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12.5px; color: #5d6874; }
+.dc-exl span { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px dashed #b7c0ca; border-radius: 6px; padding: 3px 4px 3px 10px; } .dc-exl s { text-decoration-color: #b3261e; }
+.dc-exl button { text-decoration: none; height: 26px; border: 1px solid #c3ccd6; border-radius: 5px; background: #fff; color: var(--marinho); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
 .dc-big { display: grid; place-items: start center; } .dc-big img { max-width: 100%; width: 640px; background: #fff; box-shadow: 0 4px 18px rgba(0, 0, 0, .18); }
 .dc-sd { border-left: 1px solid #d6dbe1; padding: 16px; display: grid; gap: 12px; align-content: start; }
 .dc-sd h3 { margin: 0; font-size: 16px; text-transform: uppercase; letter-spacing: .05em; color: var(--marinho); }
@@ -4181,7 +4191,8 @@ async function juntarUsina(arquivos) {
 /* ---------- v85: "Documento completo" = NF + certificado Aços Vital + certificados de origem, nesta ordem, num PDF só ----------
    Passo 1: arquivos e ordem · Passo 2 (v86): etiquetas de rastreabilidade · Passo 3: conferir e salvar.
    Nada é guardado na Central: os arquivos ficam só nesta tela até salvar. */
-const DC = { ov: null, passo: 1, nf: null, cert: null, orig: [], nome: '', nomeMexido: false, final: null, finalPdf: null, sel: 0, arr: -1, cur: null, selE: null, simb: null };
+let dcUid = 0;
+const DC = { giro: new Map(), excl: new Set(), ov: null, passo: 1, nf: null, cert: null, orig: [], nome: '', nomeMexido: false, final: null, finalPdf: null, sel: 0, arr: -1, cur: null, selE: null, simb: null };
 const DC_STOP = new Set(['ESTALEIRO', 'ESTALEIROS', 'COMERCIO', 'COMÉRCIO', 'INDUSTRIA', 'INDÚSTRIA', 'CIA', 'COMPANHIA', 'CONSTRUCAO', 'CONSTRUÇÃO', 'CONSTRUTORA', 'EMPRESA', 'GRUPO', 'DE', 'DA', 'DO', 'DOS', 'DAS', 'E', 'THE', 'A', 'O']);
 function dcCliCurto(cli) {
   const P = cleanText(cli || '').toUpperCase().replace(/[^\wÀ-Ú0-9 ]+/g, ' ').split(/\s+/).filter(Boolean);
@@ -4201,9 +4212,11 @@ async function dcPdfJs(bytes) {
   const lib = await carregarPdfJs();
   return lib.getDocument({ data: bytes.slice(0), isEvalSupported: false, useSystemFonts: true, verbosity: 0 }).promise;
 }
-async function dcRender(pdf, n, w) {
-  const p = await pdf.getPage(n), v0 = p.getViewport({ scale: 1 }), k = (w / v0.width) * Math.min(2, window.devicePixelRatio || 1);
-  const vp = p.getViewport({ scale: k }), c = document.createElement('canvas');
+const dcRot = (p, g) => (((p.rotate || 0) + (g || 0)) % 360 + 360) % 360;   /* v89: giro da página (0, 90, 180, 270) */
+const dcGiro = (o, k) => (o && DC.giro.get(o.uid + ':' + k)) || 0;
+async function dcRender(pdf, n, w, giro) {
+  const p = await pdf.getPage(n), v0 = p.getViewport({ scale: 1, rotation: dcRot(p, giro) }), k = (w / v0.width) * Math.min(2, window.devicePixelRatio || 1);
+  const vp = p.getViewport({ scale: k, rotation: dcRot(p, giro) }), c = document.createElement('canvas');
   c.width = Math.ceil(vp.width); c.height = Math.ceil(vp.height);
   const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
   await p.render({ canvasContext: g, viewport: vp }).promise;
@@ -4231,7 +4244,7 @@ async function dcLer(file) {
   if (!pdf && !/^image\//i.test(file.type)) throw new Error('só PDF ou foto');
   const bytes = pdf ? new Uint8Array(await file.arrayBuffer()) : await dcFotoPdf(file);
   const doc = await dcPdfJs(bytes);
-  return { nome: file.name || 'arquivo.pdf', tam: file.size || bytes.length, bytes, pags: doc.numPages, thumb: await dcRender(doc, 1, 120), doc, foto: !pdf };
+  return { uid: 'p' + (++dcUid), nome: file.name || 'arquivo.pdf', tam: file.size || bytes.length, bytes, pags: doc.numPages, thumb: await dcRender(doc, 1, 120), doc, foto: !pdf };
 }
 /* a NF do certificado aparece no PDF da nota? (DANFE gerada pelo sistema tem texto; escaneada não) */
 async function dcConfereNf(o) {
@@ -4255,14 +4268,14 @@ function dcVer(bytes) {
 async function abrirDocCompleto() {
   if (!nomeArquivo(state)) { await exigirNumero('Documento completo'); return; }
   dcFechar();
-  Object.assign(DC, { passo: 1, nf: null, cert: null, orig: [], nome: dcNomePadrao(), nomeMexido: false, final: null, finalPdf: null, sel: 0, arr: -1, cur: null, selE: null });
+  Object.assign(DC, { passo: 1, nf: null, cert: null, orig: [], nome: dcNomePadrao(), nomeMexido: false, final: null, finalPdf: null, sel: 0, arr: -1, cur: null, selE: null, excl: new Set(), exclRot: [], giro: new Map() });
   const ov = document.createElement('div'); ov.className = 'dc-ov'; DC.ov = ov; document.body.appendChild(ov);
   document.addEventListener('keydown', dcTecla, true);
   dcDesenhar();
   try {
     const certs = doc.certs.length > 1 ? doc.certs : [state];
     const bytes = new Uint8Array(await buildPdf(certs).arrayBuffer()), d = await dcPdfJs(bytes);
-    DC.cert = { nome: (certs.length > 1 ? nomeConjunto() : nomeArquivo(state)) + '.pdf', bytes, pags: d.numPages, thumb: await dcRender(d, 1, 120), doc: d };
+    DC.cert = { uid: 'cert', nome: (certs.length > 1 ? nomeConjunto() : nomeArquivo(state)) + '.pdf', bytes, pags: d.numPages, thumb: await dcRender(d, 1, 120), doc: d };
   } catch (e) { console.error(e); DC.cert = { erro: String(e && e.message || e) }; }
   if (DC.ov === ov) dcDesenhar();
 }
@@ -4291,9 +4304,10 @@ function dcDesenhar() {
     const ck = [['ok', 'Ordem: NF, certificado Aços Vital, certificados de origem'],
       DC.nf ? [nfC && nfC.st === 'ok' ? 'ok' : 'aviso', nfC ? nfC.txt : 'nota fiscal anexada'] : ['aviso', 'sem o PDF da nota fiscal'],
       DC.orig.length ? ['ok', `${DC.orig.length} certificado${DC.orig.length > 1 ? 's' : ''} de origem`] : ['aviso', 'nenhum certificado de origem'],
-      ...dcChecaEtq()];
+      ...dcChecaEtq(), ...(DC.excl.size ? [['mut', `${DC.excl.size} página${DC.excl.size > 1 ? 's' : ''} excluída${DC.excl.size > 1 ? 's' : ''} do PDF completo`]] : [])];
     const host = wsHost();
-    corpo = `<div class="dc-l3"><div class="dc-strip">${F ? `<div class="dc-pgs">${F.thumbs.map((t, i) => `<button type="button" class="dc-pg${i === DC.sel ? ' on' : ''}" data-dc="pg" data-i="${i}"><img src="${t.img}" alt=""><span><i>${i + 1}</i>${dcEsc(t.rot)}</span></button>`).join('')}</div>
+    corpo = `<div class="dc-l3"><div class="dc-strip">${F ? `<div class="dc-pgs">${F.thumbs.map((t, i) => `<div class="dc-pgw"><button type="button" class="dc-pg${i === DC.sel ? ' on' : ''}" data-dc="pg" data-i="${i}"><img src="${t.img}" alt=""><span><i>${i + 1}</i>${dcEsc(t.rot)}</span></button>${t.k ? `<div class="dc-pgb"><button type="button" class="dc-pgg" data-dc="pggira" data-k="${dcEsc(t.k)}" title="Girar esta página para a direita" aria-label="Girar a página ${i + 1}">↻ Girar</button>${F.pags > 1 ? `<button type="button" class="dc-pgx" data-dc="pgdel" data-k="${dcEsc(t.k)}" title="Excluir esta página do PDF completo" aria-label="Excluir a página ${i + 1}">✕ Excluir</button>` : ''}</div>` : ''}</div>`).join('')}</div>
+        ${(DC.exclRot || []).length ? `<div class="dc-exl"><b>Páginas excluídas:</b>${DC.exclRot.map(x => `<span><s>${dcEsc(x.t)}</s><button type="button" data-dc="pgvolta" data-k="${dcEsc(x.k)}">Voltar</button></span>`).join('')}</div>` : ''}
         <div class="dc-big">${F.big ? `<img src="${F.big}" alt="Página ${DC.sel + 1}">` : '<span class="dc-mut">carregando…</span>'}</div>` : '<div class="dc-mut" style="padding:30px">Montando o PDF…</div>'}</div>
       <div class="dc-sd"><h3>Conferir</h3>
         <div class="dc-kv"><span>Páginas</span><b>${F ? F.pags : '—'}</b><span>Tamanho</span><b>${F ? '≈ ' + dcTam(F.bytes.length) : '—'}</b></div>
@@ -4351,6 +4365,10 @@ function dcLigar() {
     else if (a === 'ir2b') dcIr2();
     else if (a === 'ir3') dcIr3();
     else if (a === 'pg') dcVerPagina(i);
+    else if (a === 'pgdel') { DC.excl.add(b.dataset.k); await dcIr3(true); }   /* v88: excluir página */
+    else if (a === 'pggira') { const k = b.dataset.k; DC.giro.set(k, ((DC.giro.get(k) || 0) + 90) % 360); dcLimpaCache(k); await dcIr3(true); }   /* v89: girar no passo 3 */
+    else if (a === 'gira') { await dcGirarAtual(+b.dataset.g); }
+    else if (a === 'pgvolta') { DC.excl.delete(b.dataset.k); await dcIr3(true); }
     else if (a === 'salvar') dcSalvar(b);
   };
 }
@@ -4381,13 +4399,16 @@ async function dcMontar() {
   for (const [o, r, orig] of partes) {
     try {
       const src = await lib.PDFDocument.load(o.bytes, { ignoreEncryption: true });
-      const pgs = await out.copyPages(src, src.getPageIndices());
-      pgs.forEach((p, k) => { out.addPage(p); rot.push(r + (pgs.length > 1 ? ` · p. ${k + 1}` : '')); });
-      if (orig) await dcCarimbar(lib, out, pgs, o);   /* v86: etiquetas */
+      const todas = src.getPageIndices(), fica = todas.filter(k => !DC.excl.has(o.uid + ':' + k));   /* v88: páginas excluídas no passo 3 */
+      const pgs = await out.copyPages(src, fica), mapa = new Map();
+      pgs.forEach((p, j) => { const k = fica[j], g = DC.giro.get(o.uid + ':' + k) || 0; if (g) p.setRotation(lib.degrees((((p.getRotation().angle || 0) + g) % 360 + 360) % 360)); out.addPage(p); mapa.set(k, p); rot.push({ t: r + (todas.length > 1 ? ` · p. ${k + 1}` : ''), k: o.uid + ':' + k }); });
+      if (orig) await dcCarimbar(lib, out, mapa, o);   /* v86: etiquetas */
     } catch (e) { console.error(e); falhas.push(o.nome); }
   }
+  const exclRot = [];
+  for (const [o, r] of partes) for (let k = 0; k < (o.pags || 0); k++) if (DC.excl.has(o.uid + ':' + k)) exclRot.push({ t: r + ((o.pags || 0) > 1 ? ` · p. ${k + 1}` : ''), k: o.uid + ':' + k });
   out.setTitle(DC.nome.replace(/\.pdf$/i, '')); out.setCreator('Certificado de Qualidade – Aços Vital'); out.setProducer('Aços Vital');
-  return { bytes: new Uint8Array(await out.save()), rot, falhas };
+  return { bytes: new Uint8Array(await out.save()), rot, falhas, exclRot };
 }
 async function dcIr2() {
   if (!DC.orig.length) { dcIr3(); return; }
@@ -4397,7 +4418,7 @@ async function dcIr2() {
 }
 function dcChecaEtq() {
   if (!DC.orig.length) return [];
-  const n = dcComEtq(), C = new Set(dcCorridas().map(dcNorm)), vaz = [], fora = [];
+  const n = dcComEtq(), C = new Set([...dcCorridas().map(dcNorm), ...dcCorridas().map(dcCorN)]), vaz = [], fora = [];
   DC.orig.forEach(o => Object.values(o.etq || {}).forEach(L => L.forEach(e => e.lin.forEach(r => { if (!cleanText(r.lote || '').trim() || !cleanText(r.cor || '').trim()) vaz.push(1); else if (C.size && !C.has(dcNorm(r.cor))) fora.push(cleanText(r.cor).trim()); }))));
   const out = [[n === DC.orig.length ? 'ok' : 'aviso', `${n} de ${DC.orig.length} certificado${DC.orig.length > 1 ? 's' : ''} de origem com etiqueta`]];
   if (vaz.length) out.push(['aviso', `${vaz.length} linha${vaz.length > 1 ? 's' : ''} de etiqueta com lote ou corrida em branco`]);
@@ -4405,12 +4426,14 @@ function dcChecaEtq() {
   else if (n && !vaz.length && C.size) out.push(['ok', 'Corridas das etiquetas iguais às do certificado Aços Vital']);
   return out;
 }
-async function dcIr3() {
-  DC.passo = 3; DC.final = null; DC.sel = 0; dcDesenhar();
+async function dcIr3(manterSel) {
+  const sel0 = DC.sel; DC.passo = 3; DC.final = null; DC.sel = manterSel ? sel0 : 0; dcDesenhar();
   await dcComBusy('Montando o PDF completo…', async () => {
     const m = await dcMontar(), d = await dcPdfJs(m.bytes), thumbs = [];
-    for (let i = 1; i <= Math.min(d.numPages, 60); i++) thumbs.push({ img: await dcRender(d, i, 110), rot: m.rot[i - 1] || '' });
-    DC.final = { bytes: m.bytes, pags: d.numPages, thumbs, big: await dcRender(d, 1, 640), doc: d };
+    for (let i = 1; i <= Math.min(d.numPages, 60); i++) thumbs.push({ img: await dcRender(d, i, 110), rot: (m.rot[i - 1] || {}).t || '', k: (m.rot[i - 1] || {}).k });
+    DC.exclRot = m.exclRot;
+    DC.sel = Math.max(0, Math.min(DC.sel, d.numPages - 1));
+    DC.final = { bytes: m.bytes, pags: d.numPages, thumbs, big: await dcRender(d, DC.sel + 1, 640), doc: d };
     if (m.falhas.length) toast('Não deu para juntar: ' + m.falhas.join(', '), true);
   });
   dcDesenhar();
@@ -4487,6 +4510,12 @@ function dcEtqCanvas(lin, px, simb) {
 }
 /* corridas do certificado Aços Vital (coluna Corrida Nº de todas as folhas) e os lotes do pedido (vindos da Central) */
 const dcNorm = s => cleanText(s || '').toUpperCase().replace(/[^A-Z0-9]+/g, '');
+/* v88: a coluna Corrida às vezes traz o lote junto: "AV10113-4131" = lote AV10113 + corrida 4131 */
+function dcParteCor(v) {
+  const t = cleanText(v || '').trim(), m = /^(AV[\s-]*(?:\d{2}[\s-]+)?\d{3,})\s*[-–/]\s*(.+)$/i.exec(t);
+  return m ? { lote: m[1].toUpperCase().replace(/\s+/g, ''), cor: m[2].trim() } : { lote: '', cor: t };
+}
+const dcCorN = c => dcNorm(dcParteCor(c).cor);
 function dcCorridas() {
   const out = [];
   for (const c of (doc.certs.length ? doc.certs : [state])) for (const f of FIELDS) if (f.tbl === 'produto' && f.col === 'corrida' && f.item && f.item <= c.itens) { const v = cleanText(c.v[f.ref] || '').trim(); if (v && !out.some(o => dcNorm(o) === dcNorm(v))) out.push(v); }
@@ -4497,10 +4526,11 @@ function dcLotePorCorrida(cor) { const k = dcNorm(cor); if (!k) return ''; const
 function dcUsadas() { const u = new Set(); DC.orig.forEach(o => Object.values(o.etq || {}).forEach(L => L.forEach(e => e.lin.forEach(r => { if (r.cor) u.add(dcNorm(r.cor)); })))); return u; }
 /* corrida sugerida: a que aparece no nome do arquivo; senão a primeira sem etiqueta que não está no nome de outro arquivo */
 function dcCorSug(o) {
-  const C = dcCorridas(), us = dcUsadas(), nm = dcNorm(o.nome), noNome = (q, c) => dcNorm(c).length >= 3 && dcNorm(q.nome).includes(dcNorm(c));
-  return C.find(c => noNome(o, c) && !us.has(dcNorm(c))) || C.find(c => !us.has(dcNorm(c)) && !DC.orig.some(q => q !== o && noNome(q, c))) || C.find(c => !us.has(dcNorm(c))) || '';
+  const C = dcCorridas(), us = dcUsadas(), noNome = (q, c) => dcCorN(c).length >= 3 && dcNorm(q.nome).includes(dcCorN(c));
+  return C.find(c => noNome(o, c) && !us.has(dcCorN(c))) || C.find(c => !us.has(dcCorN(c)) && !DC.orig.some(q => q !== o && noNome(q, c))) || C.find(c => !us.has(dcCorN(c))) || '';
 }
-function dcSugestao(o) { const cor = dcCorSug(o); return { lote: dcLotePorCorrida(cor), cor }; }
+function dcLinha(c) { const p = dcParteCor(c); return { lote: p.lote || dcLotePorCorrida(p.cor), cor: p.cor }; }
+function dcSugestao(o) { return dcLinha(dcCorSug(o)); }
 /* ---------- passo 2: colocar as etiquetas ---------- */
 let dcSeq = 0;
 const dcEtqs = (o, pi) => ((o.etq || (o.etq = {}))[pi] || (o.etq[pi] = []));
@@ -4510,17 +4540,41 @@ async function dcPrepPasso2() {
   for (const o of DC.orig) {
     o.vp = o.vp || []; o.thumbs = o.thumbs || [];
     for (let p = 1; p <= o.pags; p++) {
-      if (!o.vp[p - 1]) { const pg = await o.doc.getPage(p), v = pg.getViewport({ scale: 1 }); o.vp[p - 1] = { w: v.width, h: v.height }; }
-      if (!o.thumbs[p - 1]) o.thumbs[p - 1] = p === 1 && o.thumb ? o.thumb : await dcRender(o.doc, p, 120);
+      if (!o.vp[p - 1]) { const pg = await o.doc.getPage(p), v = pg.getViewport({ scale: 1, rotation: dcRot(pg, dcGiro(o, p - 1)) }); o.vp[p - 1] = { w: v.width, h: v.height }; }
+      if (!o.thumbs[p - 1]) o.thumbs[p - 1] = p === 1 && o.thumb && !dcGiro(o, 0) ? o.thumb : await dcRender(o.doc, p, 120, dcGiro(o, p - 1));
     }
   }
   if (!DC.cur || !DC.orig[DC.cur.oi] || DC.cur.pi >= DC.orig[DC.cur.oi].pags) DC.cur = { oi: 0, pi: 0 };
   await dcBigAtual();
 }
+/* esquece as imagens já feitas da página (para redesenhar girada) */
+function dcLimpaCache(k) {
+  const [uid, pi] = k.split(':'), o = DC.orig.find(q => q.uid === uid); if (!o) return;
+  if (o.vp) o.vp[+pi] = null; if (o.big) o.big[+pi] = null; if (o.thumbs) o.thumbs[+pi] = null;
+}
+/* gira a página aberta no passo 2: as etiquetas vão junto (o meio de cada uma gira com a página) e continuam de pé */
+async function dcGirarAtual(g) {
+  const o = DC.orig[DC.cur.oi], pi = DC.cur.pi, k = o.uid + ':' + pi, v = o.vp[pi], L = dcEtqs(o, pi);
+  const W = v.w, H = v.h;
+  L.forEach(e => {
+    const h = e.w * dcEtqAlt(e.lin.length) / 300, cx = e.x + e.w / 2, cy = e.y + h / 2;
+    const [nx, ny] = g === 90 ? [H - cy, cx] : [cy, W - cx];
+    e.x = nx - e.w / 2; e.y = ny - h / 2;
+  });
+  DC.giro.set(k, ((DC.giro.get(k) || 0) + g) % 360); dcLimpaCache(k);
+  await dcComBusy('Girando a página…', async () => {
+    const pg = await o.doc.getPage(pi + 1), nv = pg.getViewport({ scale: 1, rotation: dcRot(pg, DC.giro.get(k)) });
+    o.vp[pi] = { w: nv.width, h: nv.height };
+    L.forEach(e => { const h = e.w * dcEtqAlt(e.lin.length) / 300; e.x = Math.max(0, Math.min(nv.width - e.w, e.x)); e.y = Math.max(0, Math.min(nv.height - h, e.y)); });
+    o.thumbs[pi] = await dcRender(o.doc, pi + 1, 120, DC.giro.get(k));
+    await dcBigAtual();
+  });
+  dcDesenhar();
+}
 async function dcBigAtual() {
   const o = DC.orig[DC.cur.oi]; if (!o) return;
   o.big = o.big || [];
-  if (!o.big[DC.cur.pi]) o.big[DC.cur.pi] = await dcRender(o.doc, DC.cur.pi + 1, 700);
+  if (!o.big[DC.cur.pi]) o.big[DC.cur.pi] = await dcRender(o.doc, DC.cur.pi + 1, 700, dcGiro(o, DC.cur.pi));
 }
 function dcEscala() {   /* a página cabe na coluna do meio (em pé até 560 px, deitada até 700 px) */
   const o = DC.orig[DC.cur.oi], v = o.vp[DC.cur.pi], dw = Math.min(1180, window.innerWidth - 32), livre = dw - (window.innerWidth <= 1100 ? 130 : 500) - 34;
@@ -4539,7 +4593,7 @@ function dcCorpo2() {
     ${e.lin.length < DC_LMAX ? `<button type="button" class="dc-add" data-dc="lin+" data-e="${e.id}">+ Mais um lote / corrida nesta etiqueta</button>` : `<span class="dc-mut">Máximo de ${DC_LMAX} linhas por etiqueta: use outra etiqueta.</span>`}
     <div class="dc-tam"><span>Tamanho</span><div>${[['P', 'Pequena'], ['M', 'Média'], ['G', 'Grande']].map(([t, l]) => `<button type="button" data-dc="tam" data-e="${e.id}" data-t="${t}" aria-pressed="${Math.abs(e.w - DC_TAM[t]) < 1}">${l}</button>`).join('')}</div></div></div>`;
   return `<div class="dc-l2"><div class="dc-th2"><div class="dc-cap">Certificados de origem</div>${th}</div>
-    <div class="dc-cv"><span class="dc-hint">${L.length ? 'Arraste a etiqueta para mover · puxe o canto laranja para mudar o tamanho' : 'Clique na página, num lugar em branco, para pôr a etiqueta'}</span>
+    <div class="dc-cv"><div class="dc-bar"><span class="dc-hint">${L.length ? 'Arraste a etiqueta para mover · puxe o canto laranja para mudar o tamanho' : 'Clique na página, num lugar em branco, para pôr a etiqueta'}</span><div class="dc-gir"><button type="button" class="btn secondary" data-dc="gira" data-g="270" title="Girar a página para a esquerda">↺ Girar</button><button type="button" class="btn secondary" data-dc="gira" data-g="90" title="Girar a página para a direita">↻ Girar</button></div></div>
       <div class="dc-page" id="dc-page" style="width:${E.W.toFixed(0)}px;height:${E.H.toFixed(0)}px">${o.big && o.big[DC.cur.pi] ? `<img src="${o.big[DC.cur.pi]}" alt="" draggable="false">` : ''}${L.map(e => dcEtqHTML(e, E.s)).join('')}</div></div>
     <div class="dc-sd2"><h3>Etiquetas nesta página</h3>${L.map(card).join('') || '<p class="dc-mut" style="margin:0">Nenhuma etiqueta nesta página. Clique num lugar em branco da página.</p>'}
       <button type="button" class="btn secondary" data-dc="etq+">+ ${L.length ? 'Outra etiqueta nesta página' : 'Etiqueta nesta página'}</button>
@@ -4598,8 +4652,7 @@ async function dcAcao2(a, b) {
   const f = b.dataset.e && dcAchaEtq(b.dataset.e);
   if (a === 'etq-' && f) { f.L.splice(f.i, 1); if (DC.selE === f.e.id) DC.selE = null; dcDesenhar(); return true; }
   if (a === 'lin+' && f && f.e.lin.length < DC_LMAX) {
-    const cor = dcCorSug(f.o);
-    f.e.lin.push({ lote: dcLotePorCorrida(cor), cor });
+    f.e.lin.push(dcLinha(dcCorSug(f.o)));
     const v = f.o.vp[f.pi], h = f.e.w * dcEtqAlt(f.e.lin.length) / 300; if (f.e.y + h > v.h) f.e.y = Math.max(0, v.h - h);
     dcDesenhar(); return true;
   }
@@ -4610,8 +4663,8 @@ async function dcAcao2(a, b) {
 /* põe as etiquetas nas páginas já copiadas para o PDF final (de pé, mesmo em página girada) */
 async function dcCarimbar(lib, out, pgs, o) {
   for (const [pi, L] of Object.entries(o.etq || {})) {
-    const page = pgs[+pi]; if (!page || !L.length) continue;
-    const vp = (await o.doc.getPage(+pi + 1)).getViewport({ scale: 1 });
+    const page = pgs.get(+pi); if (!page || !L.length) continue;
+    const pj = await o.doc.getPage(+pi + 1), vp = pj.getViewport({ scale: 1, rotation: dcRot(pj, dcGiro(o, +pi)) });
     for (const e of L) {
       const h = e.w * dcEtqAlt(e.lin.length) / 300, px = Math.min(1800, Math.round(e.w / 72 * 300));
       const c = dcEtqCanvas(e.lin, px, DC.simb), img = await out.embedPng(await (await new Promise(r => c.toBlob(r, 'image/png'))).arrayBuffer());
@@ -8481,7 +8534,7 @@ window.__cert = {
   FIELDS, CHECKS, layoutFor, pageSetup,
   conferir, opItem, desfazer, refazerHist, HIST, selCampos, LIMITES, limiteDe, foraDaNorma, carregarPdfLib, juntarUsina, ED,
   WS, htPorItem, htLinhas, htVis, wsRender, wsIrPara, descSugerida, wsEncurtar,
-  dcCliCurto, dcNomePadrao, abrirDocCompleto, dcEtqCanvas, DC,
+  dcCliCurto, dcNomePadrao, abrirDocCompleto, dcEtqCanvas, DC, dcParteCor,
 };
 })();
 

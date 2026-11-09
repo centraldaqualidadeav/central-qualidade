@@ -5686,7 +5686,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 86; window.CQ_V = APP_V;
+    const APP_V = 89; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -15145,7 +15145,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
 
   /* v78: faixa de números do RIR (opção A): aguardando · em andamento · atrasadas (+5 dias) · concluídos hoje.
      O que estava nos cartões antigos (RIR no mês e % reprovados) fica na linha de baixo de "Concluídos hoje". */
-  const RI_ATRASO = 5;
+  /* v87: nota atrasada = parada há 2 dias úteis ou mais, a mesma regra do Painel e dos Alertas (antes a tela do RIR usava 5 dias corridos) */
+  const RI_UTEIS = 2;
+  const riUteis = (sd) => (sd == null || !S.model ? null : Math.max(0, E.workdaysBetween(Math.floor(sd), S.today, S.model.hol)));
+  const riAtr = (g) => !!g && g.data != null && (riUteis(g.data) || 0) >= RI_UTEIS;
   function riProgBusca(ids) {
     RI.prog = RI.prog || {}; if (RI.progBusy || !DB.db) return;
     const falta = ids.filter((id) => !RI.prog[id] || Date.now() - RI.prog[id].t > 60000); if (!falta.length) return;
@@ -15158,12 +15161,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function riFaixa(P, ras, C, doMes, lotM, repM) {
     const hoje = dmy(Date.now()), conc = C.filter((c) => c.st === 'f' && c.fin && dmy(c.fin) === hoje);
     const lotH = conc.reduce((s0, c) => s0 + Object.keys(c.res || {}).length, 0);
-    const atr = P.filter((g) => (riDias(g) || 0) > RI_ATRASO), lotP = P.reduce((s0, g) => s0 + g.lots.length, 0);
+    const atr = P.filter(riAtr), lotP = P.reduce((s0, g) => s0 + g.lots.length, 0);
     const meus = ras.filter(riMeu).length, velha = atr.length ? Math.max(...atr.map(riDias)) : 0;
     const cel = (cls, n, l, sub) => `<div class="${cls}"><b>${NF.format(n)}</b><span>${l}</span><small>${sub}</small></div>`;
     return `<div class="rikp" role="group" aria-label="Resumo do RIR">${cel('k-rir', P.length, 'Aguardando RIR', `${NF.format(lotP)} lote${lotP === 1 ? '' : 's'} sem inspeção`)}`
       + cel('k-and', ras.length, 'Em andamento', ras.length ? `${NF.format(meus)} com você · ${NF.format(ras.length - meus)} com outros` : 'nenhum começado')
-      + cel(atr.length ? 'k-atr on' : 'k-atr', atr.length, `Atrasadas · +${RI_ATRASO} dias`, atr.length ? `a mais antiga chegou há ${NF.format(velha)} dias` : 'nenhuma nota esperando há mais de ' + RI_ATRASO + ' dias')
+      + cel(atr.length ? 'k-atr on' : 'k-atr', atr.length, `Atrasadas · ${RI_UTEIS} dias úteis`, atr.length ? `a mais antiga chegou há ${NF.format(velha)} dias` : `nenhuma nota parada há ${RI_UTEIS} dias úteis ou mais`)
       + cel('k-ok', conc.length, 'Concluídos hoje', `${NF.format(lotH)} lote${lotH === 1 ? '' : 's'} hoje · no mês: ${NF.format(doMes.length)} RIR · ${lotM ? NF1.format(repM / lotM * 100) + '% reprovados' : 'sem lotes'}`) + '</div>';
   }
   /* ---------- tela: lista ---------- */
@@ -15180,7 +15183,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const fi = RI.fi || '', ff = RI.ff || '', filtra = !!(q || fi || ff);
     const bate = (txt) => !q || E.key(txt).includes(q), okI = (n) => !fi || E.key(n || '') === fi, okF = (f) => !ff || E.key(f || '') === ff;
     const agF = P.map((g, i) => [g, i]).filter(([g]) => !fi && okF(g.forn) && bate([g.nf, g.forn, g.pc, g.lots.map((x) => x.id + ' ' + lotTxt(x)).join(' ')].join(' ')));
-    const atrF = agF.filter(([g]) => (riDias(g) || 0) > RI_ATRASO);
+    const atrF = agF.filter(([g]) => riAtr(g));
     const rasF = ras.filter((c0) => { const c = riCabAtual(c0); return okI(c.nome) && okF(c.forn) && bate([c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')); });
     const concF = C.filter((c) => c.st === 'f' && okI(c.nome) && okF(c.forn) && bate([c.num, c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')));
     const opc = (L) => { const m = new Map(); L.forEach((n) => { const k = E.key(n || ''); if (k && !m.has(k)) m.set(k, String(n).trim()); }); return Array.from(m).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR')); };
@@ -15193,30 +15196,30 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${sel('ri-fi', 'Inspetor', insps, fi)}${sel('ri-ff', 'Fornecedor', forns, ff)}</div>`;
     /* v78 etapa 3: tabela compacta (Situação · NF · Fornecedor e lotes · Chegada · Progresso · Inspetor · botão) */
     const itCfg = rirItensCfg(), nNf = itCfg.filter((o) => o.esc === 'nf').length, nLt = itCfg.length - nNf;
-    const idade = (d, quando) => (d == null ? '<span class="riage">—</span>' : `<span class="riage ${d > RI_ATRASO ? 'a2' : d >= 3 ? 'a1' : 'a0'}" title="${esc(quando || '')}">${d === 0 ? 'hoje' : NF.format(d) + (d === 1 ? ' dia' : ' dias')}</span>`);
+    const idade = (d, quando, u) => (d == null ? '<span class="riage">—</span>' : `<span class="riage ${(u || 0) >= RI_UTEIS ? 'a2' : u >= 1 ? 'a1' : 'a0'}" title="${esc((quando || '') + (u != null ? ` · ${u} dia${u === 1 ? '' : 's'} út${u === 1 ? 'il' : 'eis'}` : ''))}">${d === 0 ? 'hoje' : NF.format(d) + (d === 1 ? ' dia' : ' dias')}</span>`);
     const prog = (ok, tot) => `<div class="ripg"><span class="bar"><i style="width:${tot ? Math.round((ok / tot) * 100) : 0}%"></i></span><em>${tot == null ? '—' : ok + '/' + tot}</em></div>`;
     const quem = (nome, eu) => { const p = String(nome || '').trim().split(/\s+/).filter(Boolean); if (!p.length) return '<span class="muted">—</span>'; const ini = eu ? 'VC' : p.length > 1 ? p[0][0] + p[p.length - 1][0] : p[0].slice(0, 2); return `<div class="riwho"><span class="riav">${esc(ini)}</span><span>${esc(eu ? 'você' : p[0])}</span></div>`; };
     const lotLn = (L) => (L.length <= 3 ? L.map((x) => (x.key ? `<button type="button" class="rilk" data-open="AV:${esc(x.key)}" title="Abrir o lote">${esc(x.id)}</button>` : `<span class="rilk">${esc(x.id)}</span>`)).join(' ') : `<span class="rilk" title="${esc(lotesResumo(L.map((x) => x.id)).full)}">${esc(lotesResumo(L.map((x) => x.id)).txt)}</span>`);
     const linha = (sit, nf, fo, sb, age, pg, who, bt) => `<div class="rirw" role="row"><div class="c-sit">${sit}</div><div class="c-nf mono">${esc(nf || '—')}</div><div class="c-fo"><div class="fn"><span class="nfn">NF ${esc(nf || '—')} · </span>${esc(fo || 'sem fornecedor')}</div><div class="sb">${sb}</div></div><div class="c-age">${age}</div><div class="c-pg">${pg}</div><div class="c-who">${who}</div><div class="c-bt">${bt}</div></div>`;
-    const grp = (g, i) => { const d = riDias(g), atr = (d || 0) > RI_ATRASO, n = g.lots.length;
+    const grp = (g, i) => { const d = riDias(g), atr = riAtr(g), n = g.lots.length;
       return linha(atr ? '<span class="risit atr">Atrasada</span>' : '<span class="risit agu">Aguardando</span>', disp(g.nf), g.forn,
         `${riSitForn(g.forn)}${lotLn(g.lots)} · ${esc(lotTxt(g.lots[0]) || (n + (n === 1 ? ' lote' : ' lotes')))}${n > 1 && lotTxt(g.lots[0]) ? ' + ' + (n - 1) : ''}${g.pc ? ' · OC ' + esc(disp(g.pc)) : ''}`,
-        idade(d, 'recebido ' + fD(g.data)), prog(0, nNf + nLt * n), quem(''), w ? `<button class="btn" type="button" data-act="ri-novo" data-key="${i}">Iniciar RIR</button>` : ''); };
+        idade(d, 'recebido ' + fD(g.data), riUteis(g.data)), prog(0, nNf + nLt * n), quem(''), w ? `<button class="btn" type="button" data-act="ri-novo" data-key="${i}">Iniciar RIR</button>` : ''); };
     const rasc = (c0) => { const c = riCabAtual(c0), eu = riMeu(c), L = (c.lotes || []).map((k, j) => { const x = findRec('AV', k); return { key: x ? k : '', id: (x && x.id) || (c.ids || [])[j] || k, x }; });
       const ds = L.map((o) => o.x && o.x.data).filter((v) => v != null), d0 = ds.length ? Math.min(...ds) : null, pr = (RI.prog || {})[c.id];
       return linha('<span class="risit and">Em andamento</span>', c.nf, c.forn, `${lotLn(L)} · ${L.length} ${L.length === 1 ? 'lote' : 'lotes'} · começado ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}<span class="riwn"> · ${esc(eu ? 'com você' : c.nome || '')}</span>`,
-        idade(d0 == null ? null : Math.max(0, Math.floor(S.today - d0)), d0 == null ? '' : 'recebido ' + fD(d0)), pr && pr.tot != null ? prog(pr.ok, pr.tot) : prog(0, null), quem(c.nome, eu),
+        idade(d0 == null ? null : Math.max(0, Math.floor(S.today - d0)), d0 == null ? '' : 'recebido ' + fD(d0), riUteis(d0)), pr && pr.tot != null ? prog(pr.ok, pr.tot) : prog(0, null), quem(c.nome, eu),
         `<button class="btn ${eu ? 'primary' : ''}" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${!w ? 'Ver' : eu ? 'Continuar' : 'Assumir'}</button>`); };
     let body;
     if (!RI.ready) body = '<div class="loading"><span class="spin"></span><span>Carregando…</span></div>';
     else if (sub === 'ag') {
       RI.pend = P;
       const verR = fx === 'todas' || fx === 'and', verA = fx !== 'and', LA = fx === 'atr' ? atrF : agF;
-      const vazioA = fi ? 'As notas aguardando ainda não têm inspetor: escolha "Inspetor: todos" para vê-las.' : filtra ? 'Nenhuma nota aguardando com esses filtros.' : fx === 'atr' ? `Nenhuma nota esperando há mais de ${RI_ATRASO} dias.` : 'Nenhuma nota aguardando inspeção de recebimento.';
+      const vazioA = fi ? 'As notas aguardando ainda não têm inspetor: escolha "Inspetor: todos" para vê-las.' : filtra ? 'Nenhuma nota aguardando com esses filtros.' : fx === 'atr' ? `Nenhuma nota parada há ${RI_UTEIS} dias úteis ou mais.` : 'Nenhuma nota aguardando inspeção de recebimento.';
       riProgBusca(rasF.map((c) => c.id));
       body = `<div class="ritb" role="table"><div class="rirw h" role="row"><div>Situação</div><div>NF</div><div>Fornecedor · lotes</div><div>Chegada</div><div>Progresso</div><div>Inspetor</div><div></div></div>
         ${verR && (rasF.length || fx === 'and') ? `<div class="rigr">Em andamento <b>${rasF.length}</b></div>${rasF.length ? rasF.map(rasc).join('') : `<div class="rinone">${filtra ? 'Nenhum RIR em andamento com esses filtros.' : 'Nenhum RIR em andamento.'}</div>`}` : ''}
-        ${verA ? `<div class="rigr">${fx === 'atr' ? `Atrasadas · +${RI_ATRASO} dias` : 'Aguardando RIR'} <b>${LA.length}</b><small>lotes lançados sem resultado de inspeção, agrupados por nota fiscal · a mais antiga primeiro</small></div>
+        ${verA ? `<div class="rigr">${fx === 'atr' ? `Atrasadas · ${RI_UTEIS} dias úteis` : 'Aguardando RIR'} <b>${LA.length}</b><small>lotes lançados sem resultado de inspeção, agrupados por nota fiscal · a mais antiga primeiro</small></div>
         ${LA.length ? LA.map(([g, i]) => grp(g, i)).join('') : `<div class="rinone">${vazioA}</div>`}` : ''}</div>`;
     } else {
       const L = concF;
@@ -15611,7 +15614,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     return false;
   }
   /* notas recebidas há 2 dias úteis ou mais sem RIR (Alertas e contador do menu) */
-  const riAtrasadas = () => (rirOn() && vis('rir') && RI.ready && S.model ? riPend().filter((g) => g.data != null && E.workdaysBetween(Math.floor(g.data), S.today, S.model.hol) >= 2) : []);
+  const riAtrasadas = () => (rirOn() && vis('rir') && RI.ready && S.model ? riPend().filter(riAtr) : []);   /* v87: a mesma regra da tela do RIR */
   function rirAlertHTML() {
     const P = riAtrasadas(); if (!P.length) return '';
     return `<div class="rrwarn vyaviso" style="border-left-color:var(--rir)"><b>📋 ${P.length === 1 ? '1 nota recebida' : P.length + ' notas recebidas'} há 2 dias úteis ou mais sem RIR</b><div class="muted" style="margin-top:3px">${P.slice(0, 6).map((g) => 'NF ' + esc(disp(g.nf) || '—') + ' · ' + esc(g.forn || 'sem fornecedor')).join(' · ')}${P.length > 6 ? '…' : ''}. Enquanto não houver RIR, os lotes ficam sem resultado de inspeção.</div><div class="rrfoot" style="margin-top:8px"><button class="btn primary" type="button" data-go='{"v":"rir"}'>Abrir RIR</button></div></div>`;
