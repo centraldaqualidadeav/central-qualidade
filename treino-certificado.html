@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Treinamento · Certificado de usina</title>
+<!-- Central da Qualidade · Treinamento: leitura de certificado de usina (aberto dentro da Central; sozinho também funciona, sem gravar). Certificados fictícios, só para treino. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: o certificado de usina (fictício) em cima, como papel; embaixo três painéis iguais (avaliação · correção · progresso). Cores e fontes da Central. */
+:root {
+  --bg: #eef0ed; --surface: #ffffff; --surface-2: #f5f6f4; --sunken: #e4e7e3;
+  --line: #d3d8d2; --line-2: #bfc6be;
+  --ink: #1b211e; --ink-2: #48514c; --ink-3: #737d77;
+  --marinho: #002340; --on-marinho: #ffffff;
+  --laranja: #D9480F; --on-laranja: #ffffff; --laranja-soft: #fbe7dc;
+  --ok: #1d7446; --ok-soft: #e3f2e8; --crit: #b3261e; --crit-soft: #f8e4e2; --info: #1f5f9e; --info-soft: #e2ecf6;
+  --focus: #1f5f9e;
+  --f-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --shadow: 0 1px 2px rgba(20, 30, 25, .06), 0 6px 24px rgba(20, 30, 25, .07);
+  --bancada: #f7f8f6;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
+  --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --marinho: #1E4C8F; --on-marinho: #ffffff;
+  --laranja: #ef8a4c; --on-laranja: #1b120c; --laranja-soft: #3a2519;
+  --ok: #5dcb8d; --ok-soft: #173325; --crit: #ff6f63; --crit-soft: #3a1c1a; --info: #72a8de; --info-soft: #172a3d; --focus: #72a8de;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 24px rgba(0,0,0,.25); --bancada: #232826; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
+  --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --marinho: #1E4C8F; --on-marinho: #ffffff;
+  --laranja: #ef8a4c; --on-laranja: #1b120c; --laranja-soft: #3a2519;
+  --ok: #5dcb8d; --ok-soft: #173325; --crit: #ff6f63; --crit-soft: #3a1c1a; --info: #72a8de; --info-soft: #172a3d; --focus: #72a8de;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 24px rgba(0,0,0,.25); --bancada: #232826; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; } [hidden] { display: none !important; }
+body.embed .head { display: none; } body.embed .wrap { padding-block: 2px 8px; padding-left: 0; padding-right: 0; max-width: none; } body.embed { background: transparent; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-body); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 22px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 14px; }
+.eyebrow { font: 600 12.5px/1.2 var(--f-display); letter-spacing: .12em; text-transform: uppercase; color: var(--laranja); }
+h1 { margin: 2px 0 0; font: 700 34px/1 var(--f-display); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
+.sub { margin: 4px 0 0; color: var(--ink-2); max-width: 70ch; }
+.head { display: grid; gap: 2px; }
+
+.bar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: end; }
+.grp { display: grid; gap: 4px; }
+.grp > span { font: 600 12.5px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--line-2); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { min-height: 48px; min-width: 128px; padding: 0 16px; border: 0; border-left: 1px solid var(--line); background: transparent; color: var(--ink-2); font: 600 15px var(--f-body); cursor: pointer; }
+.seg button:first-child { border-left: 0; }
+.seg button[aria-pressed="true"] { background: var(--marinho); color: var(--on-marinho); }
+.seg button:disabled { opacity: .45; cursor: not-allowed; }
+.seg.res button { min-width: 104px; font-family: var(--f-mono); font-weight: 500; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+.bench { padding: 6px 0 4px; background: var(--bancada); overflow: hidden; position: relative; }
+.bench svg { display: block; width: 100%; height: auto; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.bench.drag svg { cursor: grab; } .bench.drag.grabbing svg { cursor: grabbing; }
+.benchbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 14px 12px; border-top: 1px solid var(--line); background: var(--surface); }
+.benchbar .hint { color: var(--ink-2); font-size: 13.5px; flex: 1 1 220px; min-width: 0; }
+.lock { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; color: var(--ink-2); }
+
+.btn { min-height: 48px; padding: 0 18px; border-radius: 9px; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--ink); font: 600 15px var(--f-body); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.btn:hover { border-color: var(--ink-3); }
+.btn.pri { background: var(--laranja); border-color: var(--laranja); color: var(--on-laranja); }
+.btn.nav { background: var(--marinho); border-color: var(--marinho); color: var(--on-marinho); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.step { white-space: nowrap; min-width: 76px; font-family: var(--f-mono); font-weight: 500; font-size: 14px; padding: 0 10px; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.lupa { padding: 0; overflow: hidden; }
+.lupah { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid var(--line); }
+.lupah b { font: 600 13px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+.lupah .grow { flex: 1; }
+.lupah .btn { min-height: 40px; font-size: 14px; }
+.lupa svg { display: block; width: 100%; height: auto; background: var(--bancada); }
+
+.panels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
+.panel { padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.ptitle { font: 600 13px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.read { display: flex; align-items: center; gap: 10px; }
+.read input { height: 56px; width: 100%; max-width: 200px; padding: 0 14px; font: 600 26px var(--f-mono); color: var(--ink); background: var(--surface); border: 2px solid var(--marinho); border-radius: 9px; font-variant-numeric: tabular-nums; }
+.read input:disabled { opacity: .6; }
+.read span { font: 500 18px var(--f-mono); color: var(--ink-2); }
+.acts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.acts .full { grid-column: 1 / -1; }
+
+.msg { border-radius: 9px; padding: 10px 12px; font-size: 14.5px; border: 1px solid transparent; }
+.msg b { font-weight: 700; }
+.msg.ok { background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 40%, transparent); color: var(--ink); }
+.msg.no { background: var(--crit-soft); border-color: color-mix(in srgb, var(--crit) 40%, transparent); color: var(--ink); }
+.msg.info { background: var(--info-soft); border-color: color-mix(in srgb, var(--info) 35%, transparent); color: var(--ink); }
+.passos { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.passos li { display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: start; font-size: 14.5px; }
+.passos i { font-style: normal; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 700 14px var(--f-display); background: var(--sunken); color: var(--ink-2); }
+.passos li.v i { background: var(--laranja); color: var(--on-laranja); }
+.passos li.m i { background: var(--info); color: #fff; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--ink-3); font-size: 13.5px; }
+
+.big { font: 700 44px/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.dots { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 5px; }
+.dots span { height: 10px; border-radius: 5px; background: var(--sunken); border: 1px solid var(--line); }
+.dots span.ok { background: var(--ok); border-color: var(--ok); }
+.dots span.no { background: var(--crit); border-color: var(--crit); }
+.dots span.cur { background: var(--laranja); border-color: var(--laranja); }
+.dots span.done { background: var(--ink-3); border-color: var(--ink-3); }
+.field { display: grid; gap: 4px; } .field label { font-size: 13px; color: var(--ink-2); font-weight: 600; }
+.field input { height: 48px; padding: 0 12px; font: 500 16px var(--f-body); border: 1px solid var(--line-2); border-radius: 9px; background: var(--surface); color: var(--ink); width: 100%; }
+
+.resul { padding: 18px; display: grid; gap: 14px; }
+.resh { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: end; }
+.resh .k { font: 600 12.5px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.pill { display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border-radius: 16px; font: 700 15px var(--f-display); letter-spacing: .06em; text-transform: uppercase; }
+.pill.ok { background: var(--ok-soft); color: var(--ok); } .pill.no { background: var(--crit-soft); color: var(--crit); }
+.tblw { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font: 600 12.5px var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+td.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.c-ok { color: var(--ok); font-weight: 700; } .c-no { color: var(--crit); font-weight: 700; }
+.note { font-size: 13.5px; color: var(--ink-2); border-left: 3px solid var(--line-2); padding-left: 10px; }
+
+@media (max-width: 900px) { .panels { grid-template-columns: 1fr 1fr; } .panels .panel:nth-child(3) { grid-column: 1 / -1; } }
+@media (max-width: 620px) {
+  h1 { font-size: 28px; }
+  .panels { grid-template-columns: 1fr; } .panels .panel:nth-child(3) { grid-column: auto; }
+  .bar { display: grid; grid-template-columns: 1fr; } .seg button { min-width: 0; padding: 0 8px; } .seg.res button { min-width: 0; }
+  .btn.step { min-width: 0; flex: 1 1 0; }
+  .benchbar .hint { flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* ---------- certificado de usina (papel: sempre claro, também no tema escuro) ---------- */
+.doc { padding: 0; overflow: hidden; }
+.paper { --pp: #fdfdfb; --pi: #1e2328; --pl: #c9cdc8; --pm: #5c636a; background: var(--pp); color: var(--pi); padding: 18px 20px 16px; display: grid; gap: 12px; }
+.dochd { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: flex-start; justify-content: space-between; border-bottom: 2px solid var(--pi); padding-bottom: 10px; }
+.dochd b { display: block; font: 700 20px/1.1 var(--f-display); letter-spacing: .04em; text-transform: uppercase; }
+.dochd span { font-size: 12.5px; color: var(--pm); }
+.docex { font: 700 11.5px/1 var(--f-display); letter-spacing: .14em; color: #b3261e; border: 1.5px solid #b3261e; border-radius: 4px; padding: 5px 8px; align-self: center; }
+.docmeta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border: 1px solid var(--pl); }
+.docmeta div { padding: 6px 10px; border-left: 1px solid var(--pl); min-width: 0; }
+.docmeta div:first-child { border-left: 0; }
+.docmeta small { display: block; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--pm); }
+.docmeta b { font: 600 14px var(--f-mono); overflow-wrap: anywhere; }
+.paper h4 { margin: 4px 0 0; font: 700 13px var(--f-display); letter-spacing: .1em; text-transform: uppercase; }
+.dtw { overflow-x: auto; }
+table.dt { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+.dt th, .dt td { border: 1px solid var(--pl); padding: 0; text-align: center; white-space: nowrap; }
+.dt th { background: #eef0ec; font: 600 12.5px var(--f-body); padding: 6px 6px; color: var(--pi); text-transform: none; letter-spacing: 0; }
+.dt td.rot { font: 600 11.5px var(--f-body); color: var(--pm); padding: 6px 8px; text-align: left; background: #f6f7f4; }
+.dt button.v { width: 100%; min-height: 40px; border: 0; background: transparent; color: var(--pi); font: 600 15px var(--f-mono); font-variant-numeric: tabular-nums; cursor: default; padding: 0 6px; }
+.marcando .dt button.v { cursor: pointer; } .marcando .dt button.v:hover { background: #fdf0e8; }
+.dt button.v.sel { outline: 3px solid #D9480F; outline-offset: -3px; background: #fdeee6; }
+.dt button.v.ok { background: #e3f2e8; } .dt button.v.fora { background: #f8e4e2; color: #8f1d17; }
+.dt button.v.fora.sel, .dt button.v.ok.sel { outline-color: #1e2328; }
+.dt tr.lim td { font: 500 11.5px var(--f-mono); color: var(--pm); padding: 4px 6px; background: #fafbf8; white-space: nowrap; }
+.docfoot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; font-size: 11.5px; color: var(--pm); border-top: 1px solid var(--pl); padding-top: 8px; }
+.limcard { padding: 14px 16px; display: grid; gap: 8px; }
+.limcard table { font-size: 13px; } .limcard td, .limcard th { white-space: nowrap; } .limcard th { text-transform: none; letter-spacing: 0; font-family: var(--f-body); }
+.veredito { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.veredito button { min-height: 52px; border-radius: 9px; border: 1.5px solid var(--line-2); background: var(--surface); color: var(--ink); font: 700 16px var(--f-body); cursor: pointer; }
+.veredito button[aria-pressed="true"][data-v="c"] { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+.veredito button[aria-pressed="true"][data-v="n"] { background: var(--crit-soft); border-color: var(--crit); color: var(--crit); }
+.veredito button:disabled { opacity: .55; cursor: default; }
+.fails { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14.5px; }
+@media (max-width: 620px) { .docmeta { grid-template-columns: 1fr 1fr; } .docmeta div:nth-child(3) { border-left: 0; } .docmeta div:nth-child(n+3) { border-top: 1px solid var(--pl); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div class="eyebrow">Central da Qualidade · Treinamento</div>
+    <h1>Certificado de usina</h1>
+    <p class="sub">Leia o certificado e compare com a norma. Se estiver conforme, toque em <b>Conforme</b>. Se não, toque em <b>Não conforme</b> e marque no certificado o valor que está fora.</p>
+  </header>
+
+  <div class="bar">
+    <div class="grp"><span>Modo</span>
+      <div class="seg" id="modos" role="group" aria-label="Modo">
+        <button type="button" data-modo="treino" aria-pressed="true">Treino livre</button>
+        <button type="button" data-modo="exer" aria-pressed="false">Exercício</button>
+        <button type="button" data-modo="prova" aria-pressed="false">Prova</button>
+      </div></div>
+    <div class="grp"><span>Norma</span>
+      <div class="seg res" id="normas" role="group" aria-label="Norma">
+        <button type="button" data-n="todas" aria-pressed="true">Todas</button>
+        <button type="button" data-n="A105" aria-pressed="false">A105</button>
+        <button type="button" data-n="A106B" aria-pressed="false">A106 B</button>
+        <button type="button" data-n="WPB" aria-pressed="false">WPB</button>
+        <button type="button" data-n="LF2" aria-pressed="false">LF2</button>
+      </div></div>
+  </div>
+
+  <section class="card doc" aria-label="Certificado de usina (exemplo para treinamento)"><div id="doc"></div></section>
+  <section class="card limcard" aria-label="Limites da norma">
+    <div class="lupah" style="padding:0;border:0"><b>Limites da norma</b><span class="grow"></span><button class="btn" type="button" id="limBtn">Mostrar a tabela da norma</button></div>
+    <div id="lim" hidden></div>
+  </section>
+  <div id="area"></div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  /* dentro da Central: tema, nome de quem está usando e gravação da prova (CQ_TREIN_HOST) */
+  const EMBED = (() => { try { return new URLSearchParams(location.search).has('embed'); } catch (e) { return false; } })();
+  const HOST = (() => { try { return window.parent !== window && window.parent.CQ_TREIN_HOST ? window.parent.CQ_TREIN_HOST : null; } catch (e) { return null; } })();
+  if (EMBED) {
+    document.body.classList.add('embed');
+    const tema = () => { try { const t = window.parent.document.documentElement.dataset.theme; if (t) document.documentElement.dataset.theme = t; } catch (e) { /* sem acesso ao tema */ } };
+    tema(); try { new MutationObserver(tema).observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }); } catch (e) { /* segue */ }
+    const alto = () => { try { if (window.frameElement) window.frameElement.style.height = Math.ceil(document.documentElement.scrollHeight) + 'px'; } catch (e) { /* segue */ } };
+    try { new ResizeObserver(alto).observe(document.body); } catch (e) { setInterval(alto, 800); }
+    addEventListener('load', alto);
+  }
+
+  /* ---------- normas (os mesmos limites do módulo de certificados da Central) ---------- */
+  const NORMAS = {
+    A105: { nome: 'ASTM A105', curto: 'A105', prod: ['Flange WN 2" classe 150', 'Flange cego 4" classe 300', 'Luva 1" classe 3000', 'Flange SO 6" classe 150'],
+      q: { C: [null, 0.35], Mn: [0.60, 1.05], P: [null, 0.035], S: [null, 0.040], Si: [0.10, 0.35], Cu: [null, 0.40], Ni: [null, 0.40], Cr: [null, 0.30], Mo: [null, 0.12], V: [null, 0.08] },
+      mnNota: { cMax: 0.35, mnMax: 1.05, passo: 0.06, teto: 1.65, txt: 'nota 1 da Tabela 1' },
+      m: { ys: [250, null], ts: [485, null], el: [22, null], ra: [30, null], hb: [137, 187] } },
+    A106B: { nome: 'ASTM A106 grau B', curto: 'A106 B', prod: ['Tubo sem costura 4" SCH 40', 'Tubo sem costura 2" SCH 80', 'Tubo sem costura 8" SCH 40', 'Tubo sem costura 6" SCH STD'],
+      q: { C: [null, 0.30], Mn: [0.29, 1.06], P: [null, 0.035], S: [null, 0.035], Si: [0.10, null], Cr: [null, 0.40], Cu: [null, 0.40], Mo: [null, 0.15], Ni: [null, 0.40], V: [null, 0.08] },
+      mnNota: { cMax: 0.30, mnMax: 1.06, passo: 0.06, teto: 1.35, txt: 'nota A da Tabela 1' },
+      m: { ys: [240, null], ts: [415, null] } },
+    WPB: { nome: 'ASTM A234 WPB', curto: 'WPB', prod: ['Curva 90° raio longo 6" SCH 40', 'Tê igual 4" SCH 40', 'Redução concêntrica 6" x 4" SCH 40', 'Cap 8" SCH STD'],
+      q: { C: [null, 0.30], Mn: [0.29, 1.06], P: [null, 0.050], S: [null, 0.058], Si: [0.10, null], Cr: [null, 0.40], Mo: [null, 0.15], Ni: [null, 0.40], Cu: [null, 0.40], V: [null, 0.08] },
+      mnNota: { cMax: 0.30, mnMax: 1.06, passo: 0.06, teto: 1.35, txt: 'nota D da Tabela 1' },
+      m: { ys: [240, null], ts: [415, 585], el: [22, null], hb: [null, 197] } },
+    LF2: { nome: 'ASTM A350 LF2 classe 1', curto: 'LF2', prod: ['Flange WN 3" classe 300', 'Flange cego 2" classe 600', 'Flange WN 6" classe 150'],
+      q: { C: [null, 0.30], Mn: [0.60, 1.35], P: [null, 0.035], S: [null, 0.040], Si: [0.15, 0.30], Ni: [null, 0.40], Cr: [null, 0.30], Mo: [null, 0.12], Cu: [null, 0.40], Nb: [null, 0.02], V: [null, 0.08] },
+      m: { ys: [250, null], ts: [485, 655], el: [22, null], ra: [30, null], hb: [null, 197], cv: [20, null] } }
+  };
+  const EL_ORDEM = ['C', 'Mn', 'P', 'S', 'Si', 'Cr', 'Ni', 'Mo', 'Cu', 'Nb', 'V'];
+  const DEC = { C: 2, Mn: 2, Si: 2, P: 3, S: 3, Cr: 2, Ni: 2, Mo: 2, Cu: 2, Nb: 3, V: 3 };
+  const M_ORDEM = ['ys', 'ts', 'el', 'ra', 'hb', 'cv'];
+  const M_NOME = { ys: 'Escoamento (MPa)', ts: 'Resistência (MPa)', el: 'Alongamento (%)', ra: 'Red. de área (%)', hb: 'Dureza (HB)', cv: 'Charpy, média (J)' };
+  const M_CURTO = { ys: 'escoamento', ts: 'resistência à tração', el: 'alongamento', ra: 'redução de área', hb: 'dureza', cv: 'Charpy' };
+  const NOTA_MIN = 8;
+  const br = (v, d) => (d == null ? String(v) : v.toFixed(d)).replace('.', ',');
+  const fmtV = (k, v) => (k.startsWith('q:') ? br(v, DEC[k.slice(2)]) : String(Math.round(v)));
+  const nomeK = (k) => (k.startsWith('q:') ? k.slice(2) : M_CURTO[k.slice(2)]);
+  const faixaTxt = ([a, b], d) => (a != null && b != null ? `${br(a, d)} a ${br(b, d)}` : a != null ? `mín. ${br(a, d)}` : `máx. ${br(b, d)}`);
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const pick = (L) => L[Math.floor(Math.random() * L.length)];
+  const arred = (v, d) => Math.round(v * 10 ** d) / 10 ** d;
+
+  /* Mn máximo da norma, com a nota (C abaixo do máximo deixa o Mn subir) — mesma conta do módulo de certificados */
+  function mnMax(N, c) {
+    const base = N.q.Mn[1];
+    if (!N.mnNota || c == null || c >= N.mnNota.cMax - 1e-9) return { mx: base, passos: 0 };
+    const passos = Math.floor(Math.round((N.mnNota.cMax - c) * 10000) / 100 + 1e-9);
+    return { mx: Math.min(N.mnNota.teto, Math.round((N.mnNota.mnMax + passos * N.mnNota.passo) * 100) / 100), passos };
+  }
+  /* valores fora da norma (a resposta certa sai daqui, dos números que aparecem no certificado) */
+  function avaliar(N, V) {
+    const F = [];
+    Object.keys(N.q).forEach((el) => {
+      const v = V.q[el]; if (v == null) return;
+      let [a, b] = N.q[el];
+      if (el === 'Mn') b = mnMax(N, V.q.C).mx;
+      if ((a != null && v < a - 1e-9) || (b != null && v > b + 1e-9)) F.push('q:' + el);
+    });
+    Object.keys(N.m).forEach((k) => {
+      const v = V.m[k]; if (v == null) return; const [a, b] = N.m[k];
+      if ((a != null && v < a) || (b != null && v > b)) F.push('m:' + k);
+    });
+    return F;
+  }
+  /* ---------- certificado sorteado ---------- */
+  function valorOk(el, [a, b]) {
+    if (el === 'C') return rnd(0.14, (b || 0.3) - 0.04);
+    if (a != null && b != null) { const r = b - a; return rnd(a + r * 0.15, b - r * 0.15); }
+    if (b != null) return rnd(b * 0.12, b * 0.75);
+    return rnd(a + 0.08, a + 0.25);
+  }
+  function mecOk(k, [a, b]) {
+    if (k === 'hb') return a != null && b != null ? rnd(a + 8, b - 8) : rnd(140, (b || 197) - 12);
+    const sobe = { ys: [25, 110], ts: [25, 110], el: [3, 14], ra: [6, 28], cv: [18, 90] }[k];
+    let v = rnd(a + sobe[0], a + sobe[1]); if (b != null) v = Math.min(v, b - 18);
+    return v;
+  }
+  function sortear(filtro) {
+    const id = filtro && filtro !== 'todas' ? filtro : pick(Object.keys(NORMAS)), N = NORMAS[id];
+    const V = { q: {}, m: {} };
+    Object.keys(N.q).forEach((el) => { V.q[el] = arred(valorOk(el, N.q[el]), DEC[el]); });
+    Object.keys(N.m).forEach((k) => { V.m[k] = Math.round(mecOk(k, N.m[k])); });
+    const tipo = Math.random(), temNota = !!N.mnNota;
+    if (temNota && tipo < 0.15) {                     /* Mn acima do máximo da tabela, mas liberado pela nota (conforme) */
+      const k = 2 + Math.floor(Math.random() * 6); V.q.C = arred(N.mnNota.cMax - k / 100, 2);
+      const mx = mnMax(N, V.q.C).mx; V.q.Mn = arred(rnd(N.q.Mn[1] + 0.01, mx - 0.005), 2);
+    } else if (temNota && tipo < 0.23) {              /* Mn passa até do que a nota libera */
+      const k = 1 + Math.floor(Math.random() * 3); V.q.C = arred(N.mnNota.cMax - k / 100, 2);
+      const mx = mnMax(N, V.q.C).mx; V.q.Mn = arred(mx + rnd(0.01, 0.04), 2);
+    } else if (tipo < 0.50) {                         /* um elemento químico fora */
+      const el = pick(Object.keys(N.q).filter((e) => e !== 'Mn' || !temNota)), [a, b] = N.q[el], d = DEC[el];
+      if (b != null && (a == null || Math.random() < 0.7)) V.q[el] = arred(b + Math.max(1 / 10 ** d, b * rnd(0.03, 0.15)), d);
+      else V.q[el] = arred(a - Math.max(1 / 10 ** d, a * rnd(0.05, 0.25)), d);
+    } else if (tipo < 0.68) {                         /* uma propriedade mecânica fora */
+      const k = pick(Object.keys(N.m)), [a, b] = N.m[k];
+      if (a != null && (b == null || Math.random() < 0.6)) V.m[k] = Math.round(a - rnd(2, k === 'el' || k === 'ra' ? 4 : 25));
+      else V.m[k] = Math.round(b + rnd(2, 20));
+    }
+    const ini = 'ABCDEFGHJKLMNPRSTUVWXYZ';
+    return { id, N, V, prod: pick(N.prod), corrida: pick(['B', 'K', 'M', 'T', 'H']) + Math.floor(1000 + Math.random() * 8999) + ini[Math.floor(Math.random() * ini.length)], cert: 'MTC-' + Math.floor(100000 + Math.random() * 899999), fails: avaliar(N, V) };
+  }
+  const lista = (n, f) => Array.from({ length: n }, () => sortear(f));
+
+  /* ---------- estado ---------- */
+  const S = { modo: 'treino', filtro: 'todas', q: null, resp: null, sel: new Set(), fb: null, treino: { ok: 0, tot: 0 }, ex: null, pv: null, nomePv: '' };
+  const area = document.getElementById('area'), docEl = document.getElementById('doc'), limEl = document.getElementById('lim');
+  const $ = (q) => area.querySelector(q);
+  const esc = (t) => String(t).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+  const atual = () => (S.modo === 'treino' ? S.q : S.modo === 'exer' ? (S.ex && S.ex.L[S.ex.k]) : (S.pv && S.pv.L[S.pv.k]));
+  const respTxt = (fails) => (fails.length ? 'Não conforme: ' + fails.map(nomeK).join(', ') : 'Conforme');
+
+  /* ---------- desenho do certificado ---------- */
+  function limRow(N, V, keys, tbl) {
+    return `<tr class="lim"><td class="rot">Norma</td>${keys.map((k) => {
+      if (tbl === 'q') { let f = N.q[k]; if (k === 'Mn') { const m = mnMax(N, V.q.C); if (m.mx > f[1]) return `<td>${faixaTxt([f[0], m.mx], 2)}<br>(${N.mnNota.txt})</td>`; } return `<td>${faixaTxt(f, DEC[k])}</td>`; }
+      return `<td>${faixaTxt(N.m[k], null)}</td>`; }).join('')}</tr>`;
+  }
+  function desenharDoc() {
+    const Q = atual();
+    if (!Q) { docEl.innerHTML = `<div class="paper"><p style="margin:0;color:#5c636a">Digite o nome do inspetor e toque em <b>Começar a prova</b>: o primeiro certificado aparece aqui.</p></div>`; return; }
+    const N = Q.N, V = Q.V, mostra = !!S.fb && !S.fb.vazio && S.modo !== 'prova';
+    const els = EL_ORDEM.filter((e) => N.q[e]), ms = M_ORDEM.filter((k) => N.m[k]), F = new Set(Q.fails);
+    const cel = (key, txt) => { const c = ['v']; if (S.sel.has(key)) c.push('sel'); if (mostra) c.push(F.has(key) ? 'fora' : 'ok'); return `<td><button type="button" class="${c.join(' ')}" data-k="${key}" aria-pressed="${S.sel.has(key)}">${txt}</button></td>`; };
+    docEl.innerHTML = `<div class="paper${S.resp === 'n' && !S.fb ? ' marcando' : ''}">
+      <div class="dochd"><div><b>Usina Exemplo S.A.</b><span>Certificado de inspeção · EN 10204 tipo 3.1 · nº ${esc(Q.cert)}</span></div><span class="docex">EXEMPLO PARA TREINAMENTO</span></div>
+      <div class="docmeta"><div><small>Produto</small><b>${esc(Q.prod)}</b></div><div><small>Norma / grau</small><b>${esc(N.nome)}</b></div><div><small>Corrida</small><b>${esc(Q.corrida)}</b></div><div><small>Tratamento</small><b>${N === NORMAS.A106B ? 'Laminado a quente' : 'Normalizado'}</b></div></div>
+      <h4>Composição química (%) · análise de corrida</h4>
+      <div class="dtw"><table class="dt"><thead><tr><th></th>${els.map((e) => `<th>${e}</th>`).join('')}</tr></thead><tbody>
+        <tr><td class="rot">Corrida ${esc(Q.corrida)}</td>${els.map((e) => cel('q:' + e, br(V.q[e], DEC[e]))).join('')}</tr>${mostra ? limRow(N, V, els, 'q') : ''}</tbody></table></div>
+      <h4>Propriedades mecânicas</h4>
+      <div class="dtw"><table class="dt"><thead><tr><th></th>${ms.map((k) => `<th>${M_NOME[k]}</th>`).join('')}</tr></thead><tbody>
+        <tr><td class="rot">Corpo de prova 1</td>${ms.map((k) => cel('m:' + k, String(V.m[k]))).join('')}</tr>${mostra ? limRow(N, V, ms, 'm') : ''}</tbody></table></div>
+      <div class="docfoot"><span>Certificamos que o material foi fabricado e ensaiado conforme a norma indicada.</span><span>Usina fictícia · dados sorteados para treino</span></div></div>`;
+    desenharLim();
+  }
+  function desenharLim() {
+    const Q = atual(); if (!Q) { limEl.innerHTML = ''; return; }
+    const N = Q.N, els = EL_ORDEM.filter((e) => N.q[e]), ms = M_ORDEM.filter((k) => N.m[k]);
+    limEl.innerHTML = `<div class="tblw"><table><thead><tr><th>${esc(N.nome)}</th>${els.map((e) => `<th>${e}</th>`).join('')}</tr></thead><tbody><tr><td>Química (%)</td>${els.map((e) => `<td class="num">${faixaTxt(N.q[e], DEC[e])}</td>`).join('')}</tr></tbody></table></div>
+      <div class="tblw"><table><thead><tr><th>Mecânica</th>${ms.map((k) => `<th>${M_NOME[k]}</th>`).join('')}</tr></thead><tbody><tr><td>Exigido</td>${ms.map((k) => `<td class="num">${faixaTxt(N.m[k], null)}</td>`).join('')}</tr></tbody></table></div>
+      ${N.mnNota ? `<p class="note" style="margin:0"><b>Mn (${esc(N.mnNota.txt)}):</b> para cada 0,01% de C abaixo de ${br(N.mnNota.cMax, 2)}%, o Mn pode passar ${br(N.mnNota.mnMax, 2)}% em mais ${br(N.mnNota.passo, 2)}%, até ${br(N.mnNota.teto, 2)}%.</p>` : ''}`;
+  }
+  document.getElementById('limBtn').addEventListener('click', (e) => { limEl.hidden = !limEl.hidden; e.currentTarget.textContent = limEl.hidden ? 'Mostrar a tabela da norma' : 'Esconder a tabela da norma'; });
+  docEl.addEventListener('click', (e) => {
+    const b = e.target.closest('button.v'); if (!b || S.resp !== 'n' || S.fb) return;
+    const k = b.dataset.k; if (S.sel.has(k)) S.sel.delete(k); else S.sel.add(k);
+    desenharDoc(); desenharPaineis();
+  });
+
+  /* ---------- correção ---------- */
+  function corrigir(Q) {
+    if (!S.resp) return { vazio: true, msg: 'Toque em Conforme ou em Não conforme.' };
+    if (S.resp === 'n' && !S.sel.size) return { vazio: true, msg: 'Marque no certificado o valor que está fora da norma.' };
+    const certo = Q.fails.slice().sort().join('|'), dado = S.resp === 'c' ? '' : [...S.sel].sort().join('|');
+    return { ok: certo === dado, v: S.resp === 'c' ? 'Conforme' : 'Não conforme: ' + [...S.sel].map(nomeK).join(', ') };
+  }
+  function explicar(Q) {
+    const N = Q.N, V = Q.V, L = [];
+    Q.fails.forEach((k) => {
+      const [t, x] = k.split(':');
+      if (t === 'q') {
+        const v = V.q[x], f = N.q[x];
+        if (x === 'Mn') { const m = mnMax(N, V.q.C); L.push(m.passos ? `<b>Mn ${br(v, 2)}%</b> passa do máximo. O C ${br(V.q.C, 2)}% está ${m.passos} centésimo(s) abaixo de ${br(N.mnNota.cMax, 2)}%: a ${esc(N.mnNota.txt)} libera Mn até <b>${br(m.mx, 2)}%</b>, e mesmo assim não chega.` : `<b>Mn ${br(v, 2)}%</b> acima do máximo de ${br(f[1], 2)}% (o C ${br(V.q.C, 2)}% não está abaixo do máximo, então a nota não libera mais Mn).`); if (v < (f[0] || 0)) L[L.length - 1] = `<b>Mn ${br(v, 2)}%</b> abaixo do mínimo de ${br(f[0], 2)}%.`; }
+        else L.push(f[1] != null && v > f[1] ? `<b>${x} ${br(v, DEC[x])}%</b> acima do máximo de ${br(f[1], DEC[x])}%.` : `<b>${x} ${br(v, DEC[x])}%</b> abaixo do mínimo de ${br(f[0], DEC[x])}%.`);
+      } else {
+        const v = V.m[x], [a, b] = N.m[x];
+        L.push(a != null && v < a ? `<b>${M_NOME[x].replace(/ \(.*/, '')} ${v}</b> abaixo do mínimo de ${a}.` : `<b>${M_NOME[x].replace(/ \(.*/, '')} ${v}</b> acima do máximo de ${b}.`);
+      }
+    });
+    if (!Q.fails.length) {
+      const m = N.mnNota ? mnMax(N, V.q.C) : null;
+      if (m && V.q.Mn > N.q.Mn[1] + 1e-9) L.push(`Atenção ao <b>Mn ${br(V.q.Mn, 2)}%</b>: passa dos ${br(N.q.Mn[1], 2)}% da tabela, mas o C ${br(V.q.C, 2)}% está ${m.passos} centésimo(s) abaixo de ${br(N.mnNota.cMax, 2)}%, e a ${esc(N.mnNota.txt)} libera Mn até ${br(m.mx, 2)}%. <b>Está conforme.</b>`);
+      else L.push('Todos os valores estão dentro dos limites da norma.');
+    }
+    return `<ul class="fails">${L.map((t) => `<li>${t}</li>`).join('')}</ul>`;
+  }
+
+  /* ---------- painéis ---------- */
+  function avaliacaoHTML(titulo, botao, travado) {
+    return `<section class="card panel"><div class="ptitle">${titulo}</div>
+      <div class="veredito"><button type="button" data-v="c" aria-pressed="${S.resp === 'c'}" ${travado ? 'disabled' : ''}>Conforme</button><button type="button" data-v="n" aria-pressed="${S.resp === 'n'}" ${travado ? 'disabled' : ''}>Não conforme</button></div>
+      ${S.resp === 'n' && !travado ? `<p class="muted" style="margin:0">Toque no certificado no(s) valor(es) fora da norma. Marcados: <b>${S.sel.size ? [...S.sel].map(nomeK).join(', ') : 'nenhum'}</b>.</p>` : ''}
+      <div id="pverr" class="msg info" hidden></div>
+      <div class="acts">${botao}</div></section>`;
+  }
+  function corrHTML() {
+    const f = S.fb, Q = atual();
+    if (!f) return '<p class="muted" style="margin:0">Decida e toque em <b>Conferir</b>. A correção mostra, no próprio certificado, o que está dentro (verde) e fora (vermelho) da norma.</p>';
+    return `<div class="msg ${f.ok ? 'ok' : 'no'}"><b>${f.ok ? 'Certo!' : 'Ainda não.'}</b> A resposta certa é <b>${esc(respTxt(Q.fails))}</b>.${f.ok ? '' : ` Você respondeu: ${esc(f.v)}.`}</div>${explicar(Q)}`;
+  }
+  function desenharPaineis() {
+    if (S.modo === 'treino') return painelTreino();
+    if (S.modo === 'exer') return painelExer();
+    return painelProva();
+  }
+  function ligar(conferir) {
+    area.querySelectorAll('.veredito [data-v]').forEach((b) => b.addEventListener('click', () => { S.resp = b.dataset.v; if (S.resp === 'c') S.sel.clear(); desenharDoc(); desenharPaineis(); }));
+    area.querySelectorAll('[data-a]').forEach((b) => b.addEventListener('click', () => acao(b.dataset.a, conferir)));
+  }
+  function erro(msg) { const m = $('#pverr'); if (m) { m.textContent = msg; m.hidden = false; } }
+  function limpa() { S.resp = null; S.sel.clear(); S.fb = null; }
+
+  function painelTreino() {
+    const t = S.treino, pct = t.tot ? Math.round(100 * t.ok / t.tot) : 0;
+    area.innerHTML = `<div class="panels">${avaliacaoHTML('Sua avaliação', S.fb ? '<button class="btn nav full" type="button" data-a="nova">Próximo certificado →</button>' : '<button class="btn pri" type="button" data-a="conferir">Conferir</button><button class="btn" type="button" data-a="nova">Outro certificado</button><button class="btn full" type="button" data-a="mostrar">Mostrar resposta</button>', !!S.fb)}
+      <section class="card panel" aria-live="polite"><div class="ptitle">Correção</div>${corrHTML()}</section>
+      <section class="card panel"><div class="ptitle">Treino de hoje</div><div class="big">${t.ok} <span style="font-size:24px;color:var(--ink-3)">de ${t.tot}</span></div>
+        <div class="muted">${t.tot ? pct + '% de acerto · ' : ''}o treino não vale nota. Para nota, use <b>Exercício</b> ou <b>Prova</b>.</div></section></div>`;
+    ligar(() => { const r = corrigir(S.q); if (r.vazio) return erro(r.msg); t.tot++; if (r.ok) t.ok++; S.fb = r; desenharDoc(); desenharPaineis(); });
+  }
+  function acao(a, conferir) {
+    if (a === 'conferir' || a === 'pvconf') return conferir();
+    if (a === 'nova') { S.q = sortear(S.filtro); limpa(); desenharDoc(); desenharPaineis(); scrollDoc(); return; }
+    if (a === 'mostrar') { S.fb = { ok: false, v: 'Mostrar resposta', mostrou: true }; desenharDoc(); desenharPaineis(); return; }
+    if (a === 'proxima') { S.ex.k++; limpa(); desenharDoc(); desenharPaineis(); scrollDoc(); return; }
+    if (a === 'exnovo') { iniciarExer(); return; }
+    if (a === 'pvcomecar') return iniciarProva();
+    if (a === 'pvgravar') { if (S.pv) { S.pv.grav = null; desenharPaineis(); gravar(S.pv); } return; }
+    if (a === 'pvnovo') { S.pv = null; limpa(); travarNorma(false); desenharDoc(); desenharPaineis(); }
+  }
+  function scrollDoc() { try { if (!EMBED) docEl.scrollIntoView({ block: 'start', behavior: 'smooth' }); else window.parent.scrollTo({ top: Math.max(0, window.frameElement.getBoundingClientRect().top + window.parent.scrollY - 70), behavior: 'smooth' }); } catch (e) { /* segue */ } }
+
+  /* exercício: 10 certificados, correção na hora */
+  function iniciarExer() { S.ex = { L: lista(10, S.filtro), k: 0, resp: [] }; limpa(); desenharDoc(); desenharPaineis(); }
+  const dotsHTML = (E, prova) => `<div class="dots" aria-hidden="true">${Array.from({ length: 10 }, (_, j) => { const r = E.resp[j]; const cl = r ? (prova ? 'done' : (r.ok ? 'ok' : 'no')) : (j === E.k ? 'cur' : ''); return `<span class="${cl}"></span>`; }).join('')}</div>`;
+  function tabelaHTML(E) {
+    return `<div class="tblw"><table><thead><tr><th>#</th><th>Certificado</th><th>Resposta certa</th><th>Sua resposta</th><th>Resultado</th></tr></thead><tbody>${E.L.map((Q, j) => { const r = E.resp[j] || {}; return `<tr><td class="num">${j + 1}</td><td>${esc(Q.N.curto)} · ${esc(Q.corrida)}</td><td>${esc(respTxt(Q.fails))}</td><td>${esc(r.v || '—')}</td><td class="${r.ok ? 'c-ok' : 'c-no'}">${r.ok ? '✓ certo' : '✕ errado'}</td></tr>`; }).join('')}</tbody></table></div>`;
+  }
+  function painelExer() {
+    const E = S.ex; if (!E) return iniciarExer();
+    const ac = E.resp.filter((r) => r.ok).length;
+    if (E.k >= 10) {
+      docEl.innerHTML = '';
+      area.innerHTML = `<section class="card resul"><div class="resh"><div><div class="k">Exercício concluído</div><div class="big">${ac} de 10</div></div><span class="grow"></span><button class="btn pri" type="button" data-a="exnovo">Fazer outro exercício</button></div>${tabelaHTML(E)}</section>`;
+      ligar(() => {}); return;
+    }
+    const conf = !!S.fb;
+    area.innerHTML = `<div class="panels">${avaliacaoHTML(`Certificado ${E.k + 1} de 10`, conf ? `<button class="btn nav full" type="button" data-a="proxima">${E.k === 9 ? 'Ver resultado' : 'Próximo certificado →'}</button>` : '<button class="btn pri full" type="button" data-a="conferir">Conferir</button>', conf)}
+      <section class="card panel" aria-live="polite"><div class="ptitle">Correção</div>${corrHTML()}</section>
+      <section class="card panel"><div class="ptitle">Exercício · 10 certificados</div><div class="big">${ac} <span style="font-size:24px;color:var(--ink-3)">acerto${ac === 1 ? '' : 's'}</span></div>${dotsHTML(E)}<div class="muted">Corrige na hora e mostra o que está fora da norma.</div></section></div>`;
+    ligar(() => { if (S.fb) return; const Q = E.L[E.k], r = corrigir(Q); if (r.vazio) return erro(r.msg); E.resp[E.k] = { ok: r.ok, v: r.v }; S.fb = r; desenharDoc(); desenharPaineis(); });
+  }
+
+  /* prova: nome, 10 certificados, sem correção até o fim; grava na Central */
+  function travarNorma(on) { document.querySelectorAll('#normas button').forEach((b) => { b.disabled = on; }); }
+  const normaTxt = () => (S.filtro === 'todas' ? 'A105, A106 B, WPB e LF2' : NORMAS[S.filtro].curto);
+  function iniciarProva() {
+    const nome = (($('#pvnome') || {}).value || '').trim();
+    if (!nome) { erro('Digite o nome do inspetor para começar.'); return; }
+    S.nomePv = nome; S.pv = { nome, L: lista(10, S.filtro), k: 0, resp: [], t0: Date.now(), fim: null, norma: normaTxt() }; limpa(); travarNorma(true); desenharDoc(); desenharPaineis();
+  }
+  const dur = (ms) => { const s = Math.round(ms / 1000); return `${Math.floor(s / 60)} min ${String(s % 60).padStart(2, '0')} s`; };
+  function gravHTML(p) {
+    if (!HOST) return '<span class="note">Aberto fora da Central: este resultado não fica gravado.</span>';
+    if (p.grav === 'ok') return '<span class="msg ok" id="pvgrav"><b>Gravado na Central</b> · Treinamento › Provas</span>';
+    if (p.grav === 'erro') return `<span class="msg no" id="pvgrav"><b>Não gravou:</b> ${esc(p.gravErr || 'sem conexão')}.</span><button class="btn" type="button" data-a="pvgravar">Tentar gravar de novo</button>`;
+    return '<span class="msg info" id="pvgrav">Gravando na Central…</span>';
+  }
+  async function gravar(p) {
+    if (!HOST || !HOST.salvar || p.grav === 'ok' || p.gravando) return;
+    p.gravando = true; p.grav = null;
+    const ac = p.resp.filter((r) => r.ok).length;
+    const reg = { tipo: 'certificado', res: p.norma, nome: p.nome, nota: ac, tot: 10, min: NOTA_MIN, ok: ac >= NOTA_MIN, ini: p.t0, fim: p.fim, ms: p.fim - p.t0,
+      resp: p.L.map((Q, j) => ({ c: `${Q.N.curto} · ${Q.corrida} · ${respTxt(Q.fails)}`, v: (p.resp[j] || {}).v || '', ok: !!(p.resp[j] || {}).ok })) };
+    try { await HOST.salvar(reg); p.grav = 'ok'; } catch (e) { p.grav = 'erro'; p.gravErr = (e && (e.message || e.code)) || String(e); }
+    p.gravando = false;
+    if (S.pv === p && S.modo === 'prova') desenharPaineis();
+  }
+  function painelProva() {
+    const p = S.pv;
+    if (!p) {
+      area.innerHTML = `<div class="panels">
+        <section class="card panel"><div class="ptitle">Prova do inspetor</div>
+          <form id="f" class="field"><label for="pvnome">Nome do inspetor</label><input id="pvnome" autocomplete="off" placeholder="Nome e sobrenome" value="${esc(S.nomePv || (HOST && HOST.nome ? HOST.nome() : '') || '')}"></form>
+          <div id="pverr" class="msg no" hidden></div>
+          <div class="acts"><button class="btn pri full" type="button" data-a="pvcomecar">Começar a prova</button></div></section>
+        <section class="card panel"><div class="ptitle">Como funciona</div><ol class="passos">
+          <li><i>1</i><span>10 certificados sorteados (${esc(normaTxt())}).</span></li>
+          <li><i>2</i><span>Para cada um: Conforme, ou Não conforme marcando o valor fora. A tabela da norma pode ser consultada.</span></li>
+          <li><i>3</i><span>Sem correção durante a prova. Aprovado com <b>${NOTA_MIN} ou mais</b> acertos de 10.</span></li></ol></section>
+        <section class="card panel"><div class="ptitle">Registro</div><p class="note" style="margin:0">${HOST ? 'Ao terminar, a prova fica gravada na Central (Treinamento › Provas) com nome, data e nota. Serve como evidência de treinamento do inspetor.' : 'Aberto fora da Central: o resultado aparece só na tela e não fica gravado.'}</p></section></div>`;
+      const f = $('#f'); if (f) f.addEventListener('submit', (e) => { e.preventDefault(); iniciarProva(); });
+      ligar(() => iniciarProva()); return;
+    }
+    if (p.k >= 10) {
+      const ac = p.resp.filter((r) => r.ok).length, ok = ac >= NOTA_MIN, d = new Date(p.fim);
+      docEl.innerHTML = '';
+      area.innerHTML = `<section class="card resul">
+        <div class="resh"><div><div class="k">Inspetor</div><div style="font:600 20px var(--f-body)">${esc(p.nome)}</div></div>
+          <div><div class="k">Nota</div><div class="big">${ac} / 10</div></div>
+          <div><div class="k">Situação</div><span class="pill ${ok ? 'ok' : 'no'}">${ok ? 'Aprovado' : 'Reprovado'}</span></div>
+          <div><div class="k">Normas</div><div class="mono">${esc(p.norma)}</div></div>
+          <div><div class="k">Data</div><div class="mono">${d.toLocaleDateString('pt-BR')} ${d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</div></div>
+          <div><div class="k">Tempo</div><div class="mono">${dur(p.fim - p.t0)}</div></div></div>
+        ${tabelaHTML(p)}
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><button class="btn pri" type="button" data-a="pvnovo">Nova prova</button>${gravHTML(p)}</div></section>`;
+      ligar(() => {}); return;
+    }
+    area.innerHTML = `<div class="panels">${avaliacaoHTML(`Certificado ${p.k + 1} de 10`, `<button class="btn pri full" type="button" data-a="pvconf">${p.k === 9 ? 'Confirmar e terminar' : 'Confirmar e ir para o próximo'}</button>`, false)}
+      <section class="card panel"><div class="ptitle">Durante a prova</div><p style="margin:0">A correção aparece só no final. Confira bem antes de confirmar: a resposta não pode ser mudada depois.</p></section>
+      <section class="card panel"><div class="ptitle">Prova · ${esc(p.nome)}</div><div class="big">${p.k} <span style="font-size:24px;color:var(--ink-3)">de 10 respondidos</span></div>${dotsHTML(p, true)}</section></div>`;
+    ligar(() => {
+      const Q = p.L[p.k], r = corrigir(Q); if (r.vazio) return erro(r.msg);
+      p.resp[p.k] = { ok: r.ok, v: r.v }; p.k++; limpa();
+      if (p.k >= 10) { p.fim = Date.now(); travarNorma(false); gravar(p); }
+      desenharDoc(); desenharPaineis(); scrollDoc();
+    });
+  }
+
+  /* ---------- trocar modo / norma ---------- */
+  function trocaModo(m) {
+    if (S.modo === 'prova' && m !== 'prova' && S.pv && S.pv.k < 10) { S.pv = null; travarNorma(false); }
+    S.modo = m; limpa();
+    document.querySelectorAll('#modos button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modo === m)));
+    if (m === 'treino' && !S.q) S.q = sortear(S.filtro);
+    if (m === 'exer') S.ex = null;
+    if (m === 'prova') S.pv = null;
+    if (m === 'exer') iniciarExer(); else { desenharDoc(); desenharPaineis(); }
+  }
+  document.getElementById('modos').addEventListener('click', (e) => { const b = e.target.closest('[data-modo]'); if (b) trocaModo(b.dataset.modo); });
+  document.getElementById('normas').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-n]'); if (!b || b.disabled || b.dataset.n === S.filtro) return;
+    S.filtro = b.dataset.n; document.querySelectorAll('#normas button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.n === S.filtro)));
+    S.q = sortear(S.filtro); trocaModo(S.modo);
+  });
+
+  window.__cert = window.__paq = { S, NORMAS, sortear, avaliar, mnMax, corrigir, atual };
+  S.q = sortear(S.filtro); desenharDoc(); desenharPaineis();
+})();
+</script>
+</body>
+</html>

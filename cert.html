@@ -600,6 +600,11 @@ select.fld option { color: #000; font-weight: normal; }
 .pv-table .pv-orig b { font-weight: bold; color: var(--brand); }
 .pv-table .pv-link { border: 0; background: none; padding: 0; margin-left: 8px; font: inherit; font-weight: bold; color: var(--brand); text-decoration: underline; cursor: pointer; white-space: nowrap; }
 .pv-table .pv-sug { display: block; font-size: 11.5px; margin-top: 2px; color: var(--text); }
+/* v98: descrição, especificação e material editáveis na importação (clique e corrija antes de criar) */
+.pv-table .pv-ed { cursor: text; border-bottom: 1px dashed color-mix(in srgb, var(--muted) 70%, transparent); border-radius: 2px; outline: 1px solid transparent; outline-offset: 1px; }
+.pv-table .pv-ed:hover { outline-color: color-mix(in srgb, var(--brand) 45%, transparent); }
+.pv-table .pv-ed:focus { outline: 2px solid var(--brand); border-bottom-color: transparent; background: color-mix(in srgb, var(--brand) 8%, transparent); }
+.pv-table .pv-ed:empty::before { content: '(vazio)'; color: var(--muted); font-weight: normal; }
 .pv-table tr.pv-grp td { background: var(--brand); color: #FFFFFF; font-weight: bold; font-size: 12.5px; padding: 6px 10px; }
 .pv-table tr.pv-grp.outro td { background: #3B6CB0; }
 .pv-table tr.outro td.pv-dest { color: #3B6CB0; font-weight: bold; }
@@ -6483,6 +6488,26 @@ function el(tag, text, cls) {
 const textoComponentes = g => g.componentes.map(c => c.nome.toLowerCase() + (c.espec ? ` (${c.espec})` : '')).join(' · ');
 /* tela de conferência: cabeçalho lido do PDF + itens com caixa de seleção e a folha de destino;
  * itens do outro tipo (grades ou tubos) aparecem num grupo separado e vão para o outro certificado */
+/* v98: texto editável numa linha (Enter confirma, Esc volta ao que estava); muda(texto) a cada letra */
+function campoEditavel(texto, rotulo, muda) {
+  const e = el('span', '', 'pv-ed');
+  try { e.contentEditable = 'plaintext-only'; } catch (x) { e.contentEditable = 'true'; }
+  if (e.contentEditable !== 'plaintext-only') e.contentEditable = 'true';
+  e.spellcheck = false; e.tabIndex = 0;
+  e.setAttribute('role', 'textbox'); e.setAttribute('aria-label', rotulo); e.title = 'Clique para corrigir';
+  e.textContent = texto || '';
+  let antes = e.textContent;
+  const limpa = (t) => String(t || '').replace(/[\r\n\t]+/g, ' ');
+  e.addEventListener('focus', () => { antes = e.textContent; });
+  e.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter') { ev.preventDefault(); e.blur(); }
+    else if (ev.key === 'Escape') { ev.preventDefault(); ev.stopPropagation(); e.textContent = antes; muda(antes); e.blur(); }
+  });
+  e.addEventListener('paste', (ev) => { ev.preventDefault(); const t = limpa((ev.clipboardData || window.clipboardData).getData('text')); document.execCommand('insertText', false, t); });
+  e.addEventListener('input', () => muda(limpa(e.textContent)));
+  e.addEventListener('blur', () => { const t = limpa(e.textContent).replace(/\s+/g, ' ').trim(); if (t !== e.textContent) e.textContent = t; muda(t); });
+  return e;
+}
 function conferirPedido(ped) {
   const N = ped.itens.length;
   const oc = ped.tipo === 'oc';
@@ -6569,7 +6594,12 @@ function conferirPedido(ped) {
     chk.setAttribute('aria-label', `Incluir o item ${oc && it.itemOC ? it.itemOC + ' da O.C.' : i + 1}`);
     td0.appendChild(chk);
     const desc = el('td');
-    const descTxt = document.createTextNode(it.descricao || '—');
+    let pinta = null;
+    const descTxt = campoEditavel(it.descricao || '', 'Descrição do item', (t) => {
+      it.descricao = t;
+      if (it.padrao) { if (it.usarOriginal) it.origEd = t; else it.sugerida = t; if (pinta) pinta(true); }
+      else { it.naoCabe = it.tipoCert === TIPO && !LYT && !descricaoCabe(t); if (alertaCabe) alertaCabe.hidden = !it.naoCabe; }
+    });
     desc.append(descTxt);
     if (it.grade) desc.appendChild(el('span', it.grade.tipo, 'pv-tipo'));
     if (it.valv && (it.valv.tipo || it.valv.bitola || it.valv.classe) && it.tipoCert === TIPO) desc.appendChild(el('span', [it.valv.tipo, it.valv.bitola, it.valv.classe, it.valv.ext].filter(Boolean).join(' · '), 'pv-tipo'));
@@ -6579,9 +6609,9 @@ function conferirPedido(ped) {
       const o = el('span', '', 'pv-orig'), rot = el('b'), outra = el('span'), bt = el('button', '', 'pv-link');
       bt.type = 'button';
       o.append(rot, outra, bt);
-      const pinta = () => {
-        it.descricao = it.usarOriginal ? it.descricaoCompleta : it.sugerida;
-        descTxt.textContent = it.descricao;
+      pinta = (digitando) => {
+        it.descricao = it.usarOriginal ? (it.origEd != null ? it.origEd : it.descricaoCompleta) : it.sugerida;
+        if (!digitando) descTxt.textContent = it.descricao;
         rot.textContent = it.usarOriginal ? 'Original do pedido · sugerida: ' : 'Sugerida no padrão · original: ';
         outra.textContent = it.usarOriginal ? it.sugerida : it.descricaoCompleta;
         bt.textContent = it.usarOriginal ? 'usar a sugerida' : 'usar a original';
@@ -6613,7 +6643,8 @@ function conferirPedido(ped) {
       desc.appendChild(sg);
     } else if (!outro && (it.espec || it.material)) {
       const sg = el('span', '', 'pv-sug');
-      sg.append(el('b', 'Sugestão: '), document.createTextNode([it.espec && 'Espec. ' + it.espec, it.material && 'Material ' + it.material].filter(Boolean).join(' · ')));
+      sg.append(el('b', 'Sugestão: '), 'Espec. ', campoEditavel(it.espec, 'Especificação sugerida', (t) => { it.espec = t; }),
+        ' · Material ', campoEditavel(it.material, 'Material sugerido', (t) => { it.material = t; }));
       desc.appendChild(sg);
     }
     const dest = el('td', '', 'pv-dest');
@@ -6645,6 +6676,7 @@ function conferirPedido(ped) {
       : 'Entram nas folhas: cliente, Nº do certificado (Nº do PV + letra a cada 10 itens), O.C. do cliente, quantidade e descrição de cada item. ' +
         'Especificação e material vêm como sugestão (quando a descrição traz a norma); item da O.C., corrida, análises e tratamento térmico continuam para preencher. ';
   const nota = el('p', textoNota + (nOutros ? `Os itens de ${nomeOutros.toLowerCase()} ficam guardados para o certificado de ${nomeOutros.toLowerCase()}. ` : '') +
+    'Para corrigir a descrição, a especificação ou o material antes de criar, clique no texto (linha tracejada). ' +
     'Desmarque os itens que não vão (Shift+clique marca um intervalo).', 'pv-note');
   const comSugestao = LYT ? 0 : ped.itens.filter(it => it.tipoCert === TIPO && (it.espec || it.material)).length;
   const nAqui = N - nOutros;
@@ -6891,6 +6923,7 @@ function showDialog({ title, message, content, buttons, wide = false, dismissabl
     });
     const cancel = () => close(valueOf(buttons[0]));
     const onKey = e => {
+      if (e.key === 'Escape' && e.target && e.target.classList && e.target.classList.contains('pv-ed')) return;   // v98: Esc no texto editável só desfaz a edição
       if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); cancel(); return; }
       if (e.key === 'Tab') {      // o foco não sai da janela
         const f = [...box.querySelectorAll('button, input, select, textarea, a[href], [tabindex]:not([tabindex="-1"])')]

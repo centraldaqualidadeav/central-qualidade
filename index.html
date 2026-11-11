@@ -33,7 +33,7 @@
   --tcr: #707a2c;
   --usi: #497a98;
   --sold: #be5615;
-  --iqf: #986b3e; --rif: #1B3A6B; --rir: #4b6320;
+  --iqf: #986b3e; --rif: #1B3A6B; --rir: #4b6320; --trn: #2f6f7e;
   --ok: #1d7446;
   --warn: #9a6400;
   --serious: #b9500e;
@@ -51,7 +51,7 @@
   :root:not([data-theme="light"]) {
     --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
     --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #6c7772;
-    --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --rir: #8fb35a;
+    --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --trn: #5fb2c2; --rir: #8fb35a;
     --ok: #5dcb8d; --warn: #e3ad48; --serious: #ef8a4c; --crit: #ff6f63; --info: #72a8de; --off: #9aa39f; --focus: #72a8de;
     --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
     color-scheme: dark;
@@ -60,7 +60,7 @@
 :root[data-theme="dark"] {
   --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
   --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #6c7772;
-  --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --rir: #8fb35a;
+  --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --trn: #5fb2c2; --rir: #8fb35a;
   --ok: #5dcb8d; --warn: #e3ad48; --serious: #ef8a4c; --crit: #ff6f63; --info: #72a8de; --off: #9aa39f; --focus: #72a8de;
   --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
   color-scheme: dark;
@@ -1125,6 +1125,13 @@ body.tabmode .main { padding: 0 !important; }
 .tbw { min-height: calc(100dvh / var(--cqz, 1)); display: flex; flex-direction: column; background: var(--bg); }
 /* Mapa de processos 3D */
 .m3view { max-width: none; gap: 14px; }
+/* v90: Treinamento */
+.trv { max-width: none; gap: 14px; } .trabas { align-self: start; justify-self: start; } .trabas button { min-width: 140px; font-weight: 600; }
+.trfr { display: block; width: 100%; min-height: 900px; border: 0; background: transparent; }
+.trtb { max-width: none; padding-left: 12px; padding-right: 12px; }
+.trres { display: inline-flex; align-items: center; min-height: 26px; padding: 0 10px; border-radius: 13px; font-weight: 700; font-size: 12.5px; letter-spacing: .04em; text-transform: uppercase; }
+.trres.ok { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); } .trres.no { background: color-mix(in srgb, var(--crit) 14%, transparent); color: var(--crit); }
+.trvazio { padding: 22px; border: 1px dashed var(--line-2); border-radius: 12px; color: var(--ink-2); background: var(--surface); }
 .m3wrap { position: relative; height: calc(70vh / var(--cqz, 1)); min-height: 420px; border-radius: 16px; overflow: hidden; background: #07090b; border: 1px solid var(--line); }
 .m3wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
 .m3tb { flex: 1 0 auto; display: flex; flex-direction: column; } .m3tb .m3wrap { flex: 1; border-radius: 0; border: 0; }
@@ -2466,6 +2473,7 @@ body.cq-ver .tbhd { top: 36px; }
       <a href="#auditoria" data-v="auditoria" style="--c:var(--warn)"><span class="sw"></span>Auditoria<span class="ct" id="ct-aud" hidden></span></a>
       <a href="#relatorio" data-v="relatorio" style="--c:var(--geral)"><span class="sw"></span>Relatórios</a>
       <a href="#manual" data-v="manual" style="--c:var(--geral)"><span class="sw"></span>Manual</a>
+      <a href="#trein" data-v="trein" title="Simuladores de instrumentos e leitura de certificado de usina: treino, exercício e prova do inspetor" style="--c:var(--trn)"><span class="sw"></span>Treinamento</a>
       <a href="#trello" data-v="trello" style="--c:var(--jur)"><span class="sw"></span>Trello Jurong</a>
       <a href="#acomp" data-v="acomp" style="--c:var(--acj)"><span class="sw"></span>Acompanhamento Jurong</a>
       <a href="#historico" data-v="historico" style="--c:var(--geral)"><span class="sw"></span>Histórico</a>
@@ -5686,7 +5694,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 89; window.CQ_V = APP_V;
+    const APP_V = 98; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -6761,8 +6769,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* acesso por módulo (versão hospedada): 'nao' = não vê, 'ver' = só consulta, 'lanca' = lança */
   /* módulos em teste: a conta dona esconde de todo mundo (inclusive administradores) até liberar.
      Sem escolha gravada, os módulos novos ou reformulados começam escondidos. */
-  const TESTE_MODS = [['rir', 'RIR · Relatório de Inspeção de Recebimento', 'módulo novo: checklist da nota recebida no tablet ou no computador, resultado por lote; reprovado vai para a fila da NCF'], ['ins', 'Calibração', 'reformulada: EMA, histórico, envio ao laboratório, etiqueta QR, cronograma e custos'], ['sold', 'Soldagem', 'módulo novo'], ['iqf', 'Avaliação de fornecedores', 'módulo novo'], ['certq', 'Certificados', 'módulo novo: fila de pedidos do Omie e emissão do certificado de qualidade'], ['rif', 'RIF · Relatório de Inspeção Final (Usinagem)', 'módulo novo: quadro da usinagem e relatório de inspeção final']];
-  const TESTE_DEF = { rir: true, ins: true, sold: true, iqf: true, certq: true, rif: true, ticker: true };
+  const TESTE_MODS = [['rir', 'RIR · Relatório de Inspeção de Recebimento', 'módulo novo: checklist da nota recebida no tablet ou no computador, resultado por lote; reprovado vai para a fila da NCF'], ['ins', 'Calibração', 'reformulada: EMA, histórico, envio ao laboratório, etiqueta QR, cronograma e custos'], ['sold', 'Soldagem', 'módulo novo'], ['iqf', 'Avaliação de fornecedores', 'módulo novo'], ['certq', 'Certificados', 'módulo novo: fila de pedidos do Omie e emissão do certificado de qualidade'], ['rif', 'RIF · Relatório de Inspeção Final (Usinagem)', 'módulo novo: quadro da usinagem e relatório de inspeção final'], ['trein', 'Treinamento', 'módulo novo: simuladores de paquímetro, micrômetro e goniômetro e leitura de certificado de usina (treino, exercício e prova do inspetor gravada)']];
+  const TESTE_DEF = { rir: true, ins: true, sold: true, iqf: true, certq: true, rif: true, trein: true, ticker: true };
   const ocultos = () => { const o = ((DB.cfg || {}).ocultos) || {}; return Object.assign({}, TESTE_DEF, o); };
   const emTeste = (col) => !!ocultos()[col];
   window.CQ_EMTESTE = (col) => emTeste(col); /* Usuários avisa quando a ferramenta do tablet ainda está em teste */
@@ -6781,6 +6789,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const MAPA3D = false;
   const viewOk = (v) => {
     if (v === 'tabhome') return !!S.model && ['rirtab', 'riftab', 'rnctab'].some((t) => viewOk(t));
+    if (v === 'trein') return !!S.model && (DB.owner || !emTeste('trein')); /* v90: Treinamento é para todos que entram na Central (inclusive o tablet) */
     if (v === 'mapa3d') return MAPA3D && !!S.model; /* o mapa 3D é para todos que entram na Central (inclusive quem usa só o tablet) */
     if (v === 'riftab') return !!S.model && (tbOnly() ? tbTool('rif') && cw('rif') : vis('rif'));
     if (v === 'rirtab') return !!S.model && rirOn() && cw('rir') && (!tbOnly() || tbTool('rir'));
@@ -6998,13 +7007,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       cert: '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><circle cx="12" cy="13" r="2.6"/><path d="m10.6 15.2-1 4 2.4-1.2 2.4 1.2-1-4"/>',
       org: '<rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M6 16v-4h12v4"/>',
       gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>',
-      cube: '<path d="M12 2.8 4 7.2v9.6l8 4.4 8-4.4V7.2z"/><path d="M4 7.2 12 11.6l8-4.4M12 11.6v9.6"/>'
+      cube: '<path d="M12 2.8 4 7.2v9.6l8 4.4 8-4.4V7.2z"/><path d="M4 7.2 12 11.6l8-4.4M12 11.6v9.6"/>',
+      cap: '<path d="M2 9.5 12 4.5l10 5-10 5z"/><path d="M6 11.5v4.8c3.3 2.3 8.7 2.3 12 0v-4.8M22 9.5v5"/>'
     };
-    const V = { painel: 'grid', alertas: 'bell', rastreio: 'route', equipe: 'org', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rir: 'rirc', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', manual: 'book', mapa3d: 'cube', trello: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
+    const V = { painel: 'grid', alertas: 'bell', rastreio: 'route', equipe: 'org', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rir: 'rirc', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', manual: 'book', mapa3d: 'cube', trein: 'cap', trello: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
     const o = {}; Object.keys(V).forEach((v) => { o[v] = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[V[v]]}</svg>`; });
     return o;
   })();
-  function navIcons() { $$('#nav a').forEach((a) => { const sw = a.querySelector('.sw'); if (sw && !sw.firstChild && NAV_ICO[a.dataset.v]) sw.innerHTML = NAV_ICO[a.dataset.v]; const col = VIEW_COL[a.dataset.v]; a.classList.toggle('emteste', !!(DB.owner && col && emTeste(col))); }); }
+  function navIcons() { $$('#nav a').forEach((a) => { const sw = a.querySelector('.sw'); if (sw && !sw.firstChild && NAV_ICO[a.dataset.v]) sw.innerHTML = NAV_ICO[a.dataset.v]; const col = VIEW_COL[a.dataset.v] || (a.dataset.v === 'trein' ? 'trein' : null); a.classList.toggle('emteste', !!(DB.owner && col && emTeste(col))); }); }
   /* ---------- modo escuro: só o dono e os administradores; a escolha é de cada pessoa ---------- */
   const canTheme = () => !!(DB.owner || DB.admin === true);
   function applyTheme() {
@@ -7335,6 +7345,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   async function openRecord(mod, key) {
     if (mod === 'SOLD') { soldFicha(key); return; }
+    if (mod === 'TREIN') { trFicha(key); return; }
     if (mod === 'IQF') { iqOpen(key); return; }
     if (mod === 'RIR') { riAbrir(key); return; }
     if (mod === 'RIF') { if (RFI.ped[key]) { if (S.view !== 'rif') go('rif'); setTimeout(() => rfOpen(key), 80); } return; }
@@ -7470,7 +7481,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     }
     const tabAntes = document.body.classList.contains('tabmode');
     document.body.classList.toggle('tbmini', lsGet('cq-tb-mini', '') === '1');
-    document.body.classList.toggle('tabmode', S.view === 'tabhome' || S.view === 'rnctab' || S.view === 'riftab' || S.view === 'rirtab' || ((S.view === 'manual' || S.view === 'mapa3d') && tbOnly()));
+    document.body.classList.toggle('tabmode', S.view === 'tabhome' || S.view === 'rnctab' || S.view === 'riftab' || S.view === 'rirtab' || ((S.view === 'manual' || S.view === 'mapa3d' || S.view === 'trein') && tbOnly()));
     const tabAgora = document.body.classList.contains('tabmode'); if (tabAgora !== tabAntes) applyTheme();
     if (S.view === 'equipe' || S.view === 'sold') ouvePes();
     if (S.view === 'acomp' || S.view === 'trello') ouveJurong(S.view);
@@ -20052,6 +20063,215 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     };
     m3Size(); setTimeout(m3Size, 0); /* de novo depois que o letreiro aparece */
   };
+  /* ---------- v90: Treinamento · simulador de paquímetro (treino-paquimetro.html, aberto dentro da Central) e provas gravadas ---------- */
+  /* trein/p-<ms>-<quem>: uma prova por documento, gravada por quem fez; depois de gravada não muda */
+  const TR = { docs: {}, ready: false, sub: false, erro: false };
+  const trTodos = () => !!(DB.owner || DB.admin === true);   /* administradores veem as provas de todos; os outros, as suas */
+  function trOuve() {
+    if (TR.sub || !DB.db) return; TR.sub = true;
+    DB.db.collection('trein').onSnapshot((snap) => {
+      const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); TR.docs = o; TR.ready = true; TR.erro = false;
+      if (S.view === 'trein' && (S.f.trein || {}).aba === 'provas') { if ($('#layer').innerHTML) S.stale = true; else render(); }
+    }, (e) => { anotaErro('trein', e); TR.ready = true; TR.erro = true; if (S.view === 'trein') render(); });
+  }
+  function trMinhas() {
+    const me = DB.me || '', nome = E.key(myPessoa() || DB.meName || ''), todos = trTodos();
+    return Object.entries(TR.docs).map(([id, d]) => Object.assign({ key: id, mod: 'TREIN' }, d || {}))
+      .filter((d) => d.tipo && (todos || (me && d.by === me) || (nome && E.key(d.nome || '') === nome)));
+  }
+  /* a página do simulador chama a Central por aqui (mesma origem) */
+  window.CQ_TREIN_HOST = {
+    nome: () => myPessoa() || DB.meName || '',
+    salvar: async (r) => {
+      if (!DB.db) throw new Error('sem conexão com o banco');
+      const id = 'p-' + Date.now() + '-' + String(DB.me || 'anon').replace(/[^A-Za-z0-9]/g, '').slice(0, 12);
+      const reg = clean({ tipo: String(r.tipo || 'paquimetro'), res: String(r.res || ''), nome: String(r.nome || '').trim().slice(0, 80), nota: +r.nota || 0, tot: +r.tot || 10, min: +r.min || 8, ok: !!r.ok,
+        ini: +r.ini || null, fim: +r.fim || Date.now(), ms: +r.ms || null, resp: Array.isArray(r.resp) ? r.resp.slice(0, 20).map((x) => ({ c: String(x.c || ''), v: String(x.v || ''), ok: !!x.ok })) : [],
+        by: DB.me || null, em: Date.now(), aparelho: tbOnly() ? 'tablet' : 'central' });
+      await DB.db.doc('trein/' + id).set(reg);
+      logEntry('GERAL', id, 'novo', `Treinamento · prova de ${trTipo(reg).replace(/^./, (c) => c.toLowerCase())} · ${reg.nome} · ${reg.nota}/${reg.tot} · ${reg.ok ? 'aprovado' : 'reprovado'}`, null);
+      return id;
+    }
+  };
+  const trDur = (ms) => { if (!ms) return '—'; const s = Math.round(ms / 1000); return `${Math.floor(s / 60)} min ${String(s % 60).padStart(2, '0')} s`; };
+  const TR_INSTR = { paquimetro: 'Paquímetro', micrometro: 'Micrômetro', goniometro: 'Goniômetro', certificado: 'Certificado de usina' };
+  const trUn = (d) => (d && (d.tipo === 'goniometro' || d.tipo === 'certificado') ? '' : ' mm');   /* goniômetro lê em graus e minutos; certificado não tem unidade */
+  const trTipo = (d) => (d.tipo === 'certificado' ? 'Certificado de usina' + (d.res ? ' (' + d.res + ')' : '') : TR_INSTR[d.tipo] ? TR_INSTR[d.tipo] + ' ' + (d.res || '') + trUn(d) : d.tipo || '');
+  function trProvas(main) {
+    if (!TR.ready) return '<p class="muted">Carregando as provas…</p>';
+    if (TR.erro) return '<div class="warnbox">Não foi possível ler as provas gravadas. Verifique a conexão; se continuar, avise o administrador (as regras do banco precisam do Treinamento).</div>';
+    const L = trMinhas();
+    if (!L.length) return `<div class="trvazio"><b>Nenhuma prova gravada ainda.</b> Em <b>Paquímetro</b>, <b>Micrômetro</b>, <b>Goniômetro</b> ou <b>Certificado</b>, escolha <b>Prova</b>, confira o nome e responda as 10 questões. A prova aparece aqui com nota e situação.</div>`;
+    return '<div id="tr-tbl"></div>';
+  }
+  function trTabela() {
+    const host = $('#tr-tbl'); if (!host) return;
+    const rows = trMinhas().map((d, i) => Object.assign({ row: i }, d));
+    mountTable(host, { id: 'trein', rows, total: rows.length, noun: rows.length === 1 ? 'prova' : 'provas', open: true, sort: 'fim', dir: -1, export: 'Treinamento_Provas', cols: [
+      { k: 'fim', l: 'Data', w: 16, s: (x) => x.fim || 0, f: (x) => (x.fim ? `${dmy(x.fim)} ${hhmm(x.fim)}` : '—'), x: (x) => (x.fim ? `${dmy(x.fim)} ${hhmm(x.fim)}` : '') },
+      { k: 'nome', l: 'Inspetor', w: 26, f: (x) => esc(x.nome || '—') },
+      { k: 'tipo', l: 'Treinamento', w: 26, s: trTipo, f: (x) => esc(trTipo(x)), x: trTipo },
+      { k: 'nota', l: 'Nota', r: 1, w: 8, f: (x) => `<b>${x.nota}</b> / ${x.tot || 10}`, x: (x) => `${x.nota}/${x.tot || 10}` },
+      { k: 'ok', l: 'Situação', w: 12, s: (x) => (x.ok ? 1 : 0), f: (x) => `<span class="trres ${x.ok ? 'ok' : 'no'}">${x.ok ? 'Aprovado' : 'Reprovado'}</span>${TR.docs['c-' + x.key] ? ' <span class="muted" style="font-size:12px">· certificado</span>' : ''}`, x: (x) => (x.ok ? 'Aprovado' : 'Reprovado') },
+      { k: 'ms', l: 'Tempo', w: 12, f: (x) => trDur(x.ms), x: (x) => trDur(x.ms) },
+      { k: 'aparelho', l: 'Aparelho', w: 10, f: (x) => esc(x.aparelho === 'tablet' ? 'Tablet' : 'Central') }
+    ] });
+  }
+  /* ---------- v96: certificado de conclusão (prova aprovada) ----------
+     trein/c-<prova>: emissão feita por um administrador (fica assinado eletronicamente por ele); qualquer pessoa que vê a prova reimprime igual */
+  const TR_VALIDADE_ANOS = 1;
+  const TR_REV = 'linear-gradient(90deg,#EBDCA6 0%,#D7AA55 17%,#AA6A31 34%,#7B417A 50%,#33428F 66%,#4F87C7 83%,#9CA7AF 100%)';
+  const TR_REVS = '<stop offset="0" stop-color="#EBDCA6"/><stop offset=".17" stop-color="#D7AA55"/><stop offset=".34" stop-color="#AA6A31"/><stop offset=".5" stop-color="#7B417A"/><stop offset=".66" stop-color="#33428F"/><stop offset=".83" stop-color="#4F87C7"/><stop offset="1" stop-color="#9CA7AF"/>';
+  const trCod = (key, d) => 'TR-' + new Date(d.fim || Date.now()).getFullYear() + '-' + String(parseInt(String(key).split('-')[1] || '0', 10).toString(36)).toUpperCase().slice(-6);
+  const trValidade = (d) => { const t = new Date(d.fim || Date.now()); t.setFullYear(t.getFullYear() + TR_VALIDADE_ANOS); return t.getTime(); };
+  const TR_TXT = {
+    paquimetro: (d) => [`leitura de paquímetro universal`, ` (resolução ${esc(d.res || '')} mm)`, 'leitura da escala fixa, leitura do nônio e soma das leituras, em medidas sorteadas e sem consulta à resposta', ['Instrumento', `Paquímetro ${esc(d.res || '')} mm`]],
+    micrometro: (d) => [`leitura de micrômetro externo`, ` (0 a 25 mm, resolução ${esc(d.res || '')} mm)`, 'leitura da bainha (milímetros e meio milímetro), leitura do tambor e soma das leituras, em medidas sorteadas e sem consulta à resposta', ['Instrumento', `Micrômetro ${esc(d.res || '')} mm`]],
+    goniometro: (d) => [`leitura de goniômetro universal`, ` (nônio de ${esc(d.res || '')})`, 'leitura dos graus no disco graduado, leitura dos minutos no nônio e soma das leituras, em ângulos sorteados e sem consulta à resposta', ['Instrumento', `Goniômetro ${esc(d.res || '')}`]],
+    certificado: (d) => [`leitura e conferência de certificado de usina`, ` (${esc(d.res || '')})`, 'comparação da composição química e das propriedades mecânicas com os limites da norma, inclusive a regra do Mn em função do C, em certificados sorteados e sem consulta à resposta', ['Normas', esc(d.res || '')]]
+  };
+  function trGuil(W, H, M, B) {   /* v97: linhas das laterais = espectro de frequência (opção L); cantos = raios na cor da barra */
+    const h = B / 2, CH = W - 2 * M - 2 * B, CV = H - 2 * M - 2 * B, n = (x) => +x.toFixed(1);
+    const barras = (comp, g) => { let d = ''; for (let i = 2; i < comp - 1; i += 3) { const v = (0.35 + 0.65 * Math.abs(Math.sin(i / 37) * Math.cos(i / 91))) * (h - 2.5); d += `M${i} ${n(-v)}V${n(v)}`; } return `<path d="${d}" fill="none" stroke="url(#${g})" stroke-width="1.4" stroke-opacity=".85"/>`; };
+    const raios = (cx, cy) => { let d = ''; for (let k = 0; k < 36; k++) { const a = k * Math.PI / 18, L = k % 3 === 0 ? 13 : 10; d += `M${n(cx + 5 * Math.cos(a))} ${n(cy + 5 * Math.sin(a))}L${n(cx + L * Math.cos(a))} ${n(cy + L * Math.sin(a))}`; } return `<path d="${d}" fill="none" stroke="url(#rvh)" stroke-width=".9"/><circle cx="${cx}" cy="${cy}" r="2.6" fill="url(#rvh)"/>`; };
+    return `<defs><linearGradient id="gh" gradientUnits="userSpaceOnUse" x1="0" x2="${CH}" y1="0" y2="0">${TR_REVS}</linearGradient><linearGradient id="gv" gradientUnits="userSpaceOnUse" x1="0" x2="${CV}" y1="0" y2="0">${TR_REVS}</linearGradient></defs>`
+      + `<g transform="translate(${M + B} ${M + h})">${barras(CH, 'gh')}</g><g transform="translate(${M + B} ${H - M - h})">${barras(CH, 'gh')}</g>`
+      + `<g transform="translate(${M + h} ${M + B}) rotate(90)">${barras(CV, 'gv')}</g><g transform="translate(${W - M - h} ${M + B}) rotate(90)">${barras(CV, 'gv')}</g>`
+      + [[M + h, M + h], [W - M - h, M + h], [M + h, H - M - h], [W - M - h, H - M - h]].map(([x, y]) => raios(x, y)).join('');
+  }
+  function trSelo() {
+    const r = 74, pts = Array.from({ length: 144 }, (_, k) => { const rr = k % 2 === 0 ? r : r - 6, a = k * Math.PI / 72; return (r + rr * Math.cos(a)).toFixed(2) + ',' + (r + rr * Math.sin(a)).toFixed(2); }).join(' ');
+    return `<svg class="selo" viewBox="0 0 148 148" width="148" height="148"><defs><linearGradient id="rvs" x1="0" x2="1">${TR_REVS}</linearGradient><path id="arcoT" d="M 24,74 a 50,50 0 1,1 100,0"/><path id="arcoB" d="M 18,74 a 56,56 0 0,0 112,0"/></defs>
+<polygon points="${pts}" fill="#002340"/><circle cx="74" cy="74" r="64" fill="none" stroke="url(#rvs)" stroke-width="2.6"/><circle cx="74" cy="74" r="60" fill="none" stroke="#ffffff" stroke-opacity=".35" stroke-width=".8"/>
+<text font-family="Barlow Condensed" font-weight="700" font-size="11" letter-spacing="2.2" fill="#ffffff"><textPath href="#arcoT" startOffset="50%" text-anchor="middle">CENTRAL DA QUALIDADE</textPath></text>
+<text font-family="Barlow Condensed" font-weight="700" font-size="11" letter-spacing="2.6" fill="#ffffff"><textPath href="#arcoB" startOffset="50%" text-anchor="middle">APROVADO</textPath></text>
+<circle cx="74" cy="74" r="36" fill="#fbfaf7"/><text x="74" y="83" text-anchor="middle" font-family="Barlow Condensed" font-weight="800" font-size="33" fill="#002340">CQ</text><rect x="55" y="89" width="38" height="3.5" rx="1.75" fill="url(#rvs)"/>
+<circle cx="98" cy="54" r="10" fill="#1d7446" stroke="#fbfaf7" stroke-width="2.5"/><path d="M93.2,54.5 l3.2,3.4 l6.2,-6.8" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  }
+  function trCertHTML(key) {
+    const d = TR.docs[key], e = TR.docs['c-' + key]; if (!d || !e) return '';
+    const W = 1123, H = 794, M = 22, B = 26, T = (TR_TXT[d.tipo] || TR_TXT.paquimetro)(d), cod = e.cod || trCod(key, d);
+    const fontes = Array.from(document.querySelectorAll('link[rel="stylesheet"][href*="fonts"]')).map((l) => `<link rel="stylesheet" href="${esc(new URL(l.getAttribute('href'), location.href).href)}">`).join('');
+    const logo = DB.logo ? `<img class="av" src="${DB.logo}" alt="Aços Vital">` : '<b class="avt">AÇOS VITAL</b>';
+    const marca = DB.logo ? `<div class="marca" style="background-image:url('${DB.logo}')"></div>` : '';
+    const dh = (t) => `${dmy(t)} às ${hhmm(t)}`;
+    return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Certificado ${esc(cod)} ${esc(d.nome || '')}</title>${fontes}<style>
+@page { size: A4 landscape; margin: 0; }
+* { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; } html, body { margin: 0; background: #fbfaf7; }
+body { font-family: "IBM Plex Sans", Arial, sans-serif; color: #1b211e; }
+.folha { width: ${W}px; height: ${H}px; position: relative; background: #fbfaf7; overflow: hidden; }
+.folha > svg.borda { position: absolute; inset: 0; }
+.rev { position: absolute; left: 58px; right: 58px; top: 58px; height: 5px; border-radius: 3px; background: ${TR_REV}; }
+.rev2 { top: auto; bottom: 52px; height: 3px; }
+.marca { position: absolute; left: 50%; top: 53%; width: 420px; height: 330px; transform: translate(-50%, -50%); opacity: .045; background: no-repeat center top / 1105px auto; }   /* só o símbolo da logo, grande, ao fundo */
+.conteudo { position: absolute; left: 88px; right: 88px; top: 78px; bottom: 80px; display: grid; grid-template-rows: auto auto 1fr auto; justify-items: center; text-align: center; }
+.topo { width: 100%; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; }
+.topo img.av { justify-self: start; height: 104px; max-width: 300px; object-fit: contain; }
+.topo .avt { justify-self: start; font: 800 40px/1 "Barlow Condensed", sans-serif; letter-spacing: .06em; color: #002340; }
+.topmeio { display: grid; justify-items: center; gap: 5px; }
+.topmeio small { font: 600 11px "Barlow Condensed", sans-serif; letter-spacing: .32em; color: #5d6771; text-transform: uppercase; }
+.topmeio small:nth-child(2) { color: #002340; font-weight: 700; }
+.cq { justify-self: end; display: grid; gap: 7px; text-align: left; }
+.cq b { font: 700 44px/.9 "Barlow Condensed", sans-serif; letter-spacing: .01em; text-transform: uppercase; color: #1E2321; }
+.cq i { display: block; height: 6px; border-radius: 3px; background: ${TR_REV}; }
+.cq span { font: 600 11.5px "Barlow Condensed", sans-serif; letter-spacing: .26em; text-transform: uppercase; color: #5d6771; }
+h1 { margin: 6px 0 0; font: 800 58px/.95 "Barlow Condensed", sans-serif; letter-spacing: .16em; color: #002340; }
+.sub { font: 600 15px "Barlow Condensed", sans-serif; letter-spacing: .34em; color: #D9480F; text-transform: uppercase; margin-top: 6px; }
+.meio { align-self: center; display: grid; justify-items: center; gap: 10px; max-width: 820px; }
+.cert { font: 400 15px/1 "IBM Plex Sans", sans-serif; color: #48514c; letter-spacing: .04em; }
+.nome { font: 700 50px/1 "Barlow Condensed", sans-serif; color: #002340; letter-spacing: .02em; padding: 0 40px 12px; background: ${TR_REV} left bottom / 100% 3px no-repeat; }
+.texto { font: 400 15.5px/1.6 "IBM Plex Sans", sans-serif; color: #2c3430; max-width: 760px; text-wrap: balance; }
+.texto b { color: #002340; }
+.dados { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; max-width: 860px; border-top: 1px solid #c9cec8; border-bottom: 1px solid #c9cec8; margin-top: 6px; }
+.dados div { padding: 9px 12px; border-left: 1px solid #e1e4df; display: grid; gap: 3px; } .dados div:first-child { border-left: 0; }
+.dados span { font: 600 10.5px "Barlow Condensed", sans-serif; letter-spacing: .2em; text-transform: uppercase; color: #6b7570; }
+.dados b { font: 600 15px "IBM Plex Sans", sans-serif; color: #002340; font-variant-numeric: tabular-nums; }
+.rodape { width: 100%; display: grid; grid-template-columns: 1fr 160px 1fr; align-items: end; gap: 20px; }
+.ass { display: grid; justify-items: center; gap: 3px; }
+.ass .linha { width: 240px; border-top: 1px solid #2c3430; margin: 26px 0 4px; }
+.ass b { font: 600 14px "IBM Plex Sans", sans-serif; color: #1b211e; }
+.ass span { font: 400 11.5px "IBM Plex Sans", sans-serif; color: #5d6771; }
+.ass .eletr { font: 500 10.5px "IBM Plex Mono", monospace; color: #1d7446; }
+.v { font-style: normal; display: inline-grid; place-items: center; width: 14px; height: 14px; border-radius: 50%; background: #1d7446; color: #fff; font: 700 9px/1 "IBM Plex Sans"; margin-right: 6px; vertical-align: 1px; }
+.selo { justify-self: center; filter: drop-shadow(0 3px 4px rgba(0, 35, 64, .25)); }
+.verif { text-align: center; transform: translateX(-50%); position: absolute; left: 50%; bottom: 60px; font: 500 9.5px "IBM Plex Mono", monospace; color: #7b857f; letter-spacing: .04em; white-space: nowrap; }
+</style></head><body><div class="folha">
+<svg class="borda" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}"><defs><linearGradient id="rvh" x1="0" x2="1" y1="0" y2="0">${TR_REVS}</linearGradient></defs>
+<rect x="14" y="14" width="1095" height="766" fill="none" stroke="#002340" stroke-width="2.2"/><rect x="19" y="19" width="1085" height="756" fill="none" stroke="#002340" stroke-width=".6"/>
+${trGuil(W, H, M, B)}
+<rect x="50" y="50" width="1023" height="694" fill="none" stroke="#002340" stroke-width=".8"/><rect x="54" y="54" width="1015" height="686" fill="none" stroke="url(#rvh)" stroke-width="1.4"/></svg>
+<div class="rev"></div><div class="rev rev2"></div>${marca}
+<div class="conteudo">
+  <div class="topo">${logo}<div class="topmeio"><small>Emitido pela</small><small>Central da Qualidade</small><small>Treinamento</small></div><div class="cq"><b>Central da<br>Qualidade</b><i></i><span>Aços Vital · Qualidade</span></div></div>
+  <div><h1>CERTIFICADO</h1><div class="sub">de conclusão de treinamento</div></div>
+  <div class="meio"><div class="cert">Certificamos que</div><div class="nome">${esc(d.nome || '')}</div>
+    <div class="texto">concluiu com aproveitamento o treinamento e a avaliação prática de <b>${T[0]}</b>${T[1]}, sendo considerado(a) <b>aprovado(a)</b>. Conteúdo: ${T[2]}.</div>
+    <div class="dados"><div><span>Data da avaliação</span><b>${dmy(d.fim)}</b></div><div><span>Resultado</span><b><i class="v" style="width:16px;height:16px;font-size:10px">✓</i>Aprovado</b></div><div><span>${T[3][0]}</span><b>${T[3][1]}</b></div><div><span>Válido até</span><b>${dmy(e.val || trValidade(d))}</b></div></div></div>
+  <div class="rodape">
+    <div class="ass"><div class="linha"></div><b>${esc(d.nome || '')}</b><span>Inspetor de Qualidade</span><span class="eletr"><i class="v">✓</i>prova concluída em ${dh(d.fim)}</span></div>
+    ${trSelo()}
+    <div class="ass"><div class="linha"></div><b>${esc(e.nome || '')}</b><span>Responsável pela Qualidade</span><span class="eletr"><i class="v">✓</i>assinado eletronicamente em ${dh(e.em)}</span></div>
+  </div>
+</div>
+<div class="verif"><i class="v" style="width:15px;height:15px">✓</i>Verificado pela Central da Qualidade · código ${esc(cod)}</div>
+</div><script>window.__pgEspera = true; Promise.all([document.fonts ? document.fonts.ready : 0].concat([...document.images].map((i) => (i.complete ? 0 : new Promise((r) => { i.onload = i.onerror = r; }))))).then(() => { window.__pgPronto = true; });<\/script></body></html>`;
+  }
+  async function trEmitir(key) {
+    const d = TR.docs[key]; if (!d || !d.ok || !trTodos() || TR.docs['c-' + key]) return;
+    const nome = myPessoa() || DB.meName || '';
+    if (!nome) { toast('Cadastre o seu nome (Equipe) antes de assinar o certificado.', true); return; }
+    const e = { emissao: true, prova: key, cod: trCod(key, d), val: trValidade(d), por: DB.me || null, nome, em: Date.now() };
+    try {
+      await DB.db.doc('trein/c-' + key).set(e); TR.docs['c-' + key] = e;
+      logEntry('GERAL', 'c-' + key, 'novo', `Treinamento · certificado ${e.cod} emitido para ${d.nome || ''} (${trTipo(d)})`, null);
+      toast(`Certificado ${e.cod} emitido.`); trFicha(key); trImprimir(key);
+    } catch (err) { toast('Não foi possível emitir: ' + ((err && (err.message || err.code)) || err), true); }
+  }
+  function trImprimir(key) { const h = trCertHTML(key); if (h) printHTML(h); }
+  function trCertArea(key, d) {
+    if (!d.ok) return '';
+    const e = TR.docs['c-' + key];
+    if (e) return `<div class="okbox" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center"><span><b>Certificado ${esc(e.cod || '')}</b> · emitido e assinado por ${esc(e.nome || '')} em ${dmy(e.em)} · válido até ${dmy(e.val)}</span></div>`;
+    return trTodos() ? `<p class="muted" style="margin:12px 0 0">Prova aprovada: o certificado de conclusão sai assinado eletronicamente por você (${esc(myPessoa() || DB.meName || '')}), válido por ${TR_VALIDADE_ANOS} ano.</p>`
+      : '<p class="muted" style="margin:12px 0 0">Prova aprovada. O certificado de conclusão é emitido por um administrador.</p>';
+  }
+  function trCertBtn(key, d) {
+    if (!d.ok) return '';
+    if (TR.docs['c-' + key]) return `<button class="btn primary" type="button" data-act="tr-cert" data-key="${esc(key)}">Certificado (PDF)</button>`;
+    return trTodos() ? `<button class="btn primary" type="button" data-act="tr-emitir" data-key="${esc(key)}">Emitir certificado</button>` : '';
+  }
+  function trFicha(key) {
+    const d = TR.docs[key]; if (!d) return;
+    const R = d.resp || [];
+    openModal(`Prova · ${d.nome || ''}`, `${kv([['Inspetor', esc(d.nome || '')], ['Treinamento', esc(trTipo(d))], ['Data', d.fim ? `${dmy(d.fim)} às ${hhmm(d.fim)}` : '—'], ['Nota', `<b>${d.nota}</b> de ${d.tot || 10} (mínimo ${d.min || 8} para aprovar)`], ['Situação', `<span class="trres ${d.ok ? 'ok' : 'no'}">${d.ok ? 'Aprovado' : 'Reprovado'}</span>`], ['Tempo', trDur(d.ms)], ['Feita no', d.aparelho === 'tablet' ? 'Tablet' : 'Central']])}
+      ${R.length ? `<div class="twrap" style="margin-top:12px"><table class="t"><thead><tr><th scope="col">#</th><th scope="col">${d.tipo === 'certificado' ? 'Resposta certa' : 'Medida certa'}</th><th scope="col">${d.tipo === 'certificado' ? 'Resposta do inspetor' : 'Leitura do inspetor'}</th><th scope="col">Resultado</th></tr></thead><tbody>${R.map((x, i) => `<tr><td class="mono">${i + 1}</td><td class="mono">${esc(x.c)}${trUn(d)}</td><td class="mono">${x.v ? esc(x.v) + trUn(d) : '—'}</td><td><span class="trres ${x.ok ? 'ok' : 'no'}">${x.ok ? 'certo' : 'errado'}</span></td></tr>`).join('')}</tbody></table></div>` : ''}
+      ${trCertArea(key, d)}
+      <div class="formfoot">${trCertBtn(key, d)}<button class="btn" type="button" data-act="close">Fechar</button></div>`);
+  }
+  function trAct(a, key) {
+    if (a === 'tr-cert') { trImprimir(key); return true; }
+    if (a === 'tr-emitir') {
+      const b = document.querySelector('[data-act="tr-emitir"]');   /* confirma no próprio botão (sem janela por cima) */
+      if (b && b.dataset.conf !== '1') { b.dataset.conf = '1'; b.textContent = 'Confirmar: emitir e assinar'; return true; }
+      if (b) { b.disabled = true; b.textContent = 'Emitindo…'; }
+      trEmitir(key); return true;
+    }
+    if (a === 'tr-aba') { (S.f.trein || (S.f.trein = {})).aba = key; render(); return true; }
+    return false;
+  }
+  VIEWS.trein = (main) => {
+    trOuve();
+    const f = S.f.trein || (S.f.trein = {}), aba = ['provas', 'mic', 'gon', 'cert'].includes(f.aba) ? f.aba : 'paq', tab = tbOnly();
+    const SIM = { paq: ['treino-paquimetro.html', 'Simulador de paquímetro'], mic: ['treino-micrometro.html', 'Simulador de micrômetro'], gon: ['treino-goniometro.html', 'Simulador de goniômetro'], cert: ['treino-certificado.html', 'Leitura de certificado de usina'] };
+    /* o simulador não recarrega quando os dados da Central mudam (o treino em andamento continua) */
+    if (SIM[aba] && $('#trfr', main) && $('#trfr', main).dataset.aba === aba && !!main.querySelector('.tbw') === tab) return;
+    const abas = `<div class="seg trabas" role="group" aria-label="Treinamento"><button type="button" data-act="tr-aba" data-key="paq" aria-pressed="${aba === 'paq'}">Paquímetro</button><button type="button" data-act="tr-aba" data-key="mic" aria-pressed="${aba === 'mic'}">Micrômetro</button><button type="button" data-act="tr-aba" data-key="gon" aria-pressed="${aba === 'gon'}">Goniômetro</button><button type="button" data-act="tr-aba" data-key="cert" aria-pressed="${aba === 'cert'}">Certificado</button><button type="button" data-act="tr-aba" data-key="provas" aria-pressed="${aba === 'provas'}">Provas${trTodos() ? '' : ' (minhas)'}</button></div>`;
+    const corpo = SIM[aba] ? `<iframe id="trfr" class="trfr" data-aba="${aba}" src="${SIM[aba][0]}?embed=1" title="${SIM[aba][1]}"></iframe>` : trProvas(main);
+    main.innerHTML = tab
+      ? `<div class="tbw">${tbHead('Treinamento', 'instrumentos e certificado de usina')}<div class="tbb trtb">${abas}${corpo}</div></div>`
+      : `<div class="view trv">${head('Treinamento', 'Simuladores de paquímetro, micrômetro e goniômetro e leitura de certificado de usina: treino livre, exercício de 10 e prova do inspetor. A prova fica gravada em <b>Provas</b>.')}${abas}${corpo}</div>`;
+    if (aba === 'provas') trTabela();
+  };
   VIEWS.manual = (main) => {
     const L = manLista(), tab = tbOnly(), adm = manAdm();
     if (!MAN.sel || !L.some((d) => d.id === MAN.sel)) MAN.sel = (L[0] || {}).id || null;
@@ -20294,6 +20514,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (viewOk('rnctab')) L.push(['rnctab', 'NCF', 'Não conformidade', 'abrir NCF pelo tablet ou acompanhar as suas', 'var(--rnc)']);
     if (viewOk('riftab')) L.push(['riftab', 'RIF', 'Inspeção final', 'medir, fotografar e assinar o RIF pelo tablet', 'var(--rif)']);
     if (tbOnly() && viewOk('manual')) L.push(['manual', 'MQ', 'Manual', 'como fazer: instruções das suas ferramentas', 'var(--geral)']);
+    if (tbOnly() && viewOk('trein')) L.push(['trein', 'TR', 'Treinamento', 'instrumentos e certificado de usina: treino, exercício e prova', 'var(--trn)']);
     if (tbOnly() && viewOk('mapa3d')) L.push(['mapa3d', '3D', 'Mapa de processos 3D', 'o caminho do material no galpão, etapa por etapa', 'var(--geral)']);
     if (!tbOnly()) L.push(['central', 'CQ', 'Central completa', 'menu com todos os módulos liberados para você', 'var(--geral)']);
     return L;
@@ -20956,6 +21177,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (a && a.startsWith('rf-') && rfAct(a, key, act)) return;
       if (a && a.startsWith('ri-') && riAct(a, key, act)) return;
       if (a && a.startsWith('man-') && manAct(a, key)) return;
+      if (a && a.startsWith('tr-') && trAct(a, key)) return;
       if (a && a.startsWith('rt-') && rtAct(a, key, act)) return;
       if (a && a.startsWith('eq-') && eqAct(a, key)) return;
       if (a === 'bk-dl') { const f = (VY.files || [])[+key]; if (f) saveFile(f[0], f[1]); return; }

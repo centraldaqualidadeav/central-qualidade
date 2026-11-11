@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Treinamento · Goniômetro</title>
+<!-- Central da Qualidade · Treinamento: simulador de goniômetro (aberto dentro da Central; sozinho também funciona, sem gravar) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: uma coluna de bancada — goniômetro grande em cima, lupa no nônio logo abaixo, e três painéis iguais (leitura · correção · progresso). Cores e fontes da Central da Qualidade. */
+:root {
+  --bg: #eef0ed; --surface: #ffffff; --surface-2: #f5f6f4; --sunken: #e4e7e3;
+  --line: #d3d8d2; --line-2: #bfc6be;
+  --ink: #1b211e; --ink-2: #48514c; --ink-3: #737d77;
+  --marinho: #002340; --on-marinho: #ffffff;
+  --laranja: #D9480F; --on-laranja: #ffffff; --laranja-soft: #fbe7dc;
+  --ok: #1d7446; --ok-soft: #e3f2e8; --crit: #b3261e; --crit-soft: #f8e4e2; --info: #1f5f9e; --info-soft: #e2ecf6;
+  --focus: #1f5f9e;
+  --f-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --shadow: 0 1px 2px rgba(20, 30, 25, .06), 0 6px 24px rgba(20, 30, 25, .07);
+  --bancada: #f7f8f6;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
+  --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --marinho: #1E4C8F; --on-marinho: #ffffff;
+  --laranja: #ef8a4c; --on-laranja: #1b120c; --laranja-soft: #3a2519;
+  --ok: #5dcb8d; --ok-soft: #173325; --crit: #ff6f63; --crit-soft: #3a1c1a; --info: #72a8de; --info-soft: #172a3d; --focus: #72a8de;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 24px rgba(0,0,0,.25); --bancada: #232826; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
+  --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --marinho: #1E4C8F; --on-marinho: #ffffff;
+  --laranja: #ef8a4c; --on-laranja: #1b120c; --laranja-soft: #3a2519;
+  --ok: #5dcb8d; --ok-soft: #173325; --crit: #ff6f63; --crit-soft: #3a1c1a; --info: #72a8de; --info-soft: #172a3d; --focus: #72a8de;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 24px rgba(0,0,0,.25); --bancada: #232826; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; } [hidden] { display: none !important; }
+body.embed .head { display: none; } body.embed .wrap { padding-block: 2px 8px; padding-left: 0; padding-right: 0; max-width: none; } body.embed { background: transparent; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-body); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 22px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 14px; }
+.eyebrow { font: 600 12.5px/1.2 var(--f-display); letter-spacing: .12em; text-transform: uppercase; color: var(--laranja); }
+h1 { margin: 2px 0 0; font: 700 34px/1 var(--f-display); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
+.sub { margin: 4px 0 0; color: var(--ink-2); max-width: 70ch; }
+.head { display: grid; gap: 2px; }
+
+.bar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: end; }
+.grp { display: grid; gap: 4px; }
+.grp > span { font: 600 12.5px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--line-2); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { min-height: 48px; min-width: 128px; padding: 0 16px; border: 0; border-left: 1px solid var(--line); background: transparent; color: var(--ink-2); font: 600 15px var(--f-body); cursor: pointer; }
+.seg button:first-child { border-left: 0; }
+.seg button[aria-pressed="true"] { background: var(--marinho); color: var(--on-marinho); }
+.seg button:disabled { opacity: .45; cursor: not-allowed; }
+.seg.res button { min-width: 104px; font-family: var(--f-mono); font-weight: 500; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+.bench { padding: 6px 0 4px; background: var(--bancada); overflow: hidden; position: relative; }
+.bench svg { display: block; width: 100%; height: auto; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.bench.drag svg { cursor: grab; } .bench.drag.grabbing svg { cursor: grabbing; }
+.benchbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 14px 12px; border-top: 1px solid var(--line); background: var(--surface); }
+.benchbar .hint { color: var(--ink-2); font-size: 13.5px; flex: 1 1 220px; min-width: 0; }
+.lock { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; color: var(--ink-2); }
+
+.btn { min-height: 48px; padding: 0 18px; border-radius: 9px; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--ink); font: 600 15px var(--f-body); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.btn:hover { border-color: var(--ink-3); }
+.btn.pri { background: var(--laranja); border-color: var(--laranja); color: var(--on-laranja); }
+.btn.nav { background: var(--marinho); border-color: var(--marinho); color: var(--on-marinho); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.step { white-space: nowrap; min-width: 76px; font-family: var(--f-mono); font-weight: 500; font-size: 14px; padding: 0 10px; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.lupa { padding: 0; overflow: hidden; }
+.lupah { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid var(--line); }
+.lupah b { font: 600 13px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+.lupah .grow { flex: 1; }
+.lupah .btn { min-height: 40px; font-size: 14px; }
+.lupa svg { display: block; width: 100%; height: auto; background: var(--bancada); }
+
+.panels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
+.panel { padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.ptitle { font: 600 13px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.read { display: flex; align-items: center; gap: 10px; }
+.read input { height: 56px; width: 100%; max-width: 200px; padding: 0 14px; font: 600 26px var(--f-mono); color: var(--ink); background: var(--surface); border: 2px solid var(--marinho); border-radius: 9px; font-variant-numeric: tabular-nums; }
+.read input:disabled { opacity: .6; }
+.read span { font: 500 18px var(--f-mono); color: var(--ink-2); }
+.read input { max-width: 110px; text-align: center; } .lupa svg { max-width: 760px; margin: 0 auto; } .read span { margin-right: 4px; font-size: 24px; }
+.acts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.acts .full { grid-column: 1 / -1; }
+
+.msg { border-radius: 9px; padding: 10px 12px; font-size: 14.5px; border: 1px solid transparent; }
+.msg b { font-weight: 700; }
+.msg.ok { background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 40%, transparent); color: var(--ink); }
+.msg.no { background: var(--crit-soft); border-color: color-mix(in srgb, var(--crit) 40%, transparent); color: var(--ink); }
+.msg.info { background: var(--info-soft); border-color: color-mix(in srgb, var(--info) 35%, transparent); color: var(--ink); }
+.passos { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.passos li { display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: start; font-size: 14.5px; }
+.passos i { font-style: normal; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 700 14px var(--f-display); background: var(--sunken); color: var(--ink-2); }
+.passos li.v i { background: var(--laranja); color: var(--on-laranja); }
+.passos li.m i { background: var(--info); color: #fff; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--ink-3); font-size: 13.5px; }
+
+.big { font: 700 44px/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.dots { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 5px; }
+.dots span { height: 10px; border-radius: 5px; background: var(--sunken); border: 1px solid var(--line); }
+.dots span.ok { background: var(--ok); border-color: var(--ok); }
+.dots span.no { background: var(--crit); border-color: var(--crit); }
+.dots span.cur { background: var(--laranja); border-color: var(--laranja); }
+.dots span.done { background: var(--ink-3); border-color: var(--ink-3); }
+.field { display: grid; gap: 4px; } .field label { font-size: 13px; color: var(--ink-2); font-weight: 600; }
+.field input { height: 48px; padding: 0 12px; font: 500 16px var(--f-body); border: 1px solid var(--line-2); border-radius: 9px; background: var(--surface); color: var(--ink); width: 100%; }
+
+.resul { padding: 18px; display: grid; gap: 14px; }
+.resh { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: end; }
+.resh .k { font: 600 12.5px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.pill { display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border-radius: 16px; font: 700 15px var(--f-display); letter-spacing: .06em; text-transform: uppercase; }
+.pill.ok { background: var(--ok-soft); color: var(--ok); } .pill.no { background: var(--crit-soft); color: var(--crit); }
+.tblw { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font: 600 12.5px var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+td.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.c-ok { color: var(--ok); font-weight: 700; } .c-no { color: var(--crit); font-weight: 700; }
+.note { font-size: 13.5px; color: var(--ink-2); border-left: 3px solid var(--line-2); padding-left: 10px; }
+
+@media (max-width: 900px) { .panels { grid-template-columns: 1fr 1fr; } .panels .panel:nth-child(3) { grid-column: 1 / -1; } }
+@media (max-width: 620px) {
+  h1 { font-size: 28px; }
+  .panels { grid-template-columns: 1fr; } .panels .panel:nth-child(3) { grid-column: auto; }
+  .bar { display: grid; grid-template-columns: 1fr; } .seg button { min-width: 0; padding: 0 8px; } .seg.res button { min-width: 0; }
+  .btn.step { min-width: 0; flex: 1 1 0; }
+  .benchbar .hint { flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div class="eyebrow">Central da Qualidade · Treinamento</div>
+    <h1>Goniômetro</h1>
+    <p class="sub">Treine a leitura do ângulo em graus e minutos. No treino livre você gira o braço; no exercício e na prova ele já vem com um ângulo para você ler.</p>
+  </header>
+
+  <div class="bar">
+    <div class="grp"><span>Modo</span>
+      <div class="seg" id="modos" role="group" aria-label="Modo">
+        <button type="button" data-modo="treino" aria-pressed="true">Treino livre</button>
+        <button type="button" data-modo="exer" aria-pressed="false">Exercício</button>
+        <button type="button" data-modo="prova" aria-pressed="false">Prova</button>
+      </div></div>
+    <div class="grp"><span>Resolução</span>
+      <div class="seg res" id="resol" role="group" aria-label="Resolução">
+        <button type="button" data-res="5" aria-pressed="true">5′ · 0° a 90°</button>
+      </div></div>
+  </div>
+
+  <section class="card" aria-label="Goniômetro">
+    <div class="bench drag" id="bench"><svg id="cal" viewBox="60 0 920 620" role="img" aria-label="Goniômetro (transferidor universal)"></svg></div>
+    <div class="benchbar" id="benchbar"></div>
+  </section>
+
+  <section class="card lupa" aria-label="Lupa no nônio">
+    <div class="lupah"><b>Lupa no nônio</b><span class="grow"></span><button class="btn" type="button" id="lupaBtn">Esconder lupa</button></div>
+    <svg id="lupa" viewBox="0 0 320 130" aria-hidden="true"><use href="#calroot"></use></svg>
+  </section>
+
+  <div id="area"></div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  /* dentro da Central: tema, nome de quem está usando e gravação da prova (CQ_TREIN_HOST) */
+  const EMBED = (() => { try { return new URLSearchParams(location.search).has('embed'); } catch (e) { return false; } })();
+  const HOST = (() => { try { return window.parent !== window && window.parent.CQ_TREIN_HOST ? window.parent.CQ_TREIN_HOST : null; } catch (e) { return null; } })();
+  if (EMBED) {
+    document.body.classList.add('embed');
+    const tema = () => { try { const t = window.parent.document.documentElement.dataset.theme; if (t) document.documentElement.dataset.theme = t; } catch (e) { /* sem acesso ao tema */ } };
+    tema(); try { new MutationObserver(tema).observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }); } catch (e) { /* segue */ }
+    const alto = () => { try { if (window.frameElement) window.frameElement.style.height = Math.ceil(document.documentElement.scrollHeight) + 'px'; } catch (e) { /* segue */ } };
+    try { new ResizeObserver(alto).observe(document.body); } catch (e) { setInterval(alto, 800); }
+    addEventListener('load', alto);
+  }
+  /* ---------- goniômetro universal · nônio de 5′: geometria ---------- */
+  /* disco com os graus (0 em cima, 90 dos lados) preso ao braço.
+     Como no goniômetro universal: a lâmina fica deitada embaixo e a janela com lente do nônio fica em cima (fixas);
+     o braço gira junto com o disco dos graus. Nônio: 12 divisões para cada lado, 1° 55′ cada; no 0° o braço fica deitado. */
+  const CX = 520, CY = 380, RI = 122, RE = 164, RT = 118, PASSO = 115 / 60, MAXG = 90;
+  const CFG = { '5': { res: 5, n: 12, dec: 0, txt: '5′' } };
+  const NS = 'http://www.w3.org/2000/svg';
+  const S = { cfgKey: '5', u: 449, modo: 'treino', lupa: true, mostra: false, treino: { ok: 0, tot: 0 }, ex: null, pv: null, travado: false, fb: null };
+  const cfg = () => CFG[S.cfgKey];
+  const maxU = () => MAXG * 12;
+  const ANG = (u) => u * 5 / 60;                    // graus
+  const parts = (u) => { const g = Math.floor(u / 12); return { g, i: u - g * 12 }; };
+  const fmt = (u) => { const p = parts(u); return `${p.g}° ${String(p.i * 5).padStart(2, '0')}′`; };
+  /* leitura digitada (em minutos) para mostrar: 37° 25′ */
+  const fx = (v) => `${Math.floor(v / 60)}° ${String(v % 60).padStart(2, '0')}′`;
+  const svg = document.getElementById('cal'), lupa = document.getElementById('lupa');
+  const el = (tag, at, parent) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (parent) parent.appendChild(e); return e; };
+  const FF = 'IBM Plex Sans, Arial, sans-serif';
+  /* ponto no raio r e no ângulo de leitura d (0 = em cima, cresce para a esquerda) */
+  const P = (r, d) => { const t = (d + 90) * Math.PI / 180; return [CX + r * Math.cos(t), CY - r * Math.sin(t)]; };
+  const rotulo = (d) => { d = ((d % 360) + 360) % 360; return d <= 90 ? d : d <= 180 ? 180 - d : d <= 270 ? d - 180 : 360 - d; };
+  const f1 = (v) => v.toFixed(1), f2 = (v) => v.toFixed(2);
+  const setor = (r1, r2, d1, d2) => { const [a1x, a1y] = P(r1, d1), [a2x, a2y] = P(r1, d2), [b2x, b2y] = P(r2, d2), [b1x, b1y] = P(r2, d1);
+    return `M${f1(a1x)},${f1(a1y)} A${r1},${r1} 0 0 0 ${f1(a2x)},${f1(a2y)} L${f1(b2x)},${f1(b2y)} A${r2},${r2} 0 0 1 ${f1(b1x)},${f1(b1y)} Z`; };
+
+  function knurl(cx, cy, r) {   /* botão serrilhado visto de frente */
+    let o = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#kb)" stroke="#6f767c"/>`;
+    for (let k = 0; k < 36; k++) { const t = k * 10 * Math.PI / 180; o += `<line x1="${f1(cx + r * Math.cos(t))}" y1="${f1(cy + r * Math.sin(t))}" x2="${f1(cx + (r - 4) * Math.cos(t))}" y2="${f1(cy + (r - 4) * Math.sin(t))}" stroke="#7d848a" stroke-width=".8"/>`; }
+    for (let k = 1; k < 4; k++) o += `<circle cx="${cx}" cy="${cy}" r="${f1((r - 5) * k / 4)}" fill="none" stroke="#c8cdd1" stroke-width=".8"/>`;
+    return o;
+  }
+  function desenhar() {
+    const BY = CY + 132, BH = 58, BL = 430;           // lâmina deitada embaixo
+    svg.innerHTML = `
+<defs>
+<linearGradient id="st" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3f4f5"/><stop offset=".12" stop-color="#dde0e3"/><stop offset=".8" stop-color="#c9ced2"/><stop offset="1" stop-color="#a3a9af"/></linearGradient>
+<linearGradient id="bl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbfbfc"/><stop offset=".35" stop-color="#dfe2e5"/><stop offset=".5" stop-color="#c3c8cd"/><stop offset=".52" stop-color="#eceef0"/><stop offset="1" stop-color="#a9afb5"/></linearGradient>
+<radialGradient id="dkr" cx=".42" cy=".38" r=".75"><stop offset="0" stop-color="#f2f3f4"/><stop offset=".75" stop-color="#d9dde0"/><stop offset="1" stop-color="#b9bfc4"/></radialGradient>
+<radialGradient id="tu" cx=".42" cy=".38" r=".75"><stop offset="0" stop-color="#e3e6e9"/><stop offset="1" stop-color="#aab1b7"/></radialGradient>
+<radialGradient id="kb" cx=".4" cy=".35" r=".75"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#d0d5d9"/><stop offset="1" stop-color="#8f969c"/></radialGradient>
+<linearGradient id="lente" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".6"/><stop offset=".35" stop-color="#ffffff" stop-opacity=".08"/><stop offset="1" stop-color="#dbe8f1" stop-opacity=".22"/></linearGradient>
+<filter id="sh" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#1d2733" flood-opacity=".24"/></filter>
+</defs>
+<g id="calroot">
+<g id="giro">
+<g filter="url(#sh)"><path d="M${CX},${CY - 42} L${CX + 330},${CY - 42} Q${CX + 342},${CY - 42} ${CX + 342},${CY - 30} L${CX + 342},${CY + 30} Q${CX + 342},${CY + 42} ${CX + 330},${CY + 42} L${CX},${CY + 42} Z" fill="url(#st)" stroke="#8e959c"/>
+<circle cx="${CX}" cy="${CY}" r="${RE}" fill="url(#dkr)" stroke="#8e959c"/></g>
+<circle cx="${CX + 290}" cy="${CY}" r="13" fill="none" stroke="#8e959c" stroke-width="1.4"/>
+<g id="escala"></g><g id="marcaFixa"></g>
+</g>
+<g filter="url(#sh)"><circle cx="${CX}" cy="${CY}" r="${RT}" fill="url(#tu)" stroke="#8e959c"/></g>
+<path d="${setor(RI - 1, 84, -30, 30)}" fill="#f4f5f6" stroke="#b3b9be"/><g id="nonio"></g><g id="marcaNonio"></g>
+<g id="fixo"></g>
+</g>`;
+    const esc = svg.querySelector('#escala');
+    for (let d = 0; d < 360; d++) {
+      const lv = rotulo(d), ln = lv % 10 === 0 ? 16 : lv % 5 === 0 ? 12 : 8, [x1, y1] = P(RI, d), [x2, y2] = P(RI + ln, d);
+      el('line', { x1: f2(x1), y1: f2(y1), x2: f2(x2), y2: f2(y2), stroke: '#22272c', 'stroke-width': 1, 'data-d': d }, esc);
+      if (lv % 10 === 0) { const [x, y] = P(RI + 29, d), t = el('text', { x: f1(x), y: f1(y + 4.5), 'font-size': 12.5, 'text-anchor': 'middle', fill: '#22272c', 'font-family': FF, transform: `rotate(${-d} ${f1(x)} ${f1(y)})` }, esc); t.textContent = lv; }
+    }
+    /* nônio fixo na janela de cima: lê-se para a direita (os graus do disco crescem para a direita) */
+    let o = '';
+    for (let i = -12; i <= 12; i++) {
+      const d = -i * PASSO, ln = i % 6 === 0 ? 14 : 9, [x1, y1] = P(RI - 1, d), [x2, y2] = P(RI - 1 - ln, d);
+      o += `<line x1="${f2(x1)}" y1="${f2(y1)}" x2="${f2(x2)}" y2="${f2(y2)}" stroke="#22272c" stroke-width="1" data-i="${i}"/>`;
+      if (i % 6 === 0) { const [x, y] = P(RI - 25, d); o += `<text x="${f1(x)}" y="${f1(y + 4)}" font-size="10.5" text-anchor="middle" fill="#22272c" font-family="${FF}" transform="rotate(${f1(-d)} ${f1(x)} ${f1(y)})">${Math.abs(i) * 5}</text>`; }
+    }
+    const [mx, my] = P(92, 0);
+    o += `<text x="${f1(mx)}" y="${f1(my + 3)}" font-size="8" text-anchor="middle" fill="#3f454b" font-family="${FF}">5′</text>`;
+    svg.querySelector('#nonio').innerHTML = o;
+    /* janela com lente, botões, presilha e a lâmina (fixos) */
+    const [wl, wt] = P(RE + 8, 33), wr = 2 * CX - wl, wb = CY - 70;
+    let fx_ = `<path d="M${f1(wl)},${wb} L${f1(wl)},${f1(wt + 26)} Q${f1(wl)},${f1(wt - 10)} ${CX},${f1(wt - 16)} Q${f1(wr)},${f1(wt - 10)} ${f1(wr)},${f1(wt + 26)} L${f1(wr)},${wb} Z" fill="url(#lente)" stroke="#8e959c" stroke-width="2.4"/>
+<path d="M${f1(wl + 6)},${f1(wt + 8)} Q${CX},${f1(wt - 16)} ${f1(wr - 6)},${f1(wt + 8)}" fill="none" stroke="#ffffff" stroke-opacity=".7" stroke-width="2.5"/>
+<rect x="${CX - 62}" y="${wb - 2}" width="124" height="22" rx="4" fill="#4a5158"/>
+<circle cx="${CX - 46}" cy="${wb + 9}" r="5.5" fill="url(#kb)"/><circle cx="${CX + 46}" cy="${wb + 9}" r="5.5" fill="url(#kb)"/>
+<g filter="url(#sh)"><path d="M${CX - BL},${BY + BH} L${CX - BL + 40},${BY} L${CX + BL - 40},${BY} L${CX + BL},${BY + BH} Z" fill="url(#bl)" stroke="#8e959c"/></g>
+<line x1="${CX - BL + 46}" y1="${BY + BH * 0.5}" x2="${CX + BL - 46}" y2="${BY + BH * 0.5}" stroke="#ffffff" stroke-opacity=".75"/>
+<g filter="url(#sh)"><rect x="${CX - 34}" y="${CY - 10}" width="68" height="${BY + BH - CY + 4}" rx="9" fill="url(#st)" stroke="#8e959c"/></g>
+<g filter="url(#sh)">${knurl(CX, CY, 38)}</g>${knurl(CX + 76, CY + 4, 26)}${knurl(CX, BY + 30, 20)}`;
+    svg.querySelector('#fixo').innerHTML = fx_;
+    posicionar();
+  }
+  function posicionar() {
+    const A = ANG(S.u);
+    svg.querySelector('#giro').setAttribute('transform', `rotate(${(-A).toFixed(3)} ${CX} ${CY})`);
+    marcar();
+    const [px, py] = P(RI - 4, 0);
+    lupa.setAttribute('viewBox', `${(px - 160).toFixed(1)} ${(py - 70).toFixed(1)} 320 130`);
+  }
+  /* destaque da leitura: grau antes do zero do nônio (azul) e o traço do nônio que coincide com a escala (laranja) */
+  function marcar() {
+    const mf = svg.querySelector('#marcaFixa'), mn = svg.querySelector('#marcaNonio'); if (!mf) return;
+    mf.innerHTML = ''; mn.innerHTML = '';
+    if (!S.mostra) return;
+    const p = parts(S.u), lin = (g, r1, r2, d, cor) => { const [x1, y1] = P(r1, d), [x2, y2] = P(r2, d); el('line', { x1: f1(x1), y1: f1(y1), x2: f1(x2), y2: f1(y2), stroke: cor, 'stroke-width': 3.2 }, g); };
+    lin(mf, RI, RI + 18, -p.g, '#1f5f9e');
+    lin(mf, RI, RI + 13, -(p.g + 2 * p.i), '#D9480F');
+    lin(mn, RI - 1, RI - 16, -p.i * PASSO, '#D9480F');
+  }
+
+  /* ---------- girar o braço arrastando (treino livre) ---------- */
+  const bench = document.getElementById('bench');
+  let drag = null;
+  const svgAng = (ev) => { const pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY; const q = pt.matrixTransform(svg.getScreenCTM().inverse()); return Math.atan2(CY - q.y, q.x - CX) * 180 / Math.PI; };
+  svg.addEventListener('pointerdown', (ev) => {
+    if (S.travado) return;
+    drag = { a: svgAng(ev), u: S.u, id: ev.pointerId }; svg.setPointerCapture(ev.pointerId); bench.classList.add('grabbing');
+  });
+  svg.addEventListener('pointermove', (ev) => {
+    if (!drag || ev.pointerId !== drag.id) return;
+    let da = svgAng(ev) - drag.a; if (da > 180) da -= 360; if (da < -180) da += 360;
+    irPara(drag.u + Math.round(da * 12));
+  });
+  const solta = () => { if (!drag) return; drag = null; bench.classList.remove('grabbing'); };
+  svg.addEventListener('pointerup', solta); svg.addEventListener('pointercancel', solta);
+
+  function irPara(u) {
+    u = Math.max(0, Math.min(maxU(), u));
+    if (u === S.u) return;
+    S.u = u;
+    if (S.modo === 'treino' && S.fb) { S.fb = null; S.mostra = false; desenharPaineis(); }
+    posicionar();
+  }
+  let anim = 0;
+  function deslizar(u) {
+    cancelAnimationFrame(anim);
+    const reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches, de = S.u, t0 = performance.now(), D = 450;
+    if (reduz || de === u) { S.u = u; posicionar(); return; }
+    const passo = (t) => { const k = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - k, 3); S.u = Math.round(de + (u - de) * e); posicionar(); if (k < 1) anim = requestAnimationFrame(passo); };
+    anim = requestAnimationFrame(passo);
+  }
+
+  /* ---------- medidas sorteadas ---------- */
+  function sortear(evitar = []) {
+    for (let k = 0; k < 300; k++) {
+      const u = 24 + Math.floor(Math.random() * (maxU() - 48)), p = parts(u);
+      if (p.i === 0 && Math.random() < 0.8) continue;           // poucos ângulos "redondos"
+      if (evitar.some((v) => Math.abs(v - u) < 36)) continue;
+      return u;
+    }
+    return 449;
+  }
+  const lista = (n) => { const a = []; while (a.length < n) a.push(sortear(a)); return a; };
+
+  /* ---------- correção ---------- */
+  /* resposta em dois campos: graus e minutos */
+  function campos() { const g = area.querySelector('#leitura'), m = area.querySelector('#min'); return { g: g ? g.value : '', m: m ? m.value : '' }; }
+  function corrigir(c, u) {
+    const gs = String(c.g || '').trim(), ms = String(c.m || '').trim();
+    if (!gs && !ms) return { vazio: true };
+    if (!/^\d+$/.test(gs || '0') || !/^\d+$/.test(ms || '0')) return { vazio: true };
+    const g = +(gs || 0), m = +(ms || 0), v = g * 60 + m, p = parts(u), cm = p.i * 5;
+    if (m < 60 && v === u * 5) return { ok: true, v };
+    let dica;
+    if (m >= 60) dica = 'Os minutos vão de 0 a 55: 60′ já é mais um grau.';
+    else if (m % 5) dica = 'Este goniômetro lê de 5 em 5 minutos (0′, 5′, 10′ … 55′).';
+    else if (g === p.g && cm && m === 60 - cm) dica = 'Você leu o lado errado do nônio. Leia a partir do zero do nônio, para o lado em que os graus da escala aumentam.';
+    else if (g === p.g && !m && cm) dica = 'Faltou somar os minutos do nônio: veja qual traço do nônio coincide com um traço da escala.';
+    else if (g === p.g) dica = 'Os graus estão certos. Reveja o nônio: o traço que coincide, contado a partir do zero, vale 5′ cada.';
+    else if (m === cm) dica = 'Os minutos estão certos. Reveja os graus: o último grau inteiro antes do zero do nônio.';
+    else dica = 'Comece pelos graus inteiros (antes do zero do nônio) e depois some os minutos do nônio.';
+    return { ok: false, v, dica };
+  }
+  function passosHTML(u) {
+    const p = parts(u), m = String(p.i * 5).padStart(2, '0');
+    return `<ol class="passos">
+      <li class="m"><i>1</i><span><b>Escala:</b> o zero do nônio passou do traço <b class="mono">${p.g}°</b> (marca azul).</span></li>
+      <li class="v"><i>2</i><span><b>Nônio</b>, do lado em que os graus crescem: o traço que coincide é o <b class="mono">${p.i}º</b> (marca laranja) → ${p.i} × 5′ = <b class="mono">${m}′</b>.</span></li>
+      <li><i>3</i><span><b>Leitura:</b> <span class="mono">${p.g}° + ${m}′ =</span> <b class="mono">${fmt(u)}</b></span></li></ol>`;
+  }
+
+  /* ---------- painéis por modo ---------- */
+  const area = document.getElementById('area'), benchbar = document.getElementById('benchbar');
+  const $ = (q) => area.querySelector(q);
+
+  function barraCursor() {
+    const c = cfg();
+    if (S.travado) { benchbar.innerHTML = `<span class="lock">Goniômetro travado: leia o ângulo que está nele.</span>`; bench.classList.remove('drag'); return; }
+    bench.classList.add('drag');
+    benchbar.innerHTML = `<span class="hint">Arraste o braço com o dedo ou o mouse para girar, ou use os botões para ajuste fino.</span>
+      <button class="btn step" type="button" data-step="-12">−1°</button><button class="btn step" type="button" data-step="-1">−${c.txt}</button>
+      <button class="btn step" type="button" data-step="1">+${c.txt}</button><button class="btn step" type="button" data-step="12">+1°</button>`;
+  }
+  benchbar.addEventListener('click', (e) => { const b = e.target.closest('[data-step]'); if (b) irPara(S.u + +b.dataset.step); });
+
+  function desenharPaineis() {
+    if (S.modo === 'treino') return painelTreino();
+    if (S.modo === 'exer') return painelExer();
+    return painelProva();
+  }
+
+  function caixaFb() {
+    const f = S.fb;
+    if (!f) return `<p class="muted" style="margin:0">Digite a leitura e toque em <b>Conferir</b>. Se errar, a conta aparece aqui, passo a passo.</p>`;
+    if (f.vazio) return `<div class="msg info">Digite os graus e os minutos, por exemplo <span class="mono">37° 25′</span>.</div>`;
+    if (f.mostrou) return `<div class="msg info"><b>Resposta: <span class="mono">${fmt(f.u)}</span></b></div>${passosHTML(f.u)}`;
+    if (f.ok) return `<div class="msg ok"><b>Certo! <span class="mono">${fmt(f.u)}</span></b></div>${passosHTML(f.u)}`;
+    return `<div class="msg no"><b>Ainda não.</b> Você leu <span class="mono">${fx(f.v)}</span>; o certo é <span class="mono">${fmt(f.u)}</span>.</div><p style="margin:0;font-size:14.5px">${f.dica}</p>${passosHTML(f.u)}`;
+  }
+
+  function painelTreino() {
+    const t = S.treino, pct = t.tot ? Math.round(100 * t.ok / t.tot) : 0;
+    area.innerHTML = `<div class="panels">
+      <section class="card panel"><div class="ptitle">Sua leitura</div>
+        <form class="read" id="f"><input id="leitura" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="Graus"><span>°</span><input id="min" inputmode="numeric" autocomplete="off" placeholder="00" aria-label="Minutos"><span>′</span><button type="submit" hidden></button></form>
+        <div class="acts"><button class="btn pri" type="button" data-a="conferir">Conferir</button><button class="btn" type="button" data-a="nova">Nova medida</button><button class="btn full" type="button" data-a="mostrar">Mostrar resposta</button></div></section>
+      <section class="card panel" aria-live="polite"><div class="ptitle">Correção</div>${caixaFb()}</section>
+      <section class="card panel"><div class="ptitle">Treino de hoje</div><div class="big">${t.ok} <span style="font-size:24px;color:var(--ink-3)">de ${t.tot}</span></div>
+        <div class="muted">${t.tot ? pct + '% de acerto · ' : ''}o treino não vale nota. Para nota, use <b>Exercício</b> ou <b>Prova</b>.</div></section></div>`;
+    ligarForm(() => {
+      const r = corrigir(campos(), S.u);
+      if (r.vazio) { S.fb = { vazio: true }; desenharPaineis(); return; }
+      t.tot++; if (r.ok) t.ok++;
+      S.fb = Object.assign({ u: S.u }, r); S.mostra = true; marcar(); desenharPaineis(); manter(r.v);
+    });
+  }
+  function manter(v) { const g = $('#leitura'), m = $('#min'); if (g && m && v != null) { g.value = Math.floor(v / 60); m.value = String(v % 60).padStart(2, '0'); } }
+
+  function ligarForm(conferir) {
+    const f = $('#f'); if (f) f.addEventListener('submit', (e) => { e.preventDefault(); conferir(); });
+    area.querySelectorAll('[data-a]').forEach((b) => b.addEventListener('click', () => acao(b.dataset.a, conferir)));
+  }
+  function acao(a, conferir) {
+    if (a === 'conferir') return conferir();
+    if (a === 'nova') { S.fb = null; S.mostra = false; marcar(); deslizar(sortear([S.u])); desenharPaineis(); setTimeout(() => { const i = $('#leitura'); if (i) i.focus(); }, 50); return; }
+    if (a === 'mostrar') { S.fb = { mostrou: true, u: S.u }; S.mostra = true; marcar(); desenharPaineis(); return; }
+    if (a === 'proxima') return exProxima();
+    if (a === 'exnovo') { iniciarExer(); return; }
+    if (a === 'pvcomecar') return iniciarProva();
+    if (a === 'pvconf') return conferir();
+    if (a === 'pvgravar') { if (S.pv) { S.pv.grav = null; desenharPaineis(); gravar(S.pv); } return; }
+    if (a === 'pvnovo') { S.pv = null; S.travado = false; S.mostra = false; barraCursor(); marcar(); desenharPaineis(); travarRes(false); return; }
+  }
+
+  /* exercício: 10 medidas, correção na hora */
+  function iniciarExer() {
+    S.ex = { med: lista(10), k: 0, resp: [], conf: false }; S.travado = true; S.mostra = false; S.fb = null;
+    barraCursor(); deslizar(S.ex.med[0]); desenharPaineis();
+  }
+  function exProxima() {
+    const e = S.ex; e.k++; e.conf = false; S.fb = null; S.mostra = false; marcar();
+    if (e.k < 10) deslizar(e.med[e.k]);
+    desenharPaineis();
+    setTimeout(() => { const i = $('#leitura'); if (i) i.focus(); }, 50);
+  }
+  function dotsHTML(e, prova) {
+    return `<div class="dots" aria-hidden="true">${Array.from({ length: 10 }, (_, j) => { const r = e.resp[j]; const cl = r ? (prova ? 'done' : (r.ok ? 'ok' : 'no')) : (j === e.k ? 'cur' : ''); return `<span class="${cl}"></span>`; }).join('')}</div>`;
+  }
+  function painelExer() {
+    const e = S.ex;
+    if (!e) return iniciarExer();
+    const acertos = e.resp.filter((r) => r.ok).length;
+    if (e.k >= 10) {
+      area.innerHTML = `<section class="card resul"><div class="resh"><div><div class="k">Exercício concluído</div><div class="big">${acertos} de 10</div></div><div class="muted">Resolução ${cfg().txt}</div><span class="grow"></span><button class="btn pri" type="button" data-a="exnovo">Fazer outro exercício</button></div>
+        ${tabelaHTML(e)}</section>`;
+      ligarForm(() => {}); return;
+    }
+    area.innerHTML = `<div class="panels">
+      <section class="card panel"><div class="ptitle">Medida ${e.k + 1} de 10</div>
+        <form class="read" id="f"><input id="leitura" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="Graus" ${e.conf ? 'disabled' : ''}><span>°</span><input id="min" inputmode="numeric" autocomplete="off" placeholder="00" aria-label="Minutos" ${e.conf ? 'disabled' : ''}><span>′</span><button type="submit" hidden></button></form>
+        <div class="acts">${e.conf ? `<button class="btn nav full" type="button" data-a="proxima">${e.k === 9 ? 'Ver resultado' : 'Próxima medida →'}</button>` : `<button class="btn pri full" type="button" data-a="conferir">Conferir</button>`}</div></section>
+      <section class="card panel" aria-live="polite"><div class="ptitle">Correção</div>${caixaFb()}</section>
+      <section class="card panel"><div class="ptitle">Exercício · 10 medidas</div><div class="big">${acertos} <span style="font-size:24px;color:var(--ink-3)">acerto${acertos === 1 ? '' : 's'}</span></div>${dotsHTML(e)}
+        <div class="muted">Corrige na hora e mostra a conta quando errar. O goniômetro fica travado.</div></section></div>`;
+    if (e.conf) manter(e.resp[e.k].v);
+    ligarForm(() => {
+      if (e.conf) return;
+      const r = corrigir(campos(), e.med[e.k]);
+      if (r.vazio) { S.fb = { vazio: true }; desenharPaineis(); return; }
+      e.resp[e.k] = { u: e.med[e.k], v: r.v, ok: r.ok }; e.conf = true;
+      S.fb = Object.assign({ u: e.med[e.k] }, r); S.mostra = true; marcar(); desenharPaineis();
+    });
+  }
+  function tabelaHTML(e) {
+    return `<div class="tblw"><table><thead><tr><th>#</th><th>Medida certa</th><th>Sua leitura</th><th>Resultado</th></tr></thead><tbody>${e.med.map((u, j) => { const r = e.resp[j] || {}; return `<tr><td class="num">${j + 1}</td><td class="num">${fmt(u)}</td><td class="num">${r.v != null ? fx(r.v) : '—'}</td><td class="${r.ok ? 'c-ok' : 'c-no'}">${r.ok ? '✓ certo' : '✕ errado'}</td></tr>`; }).join('')}</tbody></table></div>`;
+  }
+
+  /* prova: nome, 10 medidas, sem correção até o fim */
+  const NOTA_MIN = 8;
+  function travarRes(on) { document.querySelectorAll('#resol button').forEach((b) => { b.disabled = on; }); }
+  function iniciarProva() {
+    const nome = ($('#pvnome').value || '').trim();
+    if (!nome) { const m = $('#pverr'); m.hidden = false; $('#pvnome').focus(); return; }
+    S.nomePv = nome; S.pv = { nome, med: lista(10), k: 0, resp: [], t0: Date.now(), fim: null }; S.travado = true; S.mostra = false; S.fb = null;
+    travarRes(true); barraCursor(); deslizar(S.pv.med[0]); desenharPaineis();
+  }
+  const dur = (ms) => { const s = Math.round(ms / 1000); return `${Math.floor(s / 60)} min ${String(s % 60).padStart(2, '0')} s`; };
+  function painelProva() {
+    const p = S.pv;
+    if (!p) {
+      S.travado = false; barraCursor();
+      area.innerHTML = `<div class="panels">
+        <section class="card panel"><div class="ptitle">Prova do inspetor</div>
+          <form id="f" class="field"><label for="pvnome">Nome do inspetor</label><input id="pvnome" autocomplete="off" placeholder="Nome e sobrenome" value="${esc(S.nomePv || (HOST && HOST.nome ? HOST.nome() : '') || '')}"></form>
+          <div id="pverr" class="msg no" hidden>Digite o nome do inspetor para começar.</div>
+          <div class="acts"><button class="btn pri full" type="button" data-a="pvcomecar">Começar a prova</button></div></section>
+        <section class="card panel"><div class="ptitle">Como funciona</div><ol class="passos">
+          <li><i>1</i><span>10 medidas sorteadas, resolução <b class="mono">${cfg().txt}</b>.</span></li>
+          <li><i>2</i><span>Sem resposta e sem correção durante a prova. A lupa pode ser usada.</span></li>
+          <li><i>3</i><span>Aprovado com <b>${NOTA_MIN} ou mais</b> acertos de 10.</span></li></ol></section>
+        <section class="card panel"><div class="ptitle">Registro</div><p class="note" style="margin:0">${HOST ? 'Ao terminar, a prova fica gravada na Central (Treinamento › Provas) com nome, data, resolução e nota. Serve como evidência de treinamento do inspetor.' : 'Aberto fora da Central: o resultado aparece só na tela e não fica gravado.'}</p></section></div>`;
+      ligarForm(() => iniciarProva()); return;
+    }
+    if (p.k >= 10) {
+      const ac = p.resp.filter((r) => r.ok).length, ok = ac >= NOTA_MIN, d = new Date(p.fim);
+      S.mostra = false; marcar();
+      area.innerHTML = `<section class="card resul">
+        <div class="resh"><div><div class="k">Inspetor</div><div style="font:600 20px var(--f-body)">${esc(p.nome)}</div></div>
+          <div><div class="k">Nota</div><div class="big">${ac} / 10</div></div>
+          <div><div class="k">Situação</div><span class="pill ${ok ? 'ok' : 'no'}">${ok ? 'Aprovado' : 'Reprovado'}</span></div>
+          <div><div class="k">Resolução</div><div class="mono">${cfg().txt}</div></div>
+          <div><div class="k">Data</div><div class="mono">${d.toLocaleDateString('pt-BR')} ${d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</div></div>
+          <div><div class="k">Tempo</div><div class="mono">${dur(p.fim - p.t0)}</div></div></div>
+        ${tabelaHTML(p)}
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><button class="btn pri" type="button" data-a="pvnovo">Nova prova</button>${gravHTML(p)}</div></section>`;
+      ligarForm(() => {}); return;
+    }
+    area.innerHTML = `<div class="panels">
+      <section class="card panel"><div class="ptitle">Medida ${p.k + 1} de 10</div>
+        <form class="read" id="f"><input id="leitura" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="Graus"><span>°</span><input id="min" inputmode="numeric" autocomplete="off" placeholder="00" aria-label="Minutos"><span>′</span><button type="submit" hidden></button></form>
+        <div class="acts"><button class="btn pri full" type="button" data-a="pvconf">${p.k === 9 ? 'Confirmar e terminar' : 'Confirmar e ir para a próxima'}</button></div>
+        <div id="pverr" class="msg info" hidden>Digite os graus e os minutos, por exemplo <span class="mono">37° 25′</span>.</div></section>
+      <section class="card panel"><div class="ptitle">Durante a prova</div><p style="margin:0">A correção aparece só no final. Confira bem antes de confirmar: a resposta não pode ser mudada depois.</p></section>
+      <section class="card panel"><div class="ptitle">Prova · ${esc(p.nome)}</div><div class="big">${p.k} <span style="font-size:24px;color:var(--ink-3)">de 10 respondidas</span></div>${dotsHTML(p, true)}</section></div>`;
+    ligarForm(() => {
+      const r = corrigir(campos(), p.med[p.k]);
+      if (r.vazio) { $('#pverr').hidden = false; $('#leitura').focus(); return; }
+      p.resp[p.k] = { u: p.med[p.k], v: r.v, ok: r.ok }; p.k++;
+      if (p.k >= 10) { p.fim = Date.now(); S.travado = false; travarRes(false); barraCursor(); gravar(p); }
+      else deslizar(p.med[p.k]);
+      desenharPaineis();
+      setTimeout(() => { const i = $('#leitura'); if (i) i.focus(); }, 50);
+    });
+  }
+  /* gravação da prova na Central */
+  function gravHTML(p) {
+    if (!HOST) return '<span class="note">Aberto fora da Central: este resultado não fica gravado.</span>';
+    if (p.grav === 'ok') return '<span class="msg ok" id="pvgrav"><b>Gravado na Central</b> · Treinamento › Provas</span>';
+    if (p.grav === 'erro') return `<span class="msg no" id="pvgrav"><b>Não gravou:</b> ${esc(p.gravErr || 'sem conexão')}.</span><button class="btn" type="button" data-a="pvgravar">Tentar gravar de novo</button>`;
+    return '<span class="msg info" id="pvgrav">Gravando na Central…</span>';
+  }
+  async function gravar(p) {
+    if (!HOST || !HOST.salvar || p.grav === 'ok' || p.gravando) return;
+    p.gravando = true; p.grav = null;
+    const c = cfg(), ac = p.resp.filter((r) => r.ok).length;
+    const reg = { tipo: 'goniometro', res: c.txt, nome: p.nome, nota: ac, tot: 10, min: NOTA_MIN, ok: ac >= NOTA_MIN, ini: p.t0, fim: p.fim, ms: p.fim - p.t0,
+      resp: p.resp.map((r) => ({ c: fmt(r.u), v: r.v == null ? '' : fx(r.v), ok: !!r.ok })) };
+    try { await HOST.salvar(reg); p.grav = 'ok'; } catch (e) { p.grav = 'erro'; p.gravErr = (e && (e.message || e.code)) || String(e); }
+    p.gravando = false;
+    if (S.pv === p && S.modo === 'prova') desenharPaineis();
+  }
+  const esc = (t) => String(t).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+
+  /* ---------- trocar modo / resolução ---------- */
+  function trocaModo(m) {
+    if (S.pv && S.pv.k < 10 && S.modo === 'prova' && m !== 'prova') { S.pv = null; travarRes(false); }
+    S.modo = m; S.fb = null; S.mostra = false;
+    document.querySelectorAll('#modos button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modo === m)));
+    if (m === 'treino') { S.travado = false; S.ex = null; }
+    if (m === 'exer') { S.ex = null; }
+    if (m === 'prova') { S.pv = null; S.travado = false; }
+    marcar(); barraCursor(); desenharPaineis();
+  }
+  document.getElementById('modos').addEventListener('click', (e) => { const b = e.target.closest('[data-modo]'); if (b) trocaModo(b.dataset.modo); });
+  document.getElementById('resol').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-res]'); if (!b || b.disabled || b.dataset.res === S.cfgKey) return;
+    S.cfgKey = b.dataset.res;
+    document.querySelectorAll('#resol button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.res === S.cfgKey)));
+    desenhar(); trocaModo(S.modo);
+  });
+  document.getElementById('lupaBtn').addEventListener('click', (e) => {
+    S.lupa = !S.lupa; lupa.hidden = !S.lupa; e.currentTarget.textContent = S.lupa ? 'Esconder lupa' : 'Mostrar lupa';
+  });
+
+  window.__paq = window.__gon = { S, CFG, parts, corrigir, fmt, maxU, irPara, CX, CY, PASSO };
+  desenhar(); barraCursor(); desenharPaineis();
+})();
+</script>
+</body>
+</html>

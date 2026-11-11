@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Treinamento · Paquímetro</title>
+<!-- Central da Qualidade · Treinamento: simulador de paquímetro (aberto dentro da Central; sozinho também funciona, sem gravar) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: uma coluna de bancada — paquímetro grande em cima, lupa no nônio logo abaixo, e três painéis iguais (leitura · correção · progresso). Cores e fontes da Central da Qualidade. */
+:root {
+  --bg: #eef0ed; --surface: #ffffff; --surface-2: #f5f6f4; --sunken: #e4e7e3;
+  --line: #d3d8d2; --line-2: #bfc6be;
+  --ink: #1b211e; --ink-2: #48514c; --ink-3: #737d77;
+  --marinho: #002340; --on-marinho: #ffffff;
+  --laranja: #D9480F; --on-laranja: #ffffff; --laranja-soft: #fbe7dc;
+  --ok: #1d7446; --ok-soft: #e3f2e8; --crit: #b3261e; --crit-soft: #f8e4e2; --info: #1f5f9e; --info-soft: #e2ecf6;
+  --focus: #1f5f9e;
+  --f-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --shadow: 0 1px 2px rgba(20, 30, 25, .06), 0 6px 24px rgba(20, 30, 25, .07);
+  --bancada: #f7f8f6;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
+  --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --marinho: #1E4C8F; --on-marinho: #ffffff;
+  --laranja: #ef8a4c; --on-laranja: #1b120c; --laranja-soft: #3a2519;
+  --ok: #5dcb8d; --ok-soft: #173325; --crit: #ff6f63; --crit-soft: #3a1c1a; --info: #72a8de; --info-soft: #172a3d; --focus: #72a8de;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 24px rgba(0,0,0,.25); --bancada: #232826; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
+  --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --marinho: #1E4C8F; --on-marinho: #ffffff;
+  --laranja: #ef8a4c; --on-laranja: #1b120c; --laranja-soft: #3a2519;
+  --ok: #5dcb8d; --ok-soft: #173325; --crit: #ff6f63; --crit-soft: #3a1c1a; --info: #72a8de; --info-soft: #172a3d; --focus: #72a8de;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 24px rgba(0,0,0,.25); --bancada: #232826; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; } [hidden] { display: none !important; }
+body.embed .head { display: none; } body.embed .wrap { padding-block: 2px 8px; padding-left: 0; padding-right: 0; max-width: none; } body.embed { background: transparent; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-body); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 22px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 14px; }
+.eyebrow { font: 600 12.5px/1.2 var(--f-display); letter-spacing: .12em; text-transform: uppercase; color: var(--laranja); }
+h1 { margin: 2px 0 0; font: 700 34px/1 var(--f-display); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
+.sub { margin: 4px 0 0; color: var(--ink-2); max-width: 70ch; }
+.head { display: grid; gap: 2px; }
+
+.bar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: end; }
+.grp { display: grid; gap: 4px; }
+.grp > span { font: 600 12.5px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--line-2); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { min-height: 48px; min-width: 128px; padding: 0 16px; border: 0; border-left: 1px solid var(--line); background: transparent; color: var(--ink-2); font: 600 15px var(--f-body); cursor: pointer; }
+.seg button:first-child { border-left: 0; }
+.seg button[aria-pressed="true"] { background: var(--marinho); color: var(--on-marinho); }
+.seg button:disabled { opacity: .45; cursor: not-allowed; }
+.seg.res button { min-width: 104px; font-family: var(--f-mono); font-weight: 500; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+.bench { padding: 6px 0 4px; background: var(--bancada); overflow: hidden; position: relative; }
+.bench svg { display: block; width: 100%; height: auto; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.bench.drag svg { cursor: grab; } .bench.drag.grabbing svg { cursor: grabbing; }
+.benchbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 14px 12px; border-top: 1px solid var(--line); background: var(--surface); }
+.benchbar .hint { color: var(--ink-2); font-size: 13.5px; flex: 1 1 220px; min-width: 0; }
+.lock { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; color: var(--ink-2); }
+
+.btn { min-height: 48px; padding: 0 18px; border-radius: 9px; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--ink); font: 600 15px var(--f-body); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.btn:hover { border-color: var(--ink-3); }
+.btn.pri { background: var(--laranja); border-color: var(--laranja); color: var(--on-laranja); }
+.btn.nav { background: var(--marinho); border-color: var(--marinho); color: var(--on-marinho); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.step { white-space: nowrap; min-width: 76px; font-family: var(--f-mono); font-weight: 500; font-size: 14px; padding: 0 10px; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.lupa { padding: 0; overflow: hidden; }
+.lupah { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid var(--line); }
+.lupah b { font: 600 13px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+.lupah .grow { flex: 1; }
+.lupah .btn { min-height: 40px; font-size: 14px; }
+.lupa svg { display: block; width: 100%; height: auto; background: var(--bancada); }
+
+.panels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
+.panel { padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.ptitle { font: 600 13px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.read { display: flex; align-items: center; gap: 10px; }
+.read input { height: 56px; width: 100%; max-width: 200px; padding: 0 14px; font: 600 26px var(--f-mono); color: var(--ink); background: var(--surface); border: 2px solid var(--marinho); border-radius: 9px; font-variant-numeric: tabular-nums; }
+.read input:disabled { opacity: .6; }
+.read span { font: 500 18px var(--f-mono); color: var(--ink-2); }
+.acts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.acts .full { grid-column: 1 / -1; }
+
+.msg { border-radius: 9px; padding: 10px 12px; font-size: 14.5px; border: 1px solid transparent; }
+.msg b { font-weight: 700; }
+.msg.ok { background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 40%, transparent); color: var(--ink); }
+.msg.no { background: var(--crit-soft); border-color: color-mix(in srgb, var(--crit) 40%, transparent); color: var(--ink); }
+.msg.info { background: var(--info-soft); border-color: color-mix(in srgb, var(--info) 35%, transparent); color: var(--ink); }
+.passos { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.passos li { display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: start; font-size: 14.5px; }
+.passos i { font-style: normal; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 700 14px var(--f-display); background: var(--sunken); color: var(--ink-2); }
+.passos li.v i { background: var(--laranja); color: var(--on-laranja); }
+.passos li.m i { background: var(--info); color: #fff; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--ink-3); font-size: 13.5px; }
+
+.big { font: 700 44px/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.dots { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 5px; }
+.dots span { height: 10px; border-radius: 5px; background: var(--sunken); border: 1px solid var(--line); }
+.dots span.ok { background: var(--ok); border-color: var(--ok); }
+.dots span.no { background: var(--crit); border-color: var(--crit); }
+.dots span.cur { background: var(--laranja); border-color: var(--laranja); }
+.dots span.done { background: var(--ink-3); border-color: var(--ink-3); }
+.field { display: grid; gap: 4px; } .field label { font-size: 13px; color: var(--ink-2); font-weight: 600; }
+.field input { height: 48px; padding: 0 12px; font: 500 16px var(--f-body); border: 1px solid var(--line-2); border-radius: 9px; background: var(--surface); color: var(--ink); width: 100%; }
+
+.resul { padding: 18px; display: grid; gap: 14px; }
+.resh { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: end; }
+.resh .k { font: 600 12.5px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.pill { display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border-radius: 16px; font: 700 15px var(--f-display); letter-spacing: .06em; text-transform: uppercase; }
+.pill.ok { background: var(--ok-soft); color: var(--ok); } .pill.no { background: var(--crit-soft); color: var(--crit); }
+.tblw { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font: 600 12.5px var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+td.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.c-ok { color: var(--ok); font-weight: 700; } .c-no { color: var(--crit); font-weight: 700; }
+.note { font-size: 13.5px; color: var(--ink-2); border-left: 3px solid var(--line-2); padding-left: 10px; }
+
+@media (max-width: 900px) { .panels { grid-template-columns: 1fr 1fr; } .panels .panel:nth-child(3) { grid-column: 1 / -1; } }
+@media (max-width: 620px) {
+  h1 { font-size: 28px; }
+  .panels { grid-template-columns: 1fr; } .panels .panel:nth-child(3) { grid-column: auto; }
+  .bar { display: grid; grid-template-columns: 1fr; } .seg button { min-width: 0; padding: 0 8px; } .seg.res button { min-width: 0; }
+  .btn.step { min-width: 0; flex: 1 1 0; }
+  .benchbar .hint { flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div class="eyebrow">Central da Qualidade · Treinamento</div>
+    <h1>Paquímetro</h1>
+    <p class="sub">Treine a leitura do nônio. No treino livre você arrasta o cursor; no exercício e na prova o paquímetro já vem com uma medida para você ler.</p>
+  </header>
+
+  <div class="bar">
+    <div class="grp"><span>Modo</span>
+      <div class="seg" id="modos" role="group" aria-label="Modo">
+        <button type="button" data-modo="treino" aria-pressed="true">Treino livre</button>
+        <button type="button" data-modo="exer" aria-pressed="false">Exercício</button>
+        <button type="button" data-modo="prova" aria-pressed="false">Prova</button>
+      </div></div>
+    <div class="grp"><span>Resolução</span>
+      <div class="seg res" id="resol" role="group" aria-label="Resolução">
+        <button type="button" data-res="0.02" aria-pressed="true">0,02 mm</button>
+        <button type="button" data-res="0.05" aria-pressed="false">0,05 mm</button>
+      </div></div>
+  </div>
+
+  <section class="card" aria-label="Paquímetro">
+    <div class="bench drag" id="bench"><svg id="cal" viewBox="0 0 1380 420" role="img" aria-label="Paquímetro universal"></svg></div>
+    <div class="benchbar" id="benchbar"></div>
+  </section>
+
+  <section class="card lupa" aria-label="Lupa no nônio">
+    <div class="lupah"><b>Lupa no nônio</b><span class="grow"></span><button class="btn" type="button" id="lupaBtn">Esconder lupa</button></div>
+    <svg id="lupa" viewBox="0 0 600 120" aria-hidden="true"><use href="#calroot"></use></svg>
+  </section>
+
+  <div id="area"></div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  /* dentro da Central: tema, nome de quem está usando e gravação da prova (CQ_TREIN_HOST) */
+  const EMBED = (() => { try { return new URLSearchParams(location.search).has('embed'); } catch (e) { return false; } })();
+  const HOST = (() => { try { return window.parent !== window && window.parent.CQ_TREIN_HOST ? window.parent.CQ_TREIN_HOST : null; } catch (e) { return null; } })();
+  if (EMBED) {
+    document.body.classList.add('embed');
+    const tema = () => { try { const t = window.parent.document.documentElement.dataset.theme; if (t) document.documentElement.dataset.theme = t; } catch (e) { /* sem acesso ao tema */ } };
+    tema(); try { new MutationObserver(tema).observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }); } catch (e) { /* segue */ }
+    const alto = () => { try { if (window.frameElement) window.frameElement.style.height = Math.ceil(document.documentElement.scrollHeight) + 'px'; } catch (e) { /* segue */ } };
+    try { new ResizeObserver(alto).observe(document.body); } catch (e) { setInterval(alto, 800); }
+    addEventListener('load', alto);
+  }
+  /* ---------- paquímetro: geometria ---------- */
+  const K = 7.2, X0 = 150, BT = 110, BB = 168, END = X0 + 156 * K;
+  const CFG = {
+    '0.02': { res: 0.02, n: 50, mod: 1, lbl: 5, dec: 2, txt: '0,02' },   // 50 divisões em 49 mm
+    '0.05': { res: 0.05, n: 20, mod: 2, lbl: 2, dec: 2, txt: '0,05' }    // 20 divisões em 39 mm
+  };
+  const NS = 'http://www.w3.org/2000/svg';
+  const S = { cfgKey: '0.02', u: 1173, modo: 'treino', lupa: true, mostra: false, treino: { ok: 0, tot: 0 }, ex: null, pv: null, travado: false, fb: null };
+  const cfg = () => CFG[S.cfgKey];
+  const s_ = (c) => (c.n * c.mod - 1) / c.n;           // passo do nônio em mm
+  const VLmm = (c) => c.n * s_(c);
+  const SW = (c) => VLmm(c) * K + 70;
+  const maxU = (c) => Math.floor(((END - 24 - X0 - SW(c)) / K) / c.res);
+  const L = () => S.u * cfg().res;
+  const fmt = (u, c = cfg()) => (u * c.res).toFixed(c.dec).replace('.', ',');
+  /* leitura digitada, com pelo menos 2 casas (34,6 → 34,60) */
+  const fx = (v) => { const d = (String(v).split('.')[1] || '').length; return (+v).toFixed(Math.max(2, d)).replace('.', ','); };
+  const parts = (u, c = cfg()) => { const mm = Math.floor(u / c.n); return { mm, i: u - mm * c.n }; };
+
+  const svg = document.getElementById('cal'), lupa = document.getElementById('lupa');
+  const el = (tag, at, parent) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (parent) parent.appendChild(e); return e; };
+
+  function desenhar() {
+    const c = cfg(), sw = SW(c), VL = VLmm(c) * K, s = s_(c);
+    svg.innerHTML = `
+<defs>
+<linearGradient id="hs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f2f3"/><stop offset=".08" stop-color="#dcdfe2"/><stop offset=".85" stop-color="#cdd1d5"/><stop offset="1" stop-color="#a9aeb3"/></linearGradient>
+<linearGradient id="jw" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b9bec3"/><stop offset=".35" stop-color="#dfe2e5"/><stop offset="1" stop-color="#c3c8cd"/></linearGradient>
+<linearGradient id="dk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8d939a"/><stop offset=".5" stop-color="#6b7178"/><stop offset="1" stop-color="#585e65"/></linearGradient>
+<linearGradient id="tip" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b4046"/><stop offset="1" stop-color="#5d636a"/></linearGradient>
+<linearGradient id="vp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9cdd1"/><stop offset=".15" stop-color="#e3e6e8"/><stop offset="1" stop-color="#cfd3d7"/></linearGradient>
+<linearGradient id="pc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d8790"/><stop offset=".3" stop-color="#d6dce1"/><stop offset=".55" stop-color="#9aa4ad"/><stop offset="1" stop-color="#5f6870"/></linearGradient>
+<radialGradient id="wh" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#eceef0"/><stop offset="1" stop-color="#9ea4aa"/></radialGradient>
+<filter id="sh" x="-5%" y="-5%" width="110%" height="120%"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1d2733" flood-opacity=".22"/></filter>
+</defs>
+<g id="calroot">
+<g filter="url(#sh)">
+<rect id="vareta" x="${END - 4}" y="${BB - 14}" width="4" height="6" fill="url(#dk)"/>
+<path d="M${X0 - 56},${BT} L${X0},${BT} L${X0},392 Q${X0},400 ${X0 - 6},401 L${X0 - 10},401 Q${X0 - 14},401 ${X0 - 15},396 L${X0 - 24},330 L${X0 - 52},${BB + 62} Q${X0 - 62},${BB + 50} ${X0 - 62},${BB + 30} L${X0 - 62},${BT + 6} Q${X0 - 62},${BT} ${X0 - 56},${BT} Z" fill="url(#jw)" stroke="#9aa0a6"/>
+<path d="M${X0},350 L${X0},392 Q${X0},400 ${X0 - 6},401 L${X0 - 10},401 Q${X0 - 14},401 ${X0 - 15},396 L${X0 - 20},350 Z" fill="url(#tip)"/>
+<path d="M${X0 - 44},${BT} L${X0 - 44},72 Q${X0 - 44},66 ${X0 - 40},62 L${X0 - 12},24 Q${X0 - 10},22 ${X0 - 6},22 L${X0},22 L${X0},${BT} Z" fill="url(#jw)" stroke="#9aa0a6"/>
+<path d="M${X0 - 10},22 L${X0},22 L${X0},48 L${X0 - 6},48 Z" fill="url(#tip)"/>
+<path d="M${X0 - 30},${BT} L${X0 - 30},86 L${X0 - 18},76 L${X0 - 18},${BT} Z" fill="#aeb3b8"/>
+<rect x="${X0 - 62}" y="${BT}" width="${END - X0 + 62}" height="${BB - BT}" rx="6" fill="url(#hs)" stroke="#9aa0a6"/>
+<line x1="${X0 - 60}" y1="${BT + 1.5}" x2="${END - 2}" y2="${BT + 1.5}" stroke="#fff" stroke-opacity=".8"/>
+</g>
+<text x="${X0 - 31}" y="${BB + 20}" font-size="8.5" text-anchor="middle" fill="#6b7178" font-family="IBM Plex Sans, Arial, sans-serif" letter-spacing="1">INOX</text>
+<text x="${X0 - 31}" y="${BB + 31}" font-size="8.5" text-anchor="middle" fill="#6b7178" font-family="IBM Plex Sans, Arial, sans-serif">20 °C</text>
+<g id="escala"></g><g id="marcaFixa"></g>
+<g id="cursor"></g>
+</g>`;
+    const esc = svg.querySelector('#escala');
+    for (const yy of [BT + 14, BB - 14]) { el('circle', { cx: END - 14, cy: yy, r: 3.6, fill: '#b3b8bd', stroke: '#80868c' }, esc); el('line', { x1: END - 16.5, y1: yy, x2: END - 11.5, y2: yy, stroke: '#80868c' }, esc); }
+    for (let m = 0; m <= 150; m++) {
+      const x = X0 + m * K, h = m % 10 === 0 ? 24 : m % 5 === 0 ? 17 : 11;
+      el('line', { x1: x, y1: BB - 1, x2: x, y2: BB - 1 - h, stroke: '#2c3238', 'stroke-width': 1, 'data-m': m }, esc);
+      if (m % 10 === 0) { const t = el('text', { x, y: BB - 32, 'font-size': 15, 'text-anchor': 'middle', fill: '#3f454b', 'font-family': 'IBM Plex Sans, Arial, sans-serif' }, esc); t.textContent = m / 10; }
+    }
+    const cur = svg.querySelector('#cursor'), xv = X0;
+    cur.innerHTML = `<g filter="url(#sh)">
+<path d="M${xv},${BT} L${xv},22 L${xv + 6},22 Q${xv + 10},22 ${xv + 12},24 L${xv + 40},62 Q${xv + 44},66 ${xv + 44},72 L${xv + 44},${BT - 8} Z" fill="url(#jw)" stroke="#9aa0a6"/>
+<path d="M${xv},22 L${xv + 10},22 L${xv + 6},48 L${xv},48 Z" fill="url(#tip)"/>
+<rect x="${xv}" y="${BT - 12}" width="${(sw * 0.62).toFixed(1)}" height="16" rx="5" fill="url(#dk)" stroke="#555b62"/>
+<rect x="${(xv + sw * 0.31 - 12).toFixed(1)}" y="${BT - 27}" width="24" height="16" rx="5" fill="url(#dk)" stroke="#555b62"/>${Array.from({ length: 7 }, (_, j) => `<line x1="${(xv + sw * 0.31 - 9 + j * 3).toFixed(1)}" y1="${BT - 25}" x2="${(xv + sw * 0.31 - 9 + j * 3).toFixed(1)}" y2="${BT - 13}" stroke="#454b51" stroke-width=".8"/>`).join('')}
+<g id="rolete"></g>
+<path d="M${xv},${BB} L${(xv + sw - 8).toFixed(1)},${BB} Q${(xv + sw).toFixed(1)},${BB} ${(xv + sw).toFixed(1)},${BB + 8} L${(xv + sw).toFixed(1)},${BB + 42} Q${(xv + sw).toFixed(1)},${BB + 50} ${(xv + sw - 8).toFixed(1)},${BB + 50} L${xv + 80},${BB + 50} Q${xv + 64},${BB + 50} ${xv + 58},${BB + 64} L${xv + 30},330 L${xv + 15},396 Q${xv + 14},401 ${xv + 10},401 L${xv + 6},401 Q${xv},400 ${xv},392 Z" fill="url(#vp)" stroke="#9aa0a6"/>
+<path d="M${xv},350 L${xv + 20},350 L${xv + 15},396 Q${xv + 14},401 ${xv + 10},401 L${xv + 6},401 Q${xv},400 ${xv},392 Z" fill="url(#tip)"/>
+<rect x="${xv + 4}" y="${BB + 3}" width="${(VL + 22).toFixed(1)}" height="36" rx="3" fill="#e9ecee" stroke="#b9bec3"/>
+</g><g id="nonio"></g><g id="marcaNonio"></g>
+<text x="${(xv + VL + 46).toFixed(1)}" y="${BB + 22}" font-size="9.5" text-anchor="middle" fill="#3f454b" font-family="IBM Plex Sans, Arial, sans-serif">${c.txt}</text>
+<text x="${(xv + VL + 46).toFixed(1)}" y="${BB + 34}" font-size="9.5" text-anchor="middle" fill="#3f454b" font-family="IBM Plex Sans, Arial, sans-serif">mm</text>`;
+    const rol = cur.querySelector('#rolete'), cx = xv + sw * 0.6, cy = BB + 60;
+    el('circle', { cx, cy, r: 17, fill: 'url(#wh)', stroke: '#80868c' }, rol);
+    for (let t = 0; t < 360; t += 15) { const r = (t + 180) * Math.PI / 180; el('line', { x1: cx + 17 * Math.cos(r), y1: cy - 17 * Math.sin(r), x2: cx + 13.5 * Math.cos(r), y2: cy - 13.5 * Math.sin(r), stroke: '#80868c' }, rol); }
+    const non = cur.querySelector('#nonio');
+    for (let i = 0; i <= c.n; i++) {
+      const x = xv + i * s * K, lab = i % c.lbl === 0, h = lab ? 16 : 9;
+      el('line', { x1: x.toFixed(2), y1: BB, x2: x.toFixed(2), y2: BB + h, stroke: '#2c3238', 'stroke-width': 1, 'data-i': i }, non);
+      if (lab) { const t = el('text', { x: x.toFixed(2), y: BB + 32, 'font-size': 11, 'text-anchor': 'middle', fill: '#3f454b', 'font-family': 'IBM Plex Sans, Arial, sans-serif' }, non); t.textContent = i / c.lbl; }
+    }
+    posicionar();
+  }
+
+  function posicionar() {
+    const c = cfg(), dx = L() * K;
+    svg.querySelector('#cursor').setAttribute('transform', `translate(${dx.toFixed(2)},0)`);
+    svg.querySelector('#vareta').setAttribute('width', (dx + 4).toFixed(2));
+    marcar();
+    const x0 = X0 + dx - 34, w = VLmm(c) * K + 120;
+    lupa.setAttribute('viewBox', `${x0.toFixed(1)} ${BB - 50} ${w.toFixed(1)} 96`);
+  }
+
+  /* destaque da leitura: traço do mm antes do zero (azul) e traço que coincide (laranja) */
+  function marcar() {
+    const mf = svg.querySelector('#marcaFixa'), mn = svg.querySelector('#marcaNonio'); if (!mf) return;
+    mf.innerHTML = ''; mn.innerHTML = '';
+    if (!S.mostra) return;
+    const c = cfg(), p = parts(S.u), s = s_(c);
+    const xm = X0 + p.mm * K, xc = X0 + (p.mm + p.i * c.mod) * K, xn = X0 + p.i * s * K;
+    el('line', { x1: xm, y1: BB - 1, x2: xm, y2: BT + 30, stroke: '#1f5f9e', 'stroke-width': 3 }, mf);
+    el('path', { d: `M${xm - 6},${BT + 22} L${xm + 6},${BT + 22} L${xm},${BT + 30} Z`, fill: '#1f5f9e' }, mf);
+    el('line', { x1: xc, y1: BB - 1, x2: xc, y2: BB - 20, stroke: '#D9480F', 'stroke-width': 3 }, mf);
+    el('line', { x1: xn, y1: BB, x2: xn, y2: BB + 18, stroke: '#D9480F', 'stroke-width': 3 }, mn);
+    el('circle', { cx: xn, cy: BB, r: 9, fill: 'none', stroke: '#D9480F', 'stroke-width': 2, 'stroke-dasharray': '3 2.5' }, mn);
+  }
+
+  /* ---------- arrastar o cursor (treino livre) ---------- */
+  const bench = document.getElementById('bench');
+  let drag = null;
+  const svgX = (ev) => { const pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY; return pt.matrixTransform(svg.getScreenCTM().inverse()).x; };
+  svg.addEventListener('pointerdown', (ev) => {
+    if (S.travado) return;
+    drag = { x: svgX(ev), u: S.u, id: ev.pointerId }; svg.setPointerCapture(ev.pointerId); bench.classList.add('grabbing');
+  });
+  svg.addEventListener('pointermove', (ev) => {
+    if (!drag || ev.pointerId !== drag.id) return;
+    const c = cfg(), du = Math.round((svgX(ev) - drag.x) / K / c.res);
+    irPara(drag.u + du);
+  });
+  const solta = () => { if (!drag) return; drag = null; bench.classList.remove('grabbing'); };
+  svg.addEventListener('pointerup', solta); svg.addEventListener('pointercancel', solta);
+
+  function irPara(u) {
+    const c = cfg(); u = Math.max(0, Math.min(maxU(c), u));
+    if (u === S.u) return;
+    S.u = u;
+    if (S.modo === 'treino' && S.fb) { S.fb = null; S.mostra = false; desenharPaineis(); }
+    posicionar();
+  }
+  let anim = 0;
+  function deslizar(u) {
+    cancelAnimationFrame(anim);
+    const reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches, de = S.u, t0 = performance.now(), D = 450;
+    if (reduz || de === u) { S.u = u; posicionar(); return; }
+    const passo = (t) => { const k = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - k, 3); S.u = Math.round(de + (u - de) * e); posicionar(); if (k < 1) anim = requestAnimationFrame(passo); };
+    anim = requestAnimationFrame(passo);
+  }
+
+  /* ---------- medidas sorteadas ---------- */
+  function sortear(evitar = []) {
+    const c = cfg(), mx = maxU(c);
+    for (let t = 0; t < 200; t++) {
+      const u = Math.round((2 + Math.random() * (mx * c.res - 3)) / c.res), p = parts(u);
+      if (p.i === 0 && Math.random() < 0.8) continue;           // poucas medidas "redondas"
+      if (evitar.some((v) => Math.abs(v - u) < 1 / c.res)) continue;
+      return u;
+    }
+    return Math.round(mx / 2);
+  }
+  const lista = (n) => { const a = []; while (a.length < n) a.push(sortear(a)); return a; };
+
+  /* ---------- correção ---------- */
+  function lerValor(txt) {
+    const t = String(txt || '').trim().replace(/\s/g, '').replace(',', '.');
+    if (!/^\d+(\.\d+)?$/.test(t)) return null;
+    return +t;
+  }
+  function corrigir(txt, u) {
+    const c = cfg(), v = lerValor(txt);
+    if (v == null) return { vazio: true };
+    const uv = v / c.res, inteiro = Math.abs(uv - Math.round(uv)) < 1e-6, ur = Math.round(uv);
+    if (inteiro && ur === u) return { ok: true, v };
+    const p = parts(u); let dica = '';
+    if (!inteiro) dica = `Com este paquímetro a leitura sempre cai de ${c.txt} em ${c.txt} mm (por exemplo ${fmt(Math.max(1, u))}).`;
+    else { const q = parts(ur); if (q.mm === p.mm && q.i !== p.i) dica = 'Os milímetros estão certos. Reveja o nônio: procure o traço que fica exatamente alinhado com um traço da escala fixa.'; else if (q.mm !== p.mm && q.i === p.i) dica = 'O nônio está certo. Reveja os milímetros: conte os traços da escala fixa até o zero do nônio.'; else dica = 'Comece pelos milímetros inteiros (antes do zero do nônio) e depois some o nônio.'; }
+    return { ok: false, v, dica };
+  }
+  function passosHTML(u) {
+    const c = cfg(), p = parts(u), fr = (p.i * c.res).toFixed(c.dec).replace('.', ','), entre = p.i % c.lbl === 0 ? `no número ${p.i / c.lbl} do nônio` : `entre o ${Math.floor(p.i / c.lbl)} e o ${Math.floor(p.i / c.lbl) + 1} do nônio`;
+    return `<ol class="passos">
+      <li class="m"><i>1</i><span><b>Escala fixa:</b> o zero do nônio passou do traço <b class="mono">${p.mm} mm</b> (marca azul).</span></li>
+      <li class="v"><i>2</i><span><b>Nônio:</b> o traço que coincide é o <b class="mono">${p.i}º</b> (${entre}, marca laranja) → ${p.i} × ${c.txt} = <b class="mono">${fr} mm</b>.</span></li>
+      <li><i>3</i><span><b>Leitura:</b> <span class="mono">${p.mm} + ${fr} =</span> <b class="mono">${fmt(u)} mm</b></span></li></ol>`;
+  }
+
+  /* ---------- painéis por modo ---------- */
+  const area = document.getElementById('area'), benchbar = document.getElementById('benchbar');
+  const $ = (q) => area.querySelector(q);
+
+  function barraCursor() {
+    const c = cfg();
+    if (S.travado) { benchbar.innerHTML = `<span class="lock">Cursor travado: leia a medida que está no paquímetro.</span>`; bench.classList.remove('drag'); return; }
+    bench.classList.add('drag');
+    benchbar.innerHTML = `<span class="hint">Arraste o paquímetro com o dedo ou o mouse para abrir e fechar, ou use os botões para ajuste fino.</span>
+      <button class="btn step" type="button" data-step="${-c.n}">−1 mm</button><button class="btn step" type="button" data-step="-1">−${c.txt}</button>
+      <button class="btn step" type="button" data-step="1">+${c.txt}</button><button class="btn step" type="button" data-step="${c.n}">+1 mm</button>`;
+  }
+  benchbar.addEventListener('click', (e) => { const b = e.target.closest('[data-step]'); if (b) irPara(S.u + +b.dataset.step); });
+
+  function desenharPaineis() {
+    if (S.modo === 'treino') return painelTreino();
+    if (S.modo === 'exer') return painelExer();
+    return painelProva();
+  }
+
+  function caixaFb() {
+    const f = S.fb;
+    if (!f) return `<p class="muted" style="margin:0">Digite a leitura e toque em <b>Conferir</b>. Se errar, a conta aparece aqui, passo a passo.</p>`;
+    if (f.vazio) return `<div class="msg info">Digite a leitura em milímetros, por exemplo <span class="mono">23,46</span>.</div>`;
+    if (f.mostrou) return `<div class="msg info"><b>Resposta: <span class="mono">${fmt(f.u)} mm</span></b></div>${passosHTML(f.u)}`;
+    if (f.ok) return `<div class="msg ok"><b>Certo! <span class="mono">${fmt(f.u)} mm</span></b></div>${passosHTML(f.u)}`;
+    return `<div class="msg no"><b>Ainda não.</b> Você leu <span class="mono">${fx(f.v)} mm</span>; o certo é <span class="mono">${fmt(f.u)} mm</span>.</div><p style="margin:0;font-size:14.5px">${f.dica}</p>${passosHTML(f.u)}`;
+  }
+
+  function painelTreino() {
+    const t = S.treino, pct = t.tot ? Math.round(100 * t.ok / t.tot) : 0;
+    area.innerHTML = `<div class="panels">
+      <section class="card panel"><div class="ptitle">Sua leitura</div>
+        <form class="read" id="f"><input id="leitura" inputmode="decimal" autocomplete="off" placeholder="0,00" aria-label="Sua leitura em milímetros"><span>mm</span></form>
+        <div class="acts"><button class="btn pri" type="button" data-a="conferir">Conferir</button><button class="btn" type="button" data-a="nova">Nova medida</button><button class="btn full" type="button" data-a="mostrar">Mostrar resposta</button></div></section>
+      <section class="card panel" aria-live="polite"><div class="ptitle">Correção</div>${caixaFb()}</section>
+      <section class="card panel"><div class="ptitle">Treino de hoje</div><div class="big">${t.ok} <span style="font-size:24px;color:var(--ink-3)">de ${t.tot}</span></div>
+        <div class="muted">${t.tot ? pct + '% de acerto · ' : ''}o treino não vale nota. Para nota, use <b>Exercício</b> ou <b>Prova</b>.</div></section></div>`;
+    ligarForm(() => {
+      const r = corrigir($('#leitura').value, S.u);
+      if (r.vazio) { S.fb = { vazio: true }; desenharPaineis(); return; }
+      t.tot++; if (r.ok) t.ok++;
+      S.fb = Object.assign({ u: S.u }, r); S.mostra = true; marcar(); desenharPaineis(); manter(r.v);
+    });
+  }
+  function manter(v) { const i = $('#leitura'); if (i && v != null) i.value = String(v).replace('.', ','); }
+
+  function ligarForm(conferir) {
+    const f = $('#f'); if (f) f.addEventListener('submit', (e) => { e.preventDefault(); conferir(); });
+    area.querySelectorAll('[data-a]').forEach((b) => b.addEventListener('click', () => acao(b.dataset.a, conferir)));
+  }
+  function acao(a, conferir) {
+    if (a === 'conferir') return conferir();
+    if (a === 'nova') { S.fb = null; S.mostra = false; marcar(); deslizar(sortear([S.u])); desenharPaineis(); setTimeout(() => { const i = $('#leitura'); if (i) i.focus(); }, 50); return; }
+    if (a === 'mostrar') { S.fb = { mostrou: true, u: S.u }; S.mostra = true; marcar(); desenharPaineis(); return; }
+    if (a === 'proxima') return exProxima();
+    if (a === 'exnovo') { iniciarExer(); return; }
+    if (a === 'pvcomecar') return iniciarProva();
+    if (a === 'pvconf') return conferir();
+    if (a === 'pvgravar') { if (S.pv) { S.pv.grav = null; desenharPaineis(); gravar(S.pv); } return; }
+    if (a === 'pvnovo') { S.pv = null; S.travado = false; S.mostra = false; barraCursor(); marcar(); desenharPaineis(); travarRes(false); return; }
+  }
+
+  /* exercício: 10 medidas, correção na hora */
+  function iniciarExer() {
+    S.ex = { med: lista(10), k: 0, resp: [], conf: false }; S.travado = true; S.mostra = false; S.fb = null;
+    barraCursor(); deslizar(S.ex.med[0]); desenharPaineis();
+  }
+  function exProxima() {
+    const e = S.ex; e.k++; e.conf = false; S.fb = null; S.mostra = false; marcar();
+    if (e.k < 10) deslizar(e.med[e.k]);
+    desenharPaineis();
+    setTimeout(() => { const i = $('#leitura'); if (i) i.focus(); }, 50);
+  }
+  function dotsHTML(e, prova) {
+    return `<div class="dots" aria-hidden="true">${Array.from({ length: 10 }, (_, j) => { const r = e.resp[j]; const cl = r ? (prova ? 'done' : (r.ok ? 'ok' : 'no')) : (j === e.k ? 'cur' : ''); return `<span class="${cl}"></span>`; }).join('')}</div>`;
+  }
+  function painelExer() {
+    const e = S.ex;
+    if (!e) return iniciarExer();
+    const acertos = e.resp.filter((r) => r.ok).length;
+    if (e.k >= 10) {
+      area.innerHTML = `<section class="card resul"><div class="resh"><div><div class="k">Exercício concluído</div><div class="big">${acertos} de 10</div></div><div class="muted">Resolução ${cfg().txt} mm</div><span class="grow"></span><button class="btn pri" type="button" data-a="exnovo">Fazer outro exercício</button></div>
+        ${tabelaHTML(e)}</section>`;
+      ligarForm(() => {}); return;
+    }
+    area.innerHTML = `<div class="panels">
+      <section class="card panel"><div class="ptitle">Medida ${e.k + 1} de 10</div>
+        <form class="read" id="f"><input id="leitura" inputmode="decimal" autocomplete="off" placeholder="0,00" aria-label="Sua leitura em milímetros" ${e.conf ? 'disabled' : ''}><span>mm</span></form>
+        <div class="acts">${e.conf ? `<button class="btn nav full" type="button" data-a="proxima">${e.k === 9 ? 'Ver resultado' : 'Próxima medida →'}</button>` : `<button class="btn pri full" type="button" data-a="conferir">Conferir</button>`}</div></section>
+      <section class="card panel" aria-live="polite"><div class="ptitle">Correção</div>${caixaFb()}</section>
+      <section class="card panel"><div class="ptitle">Exercício · 10 medidas</div><div class="big">${acertos} <span style="font-size:24px;color:var(--ink-3)">acerto${acertos === 1 ? '' : 's'}</span></div>${dotsHTML(e)}
+        <div class="muted">Corrige na hora e mostra a conta quando errar. O cursor fica travado.</div></section></div>`;
+    if (e.conf) manter(e.resp[e.k].v);
+    ligarForm(() => {
+      if (e.conf) return;
+      const r = corrigir($('#leitura').value, e.med[e.k]);
+      if (r.vazio) { S.fb = { vazio: true }; desenharPaineis(); return; }
+      e.resp[e.k] = { u: e.med[e.k], v: r.v, ok: r.ok }; e.conf = true;
+      S.fb = Object.assign({ u: e.med[e.k] }, r); S.mostra = true; marcar(); desenharPaineis();
+    });
+  }
+  function tabelaHTML(e) {
+    return `<div class="tblw"><table><thead><tr><th>#</th><th>Medida certa</th><th>Sua leitura</th><th>Resultado</th></tr></thead><tbody>${e.med.map((u, j) => { const r = e.resp[j] || {}; return `<tr><td class="num">${j + 1}</td><td class="num">${fmt(u)} mm</td><td class="num">${r.v != null ? fx(r.v) + ' mm' : '—'}</td><td class="${r.ok ? 'c-ok' : 'c-no'}">${r.ok ? '✓ certo' : '✕ errado'}</td></tr>`; }).join('')}</tbody></table></div>`;
+  }
+
+  /* prova: nome, 10 medidas, sem correção até o fim */
+  const NOTA_MIN = 8;
+  function travarRes(on) { document.querySelectorAll('#resol button').forEach((b) => { b.disabled = on; }); }
+  function iniciarProva() {
+    const nome = ($('#pvnome').value || '').trim();
+    if (!nome) { const m = $('#pverr'); m.hidden = false; $('#pvnome').focus(); return; }
+    S.nomePv = nome; S.pv = { nome, med: lista(10), k: 0, resp: [], t0: Date.now(), fim: null }; S.travado = true; S.mostra = false; S.fb = null;
+    travarRes(true); barraCursor(); deslizar(S.pv.med[0]); desenharPaineis();
+  }
+  const dur = (ms) => { const s = Math.round(ms / 1000); return `${Math.floor(s / 60)} min ${String(s % 60).padStart(2, '0')} s`; };
+  function painelProva() {
+    const p = S.pv;
+    if (!p) {
+      S.travado = false; barraCursor();
+      area.innerHTML = `<div class="panels">
+        <section class="card panel"><div class="ptitle">Prova do inspetor</div>
+          <form id="f" class="field"><label for="pvnome">Nome do inspetor</label><input id="pvnome" autocomplete="off" placeholder="Nome e sobrenome" value="${esc(S.nomePv || (HOST && HOST.nome ? HOST.nome() : '') || '')}"></form>
+          <div id="pverr" class="msg no" hidden>Digite o nome do inspetor para começar.</div>
+          <div class="acts"><button class="btn pri full" type="button" data-a="pvcomecar">Começar a prova</button></div></section>
+        <section class="card panel"><div class="ptitle">Como funciona</div><ol class="passos">
+          <li><i>1</i><span>10 medidas sorteadas, resolução <b class="mono">${cfg().txt} mm</b>.</span></li>
+          <li><i>2</i><span>Sem resposta e sem correção durante a prova. A lupa pode ser usada.</span></li>
+          <li><i>3</i><span>Aprovado com <b>${NOTA_MIN} ou mais</b> acertos de 10.</span></li></ol></section>
+        <section class="card panel"><div class="ptitle">Registro</div><p class="note" style="margin:0">${HOST ? 'Ao terminar, a prova fica gravada na Central (Treinamento › Provas) com nome, data, resolução e nota. Serve como evidência de treinamento do inspetor.' : 'Aberto fora da Central: o resultado aparece só na tela e não fica gravado.'}</p></section></div>`;
+      ligarForm(() => iniciarProva()); return;
+    }
+    if (p.k >= 10) {
+      const ac = p.resp.filter((r) => r.ok).length, ok = ac >= NOTA_MIN, d = new Date(p.fim);
+      S.mostra = false; marcar();
+      area.innerHTML = `<section class="card resul">
+        <div class="resh"><div><div class="k">Inspetor</div><div style="font:600 20px var(--f-body)">${esc(p.nome)}</div></div>
+          <div><div class="k">Nota</div><div class="big">${ac} / 10</div></div>
+          <div><div class="k">Situação</div><span class="pill ${ok ? 'ok' : 'no'}">${ok ? 'Aprovado' : 'Reprovado'}</span></div>
+          <div><div class="k">Resolução</div><div class="mono">${cfg().txt} mm</div></div>
+          <div><div class="k">Data</div><div class="mono">${d.toLocaleDateString('pt-BR')} ${d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</div></div>
+          <div><div class="k">Tempo</div><div class="mono">${dur(p.fim - p.t0)}</div></div></div>
+        ${tabelaHTML(p)}
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><button class="btn pri" type="button" data-a="pvnovo">Nova prova</button>${gravHTML(p)}</div></section>`;
+      ligarForm(() => {}); return;
+    }
+    area.innerHTML = `<div class="panels">
+      <section class="card panel"><div class="ptitle">Medida ${p.k + 1} de 10</div>
+        <form class="read" id="f"><input id="leitura" inputmode="decimal" autocomplete="off" placeholder="0,00" aria-label="Sua leitura em milímetros"><span>mm</span></form>
+        <div class="acts"><button class="btn pri full" type="button" data-a="pvconf">${p.k === 9 ? 'Confirmar e terminar' : 'Confirmar e ir para a próxima'}</button></div>
+        <div id="pverr" class="msg info" hidden>Digite a leitura em milímetros, por exemplo <span class="mono">23,46</span>.</div></section>
+      <section class="card panel"><div class="ptitle">Durante a prova</div><p style="margin:0">A correção aparece só no final. Confira bem antes de confirmar: a resposta não pode ser mudada depois.</p></section>
+      <section class="card panel"><div class="ptitle">Prova · ${esc(p.nome)}</div><div class="big">${p.k} <span style="font-size:24px;color:var(--ink-3)">de 10 respondidas</span></div>${dotsHTML(p, true)}</section></div>`;
+    ligarForm(() => {
+      const r = corrigir($('#leitura').value, p.med[p.k]);
+      if (r.vazio) { $('#pverr').hidden = false; $('#leitura').focus(); return; }
+      p.resp[p.k] = { u: p.med[p.k], v: r.v, ok: r.ok }; p.k++;
+      if (p.k >= 10) { p.fim = Date.now(); S.travado = false; travarRes(false); barraCursor(); gravar(p); }
+      else deslizar(p.med[p.k]);
+      desenharPaineis();
+      setTimeout(() => { const i = $('#leitura'); if (i) i.focus(); }, 50);
+    });
+  }
+  /* gravação da prova na Central */
+  function gravHTML(p) {
+    if (!HOST) return '<span class="note">Aberto fora da Central: este resultado não fica gravado.</span>';
+    if (p.grav === 'ok') return '<span class="msg ok" id="pvgrav"><b>Gravado na Central</b> · Treinamento › Provas</span>';
+    if (p.grav === 'erro') return `<span class="msg no" id="pvgrav"><b>Não gravou:</b> ${esc(p.gravErr || 'sem conexão')}.</span><button class="btn" type="button" data-a="pvgravar">Tentar gravar de novo</button>`;
+    return '<span class="msg info" id="pvgrav">Gravando na Central…</span>';
+  }
+  async function gravar(p) {
+    if (!HOST || !HOST.salvar || p.grav === 'ok' || p.gravando) return;
+    p.gravando = true; p.grav = null;
+    const c = cfg(), ac = p.resp.filter((r) => r.ok).length;
+    const reg = { tipo: 'paquimetro', res: c.txt, nome: p.nome, nota: ac, tot: 10, min: NOTA_MIN, ok: ac >= NOTA_MIN, ini: p.t0, fim: p.fim, ms: p.fim - p.t0,
+      resp: p.resp.map((r) => ({ c: fmt(r.u), v: r.v == null ? '' : fx(r.v), ok: !!r.ok })) };
+    try { await HOST.salvar(reg); p.grav = 'ok'; } catch (e) { p.grav = 'erro'; p.gravErr = (e && (e.message || e.code)) || String(e); }
+    p.gravando = false;
+    if (S.pv === p && S.modo === 'prova') desenharPaineis();
+  }
+  const esc = (t) => String(t).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+
+  /* ---------- trocar modo / resolução ---------- */
+  function trocaModo(m) {
+    if (S.pv && S.pv.k < 10 && S.modo === 'prova' && m !== 'prova') { S.pv = null; travarRes(false); }
+    S.modo = m; S.fb = null; S.mostra = false;
+    document.querySelectorAll('#modos button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modo === m)));
+    if (m === 'treino') { S.travado = false; S.ex = null; }
+    if (m === 'exer') { S.ex = null; }
+    if (m === 'prova') { S.pv = null; S.travado = false; }
+    marcar(); barraCursor(); desenharPaineis();
+  }
+  document.getElementById('modos').addEventListener('click', (e) => { const b = e.target.closest('[data-modo]'); if (b) trocaModo(b.dataset.modo); });
+  document.getElementById('resol').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-res]'); if (!b || b.disabled || b.dataset.res === S.cfgKey) return;
+    const mm = L(); S.cfgKey = b.dataset.res; S.u = Math.min(maxU(cfg()), Math.round(mm / cfg().res));
+    document.querySelectorAll('#resol button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.res === S.cfgKey)));
+    desenhar(); trocaModo(S.modo);
+  });
+  document.getElementById('lupaBtn').addEventListener('click', (e) => {
+    S.lupa = !S.lupa; lupa.hidden = !S.lupa; e.currentTarget.textContent = S.lupa ? 'Esconder lupa' : 'Mostrar lupa';
+  });
+
+  window.__paq = { S, CFG, parts, corrigir, fmt, maxU, irPara, s_ };
+  desenhar(); barraCursor(); desenharPaineis();
+})();
+</script>
+</body>
+</html>

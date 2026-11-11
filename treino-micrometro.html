@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Treinamento · Micrômetro</title>
+<!-- Central da Qualidade · Treinamento: simulador de micrômetro (aberto dentro da Central; sozinho também funciona, sem gravar) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: uma coluna de bancada — micrômetro grande em cima, lupa na bainha e no tambor logo abaixo, e três painéis iguais (leitura · correção · progresso). Cores e fontes da Central da Qualidade. */
+:root {
+  --bg: #eef0ed; --surface: #ffffff; --surface-2: #f5f6f4; --sunken: #e4e7e3;
+  --line: #d3d8d2; --line-2: #bfc6be;
+  --ink: #1b211e; --ink-2: #48514c; --ink-3: #737d77;
+  --marinho: #002340; --on-marinho: #ffffff;
+  --laranja: #D9480F; --on-laranja: #ffffff; --laranja-soft: #fbe7dc;
+  --ok: #1d7446; --ok-soft: #e3f2e8; --crit: #b3261e; --crit-soft: #f8e4e2; --info: #1f5f9e; --info-soft: #e2ecf6;
+  --focus: #1f5f9e;
+  --f-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --shadow: 0 1px 2px rgba(20, 30, 25, .06), 0 6px 24px rgba(20, 30, 25, .07);
+  --bancada: #f7f8f6;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
+  --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --marinho: #1E4C8F; --on-marinho: #ffffff;
+  --laranja: #ef8a4c; --on-laranja: #1b120c; --laranja-soft: #3a2519;
+  --ok: #5dcb8d; --ok-soft: #173325; --crit: #ff6f63; --crit-soft: #3a1c1a; --info: #72a8de; --info-soft: #172a3d; --focus: #72a8de;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 24px rgba(0,0,0,.25); --bancada: #232826; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
+  --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --marinho: #1E4C8F; --on-marinho: #ffffff;
+  --laranja: #ef8a4c; --on-laranja: #1b120c; --laranja-soft: #3a2519;
+  --ok: #5dcb8d; --ok-soft: #173325; --crit: #ff6f63; --crit-soft: #3a1c1a; --info: #72a8de; --info-soft: #172a3d; --focus: #72a8de;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 24px rgba(0,0,0,.25); --bancada: #232826; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; } [hidden] { display: none !important; }
+body.embed .head { display: none; } body.embed .wrap { padding-block: 2px 8px; padding-left: 0; padding-right: 0; max-width: none; } body.embed { background: transparent; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-body); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 22px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 14px; }
+.eyebrow { font: 600 12.5px/1.2 var(--f-display); letter-spacing: .12em; text-transform: uppercase; color: var(--laranja); }
+h1 { margin: 2px 0 0; font: 700 34px/1 var(--f-display); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
+.sub { margin: 4px 0 0; color: var(--ink-2); max-width: 70ch; }
+.head { display: grid; gap: 2px; }
+
+.bar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: end; }
+.grp { display: grid; gap: 4px; }
+.grp > span { font: 600 12.5px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--line-2); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { min-height: 48px; min-width: 128px; padding: 0 16px; border: 0; border-left: 1px solid var(--line); background: transparent; color: var(--ink-2); font: 600 15px var(--f-body); cursor: pointer; }
+.seg button:first-child { border-left: 0; }
+.seg button[aria-pressed="true"] { background: var(--marinho); color: var(--on-marinho); }
+.seg button:disabled { opacity: .45; cursor: not-allowed; }
+.seg.res button { min-width: 104px; font-family: var(--f-mono); font-weight: 500; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+.bench { padding: 6px 0 4px; background: var(--bancada); overflow: hidden; position: relative; }
+.bench svg { display: block; width: 100%; height: auto; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.bench.drag svg { cursor: grab; } .bench.drag.grabbing svg { cursor: grabbing; }
+.benchbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 14px 12px; border-top: 1px solid var(--line); background: var(--surface); }
+.benchbar .hint { color: var(--ink-2); font-size: 13.5px; flex: 1 1 220px; min-width: 0; }
+.lock { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; color: var(--ink-2); }
+
+.btn { min-height: 48px; padding: 0 18px; border-radius: 9px; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--ink); font: 600 15px var(--f-body); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.btn:hover { border-color: var(--ink-3); }
+.btn.pri { background: var(--laranja); border-color: var(--laranja); color: var(--on-laranja); }
+.btn.nav { background: var(--marinho); border-color: var(--marinho); color: var(--on-marinho); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.step { white-space: nowrap; min-width: 76px; font-family: var(--f-mono); font-weight: 500; font-size: 14px; padding: 0 10px; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.lupa { padding: 0; overflow: hidden; }
+.lupah { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid var(--line); }
+.lupah b { font: 600 13px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+.lupah .grow { flex: 1; }
+.lupah .btn { min-height: 40px; font-size: 14px; }
+.lupa svg { display: block; width: 100%; height: auto; background: var(--bancada); }
+
+.panels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
+.panel { padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.ptitle { font: 600 13px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.read { display: flex; align-items: center; gap: 10px; }
+.read input { height: 56px; width: 100%; max-width: 200px; padding: 0 14px; font: 600 26px var(--f-mono); color: var(--ink); background: var(--surface); border: 2px solid var(--marinho); border-radius: 9px; font-variant-numeric: tabular-nums; }
+.read input:disabled { opacity: .6; }
+.read span { font: 500 18px var(--f-mono); color: var(--ink-2); }
+.acts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.acts .full { grid-column: 1 / -1; }
+
+.msg { border-radius: 9px; padding: 10px 12px; font-size: 14.5px; border: 1px solid transparent; }
+.msg b { font-weight: 700; }
+.msg.ok { background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 40%, transparent); color: var(--ink); }
+.msg.no { background: var(--crit-soft); border-color: color-mix(in srgb, var(--crit) 40%, transparent); color: var(--ink); }
+.msg.info { background: var(--info-soft); border-color: color-mix(in srgb, var(--info) 35%, transparent); color: var(--ink); }
+.passos { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.passos li { display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: start; font-size: 14.5px; }
+.passos i { font-style: normal; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 700 14px var(--f-display); background: var(--sunken); color: var(--ink-2); }
+.passos li.v i { background: var(--laranja); color: var(--on-laranja); }
+.passos li.m i { background: var(--info); color: #fff; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--ink-3); font-size: 13.5px; }
+
+.big { font: 700 44px/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.dots { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 5px; }
+.dots span { height: 10px; border-radius: 5px; background: var(--sunken); border: 1px solid var(--line); }
+.dots span.ok { background: var(--ok); border-color: var(--ok); }
+.dots span.no { background: var(--crit); border-color: var(--crit); }
+.dots span.cur { background: var(--laranja); border-color: var(--laranja); }
+.dots span.done { background: var(--ink-3); border-color: var(--ink-3); }
+.field { display: grid; gap: 4px; } .field label { font-size: 13px; color: var(--ink-2); font-weight: 600; }
+.field input { height: 48px; padding: 0 12px; font: 500 16px var(--f-body); border: 1px solid var(--line-2); border-radius: 9px; background: var(--surface); color: var(--ink); width: 100%; }
+
+.resul { padding: 18px; display: grid; gap: 14px; }
+.resh { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: end; }
+.resh .k { font: 600 12.5px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.pill { display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border-radius: 16px; font: 700 15px var(--f-display); letter-spacing: .06em; text-transform: uppercase; }
+.pill.ok { background: var(--ok-soft); color: var(--ok); } .pill.no { background: var(--crit-soft); color: var(--crit); }
+.tblw { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font: 600 12.5px var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+td.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.c-ok { color: var(--ok); font-weight: 700; } .c-no { color: var(--crit); font-weight: 700; }
+.note { font-size: 13.5px; color: var(--ink-2); border-left: 3px solid var(--line-2); padding-left: 10px; }
+
+@media (max-width: 900px) { .panels { grid-template-columns: 1fr 1fr; } .panels .panel:nth-child(3) { grid-column: 1 / -1; } }
+@media (max-width: 620px) {
+  h1 { font-size: 28px; }
+  .panels { grid-template-columns: 1fr; } .panels .panel:nth-child(3) { grid-column: auto; }
+  .bar { display: grid; grid-template-columns: 1fr; } .seg button { min-width: 0; padding: 0 8px; } .seg.res button { min-width: 0; }
+  .btn.step { min-width: 0; flex: 1 1 0; }
+  .benchbar .hint { flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div class="eyebrow">Central da Qualidade · Treinamento</div>
+    <h1>Micrômetro</h1>
+    <p class="sub">Treine a leitura da bainha e do tambor. No treino livre você abre e fecha o micrômetro; no exercício e na prova ele já vem com uma medida para você ler.</p>
+  </header>
+
+  <div class="bar">
+    <div class="grp"><span>Modo</span>
+      <div class="seg" id="modos" role="group" aria-label="Modo">
+        <button type="button" data-modo="treino" aria-pressed="true">Treino livre</button>
+        <button type="button" data-modo="exer" aria-pressed="false">Exercício</button>
+        <button type="button" data-modo="prova" aria-pressed="false">Prova</button>
+      </div></div>
+    <div class="grp"><span>Resolução</span>
+      <div class="seg res" id="resol" role="group" aria-label="Resolução">
+        <button type="button" data-res="0.01" aria-pressed="true">0,01 mm · 0–25 mm</button>
+      </div></div>
+  </div>
+
+  <section class="card" aria-label="Micrômetro">
+    <div class="bench drag" id="bench"><svg id="cal" viewBox="0 0 1240 430" role="img" aria-label="Micrômetro externo"></svg></div>
+    <div class="benchbar" id="benchbar"></div>
+  </section>
+
+  <section class="card lupa" aria-label="Lupa na bainha e no tambor">
+    <div class="lupah"><b>Lupa na bainha e no tambor</b><span class="grow"></span><button class="btn" type="button" id="lupaBtn">Esconder lupa</button></div>
+    <svg id="lupa" viewBox="0 0 500 124" aria-hidden="true"><use href="#calroot"></use></svg>
+  </section>
+
+  <div id="area"></div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  /* dentro da Central: tema, nome de quem está usando e gravação da prova (CQ_TREIN_HOST) */
+  const EMBED = (() => { try { return new URLSearchParams(location.search).has('embed'); } catch (e) { return false; } })();
+  const HOST = (() => { try { return window.parent !== window && window.parent.CQ_TREIN_HOST ? window.parent.CQ_TREIN_HOST : null; } catch (e) { return null; } })();
+  if (EMBED) {
+    document.body.classList.add('embed');
+    const tema = () => { try { const t = window.parent.document.documentElement.dataset.theme; if (t) document.documentElement.dataset.theme = t; } catch (e) { /* sem acesso ao tema */ } };
+    tema(); try { new MutationObserver(tema).observe(window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }); } catch (e) { /* segue */ }
+    const alto = () => { try { if (window.frameElement) window.frameElement.style.height = Math.ceil(document.documentElement.scrollHeight) + 'px'; } catch (e) { /* segue */ } };
+    try { new ResizeObserver(alto).observe(document.body); } catch (e) { setInterval(alto, 800); }
+    addEventListener('load', alto);
+  }
+  /* ---------- micrômetro externo 0–25 mm · 0,01 mm: geometria ---------- */
+  /* bainha: traços de 1 mm em cima da linha e de 0,5 mm embaixo; tambor: 50 divisões (uma volta = 0,5 mm) */
+  const K = 16, XA = 110, XS0 = 560, AX = 170, R = 58, TW = 190, MAXMM = 25;
+  const CFG = { '0.01': { res: 0.01, n: 100, dec: 2, txt: '0,01' } };
+  const NS = 'http://www.w3.org/2000/svg';
+  const S = { cfgKey: '0.01', u: 788, modo: 'treino', lupa: true, mostra: false, treino: { ok: 0, tot: 0 }, ex: null, pv: null, travado: false, fb: null };
+  const cfg = () => CFG[S.cfgKey];
+  const maxU = () => MAXMM * 100;
+  const L = () => S.u / 100;
+  const fmt = (u) => (u / 100).toFixed(2).replace('.', ',');
+  /* leitura digitada, com pelo menos 2 casas (7,8 → 7,80) */
+  const fx = (v) => { const d = (String(v).split('.')[1] || '').length; return (+v).toFixed(Math.max(2, d)).replace('.', ','); };
+  const parts = (u) => { const mm = Math.floor(u / 100), r = u - mm * 100; return { mm, meio: r >= 50, t: r % 50 }; };
+  const svg = document.getElementById('cal'), lupa = document.getElementById('lupa');
+  const el = (tag, at, parent) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (parent) parent.appendChild(e); return e; };
+  const FF = 'IBM Plex Sans, Arial, sans-serif';
+
+  function desenhar() {
+    const mid = (XA + 520) / 2;
+    svg.innerHTML = `
+<defs>
+<linearGradient id="cy" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f969c"/><stop offset=".18" stop-color="#eef0f2"/><stop offset=".45" stop-color="#d3d7db"/><stop offset=".8" stop-color="#a9afb5"/><stop offset="1" stop-color="#7d848a"/></linearGradient>
+<linearGradient id="cy2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9aa1a7"/><stop offset=".25" stop-color="#f4f5f6"/><stop offset=".55" stop-color="#d9dde0"/><stop offset="1" stop-color="#8a9197"/></linearGradient>
+<linearGradient id="fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5d6a76"/><stop offset=".5" stop-color="#46525d"/><stop offset="1" stop-color="#36404a"/></linearGradient>
+<linearGradient id="ins" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9a25a"/><stop offset="1" stop-color="#a8752f"/></linearGradient>
+<linearGradient id="pc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d8790"/><stop offset=".3" stop-color="#d6dce1"/><stop offset=".55" stop-color="#9aa4ad"/><stop offset="1" stop-color="#5f6870"/></linearGradient>
+<linearGradient id="kn" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6f757c"/><stop offset=".5" stop-color="#cfd3d7"/><stop offset="1" stop-color="#6f757c"/></linearGradient>
+<clipPath id="clipS"><rect id="clipSr" x="${XS0 - 4}" y="${AX - 40}" width="10" height="80"/></clipPath>
+<filter id="sh" x="-5%" y="-5%" width="110%" height="120%"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#1d2733" flood-opacity=".22"/></filter>
+</defs>
+<g id="calroot">
+<g filter="url(#sh)">
+<path d="M${XA - 40},${AX - 26} L${XA},${AX - 26} L${XA},${AX + 26} L${XA - 6},${AX + 26} C${XA - 10},${AX + 150} ${XA + 60},${AX + 215} ${mid},${AX + 218} C${460},${AX + 215} ${510},${AX + 150} 500,${AX + 30} L500,${AX - 30} L560,${AX - 30} L560,${AX + 40} C565,${AX + 190} 470,${AX + 250} ${mid},${AX + 250} C150,${AX + 250} ${XA - 45},${AX + 190} ${XA - 40},${AX + 30} Z" fill="url(#fr)" stroke="#2f3840"/>
+<path d="M${XA + 30},${AX + 150} C${XA + 80},${AX + 196} 420,${AX + 196} 470,${AX + 150} L480,${AX + 176} C420,${AX + 226} ${XA + 80},${AX + 226} ${XA + 18},${AX + 176} Z" fill="url(#ins)" opacity=".95"/>
+<rect x="${XA - 34}" y="${AX - 14}" width="34" height="28" fill="url(#cy2)" stroke="#6f767c"/>
+<rect id="fuso" x="${XA}" y="${AX - 14}" width="390" height="28" fill="url(#cy2)" stroke="#6f767c"/>
+<rect x="512" y="${AX - 56}" width="36" height="28" rx="5" fill="url(#kn)" stroke="#5d636a"/>
+<rect id="bainha" x="560" y="${AX - 26}" width="40" height="52" fill="url(#cy)" stroke="#6f767c"/>
+</g>
+<text x="${mid}" y="${AX + 212}" font-size="12" text-anchor="middle" fill="#fff" letter-spacing="2" font-family="${FF}">0–25 mm  ·  0,01 mm</text>
+<g id="escala" clip-path="url(#clipS)"></g><g id="marcaFixa"></g>
+<g id="tambor"></g>
+</g>`;
+    const esc = svg.querySelector('#escala');
+    el('line', { x1: XS0 - 4, y1: AX, x2: XS0 + MAXMM * K + 30, y2: AX, stroke: '#22272c', 'stroke-width': 1.3 }, esc);
+    for (let m = 0; m <= MAXMM; m++) {
+      const x = XS0 + m * K;
+      el('line', { x1: x, y1: AX, x2: x, y2: AX - (m % 5 === 0 ? 16 : 11), stroke: '#22272c', 'stroke-width': 1.2, 'data-m': m }, esc);
+      if (m % 5 === 0) { const t = el('text', { x, y: AX - 19, 'font-size': 13, 'text-anchor': 'middle', fill: '#22272c', 'font-family': FF }, esc); t.textContent = m; }
+      if (m < MAXMM) el('line', { x1: x + K / 2, y1: AX, x2: x + K / 2, y2: AX + 10, stroke: '#22272c', 'stroke-width': 1.2, 'data-h': m }, esc);
+    }
+    /* tambor (desenhado com a borda em x = XS0; anda com translate) */
+    const tb = svg.querySelector('#tambor'), x = XS0;
+    let k = '';
+    for (let j = 0; j < 18; j++) k += `<line x1="${x + 100 + j * 5}" y1="${AX - R + 2}" x2="${x + 100 + j * 5}" y2="${AX + R - 2}" stroke="#8a9197" stroke-width="1"/>`;
+    for (let j = 0; j < 10; j++) k += `<line x1="${x + TW + 24 + j * 5}" y1="${AX - 28}" x2="${x + TW + 24 + j * 5}" y2="${AX + 28}" stroke="#8a9197" stroke-width="1"/>`;
+    tb.innerHTML = `<g filter="url(#sh)"><path d="M${x},${AX - R + 8} L${x + 14},${AX - R} L${x + TW},${AX - R} L${x + TW},${AX + R} L${x + 14},${AX + R} L${x},${AX + R - 8} Z" fill="url(#cy2)" stroke="#6f767c"/>
+<rect x="${x + TW}" y="${AX - 22}" width="18" height="44" fill="url(#cy)" stroke="#6f767c"/><rect x="${x + TW + 18}" y="${AX - 30}" width="56" height="60" rx="6" fill="url(#cy2)" stroke="#6f767c"/></g>${k}<g id="grad"></g><g id="marcaTambor"></g>`;
+    posicionar();
+  }
+  /* graduação do tambor: o traço t fica na linha da bainha; os números crescem para cima */
+  function graduar(t) {
+    const g = svg.querySelector('#grad'); if (!g) return;
+    let o = '';
+    for (let j = 0; j < 50; j++) {
+      let a = (j - t) * 7.2; if (a > 180) a -= 360; if (a < -180) a += 360;
+      if (Math.abs(a) > 78) continue;
+      const r = a * Math.PI / 180, y = AX - (R - 8) * Math.sin(r), c = Math.cos(r), ln = j % 5 === 0 ? 18 : 10;
+      o += `<line x1="${XS0 + 2}" y1="${y.toFixed(2)}" x2="${XS0 + 2 + ln}" y2="${y.toFixed(2)}" stroke="#22272c" stroke-width="${(1.1 * c + 0.2).toFixed(2)}" data-j="${j}"/>`;
+      if (j % 5 === 0 && c > 0.35) o += `<text x="${XS0 + 24}" y="${(y + 4 * c).toFixed(2)}" font-size="${(13 * c).toFixed(1)}" fill="#22272c" font-family="${FF}">${j}</text>`;
+    }
+    g.innerHTML = o;
+  }
+  function posicionar() {
+    const dx = L() * K, xt = XS0 + dx, p = parts(S.u);
+    svg.querySelector('#tambor').setAttribute('transform', `translate(${dx.toFixed(2)},0)`);
+    const f = svg.querySelector('#fuso'); f.setAttribute('x', (XA + dx).toFixed(2)); f.setAttribute('width', (500 - XA - dx + 2).toFixed(2));
+    svg.querySelector('#bainha').setAttribute('width', (xt - 560 + 30).toFixed(2));
+    svg.querySelector('#clipSr').setAttribute('width', (xt - (XS0 - 4)).toFixed(2));
+    graduar(p.t);
+    marcar();
+    lupa.setAttribute("viewBox", `${(xt - 270).toFixed(1)} ${AX - 62} 500 124`);
+  }
+  /* destaque da leitura: último milímetro e meio milímetro (azul) e o traço do tambor na linha (laranja) */
+  function marcar() {
+    const mf = svg.querySelector('#marcaFixa'), mt = svg.querySelector('#marcaTambor'); if (!mf) return;
+    mf.innerHTML = ''; mt.innerHTML = '';
+    if (!S.mostra) return;
+    const p = parts(S.u), xm = XS0 + p.mm * K;
+    el('line', { x1: xm, y1: AX, x2: xm, y2: AX - 18, stroke: '#1f5f9e', 'stroke-width': 3.2 }, mf);
+    if (p.meio) el('line', { x1: xm + K / 2, y1: AX, x2: xm + K / 2, y2: AX + 12, stroke: '#1f5f9e', 'stroke-width': 3.2 }, mf);
+    el('line', { x1: XS0 + 1, y1: AX, x2: XS0 + 22, y2: AX, stroke: '#D9480F', 'stroke-width': 3.2 }, mt);
+    el('circle', { cx: XS0 + 12, cy: AX, r: 9, fill: 'none', stroke: '#D9480F', 'stroke-width': 2, 'stroke-dasharray': '3 2.5' }, mt);
+  }
+
+  /* ---------- abrir e fechar arrastando (treino livre) ---------- */
+  const bench = document.getElementById('bench');
+  let drag = null;
+  const svgX = (ev) => { const pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY; return pt.matrixTransform(svg.getScreenCTM().inverse()).x; };
+  svg.addEventListener('pointerdown', (ev) => {
+    if (S.travado) return;
+    drag = { x: svgX(ev), u: S.u, id: ev.pointerId }; svg.setPointerCapture(ev.pointerId); bench.classList.add('grabbing');
+  });
+  svg.addEventListener('pointermove', (ev) => {
+    if (!drag || ev.pointerId !== drag.id) return;
+    const du = Math.round((svgX(ev) - drag.x) / K * 100);
+    irPara(drag.u + du);
+  });
+  const solta = () => { if (!drag) return; drag = null; bench.classList.remove('grabbing'); };
+  svg.addEventListener('pointerup', solta); svg.addEventListener('pointercancel', solta);
+
+  function irPara(u) {
+    u = Math.max(0, Math.min(maxU(), u));
+    if (u === S.u) return;
+    S.u = u;
+    if (S.modo === 'treino' && S.fb) { S.fb = null; S.mostra = false; desenharPaineis(); }
+    posicionar();
+  }
+  let anim = 0;
+  function deslizar(u) {
+    cancelAnimationFrame(anim);
+    const reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches, de = S.u, t0 = performance.now(), D = 450;
+    if (reduz || de === u) { S.u = u; posicionar(); return; }
+    const passo = (t) => { const k = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - k, 3); S.u = Math.round(de + (u - de) * e); posicionar(); if (k < 1) anim = requestAnimationFrame(passo); };
+    anim = requestAnimationFrame(passo);
+  }
+
+  /* ---------- medidas sorteadas ---------- */
+  function sortear(evitar = []) {
+    for (let k = 0; k < 300; k++) {
+      const u = 30 + Math.floor(Math.random() * (maxU() - 60)), p = parts(u);
+      if (p.t === 0 && Math.random() < 0.8) continue;           // poucas medidas "redondas"
+      if (evitar.some((v) => Math.abs(v - u) < 100)) continue;
+      return u;
+    }
+    return 1288;
+  }
+  const lista = (n) => { const a = []; while (a.length < n) a.push(sortear(a)); return a; };
+
+  /* ---------- correção ---------- */
+  function lerValor(txt) {
+    const t = String(txt || '').trim().replace(/\s/g, '').replace(',', '.');
+    if (!/^\d+(\.\d+)?$/.test(t)) return null;
+    return +t;
+  }
+  function corrigir(txt, u) {
+    const v = lerValor(txt);
+    if (v == null) return { vazio: true };
+    const uv = v * 100, inteiro = Math.abs(uv - Math.round(uv)) < 1e-6, ur = Math.round(uv);
+    if (inteiro && ur === u) return { ok: true, v };
+    const p = parts(u); let dica = '';
+    if (!inteiro) dica = `A leitura deste micrômetro vai de 0,01 em 0,01 mm: duas casas depois da vírgula (por exemplo ${fmt(Math.max(1, u))}).`;
+    else {
+      const q = parts(ur);
+      if (Math.abs(ur - u) === 50 && q.mm === p.mm) dica = p.meio ? 'Faltou somar o meio milímetro: o traço de baixo da bainha, depois do último milímetro, já apareceu (+ 0,50 mm).' : 'Não some o meio milímetro: o traço de baixo da bainha, depois do último milímetro, ainda não apareceu.';
+      else if (q.t === p.t && q.meio === p.meio) dica = 'O tambor está certo. Reveja os milímetros: o último traço de cima que aparece na bainha.';
+      else if (q.mm === p.mm && q.meio === p.meio) dica = 'A bainha está certa. Reveja o tambor: o traço que fica na linha da bainha (cada traço vale 0,01 mm).';
+      else dica = 'Comece pela bainha (milímetros e meio milímetro) e depois some o tambor.';
+    }
+    return { ok: false, v, dica };
+  }
+  function passosHTML(u) {
+    const p = parts(u), tb = (p.t / 100).toFixed(2).replace('.', ',');
+    return `<ol class="passos">
+      <li class="m"><i>1</i><span><b>Bainha, em cima:</b> o último milímetro que aparece é o <b class="mono">${p.mm} mm</b> (marca azul).</span></li>
+      <li class="m"><i>2</i><span><b>Bainha, embaixo:</b> ${p.meio ? 'o traço do meio milímetro <b>já apareceu</b> → <b class="mono">+ 0,50 mm</b> (marca azul).' : 'o traço do meio milímetro <b>ainda não apareceu</b> → <b class="mono">+ 0,00 mm</b>.'}</span></li>
+      <li class="v"><i>3</i><span><b>Tambor:</b> o traço na linha da bainha é o <b class="mono">${p.t}</b> (marca laranja) → ${p.t} × 0,01 = <b class="mono">${tb} mm</b>.</span></li>
+      <li><i>4</i><span><b>Leitura:</b> <span class="mono">${p.mm} + ${p.meio ? '0,50' : '0,00'} + ${tb} =</span> <b class="mono">${fmt(u)} mm</b></span></li></ol>`;
+  }
+
+  /* ---------- painéis por modo ---------- */
+  const area = document.getElementById('area'), benchbar = document.getElementById('benchbar');
+  const $ = (q) => area.querySelector(q);
+
+  function barraCursor() {
+    const c = cfg();
+    if (S.travado) { benchbar.innerHTML = `<span class="lock">Micrômetro travado: leia a medida que está nele.</span>`; bench.classList.remove('drag'); return; }
+    bench.classList.add('drag');
+    benchbar.innerHTML = `<span class="hint">Arraste o micrômetro com o dedo ou o mouse para abrir e fechar (o tambor gira junto), ou use os botões para ajuste fino.</span>
+      <button class="btn step" type="button" data-step="-100">−1 mm</button><button class="btn step" type="button" data-step="-1">−${c.txt}</button>
+      <button class="btn step" type="button" data-step="1">+${c.txt}</button><button class="btn step" type="button" data-step="100">+1 mm</button>`;
+  }
+  benchbar.addEventListener('click', (e) => { const b = e.target.closest('[data-step]'); if (b) irPara(S.u + +b.dataset.step); });
+
+  function desenharPaineis() {
+    if (S.modo === 'treino') return painelTreino();
+    if (S.modo === 'exer') return painelExer();
+    return painelProva();
+  }
+
+  function caixaFb() {
+    const f = S.fb;
+    if (!f) return `<p class="muted" style="margin:0">Digite a leitura e toque em <b>Conferir</b>. Se errar, a conta aparece aqui, passo a passo.</p>`;
+    if (f.vazio) return `<div class="msg info">Digite a leitura em milímetros, por exemplo <span class="mono">23,46</span>.</div>`;
+    if (f.mostrou) return `<div class="msg info"><b>Resposta: <span class="mono">${fmt(f.u)} mm</span></b></div>${passosHTML(f.u)}`;
+    if (f.ok) return `<div class="msg ok"><b>Certo! <span class="mono">${fmt(f.u)} mm</span></b></div>${passosHTML(f.u)}`;
+    return `<div class="msg no"><b>Ainda não.</b> Você leu <span class="mono">${fx(f.v)} mm</span>; o certo é <span class="mono">${fmt(f.u)} mm</span>.</div><p style="margin:0;font-size:14.5px">${f.dica}</p>${passosHTML(f.u)}`;
+  }
+
+  function painelTreino() {
+    const t = S.treino, pct = t.tot ? Math.round(100 * t.ok / t.tot) : 0;
+    area.innerHTML = `<div class="panels">
+      <section class="card panel"><div class="ptitle">Sua leitura</div>
+        <form class="read" id="f"><input id="leitura" inputmode="decimal" autocomplete="off" placeholder="0,00" aria-label="Sua leitura em milímetros"><span>mm</span></form>
+        <div class="acts"><button class="btn pri" type="button" data-a="conferir">Conferir</button><button class="btn" type="button" data-a="nova">Nova medida</button><button class="btn full" type="button" data-a="mostrar">Mostrar resposta</button></div></section>
+      <section class="card panel" aria-live="polite"><div class="ptitle">Correção</div>${caixaFb()}</section>
+      <section class="card panel"><div class="ptitle">Treino de hoje</div><div class="big">${t.ok} <span style="font-size:24px;color:var(--ink-3)">de ${t.tot}</span></div>
+        <div class="muted">${t.tot ? pct + '% de acerto · ' : ''}o treino não vale nota. Para nota, use <b>Exercício</b> ou <b>Prova</b>.</div></section></div>`;
+    ligarForm(() => {
+      const r = corrigir($('#leitura').value, S.u);
+      if (r.vazio) { S.fb = { vazio: true }; desenharPaineis(); return; }
+      t.tot++; if (r.ok) t.ok++;
+      S.fb = Object.assign({ u: S.u }, r); S.mostra = true; marcar(); desenharPaineis(); manter(r.v);
+    });
+  }
+  function manter(v) { const i = $('#leitura'); if (i && v != null) i.value = String(v).replace('.', ','); }
+
+  function ligarForm(conferir) {
+    const f = $('#f'); if (f) f.addEventListener('submit', (e) => { e.preventDefault(); conferir(); });
+    area.querySelectorAll('[data-a]').forEach((b) => b.addEventListener('click', () => acao(b.dataset.a, conferir)));
+  }
+  function acao(a, conferir) {
+    if (a === 'conferir') return conferir();
+    if (a === 'nova') { S.fb = null; S.mostra = false; marcar(); deslizar(sortear([S.u])); desenharPaineis(); setTimeout(() => { const i = $('#leitura'); if (i) i.focus(); }, 50); return; }
+    if (a === 'mostrar') { S.fb = { mostrou: true, u: S.u }; S.mostra = true; marcar(); desenharPaineis(); return; }
+    if (a === 'proxima') return exProxima();
+    if (a === 'exnovo') { iniciarExer(); return; }
+    if (a === 'pvcomecar') return iniciarProva();
+    if (a === 'pvconf') return conferir();
+    if (a === 'pvgravar') { if (S.pv) { S.pv.grav = null; desenharPaineis(); gravar(S.pv); } return; }
+    if (a === 'pvnovo') { S.pv = null; S.travado = false; S.mostra = false; barraCursor(); marcar(); desenharPaineis(); travarRes(false); return; }
+  }
+
+  /* exercício: 10 medidas, correção na hora */
+  function iniciarExer() {
+    S.ex = { med: lista(10), k: 0, resp: [], conf: false }; S.travado = true; S.mostra = false; S.fb = null;
+    barraCursor(); deslizar(S.ex.med[0]); desenharPaineis();
+  }
+  function exProxima() {
+    const e = S.ex; e.k++; e.conf = false; S.fb = null; S.mostra = false; marcar();
+    if (e.k < 10) deslizar(e.med[e.k]);
+    desenharPaineis();
+    setTimeout(() => { const i = $('#leitura'); if (i) i.focus(); }, 50);
+  }
+  function dotsHTML(e, prova) {
+    return `<div class="dots" aria-hidden="true">${Array.from({ length: 10 }, (_, j) => { const r = e.resp[j]; const cl = r ? (prova ? 'done' : (r.ok ? 'ok' : 'no')) : (j === e.k ? 'cur' : ''); return `<span class="${cl}"></span>`; }).join('')}</div>`;
+  }
+  function painelExer() {
+    const e = S.ex;
+    if (!e) return iniciarExer();
+    const acertos = e.resp.filter((r) => r.ok).length;
+    if (e.k >= 10) {
+      area.innerHTML = `<section class="card resul"><div class="resh"><div><div class="k">Exercício concluído</div><div class="big">${acertos} de 10</div></div><div class="muted">Resolução ${cfg().txt} mm</div><span class="grow"></span><button class="btn pri" type="button" data-a="exnovo">Fazer outro exercício</button></div>
+        ${tabelaHTML(e)}</section>`;
+      ligarForm(() => {}); return;
+    }
+    area.innerHTML = `<div class="panels">
+      <section class="card panel"><div class="ptitle">Medida ${e.k + 1} de 10</div>
+        <form class="read" id="f"><input id="leitura" inputmode="decimal" autocomplete="off" placeholder="0,00" aria-label="Sua leitura em milímetros" ${e.conf ? 'disabled' : ''}><span>mm</span></form>
+        <div class="acts">${e.conf ? `<button class="btn nav full" type="button" data-a="proxima">${e.k === 9 ? 'Ver resultado' : 'Próxima medida →'}</button>` : `<button class="btn pri full" type="button" data-a="conferir">Conferir</button>`}</div></section>
+      <section class="card panel" aria-live="polite"><div class="ptitle">Correção</div>${caixaFb()}</section>
+      <section class="card panel"><div class="ptitle">Exercício · 10 medidas</div><div class="big">${acertos} <span style="font-size:24px;color:var(--ink-3)">acerto${acertos === 1 ? '' : 's'}</span></div>${dotsHTML(e)}
+        <div class="muted">Corrige na hora e mostra a conta quando errar. O micrômetro fica travado.</div></section></div>`;
+    if (e.conf) manter(e.resp[e.k].v);
+    ligarForm(() => {
+      if (e.conf) return;
+      const r = corrigir($('#leitura').value, e.med[e.k]);
+      if (r.vazio) { S.fb = { vazio: true }; desenharPaineis(); return; }
+      e.resp[e.k] = { u: e.med[e.k], v: r.v, ok: r.ok }; e.conf = true;
+      S.fb = Object.assign({ u: e.med[e.k] }, r); S.mostra = true; marcar(); desenharPaineis();
+    });
+  }
+  function tabelaHTML(e) {
+    return `<div class="tblw"><table><thead><tr><th>#</th><th>Medida certa</th><th>Sua leitura</th><th>Resultado</th></tr></thead><tbody>${e.med.map((u, j) => { const r = e.resp[j] || {}; return `<tr><td class="num">${j + 1}</td><td class="num">${fmt(u)} mm</td><td class="num">${r.v != null ? fx(r.v) + ' mm' : '—'}</td><td class="${r.ok ? 'c-ok' : 'c-no'}">${r.ok ? '✓ certo' : '✕ errado'}</td></tr>`; }).join('')}</tbody></table></div>`;
+  }
+
+  /* prova: nome, 10 medidas, sem correção até o fim */
+  const NOTA_MIN = 8;
+  function travarRes(on) { document.querySelectorAll('#resol button').forEach((b) => { b.disabled = on; }); }
+  function iniciarProva() {
+    const nome = ($('#pvnome').value || '').trim();
+    if (!nome) { const m = $('#pverr'); m.hidden = false; $('#pvnome').focus(); return; }
+    S.nomePv = nome; S.pv = { nome, med: lista(10), k: 0, resp: [], t0: Date.now(), fim: null }; S.travado = true; S.mostra = false; S.fb = null;
+    travarRes(true); barraCursor(); deslizar(S.pv.med[0]); desenharPaineis();
+  }
+  const dur = (ms) => { const s = Math.round(ms / 1000); return `${Math.floor(s / 60)} min ${String(s % 60).padStart(2, '0')} s`; };
+  function painelProva() {
+    const p = S.pv;
+    if (!p) {
+      S.travado = false; barraCursor();
+      area.innerHTML = `<div class="panels">
+        <section class="card panel"><div class="ptitle">Prova do inspetor</div>
+          <form id="f" class="field"><label for="pvnome">Nome do inspetor</label><input id="pvnome" autocomplete="off" placeholder="Nome e sobrenome" value="${esc(S.nomePv || (HOST && HOST.nome ? HOST.nome() : '') || '')}"></form>
+          <div id="pverr" class="msg no" hidden>Digite o nome do inspetor para começar.</div>
+          <div class="acts"><button class="btn pri full" type="button" data-a="pvcomecar">Começar a prova</button></div></section>
+        <section class="card panel"><div class="ptitle">Como funciona</div><ol class="passos">
+          <li><i>1</i><span>10 medidas sorteadas, resolução <b class="mono">${cfg().txt} mm</b>.</span></li>
+          <li><i>2</i><span>Sem resposta e sem correção durante a prova. A lupa pode ser usada.</span></li>
+          <li><i>3</i><span>Aprovado com <b>${NOTA_MIN} ou mais</b> acertos de 10.</span></li></ol></section>
+        <section class="card panel"><div class="ptitle">Registro</div><p class="note" style="margin:0">${HOST ? 'Ao terminar, a prova fica gravada na Central (Treinamento › Provas) com nome, data, resolução e nota. Serve como evidência de treinamento do inspetor.' : 'Aberto fora da Central: o resultado aparece só na tela e não fica gravado.'}</p></section></div>`;
+      ligarForm(() => iniciarProva()); return;
+    }
+    if (p.k >= 10) {
+      const ac = p.resp.filter((r) => r.ok).length, ok = ac >= NOTA_MIN, d = new Date(p.fim);
+      S.mostra = false; marcar();
+      area.innerHTML = `<section class="card resul">
+        <div class="resh"><div><div class="k">Inspetor</div><div style="font:600 20px var(--f-body)">${esc(p.nome)}</div></div>
+          <div><div class="k">Nota</div><div class="big">${ac} / 10</div></div>
+          <div><div class="k">Situação</div><span class="pill ${ok ? 'ok' : 'no'}">${ok ? 'Aprovado' : 'Reprovado'}</span></div>
+          <div><div class="k">Resolução</div><div class="mono">${cfg().txt} mm</div></div>
+          <div><div class="k">Data</div><div class="mono">${d.toLocaleDateString('pt-BR')} ${d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</div></div>
+          <div><div class="k">Tempo</div><div class="mono">${dur(p.fim - p.t0)}</div></div></div>
+        ${tabelaHTML(p)}
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><button class="btn pri" type="button" data-a="pvnovo">Nova prova</button>${gravHTML(p)}</div></section>`;
+      ligarForm(() => {}); return;
+    }
+    area.innerHTML = `<div class="panels">
+      <section class="card panel"><div class="ptitle">Medida ${p.k + 1} de 10</div>
+        <form class="read" id="f"><input id="leitura" inputmode="decimal" autocomplete="off" placeholder="0,00" aria-label="Sua leitura em milímetros"><span>mm</span></form>
+        <div class="acts"><button class="btn pri full" type="button" data-a="pvconf">${p.k === 9 ? 'Confirmar e terminar' : 'Confirmar e ir para a próxima'}</button></div>
+        <div id="pverr" class="msg info" hidden>Digite a leitura em milímetros, por exemplo <span class="mono">23,46</span>.</div></section>
+      <section class="card panel"><div class="ptitle">Durante a prova</div><p style="margin:0">A correção aparece só no final. Confira bem antes de confirmar: a resposta não pode ser mudada depois.</p></section>
+      <section class="card panel"><div class="ptitle">Prova · ${esc(p.nome)}</div><div class="big">${p.k} <span style="font-size:24px;color:var(--ink-3)">de 10 respondidas</span></div>${dotsHTML(p, true)}</section></div>`;
+    ligarForm(() => {
+      const r = corrigir($('#leitura').value, p.med[p.k]);
+      if (r.vazio) { $('#pverr').hidden = false; $('#leitura').focus(); return; }
+      p.resp[p.k] = { u: p.med[p.k], v: r.v, ok: r.ok }; p.k++;
+      if (p.k >= 10) { p.fim = Date.now(); S.travado = false; travarRes(false); barraCursor(); gravar(p); }
+      else deslizar(p.med[p.k]);
+      desenharPaineis();
+      setTimeout(() => { const i = $('#leitura'); if (i) i.focus(); }, 50);
+    });
+  }
+  /* gravação da prova na Central */
+  function gravHTML(p) {
+    if (!HOST) return '<span class="note">Aberto fora da Central: este resultado não fica gravado.</span>';
+    if (p.grav === 'ok') return '<span class="msg ok" id="pvgrav"><b>Gravado na Central</b> · Treinamento › Provas</span>';
+    if (p.grav === 'erro') return `<span class="msg no" id="pvgrav"><b>Não gravou:</b> ${esc(p.gravErr || 'sem conexão')}.</span><button class="btn" type="button" data-a="pvgravar">Tentar gravar de novo</button>`;
+    return '<span class="msg info" id="pvgrav">Gravando na Central…</span>';
+  }
+  async function gravar(p) {
+    if (!HOST || !HOST.salvar || p.grav === 'ok' || p.gravando) return;
+    p.gravando = true; p.grav = null;
+    const c = cfg(), ac = p.resp.filter((r) => r.ok).length;
+    const reg = { tipo: 'micrometro', res: c.txt, nome: p.nome, nota: ac, tot: 10, min: NOTA_MIN, ok: ac >= NOTA_MIN, ini: p.t0, fim: p.fim, ms: p.fim - p.t0,
+      resp: p.resp.map((r) => ({ c: fmt(r.u), v: r.v == null ? '' : fx(r.v), ok: !!r.ok })) };
+    try { await HOST.salvar(reg); p.grav = 'ok'; } catch (e) { p.grav = 'erro'; p.gravErr = (e && (e.message || e.code)) || String(e); }
+    p.gravando = false;
+    if (S.pv === p && S.modo === 'prova') desenharPaineis();
+  }
+  const esc = (t) => String(t).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+
+  /* ---------- trocar modo / resolução ---------- */
+  function trocaModo(m) {
+    if (S.pv && S.pv.k < 10 && S.modo === 'prova' && m !== 'prova') { S.pv = null; travarRes(false); }
+    S.modo = m; S.fb = null; S.mostra = false;
+    document.querySelectorAll('#modos button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modo === m)));
+    if (m === 'treino') { S.travado = false; S.ex = null; }
+    if (m === 'exer') { S.ex = null; }
+    if (m === 'prova') { S.pv = null; S.travado = false; }
+    marcar(); barraCursor(); desenharPaineis();
+  }
+  document.getElementById('modos').addEventListener('click', (e) => { const b = e.target.closest('[data-modo]'); if (b) trocaModo(b.dataset.modo); });
+  document.getElementById('resol').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-res]'); if (!b || b.disabled || b.dataset.res === S.cfgKey) return;
+    const mm = L(); S.cfgKey = b.dataset.res; S.u = Math.min(maxU(cfg()), Math.round(mm / cfg().res));
+    document.querySelectorAll('#resol button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.res === S.cfgKey)));
+    desenhar(); trocaModo(S.modo);
+  });
+  document.getElementById('lupaBtn').addEventListener('click', (e) => {
+    S.lupa = !S.lupa; lupa.hidden = !S.lupa; e.currentTarget.textContent = S.lupa ? 'Esconder lupa' : 'Mostrar lupa';
+  });
+
+  window.__paq = window.__mic = { S, CFG, parts, corrigir, fmt, maxU, irPara, K, XS0, AX };
+  desenhar(); barraCursor(); desenharPaineis();
+})();
+</script>
+</body>
+</html>
