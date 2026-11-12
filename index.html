@@ -46,6 +46,7 @@
   --f-body: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
   --r: 6px;
+  --n-av: var(--av); --n-serv: var(--serv); --n-rnc: var(--rnc); --n-rncc: var(--rncc); --n-cal: var(--cal); --n-sold: var(--sold); --n-iqf: var(--iqf); --n-tcr: var(--tcr); --n-rif: var(--rif); --n-rir: var(--rir); --n-geral: var(--geral); --n-roxo: #7B417A; --n-ouro: #a77f19; --n-azul: #33428F; /* v99: tons dos gráficos (no escuro, versão neon) */
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -53,6 +54,7 @@
     --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #6c7772;
     --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --trn: #5fb2c2; --rir: #8fb35a;
     --ok: #5dcb8d; --warn: #e3ad48; --serious: #ef8a4c; --crit: #ff6f63; --info: #72a8de; --off: #9aa39f; --focus: #72a8de;
+    --n-av: #3fbf8f; --n-serv: #d99a3c; --n-rnc: #ff5a47; --n-rncc: #a07cf0; --n-cal: #3d9bff; --n-sold: #ff7a33; --n-iqf: #d4955a; --n-tcr: #b8c34a; --n-rif: #5b8ff0; --n-rir: #9fd16a; --n-geral: #8a958f; --n-roxo: #8f63d6; --n-ouro: #e3b85a; --n-azul: #5b9be6;
     --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
     color-scheme: dark;
   }
@@ -62,6 +64,7 @@
   --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #6c7772;
   --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --trn: #5fb2c2; --rir: #8fb35a;
   --ok: #5dcb8d; --warn: #e3ad48; --serious: #ef8a4c; --crit: #ff6f63; --info: #72a8de; --off: #9aa39f; --focus: #72a8de;
+  --n-av: #3fbf8f; --n-serv: #d99a3c; --n-rnc: #ff5a47; --n-rncc: #a07cf0; --n-cal: #3d9bff; --n-sold: #ff7a33; --n-iqf: #d4955a; --n-tcr: #b8c34a; --n-rif: #5b8ff0; --n-rir: #9fd16a; --n-geral: #8a958f; --n-roxo: #8f63d6; --n-ouro: #e3b85a; --n-azul: #5b9be6;
   --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
   color-scheme: dark;
 }
@@ -216,6 +219,49 @@ button.kpi:hover { border-color: var(--ink-3); }
 .rindp em { font: 600 12.5px var(--f-mono); font-style: normal; color: var(--ink-2); text-align: right; }
 @media (max-width: 1280px) { .kpis.rindk { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 980px) { .rindbar { grid-template-columns: auto minmax(0, 1fr); } .rindbar .rindh { display: none; } .rindn { grid-template-columns: 40px minmax(0, 1fr) 40px; } .rindbar .inp { grid-column: 1 / -1; } .kpis.rindk { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* v99: Equipe hoje (todos os módulos) — topo do Painel, no visual novo dos indicadores (aprovado) */
+.ehbar { display: grid; grid-template-columns: auto minmax(0, 1fr) 220px; gap: 10px; align-items: center; }
+.ehbar .rindn { grid-template-columns: 40px 210px 40px; }
+.ehbar .inp { height: var(--h-in); min-height: var(--h-in); }
+.ehh { font-size: 12.5px; color: var(--ink-3); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ehlive { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--ok); margin-right: 6px; }
+.ehlive i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 4px color-mix(in srgb, var(--ok) 25%, transparent); }
+.ehins { display: grid; grid-template-columns: 196px minmax(0, 1fr); gap: 14px; align-items: center; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--geral) 45%, var(--line)); border-radius: var(--r); background: linear-gradient(90deg, color-mix(in srgb, var(--geral) 14%, var(--surface)) 0%, var(--surface) 70%); }
+.ehinsh { display: grid; grid-template-columns: 22px 1fr; column-gap: 8px; align-items: center; }
+.ehinsh svg { grid-row: 1 / span 2; width: 22px; height: 22px; fill: var(--geral); }
+.ehinsh b { font: 700 15px/1 var(--f-display); letter-spacing: .06em; text-transform: uppercase; } .ehinsh small { font-size: 11px; color: var(--ink-3); }
+.ehins ul { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.ehins li { display: grid; grid-template-columns: 8px 1fr; gap: 9px; align-items: start; font-size: 13px; line-height: 1.4; color: var(--ink-2); padding-left: 14px; border-left: 1px solid var(--line); }
+.ehins li b { color: var(--ink); font-weight: 600; }
+.ehins li i { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; background: var(--ink-3); }
+.ehins li.ok i { background: var(--ok); } .ehins li.warn i { background: var(--warn); } .ehins li.info i { background: var(--info); }
+.ehins li.crit i { background: var(--crit); box-shadow: 0 0 0 3px color-mix(in srgb, var(--crit) 25%, transparent); }
+.ehpcs { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.ehpc { display: grid; gap: 8px; align-content: start; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); text-align: left; font: inherit; color: inherit; }
+button.ehpc { cursor: pointer; } button.ehpc:hover { border-color: var(--ink-3); } button.ehpc[aria-pressed="true"] { border-color: var(--ok); }
+.ehpch { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+.ehpch b { display: block; font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ehpch small { font-size: 12px; color: var(--ink-3); }
+.ehpch em { font: 700 28px/1 var(--f-display); font-style: normal; text-align: right; } .ehpch em small { display: block; font: 400 10.5px var(--f-body); color: var(--ink-3); }
+.ehav { position: relative; display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; font: 700 11px var(--f-display); letter-spacing: .04em; color: var(--ink-2); background: var(--surface-2); border: 1px solid var(--line); }
+.ehav.st::after { content: ''; position: absolute; right: -4px; bottom: -4px; width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--surface); background: var(--ink-3); }
+.ehav.st.on::after { background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent); }
+.ehpc p { margin: 0; font-size: 13px; line-height: 1.4; color: var(--ink-2); min-height: 3.6em; padding: 8px 10px; border-radius: 4px; background: var(--surface-2); border-left: 3px solid var(--line-2); overflow-wrap: anywhere; }
+.ehpc.on p { border-left-color: var(--ok); } .ehpc p b { color: var(--ink); font-weight: 600; }
+.ehpms { display: flex; flex-wrap: wrap; gap: 6px; }
+.ehpm { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 9px 0 3px; border-radius: 13px; font-size: 12px; color: var(--ink-2); background: color-mix(in srgb, var(--m) 16%, transparent); }
+.ehpm b { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; font: 700 12px var(--f-display); color: #fff; background: var(--m); }
+.ehpt { display: flex; justify-content: space-between; gap: 8px; font: 500 11.5px var(--f-mono); color: var(--ink-3); border-top: 1px dashed var(--line); padding-top: 7px; }
+.ehc2 { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 14px; }
+.ehlg { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--ink-2); } .ehlg span { display: inline-flex; align-items: center; gap: 6px; } .ehlg i { width: 10px; height: 10px; border-radius: 2px; }
+.ehsvg { width: 100%; height: auto; display: block; overflow: visible; }
+.ehsvg .gl { stroke: var(--line); } .ehsvg .ax { fill: var(--ink-3); font: 11px var(--f-body); } .ehsvg .vl { fill: var(--ink); font: 600 11.5px var(--f-body); }
+.ehsvg .now { stroke: var(--warn); stroke-width: 1.5; } .ehsvg .nowt { fill: var(--warn); font: 700 11px var(--f-body); }
+.ehtl { list-style: none; margin: 0; padding: 0; display: grid; }
+.ehtl li { display: grid; grid-template-columns: 46px 30px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-2); }
+.ehtl li b { color: var(--ink); font-weight: 600; } .ehtl time { font: 600 12.5px var(--f-mono); color: var(--ink-3); }
+.ehmc { font: 700 11px var(--f-display); letter-spacing: .08em; padding: 3px 8px; border-radius: 4px; color: #fff; background: var(--m); white-space: nowrap; text-transform: uppercase; }
+.ehmais { justify-self: start; font-size: 12.5px; font-weight: 600; color: var(--info); background: none; border: 0; padding: 0; cursor: pointer; } .ehmais:hover { text-decoration: underline; }
+@media (max-width: 980px) { .ehbar { grid-template-columns: minmax(0, 1fr); } .ehbar .rindn { grid-template-columns: 48px minmax(0, 1fr) 48px; } .ehins { grid-template-columns: minmax(0, 1fr); } .ehins ul { grid-template-columns: minmax(0, 1fr); gap: 8px; } .ehins li { border-left: 0; padding-left: 0; } .ehc2 { grid-template-columns: minmax(0, 1fr); } }
 /* v78 etapa 3: tabela compacta da lista do RIR (mesmas colunas em todas as linhas) */
 .ritb { border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--surface); margin-bottom: 18px; }
 .rirw { display: grid; grid-template-columns: 128px 84px minmax(0, 1fr) 84px 150px 140px 132px; column-gap: 14px; align-items: center; min-height: 58px; padding: 6px 14px; border-top: 1px solid var(--line); }
@@ -5694,7 +5740,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 98; window.CQ_V = APP_V;
+    const APP_V = 99; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7745,6 +7791,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const proxN = insSt('VENCE EM BREVE') + insSt('VENCE HOJE');
     const mesAt = { de: E.isoDate(m0), ate: E.isoDate(m1 - 1) }, mesAn = { de: E.isoDate(p0), ate: E.isoDate(p1 - 1) };
     main.innerHTML = `<div class="view">${head('Painel de indicadores', `Dados ao vivo do banco da Qualidade, calculados em ${fD(t)}. Clique num número ou numa barra para abrir a lista.`, '<button class="btn" type="button" data-act="tv-on" title="Para a TV: o Painel ocupa a tela toda e rola sozinho">⛶ Tela cheia (rolando)</button>')}
+      ${ehPainelHTML()}
       ${gerPainelHTML()}
       <section class="sec">${band('RNC', 'Indicadores de NCF')}<div class="block"><div class="body">
         <div class="kpis sm">
@@ -7911,6 +7958,135 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         { ...pp('Sem certificado', ns, Sm.length, sc, tp(sc, scp), tierInv(sc, 5, 10), { v: 'serv', f: { cert: 'sem' } }, 'sem certificado', 'Sem certificado'), tone: tierInv(sc, 5, 10) || 'warn' });
     }
     return R;
+  }
+  /* ================= v99: EQUIPE HOJE (todos os módulos) — topo do Painel =================
+     Lê o Histórico do dia (log/AAAA-MM-DD): cada ação gravada na Central tem hora, quem fez, módulo e o que foi.
+     Hoje fica "ao vivo" (escuta o documento do dia); dias anteriores são lidos uma vez. Quem não vê o Histórico não vê este bloco. */
+  const EH = { dia: null, ins: '', docs: {}, ouvindo: null, un: null, lendo: {} };
+  const EH_COR = { AV: 'av', SERV: 'serv', RNC: 'rnc', RNCC: 'rncc', INS: 'cal', SOLD: 'sold', IQF: 'iqf', CERTQ: 'tcr', RIF: 'rif', RIR: 'rir', GERAL: 'geral' };
+  const EH_NOME = { AV: 'Lotes', SERV: 'Serviços', RNC: 'NCF', RNCC: 'NCC', INS: 'Calibração', SOLD: 'Soldagem', IQF: 'IQF', CERTQ: 'Certificados', RIF: 'RIF', RIR: 'RIR', GERAL: 'Configuração' };
+  const EH_VERBO = { novo: 'lançou', criado: 'criou', importado: 'importou', 'excluído': 'excluiu', excluido: 'excluiu', alterado: 'alterou' };
+  const ehCor = (m) => `var(--n-${EH_COR[m] || 'geral'})`;
+  const ehHoje = () => today8();
+  const ehDia = () => EH.dia || ehHoje();
+  const ehIni = (n) => { const p = String(n || '').trim().split(/\s+/).filter(Boolean); return (p.length > 1 ? p[0][0] + p[p.length - 1][0] : (p[0] || '—').slice(0, 2)).toUpperCase(); };
+  const ehModOk = (m) => { if (m === 'GERAL' || typeof window.CQ_ACCESS !== 'function') return true; const col = MOD[m] ? MOD[m].col : (VIEW_COL[m] || null); return !col || vis(col); };
+  function ehGuarda(d, snap) {
+    const L = snap && snap.exists ? Object.values((snap.data() || {}).e || {}).filter((x) => x && x.at) : [];   /* os módulos de cada um são filtrados na hora de mostrar (o acesso pode chegar depois) */
+    L.sort((a, b) => b.at - a.at); EH.docs[d] = L;
+    const falta = L.map((x) => x.by).filter((i) => i && !(i in DB.names));
+    if (falta.length) resolveNames(falta).then(ehAtualiza).catch(() => {});
+  }
+  function ehCarrega() {
+    const d = ehDia(), hoje = ehHoje();
+    if (d === hoje) {
+      if (EH.ouvindo !== hoje) {
+        if (EH.un) { try { EH.un(); } catch (e) { /* já fechado */ } }
+        EH.ouvindo = hoje;
+        EH.un = DB.db.doc('log/' + hoje).onSnapshot((snap) => { ehGuarda(hoje, snap); ehAtualiza(); }, () => { EH.docs[hoje] = EH.docs[hoje] || []; ehAtualiza(); });
+      }
+    } else if (!EH.docs[d] && !EH.lendo[d]) {
+      EH.lendo[d] = true;
+      DB.db.doc('log/' + d).get().then((snap) => { ehGuarda(d, snap); }).catch(() => { EH.docs[d] = []; }).then(() => { EH.lendo[d] = false; ehAtualiza(); });
+    }
+  }
+  /* troca só o bloco (o resto do Painel não é refeito a cada ação da equipe) */
+  function ehAtualiza() { const el = document.getElementById('eh-sec'); if (el && S.view === 'painel') el.outerHTML = ehPainelHTML(); }
+  window.__CQ_EH = EH; /* consulta nos testes */
+  setInterval(() => { if (S.view === 'painel' && !EH.dia) { if (EH.ouvindo && EH.ouvindo !== ehHoje()) ehCarrega(); ehAtualiza(); } }, 60000);   /* "há X min" e a virada do dia */
+  function ehNav(k) {
+    if (k === '0') { EH.dia = null; return; }
+    const [y, m, dd] = ehDia().split('-').map(Number), t = new Date(y, m - 1, dd + Number(k));
+    const novo = today8(t); EH.dia = novo >= ehHoje() ? null : novo;
+  }
+  function ehAct(a, key) {
+    if (a === 'eh-dia') { ehNav(key); ehCarrega(); ehAtualiza(); return true; }
+    if (a === 'eh-p') { EH.ins = EH.ins === key ? '' : key; ehAtualiza(); return true; }
+    return false;
+  }
+  document.addEventListener('change', (e) => { const t = e.target; if (t && t.id === 'eh-ins') { EH.ins = t.value; ehAtualiza(); } });
+  const ehHa = (ms) => { const m = Math.max(0, Math.round((Date.now() - ms) / 60000)); return m < 1 ? 'agora' : m < 60 ? `há ${m} min` : `há ${Math.floor(m / 60)} h${m % 60 ? ' ' + (m % 60) : ''}`; };
+  const ehTxt = (x, mai) => { const v = EH_VERBO[x.act] || 'alterou'; return `${mai ? v[0].toUpperCase() + v.slice(1) : v} · <b>${esc(x.label || x.key || '')}</b>`; };
+  /* colunas empilhadas com acabamento degradê neon (o mesmo dos minigráficos aprovados) */
+  function ehColunas(cols, series, ymax, agora) {
+    const w = 640, h = 220, L = 30, R = 12, T = 16, B = 24, n = cols.length, iw = w - L - R, ih = h - T - B, bw = iw / n * 0.56;
+    const o = ['<defs><filter id="eh-glw" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
+      + series.map((s, j) => `<linearGradient id="eh-g${j}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" style="stop-color:${s.cor};stop-opacity:.88"/><stop offset="1" style="stop-color:${s.cor};stop-opacity:.16"/></linearGradient>`).join('') + '</defs>'];
+    for (let k = 0; k <= 4; k++) { const y = T + ih - ih * k / 4; o.push(`<line x1="${L}" x2="${w - R}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" class="gl"/>` + ((ymax * k) % 4 === 0 ? `<text x="${L - 6}" y="${(y + 4).toFixed(1)}" class="ax" text-anchor="end">${ymax * k / 4}</text>` : '')); }
+    for (let i = 0; i < n; i++) {
+      const x = L + iw * (i + 0.5) / n - bw / 2; let acc = 0, k = 0; const tot = series.reduce((sm, s) => sm + s.v[i], 0);
+      series.forEach((s, j) => {
+        const v = s.v[i]; if (!v) return;
+        let y0 = T + ih - ih * acc / ymax; const y1 = T + ih - ih * (acc + v) / ymax; acc += v; if (k) y0 -= 2; k++;
+        o.push(`<rect x="${x.toFixed(1)}" y="${y1.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(1, y0 - y1).toFixed(1)}" rx="2" fill="url(#eh-g${j})"><title>${esc(cols[i] + ' · ' + s.nome + ': ' + v)}</title></rect>`
+          + `<line x1="${(x + 1).toFixed(1)}" x2="${(x + bw - 1).toFixed(1)}" y1="${(y1 + 1).toFixed(1)}" y2="${(y1 + 1).toFixed(1)}" style="stroke:${s.cor}" stroke-width="2.4" stroke-linecap="round" filter="url(#eh-glw)"/>`);
+      });
+      if (tot) o.push(`<text x="${(x + bw / 2).toFixed(1)}" y="${(T + ih - ih * tot / ymax - 7).toFixed(1)}" class="vl" text-anchor="middle">${tot}</text>`);
+      o.push(`<text x="${(x + bw / 2).toFixed(1)}" y="${h - 6}" class="ax" text-anchor="middle">${cols[i]}</text>`);
+    }
+    if (agora != null) { const xa = L + iw * (agora + 0.5) / n; o.push(`<line x1="${xa.toFixed(1)}" x2="${xa.toFixed(1)}" y1="${T - 4}" y2="${T + ih}" class="now"/><text x="${(xa + 4).toFixed(1)}" y="${T + 6}" class="nowt">agora</text>`); }
+    return `<div class="ehlg">${series.map((s) => `<span><i style="background:${s.cor}"></i>${esc(s.nome)}</span>`).join('')}</div><svg class="ehsvg" viewBox="0 0 ${w} ${h}" role="img" aria-label="Ações por hora e por módulo">${o.join('')}</svg>`;
+  }
+  function ehPainelHTML() {
+    if (!S.model || !DB.db || !viewOk('historico')) return '';
+    ehCarrega();
+    const d = ehDia(), hoje = d === ehHoje(), TODAS = EH.docs[d] && EH.docs[d].filter((x) => ehModOk(x.mod));
+    const [yy, mm, dd] = d.split('-').map(Number), dt = new Date(yy, mm - 1, dd);
+    const perTxt = `${['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'][dt.getDay()]}, ${String(dd).padStart(2, '0')}/${String(mm).padStart(2, '0')}/${yy}`;
+    /* pessoas do dia */
+    const P = new Map();
+    (TODAS || []).forEach((x) => { const k = x.by || '—'; const p = P.get(k) || { k, nome: who(x.by), L: [] }; p.L.push(x); P.set(k, p); });
+    const pessoas = Array.from(P.values()).sort((a, b) => b.L[0].at - a.L[0].at);
+    if (EH.ins && !P.has(EH.ins)) EH.ins = '';
+    const X = EH.ins ? (P.get(EH.ins) || { L: [] }).L : (TODAS || []);
+    const on = (p) => hoje && Date.now() - p.L[0].at < 15 * 60000;
+    const bar = `<div class="ehbar"><div class="rindn"><button type="button" class="btn" data-act="eh-dia" data-key="-1" aria-label="Dia anterior">‹</button><b>${esc(perTxt)}</b><button type="button" class="btn" data-act="eh-dia" data-key="1" aria-label="Próximo dia" ${hoje ? 'disabled' : ''}>›</button></div>
+      <span class="ehh">${hoje ? '<span class="ehlive"><i></i>ao vivo</span>atualiza sozinho a cada ação gravada na Central' : `<button type="button" class="ehmais" data-act="eh-dia" data-key="0">voltar para hoje</button>`}</span>
+      <select id="eh-ins" class="inp" aria-label="Pessoa"><option value="">Pessoa: todas</option>${pessoas.map((p) => `<option value="${esc(p.k)}"${p.k === EH.ins ? ' selected' : ''}>${esc(p.nome)}</option>`).join('')}</select></div>`;
+    const sec = (corpo) => `<section class="sec" id="eh-sec">${band('GERAL', 'Equipe hoje · todos os módulos', hoje ? 'o que cada pessoa está fazendo na Central' : 'o que cada pessoa fez na Central')}<div class="block"><div class="body">${bar}${corpo}</div></div></section>`;
+    if (!TODAS) return sec('<div class="loading"><span class="spin"></span><span>Carregando o dia…</span></div>');
+    if (!TODAS.length) return sec(`<div class="empty">${hoje ? 'Ninguém gravou nada na Central hoje ainda.' : 'Ninguém gravou nada na Central neste dia.'}</div>`);
+    /* resumo */
+    const porMod = new Map(); X.forEach((x) => porMod.set(x.mod, (porMod.get(x.mod) || 0) + 1));
+    const mods = Array.from(porMod.entries()).sort((a, b) => b[1] - a[1]);
+    const nOn = pessoas.filter(on).length, hAgora = new Date().getHours();
+    const i1 = hoje
+      ? ['ok', `<b>${nOn ? NF.format(nOn) + (nOn === 1 ? ' pessoa trabalhando' : ' pessoas trabalhando') : 'Ninguém mexendo'}</b> na Central agora · ${NF.format(TODAS.length)} ${TODAS.length === 1 ? 'ação' : 'ações'} até as ${hAgora}h.`]
+      : ['ok', `<b>${NF.format(pessoas.length)} ${pessoas.length === 1 ? 'pessoa trabalhou' : 'pessoas trabalharam'}</b> na Central · ${NF.format(TODAS.length)} ${TODAS.length === 1 ? 'ação' : 'ações'} no dia.`];
+    const i2 = ['info', `<b>${esc(EH_NOME[mods[0][0]] || mods[0][0])}</b> foi o módulo mais movimentado${EH.ins ? ' para ' + esc(P.get(EH.ins).nome.split(' ')[0]) : ''}: ${NF.format(mods[0][1])} ${mods[0][1] === 1 ? 'ação' : 'ações'}.`];
+    let i3;
+    if (hoje) {
+      const M = S.model, pend = [];
+      if (vis('rnc')) { const n = (M.rnc || []).filter((x) => x.aberta && (x.prazoFinal === S.today || x.prazoDisp === S.today)).length; if (n) pend.push(`${NF.format(n)} NCF ${n === 1 ? 'vence' : 'vencem'} hoje`); }
+      if (vis('ins')) { const n = (M.ins || []).filter((x) => x.emUso && x.dias != null && x.dias >= 0 && x.dias <= 1).length; if (n) pend.push(`${NF.format(n)} ${n === 1 ? 'instrumento vence' : 'instrumentos vencem'} até amanhã`); }
+      const ra = riAtrasadas().length; if (ra) pend.push(`${NF.format(ra)} ${ra === 1 ? 'nota atrasada' : 'notas atrasadas'} no RIR`);
+      i3 = pend.length ? ['warn', `<b>Pendências do dia:</b> ${pend.join(' · ')}.`] : ['ok', '<b>Sem pendências</b> vencendo hoje.'];
+    } else {
+      const ult = TODAS[0], pri = TODAS[TODAS.length - 1];
+      i3 = ['info', `<b>Primeira ação às ${hhmm(pri.at)}</b> (${esc(who(pri.by).split(' ')[0])}); a última às ${hhmm(ult.at)} (${esc(who(ult.by).split(' ')[0])}).`];
+    }
+    const ins = `<div class="ehins"><div class="ehinsh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 6.2L21 9l-5 4.3L17.5 20 12 16.6 6.5 20 8 13.3 3 9l6.6-.8z"/></svg><b>Resumo do dia</b><small>gerado pela Central</small></div><ul>${[i1, i2, i3].map(([t, h]) => `<li class="${t}"><i></i><span>${h}</span></li>`).join('')}</ul></div>`;
+    /* um cartão por pessoa (toque no cartão filtra) */
+    const card = (p) => {
+      const u = p.L[0], o = on(p), cm = new Map(); p.L.forEach((x) => cm.set(x.mod, (cm.get(x.mod) || 0) + 1));
+      const chips = Array.from(cm.entries()).sort((a, b) => b[1] - a[1]).map(([m, n]) => `<span class="ehpm" style="--m:${ehCor(m)}"><b>${n}</b>${esc(EH_NOME[m] || m)}</span>`).join('');
+      return `<button type="button" class="ehpc${o ? ' on' : ''}" data-act="eh-p" data-key="${esc(p.k)}" aria-pressed="${EH.ins === p.k}" title="${EH.ins === p.k ? 'Mostrar todos' : 'Ver só ' + esc(p.nome)}"><div class="ehpch"><span class="ehav st${o ? ' on' : ''}">${esc(ehIni(p.nome))}</span><div><b>${esc(p.nome)}</b><small>${o ? 'mexendo agora' : hoje ? 'última ação ' + ehHa(u.at) : 'última ação às ' + hhmm(u.at)}</small></div><em>${NF.format(p.L.length)}<small>${p.L.length === 1 ? 'ação' : 'ações'}</small></em></div>
+        <p>${ehTxt(u, true)}</p><div class="ehpms">${chips}</div><div class="ehpt"><span>começou ${hhmm(p.L[p.L.length - 1].at)}</span><span>${hoje ? ehHa(u.at) : 'última ' + hhmm(u.at)}</span></div></button>`;
+    };
+    const cards = `<div class="ehpcs">${(EH.ins ? pessoas.filter((p) => p.k === EH.ins) : pessoas).map(card).join('')}</div>`;
+    /* ações por hora e por módulo (os 3 módulos com mais ações + "Outros") */
+    const hs = X.map((x) => new Date(x.at).getHours()), h0 = Math.min(7, ...hs), h1 = Math.max(17, ...hs), horas = [];
+    for (let h = h0; h <= h1; h++) horas.push(h);
+    const top = mods.slice(0, mods.length > 4 ? 3 : 4).map(([m]) => m), outros = mods.length > 4;
+    const series = top.map((m) => ({ nome: EH_NOME[m] || m, cor: ehCor(m), v: horas.map((h) => X.filter((x) => x.mod === m && new Date(x.at).getHours() === h).length) }));
+    if (outros) series.push({ nome: 'Outros', cor: 'var(--n-geral)', v: horas.map((h) => X.filter((x) => !top.includes(x.mod) && new Date(x.at).getHours() === h).length) });
+    const mx = Math.max(1, ...horas.map((_, i) => series.reduce((sm, s) => sm + s.v[i], 0))), ymax = Math.max(4, Math.ceil(mx / 4) * 4);
+    const agora = hoje ? (new Date().getHours() - h0) + new Date().getMinutes() / 60 - 0.5 : null;
+    const graf = `<div class="chart"><h3>Ações por hora e por módulo<small>${hoje ? 'hoje até agora' : esc(perTxt)}${EH.ins ? ' · ' + esc(P.get(EH.ins).nome) : ''}</small></h3>${ehColunas(horas.map((h) => h + 'h'), series, ymax, agora != null && agora >= -0.5 && agora <= horas.length - 0.5 ? agora : null)}</div>`;
+    /* linha do tempo */
+    const tl = `<div class="chart"><h3>Linha do tempo do dia<small>do mais novo para o mais antigo</small></h3><ul class="ehtl">${X.slice(0, 7).map((x) => `<li><time>${hhmm(x.at)}</time><span class="ehav">${esc(ehIni(who(x.by)))}</span><div><b>${esc(who(x.by).split(' ')[0])}</b> ${ehTxt(x)}</div><span class="ehmc" style="--m:${ehCor(x.mod)}">${esc(EH_NOME[x.mod] || x.mod)}</span></li>`).join('')}</ul>
+      ${X.length > 7 ? `<button type="button" class="ehmais" data-go='${esc(JSON.stringify({ v: 'historico' }))}'>Ver as ${NF.format(X.length)} ações no Histórico →</button>` : ''}</div>`;
+    return sec(ins + cards + `<div class="ehc2">${graf}${tl}</div>`);
   }
   /* topo do Painel: mesmo layout de cartões de antes, 1 cartão por módulo — número do mês grande e o % no anel */
   function gerPainelHTML() {
@@ -21179,6 +21355,7 @@ ${trGuil(W, H, M, B)}
       if (a && a.startsWith('man-') && manAct(a, key)) return;
       if (a && a.startsWith('tr-') && trAct(a, key)) return;
       if (a && a.startsWith('rt-') && rtAct(a, key, act)) return;
+      if (a && a.startsWith('eh-') && ehAct(a, key)) return;   /* v99: Equipe hoje no Painel */
       if (a && a.startsWith('eq-') && eqAct(a, key)) return;
       if (a === 'bk-dl') { const f = (VY.files || [])[+key]; if (f) saveFile(f[0], f[1]); return; }
       if (a === 'rnc-apagar') { rncApagar(key); return; }
