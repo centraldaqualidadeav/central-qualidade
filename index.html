@@ -245,19 +245,27 @@ button.ehpc { cursor: pointer; } button.ehpc:hover { border-color: var(--ink-3);
 .ehav { position: relative; display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; font: 700 11px var(--f-display); letter-spacing: .04em; color: var(--ink-2); background: var(--surface-2); border: 1px solid var(--line); }
 .ehav.st::after { content: ''; position: absolute; right: -4px; bottom: -4px; width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--surface); background: var(--ink-3); }
 .ehav.st.on::after { background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent); }
-/* v104: foto redonda (ou as iniciais no mesmo círculo) no cartão da pessoa; linhas fixas para os cartões ficarem alinhados entre si */
-.ehpcs { align-items: stretch; }
-.ehpc { grid-template-rows: 44px auto 26px 1fr; row-gap: 10px; }
-.ehpch { grid-template-columns: 44px minmax(0, 1fr) auto; height: 44px; }
-.ehpch > div > small { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ehpc.on .ehpch > div > small { color: var(--ok); font-weight: 600; }
-.ehav.ehfa { width: 44px; height: 44px; font-size: 14px; }
-.ehav.ehfa.fo { padding: 0; border: 0; background: none; }
-.ehav.ehfa.fo img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; display: block; box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--line-2); }
-.ehav.ehfa.fo.on img { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--ok), 0 0 12px 2px color-mix(in srgb, var(--ok) 45%, transparent); }
-.ehav.ehfa.st::after { right: -2px; bottom: -2px; }
-.ehpc > .ehpms { flex-wrap: nowrap; overflow: hidden; height: 26px; }
-.ehpc > .ehpt { align-self: end; }
+/* v105: cartão da pessoa com a foto de crachá (4×5) do cadastro da Equipe — ou as iniciais na mesma caixa;
+   linhas fixas (nome · foto+situação · foto+módulos · balão · rodapé) para todos os cartões ficarem alinhados entre si */
+.ehpcs { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); align-items: stretch; }
+.ehpc { grid-template-columns: 64px minmax(0, 1fr); grid-template-rows: 28px 24px 60px auto 1fr; grid-template-areas: "nome nome" "foto st" "foto chips" "bal bal" "pt pt"; column-gap: 12px; row-gap: 0; align-items: start; }
+.ehnm { grid-area: nome; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; min-width: 0; }
+.ehnm b { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.ehnm em { font: 700 22px/1 var(--f-display); font-style: normal; white-space: nowrap; } .ehnm em small { font: 400 11px var(--f-body); color: var(--ink-3); margin-left: 3px; }
+.ehst { grid-area: st; align-self: start; margin-top: 3px; line-height: 16px; font-size: 12px; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 6px; min-width: 0; }
+.ehst i { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-3); flex: none; } .ehpc.on .ehst { color: var(--ok); font-weight: 600; } .ehpc.on .ehst i { background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent); }
+.ehpc > .ehpms { grid-area: chips; align-self: end; align-content: flex-end; min-width: 0; }   /* nenhuma etiqueta cortada: as que não cabem em 2 linhas viram "+N" (ehChipsFit) */
+.ehpm { max-width: 100%; min-width: 0; } .ehpm > span { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ehpm.mais { --m: var(--ink-3); padding-right: 3px; }
+.ehpc > p { grid-area: bal; margin-top: 12px !important; }
+.ehpc > .ehpt { grid-area: pt; align-self: end; margin-top: 10px; }
+.ehfoto { grid-area: foto; margin-top: 4px; position: relative; display: grid; place-items: center; width: 64px; height: 80px; border-radius: 6px; overflow: hidden; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--ink-2); font: 700 20px var(--f-display); letter-spacing: .04em; }
+.ehfoto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ehpc.on .ehfoto { border-color: var(--ok); box-shadow: 0 0 0 1px var(--ok), 0 0 14px color-mix(in srgb, var(--ok) 40%, transparent); }
+.ehfoto i { position: absolute; left: 0; right: 0; bottom: 0; font: 700 9.5px/1 var(--f-display); letter-spacing: .08em; text-transform: uppercase; text-align: center; padding: 3px 0; color: #fff; font-style: normal; background: color-mix(in srgb, var(--ok) 80%, #000); }
+/* nas listas (linha do tempo, Agora, Por pessoa): foto redonda pequena no lugar das iniciais */
+.ehav.fo, .nxav.fo { padding: 0; border: 0; background: none; }
+.ehav.fo img, .nxav.fo img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; display: block; box-shadow: 0 0 0 1px var(--line-2); }
 .ehpc p { margin: 0; font-size: 13px; line-height: 1.4; color: var(--ink-2); min-height: calc(3 * 1.4em + 16px); padding: 8px 10px; border-radius: 4px; background: var(--surface-2); border-left: 3px solid var(--line-2); overflow-wrap: anywhere; }
 .ehpc.on p { border-left-color: var(--ok); } .ehpc p b { color: var(--ink); font-weight: 600; }
 .ehpms { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -288,6 +296,9 @@ button.ehpc { cursor: pointer; } button.ehpc:hover { border-color: var(--ink-3);
 .nxseg button[aria-pressed="true"] { background: color-mix(in srgb, var(--c) 24%, transparent); color: var(--ink); font-weight: 600; }
 .nxbar .rindn { grid-template-columns: 40px 210px 40px; } .nxbar .inp { height: var(--h-in); min-height: var(--h-in); }
 .nxh { font-size: 12.5px; color: var(--ink-3); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 5px 0 5px 6px; }
+/* v105: texto ao lado do "ao vivo" nunca fica cortado no meio: o pedaço que não cabe some inteiro (vai para uma 2ª linha escondida) */
+.nxh, .ehh { display: flex; flex-wrap: wrap; align-items: center; align-content: flex-start; row-gap: 30px; height: 30px; white-space: normal; }
+.nxh > span, .ehh > span { white-space: nowrap; }
 .nxins { display: grid; grid-template-columns: 196px minmax(0, 1fr); gap: 14px; align-items: center; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--c) 45%, var(--line)); border-radius: var(--r); background: linear-gradient(90deg, color-mix(in srgb, var(--c) 14%, var(--surface)) 0%, var(--surface) 70%); }
 .nxins .ehinsh svg { fill: var(--c); }
 .nxins ul { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
@@ -347,6 +358,9 @@ button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 .nxmore { border: 1px solid var(--line); border-radius: var(--r); padding: 10px 14px; background: var(--surface); }
 .nxmore summary { cursor: pointer; font-weight: 600; font-size: 13px; color: var(--ink-2); } .nxmore[open] summary { margin-bottom: 12px; }
 @media (max-width: 1280px) { .nxks { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* v105: barra do indicador em telas de 981 a ~1400 px: em vez de espremer (botões por baixo da data), vira uma grade 2×2 alinhada */
+.nxsec > .block > .body { container: nxb / inline-size; }
+@container nxb (max-width: 1040px) { .nxbar { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .nxbar .nxseg { grid-auto-columns: minmax(0, 1fr); } .nxbar .rindn { grid-template-columns: 40px minmax(0, 1fr) 40px; } }
 @media (max-width: 980px) { .nxbar { grid-template-columns: minmax(0, 1fr); } .nxseg { grid-auto-columns: minmax(0, 1fr); } .nxbar .rindn { grid-template-columns: 48px minmax(0, 1fr) 48px; } .nxh { display: none; }
   .nxins { grid-template-columns: minmax(0, 1fr); } .nxins ul { grid-template-columns: minmax(0, 1fr); gap: 8px; } .nxins li { border-left: 0; padding-left: 0; }
   .nxks { grid-template-columns: repeat(2, minmax(0, 1fr)); } .nxk:last-child:nth-child(odd) { grid-column: 1 / -1; } .nxc2, .nxc2b { grid-template-columns: minmax(0, 1fr); } }
@@ -5829,7 +5843,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 104; window.CQ_V = APP_V;
+    const APP_V = 105; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -8014,8 +8028,26 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     }
     return null;
   }
+  /* v105: as etiquetas de módulo do cartão ocupam no máximo 2 linhas (60 px) e nunca ficam cortadas:
+     as que não cabem saem, da menor para a maior, e entra "+N outros" (o nome delas fica no "title") */
+  function ehChipsFit() {
+    /* nome comprido que não cabe na linha: primeiro e último nome (o nome inteiro fica no "title") */
+    document.querySelectorAll('#eh-sec .ehnm b').forEach((b) => { const full = b.dataset.n || b.textContent; b.dataset.n = full; b.textContent = full; b.title = full; if (b.scrollWidth > b.clientWidth + 1) { const p = full.trim().split(/\s+/); if (p.length > 2) b.textContent = p[0] + ' ' + p[p.length - 1]; } });
+    document.querySelectorAll('#eh-sec .ehpc > .ehpms').forEach((box) => {
+      const cs = Array.from(box.querySelectorAll('.ehpm:not(.mais)')), mais = box.querySelector('.ehpm.mais');
+      cs.forEach((c) => { c.style.display = ''; }); if (mais) mais.style.display = 'none';
+      const cabe = () => box.scrollHeight <= 61 && box.getBoundingClientRect().height <= 61 && Array.from(box.querySelectorAll('.ehpm > span')).every((t) => t.parentNode.style.display === 'none' || t.scrollWidth <= t.clientWidth + 1);
+      if (cabe() || !mais) return;
+      mais.style.display = ''; let n = cs.length;
+      while (n > 1 && !cabe()) { n--; cs[n].style.display = 'none'; const fora = cs.slice(n); mais.querySelector('b').textContent = '+' + fora.length; mais.title = fora.map((c) => c.title).join(' · '); }
+    });
+  }
+  let ehFitT = 0; window.addEventListener('resize', () => { clearTimeout(ehFitT); ehFitT = setTimeout(ehChipsFit, 120); });
   function ehFotosAtualiza() { if (S.view === 'painel' && document.getElementById('eh-sec')) ehAtualiza(); }
-  const ehAvatar = (uid, nome, on) => { const f = ehFoto(uid); return `<span class="ehav st ehfa${f ? ' fo' : ''}${on ? ' on' : ''}">${f ? `<img src="${esc(f)}" alt="" loading="lazy" decoding="async">` : esc(ehIni(nome))}</span>`; };
+  const ehImg = (f) => `<img src="${esc(f)}" alt="" loading="lazy" decoding="async">`;
+  /* v105: crachá no cartão; redonda pequena nas listas (cls = 'ehav', 'ehav st' ou 'nxav') */
+  const ehCracha = (uid, nome, on) => { const f = ehFoto(uid); return `<span class="ehfoto${f ? ' fo' : ''}">${f ? ehImg(f) : esc(ehIni(nome))}${on ? '<i>agora</i>' : ''}</span>`; };
+  const ehAvP = (uid, nome, cls, on) => { const f = ehFoto(uid); return `<span class="${cls}${f ? ' fo' : ''}${on ? ' on' : ''}">${f ? ehImg(f) : esc(ehIni(nome))}</span>`; };
   const ehModOk = (m) => { if (m === 'GERAL' || typeof window.CQ_ACCESS !== 'function') return true; const col = MOD[m] ? MOD[m].col : (VIEW_COL[m] || null); return !col || vis(col); };
   function ehGuarda(d, snap) {
     const L = snap && snap.exists ? Object.values((snap.data() || {}).e || {}).filter((x) => x && x.at) : [];   /* os módulos de cada um são filtrados na hora de mostrar (o acesso pode chegar depois) */
@@ -8087,7 +8119,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const X = EH.ins ? (P.get(EH.ins) || { L: [] }).L : (TODAS || []);
     const on = (p) => hoje && Date.now() - p.L[0].at < 15 * 60000;
     const bar = `<div class="ehbar"><div class="rindn"><button type="button" class="btn" data-act="eh-dia" data-key="-1" aria-label="Dia anterior">‹</button><b>${esc(perTxt)}</b><button type="button" class="btn" data-act="eh-dia" data-key="1" aria-label="Próximo dia" ${hoje ? 'disabled' : ''}>›</button></div>
-      <span class="ehh">${hoje ? '<span class="ehlive"><i></i>ao vivo</span>atualiza sozinho a cada ação gravada na Central' : `<button type="button" class="ehmais" data-act="eh-dia" data-key="0">voltar para hoje</button>`}</span>
+      <span class="ehh">${hoje ? '<span class="ehlive"><i></i>ao vivo</span><span>atualiza sozinho a cada ação gravada na Central</span>' : `<button type="button" class="ehmais" data-act="eh-dia" data-key="0">voltar para hoje</button>`}</span>
       <select id="eh-ins" class="inp" aria-label="Pessoa"><option value="">Pessoa: todas</option>${pessoas.map((p) => `<option value="${esc(p.k)}"${p.k === EH.ins ? ' selected' : ''}>${esc(p.nome)}</option>`).join('')}</select></div>`;
     const sec = (corpo) => `<section class="sec" id="eh-sec">${band('GERAL', 'Equipe hoje · todos os módulos', hoje ? 'o que cada pessoa está fazendo na Central' : 'o que cada pessoa fez na Central')}<div class="block"><div class="body">${bar}${corpo}</div></div></section>`;
     if (!TODAS) return sec('<div class="loading"><span class="spin"></span><span>Carregando o dia…</span></div>');
@@ -8115,10 +8147,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     /* um cartão por pessoa (toque no cartão filtra) */
     const card = (p) => {
       const u = p.L[0], o = on(p), cm = new Map(); p.L.forEach((x) => cm.set(x.mod, (cm.get(x.mod) || 0) + 1));
-      const chips = Array.from(cm.entries()).sort((a, b) => b[1] - a[1]).map(([m, n]) => `<span class="ehpm" style="--m:${ehCor(m)}"><b>${n}</b>${esc(EH_NOME[m] || m)}</span>`).join('');
-      return `<button type="button" class="ehpc${o ? ' on' : ''}" data-act="eh-p" data-key="${esc(p.k)}" aria-pressed="${EH.ins === p.k}" title="${EH.ins === p.k ? 'Mostrar todos' : 'Ver só ' + esc(p.nome)}"><div class="ehpch">${ehAvatar(p.k, p.nome, o)}<div><b>${esc(p.nome)}</b><small>${o ? 'mexendo agora' : hoje ? 'última ação ' + ehHa(u.at) : 'última ação às ' + hhmm(u.at)}</small></div><em>${NF.format(p.L.length)}<small>${p.L.length === 1 ? 'ação' : 'ações'}</small></em></div>
+      const chips = Array.from(cm.entries()).sort((a, b) => b[1] - a[1]).map(([m, n]) => `<span class="ehpm" style="--m:${ehCor(m)}" title="${n} ${n === 1 ? 'ação' : 'ações'} em ${esc(EH_NOME[m] || m)}"><b>${n}</b><span>${esc(EH_NOME[m] || m)}</span></span>`).join('') + (cm.size > 1 ? `<span class="ehpm mais" style="display:none"><b>+0</b></span>` : '');
+      return `<button type="button" class="ehpc${o ? ' on' : ''}" data-act="eh-p" data-key="${esc(p.k)}" aria-pressed="${EH.ins === p.k}" title="${EH.ins === p.k ? 'Mostrar todos' : 'Ver só ' + esc(p.nome)}">${ehCracha(p.k, p.nome, o)}<div class="ehnm"><b>${esc(p.nome)}</b><em>${NF.format(p.L.length)}<small>${p.L.length === 1 ? 'ação' : 'ações'}</small></em></div><small class="ehst"><i></i>${o ? 'mexendo agora' : hoje ? 'última ação ' + ehHa(u.at) : 'última ação às ' + hhmm(u.at)}</small>
         <p title="${esc((EH_VERBO[u.act] || 'alterou') + ' · ' + (u.label || u.key || ''))}"><span class="ehtx3">${ehTxt(u, true)}</span></p><div class="ehpms">${chips}</div><div class="ehpt"><span>começou ${hhmm(p.L[p.L.length - 1].at)}</span><span>${hoje ? ehHa(u.at) : 'última ' + hhmm(u.at)}</span></div></button>`;
     };
+    requestAnimationFrame(ehChipsFit);
     const cards = `<div class="ehpcs">${(EH.ins ? pessoas.filter((p) => p.k === EH.ins) : pessoas).map(card).join('')}</div>`;
     /* ações por hora e por módulo (os 3 módulos com mais ações + "Outros") */
     const hs = X.map((x) => new Date(x.at).getHours()), h0 = Math.min(7, ...hs), h1 = Math.max(17, ...hs), horas = [];
@@ -8131,7 +8164,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const graf = `<div class="chart"><h3>Ações por hora e por módulo<small>${hoje ? 'hoje até agora' : esc(perTxt)}${EH.ins ? ' · ' + esc(P.get(EH.ins).nome) : ''}</small></h3>${ehColunas(horas.map((h) => h + 'h'), series, ymax, agora != null && agora >= -0.5 && agora <= horas.length - 0.5 ? agora : null)}</div>`;
     /* linha do tempo */
     /* v100: a linha do tempo tem a altura do gráfico ao lado e rola por dentro (todas as ações do dia); cada ação em até 2 linhas, o texto inteiro no "title" */
-    const tl = `<div class="chart ehtlc"><h3>Linha do tempo do dia<small>${NF.format(X.length)} ${X.length === 1 ? 'ação' : 'ações'} · a mais nova em cima</small></h3><ul class="ehtl">${X.slice(0, 150).map((x) => `<li title="${esc(hhmm(x.at) + ' · ' + who(x.by) + ' ' + (EH_VERBO[x.act] || 'alterou') + ' · ' + (x.label || x.key || ''))}"><time>${hhmm(x.at)}</time><span class="ehav">${esc(ehIni(who(x.by)))}</span><div class="ehtx"><b>${esc(who(x.by).split(' ')[0])}</b> ${ehTxt(x)}</div><span class="ehmc" style="--m:${ehCor(x.mod)}">${esc(EH_NOME[x.mod] || x.mod)}</span></li>`).join('')}</ul>
+    const tl = `<div class="chart ehtlc"><h3>Linha do tempo do dia<small>${NF.format(X.length)} ${X.length === 1 ? 'ação' : 'ações'} · a mais nova em cima</small></h3><ul class="ehtl">${X.slice(0, 150).map((x) => `<li title="${esc(hhmm(x.at) + ' · ' + who(x.by) + ' ' + (EH_VERBO[x.act] || 'alterou') + ' · ' + (x.label || x.key || ''))}"><time>${hhmm(x.at)}</time>${ehAvP(x.by, who(x.by), 'ehav')}<div class="ehtx"><b>${esc(who(x.by).split(' ')[0])}</b> ${ehTxt(x)}</div><span class="ehmc" style="--m:${ehCor(x.mod)}">${esc(EH_NOME[x.mod] || x.mod)}</span></li>`).join('')}</ul>
       <button type="button" class="ehmais" data-go='${esc(JSON.stringify({ v: 'historico' }))}'>Abrir no Histórico →</button></div>`;
     return sec(ins + cards + `<div class="ehc2">${graf}${tl}</div>`);
   }
@@ -8374,11 +8407,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const ant = { d: 'Dia útil anterior', m: 'Mês anterior', t: 'Trimestre anterior', a: '12 meses anteriores' }[P.m], prox = { d: 'Próximo dia útil', m: 'Próximo mês', t: 'Próximo trimestre', a: '12 meses seguintes' }[P.m];
     return `<div class="nxbar"><div class="nxseg" role="group" aria-label="Período">${segs.map(([k, l]) => `<button type="button" data-act="nx-p" data-key="${mod}|${k}" aria-pressed="${st.m === k}">${l}</button>`).join('')}</div>
       <div class="rindn"><button type="button" class="btn" data-act="nx-nav" data-key="${mod}|-1" aria-label="${ant}">‹</button><b>${esc(P.label)}</b><button type="button" class="btn" data-act="nx-nav" data-key="${mod}|1" aria-label="${prox}" ${P.fim ? 'disabled' : ''}>›</button></div>
-      <span class="nxh">${P.m === 'd' ? (P.cur ? '<span class="ehlive"><i></i>ao vivo</span>hoje · atualiza sozinho' : `<button type="button" class="nxmais" data-act="nx-nav" data-key="${mod}|0">voltar para hoje</button>`) : `comparando com ${esc(P.cmpL)}${P.cur ? ' até o mesmo dia' : ''}`}</span>${filtro}</div>`;
+      <span class="nxh">${P.m === 'd' ? (P.cur ? '<span class="ehlive"><i></i>ao vivo</span><span>hoje · atualiza sozinho</span>' : `<button type="button" class="nxmais" data-act="nx-nav" data-key="${mod}|0">voltar para hoje</button>`) : `<span>comparando com ${esc(P.cmpL)}</span>${P.cur ? '<span>&nbsp;até o mesmo dia</span>' : ''}`}</span>${filtro}</div>`;
   }
   function nxTab(cab, linhas, tot) {
     const th = cab.map((c, i) => `<th${i && i < cab.length - 2 ? ' class="n"' : i === cab.length - 2 ? ' class="nxsc"' : ''}>${esc(c)}</th>`).join('');
-    const tr = (r) => `<tr${r.go ? ` data-go="${esc(JSON.stringify(r.go))}"` : ''}><td><div class="rw"><span class="nxav">${esc(r.av)}</span><span>${esc(r.nome)}</span></div></td>${r.nums.map((x) => `<td class="n${x && x.crit ? ' crit' : ''}">${x && typeof x === 'object' ? x.v : x}</td>`).join('')}<td class="nxsc"><div class="tsp">${nxSpark(r.tend, 70, 22)}</div></td><td><div class="nxpp"><span><i style="width:${r.pct}%"></i></span><em>${r.pct}%</em></div></td></tr>`;
+    const tr = (r) => `<tr${r.go ? ` data-go="${esc(JSON.stringify(r.go))}"` : ''}><td><div class="rw"><span class="nxav${r.foto ? ' fo' : ''}">${r.foto ? `<img src="${esc(r.foto)}" alt="" loading="lazy" decoding="async">` : esc(r.av)}</span><span>${esc(r.nome)}</span></div></td>${r.nums.map((x) => `<td class="n${x && x.crit ? ' crit' : ''}">${x && typeof x === 'object' ? x.v : x}</td>`).join('')}<td class="nxsc"><div class="tsp">${nxSpark(r.tend, 70, 22)}</div></td><td><div class="nxpp"><span><i style="width:${r.pct}%"></i></span><em>${r.pct}%</em></div></td></tr>`;
     return `<table class="nxtb"><thead><tr>${th}</tr></thead><tbody>${linhas.map(tr).join('')}</tbody>${tot ? `<tfoot><tr><td>Total</td>${tot.map((x) => `<td class="n">${x}</td>`).join('')}<td class="nxsc"></td><td></td></tr></tfoot>` : ''}</table>`;
   }
   const NXF = { rnc: () => ncfPainelHTML(), rncc: () => nccPainelHTML(), av: () => avPainelHTML(), serv: () => servPainelHTML() };
@@ -8436,10 +8469,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         + (mediaH && !Math.max(...mediaH) ? `<p class="muted" style="margin:0;font-size:12px">Sem ações em ${c.sigla} nos 20 dias úteis anteriores para comparar com a média.</p>` : mediaH ? `<h4 class="nxh4" style="margin:4px 0 0;font:500 12px var(--f-body);color:var(--ink-2)">Acumulado do dia × média dos últimos 20 dias úteis</h4>${nxLinhas(c.id + '-l', horas.map((h) => h + 'h'), acum, mediaH, VERM)}` : '<p class="muted" style="margin:0;font-size:12px">Carregando a média dos últimos 20 dias úteis…</p>')
         : `<div class="empty">Nenhuma ação em ${c.sigla} ${P.cur ? 'hoje ainda' : 'neste dia'}.</div>`) : '<div class="loading"><span class="spin"></span><span>Carregando o dia…</span></div>'}</div>`;
       const onP = (p) => P.cur && Date.now() - p.L[0].at < 15 * 60000;
-      const agoraHTML = `<div class="chart"><h3>${P.cur ? 'Agora' : 'Quem mexeu'}<small>${P.cur ? `quem está mexendo em ${c.sigla} · verde = nos últimos 15 min` : `em ${c.sigla} neste dia`}</small></h3>${PS.length ? `<ul class="nxul">${PS.slice(0, 6).map((p) => `<li><span class="ehav st${onP(p) ? ' on' : ''}">${esc(ehIni(p.nome))}</span><div><b>${esc(p.nome)}</b><small>${esc((EH_VERBO[p.L[0].act] || 'alterou') + ' · ' + (p.L[0].label || ''))}</small></div><div style="display:grid;justify-items:end;gap:2px"><em style="font:600 12px var(--f-mono);font-style:normal;color:var(--ink-2)">${P.cur ? ehHa(p.L[0].at) : hhmm(p.L[0].at)}</em><small style="font-size:11px;color:var(--ink-3)">${p.L.length} ${p.L.length === 1 ? 'ação' : 'ações'}</small></div></li>`).join('')}</ul>` : `<div class="empty">Ninguém mexeu em ${c.sigla}.</div>`}</div>`;
-      const tl = `<div class="chart ehtlc"><h3>Linha do tempo do dia<small>${NF.format(X.length)} ${X.length === 1 ? 'ação' : 'ações'} em ${c.sigla} · a mais nova em cima</small></h3><ul class="ehtl">${X.slice(0, 150).map((x) => `<li title="${esc(hhmm(x.at) + ' · ' + who(x.by) + ' ' + (EH_VERBO[x.act] || 'alterou') + ' · ' + (x.label || ''))}"><time>${hhmm(x.at)}</time><span class="ehav">${esc(ehIni(who(x.by)))}</span><div class="ehtx"><b>${esc(who(x.by).split(' ')[0])}</b> ${ehTxt(x)}</div><span class="ehmc" style="--m:${c.cor}">${c.sigla}</span></li>`).join('')}</ul><button type="button" class="nxmais" data-go='${esc(JSON.stringify({ v: 'historico' }))}'>Abrir no Histórico →</button></div>`;
+      const agoraHTML = `<div class="chart"><h3>${P.cur ? 'Agora' : 'Quem mexeu'}<small>${P.cur ? `quem está mexendo em ${c.sigla} · verde = nos últimos 15 min` : `em ${c.sigla} neste dia`}</small></h3>${PS.length ? `<ul class="nxul">${PS.slice(0, 6).map((p) => `<li title="${esc(p.nome + ' · ' + (EH_VERBO[p.L[0].act] || 'alterou') + ' · ' + (p.L[0].label || ''))}">${ehAvP(p.k, p.nome, 'ehav st', onP(p))}<div><b>${esc(p.nome)}</b><small>${esc((EH_VERBO[p.L[0].act] || 'alterou') + ' · ' + (p.L[0].label || ''))}</small></div><div style="display:grid;justify-items:end;gap:2px"><em style="font:600 12px var(--f-mono);font-style:normal;color:var(--ink-2)">${P.cur ? ehHa(p.L[0].at) : hhmm(p.L[0].at)}</em><small style="font-size:11px;color:var(--ink-3)">${p.L.length} ${p.L.length === 1 ? 'ação' : 'ações'}</small></div></li>`).join('')}</ul>` : `<div class="empty">Ninguém mexeu em ${c.sigla}.</div>`}</div>`;
+      const tl = `<div class="chart ehtlc"><h3>Linha do tempo do dia<small>${NF.format(X.length)} ${X.length === 1 ? 'ação' : 'ações'} em ${c.sigla} · a mais nova em cima</small></h3><ul class="ehtl">${X.slice(0, 150).map((x) => `<li title="${esc(hhmm(x.at) + ' · ' + who(x.by) + ' ' + (EH_VERBO[x.act] || 'alterou') + ' · ' + (x.label || ''))}"><time>${hhmm(x.at)}</time>${ehAvP(x.by, who(x.by), 'ehav')}<div class="ehtx"><b>${esc(who(x.by).split(' ')[0])}</b> ${ehTxt(x)}</div><span class="ehmc" style="--m:${c.cor}">${c.sigla}</span></li>`).join('')}</ul><button type="button" class="nxmais" data-go='${esc(JSON.stringify({ v: 'historico' }))}'>Abrir no Histórico →</button></div>`;
       const tot = X.length || 1;
-      const tab = PS.length ? nxTab(c.tabCab || ['Pessoa', 'Abriu', 'Concluiu', 'Ações', 'Ritmo', 'Parte'], PS.map((p) => ({ av: ehIni(p.nome), nome: p.nome, nums: [p.L.filter((x) => x.act === 'novo').length, p.L.filter((x) => x.act !== 'novo' && nxConclLog(x)).length, p.L.length], tend: horas.map((h) => p.L.filter((x) => nxHoraLog(x) === h).length), pct: Math.round(p.L.length / tot * 100) })), [sA.reduce((s, v) => s + v, 0), sC.reduce((s, v) => s + v, 0), X.length]) : `<div class="empty">Sem ações em ${c.sigla} neste dia.</div>`;
+      const tab = PS.length ? nxTab(c.tabCab || ['Pessoa', 'Abriu', 'Concluiu', 'Ações', 'Ritmo', 'Parte'], PS.map((p) => ({ av: ehIni(p.nome), foto: ehFoto(p.k), nome: p.nome, nums: [p.L.filter((x) => x.act === 'novo').length, p.L.filter((x) => x.act !== 'novo' && nxConclLog(x)).length, p.L.length], tend: horas.map((h) => p.L.filter((x) => nxHoraLog(x) === h).length), pct: Math.round(p.L.length / tot * 100) })), [sA.reduce((s, v) => s + v, 0), sC.reduce((s, v) => s + v, 0), X.length]) : `<div class="empty">Sem ações em ${c.sigla} neste dia.</div>`;
       const temMedia = mAc != null && mAc > 0;
       const i1 = LG ? (X.length ? [temMedia && X.length >= mAc ? 'ok' : 'info', `<b>${!temMedia ? 'Movimento do dia' : X.length >= mAc ? 'Dia movimentado' : 'Dia mais calmo'}:</b> ${NF.format(X.length)} ${X.length === 1 ? 'ação' : 'ações'} em ${c.sigla}${P.cur ? ' até as ' + new Date().getHours() + 'h' : ''}${temMedia ? ` — a média do dia inteiro é ${NF1.format(mAc)}` : ''}.`] : ['info', `<b>Nenhuma ação em ${c.sigla}</b> ${P.cur ? 'hoje ainda' : 'neste dia'}.`]) : ['info', 'Carregando as ações do dia…'];
       const u = PS[0];
