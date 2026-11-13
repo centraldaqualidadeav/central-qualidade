@@ -326,13 +326,15 @@ button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 .nxtb .tsp { position: relative; width: 70px; height: 22px; } .nxtb .tsp svg { width: 70px; height: 22px; display: block; } .nxtb .tsp i { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--c); }
 .nxpp { display: grid; grid-template-columns: minmax(24px, 1fr) 36px; gap: 8px; align-items: center; } .nxpp span { height: 8px; border-radius: 4px; background: var(--sunken); border: 1px solid var(--line); overflow: hidden; } .nxpp i { display: block; height: 100%; background: var(--c); }
 .nxpp em { font: 600 12.5px var(--f-mono); font-style: normal; color: var(--ink-2); text-align: right; }
+.nxsec .chart { container-type: inline-size; min-width: 0; }
+@container (max-width: 500px) { .nxtb .nxsc { display: none; } .nxtb th, .nxtb td { padding-left: 4px; padding-right: 4px; } }   /* v102: quadro estreito: sai a tendência, nada fica para fora */
 .nxmore { border: 1px solid var(--line); border-radius: var(--r); padding: 10px 14px; background: var(--surface); }
 .nxmore summary { cursor: pointer; font-weight: 600; font-size: 13px; color: var(--ink-2); } .nxmore[open] summary { margin-bottom: 12px; }
 @media (max-width: 1280px) { .nxks { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 980px) { .nxbar { grid-template-columns: minmax(0, 1fr); } .nxseg { grid-auto-columns: minmax(0, 1fr); } .nxbar .rindn { grid-template-columns: 48px minmax(0, 1fr) 48px; } .nxh { display: none; }
   .nxins { grid-template-columns: minmax(0, 1fr); } .nxins ul { grid-template-columns: minmax(0, 1fr); gap: 8px; } .nxins li { border-left: 0; padding-left: 0; }
   .nxks { grid-template-columns: repeat(2, minmax(0, 1fr)); } .nxk:last-child:nth-child(odd) { grid-column: 1 / -1; } .nxc2, .nxc2b { grid-template-columns: minmax(0, 1fr); } }
-@media (max-width: 560px) { .nxtb th:nth-child(3), .nxtb td:nth-child(3), .nxtb th:nth-child(5), .nxtb td:nth-child(5) { display: none; } }
+@media (max-width: 560px) { .nxtb th:nth-child(3), .nxtb td:nth-child(3) { display: none; } }
 /* v78 etapa 3: tabela compacta da lista do RIR (mesmas colunas em todas as linhas) */
 .ritb { border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--surface); margin-bottom: 18px; }
 .rirw { display: grid; grid-template-columns: 128px 84px minmax(0, 1fr) 84px 150px 140px 132px; column-gap: 14px; align-items: center; min-height: 58px; padding: 6px 14px; border-top: 1px solid var(--line); }
@@ -5811,7 +5813,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 101; window.CQ_V = APP_V;
+    const APP_V = 102; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7811,29 +7813,6 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   window.addEventListener('resize', () => { if (TV.on) requestAnimationFrame(tvMede); });
 
   /* ================= PAINEL ================= */
-  function rnccPainel(M, mb12, ser) {
-    const R = M.rncc || [], st = (s) => R.filter((x) => x.status === s).length, goK = (f) => ({ v: 'rncc', f });
-    const resp = R.map((x) => x.diasResposta).filter((v) => v != null), tr = resp.length ? Math.round(resp.reduce((a, b) => a + b, 0) / resp.length * 10) / 10 : 0;
-    const julg = R.filter((x) => E.low(x.procedente) === 'sim' || E.low(x.procedente) === 'não' || E.low(x.procedente) === 'nao'), proc = R.filter((x) => E.low(x.procedente) === 'sim').length;
-    return `<section class="sec">${band('RNCC', 'Indicadores de NCC')}<div class="block"><div class="body">
-      <div class="kpis sm">
-        ${kpiHTML({ l: 'Total', v: NF.format(R.length), c: MOD.RNCC.c, go: goK({}) })}
-        ${kpiHTML({ l: 'Em andamento', v: NF.format(st('Em Andamento')), c: MOD.RNCC.c, pct: [st('Em Andamento'), R.length, 'do total', ''], go: goK({ status: ['Em Andamento'] }) })}
-        ${kpiHTML({ l: 'Pendentes', v: NF.format(st('Pendente')), sub: 'contenção ou resposta vencida', c: MOD.RNCC.c, pct: [st('Pendente'), R.length, 'do total', 'warn'], cls: st('Pendente') ? 'warn' : '', go: goK({ status: ['Pendente'] }) })}
-        ${kpiHTML({ l: 'Atrasadas', v: NF.format(st('Atrasado')), sub: 'após o prazo final', c: MOD.RNCC.c, pct: [st('Atrasado'), R.length, 'do total', 'crit'], cls: st('Atrasado') ? 'crit' : '', go: goK({ status: ['Atrasado'] }) })}
-        ${kpiHTML({ l: 'Concluídas', v: NF.format(st('Concluida')), c: MOD.RNCC.c, pct: [st('Concluida'), R.length, 'do total', 'ok'], go: goK({ status: ['Concluida'] }) })}
-        ${kpiHTML({ l: 'Procedentes', v: julg.length ? NF1.format(proc / julg.length * 100) + '%' : '—', sub: proc + ' de ' + julg.length + ' analisadas', c: MOD.RNCC.c, go: goK({ proc: 'Sim' }) })}
-        ${kpiHTML({ l: 'Tempo médio de resposta', v: NF1.format(tr), sub: 'dias corridos até responder', c: MOD.RNCC.c })}
-        ${kpiHTML({ l: 'Reincidências', v: NF.format(R.filter((x) => x.reinc === 'Sim').length), sub: 'mesmo cliente e motivo', c: MOD.RNCC.c, pct: [R.filter((x) => x.reinc === 'Sim').length, R.length, 'do total', ''] })}
-      </div>
-      <div class="charts">
-        ${chartHTML('NCC por mês', colsHTML(ser(R, mb12), MOD.RNCC.c), 'últimos 12 meses')}
-        ${chartHTML('Por cliente', barsHTML(countBy(R, (x) => x.cliente).map((i) => ({ ...i, go: goK({ cliente: i.label }) })), MOD.RNCC.c, { max: 10 }), 'top 10')}
-        ${chartHTML('Por motivo', barsHTML(countBy(R, (x) => x.motivo).map((i) => ({ ...i, go: goK({ motivo: i.label }) })), MOD.RNCC.c))}
-        ${chartHTML('Por setor responsável', barsHTML(countBy(R, (x) => x.setor).map((i) => ({ ...i, go: goK({ setor: i.label }) })), MOD.RNCC.c, { max: 10 }))}
-        ${chartHTML('Por origem da causa', barsHTML(countBy(R, (x) => x.origem), MOD.RNCC.c))}
-      </div></div></div></section>`;
-  }
   VIEWS.painel = (main) => {
     const M = S.model, t = S.today, o = E.ymd(t);
     const [m0, m1] = monthRange(o.y, o.m);
@@ -7865,7 +7844,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${ehPainelHTML()}
       ${gerPainelHTML()}
       ${ncfPainelHTML()}
-      ${rnccPainel(M, mb12, ser)}
+      ${nccPainelHTML()}
       <section class="sec">${band('AV', 'Indicadores de lotes (AV)')}<div class="block"><div class="body">
         <div class="kpis sm">
           ${kpiHTML({ l: 'Total de lotes', v: NF.format(M.av.length), sub: NF.format(nNotas(M.av)) + ' notas fiscais', c: MOD.AV.c, go: { v: 'av', f: {} } })}
@@ -8044,7 +8023,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     }
   }
   /* troca só o bloco (o resto do Painel não é refeito a cada ação da equipe) */
-  function ehAtualiza() { const el = document.getElementById('eh-sec'); if (el && S.view === 'painel') el.outerHTML = ehPainelHTML(); if (NX.rnc.m === 'd') nxAtualiza('rnc'); }
+  function ehAtualiza() { const el = document.getElementById('eh-sec'); if (el && S.view === 'painel') el.outerHTML = ehPainelHTML(); nxAtualizaDia(); }
   window.__CQ_EH = EH; /* consulta nos testes */
   setInterval(() => { if (S.view === 'painel' && !EH.dia) { if (EH.ouvindo && EH.ouvindo !== ehHoje()) ehCarrega(); ehAtualiza(); } }, 60000);   /* "há X min" e a virada do dia */
   function ehNav(k) {
@@ -8260,7 +8239,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
      Barra Dia | Mês | Trimestre | 12 meses + setas + filtro; resumo automático; 5 cartões com variação, anel e minigráfico;
      gráfico principal em degradê neon; prazos de agora; tabela por fornecedor; Pareto dos motivos.
      As peças (nxCols, nxSpark, nxKpi, nxIns, nxTab…) servem para os próximos módulos. */
-  const NX = { rnc: { m: 'm', ref: null, f: '' } };
+  const NX = { rnc: { m: 'm', ref: null, f: '' }, rncc: { m: 'm', ref: null, f: '' } };
   const MES3 = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
   const nxIni = (n) => { const p = String(n || '').replace(/[^A-Za-zÀ-ÿ0-9 ]/g, ' ').trim().split(/\s+/).filter(Boolean); return (p.length > 1 ? p[0][0] + p[1][0] : (p[0] || '—').slice(0, 2)).toUpperCase(); };
   const nxFim = (y, m) => E.serialFromYMD(m === 12 ? y + 1 : y, m === 12 ? 1 : m + 1, 1) - 1;
@@ -8384,29 +8363,77 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <span class="nxh">${P.m === 'd' ? (P.cur ? '<span class="ehlive"><i></i>ao vivo</span>hoje · atualiza sozinho' : `<button type="button" class="nxmais" data-act="nx-nav" data-key="${mod}|0">voltar para hoje</button>`) : `comparando com ${esc(P.cmpL)}${P.cur ? ' até o mesmo dia' : ''}`}</span>${filtro}</div>`;
   }
   function nxTab(cab, linhas, tot) {
-    const th = cab.map((c, i) => `<th${i && i < cab.length - 2 ? ' class="n"' : ''}>${esc(c)}</th>`).join('');
-    const tr = (r) => `<tr${r.go ? ` data-go="${esc(JSON.stringify(r.go))}"` : ''}><td><div class="rw"><span class="nxav">${esc(r.av)}</span><span>${esc(r.nome)}</span></div></td>${r.nums.map((x) => `<td class="n${x && x.crit ? ' crit' : ''}">${x && typeof x === 'object' ? x.v : x}</td>`).join('')}<td><div class="tsp">${nxSpark(r.tend, 70, 22)}</div></td><td><div class="nxpp"><span><i style="width:${r.pct}%"></i></span><em>${r.pct}%</em></div></td></tr>`;
-    return `<table class="nxtb"><thead><tr>${th}</tr></thead><tbody>${linhas.map(tr).join('')}</tbody>${tot ? `<tfoot><tr><td>Total</td>${tot.map((x) => `<td class="n">${x}</td>`).join('')}<td></td><td></td></tr></tfoot>` : ''}</table>`;
+    const th = cab.map((c, i) => `<th${i && i < cab.length - 2 ? ' class="n"' : i === cab.length - 2 ? ' class="nxsc"' : ''}>${esc(c)}</th>`).join('');
+    const tr = (r) => `<tr${r.go ? ` data-go="${esc(JSON.stringify(r.go))}"` : ''}><td><div class="rw"><span class="nxav">${esc(r.av)}</span><span>${esc(r.nome)}</span></div></td>${r.nums.map((x) => `<td class="n${x && x.crit ? ' crit' : ''}">${x && typeof x === 'object' ? x.v : x}</td>`).join('')}<td class="nxsc"><div class="tsp">${nxSpark(r.tend, 70, 22)}</div></td><td><div class="nxpp"><span><i style="width:${r.pct}%"></i></span><em>${r.pct}%</em></div></td></tr>`;
+    return `<table class="nxtb"><thead><tr>${th}</tr></thead><tbody>${linhas.map(tr).join('')}</tbody>${tot ? `<tfoot><tr><td>Total</td>${tot.map((x) => `<td class="n">${x}</td>`).join('')}<td class="nxsc"></td><td></td></tr></tfoot>` : ''}</table>`;
   }
-  function nxAtualiza(mod) { const el = document.getElementById('nx-' + mod); if (el && S.view === 'painel') el.outerHTML = mod === 'rnc' ? ncfPainelHTML() : ''; }
+  const NXF = { rnc: () => ncfPainelHTML(), rncc: () => nccPainelHTML() };
+  function nxAtualiza(mod) { const el = document.getElementById('nx-' + mod); if (el && S.view === 'painel' && NXF[mod]) el.outerHTML = NXF[mod](); }
+  const nxAtualizaDia = () => Object.keys(NX).forEach((m) => { if (NX[m].m === 'd') nxAtualiza(m); });
   function nxAct(a, key) {
     const [mod, k] = String(key || '').split('|'), st = NX[mod]; if (!st) return false;
     if (a === 'nx-p') { if (st.m !== k) { st.m = k; st.ref = null; } nxAtualiza(mod); return true; }
     if (a === 'nx-nav') { if (k === '0') st.ref = null; else nxNav(st, k); nxAtualiza(mod); return true; }
     return false;
   }
-  document.addEventListener('change', (e) => { const t = e.target; if (t && t.id === 'nx-rnc-f') { NX.rnc.f = t.value; nxAtualiza('rnc'); } });
+  document.addEventListener('change', (e) => { const t = e.target, m = t && t.id && /^nx-(\w+)-f$/.exec(t.id); if (m && NX[m[1]]) { NX[m[1]].f = t.value; nxAtualiza(m[1]); } });
   /* ações do Histórico de um dia (usa o mesmo cache da Equipe hoje; dias anteriores são lidos uma vez) */
   function nxLog(d8) {
     if (EH.docs[d8]) return EH.docs[d8];
     if (d8 === ehHoje()) { if (EH.ouvindo !== d8) { const salva = EH.dia; EH.dia = null; ehCarrega(); EH.dia = salva; } return EH.docs[d8]; }
-    if (!EH.lendo[d8]) { EH.lendo[d8] = true; DB.db.doc('log/' + d8).get().then((snap) => { ehGuarda(d8, snap); }).catch(() => { EH.docs[d8] = []; }).then(() => { EH.lendo[d8] = false; nxAtualiza('rnc'); }); }
+    if (!EH.lendo[d8]) { EH.lendo[d8] = true; DB.db.doc('log/' + d8).get().then((snap) => { ehGuarda(d8, snap); }).catch(() => { EH.docs[d8] = []; }).then(() => { EH.lendo[d8] = false; nxAtualizaDia(); }); }
     return undefined;
   }
   const nxD8 = (serial) => { const o = E.ymd(serial); return `${o.y}-${String(o.m).padStart(2, '0')}-${String(o.d).padStart(2, '0')}`; };
   const nxHoraLog = (x) => new Date(x.at).getHours();
   const nxConclLog = (x) => (x.campos && x.campos.conclusao && x.campos.conclusao[1] != null) || /concluíd/i.test(x.label || '');
 
+  /* v102: o modo Dia é o mesmo para os módulos de registros (NCF, NCC…): o que muda vem em "c" */
+  function nxDiaHTML(c) {
+    const { P, R, ab, cc, abertasAgora, atrAgora, atrEm, prox, urgH, goR, sec } = c, hoje = S.today, fl = Math.floor;
+    const media = (L) => (L.length ? L.reduce((s2, v) => s2 + v, 0) / L.length : null), VERM = c.cor, ROXO = c.cor2 || 'var(--n-roxo)', OURO = 'var(--n-ouro)';
+    void R; void fl; void hoje;
+      const d = P.a, d8 = nxD8(d), LG = nxLog(d8), logs = P.ant.map((t) => nxLog(nxD8(t)));
+      const pronto = LG && logs.every(Boolean);
+      const soRNC = (L) => (L || []).filter((x) => x.mod === c.mod);
+      const X = soRNC(LG), aDia = ab(d, d), cDia = cc(d, d);
+      const mAb = media(P.ant.map((t) => ab(t, t).length)), mCc = media(P.ant.map((t) => cc(t, t).length)), mAc = pronto ? media(logs.map((L) => soRNC(L).length)) : null;
+      const venc = c.venc(d);
+      const atrD = P.cur ? atrAgora.length : atrEm(d);
+      const hist6 = P.hist.map((h) => h.a);
+      const ks = [
+        { l: P.cur ? 'Abertas hoje' : 'Abertas no dia', v: NF.format(aDia.length), sub: c.sigla + ' registradas no dia', dl: nxDl(aDia.length, mAb, P, 'desce'), serie: hist6.map((t) => ab(t, t).length), pct: aDia.length ? [aDia.filter((x) => x.conclusao != null).length, aDia.length, 'já concluída(s)', 'ok'] : null, go: goR({ de: E.isoDate(d), ate: E.isoDate(d) }) },
+        { l: P.cur ? 'Concluídas hoje' : 'Concluídas no dia', v: NF.format(cDia.length), sub: 'fechadas no dia', dl: nxDl(cDia.length, mCc, P, 'sobe'), serie: hist6.map((t) => cc(t, t).length), pct: cDia.length + abertasAgora.length ? [cDia.length, cDia.length + abertasAgora.length, 'do que estava aberto', 'ok'] : null, cls: cDia.length ? 'ok' : '' },
+        { l: 'Ações no dia', v: LG ? NF.format(X.length) : '…', sub: 'disposições, respostas, e-mails, fotos', dl: LG && mAc != null ? nxDl(X.length, mAc, P, 'sobe') : null, serie: pronto ? P.ant.slice(0, 5).reverse().map((t) => soRNC(EH.docs[nxD8(t)]).length).concat([X.length]) : null, pct: LG && mAc ? [X.length, Math.max(X.length, Math.round(mAc)), 'da média do dia', 'ok'] : null },
+        { l: P.cur ? 'Vencem hoje' : 'Venciam no dia', v: NF.format(venc.length), sub: 'prazo de disposição ou final', serie: hist6.map((t) => R.filter((x) => x.prazoFinal === t).length), pct: venc.length && abertasAgora.length ? [venc.length, abertasAgora.length, 'das abertas', 'warn'] : null, cls: venc.length ? 'warn' : '' },
+        { l: P.cur ? 'Atrasadas · agora' : 'Atrasadas no dia', v: NF.format(atrD), sub: 'passaram do prazo final', dl: P.cur ? nxDl(atrD, atrEm(P.ant[0]), Object.assign({}, P, { cmp: 'vs ontem' }), 'desce', NF.format) : null, serie: hist6.map((t) => (t === hoje ? atrAgora.length : atrEm(t))), pct: atrD && abertasAgora.length ? [atrD, Math.max(atrD, abertasAgora.length), 'das abertas', 'crit'] : null, cls: atrD ? 'crit' : '', go: goR({ status: ['Atrasado'] }) }
+      ];
+      /* pessoas e horas */
+      const pes = new Map(); X.forEach((x) => { const k = x.by || '—'; const p = pes.get(k) || { k, nome: who(x.by), L: [] }; p.L.push(x); pes.set(k, p); });
+      const PS = Array.from(pes.values()).sort((a, b) => b.L[0].at - a.L[0].at);
+      const hs = X.map(nxHoraLog), h0 = Math.min(7, ...hs), h1 = Math.max(17, ...hs), horas = []; for (let h = h0; h <= h1; h++) horas.push(h);
+      const porH = (f) => horas.map((h) => X.filter((x) => nxHoraLog(x) === h && f(x)).length);
+      const sA = porH((x) => x.act === 'novo'), sC = porH((x) => x.act !== 'novo' && nxConclLog(x)), sO = porH((x) => x.act !== 'novo' && !nxConclLog(x));
+      const agoraH = P.cur ? (new Date().getHours() - h0) + new Date().getMinutes() / 60 - 0.5 : null;
+      let ac = 0; const acum = horas.map((h, i) => { ac += sA[i] + sC[i] + sO[i]; return P.cur && h > new Date().getHours() ? null : ac; });
+      const mediaH = pronto ? horas.map((h) => media(logs.map((L) => soRNC(L).filter((x) => nxHoraLog(x) <= h).length))) : null;
+      const graf = `<div class="chart"><h3>Movimento por hora<small>${P.cur ? 'hoje até agora' : esc(P.label)}</small></h3>${LG ? (X.length ? nxCols(c.id + '-h', horas.map((h) => h + 'h'), [{ nome: 'Aberturas', cor: VERM, v: sA }, { nome: 'Outras ações', cor: ROXO, v: sO }, { nome: 'Conclusões', cor: OURO, v: sC }], nxTeto(Math.max(...horas.map((_, i) => sA[i] + sO[i] + sC[i])))
+        , { agora: agoraH != null && agoraH >= -0.5 && agoraH <= horas.length - 0.5 ? agoraH : null, agoraT: 'agora', aria: c.sigla + ': movimento por hora' })
+        + (mediaH && !Math.max(...mediaH) ? `<p class="muted" style="margin:0;font-size:12px">Sem ações em ${c.sigla} nos 20 dias úteis anteriores para comparar com a média.</p>` : mediaH ? `<h4 class="nxh4" style="margin:4px 0 0;font:500 12px var(--f-body);color:var(--ink-2)">Acumulado do dia × média dos últimos 20 dias úteis</h4>${nxLinhas(c.id + '-l', horas.map((h) => h + 'h'), acum, mediaH, VERM)}` : '<p class="muted" style="margin:0;font-size:12px">Carregando a média dos últimos 20 dias úteis…</p>')
+        : `<div class="empty">Nenhuma ação em ${c.sigla} ${P.cur ? 'hoje ainda' : 'neste dia'}.</div>`) : '<div class="loading"><span class="spin"></span><span>Carregando o dia…</span></div>'}</div>`;
+      const onP = (p) => P.cur && Date.now() - p.L[0].at < 15 * 60000;
+      const agoraHTML = `<div class="chart"><h3>${P.cur ? 'Agora' : 'Quem mexeu'}<small>${P.cur ? `quem está mexendo em ${c.sigla} · verde = nos últimos 15 min` : `em ${c.sigla} neste dia`}</small></h3>${PS.length ? `<ul class="nxul">${PS.slice(0, 6).map((p) => `<li><span class="ehav st${onP(p) ? ' on' : ''}">${esc(ehIni(p.nome))}</span><div><b>${esc(p.nome)}</b><small>${esc((EH_VERBO[p.L[0].act] || 'alterou') + ' · ' + (p.L[0].label || ''))}</small></div><div style="display:grid;justify-items:end;gap:2px"><em style="font:600 12px var(--f-mono);font-style:normal;color:var(--ink-2)">${P.cur ? ehHa(p.L[0].at) : hhmm(p.L[0].at)}</em><small style="font-size:11px;color:var(--ink-3)">${p.L.length} ${p.L.length === 1 ? 'ação' : 'ações'}</small></div></li>`).join('')}</ul>` : `<div class="empty">Ninguém mexeu em ${c.sigla}.</div>`}</div>`;
+      const tl = `<div class="chart ehtlc"><h3>Linha do tempo do dia<small>${NF.format(X.length)} ${X.length === 1 ? 'ação' : 'ações'} em ${c.sigla} · a mais nova em cima</small></h3><ul class="ehtl">${X.slice(0, 150).map((x) => `<li title="${esc(hhmm(x.at) + ' · ' + who(x.by) + ' ' + (EH_VERBO[x.act] || 'alterou') + ' · ' + (x.label || ''))}"><time>${hhmm(x.at)}</time><span class="ehav">${esc(ehIni(who(x.by)))}</span><div class="ehtx"><b>${esc(who(x.by).split(' ')[0])}</b> ${ehTxt(x)}</div><span class="ehmc" style="--m:${c.cor}">${c.sigla}</span></li>`).join('')}</ul><button type="button" class="nxmais" data-go='${esc(JSON.stringify({ v: 'historico' }))}'>Abrir no Histórico →</button></div>`;
+      const tot = X.length || 1;
+      const tab = PS.length ? nxTab(['Pessoa', 'Abriu', 'Concluiu', 'Ações', 'Ritmo', 'Parte'], PS.map((p) => ({ av: ehIni(p.nome), nome: p.nome, nums: [p.L.filter((x) => x.act === 'novo').length, p.L.filter((x) => x.act !== 'novo' && nxConclLog(x)).length, p.L.length], tend: horas.map((h) => p.L.filter((x) => nxHoraLog(x) === h).length), pct: Math.round(p.L.length / tot * 100) })), [sA.reduce((s, v) => s + v, 0), sC.reduce((s, v) => s + v, 0), X.length]) : `<div class="empty">Sem ações em ${c.sigla} neste dia.</div>`;
+      const temMedia = mAc != null && mAc > 0;
+      const i1 = LG ? (X.length ? [temMedia && X.length >= mAc ? 'ok' : 'info', `<b>${!temMedia ? 'Movimento do dia' : X.length >= mAc ? 'Dia movimentado' : 'Dia mais calmo'}:</b> ${NF.format(X.length)} ${X.length === 1 ? 'ação' : 'ações'} em ${c.sigla}${P.cur ? ' até as ' + new Date().getHours() + 'h' : ''}${temMedia ? ` — a média do dia inteiro é ${NF1.format(mAc)}` : ''}.`] : ['info', `<b>Nenhuma ação em ${c.sigla}</b> ${P.cur ? 'hoje ainda' : 'neste dia'}.`]) : ['info', 'Carregando as ações do dia…'];
+      const u = PS[0];
+      const i2 = u ? ['info', `<b>${esc(u.nome.split(' ')[0])}</b> ${P.cur ? (onP(u) ? 'está com' : 'mexeu por último em') : 'mexeu por último em'} <b>${esc(String(u.L[0].label || '').split(' · ')[0])}</b> (${P.cur ? ehHa(u.L[0].at) : hhmm(u.L[0].at)}).`] : ['info', `<b>${NF.format(aDia.length)} NCF aberta(s)</b> e ${NF.format(cDia.length)} concluída(s) no dia.`];
+      const v0 = venc.slice().sort((a, b) => (prox(a) || 0) - (prox(b) || 0))[0];
+      const i3 = v0 ? ['warn', `<b>${venc.length === 1 ? '1 ' + c.sigla + ' vence' : venc.length + ' ' + c.sigla + ' vencem'} ${P.cur ? 'hoje' : 'neste dia'}:</b> ${esc(v0.num)} · ${esc(String(c.quem(v0) || '').split(/\s+/).slice(0, 2).join(' '))}${c.resp(v0) ? ', com ' + esc(String(c.resp(v0)).split(' ')[0]) : ''}.`] : atrD ? ['crit', `<b>${atrD === 1 ? '1 ' + c.sigla + ' atrasada' : atrD + ' ' + c.sigla + ' atrasadas'}</b> ${P.cur ? 'agora' : 'no dia'}.`] : ['ok', `<b>Nada vencendo</b> ${P.cur ? 'hoje' : 'neste dia'} e nenhuma atrasada.`];
+      return sec(nxIns([i1, i2, i3], 'Resumo do dia') + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}<div style="display:grid;gap:14px;align-content:start">${agoraHTML}${P.cur ? urgH(3) : ''}</div></div><div class="nxc2b ehc2">${tl}<div class="chart"><h3>Por pessoa<small>${esc(P.label)}</small></h3>${tab}</div></div>`);
+  }
   function ncfPainelHTML() {
     const M = S.model; if (!M || !vis('rnc')) return '';
     const st = NX.rnc, dia = viewOk('historico'); if (st.m === 'd' && !dia) st.m = 'm';
@@ -8443,49 +8470,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         ${abertasAgora.length ? `<button type="button" class="nxmais" data-go="${esc(JSON.stringify(goR({ status: ['Em Andamento', 'Pendente', 'Atrasado'] })))}">Ver as ${NF.format(abertasAgora.length)} abertas →</button>` : ''}</div>`; };
 
     /* ---------------- DIA ---------------- */
-    if (P.m === 'd') {
-      const d = P.a, d8 = nxD8(d), LG = nxLog(d8), logs = P.ant.map((t) => nxLog(nxD8(t)));
-      const pronto = LG && logs.every(Boolean);
-      const soRNC = (L) => (L || []).filter((x) => x.mod === 'RNC' && (!fk || true));
-      const X = soRNC(LG), aDia = ab(d, d), cDia = cc(d, d);
-      const mAb = media(P.ant.map((t) => ab(t, t).length)), mCc = media(P.ant.map((t) => cc(t, t).length)), mAc = pronto ? media(logs.map((L) => soRNC(L).length)) : null;
-      const venc = R.filter((x) => fl(x.data) <= d && (x.conclusao == null || fl(x.conclusao) > d) && (x.prazoFinal === d || (x.status === 'Em Andamento' && x.dispDue != null && fl(x.dispDue) === d)));
-      const atrD = P.cur ? atrAgora.length : atrEm(d);
-      const hist6 = P.hist.map((h) => h.a);
-      const ks = [
-        { l: P.cur ? 'Abertas hoje' : 'Abertas no dia', v: NF.format(aDia.length), sub: 'NCF registradas no dia', dl: nxDl(aDia.length, mAb, P, 'desce'), serie: hist6.map((t) => ab(t, t).length), pct: aDia.length ? [aDia.filter((x) => x.conclusao != null).length, aDia.length, 'já concluída(s)', 'ok'] : null, go: goR({ de: E.isoDate(d), ate: E.isoDate(d) }) },
-        { l: P.cur ? 'Concluídas hoje' : 'Concluídas no dia', v: NF.format(cDia.length), sub: 'fechadas no dia', dl: nxDl(cDia.length, mCc, P, 'sobe'), serie: hist6.map((t) => cc(t, t).length), pct: cDia.length + abertasAgora.length ? [cDia.length, cDia.length + abertasAgora.length, 'do que estava aberto', 'ok'] : null, cls: cDia.length ? 'ok' : '' },
-        { l: 'Ações no dia', v: LG ? NF.format(X.length) : '…', sub: 'disposições, respostas, e-mails, fotos', dl: LG && mAc != null ? nxDl(X.length, mAc, P, 'sobe') : null, serie: pronto ? P.ant.slice(0, 5).reverse().map((t) => soRNC(EH.docs[nxD8(t)]).length).concat([X.length]) : null, pct: LG && mAc ? [X.length, Math.max(X.length, Math.round(mAc)), 'da média do dia', 'ok'] : null },
-        { l: P.cur ? 'Vencem hoje' : 'Venciam no dia', v: NF.format(venc.length), sub: 'prazo de disposição ou final', serie: hist6.map((t) => R.filter((x) => x.prazoFinal === t).length), pct: venc.length && abertasAgora.length ? [venc.length, abertasAgora.length, 'das abertas', 'warn'] : null, cls: venc.length ? 'warn' : '' },
-        { l: P.cur ? 'Atrasadas · agora' : 'Atrasadas no dia', v: NF.format(atrD), sub: 'passaram do prazo final', dl: P.cur ? nxDl(atrD, atrEm(P.ant[0]), Object.assign({}, P, { cmp: 'vs ontem' }), 'desce', NF.format) : null, serie: hist6.map((t) => (t === hoje ? atrAgora.length : atrEm(t))), pct: atrD && abertasAgora.length ? [atrD, Math.max(atrD, abertasAgora.length), 'das abertas', 'crit'] : null, cls: atrD ? 'crit' : '', go: goR({ status: ['Atrasado'] }) }
-      ];
-      /* pessoas e horas */
-      const pes = new Map(); X.forEach((x) => { const k = x.by || '—'; const p = pes.get(k) || { k, nome: who(x.by), L: [] }; p.L.push(x); pes.set(k, p); });
-      const PS = Array.from(pes.values()).sort((a, b) => b.L[0].at - a.L[0].at);
-      const hs = X.map(nxHoraLog), h0 = Math.min(7, ...hs), h1 = Math.max(17, ...hs), horas = []; for (let h = h0; h <= h1; h++) horas.push(h);
-      const porH = (f) => horas.map((h) => X.filter((x) => nxHoraLog(x) === h && f(x)).length);
-      const sA = porH((x) => x.act === 'novo'), sC = porH((x) => x.act !== 'novo' && nxConclLog(x)), sO = porH((x) => x.act !== 'novo' && !nxConclLog(x));
-      const agoraH = P.cur ? (new Date().getHours() - h0) + new Date().getMinutes() / 60 - 0.5 : null;
-      let ac = 0; const acum = horas.map((h, i) => { ac += sA[i] + sC[i] + sO[i]; return P.cur && h > new Date().getHours() ? null : ac; });
-      const mediaH = pronto ? horas.map((h) => media(logs.map((L) => soRNC(L).filter((x) => nxHoraLog(x) <= h).length))) : null;
-      const graf = `<div class="chart"><h3>Movimento por hora<small>${P.cur ? 'hoje até agora' : esc(P.label)}</small></h3>${LG ? (X.length ? nxCols('nxr-h', horas.map((h) => h + 'h'), [{ nome: 'Aberturas', cor: VERM, v: sA }, { nome: 'Outras ações', cor: ROXO, v: sO }, { nome: 'Conclusões', cor: OURO, v: sC }], nxTeto(Math.max(...horas.map((_, i) => sA[i] + sO[i] + sC[i])))
-        , { agora: agoraH != null && agoraH >= -0.5 && agoraH <= horas.length - 0.5 ? agoraH : null, agoraT: 'agora', aria: 'NCF: movimento por hora' })
-        + (mediaH && !Math.max(...mediaH) ? '<p class="muted" style="margin:0;font-size:12px">Sem ações em NCF nos 20 dias úteis anteriores para comparar com a média.</p>' : mediaH ? `<h4 class="nxh4" style="margin:4px 0 0;font:500 12px var(--f-body);color:var(--ink-2)">Acumulado do dia × média dos últimos 20 dias úteis</h4>${nxLinhas('nxr-l', horas.map((h) => h + 'h'), acum, mediaH, VERM)}` : '<p class="muted" style="margin:0;font-size:12px">Carregando a média dos últimos 20 dias úteis…</p>')
-        : `<div class="empty">Nenhuma ação em NCF ${P.cur ? 'hoje ainda' : 'neste dia'}.</div>`) : '<div class="loading"><span class="spin"></span><span>Carregando o dia…</span></div>'}</div>`;
-      const onP = (p) => P.cur && Date.now() - p.L[0].at < 15 * 60000;
-      const agoraHTML = `<div class="chart"><h3>${P.cur ? 'Agora' : 'Quem mexeu'}<small>${P.cur ? 'quem está mexendo em NCF · verde = nos últimos 15 min' : 'em NCF neste dia'}</small></h3>${PS.length ? `<ul class="nxul">${PS.slice(0, 6).map((p) => `<li><span class="ehav st${onP(p) ? ' on' : ''}">${esc(ehIni(p.nome))}</span><div><b>${esc(p.nome)}</b><small>${esc((EH_VERBO[p.L[0].act] || 'alterou') + ' · ' + (p.L[0].label || ''))}</small></div><div style="display:grid;justify-items:end;gap:2px"><em style="font:600 12px var(--f-mono);font-style:normal;color:var(--ink-2)">${P.cur ? ehHa(p.L[0].at) : hhmm(p.L[0].at)}</em><small style="font-size:11px;color:var(--ink-3)">${p.L.length} ${p.L.length === 1 ? 'ação' : 'ações'}</small></div></li>`).join('')}</ul>` : '<div class="empty">Ninguém mexeu em NCF.</div>'}</div>`;
-      const tl = `<div class="chart ehtlc"><h3>Linha do tempo do dia<small>${NF.format(X.length)} ${X.length === 1 ? 'ação' : 'ações'} em NCF · a mais nova em cima</small></h3><ul class="ehtl">${X.slice(0, 150).map((x) => `<li title="${esc(hhmm(x.at) + ' · ' + who(x.by) + ' ' + (EH_VERBO[x.act] || 'alterou') + ' · ' + (x.label || ''))}"><time>${hhmm(x.at)}</time><span class="ehav">${esc(ehIni(who(x.by)))}</span><div class="ehtx"><b>${esc(who(x.by).split(' ')[0])}</b> ${ehTxt(x)}</div><span class="ehmc" style="--m:var(--n-rnc)">NCF</span></li>`).join('')}</ul><button type="button" class="nxmais" data-go='${esc(JSON.stringify({ v: 'historico' }))}'>Abrir no Histórico →</button></div>`;
-      const tot = X.length || 1;
-      const tab = PS.length ? nxTab(['Pessoa', 'Abriu', 'Concluiu', 'Ações', 'Ritmo', 'Parte'], PS.map((p) => ({ av: ehIni(p.nome), nome: p.nome, nums: [p.L.filter((x) => x.act === 'novo').length, p.L.filter((x) => x.act !== 'novo' && nxConclLog(x)).length, p.L.length], tend: horas.map((h) => p.L.filter((x) => nxHoraLog(x) === h).length), pct: Math.round(p.L.length / tot * 100) })), [sA.reduce((s, v) => s + v, 0), sC.reduce((s, v) => s + v, 0), X.length]) : '<div class="empty">Sem ações em NCF neste dia.</div>';
-      const temMedia = mAc != null && mAc > 0;
-      const i1 = LG ? (X.length ? [temMedia && X.length >= mAc ? 'ok' : 'info', `<b>${!temMedia ? 'Movimento do dia' : X.length >= mAc ? 'Dia movimentado' : 'Dia mais calmo'}:</b> ${NF.format(X.length)} ${X.length === 1 ? 'ação' : 'ações'} em NCF${P.cur ? ' até as ' + new Date().getHours() + 'h' : ''}${temMedia ? ` — a média do dia inteiro é ${NF1.format(mAc)}` : ''}.`] : ['info', `<b>Nenhuma ação em NCF</b> ${P.cur ? 'hoje ainda' : 'neste dia'}.`]) : ['info', 'Carregando as ações do dia…'];
-      const u = PS[0];
-      const i2 = u ? ['info', `<b>${esc(u.nome.split(' ')[0])}</b> ${P.cur ? (onP(u) ? 'está com' : 'mexeu por último em') : 'mexeu por último em'} <b>${esc(String(u.L[0].label || '').split(' · ')[0])}</b> (${P.cur ? ehHa(u.L[0].at) : hhmm(u.L[0].at)}).`] : ['info', `<b>${NF.format(aDia.length)} NCF aberta(s)</b> e ${NF.format(cDia.length)} concluída(s) no dia.`];
-      const v0 = venc.slice().sort((a, b) => (prox(a) || 0) - (prox(b) || 0))[0];
-      const i3 = v0 ? ['warn', `<b>${venc.length === 1 ? '1 NCF vence' : venc.length + ' NCF vencem'} ${P.cur ? 'hoje' : 'neste dia'}:</b> ${esc(v0.num)} · ${esc(String(v0.forn || '').split(/\s+/).slice(0, 2).join(' '))}${v0.emissor ? ', com ' + esc(v0.emissor.split(' ')[0]) : ''}.`] : atrD ? ['crit', `<b>${atrD === 1 ? '1 NCF atrasada' : atrD + ' NCF atrasadas'}</b> ${P.cur ? 'agora' : 'no dia'}.`] : ['ok', `<b>Nada vencendo</b> ${P.cur ? 'hoje' : 'neste dia'} e nenhuma atrasada.`];
-      return sec(nxIns([i1, i2, i3], 'Resumo do dia') + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}<div style="display:grid;gap:14px;align-content:start">${agoraHTML}${P.cur ? urgH(3) : ''}</div></div><div class="nxc2b ehc2">${tl}<div class="chart"><h3>Por pessoa<small>${esc(P.label)}</small></h3>${tab}</div></div>`);
-    }
-
+    if (P.m === 'd') return nxDiaHTML({ P, R, ab, cc, abertasAgora, atrAgora, atrEm, prox, urgH, goR, sec, mod: 'RNC', id: 'nxr', sigla: 'NCF', cor: 'var(--n-rnc)', quem: (x) => x.forn, resp: (x) => x.emissor,
+      venc: (d) => R.filter((x) => fl(x.data) <= d && (x.conclusao == null || fl(x.conclusao) > d) && (x.prazoFinal === d || (x.status === 'Em Andamento' && x.dispDue != null && fl(x.dispDue) === d))) });
     /* ---------------- MÊS / TRIMESTRE / 12 MESES ---------------- */
     const A = ab(P.a, P.b), Ap = ab(P.prev.a, P.prev.b), L1 = lotes(P.a, P.b), Lp = lotes(P.prev.a, P.prev.b);
     const por100 = (n, l) => (l ? n / l * 100 : null), r100 = por100(A.length, L1), r100p = por100(Ap.length, Lp);
@@ -8538,6 +8524,88 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${chartHTML('Fornecedores com reincidência', barsHTML(countBy(A.filter((x) => x.reinc === 'Sim'), (x) => x.forn).map((i) => ({ ...i, go: goR({ forn: i.label, reinc: 'Sim' }) })), MOD.RNC.c, { max: 10 }), 'top 10')}</div></details>`;
     void fimP;
     return sec(nxIns([i1, i2, i3], { m: 'Resumo do mês', t: 'Resumo do trimestre', a: 'Resumo dos 12 meses' }[P.m]) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b">${`<div class="chart"><h3>Por fornecedor<small>${esc(P.label)}</small></h3>${tabF}</div>`}${par}</div>${mais}`);
+  }
+  /* v102: NCC (reclamações de clientes) no visual novo — mesmas peças da NCF */
+  function nccPainelHTML() {
+    const M = S.model; if (!M || !vis('rncc')) return '';
+    const st = NX.rncc, dia = viewOk('historico'); if (st.m === 'd' && !dia) st.m = 'm';
+    const P = nxPer(st), fk = st.f, hoje = S.today, now = E.nowSerial ? E.nowSerial() : hoje, fl = Math.floor;
+    const TODOS = (M.rncc || []).filter((x) => x.status !== 'Cancelada' && x.data != null);
+    const R = fk ? TODOS.filter((x) => E.key(x.cliente || '') === fk) : TODOS;
+    const dentro = (v, a, b) => v != null && fl(v) >= a && fl(v) <= b;
+    const ab = (a, b) => R.filter((x) => dentro(x.data, a, b)), cc = (a, b) => R.filter((x) => dentro(x.conclusao, a, b));
+    const atrEm = (t) => R.filter((x) => fl(x.data) <= t && (x.conclusao == null || fl(x.conclusao) > t) && x.prazoFinal != null && t >= x.prazoFinal).length;
+    const media = (L) => (L.length ? L.reduce((s2, v) => s2 + v, 0) / L.length : null);
+    const proc = (x) => E.low(x.procedente) === 'sim', improc = (x) => !!x.improc || ['não', 'nao'].includes(E.low(x.procedente));
+    const cliOpc = new Map(); TODOS.forEach((x) => { const k = E.key(x.cliente || ''); if (k && !cliOpc.has(k)) cliOpc.set(k, String(x.cliente).trim()); });
+    const filtro = `<select id="nx-rncc-f" class="inp" aria-label="Cliente"><option value="">Cliente: todos</option>${Array.from(cliOpc).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR')).map(([k, n]) => `<option value="${esc(k)}"${k === fk ? ' selected' : ''}>${esc(n)}</option>`).join('')}</select>`;
+    const sec = (corpo) => `<section class="sec nxsec" id="nx-rncc" style="--c:var(--n-rncc)">${band('RNCC', 'Indicadores de NCC · reclamações de clientes')}<div class="block"><div class="body">${nxBarra('rncc', st, P, filtro, dia)}${corpo}</div></div></section>`;
+    const C = 'var(--n-rncc)', AZUL = 'var(--n-azul)', OURO = 'var(--n-ouro)', VERM = 'var(--n-rnc)';
+    const goK = (f) => ({ v: 'rncc', f: Object.assign(fk ? { cliente: cliOpc.get(fk) } : {}, f || {}) });
+    const abertasAgora = R.filter((x) => x.aberta), atrAgora = abertasAgora.filter((x) => x.status === 'Atrasado');
+    const etapa = (x) => rnccStage(x), prox = (x) => { const d = etapa(x).due; return d == null ? null : d + (EXP().fim != null ? EXP().fim / 24 : 1); };
+    const grupo = (x) => { const t = etapa(x).t; return t === 'Contenção' ? 'cont' : /^Resposta/.test(t) ? 'resp' : 'outr'; };
+    const urgL = atrAgora.slice().sort((a, b) => (a.prazoFinal || 0) - (b.prazoFinal || 0)).concat(abertasAgora.filter((x) => x.status !== 'Atrasado' && prox(x) != null).sort((a, b) => prox(a) - prox(b)));
+    const chip = (x) => {
+      if (x.status === 'Atrasado') { const d = hoje - x.prazoFinal; return [d <= 0 ? 'atrasada hoje' : `atrasada ${d} d`, 'crit']; }
+      const e = etapa(x), p = prox(x), nome = e.t === 'Contenção' ? 'contenção' : /^Resposta/.test(e.t) ? 'responder' : e.t === 'Verificação de eficácia' ? 'eficácia' : 'prazo';
+      if (p == null) return [nome, '']; if (p - now <= 0) return [nome + ' vencida', 'crit'];
+      if (fl(p) === hoje) return [nome + ' hoje', 'warn']; if (fl(p) === hoje + 1) return [nome + ' amanhã', 'warn'];
+      return [`${nome} em ${fl(p) - hoje} d`, ''];
+    };
+    const urgH = (max) => { const n = (g) => abertasAgora.filter((x) => x.status !== 'Atrasado' && grupo(x) === g).length, segs = [['Respondida', n('outr'), OURO], ['Aguardando resposta', n('resp'), AZUL], ['Em contenção', n('cont'), C], ['Atrasada', atrAgora.length, VERM]];
+      return `<div class="chart"><h3>NCC abertas<small>agora</small></h3>${abertasAgora.length ? `<div class="nxsb">${segs.filter((s2) => s2[1]).map((s2) => `<span style="flex:${s2[1]};background:${s2[2]}" title="${esc(s2[0] + ': ' + s2[1])}"></span>`).join('')}</div>` : ''}<div class="nxsl">${segs.map((s2) => `<span><i style="background:${s2[2]}"></i>${s2[0]} <b>${s2[1]}</b></span>`).join('')}</div>
+        ${urgL.length ? `<ul class="nxul">${urgL.slice(0, max || 4).map((x) => { const [t, c2] = chip(x); return `<li data-open="RNCC:${esc(x.key)}" tabindex="0"><span class="nxav">${esc(nxIni(x.cliente))}</span><div><b>${esc(x.num)} · ${esc(String(x.cliente || 'sem cliente').split(/\s+/).slice(0, 3).join(' '))}</b><small>${esc([x.motivo, etapa(x).t, (x.emissor || '').split(' ')[0]].filter(Boolean).join(' · '))}</small></div><span class="nxcd ${c2}">${esc(t)}</span></li>`; }).join('')}</ul>` : okSeal('Nenhuma NCC aberta', '')}
+        ${abertasAgora.length ? `<button type="button" class="nxmais" data-go="${esc(JSON.stringify(goK({ status: ['Em Andamento', 'Pendente', 'Atrasado'] })))}">Ver as ${NF.format(abertasAgora.length)} abertas →</button>` : ''}</div>`; };
+    if (P.m === 'd') return nxDiaHTML({ P, R, ab, cc, abertasAgora, atrAgora, atrEm, prox, urgH, goR: goK, sec, mod: 'RNCC', id: 'nxk', sigla: 'NCC', cor: C, cor2: AZUL, quem: (x) => x.cliente, resp: (x) => x.emissor,
+      venc: (d) => R.filter((x) => fl(x.data) <= d && (x.conclusao == null || fl(x.conclusao) > d) && x.aberta && etapa(x).due === d) });
+
+    /* Mês / Trimestre / 12 meses */
+    const A = ab(P.a, P.b), Ap = ab(P.prev.a, P.prev.b), quando = { m: 'no mês', t: 'no trimestre', a: 'em 12 meses' }[P.m], H = P.hist, serie = (f) => H.map((h) => f(h.a, h.b));
+    const julg = (L) => L.filter((x) => proc(x) || improc(x));
+    const nProc = A.filter(proc).length, nProcP = Ap.filter(proc).length;
+    const respP = (a, b) => R.filter((x) => dentro(x.respData, a, b) && x.diasResposta != null);
+    const tR = media(respP(P.a, P.b).map((x) => x.diasResposta)), tRp = media(respP(P.prev.a, P.prev.b).map((x) => x.diasResposta));
+    const rpz = respP(P.a, P.b), rpzOk = rpz.filter((x) => x.prazoResp != null && fl(x.respData) <= x.prazoResp).length;
+    const efP = (a, b) => R.filter((x) => dentro(x.eficData, a, b) && ['eficaz', 'não eficaz', 'nao eficaz'].includes(E.low(x.eficacia)));
+    const pEf = (a, b) => { const L = efP(a, b); return L.length ? L.filter((x) => E.low(x.eficacia) === 'eficaz').length / L.length * 100 : null; };
+    const ef = pEf(P.a, P.b), efp = pEf(P.prev.a, P.prev.b), EF = efP(P.a, P.b);
+    const contAg = abertasAgora.filter((x) => grupo(x) === 'cont').length;
+    const ks = [
+      { l: 'NCC ' + quando, v: NF.format(A.length), sub: `reclamações · ${esc(P.label)}`, dl: nxDl(A.length, Ap.length, P, 'desce', NF.format), serie: serie((a, b) => ab(a, b).length), pct: julg(A).length ? [nProc, julg(A).length, 'procedentes', 'warn'] : null, go: goK({ de: E.isoDate(P.a), ate: E.isoDate(P.b) }) },
+      { l: 'Procedentes', v: NF.format(nProc), sub: `${NF.format(julg(A).length)} analisada(s) · ${NF.format(A.length - julg(A).length)} em análise`, dl: nxDl(nProc, nProcP, P, 'desce', NF.format), serie: serie((a, b) => ab(a, b).filter(proc).length), pct: A.length && nProc ? [nProc, A.length, 'das NCC', 'warn'] : null, cls: nProc ? 'warn' : '', go: goK({ proc: 'Sim' }) },
+      { l: 'Em contenção · agora', v: NF.format(contAg), sub: 'contenção ainda não registrada', serie: H.map((h) => R.filter((x) => fl(x.data) <= h.b && (x.contData == null || fl(x.contData) > h.b) && (x.conclusao == null || fl(x.conclusao) > h.b) && !improc(x)).length), pct: contAg && abertasAgora.length ? [contAg, abertasAgora.length, 'das abertas', 'warn'] : null, cls: contAg ? 'warn' : '' },
+      { l: 'Primeira resposta', v: tR == null ? '—' : NF1.format(Math.round(tR * 10) / 10) + ' d', sub: 'média até responder o cliente', dl: tR != null && tRp != null ? nxDl(tR, tRp, P, 'desce', (v) => NF1.format(v) + ' d') : null, serie: serie((a, b) => media(respP(a, b).map((x) => x.diasResposta)) || 0), pct: rpz.length ? [rpzOk, rpz.length, 'no prazo', rpzOk / rpz.length >= 0.8 ? 'ok' : 'warn'] : null },
+      { l: 'Eficácia verificada', v: ef == null ? '—' : NF.format(Math.round(ef)) + '%', sub: `${NF.format(EF.length)} verificação(ões) ${quando}`, dl: ef != null && efp != null ? nxDl(ef, efp, P, 'sobe', (v) => NF.format(Math.round(v)) + ' p.p.') : null, serie: serie((a, b) => pEf(a, b) || 0), pct: EF.length ? [EF.filter((x) => E.low(x.eficacia) === 'eficaz').length, EF.length, 'eficazes', 'ok'] : null, cls: ef != null && ef >= 80 ? 'ok' : '' }
+    ];
+    let cols = [], tips = [], rng = [];
+    if (P.m === 'm') { const hol = M.hol; for (let t = P.a; t <= P.bFull; t++) if (riUtil(t, hol) || ab(t, t).length) { cols.push(String(E.ymd(t).d)); tips.push(E.fmtDate(t)); rng.push([t, t]); } }
+    else if (P.m === 't') { let t = P.a; while (E.dow(t) !== 1 && t > P.a - 7) t--; for (; t <= P.bFull; t += 7) { const a = Math.max(t, P.a), b = Math.min(t + 6, P.bFull), o = E.ymd(a); cols.push(`${String(o.d).padStart(2, '0')}/${String(o.m).padStart(2, '0')}`); tips.push('semana de ' + E.fmtDate(a) + ' a ' + E.fmtDate(b)); rng.push([a, b]); } }
+    else H.forEach((h) => { cols.push(h.l); tips.push(h.l); rng.push([h.a, h.b]); });
+    const sit = (f) => rng.map(([a, b]) => ab(a, b).filter(f).length);
+    const sP = sit(proc), sI = sit(improc), sA = sit((x) => !proc(x) && !improc(x));
+    const ix = rng.findIndex(([a, b]) => hoje >= a && hoje <= b);
+    const tituloG = { m: 'NCC por dia útil', t: 'NCC por semana', a: 'NCC por mês' }[P.m];
+    const graf = `<div class="chart"><h3>${tituloG}<small>${esc(P.label)} · cor = procedência</small></h3>${nxCols('nxk-p', cols, [{ nome: 'Procedente', cor: C, v: sP }, { nome: 'Em análise', cor: AZUL, v: sA }, { nome: 'Improcedente', cor: OURO, v: sI }], nxTeto(Math.max(1, ...cols.map((_, i) => sP[i] + sA[i] + sI[i]))), { agora: P.cur && ix >= 0 && P.m !== 'a' ? ix + 0.5 : null, tip: tips, aria: tituloG })}</div>`;
+    const gc = new Map(); A.forEach((x) => { const k = E.key(x.cliente || '') || '—'; const g = gc.get(k) || { k, nome: String(x.cliente || '(sem cliente)').trim(), n: 0, p: 0 }; g.n++; if (proc(x)) g.p++; gc.set(k, g); });
+    const GC = Array.from(gc.values()).sort((a, b) => b.n - a.n || a.nome.localeCompare(b.nome, 'pt-BR')).slice(0, 6), totA = A.length || 1;
+    const tabC = GC.length ? nxTab(['Cliente', 'NCC', 'Proced.', 'Tendência', 'Parte'], GC.map((g) => ({ av: nxIni(g.nome), nome: g.nome, go: { v: 'rncc', f: { cliente: g.nome } }, nums: [g.n, { v: g.p, crit: g.p > 1 }], tend: H.map((h) => R.filter((x) => E.key(x.cliente || '') === g.k && dentro(x.data, h.a, h.b)).length), pct: Math.round(g.n / totA * 100) })), [NF.format(A.length), NF.format(nProc)]) : '<div class="empty">Sem NCC no período.</div>';
+    const pa = P.m === 'm' ? P.b - 364 : P.a, PM = new Map(); ab(pa, P.b).forEach((x) => { const k = x.motivo || '(sem motivo)'; PM.set(k, (PM.get(k) || 0) + 1); });
+    let PL = Array.from(PM.entries()).sort((a, b) => b[1] - a[1]); if (PL.length > 7) { const r = PL.slice(6).reduce((s2, x) => s2 + x[1], 0); PL = PL.slice(0, 6).concat([['Outros', r]]); }
+    const par = `<div class="chart"><h3>Pareto dos motivos<small>${P.m === 'm' ? '12 meses até ' + esc(E.fmtDate(P.b)) : esc(P.label)} · os primeiros somam 80% dos casos</small></h3>${nxPareto('nxk-pa', PL, C)}</div>`;
+    const dif = A.length - Ap.length;
+    const i1 = [dif > 0 ? 'warn' : 'ok', `<b>${A.length === 1 ? '1 reclamação' : NF.format(A.length) + ' reclamações'} ${quando}</b>${dif ? `, ${NF.format(Math.abs(dif))} a ${dif > 0 ? 'mais' : 'menos'} que em ${esc(P.cmpL)}` : `, o mesmo que em ${esc(P.cmpL)}`}${P.cur ? ' (até o mesmo dia)' : ''}.`];
+    const c0 = abertasAgora.filter((x) => grupo(x) === 'cont').sort((a, b) => (prox(a) || 0) - (prox(b) || 0))[0], a0 = atrAgora.slice().sort((a, b) => (a.prazoFinal || 0) - (b.prazoFinal || 0))[0];
+    const i2 = a0 ? ['crit', `<b>${atrAgora.length === 1 ? '1 NCC atrasada' : atrAgora.length + ' NCC atrasadas'} agora</b> — a mais antiga é a ${esc(a0.num)} · ${esc(String(a0.cliente || '').split(/\s+/).slice(0, 2).join(' '))}.`]
+      : c0 ? ['warn', `<b>${contAg === 1 ? '1 em contenção' : contAg + ' em contenção'} agora:</b> ${esc(c0.num)} · ${esc(String(c0.cliente || '').split(/\s+/).slice(0, 2).join(' '))}${c0.emissor ? ', com ' + esc(c0.emissor.split(' ')[0]) : ''}.`] : ['ok', '<b>Nenhuma NCC atrasada</b> nem esperando contenção.'];
+    const mot = (L) => { const m = new Map(); L.forEach((x) => m.set(x.motivo || '(sem motivo)', (m.get(x.motivo || '(sem motivo)') || 0) + 1)); return Array.from(m.entries()).sort((a, b) => b[1] - a[1])[0]; };
+    const m1 = mot(A), pm = (m, L) => (m && L.length ? Math.round(L.filter((x) => (x.motivo || '(sem motivo)') === m[0]).length / L.length * 100) : 0);
+    const i3 = m1 ? ['info', `<b>${esc(m1[0])}</b> é o motivo de ${pm(m1, A)}% das reclamações ${quando}${Ap.length ? `; em ${esc(P.cmpL)} era ${pm(m1, Ap)}%` : ''}.`] : ['info', `Nenhuma reclamação ${quando}.`];
+    const mais = `<details class="nxmore"><summary>Mais gráficos de NCC (setor responsável, origem da causa, gravidade) · ${esc(P.label)}</summary><div class="charts">
+      ${chartHTML('Por setor responsável', barsHTML(countBy(A, (x) => x.setor).map((i) => ({ ...i, go: goK({ setor: i.label }) })), MOD.RNCC.c, { max: 10 }))}
+      ${chartHTML('Por origem da causa', barsHTML(countBy(A, (x) => x.origem), MOD.RNCC.c))}
+      ${chartHTML('Por gravidade', barsHTML(countBy(A, (x) => x.gravidade), MOD.RNCC.c))}</div></details>`;
+    return sec(nxIns([i1, i2, i3], { m: 'Resumo do mês', t: 'Resumo do trimestre', a: 'Resumo dos 12 meses' }[P.m]) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Por cliente<small>${esc(P.label)}</small></h3>${tabC}</div>${par}</div>${mais}`);
   }
   /* visão do processo: o caminho do lote nos últimos 12 meses, do recebimento à NCF resolvida */
   function procPainelHTML() {
