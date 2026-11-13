@@ -267,6 +267,72 @@ button.ehpc { cursor: pointer; } button.ehpc:hover { border-color: var(--ink-3);
 .ehmc { font: 700 11px var(--f-display); letter-spacing: .08em; padding: 3px 8px; border-radius: 4px; color: #fff; background: var(--m); white-space: nowrap; text-transform: uppercase; }
 .ehmais { justify-self: start; font-size: 12.5px; font-weight: 600; color: var(--info); background: none; border: 0; padding: 0; cursor: pointer; } .ehmais:hover { text-decoration: underline; }
 @media (max-width: 980px) { .ehbar { grid-template-columns: minmax(0, 1fr); } .ehbar .rindn { grid-template-columns: 48px minmax(0, 1fr) 48px; } .ehins { grid-template-columns: minmax(0, 1fr); } .ehins ul { grid-template-columns: minmax(0, 1fr); gap: 8px; } .ehins li { border-left: 0; padding-left: 0; } .ehc2 { grid-template-columns: minmax(0, 1fr); } }
+/* v101: indicadores no visual novo (aprovado) — NCF primeiro; as mesmas peças servem para os outros módulos */
+.nxsec { --c: var(--n-geral); }
+.nxbar { display: grid; grid-template-columns: auto auto minmax(0, 1fr) 240px; gap: 10px; align-items: center; }
+.nxseg { display: inline-grid; grid-auto-flow: column; grid-auto-columns: 92px; border: 1px solid var(--line-2); border-radius: 6px; overflow: hidden; height: var(--h-in); }
+.nxseg button { font: 500 14px var(--f-body); color: var(--ink-2); background: var(--surface); border: 0; cursor: pointer; } .nxseg button + button { border-left: 1px solid var(--line); }
+.nxseg button[aria-pressed="true"] { background: color-mix(in srgb, var(--c) 24%, transparent); color: var(--ink); font-weight: 600; }
+.nxbar .rindn { grid-template-columns: 40px 210px 40px; } .nxbar .inp { height: var(--h-in); min-height: var(--h-in); }
+.nxh { font-size: 12.5px; color: var(--ink-3); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 5px 0 5px 6px; }
+.nxins { display: grid; grid-template-columns: 196px minmax(0, 1fr); gap: 14px; align-items: center; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--c) 45%, var(--line)); border-radius: var(--r); background: linear-gradient(90deg, color-mix(in srgb, var(--c) 14%, var(--surface)) 0%, var(--surface) 70%); }
+.nxins .ehinsh svg { fill: var(--c); }
+.nxins ul { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.nxins li { display: grid; grid-template-columns: 8px 1fr; gap: 9px; align-items: start; font-size: 13px; line-height: 1.4; color: var(--ink-2); padding-left: 14px; border-left: 1px solid var(--line); }
+.nxins li b { color: var(--ink); font-weight: 600; } .nxins li i { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; background: var(--ink-3); }
+.nxins li.ok i { background: var(--ok); } .nxins li.warn i { background: var(--warn); } .nxins li.info i { background: var(--info); } .nxins li.crit i { background: var(--crit); box-shadow: 0 0 0 3px color-mix(in srgb, var(--crit) 25%, transparent); }
+.nxks { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.nxk { position: relative; display: grid; grid-template-rows: auto auto 1fr auto; gap: 4px; padding: 12px 14px 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); overflow: hidden; min-height: 190px; text-align: left; font: inherit; color: inherit; }
+button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
+.nxk::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--c); }
+.nxk .lbl { font: 600 11px/1.25 var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); padding-right: 6px; }
+.nxk .vr { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.nxk .val { font: 700 34px/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.nxk.crit .val { color: var(--crit); } .nxk.warn .val { color: var(--warn); } .nxk.ok .val { color: var(--ok); }
+.nxdl { font: 600 12px/1 var(--f-body); padding: 4px 7px; border-radius: 10px; white-space: nowrap; color: var(--ink-2); background: color-mix(in srgb, var(--ink-3) 18%, transparent); }
+.nxdl.ok { color: var(--ok); background: color-mix(in srgb, var(--ok) 15%, transparent); } .nxdl.warn { color: var(--warn); background: color-mix(in srgb, var(--warn) 15%, transparent); } .nxdl.crit { color: var(--crit); background: color-mix(in srgb, var(--crit) 15%, transparent); }
+.nxk .sub { font-size: 12px; color: var(--ink-3); padding-right: 64px; }
+.nxk .kring { top: 80px; bottom: auto; }
+.nxsp { position: relative; margin: 6px -14px 0; height: 44px; border-top: 1px dashed var(--line); padding-top: 14px; }
+.nxsp svg { width: 100%; height: 28px; display: block; } .nxsp i { position: absolute; width: 6px; height: 6px; border-radius: 50%; margin-top: 14px; background: var(--c); }
+.nxsp span { position: absolute; left: 14px; top: 2px; font-size: 10px; color: var(--ink-3); }
+.nxc2 { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 14px; }
+.nxc2b { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 14px; }
+.nxsvg { width: 100%; height: auto; display: block; overflow: visible; }
+.nxsvg .gl { stroke: var(--line); } .nxsvg .ax { fill: var(--ink-3); font: 11px var(--f-body); } .nxsvg .vl { fill: var(--ink); font: 600 11.5px var(--f-body); }
+.nxsvg .now { stroke: var(--warn); stroke-width: 1.5; } .nxsvg .nowt { fill: var(--warn); font: 700 11px var(--f-body); }
+.nxsvg .ln { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; } .nxsvg .lnd { fill: var(--ink); stroke: var(--surface); stroke-width: 2; }
+.nxsvg .gh { fill: none; stroke: var(--ink-3); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.nxsvg .m80 { stroke: var(--warn); stroke-dasharray: 5 4; stroke-width: 1.3; } .nxsvg .m8 { fill: var(--warn); font-weight: 600; }
+.nxsvg .lb1 { fill: var(--ink); font: 600 11.5px var(--f-body); } .nxsvg .lb2 { fill: var(--ink-3); font: 11px var(--f-body); }
+.nxlg { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--ink-2); } .nxlg span { display: inline-flex; align-items: center; gap: 6px; } .nxlg i { width: 10px; height: 10px; border-radius: 2px; }
+.nxlg i.l { width: 16px; height: 2px; background: var(--ink); border-radius: 0; } .nxlg i.g { width: 16px; height: 0; border-top: 1.5px dashed var(--ink-3); border-radius: 0; } .nxlg i.m { width: 16px; height: 0; border-top: 1.5px dashed var(--warn); border-radius: 0; }
+.nxsb { display: flex; height: 12px; border-radius: 6px; overflow: hidden; gap: 2px; background: var(--sunken); }
+.nxsl { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--ink-2); } .nxsl span { display: inline-flex; gap: 6px; align-items: center; } .nxsl i { width: 9px; height: 9px; border-radius: 50%; } .nxsl b { color: var(--ink); }
+.nxul { list-style: none; margin: 0; padding: 0; display: grid; }
+.nxul li { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 9px 0; border-top: 1px solid var(--line); }
+.nxul li[data-open] { cursor: pointer; } .nxul li[data-open]:hover { background: color-mix(in srgb, var(--ink) 3%, transparent); }
+.nxul li b { display: block; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .nxul li small { display: block; font-size: 12px; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nxav { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; font: 700 11px var(--f-display); letter-spacing: .04em; color: var(--ink-2); background: color-mix(in srgb, var(--c) 22%, var(--surface-2)); }
+.nxcd { font: 600 12px var(--f-mono); padding: 5px 9px; border-radius: 12px; white-space: nowrap; color: var(--ink-2); background: color-mix(in srgb, var(--ink-3) 15%, transparent); }
+.nxcd.crit { color: var(--crit); background: color-mix(in srgb, var(--crit) 15%, transparent); } .nxcd.warn { color: var(--warn); background: color-mix(in srgb, var(--warn) 15%, transparent); }
+.nxmais { justify-self: start; font-size: 12.5px; font-weight: 600; color: var(--info); background: none; border: 0; padding: 0; cursor: pointer; } .nxmais:hover { text-decoration: underline; }
+.nxtb { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.nxtb th { text-align: left; font: 600 11px/1.2 var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); padding: 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.nxtb td { padding: 7px 6px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.nxtb tbody tr[data-go] { cursor: pointer; } .nxtb tbody tr[data-go]:hover td { background: color-mix(in srgb, var(--ink) 3%, transparent); }
+.nxtb .n { text-align: right; } .nxtb td.crit { color: var(--crit); font-weight: 600; } .nxtb tfoot td { font-weight: 600; border-bottom: 0; border-top: 1px solid var(--line-2); }
+.nxtb .rw { display: flex; align-items: center; gap: 8px; } .nxtb .rw .nxav { flex: none; }
+.nxtb .tsp { position: relative; width: 70px; height: 22px; } .nxtb .tsp svg { width: 70px; height: 22px; display: block; } .nxtb .tsp i { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--c); }
+.nxpp { display: grid; grid-template-columns: minmax(24px, 1fr) 36px; gap: 8px; align-items: center; } .nxpp span { height: 8px; border-radius: 4px; background: var(--sunken); border: 1px solid var(--line); overflow: hidden; } .nxpp i { display: block; height: 100%; background: var(--c); }
+.nxpp em { font: 600 12.5px var(--f-mono); font-style: normal; color: var(--ink-2); text-align: right; }
+.nxmore { border: 1px solid var(--line); border-radius: var(--r); padding: 10px 14px; background: var(--surface); }
+.nxmore summary { cursor: pointer; font-weight: 600; font-size: 13px; color: var(--ink-2); } .nxmore[open] summary { margin-bottom: 12px; }
+@media (max-width: 1280px) { .nxks { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 980px) { .nxbar { grid-template-columns: minmax(0, 1fr); } .nxseg { grid-auto-columns: minmax(0, 1fr); } .nxbar .rindn { grid-template-columns: 48px minmax(0, 1fr) 48px; } .nxh { display: none; }
+  .nxins { grid-template-columns: minmax(0, 1fr); } .nxins ul { grid-template-columns: minmax(0, 1fr); gap: 8px; } .nxins li { border-left: 0; padding-left: 0; }
+  .nxks { grid-template-columns: repeat(2, minmax(0, 1fr)); } .nxk:last-child:nth-child(odd) { grid-column: 1 / -1; } .nxc2, .nxc2b { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 560px) { .nxtb th:nth-child(3), .nxtb td:nth-child(3), .nxtb th:nth-child(5), .nxtb td:nth-child(5) { display: none; } }
 /* v78 etapa 3: tabela compacta da lista do RIR (mesmas colunas em todas as linhas) */
 .ritb { border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--surface); margin-bottom: 18px; }
 .rirw { display: grid; grid-template-columns: 128px 84px minmax(0, 1fr) 84px 150px 140px 132px; column-gap: 14px; align-items: center; min-height: 58px; padding: 6px 14px; border-top: 1px solid var(--line); }
@@ -5745,7 +5811,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 100; window.CQ_V = APP_V;
+    const APP_V = 101; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7798,25 +7864,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     main.innerHTML = `<div class="view">${head('Painel de indicadores', `Dados ao vivo do banco da Qualidade, calculados em ${fD(t)}. Clique num número ou numa barra para abrir a lista.`, '<button class="btn" type="button" data-act="tv-on" title="Para a TV: o Painel ocupa a tela toda e rola sozinho">⛶ Tela cheia (rolando)</button>')}
       ${ehPainelHTML()}
       ${gerPainelHTML()}
-      <section class="sec">${band('RNC', 'Indicadores de NCF')}<div class="block"><div class="body">
-        <div class="kpis sm">
-          ${kpiHTML({ l: 'Total', v: NF.format(M.rnc.length), c: MOD.RNC.c, go: goR({}) })}
-          ${kpiHTML({ l: 'Em andamento', v: NF.format(st('Em Andamento')), c: MOD.RNC.c, pct: [st('Em Andamento'), M.rnc.length, 'do total', ''], go: goR({ status: ['Em Andamento'] }) })}
-          ${kpiHTML({ l: 'Pendentes', v: NF.format(st('Pendente')), sub: 'após o prazo de disposição', c: MOD.RNC.c, pct: [st('Pendente'), M.rnc.length, 'do total', 'warn'], cls: st('Pendente') ? 'warn' : '', go: goR({ status: ['Pendente'] }) })}
-          ${kpiHTML({ l: 'Atrasadas', v: NF.format(st('Atrasado')), sub: 'após o prazo final', c: MOD.RNC.c, pct: [st('Atrasado'), M.rnc.length, 'do total', 'crit'], cls: st('Atrasado') ? 'crit' : '', go: goR({ status: ['Atrasado'] }) })}
-          ${kpiHTML({ l: 'Concluídas', v: NF.format(st('Concluida')), c: MOD.RNC.c, pct: [st('Concluida'), M.rnc.length, 'do total', 'ok'], go: goR({ status: ['Concluida'] }) })}
-          ${kpiHTML({ l: 'Canceladas', v: NF.format(st('Cancelada')), c: MOD.RNC.c, pct: [st('Cancelada'), M.rnc.length, 'do total', ''], go: goR({ status: ['Cancelada'] }) })}
-          ${kpiHTML({ l: 'Tempo médio de fechamento', v: NF1.format(tm), sub: 'dias corridos', c: MOD.RNC.c })}
-          ${kpiHTML({ l: 'Reincidências', v: NF.format(M.rnc.filter((x) => x.reinc === 'Sim').length), sub: 'mesmo fornecedor e motivo', c: MOD.RNC.c, pct: [M.rnc.filter((x) => x.reinc === 'Sim').length, M.rnc.length, 'do total', ''], go: goR({ reinc: 'Sim' }) })}
-        </div>
-        <div class="charts">
-          ${chartHTML('NCF abertas por mês', colsHTML(ser(M.rnc, mb12), MOD.RNC.c), 'últimos 12 meses')}
-          ${chartHTML('NCF por motivo', barsHTML(countBy(M.rnc, (x) => x.motivo).map((i) => ({ ...i, go: goR({ motivo: i.label }) })), MOD.RNC.c, { max: 10 }))}
-          ${chartHTML('Fornecedores com mais NCF', barsHTML(countBy(M.rnc, (x) => x.forn).map((i) => ({ ...i, go: goR({ forn: i.label }) })), MOD.RNC.c, { max: 10 }), 'top 10')}
-          ${chartHTML('Fornecedores com reincidência', barsHTML(countBy(M.rnc.filter((x) => x.reinc === 'Sim'), (x) => x.forn).map((i) => ({ ...i, go: goR({ forn: i.label, reinc: 'Sim' }) })), MOD.RNC.c, { max: 10 }), 'top 10')}
-          ${chartHTML('NCF por comprador', barsHTML(countBy(M.rnc, (x) => x.comprador).map((i) => ({ ...i, go: goR({ comprador: i.label }) })), MOD.RNC.c, { max: 12 }))}
-          ${chartHTML('NCF por filial', barsHTML(countBy(M.rnc, (x) => x.filial).map((i) => ({ ...i, go: goR({ filial: i.label }) })), MOD.RNC.c))}
-        </div></div></div></section>
+      ${ncfPainelHTML()}
       ${rnccPainel(M, mb12, ser)}
       <section class="sec">${band('AV', 'Indicadores de lotes (AV)')}<div class="block"><div class="body">
         <div class="kpis sm">
@@ -7996,7 +8044,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     }
   }
   /* troca só o bloco (o resto do Painel não é refeito a cada ação da equipe) */
-  function ehAtualiza() { const el = document.getElementById('eh-sec'); if (el && S.view === 'painel') el.outerHTML = ehPainelHTML(); }
+  function ehAtualiza() { const el = document.getElementById('eh-sec'); if (el && S.view === 'painel') el.outerHTML = ehPainelHTML(); if (NX.rnc.m === 'd') nxAtualiza('rnc'); }
   window.__CQ_EH = EH; /* consulta nos testes */
   setInterval(() => { if (S.view === 'painel' && !EH.dia) { if (EH.ouvindo && EH.ouvindo !== ehHoje()) ehCarrega(); ehAtualiza(); } }, 60000);   /* "há X min" e a virada do dia */
   function ehNav(k) {
@@ -8207,6 +8255,289 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         ${chartHTML('Itens inspecionados por mês', colsHTML(porMes, MOD.RIF.c), 'últimos 6 meses')}
         ${chartHTML('Pedidos por etapa', barsHTML(RF_ETAPAS.map(([k, l]) => ({ label: l, value: et(k) })), MOD.RIF.c))}
       </div></div></div></section>`;
+  }
+  /* ================= v101: INDICADORES NO VISUAL NOVO (aprovado) — NCF =================
+     Barra Dia | Mês | Trimestre | 12 meses + setas + filtro; resumo automático; 5 cartões com variação, anel e minigráfico;
+     gráfico principal em degradê neon; prazos de agora; tabela por fornecedor; Pareto dos motivos.
+     As peças (nxCols, nxSpark, nxKpi, nxIns, nxTab…) servem para os próximos módulos. */
+  const NX = { rnc: { m: 'm', ref: null, f: '' } };
+  const MES3 = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+  const nxIni = (n) => { const p = String(n || '').replace(/[^A-Za-zÀ-ÿ0-9 ]/g, ' ').trim().split(/\s+/).filter(Boolean); return (p.length > 1 ? p[0][0] + p[1][0] : (p[0] || '—').slice(0, 2)).toUpperCase(); };
+  const nxFim = (y, m) => E.serialFromYMD(m === 12 ? y + 1 : y, m === 12 ? 1 : m + 1, 1) - 1;
+  const nxMes = (y, m) => ({ a: E.serialFromYMD(y, m, 1), b: nxFim(y, m) });
+  /* período escolhido: a..b (b nunca passa de hoje), período anterior comparável, histórico para os minigráficos e as colunas do gráfico */
+  function nxPer(st) {
+    const hoje = S.today, o = E.ymd(hoje), hol = (S.model || {}).hol || new Set();
+    if (st.m === 'd') {
+      const d = st.ref == null ? hoje : Math.min(st.ref, hoje), ant = [];
+      for (let t = d - 1; ant.length < 20 && t > d - 70; t--) if (riUtil(t, hol)) ant.push(t);
+      return { m: 'd', a: d, b: d, cur: d === hoje, fim: d >= hoje, label: `${['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'][E.dow(d)]}, ${E.fmtDate(d)}`, ant, cmp: 'vs média', spl: 'últimos 6 dias úteis',
+        hist: ant.slice(0, 5).reverse().concat([d]).map((t) => ({ a: t, b: t })) };
+    }
+    if (st.m === 'm' || st.m === 'a') {
+      const [y, m] = st.ref ? st.ref.split('-').map(Number) : [o.y, o.m], idx = y * 12 + m - 1, ym = (k) => ({ y: Math.floor(k / 12), m: (k % 12) + 1 });
+      if (st.m === 'm') {
+        const P = nxMes(y, m), b = Math.min(P.b, hoje), cur = hoje >= P.a && hoje <= P.b, q = ym(idx - 1), Q = nxMes(q.y, q.m);
+        const hist = []; for (let k = idx - 5; k <= idx; k++) { const r = ym(k), R = nxMes(r.y, r.m); hist.push({ a: R.a, b: Math.min(R.b, hoje) }); }
+        return { m: 'm', a: P.a, b, bFull: P.b, cur, fim: cur, label: `${MESES_L[m - 1]} ${y}`, prev: { a: Q.a, b: cur ? Math.min(Q.a + (b - P.a), Q.b) : Q.b }, cmp: 'vs ' + MES3[q.m - 1], cmpL: MESES_L[q.m - 1], spl: '6 meses', hist };
+      }
+      const r0 = ym(idx - 11), a = E.serialFromYMD(r0.y, r0.m, 1), bF = nxFim(y, m), b = Math.min(bF, hoje), cur = hoje >= a && hoje <= bF, p0 = ym(idx - 23);
+      const hist = []; for (let k = idx - 11; k <= idx; k++) { const r = ym(k), R = nxMes(r.y, r.m); hist.push({ a: R.a, b: Math.min(R.b, hoje), l: MES3[r.m - 1] + (r.m === 1 ? '/' + String(r.y).slice(2) : '') }); }
+      return { m: 'a', a, b, bFull: bF, cur, fim: cur, label: `${MES3[r0.m - 1]}/${String(r0.y).slice(2)} – ${MES3[m - 1]}/${String(y).slice(2)}`, prev: { a: E.serialFromYMD(p0.y, p0.m, 1), b: a - 1 }, cmp: 'vs 12 m antes', cmpL: 'os 12 meses anteriores', spl: '12 meses', hist };
+    }
+    /* trimestre */
+    const [y, q] = st.ref ? st.ref.split('-').map(Number) : [o.y, Math.floor((o.m - 1) / 3) + 1], qi = y * 4 + q - 1, yq = (k) => ({ y: Math.floor(k / 4), q: (k % 4) + 1 });
+    const QR = (r) => ({ a: E.serialFromYMD(r.y, r.q * 3 - 2, 1), b: nxFim(r.y, r.q * 3) });
+    const P = QR({ y, q }), b = Math.min(P.b, hoje), cur = hoje >= P.a && hoje <= P.b, pq = yq(qi - 1), PQ = QR(pq);
+    const hist = []; for (let k = qi - 5; k <= qi; k++) { const R = QR(yq(k)); hist.push({ a: R.a, b: Math.min(R.b, hoje) }); }
+    return { m: 't', a: P.a, b, bFull: P.b, cur, fim: cur, label: `${q}º tri ${y} (${MES3[q * 3 - 3]}–${MES3[q * 3 - 1]})`, prev: { a: PQ.a, b: cur ? Math.min(PQ.a + (b - P.a), PQ.b) : PQ.b }, cmp: `vs ${pq.q}º tri`, cmpL: `o ${pq.q}º trimestre`, spl: '6 trimestres', hist };
+  }
+  function nxNav(st, k) {
+    const hoje = S.today, o = E.ymd(hoje), hol = (S.model || {}).hol || new Set(), n = Number(k);
+    if (st.m === 'd') { let d = st.ref == null ? hoje : st.ref; do { d += n; } while (!riUtil(d, hol) && d > hoje - 4000 && d < hoje); st.ref = d >= hoje ? null : d; return; }
+    if (st.m === 't') { const [y, q] = st.ref ? st.ref.split('-').map(Number) : [o.y, Math.floor((o.m - 1) / 3) + 1], t = y * 4 + q - 1 + n, cq = o.y * 4 + Math.floor((o.m - 1) / 3); if (t > cq) return; st.ref = t === cq ? null : Math.floor(t / 4) + '-' + ((t % 4) + 1); return; }
+    const [y, m] = st.ref ? st.ref.split('-').map(Number) : [o.y, o.m], t = y * 12 + m - 1 + n, ct = o.y * 12 + o.m - 1; if (t > ct) return;
+    st.ref = t === ct ? null : Math.floor(t / 12) + '-' + String((t % 12) + 1).padStart(2, '0');
+  }
+  /* variação: [texto, tom]; bom = 'desce' (menos é melhor) ou 'sobe' */
+  function nxDl(cur, ant, P, bom, fmt) {
+    if (cur == null || ant == null || isNaN(ant)) return null;
+    const f = fmt || ((v) => NF1.format(Math.round(v * 10) / 10)), d = Math.round((cur - ant) * 10) / 10;
+    if (!d) return ['= ' + P.cmp.replace(/^vs /, ''), ''];
+    const melhor = bom === 'desce' ? d < 0 : d > 0;
+    return [`${d > 0 ? '▲' : '▼'} ${f(Math.abs(d))} ${P.cmp}`, melhor ? 'ok' : 'warn'];
+  }
+  function nxSpark(vals, w = 150, h = 28) {
+    const V = vals.map((v) => (v == null || isNaN(v) ? 0 : v)); if (V.length < 2) return '';
+    const mx = Math.max(...V), mn0 = Math.min(...V), mn = mn0 - (mx - mn0 || 1) * 0.35, n = V.length;
+    const P = V.map((v, i) => [2 + i * (w - 4) / (n - 1), h - 3 - (v - mn) / ((mx - mn) || 1) * (h - 8)]);
+    const d = 'M' + P.map((p) => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L'), [x, y] = P[n - 1];
+    return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="${d} L${x.toFixed(1)} ${h} L${P[0][0].toFixed(1)} ${h}Z" style="fill:var(--c)" fill-opacity=".2"/><path d="${d}" fill="none" style="stroke:var(--c)" stroke-width="1.6" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg><i style="left:calc(${(x / w * 100).toFixed(1)}% - 3px);top:${(y - 3).toFixed(1)}px"></i>`;
+  }
+  function nxKpi(k, P) {
+    const tag = k.go ? 'button' : 'div', go = k.go ? ` type="button" data-go="${esc(JSON.stringify(k.go))}"` : '';
+    const dl = k.dl ? `<span class="nxdl ${k.dl[1]}">${esc(k.dl[0])}</span>` : '';
+    return `<${tag} class="nxk ${k.cls || ''}"${go}><span class="lbl">${esc(k.l)}</span><div class="vr"><b class="val">${k.v}</b>${dl}</div><span class="sub">${esc(k.sub || '')}</span>${k.pct ? pctRing(k.pct) : ''}<div class="nxsp">${k.serie ? nxSpark(k.serie) : ''}<span>${esc(P.spl)}</span></div></${tag}>`;
+  }
+  const nxIns = (L, titulo) => `<div class="nxins"><div class="ehinsh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 6.2L21 9l-5 4.3L17.5 20 12 16.6 6.5 20 8 13.3 3 9l6.6-.8z"/></svg><b>${esc(titulo)}</b><small>gerado pela Central</small></div><ul>${L.map(([t, h]) => `<li class="${t}"><i></i><span>${h}</span></li>`).join('')}</ul></div>`;
+  /* colunas empilhadas em degradê neon (id = prefixo único do gráfico) */
+  function nxCols(id, cols, series, ymax, o = {}) {
+    const w = 640, h = o.h || 220, L = 30, R = 12, T = 16, B = 24, n = cols.length, iw = w - L - R, ih = h - T - B, bw = iw / n * 0.56, rot = n > 24 ? 2 : 1;
+    const out = [`<defs><filter id="${id}-glw" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`
+      + series.map((s, j) => `<linearGradient id="${id}-g${j}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" style="stop-color:${s.cor};stop-opacity:.88"/><stop offset="1" style="stop-color:${s.cor};stop-opacity:.16"/></linearGradient>`).join('') + '</defs>'];
+    for (let k = 0; k <= 4; k++) { const y = T + ih - ih * k / 4; out.push(`<line x1="${L}" x2="${w - R}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" class="gl"/>` + ((ymax * k) % 4 === 0 ? `<text x="${L - 6}" y="${(y + 4).toFixed(1)}" class="ax" text-anchor="end">${NF.format(ymax * k / 4)}</text>` : '')); }
+    const tots = cols.map((_, i) => series.reduce((sm, s) => sm + (s.v[i] || 0), 0)), mxT = Math.max(...tots);
+    for (let i = 0; i < n; i++) {
+      const x = L + iw * (i + 0.5) / n - bw / 2; let acc = 0, k = 0;
+      series.forEach((s, j) => {
+        const v = s.v[i] || 0; if (!v) return;
+        let y0 = T + ih - ih * acc / ymax; const y1 = T + ih - ih * (acc + v) / ymax; acc += v; if (k) y0 -= 2; k++;
+        out.push(`<rect x="${x.toFixed(1)}" y="${y1.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(1, y0 - y1).toFixed(1)}" rx="2" fill="url(#${id}-g${j})"><title>${esc((o.tip ? o.tip[i] : cols[i]) + ' · ' + s.nome + ': ' + NF.format(v))}</title></rect>`
+          + `<line x1="${(x + 1).toFixed(1)}" x2="${(x + bw - 1).toFixed(1)}" y1="${(y1 + 1).toFixed(1)}" y2="${(y1 + 1).toFixed(1)}" style="stroke:${s.cor}" stroke-width="2.4" stroke-linecap="round" filter="url(#${id}-glw)"/>`);
+      });
+      if (tots[i] && (n <= 24 || tots[i] === mxT || i % 2 === 0)) out.push(`<text x="${(x + bw / 2).toFixed(1)}" y="${(T + ih - ih * tots[i] / ymax - 7).toFixed(1)}" class="vl" text-anchor="middle">${NF.format(tots[i])}</text>`);
+      if (i % rot === 0) out.push(`<text x="${(x + bw / 2).toFixed(1)}" y="${h - 6}" class="ax" text-anchor="middle">${esc(cols[i])}</text>`);
+    }
+    if (o.agora != null) { const xa = L + iw * (o.agora + 0.5) / n; out.push(`<line x1="${xa.toFixed(1)}" x2="${xa.toFixed(1)}" y1="${T - 4}" y2="${T + ih}" class="now"/><text x="${(xa + 4).toFixed(1)}" y="${T + 6}" class="nowt">${esc(o.agoraT || 'hoje')}</text>`); }
+    return `<div class="nxlg">${series.map((s) => `<span><i style="background:${s.cor}"></i>${esc(s.nome)}</span>`).join('')}</div><svg class="nxsvg" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(o.aria || 'gráfico')}">${out.join('')}</svg>`;
+  }
+  const nxTeto = (v) => (v <= 4 ? 4 : v <= 8 ? 8 : Math.ceil(v / 4) * 4);
+  /* linha acumulada × média (um eixo só) */
+  function nxLinhas(id, cols, acum, media, cor, rot) {
+    const w = 640, h = 110, L = 30, R = 12, T = 12, B = 22, n = cols.length, iw = w - L - R, ih = h - T - B, mx = nxTeto(Math.max(1, ...acum.filter((v) => v != null), ...media));
+    const o = [`<defs><filter id="${id}-gl2" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="${id}-ar" x1="0" x2="0" y1="0" y2="1"><stop offset="0" style="stop-color:${cor};stop-opacity:.35"/><stop offset="1" style="stop-color:${cor};stop-opacity:0"/></linearGradient></defs>`];
+    for (let k = 0; k <= 2; k++) { const y = T + ih - ih * k / 2; o.push(`<line x1="${L}" x2="${w - R}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" class="gl"/><text x="${L - 6}" y="${(y + 4).toFixed(1)}" class="ax" text-anchor="end">${NF.format(mx * k / 2)}</text>`); }
+    const Pt = (v, i) => [L + iw * (i + 0.5) / n, T + ih - ih * v / mx];
+    const pm = media.map(Pt), pa = acum.map((v, i) => (v == null ? null : Pt(v, i))).filter(Boolean);
+    o.push(`<path d="M${pm.map((p) => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L')}" class="gh"/>`);
+    if (pa.length) {
+      const d = 'M' + pa.map((p) => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L'), u = pa[pa.length - 1];
+      o.push(`<path d="${d} L${u[0].toFixed(1)} ${T + ih} L${pa[0][0].toFixed(1)} ${T + ih}Z" fill="url(#${id}-ar)"/><path d="${d}" fill="none" style="stroke:${cor}" stroke-width="2.2" stroke-linejoin="round" filter="url(#${id}-gl2)"/><circle cx="${u[0].toFixed(1)}" cy="${u[1].toFixed(1)}" r="4" style="fill:${cor}" stroke="var(--surface)" stroke-width="2"/>`
+        + `<text x="${(u[0] > w - 110 ? u[0] - 8 : u[0] + 8).toFixed(1)}" y="${(u[1] - 6).toFixed(1)}" class="lb1"${u[0] > w - 110 ? ' text-anchor="end"' : ''}>${NF.format(acum.filter((v) => v != null).pop())} até agora</text>`);
+    }
+    o.push(`<text x="${(pm[pm.length - 1][0] - 4).toFixed(1)}" y="${(pm[pm.length - 1][1] - 6).toFixed(1)}" class="lb2" text-anchor="end">média do dia: ${NF1.format(media[media.length - 1])}</text>`);
+    cols.forEach((c, i) => { if (i % (rot || 1) === 0) o.push(`<text x="${(L + iw * (i + 0.5) / n).toFixed(1)}" y="${h - 5}" class="ax" text-anchor="middle">${esc(c)}</text>`); });
+    return `<svg class="nxsvg" viewBox="0 0 ${w} ${h}" role="img" aria-label="Acumulado do dia e média">${o.join('')}</svg>`;
+  }
+  function nxPareto(id, itens, cor) {
+    if (!itens.length) return '<div class="empty">Sem NCF no período.</div>';
+    const w = 640, h = 230, L = 30, R = 40, T = 16, B = 44, n = itens.length, iw = w - L - R, ih = h - T - B, tot = itens.reduce((s, x) => s + x[1], 0), ym = nxTeto(itens[0][1]), bw = iw / n * 0.6;
+    const o = [`<defs><filter id="${id}-glw" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="${id}-g0" x1="0" x2="0" y1="0" y2="1"><stop offset="0" style="stop-color:${cor};stop-opacity:.88"/><stop offset="1" style="stop-color:${cor};stop-opacity:.16"/></linearGradient><linearGradient id="${id}-g1" x1="0" x2="0" y1="0" y2="1"><stop offset="0" style="stop-color:var(--n-geral);stop-opacity:.8"/><stop offset="1" style="stop-color:var(--n-geral);stop-opacity:.14"/></linearGradient></defs>`];
+    for (let k = 0; k <= 4; k++) { const y = T + ih - ih * k / 4; o.push(`<line x1="${L}" x2="${w - R}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" class="gl"/>${(ym * k) % 4 === 0 ? `<text x="${L - 6}" y="${(y + 4).toFixed(1)}" class="ax" text-anchor="end">${ym * k / 4}</text>` : ''}<text x="${w - R + 6}" y="${(y + 4).toFixed(1)}" class="ax">${25 * k}%</text>`); }
+    const y80 = T + ih - ih * 0.8; o.push(`<line x1="${L}" x2="${w - R}" y1="${y80.toFixed(1)}" y2="${y80.toFixed(1)}" class="m80"/><text x="${w - R - 4}" y="${(y80 - 5).toFixed(1)}" class="ax m8" text-anchor="end">80%</text>`);
+    let acc = 0; const pts = [];
+    itens.forEach(([lab, v], i) => {
+      const x = L + iw * (i + 0.5) / n - bw / 2, hh = ih * v / ym, dentro = acc / tot < 0.8;
+      o.push(`<rect x="${x.toFixed(1)}" y="${(T + ih - hh).toFixed(1)}" width="${bw.toFixed(1)}" height="${hh.toFixed(1)}" rx="2" fill="url(#${id}-g${dentro ? 0 : 1})"><title>${esc(lab + ': ' + v)}</title></rect><line x1="${(x + 1).toFixed(1)}" x2="${(x + bw - 1).toFixed(1)}" y1="${(T + ih - hh + 1).toFixed(1)}" y2="${(T + ih - hh + 1).toFixed(1)}" style="stroke:${dentro ? cor : 'var(--n-geral)'}" stroke-width="2.4" stroke-linecap="round" filter="url(#${id}-glw)"/>`
+        + `<text x="${(x + bw / 2).toFixed(1)}" y="${(T + ih - hh - 7).toFixed(1)}" class="vl" text-anchor="middle">${v}</text><text x="${(x + bw / 2).toFixed(1)}" y="${h - 26}" class="ax" text-anchor="middle">${esc(lab.length > 14 ? lab.slice(0, 13) + '…' : lab)}</text>`);
+      acc += v; pts.push([x + bw / 2, T + ih - ih * acc / tot]);
+    });
+    o.push(`<path d="M${pts.map((p) => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L')}" class="ln"/>${pts.map((p) => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" class="lnd"/>`).join('')}`);
+    return `<div class="nxlg"><span><i style="background:${cor}"></i>quantidade</span><span><i class="l"></i>% acumulado</span><span><i class="m"></i>80% dos casos</span></div><svg class="nxsvg" viewBox="0 0 ${w} ${h}" role="img" aria-label="Pareto">${o.join('')}</svg>`;
+  }
+  /* barra do período (o Dia só aparece para quem vê o Histórico: ele usa as ações gravadas no dia) */
+  function nxBarra(mod, st, P, filtro, dia) {
+    const segs = (dia ? [['d', 'Dia']] : []).concat([['m', 'Mês'], ['t', 'Trimestre'], ['a', '12 meses']]);
+    const ant = { d: 'Dia útil anterior', m: 'Mês anterior', t: 'Trimestre anterior', a: '12 meses anteriores' }[P.m], prox = { d: 'Próximo dia útil', m: 'Próximo mês', t: 'Próximo trimestre', a: '12 meses seguintes' }[P.m];
+    return `<div class="nxbar"><div class="nxseg" role="group" aria-label="Período">${segs.map(([k, l]) => `<button type="button" data-act="nx-p" data-key="${mod}|${k}" aria-pressed="${st.m === k}">${l}</button>`).join('')}</div>
+      <div class="rindn"><button type="button" class="btn" data-act="nx-nav" data-key="${mod}|-1" aria-label="${ant}">‹</button><b>${esc(P.label)}</b><button type="button" class="btn" data-act="nx-nav" data-key="${mod}|1" aria-label="${prox}" ${P.fim ? 'disabled' : ''}>›</button></div>
+      <span class="nxh">${P.m === 'd' ? (P.cur ? '<span class="ehlive"><i></i>ao vivo</span>hoje · atualiza sozinho' : `<button type="button" class="nxmais" data-act="nx-nav" data-key="${mod}|0">voltar para hoje</button>`) : `comparando com ${esc(P.cmpL)}${P.cur ? ' até o mesmo dia' : ''}`}</span>${filtro}</div>`;
+  }
+  function nxTab(cab, linhas, tot) {
+    const th = cab.map((c, i) => `<th${i && i < cab.length - 2 ? ' class="n"' : ''}>${esc(c)}</th>`).join('');
+    const tr = (r) => `<tr${r.go ? ` data-go="${esc(JSON.stringify(r.go))}"` : ''}><td><div class="rw"><span class="nxav">${esc(r.av)}</span><span>${esc(r.nome)}</span></div></td>${r.nums.map((x) => `<td class="n${x && x.crit ? ' crit' : ''}">${x && typeof x === 'object' ? x.v : x}</td>`).join('')}<td><div class="tsp">${nxSpark(r.tend, 70, 22)}</div></td><td><div class="nxpp"><span><i style="width:${r.pct}%"></i></span><em>${r.pct}%</em></div></td></tr>`;
+    return `<table class="nxtb"><thead><tr>${th}</tr></thead><tbody>${linhas.map(tr).join('')}</tbody>${tot ? `<tfoot><tr><td>Total</td>${tot.map((x) => `<td class="n">${x}</td>`).join('')}<td></td><td></td></tr></tfoot>` : ''}</table>`;
+  }
+  function nxAtualiza(mod) { const el = document.getElementById('nx-' + mod); if (el && S.view === 'painel') el.outerHTML = mod === 'rnc' ? ncfPainelHTML() : ''; }
+  function nxAct(a, key) {
+    const [mod, k] = String(key || '').split('|'), st = NX[mod]; if (!st) return false;
+    if (a === 'nx-p') { if (st.m !== k) { st.m = k; st.ref = null; } nxAtualiza(mod); return true; }
+    if (a === 'nx-nav') { if (k === '0') st.ref = null; else nxNav(st, k); nxAtualiza(mod); return true; }
+    return false;
+  }
+  document.addEventListener('change', (e) => { const t = e.target; if (t && t.id === 'nx-rnc-f') { NX.rnc.f = t.value; nxAtualiza('rnc'); } });
+  /* ações do Histórico de um dia (usa o mesmo cache da Equipe hoje; dias anteriores são lidos uma vez) */
+  function nxLog(d8) {
+    if (EH.docs[d8]) return EH.docs[d8];
+    if (d8 === ehHoje()) { if (EH.ouvindo !== d8) { const salva = EH.dia; EH.dia = null; ehCarrega(); EH.dia = salva; } return EH.docs[d8]; }
+    if (!EH.lendo[d8]) { EH.lendo[d8] = true; DB.db.doc('log/' + d8).get().then((snap) => { ehGuarda(d8, snap); }).catch(() => { EH.docs[d8] = []; }).then(() => { EH.lendo[d8] = false; nxAtualiza('rnc'); }); }
+    return undefined;
+  }
+  const nxD8 = (serial) => { const o = E.ymd(serial); return `${o.y}-${String(o.m).padStart(2, '0')}-${String(o.d).padStart(2, '0')}`; };
+  const nxHoraLog = (x) => new Date(x.at).getHours();
+  const nxConclLog = (x) => (x.campos && x.campos.conclusao && x.campos.conclusao[1] != null) || /concluíd/i.test(x.label || '');
+
+  function ncfPainelHTML() {
+    const M = S.model; if (!M || !vis('rnc')) return '';
+    const st = NX.rnc, dia = viewOk('historico'); if (st.m === 'd' && !dia) st.m = 'm';
+    const P = nxPer(st), fk = st.f, hoje = S.today, now = E.nowSerial ? E.nowSerial() : hoje;
+    const TODOS = M.rnc.filter((x) => x.status !== 'Cancelada' && x.data != null);
+    const R = fk ? TODOS.filter((x) => E.key(x.forn || '') === fk) : TODOS;
+    const fl = Math.floor, dentro = (v, a, b) => v != null && fl(v) >= a && fl(v) <= b;
+    const ab = (a, b) => R.filter((x) => dentro(x.data, a, b)), cc = (a, b) => R.filter((x) => dentro(x.conclusao, a, b));
+    const lotes = (a, b) => M.av.filter((x) => dentro(x.data, a, b) && (!fk || E.key(x.forn || '') === fk)).length;
+    const atrEm = (t) => R.filter((x) => fl(x.data) <= t && (x.conclusao == null || fl(x.conclusao) > t) && x.prazoFinal != null && t >= x.prazoFinal).length;
+    const media = (L) => (L.length ? L.reduce((s, v) => s + v, 0) / L.length : null);
+    const tFech = (a, b) => media(cc(a, b).map((x) => x.diasFechamento).filter((v) => v != null));
+    const fornOpc = new Map(); TODOS.forEach((x) => { const k = E.key(x.forn || ''); if (k && !fornOpc.has(k)) fornOpc.set(k, String(x.forn).trim()); });
+    const filtro = `<select id="nx-rnc-f" class="inp" aria-label="Fornecedor"><option value="">Fornecedor: todos</option>${Array.from(fornOpc).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR')).map(([k, n]) => `<option value="${esc(k)}"${k === fk ? ' selected' : ''}>${esc(n)}</option>`).join('')}</select>`;
+    const sec = (corpo) => `<section class="sec nxsec" id="nx-rnc" style="--c:var(--n-rnc)">${band('RNC', 'Indicadores de NCF')}<div class="block"><div class="body">${nxBarra('rnc', st, P, filtro, dia)}${corpo}</div></div></section>`;
+    const C = 'var(--n-rnc)', ROXO = 'var(--n-roxo)', OURO = 'var(--n-ouro)', VERM = 'var(--n-rnc)';
+    const goR = (f) => ({ v: 'rnc', f: Object.assign(fk ? { forn: fornOpc.get(fk) } : {}, f || {}) });
+    const abertasAgora = R.filter((x) => x.aberta);
+    const atrAgora = abertasAgora.filter((x) => x.status === 'Atrasado');
+    /* prazos de agora (lado direito no Mês/Trimestre/12 meses) */
+    const prox = (x) => (x.status === 'Em Andamento' && x.dispDue != null ? x.dispDue : x.prazoFinal != null ? x.prazoFinal + (EXP().fim != null ? EXP().fim / 24 : 1) : null);
+    const v24 = abertasAgora.filter((x) => x.status !== 'Atrasado' && prox(x) != null && prox(x) - now <= 1);
+    const urgL = atrAgora.slice().sort((a, b) => (a.prazoFinal || 0) - (b.prazoFinal || 0)).concat(abertasAgora.filter((x) => x.status !== 'Atrasado' && prox(x) != null).sort((a, b) => prox(a) - prox(b))).slice(0, 4);
+    const chip = (x) => {
+      if (x.status === 'Atrasado') { const d = hoje - x.prazoFinal; return [d <= 0 ? 'atrasada hoje' : `atrasada ${d} d`, 'crit']; }
+      const p = prox(x), hh = (p - now) * 24; if (hh <= 0) return ['vence agora', 'warn'];
+      if (hh < 24 && fl(p) === hoje) return [`vence em ${Math.max(1, Math.round(hh))} h`, 'warn'];
+      if (fl(p) === hoje + 1) return ['vence amanhã', 'warn'];
+      return [`vence em ${fl(p) - hoje} d`, ''];
+    };
+    const urgH = (max) => { const nP = abertasAgora.length - atrAgora.length - v24.length, segs = [['No prazo', nP, OURO], ['Vence em 24 h', v24.length, ROXO], ['Atrasada', atrAgora.length, VERM]];
+      return `<div class="chart"><h3>Prazos das NCF abertas<small>agora</small></h3>${abertasAgora.length ? `<div class="nxsb">${segs.filter((s) => s[1]).map((s) => `<span style="flex:${s[1]};background:${s[2]}" title="${esc(s[0] + ': ' + s[1])}"></span>`).join('')}</div>` : ''}<div class="nxsl">${segs.map((s) => `<span><i style="background:${s[2]}"></i>${s[0]} <b>${s[1]}</b></span>`).join('')}</div>
+        ${urgL.length ? `<ul class="nxul">${urgL.slice(0, max || 4).map((x) => { const [t, c] = chip(x); return `<li data-open="RNC:${esc(x.key)}" tabindex="0"><span class="nxav">${esc(nxIni(x.forn))}</span><div><b>${esc(x.num)} · ${esc(String(x.forn || 'sem fornecedor').split(/\s+/).slice(0, 3).join(' '))}</b><small>${esc([x.motivo, x.emissor || x.comprador].filter(Boolean).join(' · '))}</small></div><span class="nxcd ${c}">${esc(t)}</span></li>`; }).join('')}</ul>` : okSeal('Nenhuma NCF aberta', '')}
+        ${abertasAgora.length ? `<button type="button" class="nxmais" data-go="${esc(JSON.stringify(goR({ status: ['Em Andamento', 'Pendente', 'Atrasado'] })))}">Ver as ${NF.format(abertasAgora.length)} abertas →</button>` : ''}</div>`; };
+
+    /* ---------------- DIA ---------------- */
+    if (P.m === 'd') {
+      const d = P.a, d8 = nxD8(d), LG = nxLog(d8), logs = P.ant.map((t) => nxLog(nxD8(t)));
+      const pronto = LG && logs.every(Boolean);
+      const soRNC = (L) => (L || []).filter((x) => x.mod === 'RNC' && (!fk || true));
+      const X = soRNC(LG), aDia = ab(d, d), cDia = cc(d, d);
+      const mAb = media(P.ant.map((t) => ab(t, t).length)), mCc = media(P.ant.map((t) => cc(t, t).length)), mAc = pronto ? media(logs.map((L) => soRNC(L).length)) : null;
+      const venc = R.filter((x) => fl(x.data) <= d && (x.conclusao == null || fl(x.conclusao) > d) && (x.prazoFinal === d || (x.status === 'Em Andamento' && x.dispDue != null && fl(x.dispDue) === d)));
+      const atrD = P.cur ? atrAgora.length : atrEm(d);
+      const hist6 = P.hist.map((h) => h.a);
+      const ks = [
+        { l: P.cur ? 'Abertas hoje' : 'Abertas no dia', v: NF.format(aDia.length), sub: 'NCF registradas no dia', dl: nxDl(aDia.length, mAb, P, 'desce'), serie: hist6.map((t) => ab(t, t).length), pct: aDia.length ? [aDia.filter((x) => x.conclusao != null).length, aDia.length, 'já concluída(s)', 'ok'] : null, go: goR({ de: E.isoDate(d), ate: E.isoDate(d) }) },
+        { l: P.cur ? 'Concluídas hoje' : 'Concluídas no dia', v: NF.format(cDia.length), sub: 'fechadas no dia', dl: nxDl(cDia.length, mCc, P, 'sobe'), serie: hist6.map((t) => cc(t, t).length), pct: cDia.length + abertasAgora.length ? [cDia.length, cDia.length + abertasAgora.length, 'do que estava aberto', 'ok'] : null, cls: cDia.length ? 'ok' : '' },
+        { l: 'Ações no dia', v: LG ? NF.format(X.length) : '…', sub: 'disposições, respostas, e-mails, fotos', dl: LG && mAc != null ? nxDl(X.length, mAc, P, 'sobe') : null, serie: pronto ? P.ant.slice(0, 5).reverse().map((t) => soRNC(EH.docs[nxD8(t)]).length).concat([X.length]) : null, pct: LG && mAc ? [X.length, Math.max(X.length, Math.round(mAc)), 'da média do dia', 'ok'] : null },
+        { l: P.cur ? 'Vencem hoje' : 'Venciam no dia', v: NF.format(venc.length), sub: 'prazo de disposição ou final', serie: hist6.map((t) => R.filter((x) => x.prazoFinal === t).length), pct: venc.length && abertasAgora.length ? [venc.length, abertasAgora.length, 'das abertas', 'warn'] : null, cls: venc.length ? 'warn' : '' },
+        { l: P.cur ? 'Atrasadas · agora' : 'Atrasadas no dia', v: NF.format(atrD), sub: 'passaram do prazo final', dl: P.cur ? nxDl(atrD, atrEm(P.ant[0]), Object.assign({}, P, { cmp: 'vs ontem' }), 'desce', NF.format) : null, serie: hist6.map((t) => (t === hoje ? atrAgora.length : atrEm(t))), pct: atrD && abertasAgora.length ? [atrD, Math.max(atrD, abertasAgora.length), 'das abertas', 'crit'] : null, cls: atrD ? 'crit' : '', go: goR({ status: ['Atrasado'] }) }
+      ];
+      /* pessoas e horas */
+      const pes = new Map(); X.forEach((x) => { const k = x.by || '—'; const p = pes.get(k) || { k, nome: who(x.by), L: [] }; p.L.push(x); pes.set(k, p); });
+      const PS = Array.from(pes.values()).sort((a, b) => b.L[0].at - a.L[0].at);
+      const hs = X.map(nxHoraLog), h0 = Math.min(7, ...hs), h1 = Math.max(17, ...hs), horas = []; for (let h = h0; h <= h1; h++) horas.push(h);
+      const porH = (f) => horas.map((h) => X.filter((x) => nxHoraLog(x) === h && f(x)).length);
+      const sA = porH((x) => x.act === 'novo'), sC = porH((x) => x.act !== 'novo' && nxConclLog(x)), sO = porH((x) => x.act !== 'novo' && !nxConclLog(x));
+      const agoraH = P.cur ? (new Date().getHours() - h0) + new Date().getMinutes() / 60 - 0.5 : null;
+      let ac = 0; const acum = horas.map((h, i) => { ac += sA[i] + sC[i] + sO[i]; return P.cur && h > new Date().getHours() ? null : ac; });
+      const mediaH = pronto ? horas.map((h) => media(logs.map((L) => soRNC(L).filter((x) => nxHoraLog(x) <= h).length))) : null;
+      const graf = `<div class="chart"><h3>Movimento por hora<small>${P.cur ? 'hoje até agora' : esc(P.label)}</small></h3>${LG ? (X.length ? nxCols('nxr-h', horas.map((h) => h + 'h'), [{ nome: 'Aberturas', cor: VERM, v: sA }, { nome: 'Outras ações', cor: ROXO, v: sO }, { nome: 'Conclusões', cor: OURO, v: sC }], nxTeto(Math.max(...horas.map((_, i) => sA[i] + sO[i] + sC[i])))
+        , { agora: agoraH != null && agoraH >= -0.5 && agoraH <= horas.length - 0.5 ? agoraH : null, agoraT: 'agora', aria: 'NCF: movimento por hora' })
+        + (mediaH && !Math.max(...mediaH) ? '<p class="muted" style="margin:0;font-size:12px">Sem ações em NCF nos 20 dias úteis anteriores para comparar com a média.</p>' : mediaH ? `<h4 class="nxh4" style="margin:4px 0 0;font:500 12px var(--f-body);color:var(--ink-2)">Acumulado do dia × média dos últimos 20 dias úteis</h4>${nxLinhas('nxr-l', horas.map((h) => h + 'h'), acum, mediaH, VERM)}` : '<p class="muted" style="margin:0;font-size:12px">Carregando a média dos últimos 20 dias úteis…</p>')
+        : `<div class="empty">Nenhuma ação em NCF ${P.cur ? 'hoje ainda' : 'neste dia'}.</div>`) : '<div class="loading"><span class="spin"></span><span>Carregando o dia…</span></div>'}</div>`;
+      const onP = (p) => P.cur && Date.now() - p.L[0].at < 15 * 60000;
+      const agoraHTML = `<div class="chart"><h3>${P.cur ? 'Agora' : 'Quem mexeu'}<small>${P.cur ? 'quem está mexendo em NCF · verde = nos últimos 15 min' : 'em NCF neste dia'}</small></h3>${PS.length ? `<ul class="nxul">${PS.slice(0, 6).map((p) => `<li><span class="ehav st${onP(p) ? ' on' : ''}">${esc(ehIni(p.nome))}</span><div><b>${esc(p.nome)}</b><small>${esc((EH_VERBO[p.L[0].act] || 'alterou') + ' · ' + (p.L[0].label || ''))}</small></div><div style="display:grid;justify-items:end;gap:2px"><em style="font:600 12px var(--f-mono);font-style:normal;color:var(--ink-2)">${P.cur ? ehHa(p.L[0].at) : hhmm(p.L[0].at)}</em><small style="font-size:11px;color:var(--ink-3)">${p.L.length} ${p.L.length === 1 ? 'ação' : 'ações'}</small></div></li>`).join('')}</ul>` : '<div class="empty">Ninguém mexeu em NCF.</div>'}</div>`;
+      const tl = `<div class="chart ehtlc"><h3>Linha do tempo do dia<small>${NF.format(X.length)} ${X.length === 1 ? 'ação' : 'ações'} em NCF · a mais nova em cima</small></h3><ul class="ehtl">${X.slice(0, 150).map((x) => `<li title="${esc(hhmm(x.at) + ' · ' + who(x.by) + ' ' + (EH_VERBO[x.act] || 'alterou') + ' · ' + (x.label || ''))}"><time>${hhmm(x.at)}</time><span class="ehav">${esc(ehIni(who(x.by)))}</span><div class="ehtx"><b>${esc(who(x.by).split(' ')[0])}</b> ${ehTxt(x)}</div><span class="ehmc" style="--m:var(--n-rnc)">NCF</span></li>`).join('')}</ul><button type="button" class="nxmais" data-go='${esc(JSON.stringify({ v: 'historico' }))}'>Abrir no Histórico →</button></div>`;
+      const tot = X.length || 1;
+      const tab = PS.length ? nxTab(['Pessoa', 'Abriu', 'Concluiu', 'Ações', 'Ritmo', 'Parte'], PS.map((p) => ({ av: ehIni(p.nome), nome: p.nome, nums: [p.L.filter((x) => x.act === 'novo').length, p.L.filter((x) => x.act !== 'novo' && nxConclLog(x)).length, p.L.length], tend: horas.map((h) => p.L.filter((x) => nxHoraLog(x) === h).length), pct: Math.round(p.L.length / tot * 100) })), [sA.reduce((s, v) => s + v, 0), sC.reduce((s, v) => s + v, 0), X.length]) : '<div class="empty">Sem ações em NCF neste dia.</div>';
+      const temMedia = mAc != null && mAc > 0;
+      const i1 = LG ? (X.length ? [temMedia && X.length >= mAc ? 'ok' : 'info', `<b>${!temMedia ? 'Movimento do dia' : X.length >= mAc ? 'Dia movimentado' : 'Dia mais calmo'}:</b> ${NF.format(X.length)} ${X.length === 1 ? 'ação' : 'ações'} em NCF${P.cur ? ' até as ' + new Date().getHours() + 'h' : ''}${temMedia ? ` — a média do dia inteiro é ${NF1.format(mAc)}` : ''}.`] : ['info', `<b>Nenhuma ação em NCF</b> ${P.cur ? 'hoje ainda' : 'neste dia'}.`]) : ['info', 'Carregando as ações do dia…'];
+      const u = PS[0];
+      const i2 = u ? ['info', `<b>${esc(u.nome.split(' ')[0])}</b> ${P.cur ? (onP(u) ? 'está com' : 'mexeu por último em') : 'mexeu por último em'} <b>${esc(String(u.L[0].label || '').split(' · ')[0])}</b> (${P.cur ? ehHa(u.L[0].at) : hhmm(u.L[0].at)}).`] : ['info', `<b>${NF.format(aDia.length)} NCF aberta(s)</b> e ${NF.format(cDia.length)} concluída(s) no dia.`];
+      const v0 = venc.slice().sort((a, b) => (prox(a) || 0) - (prox(b) || 0))[0];
+      const i3 = v0 ? ['warn', `<b>${venc.length === 1 ? '1 NCF vence' : venc.length + ' NCF vencem'} ${P.cur ? 'hoje' : 'neste dia'}:</b> ${esc(v0.num)} · ${esc(String(v0.forn || '').split(/\s+/).slice(0, 2).join(' '))}${v0.emissor ? ', com ' + esc(v0.emissor.split(' ')[0]) : ''}.`] : atrD ? ['crit', `<b>${atrD === 1 ? '1 NCF atrasada' : atrD + ' NCF atrasadas'}</b> ${P.cur ? 'agora' : 'no dia'}.`] : ['ok', `<b>Nada vencendo</b> ${P.cur ? 'hoje' : 'neste dia'} e nenhuma atrasada.`];
+      return sec(nxIns([i1, i2, i3], 'Resumo do dia') + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}<div style="display:grid;gap:14px;align-content:start">${agoraHTML}${P.cur ? urgH(3) : ''}</div></div><div class="nxc2b ehc2">${tl}<div class="chart"><h3>Por pessoa<small>${esc(P.label)}</small></h3>${tab}</div></div>`);
+    }
+
+    /* ---------------- MÊS / TRIMESTRE / 12 MESES ---------------- */
+    const A = ab(P.a, P.b), Ap = ab(P.prev.a, P.prev.b), L1 = lotes(P.a, P.b), Lp = lotes(P.prev.a, P.prev.b);
+    const por100 = (n, l) => (l ? n / l * 100 : null), r100 = por100(A.length, L1), r100p = por100(Ap.length, Lp);
+    const Cn = cc(P.a, P.b), noPrazo = Cn.filter((x) => x.prazoFinal != null && fl(x.conclusao) <= x.prazoFinal).length;
+    const tf = tFech(P.a, P.b), tfp = tFech(P.prev.a, P.prev.b);
+    const rein = A.filter((x) => x.reinc === 'Sim').length, reinP = Ap.filter((x) => x.reinc === 'Sim').length;
+    const fimP = P.cur ? hoje : P.b, atrP = P.cur ? atrAgora.length : atrEm(P.b), atrAnt = atrEm(P.prev.b);
+    const H = P.hist, serie = (f) => H.map((h) => f(h.a, h.b));
+    const quando = { m: 'no mês', t: 'no trimestre', a: 'em 12 meses' }[P.m];
+    const ks = [
+      { l: 'NCF ' + quando, v: NF.format(A.length), sub: `abertas · ${esc(P.label)}`, dl: nxDl(A.length, Ap.length, P, 'desce', NF.format), serie: serie((a, b) => ab(a, b).length), pct: A.length ? [A.filter((x) => x.status === 'Concluida').length, A.length, 'concluídas', 'ok'] : null, go: goR({ de: E.isoDate(P.a), ate: E.isoDate(P.b) }) },
+      { l: 'NCF por 100 lotes', v: r100 == null ? '—' : NF1.format(Math.round(r100 * 10) / 10), sub: `${NF.format(A.length)} NCF em ${NF.format(L1)} lote(s)`, dl: r100 != null && r100p != null ? nxDl(r100, r100p, P, 'desce') : null, serie: serie((a, b) => por100(ab(a, b).length, lotes(a, b)) || 0) },
+      { l: P.cur ? 'Atrasadas · agora' : 'Atrasadas no fim', v: NF.format(atrP), sub: 'passaram do prazo final', dl: nxDl(atrP, atrAnt, P, 'desce', NF.format), serie: H.map((h) => (h.b >= hoje ? atrAgora.length : atrEm(h.b))), pct: atrP && (P.cur ? abertasAgora.length : 0) ? [atrP, abertasAgora.length, 'das abertas', 'crit'] : null, cls: atrP ? 'crit' : '', go: goR({ status: ['Atrasado'] }) },
+      { l: 'Tempo de fechamento', v: tf == null ? '—' : NF1.format(Math.round(tf * 10) / 10) + ' d', sub: 'média em dias corridos', dl: tf != null && tfp != null ? nxDl(tf, tfp, P, 'desce', (v) => NF1.format(v) + ' d') : null, serie: serie((a, b) => tFech(a, b) || 0), pct: Cn.length ? [noPrazo, Cn.length, 'no prazo', noPrazo / Cn.length >= 0.8 ? 'ok' : 'warn'] : null },
+      { l: 'Reincidências', v: NF.format(rein), sub: 'mesmo fornecedor e motivo', dl: nxDl(rein, reinP, P, 'desce', NF.format), serie: serie((a, b) => ab(a, b).filter((x) => x.reinc === 'Sim').length), pct: A.length && rein ? [rein, A.length, 'das NCF', 'warn'] : null, cls: rein ? 'warn' : '', go: goR({ reinc: 'Sim' }) }
+    ];
+    /* gráfico principal: NCF abertas por dia (Mês), por semana (Trimestre) ou por mês (12 meses), pela situação de agora */
+    let cols = [], tips = [], rng = [];
+    if (P.m === 'm') { const hol = M.hol; for (let t = P.a; t <= P.bFull; t++) if (riUtil(t, hol) || ab(t, t).length) { cols.push(String(E.ymd(t).d)); tips.push(E.fmtDate(t)); rng.push([t, t]); } }
+    else if (P.m === 't') { let t = P.a; while (E.dow(t) !== 1 && t > P.a - 7) t--; for (; t <= P.bFull; t += 7) { const a = Math.max(t, P.a), b = Math.min(t + 6, P.bFull); const o = E.ymd(a); cols.push(`${String(o.d).padStart(2, '0')}/${String(o.m).padStart(2, '0')}`); tips.push('semana de ' + E.fmtDate(a) + ' a ' + E.fmtDate(b)); rng.push([a, b]); } }
+    else H.forEach((h) => { cols.push(h.l); tips.push(h.l); rng.push([h.a, h.b]); });
+    const sit = (f) => rng.map(([a, b]) => ab(a, b).filter(f).length);
+    const sAtr = sit((x) => x.status === 'Atrasado'), sAnd = sit((x) => x.status === 'Em Andamento' || x.status === 'Pendente'), sCon = sit((x) => x.status === 'Concluida');
+    const ix = rng.findIndex(([a, b]) => hoje >= a && hoje <= b);
+    const tituloG = { m: 'NCF abertas por dia útil', t: 'NCF abertas por semana', a: 'NCF abertas por mês' }[P.m];
+    const graf = `<div class="chart"><h3>${tituloG}<small>${esc(P.label)} · cor = situação de agora</small></h3>${nxCols('nxr-p', cols, [{ nome: 'Atrasada', cor: VERM, v: sAtr }, { nome: 'Em andamento', cor: ROXO, v: sAnd }, { nome: 'Concluída', cor: OURO, v: sCon }], nxTeto(Math.max(1, ...cols.map((_, i) => sAtr[i] + sAnd[i] + sCon[i]))), { agora: P.cur && ix >= 0 && P.m !== 'a' ? ix + 0.5 : null, tip: tips, aria: tituloG })}</div>`;
+    /* por fornecedor */
+    const gf = new Map(); A.forEach((x) => { const k = E.key(x.forn || '') || '—'; const g = gf.get(k) || { k, nome: String(x.forn || '(sem fornecedor)').trim(), n: 0 }; g.n++; gf.set(k, g); });
+    const GF = Array.from(gf.values()).sort((a, b) => b.n - a.n || a.nome.localeCompare(b.nome, 'pt-BR')).slice(0, 6), totA = A.length || 1;
+    const lotF = (k, a, b) => M.av.filter((x) => dentro(x.data, a, b) && E.key(x.forn || '') === k).length;
+    const tabF = GF.length ? nxTab(['Fornecedor', 'NCF', 'Lotes', '/100 lotes', 'Tendência', 'Parte'], GF.map((g) => { const l = lotF(g.k, P.a, P.b), r = l ? g.n / l * 100 : null;
+      return { av: nxIni(g.nome), nome: g.nome, go: { v: 'rnc', f: { forn: g.nome } }, nums: [g.n, l, { v: r == null ? '—' : NF1.format(Math.round(r * 10) / 10), crit: r != null && r100 != null && r > r100 * 1.5 && g.n > 1 }], tend: H.map((h) => R.filter((x) => E.key(x.forn || '') === g.k && dentro(x.data, h.a, h.b)).length), pct: Math.round(g.n / totA * 100) }; }),
+      [NF.format(A.length), NF.format(L1), r100 == null ? '—' : NF1.format(Math.round(r100 * 10) / 10)]) : '<div class="empty">Sem NCF no período.</div>';
+    /* Pareto dos motivos: 12 meses até o fim do período (no Trimestre e nos 12 meses, o próprio período) */
+    const pa = P.m === 'm' ? P.b - 364 : P.a, PM = new Map(); ab(pa, P.b).forEach((x) => { const k = x.motivo || '(sem motivo)'; PM.set(k, (PM.get(k) || 0) + 1); });
+    let PL = Array.from(PM.entries()).sort((a, b) => b[1] - a[1]); if (PL.length > 7) { const r = PL.slice(6).reduce((s, x) => s + x[1], 0); PL = PL.slice(0, 6).concat([['Outros', r]]); }
+    const par = `<div class="chart"><h3>Pareto dos motivos<small>${P.m === 'm' ? '12 meses até ' + esc(E.fmtDate(P.b)) : esc(P.label)} · os primeiros somam 80% dos casos</small></h3>${nxPareto('nxr-pa', PL, C)}</div>`;
+    /* resumo automático */
+    const mot = (L) => { const m = new Map(); L.forEach((x) => m.set(x.motivo || '(sem motivo)', (m.get(x.motivo || '(sem motivo)') || 0) + 1)); return Array.from(m.entries()).sort((a, b) => b[1] - a[1])[0]; };
+    const dif = A.length - Ap.length;
+    const i1 = [dif > 0 ? 'warn' : 'ok', `<b>${dif > 0 ? 'Mais' : dif < 0 ? 'Menos' : 'Mesmo número de'} NCF que em ${esc(P.cmpL)}:</b> ${NF.format(A.length)}${P.cur ? ' até hoje' : ''}, contra ${NF.format(Ap.length)}${P.cur ? ' no mesmo período' : ''}.`];
+    const velha = atrAgora.slice().sort((a, b) => (a.prazoFinal || 0) - (b.prazoFinal || 0))[0];
+    const i2 = atrAgora.length ? ['crit', `<b>${atrAgora.length === 1 ? '1 NCF atrasada' : atrAgora.length + ' NCF atrasadas'} agora</b> — a mais antiga é da <b>${esc(String(velha.forn || 'sem fornecedor').split(/\s+/).slice(0, 2).join(' '))}</b>, há ${NF.format(Math.max(0, hoje - velha.prazoFinal))} dia(s) do prazo final.`] : ['ok', '<b>Nenhuma NCF atrasada</b> agora.'];
+    const m1 = mot(A), m0 = mot(Ap), pm = (m, L) => (m && L.length ? Math.round(L.filter((x) => (x.motivo || '(sem motivo)') === m[0]).length / L.length * 100) : 0);
+    const i3 = m1 ? ['info', `<b>${esc(m1[0])}</b> responde por ${pm(m1, A)}% das NCF ${quando}${Ap.length ? `; em ${esc(P.cmpL)} era ${pm(m1, Ap)}%` : ''}.`] : ['info', `Nenhuma NCF ${quando}.`];
+    /* gráficos de antes (comprador, filial, reincidência), no período, recolhidos */
+    const mais = `<details class="nxmore"><summary>Mais gráficos de NCF (comprador, filial, reincidência por fornecedor) · ${esc(P.label)}</summary><div class="charts">
+      ${chartHTML('NCF por comprador', barsHTML(countBy(A, (x) => x.comprador).map((i) => ({ ...i, go: goR({ comprador: i.label }) })), MOD.RNC.c, { max: 12 }))}
+      ${chartHTML('NCF por filial', barsHTML(countBy(A, (x) => x.filial).map((i) => ({ ...i, go: goR({ filial: i.label }) })), MOD.RNC.c))}
+      ${chartHTML('Fornecedores com reincidência', barsHTML(countBy(A.filter((x) => x.reinc === 'Sim'), (x) => x.forn).map((i) => ({ ...i, go: goR({ forn: i.label, reinc: 'Sim' }) })), MOD.RNC.c, { max: 10 }), 'top 10')}</div></details>`;
+    void fimP;
+    return sec(nxIns([i1, i2, i3], { m: 'Resumo do mês', t: 'Resumo do trimestre', a: 'Resumo dos 12 meses' }[P.m]) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b">${`<div class="chart"><h3>Por fornecedor<small>${esc(P.label)}</small></h3>${tabF}</div>`}${par}</div>${mais}`);
   }
   /* visão do processo: o caminho do lote nos últimos 12 meses, do recebimento à NCF resolvida */
   function procPainelHTML() {
@@ -21362,6 +21693,7 @@ ${trGuil(W, H, M, B)}
       if (a && a.startsWith('tr-') && trAct(a, key)) return;
       if (a && a.startsWith('rt-') && rtAct(a, key, act)) return;
       if (a && a.startsWith('eh-') && ehAct(a, key)) return;   /* v99: Equipe hoje no Painel */
+      if (a && a.startsWith('nx-') && nxAct(a, key)) return;   /* v101: indicadores no visual novo */
       if (a && a.startsWith('eq-') && eqAct(a, key)) return;
       if (a === 'bk-dl') { const f = (VY.files || [])[+key]; if (f) saveFile(f[0], f[1]); return; }
       if (a === 'rnc-apagar') { rncApagar(key); return; }
