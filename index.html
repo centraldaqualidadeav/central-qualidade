@@ -328,6 +328,9 @@ button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 .nxpp em { font: 600 12.5px var(--f-mono); font-style: normal; color: var(--ink-2); text-align: right; }
 .nxsec .chart { container-type: inline-size; min-width: 0; }
 @container (max-width: 500px) { .nxtb .nxsc { display: none; } .nxtb th, .nxtb td { padding-left: 4px; padding-right: 4px; } }   /* v102: quadro estreito: sai a tendência, nada fica para fora */
+.nxhbs { display: grid; gap: 9px; } .nxhb { display: grid; grid-template-columns: minmax(110px, 40%) 1fr 58px; gap: 10px; align-items: center; font-size: 12.5px; border-radius: 4px; }
+.nxhb.click { cursor: pointer; } .nxhb.click:hover { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+.nxhb .hl { color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .nxhb .ht svg { display: block; width: 100%; height: 14px; } .nxhb b { text-align: right; font-variant-numeric: tabular-nums; }
 .nxmore { border: 1px solid var(--line); border-radius: var(--r); padding: 10px 14px; background: var(--surface); }
 .nxmore summary { cursor: pointer; font-weight: 600; font-size: 13px; color: var(--ink-2); } .nxmore[open] summary { margin-bottom: 12px; }
 @media (max-width: 1280px) { .nxks { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
@@ -5813,7 +5816,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 102; window.CQ_V = APP_V;
+    const APP_V = 103; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7842,39 +7845,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const mesAt = { de: E.isoDate(m0), ate: E.isoDate(m1 - 1) }, mesAn = { de: E.isoDate(p0), ate: E.isoDate(p1 - 1) };
     main.innerHTML = `<div class="view">${head('Painel de indicadores', `Dados ao vivo do banco da Qualidade, calculados em ${fD(t)}. Clique num número ou numa barra para abrir a lista.`, '<button class="btn" type="button" data-act="tv-on" title="Para a TV: o Painel ocupa a tela toda e rola sozinho">⛶ Tela cheia (rolando)</button>')}
       ${ehPainelHTML()}
-      ${gerPainelHTML()}
+      ${'' /* v103: os cartões-resumo por módulo (gerPainelHTML) saíram: cada módulo tem agora o próprio bloco no visual novo */}
       ${ncfPainelHTML()}
       ${nccPainelHTML()}
-      <section class="sec">${band('AV', 'Indicadores de lotes (AV)')}<div class="block"><div class="body">
-        <div class="kpis sm">
-          ${kpiHTML({ l: 'Total de lotes', v: NF.format(M.av.length), sub: NF.format(nNotas(M.av)) + ' notas fiscais', c: MOD.AV.c, go: { v: 'av', f: {} } })}
-          ${kpiHTML({ l: 'Lotes no mês atual', v: NF.format(avMes.length), c: MOD.AV.c, go: { v: 'av', f: mesAt } })}
-          ${kpiHTML({ l: 'Notas fiscais no mês', v: NF.format(nNotas(avMes)), sub: `${NF.format(avMes.length)} lotes · mês anterior: ${NF.format(nNotas(M.av.filter((x) => inRange(x.data, p0, p1))))} notas`, c: MOD.AV.c, go: { v: 'av', f: mesAt } })}
-          ${kpiHTML({ l: 'Lotes sem certificado', v: NF.format(semCertAV), sub: 'certificado "*" ou vazio', c: MOD.AV.c, pct: [semCertAV, M.av.length, 'do total', 'warn'], go: { v: 'av', f: { cert: 'sem' } } })}
-          ${kpiHTML({ l: 'Com certificado', v: (M.av.length ? NF1.format((1 - semCertAV / M.av.length) * 100) : '0') + '%', c: MOD.AV.c })}
-          ${kpiHTML({ l: 'Com retrabalho', v: NF.format(M.av.filter((x) => E.low(avRet(x)) === 'sim').length), c: MOD.AV.c, pct: [M.av.filter((x) => E.low(avRet(x)) === 'sim').length, M.av.length, 'do total', ''], go: { v: 'av', f: { retrab: 'SIM' } } })}
-          ${kpiHTML({ l: 'Aprovação na inspeção', v: insp.n ? NF1.format(insp.ok / insp.n * 100) + '%' : '—', sub: insp.n ? `${NF.format(insp.rep)} reprovado(s)${concL.length ? ' (' + NF.format(concL.length) + ' sob concessão)' : ''} de ${NF.format(insp.n)} inspecionados` : 'sem resultado registrado', c: MOD.AV.c, cls: insp.rep ? 'warn' : '', go: insp.rep ? { v: 'av', f: { insp: 'Reprovado' } } : null })}
-          ${concL.length ? kpiHTML({ l: 'Liberados sob concessão', v: NF.format(concL.length), sub: `${NF.format(concMes.length)} no mês atual · reprovados usados com autorização`, c: MOD.AV.c, pct: [concL.length, insp.rep, 'dos reprovados', 'warn'], cls: 'warn', go: { v: 'av', f: { insp: CONC } } }) : ''}
-        </div>
-        <div class="charts">
-          <div class="chart"><h3>${S.avSerie === 'notas' ? 'Notas fiscais recebidas por mês' : 'Lotes recebidos por mês'}<small>últimos 12 meses</small><span class="seg mini" role="group" aria-label="Mostrar"><button type="button" data-act="av-serie" data-key="lotes" aria-pressed="${S.avSerie !== 'notas'}">Lotes</button><button type="button" data-act="av-serie" data-key="notas" aria-pressed="${S.avSerie === 'notas'}">Notas</button></span></h3>${colsHTML(S.avSerie === 'notas' ? mb12.map((m) => ({ label: m.label, tip: MESES_L[m.m - 1] + ' ' + m.y + ' · notas', value: nNotas(M.av.filter((x) => inRange(x.data, m.start, m.end))) })) : ser(M.av, mb12), MOD.AV.c)}</div>
-          ${chartHTML('Top 10 fornecedores', barsHTML(countBy(M.av, (x) => x.forn).map((i) => ({ ...i, go: { v: 'av', f: { forn: i.label } } })), MOD.AV.c, { max: 10 }), 'nº de lotes')}
-          ${chartHTML('Lotes por quem lançou', barsHTML(countBy(M.av, avQuemLancou), MOD.AV.c, { max: 10 }))}
-          ${chartHTML('Lotes por filial', barsHTML(countBy(M.av, (x) => x.filial).map((i) => ({ ...i, go: { v: 'av', f: { filial: i.label } } })), MOD.AV.c))}
-          ${chartHTML('Aprovação na inspeção por fornecedor', aprovForn.length ? barsHTML(aprovForn, MOD.AV.c, { suf: '%' }) : '<div class="empty">Ainda não há lotes com resultado de inspeção.</div>', 'piores primeiro · fornecedores com 3 ou mais lotes inspecionados')}
-        </div></div></div></section>
-      <section class="sec">${band('SERV', 'Indicadores de serviços')}<div class="block"><div class="body">
-        <div class="kpis sm">
-          ${kpiHTML({ l: 'Total de serviços', v: NF.format(M.serv.length), c: MOD.SERV.c, go: { v: 'serv', f: {} } })}
-          ${kpiHTML({ l: 'No mês atual', v: NF.format(svMes.length), c: MOD.SERV.c, go: { v: 'serv', f: mesAt } })}
-          ${kpiHTML({ l: 'No mês anterior', v: NF.format(M.serv.filter((x) => inRange(x.data, p0, p1)).length), c: MOD.SERV.c, go: { v: 'serv', f: mesAn } })}
-          ${kpiHTML({ l: 'Sem certificado', v: NF.format(M.serv.filter(semCert).length), sub: 'certificado "*" ou vazio', c: MOD.SERV.c, pct: [M.serv.filter(semCert).length, M.serv.length, 'do total', 'warn'], go: { v: 'serv', f: { cert: 'sem' } } })}
-        </div>
-        <div class="charts">
-          ${chartHTML('Serviços por mês', colsHTML(ser(M.serv, monthsBack(6)), MOD.SERV.c), 'últimos 6 meses')}
-          ${chartHTML('Top 10 tipos de serviço', barsHTML(countBy(M.serv, (x) => x.desc).map((i) => ({ ...i, go: { v: 'serv', f: { desc: i.label } } })), MOD.SERV.c, { max: 10 }))}
-          ${chartHTML('Top 10 fornecedores de serviço', barsHTML(countBy(M.serv, (x) => x.forn).map((i) => ({ ...i, go: { v: 'serv', f: { forn: i.label } } })), MOD.SERV.c, { max: 10 }))}
-        </div></div></div></section>
+      ${avPainelHTML()}
+      ${servPainelHTML()}
       <section class="sec">${band('INS', 'Indicadores de calibração')}<div class="block"><div class="body">
         <div class="kpis sm">
           ${kpiHTML({ l: 'Total de instrumentos', v: NF.format(nParque), sub: insSt('DESCARTADO') ? NF.format(insSt('DESCARTADO')) + ' descartado(s) fora da conta' : '', c: MOD.INS.c, go: goC({}) })}
@@ -8239,7 +8214,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
      Barra Dia | Mês | Trimestre | 12 meses + setas + filtro; resumo automático; 5 cartões com variação, anel e minigráfico;
      gráfico principal em degradê neon; prazos de agora; tabela por fornecedor; Pareto dos motivos.
      As peças (nxCols, nxSpark, nxKpi, nxIns, nxTab…) servem para os próximos módulos. */
-  const NX = { rnc: { m: 'm', ref: null, f: '' }, rncc: { m: 'm', ref: null, f: '' } };
+  const NX = { rnc: { m: 'm', ref: null, f: '' }, rncc: { m: 'm', ref: null, f: '' }, av: { m: 'm', ref: null, f: '' }, serv: { m: 'm', ref: null, f: '' } };
   const MES3 = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
   const nxIni = (n) => { const p = String(n || '').replace(/[^A-Za-zÀ-ÿ0-9 ]/g, ' ').trim().split(/\s+/).filter(Boolean); return (p.length > 1 ? p[0][0] + p[1][0] : (p[0] || '—').slice(0, 2)).toUpperCase(); };
   const nxFim = (y, m) => E.serialFromYMD(m === 12 ? y + 1 : y, m === 12 ? 1 : m + 1, 1) - 1;
@@ -8367,7 +8342,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const tr = (r) => `<tr${r.go ? ` data-go="${esc(JSON.stringify(r.go))}"` : ''}><td><div class="rw"><span class="nxav">${esc(r.av)}</span><span>${esc(r.nome)}</span></div></td>${r.nums.map((x) => `<td class="n${x && x.crit ? ' crit' : ''}">${x && typeof x === 'object' ? x.v : x}</td>`).join('')}<td class="nxsc"><div class="tsp">${nxSpark(r.tend, 70, 22)}</div></td><td><div class="nxpp"><span><i style="width:${r.pct}%"></i></span><em>${r.pct}%</em></div></td></tr>`;
     return `<table class="nxtb"><thead><tr>${th}</tr></thead><tbody>${linhas.map(tr).join('')}</tbody>${tot ? `<tfoot><tr><td>Total</td>${tot.map((x) => `<td class="n">${x}</td>`).join('')}<td class="nxsc"></td><td></td></tr></tfoot>` : ''}</table>`;
   }
-  const NXF = { rnc: () => ncfPainelHTML(), rncc: () => nccPainelHTML() };
+  const NXF = { rnc: () => ncfPainelHTML(), rncc: () => nccPainelHTML(), av: () => avPainelHTML(), serv: () => servPainelHTML() };
   function nxAtualiza(mod) { const el = document.getElementById('nx-' + mod); if (el && S.view === 'painel' && NXF[mod]) el.outerHTML = NXF[mod](); }
   const nxAtualizaDia = () => Object.keys(NX).forEach((m) => { if (NX[m].m === 'd') nxAtualiza(m); });
   function nxAct(a, key) {
@@ -8401,7 +8376,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const venc = c.venc(d);
       const atrD = P.cur ? atrAgora.length : atrEm(d);
       const hist6 = P.hist.map((h) => h.a);
-      const ks = [
+      const ks = c.cards ? c.cards({ d, LG, X, mAc, pronto, hist6, media, atrD }) : [
         { l: P.cur ? 'Abertas hoje' : 'Abertas no dia', v: NF.format(aDia.length), sub: c.sigla + ' registradas no dia', dl: nxDl(aDia.length, mAb, P, 'desce'), serie: hist6.map((t) => ab(t, t).length), pct: aDia.length ? [aDia.filter((x) => x.conclusao != null).length, aDia.length, 'já concluída(s)', 'ok'] : null, go: goR({ de: E.isoDate(d), ate: E.isoDate(d) }) },
         { l: P.cur ? 'Concluídas hoje' : 'Concluídas no dia', v: NF.format(cDia.length), sub: 'fechadas no dia', dl: nxDl(cDia.length, mCc, P, 'sobe'), serie: hist6.map((t) => cc(t, t).length), pct: cDia.length + abertasAgora.length ? [cDia.length, cDia.length + abertasAgora.length, 'do que estava aberto', 'ok'] : null, cls: cDia.length ? 'ok' : '' },
         { l: 'Ações no dia', v: LG ? NF.format(X.length) : '…', sub: 'disposições, respostas, e-mails, fotos', dl: LG && mAc != null ? nxDl(X.length, mAc, P, 'sobe') : null, serie: pronto ? P.ant.slice(0, 5).reverse().map((t) => soRNC(EH.docs[nxD8(t)]).length).concat([X.length]) : null, pct: LG && mAc ? [X.length, Math.max(X.length, Math.round(mAc)), 'da média do dia', 'ok'] : null },
@@ -8417,7 +8392,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const agoraH = P.cur ? (new Date().getHours() - h0) + new Date().getMinutes() / 60 - 0.5 : null;
       let ac = 0; const acum = horas.map((h, i) => { ac += sA[i] + sC[i] + sO[i]; return P.cur && h > new Date().getHours() ? null : ac; });
       const mediaH = pronto ? horas.map((h) => media(logs.map((L) => soRNC(L).filter((x) => nxHoraLog(x) <= h).length))) : null;
-      const graf = `<div class="chart"><h3>Movimento por hora<small>${P.cur ? 'hoje até agora' : esc(P.label)}</small></h3>${LG ? (X.length ? nxCols(c.id + '-h', horas.map((h) => h + 'h'), [{ nome: 'Aberturas', cor: VERM, v: sA }, { nome: 'Outras ações', cor: ROXO, v: sO }, { nome: 'Conclusões', cor: OURO, v: sC }], nxTeto(Math.max(...horas.map((_, i) => sA[i] + sO[i] + sC[i])))
+      const graf = `<div class="chart"><h3>Movimento por hora<small>${P.cur ? 'hoje até agora' : esc(P.label)}</small></h3>${LG ? (X.length ? nxCols(c.id + '-h', horas.map((h) => h + 'h'), [{ nome: (c.ser || [])[0] || 'Aberturas', cor: VERM, v: sA }, { nome: (c.ser || [])[1] || 'Outras ações', cor: ROXO, v: sO }, { nome: (c.ser || [])[2] || 'Conclusões', cor: OURO, v: sC }], nxTeto(Math.max(...horas.map((_, i) => sA[i] + sO[i] + sC[i])))
         , { agora: agoraH != null && agoraH >= -0.5 && agoraH <= horas.length - 0.5 ? agoraH : null, agoraT: 'agora', aria: c.sigla + ': movimento por hora' })
         + (mediaH && !Math.max(...mediaH) ? `<p class="muted" style="margin:0;font-size:12px">Sem ações em ${c.sigla} nos 20 dias úteis anteriores para comparar com a média.</p>` : mediaH ? `<h4 class="nxh4" style="margin:4px 0 0;font:500 12px var(--f-body);color:var(--ink-2)">Acumulado do dia × média dos últimos 20 dias úteis</h4>${nxLinhas(c.id + '-l', horas.map((h) => h + 'h'), acum, mediaH, VERM)}` : '<p class="muted" style="margin:0;font-size:12px">Carregando a média dos últimos 20 dias úteis…</p>')
         : `<div class="empty">Nenhuma ação em ${c.sigla} ${P.cur ? 'hoje ainda' : 'neste dia'}.</div>`) : '<div class="loading"><span class="spin"></span><span>Carregando o dia…</span></div>'}</div>`;
@@ -8425,13 +8400,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const agoraHTML = `<div class="chart"><h3>${P.cur ? 'Agora' : 'Quem mexeu'}<small>${P.cur ? `quem está mexendo em ${c.sigla} · verde = nos últimos 15 min` : `em ${c.sigla} neste dia`}</small></h3>${PS.length ? `<ul class="nxul">${PS.slice(0, 6).map((p) => `<li><span class="ehav st${onP(p) ? ' on' : ''}">${esc(ehIni(p.nome))}</span><div><b>${esc(p.nome)}</b><small>${esc((EH_VERBO[p.L[0].act] || 'alterou') + ' · ' + (p.L[0].label || ''))}</small></div><div style="display:grid;justify-items:end;gap:2px"><em style="font:600 12px var(--f-mono);font-style:normal;color:var(--ink-2)">${P.cur ? ehHa(p.L[0].at) : hhmm(p.L[0].at)}</em><small style="font-size:11px;color:var(--ink-3)">${p.L.length} ${p.L.length === 1 ? 'ação' : 'ações'}</small></div></li>`).join('')}</ul>` : `<div class="empty">Ninguém mexeu em ${c.sigla}.</div>`}</div>`;
       const tl = `<div class="chart ehtlc"><h3>Linha do tempo do dia<small>${NF.format(X.length)} ${X.length === 1 ? 'ação' : 'ações'} em ${c.sigla} · a mais nova em cima</small></h3><ul class="ehtl">${X.slice(0, 150).map((x) => `<li title="${esc(hhmm(x.at) + ' · ' + who(x.by) + ' ' + (EH_VERBO[x.act] || 'alterou') + ' · ' + (x.label || ''))}"><time>${hhmm(x.at)}</time><span class="ehav">${esc(ehIni(who(x.by)))}</span><div class="ehtx"><b>${esc(who(x.by).split(' ')[0])}</b> ${ehTxt(x)}</div><span class="ehmc" style="--m:${c.cor}">${c.sigla}</span></li>`).join('')}</ul><button type="button" class="nxmais" data-go='${esc(JSON.stringify({ v: 'historico' }))}'>Abrir no Histórico →</button></div>`;
       const tot = X.length || 1;
-      const tab = PS.length ? nxTab(['Pessoa', 'Abriu', 'Concluiu', 'Ações', 'Ritmo', 'Parte'], PS.map((p) => ({ av: ehIni(p.nome), nome: p.nome, nums: [p.L.filter((x) => x.act === 'novo').length, p.L.filter((x) => x.act !== 'novo' && nxConclLog(x)).length, p.L.length], tend: horas.map((h) => p.L.filter((x) => nxHoraLog(x) === h).length), pct: Math.round(p.L.length / tot * 100) })), [sA.reduce((s, v) => s + v, 0), sC.reduce((s, v) => s + v, 0), X.length]) : `<div class="empty">Sem ações em ${c.sigla} neste dia.</div>`;
+      const tab = PS.length ? nxTab(c.tabCab || ['Pessoa', 'Abriu', 'Concluiu', 'Ações', 'Ritmo', 'Parte'], PS.map((p) => ({ av: ehIni(p.nome), nome: p.nome, nums: [p.L.filter((x) => x.act === 'novo').length, p.L.filter((x) => x.act !== 'novo' && nxConclLog(x)).length, p.L.length], tend: horas.map((h) => p.L.filter((x) => nxHoraLog(x) === h).length), pct: Math.round(p.L.length / tot * 100) })), [sA.reduce((s, v) => s + v, 0), sC.reduce((s, v) => s + v, 0), X.length]) : `<div class="empty">Sem ações em ${c.sigla} neste dia.</div>`;
       const temMedia = mAc != null && mAc > 0;
       const i1 = LG ? (X.length ? [temMedia && X.length >= mAc ? 'ok' : 'info', `<b>${!temMedia ? 'Movimento do dia' : X.length >= mAc ? 'Dia movimentado' : 'Dia mais calmo'}:</b> ${NF.format(X.length)} ${X.length === 1 ? 'ação' : 'ações'} em ${c.sigla}${P.cur ? ' até as ' + new Date().getHours() + 'h' : ''}${temMedia ? ` — a média do dia inteiro é ${NF1.format(mAc)}` : ''}.`] : ['info', `<b>Nenhuma ação em ${c.sigla}</b> ${P.cur ? 'hoje ainda' : 'neste dia'}.`]) : ['info', 'Carregando as ações do dia…'];
       const u = PS[0];
       const i2 = u ? ['info', `<b>${esc(u.nome.split(' ')[0])}</b> ${P.cur ? (onP(u) ? 'está com' : 'mexeu por último em') : 'mexeu por último em'} <b>${esc(String(u.L[0].label || '').split(' · ')[0])}</b> (${P.cur ? ehHa(u.L[0].at) : hhmm(u.L[0].at)}).`] : ['info', `<b>${NF.format(aDia.length)} NCF aberta(s)</b> e ${NF.format(cDia.length)} concluída(s) no dia.`];
       const v0 = venc.slice().sort((a, b) => (prox(a) || 0) - (prox(b) || 0))[0];
-      const i3 = v0 ? ['warn', `<b>${venc.length === 1 ? '1 ' + c.sigla + ' vence' : venc.length + ' ' + c.sigla + ' vencem'} ${P.cur ? 'hoje' : 'neste dia'}:</b> ${esc(v0.num)} · ${esc(String(c.quem(v0) || '').split(/\s+/).slice(0, 2).join(' '))}${c.resp(v0) ? ', com ' + esc(String(c.resp(v0)).split(' ')[0]) : ''}.`] : atrD ? ['crit', `<b>${atrD === 1 ? '1 ' + c.sigla + ' atrasada' : atrD + ' ' + c.sigla + ' atrasadas'}</b> ${P.cur ? 'agora' : 'no dia'}.`] : ['ok', `<b>Nada vencendo</b> ${P.cur ? 'hoje' : 'neste dia'} e nenhuma atrasada.`];
+      const i3 = c.i3 ? c.i3({ d, atrD }) : v0 ? ['warn', `<b>${venc.length === 1 ? '1 ' + c.sigla + ' vence' : venc.length + ' ' + c.sigla + ' vencem'} ${P.cur ? 'hoje' : 'neste dia'}:</b> ${esc(v0.num)} · ${esc(String(c.quem(v0) || '').split(/\s+/).slice(0, 2).join(' '))}${c.resp(v0) ? ', com ' + esc(String(c.resp(v0)).split(' ')[0]) : ''}.`] : atrD ? ['crit', `<b>${atrD === 1 ? '1 ' + c.sigla + ' atrasada' : atrD + ' ' + c.sigla + ' atrasadas'}</b> ${P.cur ? 'agora' : 'no dia'}.`] : ['ok', `<b>Nada vencendo</b> ${P.cur ? 'hoje' : 'neste dia'} e nenhuma atrasada.`];
       return sec(nxIns([i1, i2, i3], 'Resumo do dia') + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}<div style="display:grid;gap:14px;align-content:start">${agoraHTML}${P.cur ? urgH(3) : ''}</div></div><div class="nxc2b ehc2">${tl}<div class="chart"><h3>Por pessoa<small>${esc(P.label)}</small></h3>${tab}</div></div>`);
   }
   function ncfPainelHTML() {
@@ -8606,6 +8581,148 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${chartHTML('Por origem da causa', barsHTML(countBy(A, (x) => x.origem), MOD.RNCC.c))}
       ${chartHTML('Por gravidade', barsHTML(countBy(A, (x) => x.gravidade), MOD.RNCC.c))}</div></details>`;
     return sec(nxIns([i1, i2, i3], { m: 'Resumo do mês', t: 'Resumo do trimestre', a: 'Resumo dos 12 meses' }[P.m]) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Por cliente<small>${esc(P.label)}</small></h3>${tabC}</div>${par}</div>${mais}`);
+  }
+  /* v103: barras horizontais em degradê neon (rankings) */
+  function nxHbars(id, itens, cor, o = {}) {
+    if (!itens.length) return `<div class="empty">${esc(o.vazio || 'Sem dados no período.')}</div>`;
+    const mx = o.max != null ? o.max : Math.max(...itens.map((x) => x.v)), mn = o.min || 0, W = (v) => Math.max(1.5, Math.min(100, (v - mn) / ((mx - mn) || 1) * 100));
+    return `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="${id}-hg" x1="0" x2="1"><stop offset="0" style="stop-color:${cor};stop-opacity:.12"/><stop offset="1" style="stop-color:${cor};stop-opacity:.85"/></linearGradient></defs></svg>
+      <div class="nxhbs">${itens.map((x) => `<div class="nxhb${x.go ? ' click' : ''}"${x.go ? ` data-go="${esc(JSON.stringify(x.go))}"` : ''} title="${esc(x.tip || x.l)}"><span class="hl">${esc(x.l)}</span><span class="ht"><svg viewBox="0 0 100 14" preserveAspectRatio="none"><rect x="0" y="1" width="${W(x.v).toFixed(1)}" height="12" rx="2" fill="url(#${id}-hg)"/><line x1="${(W(x.v) - 0.6).toFixed(1)}" x2="${(W(x.v) - 0.6).toFixed(1)}" y1="1.5" y2="12.5" style="stroke:${cor}" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg></span><b>${esc(x.t != null ? x.t : NF.format(x.v))}</b></div>`).join('')}</div>`;
+  }
+  /* colunas do período: dias úteis (Mês), semanas (Trimestre) ou meses (12 meses) */
+  function nxRng(P, temDado) {
+    const cols = [], tips = [], rng = [];
+    if (P.m === 'm') { const hol = S.model.hol; for (let t = P.a; t <= P.bFull; t++) if (riUtil(t, hol) || temDado(t, t)) { cols.push(String(E.ymd(t).d)); tips.push(E.fmtDate(t)); rng.push([t, t]); } }
+    else if (P.m === 't') { let t = P.a; while (E.dow(t) !== 1 && t > P.a - 7) t--; for (; t <= P.bFull; t += 7) { const a = Math.max(t, P.a), b = Math.min(t + 6, P.bFull), o = E.ymd(a); cols.push(`${String(o.d).padStart(2, '0')}/${String(o.m).padStart(2, '0')}`); tips.push('semana de ' + E.fmtDate(a) + ' a ' + E.fmtDate(b)); rng.push([a, b]); } }
+    else P.hist.forEach((h) => { cols.push(h.l); tips.push(h.l); rng.push([h.a, h.b]); });
+    const ix = rng.findIndex(([a, b]) => S.today >= a && S.today <= b);
+    return { cols, tips, rng, agora: P.cur && ix >= 0 && P.m !== 'a' ? ix + 0.5 : null };
+  }
+  const nxQuando = (P) => ({ m: 'no mês', t: 'no trimestre', a: 'em 12 meses' }[P.m]);
+  const nxResumoT = (P) => ({ m: 'Resumo do mês', t: 'Resumo do trimestre', a: 'Resumo dos 12 meses' }[P.m]);
+  const nxPct = (n, d) => (d ? NF1.format(Math.round(n / d * 1000) / 10) + '%' : '—');
+
+  /* ================= v103: LOTES (AV) ================= */
+  function avPainelHTML() {
+    const M = S.model; if (!M || !vis('av')) return '';
+    const st = NX.av, dia = viewOk('historico'); if (st.m === 'd' && !dia) st.m = 'm';
+    const P = nxPer(st), fk = st.f, hoje = S.today, fl = Math.floor;
+    const TODOS = M.av.filter((x) => x.data != null), R = fk ? TODOS.filter((x) => E.key(x.forn || '') === fk) : TODOS;
+    const dentro = (v, a, b) => v != null && fl(v) >= a && fl(v) <= b;
+    const res = (x) => E.low(x.insp || ''), apr = (x) => res(x) === 'aprovado', rep = (x) => res(x) === 'reprovado', conc = (x) => res(x) === E.low(CONC), comRes = (x) => apr(x) || rep(x) || conc(x);
+    /* dia em que o lote foi inspecionado (RIR concluído) */
+    const dInsp = new Map(); (rirOn() && RI.ready ? riCards() : []).filter((c) => c.st === 'f' && c.fin).forEach((c) => Object.keys(c.res || {}).forEach((k) => { const d = msSer(c.fin); if (!dInsp.has(k) || d < dInsp.get(k)) dInsp.set(k, d); }));
+    const ab = (a, b) => R.filter((x) => dentro(x.data, a, b)), cc = (a, b) => R.filter((x) => dentro(dInsp.get(x.key), a, b));
+    const fornOpc = new Map(); TODOS.forEach((x) => { const k = E.key(x.forn || ''); if (k && !fornOpc.has(k)) fornOpc.set(k, String(x.forn).trim()); });
+    const filtro = `<select id="nx-av-f" class="inp" aria-label="Fornecedor"><option value="">Fornecedor: todos</option>${Array.from(fornOpc).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR')).map(([k, n]) => `<option value="${esc(k)}"${k === fk ? ' selected' : ''}>${esc(n)}</option>`).join('')}</select>`;
+    const sec = (corpo) => `<section class="sec nxsec" id="nx-av" style="--c:var(--n-av)">${band('AV', 'Indicadores de lotes (AV)')}<div class="block"><div class="body">${nxBarra('av', st, P, filtro, dia)}${corpo}</div></div></section>`;
+    const C = 'var(--n-av)', ROXO = 'var(--n-roxo)', OURO = 'var(--n-ouro)', VERM = 'var(--n-rnc)', CINZA = 'var(--n-geral)';
+    const goA = (f) => ({ v: 'av', f: Object.assign(fk ? { forn: fornOpc.get(fk) } : {}, f || {}) });
+    /* lotes parados (sem resultado): pela fila do RIR quando ele está ligado */
+    const comRIR = rirOn() && vis('rir') && RI.ready;
+    const util = (d) => Math.max(0, E.workdaysBetween(fl(d), hoje, M.hol));
+    const G = (comRIR ? riPend() : (() => { const g = new Map(); R.filter((x) => !comRes(x) && x.data >= hoje - 120).forEach((x) => { const k = E.key(x.forn) + '|' + E.key(x.nf); if (!g.has(k)) g.set(k, { forn: x.forn || '', nf: x.nf, lots: [], data: x.data }); const o = g.get(k); o.lots.push(x); if (x.data < o.data) o.data = x.data; }); return Array.from(g.values()).sort((a, b) => a.data - b.data); })())
+      .filter((g) => !fk || E.key(g.forn || '') === fk);
+    const parados = G.filter((g) => g.data != null && util(g.data) >= RI_UTEIS), lotPar = parados.reduce((s2, g) => s2 + g.lots.length, 0);
+    const atrEm = (t) => R.filter((x) => fl(x.data) <= t && fl(x.data) >= t - 120 && E.workdaysBetween(fl(x.data), t, M.hol) >= RI_UTEIS && (dInsp.has(x.key) ? dInsp.get(x.key) > t : !comRes(x))).length;
+    const urgH = (max) => { const n0 = G.filter((g) => util(g.data) < 1).length, n1 = G.filter((g) => util(g.data) >= 1 && util(g.data) < RI_UTEIS).length, segs = [['Até 1 dia', n0, OURO], ['1 dia', n1, ROXO], ['2 dias ou mais', parados.length, VERM]];
+      return `<div class="chart"><h3>Notas paradas<small>agora · sem ${comRIR ? 'RIR' : 'resultado'}</small></h3>${G.length ? `<div class="nxsb">${segs.filter((s2) => s2[1]).map((s2) => `<span style="flex:${s2[1]};background:${s2[2]}" title="${esc(s2[0] + ': ' + s2[1])}"></span>`).join('')}</div>` : ''}<div class="nxsl">${segs.map((s2) => `<span><i style="background:${s2[2]}"></i>${s2[0]} <b>${s2[1]}</b></span>`).join('')}</div>
+        ${G.length ? `<ul class="nxul">${G.slice(0, max || 4).map((g) => { const u = util(g.data); return `<li data-go="${esc(JSON.stringify(comRIR ? { v: 'rir' } : goA({ forn: g.forn })))}" tabindex="0"><span class="nxav">${esc(nxIni(g.forn))}</span><div><b>NF ${esc(disp(g.nf) || '—')} · ${esc(String(g.forn || 'sem fornecedor').split(/\s+/).slice(0, 3).join(' '))}</b><small>${g.lots.length} ${g.lots.length === 1 ? 'lote' : 'lotes'} · ${esc(g.lots[0].desc || '')}</small></div><span class="nxcd ${u >= RI_UTEIS ? 'crit' : u >= 1 ? 'warn' : ''}">${u ? 'parada ' + u + ' d' : 'chegou hoje'}</span></li>`; }).join('')}</ul>` : okSeal('Nenhuma nota parada', '')}
+        ${G.length ? `<button type="button" class="nxmais" data-go='${esc(JSON.stringify(comRIR ? { v: 'rir' } : goA({})))}'>Ver as ${NF.format(G.length)} notas →</button>` : ''}</div>`; };
+    if (P.m === 'd') {
+      const repDia = (t) => R.filter((x) => dInsp.get(x.key) === t && (rep(x) || conc(x)));
+      return nxDiaHTML({ P, R, ab, cc, abertasAgora: [], atrAgora: Array(lotPar).fill(0), atrEm, prox: () => null, urgH, goR: goA, sec, mod: 'AV', id: 'nxa', sigla: 'lotes', cor: C, quem: (x) => x.forn, resp: () => '', venc: () => [],
+        ser: ['Lançamentos', 'Alterações', 'Outras'], tabCab: ['Pessoa', 'Lançou', 'Outras', 'Ações', 'Ritmo', 'Parte'],
+        cards: ({ d, LG, X, mAc, pronto, hist6, media, atrD }) => { const a = ab(d, d), i = cc(d, d), r = repDia(d), mA = media(P.ant.map((t) => ab(t, t).length)), mI = media(P.ant.map((t) => cc(t, t).length));
+          return [
+            { l: P.cur ? 'Recebidos hoje' : 'Recebidos no dia', v: NF.format(a.length), sub: `${NF.format(nNotas(a))} nota(s) fiscal(is)`, dl: nxDl(a.length, mA, P, 'sobe'), serie: hist6.map((t) => ab(t, t).length), go: goA({ de: E.isoDate(d), ate: E.isoDate(d) }) },
+            { l: P.cur ? 'Inspecionados hoje' : 'Inspecionados no dia', v: NF.format(i.length), sub: 'lotes com RIR concluído', dl: nxDl(i.length, mI, P, 'sobe'), serie: hist6.map((t) => cc(t, t).length), pct: i.length ? [i.filter(apr).length, i.length, 'aprovados', 'ok'] : null, cls: i.length ? 'ok' : '' },
+            { l: 'Ações no dia', v: LG ? NF.format(X.length) : '…', sub: 'lançamentos e alterações de lotes', dl: LG && mAc != null ? nxDl(X.length, mAc, P, 'sobe') : null, serie: pronto ? P.ant.slice(0, 5).reverse().map((t) => (EH.docs[nxD8(t)] || []).filter((x) => x.mod === 'AV').length).concat([X.length]) : null },
+            { l: P.cur ? 'Reprovados hoje' : 'Reprovados no dia', v: NF.format(r.length), sub: 'no RIR (inclui concessão)', serie: hist6.map((t) => repDia(t).length), pct: r.length && i.length ? [r.length, i.length, 'dos inspecionados', 'crit'] : null, cls: r.length ? 'crit' : '' },
+            { l: P.cur ? 'Parados · agora' : 'Parados no dia', v: NF.format(atrD), sub: `lotes há ${RI_UTEIS} dias úteis ou mais sem ${comRIR ? 'RIR' : 'resultado'}`, serie: hist6.map((t) => (t === hoje ? lotPar : atrEm(t))), cls: atrD ? 'crit' : '', go: comRIR ? { v: 'rir' } : null }]; },
+        i3: () => (parados.length ? ['crit', `<b>${parados.length === 1 ? '1 nota parada' : parados.length + ' notas paradas'}</b> há ${RI_UTEIS} dias úteis ou mais: a mais antiga é a NF ${esc(disp(parados[0].nf) || '—')} · ${esc(String(parados[0].forn || '').split(/\s+/).slice(0, 2).join(' '))}.`] : ['ok', '<b>Nenhuma nota parada</b> há 2 dias úteis ou mais.']) });
+    }
+    /* Mês / Trimestre / 12 meses */
+    const A = ab(P.a, P.b), Ap = ab(P.prev.a, P.prev.b), quando = nxQuando(P), H = P.hist, serie = (f) => H.map((h) => f(h.a, h.b));
+    const iR = (L) => L.filter(comRes), taxa = (L) => { const I = iR(L); return I.length ? I.filter(apr).length / I.length * 100 : null; };
+    const tx = taxa(A), txp = taxa(Ap), semC = A.filter(semCert).length, semCp = Ap.filter(semCert).length, nC = A.filter(conc).length, nCp = Ap.filter(conc).length;
+    const ret = (L) => L.filter((x) => E.low(avRet(x)) === 'sim').length, nRet = ret(A), nRep = A.filter(rep).length;
+    const ks = [
+      { l: 'Lotes ' + quando, v: NF.format(A.length), sub: `${NF.format(nNotas(A))} notas fiscais · ${esc(P.label)}`, dl: nxDl(A.length, Ap.length, P, 'sobe', NF.format), serie: serie((a, b) => ab(a, b).length), pct: A.length ? [iR(A).length, A.length, 'com resultado', 'ok'] : null, go: goA({ de: E.isoDate(P.a), ate: E.isoDate(P.b) }) },
+      { l: 'Aprovação na inspeção', v: tx == null ? '—' : NF1.format(Math.round(tx * 10) / 10) + '%', sub: `${NF.format(nRep + nC)} reprovado(s) de ${NF.format(iR(A).length)}`, dl: tx != null && txp != null ? nxDl(tx, txp, P, 'sobe', (v) => NF1.format(v) + ' p.p.') : null, serie: serie((a, b) => taxa(ab(a, b)) || 0), cls: tx != null && tx >= 95 ? 'ok' : tx != null ? 'warn' : '', go: nRep ? goA({ insp: 'Reprovado' }) : null },
+      { l: 'Sem certificado', v: NF.format(semC), sub: 'certificado "*" ou vazio', dl: nxDl(semC, semCp, P, 'desce', NF.format), serie: serie((a, b) => ab(a, b).filter(semCert).length), pct: A.length && semC ? [semC, A.length, 'dos lotes', 'warn'] : null, cls: semC ? 'warn' : '', go: goA({ cert: 'sem' }) },
+      { l: 'Sob concessão', v: NF.format(nC), sub: 'reprovados liberados com autorização', dl: nxDl(nC, nCp, P, 'desce', NF.format), serie: serie((a, b) => ab(a, b).filter(conc).length), pct: nC ? [nC, nC + nRep, 'dos reprovados', 'warn'] : null, go: goA({ insp: CONC }) },
+      { l: 'Com retrabalho', v: NF.format(nRet), sub: 'lotes retrabalhados', dl: nxDl(nRet, ret(Ap), P, 'desce', NF.format), serie: serie((a, b) => ret(ab(a, b))), pct: A.length && nRet ? [nRet, A.length, 'dos lotes', ''] : null, go: goA({ retrab: 'SIM' }) }
+    ];
+    const g = nxRng(P, (a, b) => ab(a, b).length), sit = (f) => g.rng.map(([a, b]) => ab(a, b).filter(f).length);
+    const sA = sit(apr), sC = sit(conc), sR = sit(rep), sN = sit((x) => !comRes(x));
+    const tituloG = { m: 'Lotes recebidos por dia útil', t: 'Lotes recebidos por semana', a: 'Lotes recebidos por mês' }[P.m];
+    const graf = `<div class="chart"><h3>${tituloG}<small>${esc(P.label)} · cor = resultado da inspeção</small></h3>${nxCols('nxa-p', g.cols, [{ nome: 'Aprovados', cor: C, v: sA }, { nome: 'Sob concessão', cor: ROXO, v: sC }, { nome: 'Reprovados', cor: VERM, v: sR }, { nome: 'Sem resultado', cor: CINZA, v: sN }], nxTeto(Math.max(1, ...g.cols.map((_, i) => sA[i] + sC[i] + sR[i] + sN[i]))), { agora: g.agora, tip: g.tips, aria: tituloG })}</div>`;
+    const gf = new Map(); A.forEach((x) => { const k = E.key(x.forn || '') || '—'; const o = gf.get(k) || { k, nome: String(x.forn || '(sem fornecedor)').trim(), n: 0, r: 0 }; o.n++; if (rep(x) || conc(x)) o.r++; gf.set(k, o); });
+    const GF = Array.from(gf.values()).sort((a, b) => b.n - a.n || a.nome.localeCompare(b.nome, 'pt-BR')).slice(0, 6), totA = A.length || 1, txG = A.length ? (nRep + nC) / Math.max(1, iR(A).length) : 0;
+    const tabF = GF.length ? nxTab(['Fornecedor', 'Lotes', 'Reprov.', 'Tendência', 'Parte'], GF.map((o) => ({ av: nxIni(o.nome), nome: o.nome, go: { v: 'av', f: { forn: o.nome } }, nums: [o.n, { v: o.r, crit: o.r > 1 && o.r / o.n > txG * 1.5 }], tend: H.map((h) => R.filter((x) => E.key(x.forn || '') === o.k && dentro(x.data, h.a, h.b)).length), pct: Math.round(o.n / totA * 100) })), [NF.format(A.length), NF.format(nRep + nC)]) : '<div class="empty">Sem lotes no período.</div>';
+    const pa = P.m === 'm' ? P.b - 364 : P.a, fI = new Map(); iR(ab(pa, P.b)).forEach((x) => { const k = E.key(x.forn || ''); const o = fI.get(k) || { l: x.forn || '(sem fornecedor)', n: 0, ok: 0 }; o.n++; if (apr(x)) o.ok++; fI.set(k, o); });
+    const AF = Array.from(fI.values()).filter((o) => o.n >= 3).map((o) => ({ l: o.l, v: Math.round(o.ok / o.n * 1000) / 10, t: NF1.format(Math.round(o.ok / o.n * 1000) / 10) + '%', tip: `${o.l}: ${o.ok} de ${o.n} lotes aprovados`, go: { v: 'av', f: { forn: o.l } } })).sort((a, b) => a.v - b.v).slice(0, 8);
+    const mnAF = AF.length ? Math.max(0, Math.floor(Math.min(...AF.map((x) => x.v)) / 5) * 5 - 5) : 0;
+    const rank = `<div class="chart"><h3>Aprovação na inspeção por fornecedor<small>piores primeiro · ${P.m === 'm' ? '12 meses' : esc(P.label)} · 3 lotes ou mais</small></h3>${nxHbars('nxa-hb', AF, C, { max: 100, min: mnAF, vazio: 'Ainda não há fornecedor com 3 lotes inspecionados.' })}</div>`;
+    const dif = A.length - Ap.length;
+    const i1 = ['ok', `<b>${NF.format(A.length)} lotes recebidos</b> ${quando}${P.cur ? ' até hoje' : ''}${Ap.length >= 20 ? ` — ${dif >= 0 ? NF.format(Math.round(dif / Ap.length * 100)) + '% a mais' : NF.format(Math.round(-dif / Ap.length * 100)) + '% a menos'} que em ${esc(P.cmpL)}` : dif ? ` — ${NF.format(Math.abs(dif))} a ${dif > 0 ? 'mais' : 'menos'} que em ${esc(P.cmpL)}` : ''}.`];
+    const i2 = parados.length ? ['crit', `<b>${lotPar === 1 ? '1 lote parado' : NF.format(lotPar) + ' lotes parados'}</b> sem ${comRIR ? 'inspeção' : 'resultado'} há ${RI_UTEIS} dias úteis ou mais (${parados.length === 1 ? '1 nota' : parados.length + ' notas'}).`] : ['ok', '<b>Nenhum lote parado</b> há 2 dias úteis ou mais.'];
+    const topF = GF[0];
+    const i3 = topF ? ['info', `<b>${esc(String(topF.nome).split(/\s+/).slice(0, 2).join(' '))}</b> mandou ${NF.format(Math.round(topF.n / totA * 100))}% dos lotes ${quando}${topF.r ? `, com ${topF.r} reprovado(s)` : ', sem reprovação'}.`] : ['info', `Nenhum lote ${quando}.`];
+    const mais = `<details class="nxmore"><summary>Mais gráficos de lotes (quem lançou, filial, top 10 fornecedores) · ${esc(P.label)}</summary><div class="charts">
+      ${chartHTML('Lotes por quem lançou', barsHTML(countBy(A, avQuemLancou), MOD.AV.c, { max: 10 }))}
+      ${chartHTML('Lotes por filial', barsHTML(countBy(A, (x) => x.filial).map((i) => ({ ...i, go: goA({ filial: i.label }) })), MOD.AV.c))}
+      ${chartHTML('Top 10 fornecedores', barsHTML(countBy(A, (x) => x.forn).map((i) => ({ ...i, go: goA({ forn: i.label }) })), MOD.AV.c, { max: 10 }), 'nº de lotes')}</div></details>`;
+    return sec(nxIns([i1, i2, i3], nxResumoT(P)) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Por fornecedor<small>${esc(P.label)}</small></h3>${tabF}</div>${rank}</div>${mais}`);
+  }
+
+  /* ================= v103: SERVIÇOS ================= */
+  function servPainelHTML() {
+    const M = S.model; if (!M || !vis('serv')) return '';
+    const st = NX.serv; if (st.m === 'd') st.m = 'm';
+    const P = nxPer(st), fk = st.f, hoje = S.today, fl = Math.floor;
+    const TODOS = M.serv.filter((x) => x.data != null), R = fk ? TODOS.filter((x) => E.key(x.forn || '') === fk) : TODOS;
+    const dentro = (v, a, b) => v != null && fl(v) >= a && fl(v) <= b, ab = (a, b) => R.filter((x) => dentro(x.data, a, b));
+    const fornOpc = new Map(); TODOS.forEach((x) => { const k = E.key(x.forn || ''); if (k && !fornOpc.has(k)) fornOpc.set(k, String(x.forn).trim()); });
+    const filtro = `<select id="nx-serv-f" class="inp" aria-label="Fornecedor de serviço"><option value="">Fornecedor: todos</option>${Array.from(fornOpc).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR')).map(([k, n]) => `<option value="${esc(k)}"${k === fk ? ' selected' : ''}>${esc(n)}</option>`).join('')}</select>`;
+    const sec = (corpo) => `<section class="sec nxsec" id="nx-serv" style="--c:var(--n-serv)">${band('SERV', 'Indicadores de serviços')}<div class="block"><div class="body">${nxBarra('serv', st, P, filtro, false)}${corpo}</div></div></section>`;
+    const C = 'var(--n-serv)', ROXO = 'var(--n-roxo)', AZUL = 'var(--n-azul)', VERM = 'var(--n-rnc)', CINZA = 'var(--n-geral)';
+    const goS = (f) => ({ v: 'serv', f: Object.assign(fk ? { forn: fornOpc.get(fk) } : {}, f || {}) });
+    const A = ab(P.a, P.b), Ap = ab(P.prev.a, P.prev.b), quando = nxQuando(P), H = P.hist, serie = (f) => H.map((h) => f(h.a, h.b));
+    const tipos = new Map(); ab(P.m === 'm' ? P.b - 364 : P.a, P.b).forEach((x) => { const k = x.desc || '(sem tipo)'; tipos.set(k, (tipos.get(k) || 0) + 1); });
+    const TT = Array.from(tipos.entries()).sort((a, b) => b[1] - a[1]), t1 = TT[0] ? TT[0][0] : null, t2 = TT[1] ? TT[1][0] : null;
+    const semC = A.filter(semCert).length, nT1 = t1 ? A.filter((x) => (x.desc || '(sem tipo)') === t1).length : 0;
+    const nForn = (L) => new Set(L.map((x) => E.key(x.forn || '')).filter(Boolean)).size;
+    const fTop = (() => { const m = new Map(); A.forEach((x) => m.set(x.forn || '—', (m.get(x.forn || '—') || 0) + 1)); return Array.from(m.entries()).sort((a, b) => b[1] - a[1])[0]; })();
+    const ks = [
+      { l: 'Serviços ' + quando, v: NF.format(A.length), sub: `${NF.format(nNotas(A))} nota(s) fiscal(is) · ${esc(P.label)}`, dl: nxDl(A.length, Ap.length, P, 'sobe', NF.format), serie: serie((a, b) => ab(a, b).length), go: goS({ de: E.isoDate(P.a), ate: E.isoDate(P.b) }) },
+      { l: 'Sem certificado', v: NF.format(semC), sub: 'certificado "*" ou vazio', dl: nxDl(semC, Ap.filter(semCert).length, P, 'desce', NF.format), serie: serie((a, b) => ab(a, b).filter(semCert).length), pct: A.length && semC ? [semC, A.length, 'dos serviços', 'warn'] : null, cls: semC ? 'warn' : '', go: goS({ cert: 'sem' }) },
+      { l: t1 ? String(t1) : 'Tipo mais feito', v: NF.format(nT1), sub: 'o tipo de serviço mais frequente', dl: t1 ? nxDl(nT1, Ap.filter((x) => (x.desc || '(sem tipo)') === t1).length, P, 'sobe', NF.format) : null, serie: t1 ? serie((a, b) => ab(a, b).filter((x) => (x.desc || '(sem tipo)') === t1).length) : null, pct: A.length && nT1 ? [nT1, A.length, 'dos serviços', ''] : null, go: t1 ? goS({ desc: t1 }) : null },
+      { l: 'Fornecedores de serviço', v: NF.format(nForn(A)), sub: fTop ? `quem mais fez: ${String(fTop[0]).split(/\s+/).slice(0, 2).join(' ')} (${fTop[1]})` : 'nenhum no período', dl: nxDl(nForn(A), nForn(Ap), P, 'sobe', NF.format), serie: serie((a, b) => nForn(ab(a, b))) },
+      { l: 'Com certificado', v: nxPct(A.length - semC, A.length), sub: `${NF.format(A.length - semC)} de ${NF.format(A.length)} serviços`, dl: A.length && Ap.length ? nxDl((A.length - semC) / A.length * 100, (Ap.length - Ap.filter(semCert).length) / Ap.length * 100, P, 'sobe', (v) => NF1.format(v) + ' p.p.') : null, serie: serie((a, b) => { const L = ab(a, b); return L.length ? (L.length - L.filter(semCert).length) / L.length * 100 : 0; }), cls: A.length && !semC ? 'ok' : '' }
+    ];
+    const g = nxRng(P, (a, b) => ab(a, b).length), sit = (f) => g.rng.map(([a, b]) => ab(a, b).filter(f).length);
+    const ty = (x) => x.desc || '(sem tipo)', s1 = sit((x) => ty(x) === t1), s2 = sit((x) => t2 && ty(x) === t2), s3 = sit((x) => ty(x) !== t1 && ty(x) !== t2);
+    const series = [{ nome: t1 || 'Serviços', cor: C, v: s1 }].concat(t2 ? [{ nome: t2, cor: ROXO, v: s2 }] : []).concat([{ nome: 'Outros', cor: AZUL, v: s3 }]);
+    const tituloG = { m: 'Serviços por dia útil', t: 'Serviços por semana', a: 'Serviços por mês' }[P.m];
+    const graf = `<div class="chart"><h3>${tituloG}<small>${esc(P.label)} · cor = tipo de serviço</small></h3>${nxCols('nxs-p', g.cols, series, nxTeto(Math.max(1, ...g.cols.map((_, i) => series.reduce((s9, s) => s9 + s.v[i], 0)))), { agora: g.agora, tip: g.tips, aria: tituloG })}</div>`;
+    /* certificados que ainda não chegaram (12 meses) */
+    const SC = R.filter((x) => semCert(x) && fl(x.data) >= hoje - 365).sort((a, b) => a.data - b.data), dd = (x) => hoje - fl(x.data);
+    const n5 = SC.filter((x) => dd(x) <= 5).length, segs = [['Até 5 dias', n5, AZUL], ['Mais de 5 dias', SC.length - n5, VERM]];
+    const lado = `<div class="chart"><h3>Certificados que faltam<small>agora · serviços dos últimos 12 meses</small></h3>${SC.length ? `<div class="nxsb">${segs.filter((s2) => s2[1]).map((s2) => `<span style="flex:${s2[1]};background:${s2[2]}"></span>`).join('')}</div>` : ''}<div class="nxsl">${segs.map((s2) => `<span><i style="background:${s2[2]}"></i>${s2[0]} <b>${s2[1]}</b></span>`).join('')}</div>
+      ${SC.length ? `<ul class="nxul">${SC.slice(0, 4).map((x) => `<li data-open="SERV:${esc(x.key)}" tabindex="0"><span class="nxav">${esc(nxIni(x.forn))}</span><div><b>${esc(String(x.forn || 'sem fornecedor').split(/\s+/).slice(0, 3).join(' '))} · NF ${esc(disp(x.nf) || '—')}</b><small>${esc(x.desc || '')}${x.pv ? ' · PV ' + esc(disp(x.pv)) : ''}</small></div><span class="nxcd ${dd(x) > 5 ? 'crit' : dd(x) >= 3 ? 'warn' : ''}">${dd(x) ? 'há ' + dd(x) + ' d' : 'hoje'}</span></li>`).join('')}</ul>` : okSeal('Todos os serviços com certificado', '')}
+      ${SC.length ? `<button type="button" class="nxmais" data-go="${esc(JSON.stringify(goS({ cert: 'sem' })))}">Ver os ${NF.format(SC.length)} sem certificado →</button>` : ''}</div>`;
+    const gf = new Map(); A.forEach((x) => { const k = E.key(x.forn || '') || '—'; const o = gf.get(k) || { k, nome: String(x.forn || '(sem fornecedor)').trim(), n: 0, s: 0 }; o.n++; if (semCert(x)) o.s++; gf.set(k, o); });
+    const GF = Array.from(gf.values()).sort((a, b) => b.n - a.n || a.nome.localeCompare(b.nome, 'pt-BR')).slice(0, 6), totA = A.length || 1;
+    const tabF = GF.length ? nxTab(['Fornecedor', 'Serviços', 'S/ cert.', 'Tendência', 'Parte'], GF.map((o) => ({ av: nxIni(o.nome), nome: o.nome, go: { v: 'serv', f: { forn: o.nome } }, nums: [o.n, { v: o.s, crit: o.s > 0 }], tend: H.map((h) => R.filter((x) => E.key(x.forn || '') === o.k && dentro(x.data, h.a, h.b)).length), pct: Math.round(o.n / totA * 100) })), [NF.format(A.length), NF.format(semC)]) : '<div class="empty">Sem serviços no período.</div>';
+    const tiposP = new Map(); A.forEach((x) => tiposP.set(ty(x), (tiposP.get(ty(x)) || 0) + 1));
+    const rank = `<div class="chart"><h3>Tipos de serviço<small>${esc(P.label)}</small></h3>${nxHbars('nxs-hb', Array.from(tiposP.entries()).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([l, v]) => ({ l, v, go: goS({ desc: l }) })), C, { vazio: 'Sem serviços no período.' })}</div>`;
+    const dif = A.length - Ap.length, velho = SC[0];
+    const i1 = ['ok', `<b>${NF.format(A.length)} ${A.length === 1 ? 'serviço' : 'serviços'} ${quando}</b>${dif ? `, ${NF.format(Math.abs(dif))} a ${dif > 0 ? 'mais' : 'menos'} que em ${esc(P.cmpL)}` : `, o mesmo que em ${esc(P.cmpL)}`}${P.cur ? ' (até o mesmo dia)' : ''}.`];
+    const i2 = velho ? [dd(velho) > 5 ? 'crit' : 'warn', `<b>${SC.length === 1 ? '1 serviço sem certificado' : SC.length + ' serviços sem certificado'}</b> — o mais antigo é da <b>${esc(String(velho.forn || '').split(/\s+/).slice(0, 2).join(' '))}</b>, há ${dd(velho)} dia(s).`] : ['ok', '<b>Todos os serviços</b> dos últimos 12 meses com certificado.'];
+    const i3 = t1 && A.length ? ['info', `<b>${esc(t1)}</b> foi ${NF.format(Math.round(nT1 / A.length * 100))}% dos serviços ${quando}.`] : ['info', `Nenhum serviço ${quando}.`];
+    return sec(nxIns([i1, i2, i3], nxResumoT(P)) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${lado}</div><div class="nxc2b"><div class="chart"><h3>Por fornecedor de serviço<small>${esc(P.label)}</small></h3>${tabF}</div>${rank}</div>`);
   }
   /* visão do processo: o caminho do lote nos últimos 12 meses, do recebimento à NCF resolvida */
   function procPainelHTML() {
