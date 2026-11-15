@@ -382,9 +382,57 @@ button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 @media (max-width: 560px) { .nxtb th:nth-child(3), .nxtb td:nth-child(3) { display: none; } }
 /* v78 etapa 3: tabela compacta da lista do RIR (mesmas colunas em todas as linhas) */
 .ritb { border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--surface); margin-bottom: 18px; }
-.rirw { display: grid; grid-template-columns: 128px 84px minmax(0, 1fr) 84px 150px 140px 132px; column-gap: 14px; align-items: center; min-height: 58px; padding: 6px 14px; border-top: 1px solid var(--line); }
+.rirw { display: grid; grid-template-columns: 128px 196px minmax(0, 1fr) 84px 120px 110px 132px; column-gap: 14px; align-items: center; min-height: 58px; padding: 6px 14px; border-top: 1px solid var(--line); }
 .rirw.h { min-height: 36px; border-top: 0; background: var(--surface-2); font: 600 11px/1.2 var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
 .rirw:not(.h):hover { background: color-mix(in srgb, var(--ink) 3%, transparent); }
+/* v117: tags (como as do e-mail): nome e cor; a do cliente entra sozinha pelo PV (pontinho branco) */
+.tags { display: inline-flex; flex-wrap: wrap; gap: 5px; align-items: center; max-width: 100%; }
+.tg { display: inline-flex; align-items: center; gap: 5px; max-width: 100%; font: 700 11px/1 var(--f-body); letter-spacing: .02em; text-transform: uppercase; padding: 5px 8px 5px 6px; border-radius: 5px; color: #fff; background: var(--tc); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tg svg { width: 11px; height: 11px; flex: none; }
+.tg.auto::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #fff; opacity: .75; flex: none; }
+.tgadd { display: inline-grid; place-items: center; width: 24px; height: 22px; min-height: 0; padding: 0; border-radius: 5px; border: 1px dashed var(--ink-3); background: none; color: var(--ink-3); font: 600 15px/1 var(--f-body); cursor: pointer; }
+.tgadd:hover, .tgadd:focus-visible { border-style: solid; color: var(--ink); }
+@media (pointer: coarse) { .tgadd { width: 36px; height: 30px; } .tg { font-size: 13px; padding: 6px 10px 6px 8px; } }
+.rirw .c-nf { display: grid; gap: 6px; justify-items: start; min-width: 0; }
+.rirw .ritg { display: none; margin-top: 5px; }
+@media (max-width: 1180px) { .rirw .ritg { display: block; } }
+.tblr .tags { margin: 6px 0 2px; } .ritgs { margin: 0 0 10px; } .rgnf .ritgs { margin: 6px 0 0; }
+.rifb.has-tg { grid-template-columns: minmax(0, 1fr) 190px 210px 190px; }
+@media (max-width: 860px) { .rifb.has-tg { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.rirw .c-bt { display: grid; gap: 4px; } .rirw .c-bt .linkbtn { justify-self: center; font-size: 12px; color: var(--ink-3); }
+.risit.trv { background: color-mix(in srgb, var(--crit) 12%, var(--surface)); color: var(--crit); } .risit.trv2 { background: color-mix(in srgb, var(--warn) 14%, var(--surface)); color: var(--warn); }
+.siobs { font-size: 12.5px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.simot { display: grid; gap: 8px; }
+.simot label { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 10px; align-items: start; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; cursor: pointer; background: var(--surface); }
+.simot label.on { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink) inset; }
+.simot input { width: 18px; height: 18px; min-height: 0; margin: 2px 0 0; padding: 0; }
+.simot b { display: block; font-size: 14px; letter-spacing: .02em; } .simot small { display: block; color: var(--ink-3); font-size: 12.5px; margin-top: 2px; line-height: 1.4; }
+.smtag { display: inline-block; font: 700 10.5px var(--f-body); letter-spacing: .05em; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: 1px; }
+.smtag.t { background: color-mix(in srgb, var(--warn) 16%, var(--surface)); color: var(--warn); } .smtag.f { background: color-mix(in srgb, var(--crit) 12%, var(--surface)); color: var(--crit); }
+.tbacts { display: grid; gap: 6px; justify-items: stretch; } .tbacts .linkbtn { justify-self: center; font-size: 14px; color: var(--ink-3); }
+@media (max-width: 560px) { .tbacts { width: 100%; } }
+.asban { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; margin: 0 0 12px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); }
+.asban .av { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font: 700 15px var(--f-body); color: #fff; background: var(--info); }
+.asban b { display: block; font-size: 15.5px; } .asban small { display: block; color: var(--ink-3); font-size: 13.5px; margin-top: 2px; line-height: 1.4; }
+.asban.info { border-color: color-mix(in srgb, var(--info) 45%, var(--line)); background: color-mix(in srgb, var(--info) 9%, var(--surface)); }
+.asban.warn { border-color: color-mix(in srgb, var(--crit) 40%, var(--line)); background: color-mix(in srgb, var(--crit) 8%, var(--surface)); } .asban.warn .av { background: var(--crit); }
+.asbts { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+@media (max-width: 760px) { .asban { grid-template-columns: auto minmax(0, 1fr); } .asbts { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; } .asbts .btn { min-height: 48px; } }
+.motv { display: flex; flex-wrap: wrap; gap: 8px; }
+.motv button { border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px; font: 600 14px var(--f-body); background: var(--surface); color: var(--ink); cursor: pointer; min-height: 0; }
+.motv button[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--surface); }
+.passou { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 16px; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--crit) 7%, var(--surface)); }
+.passou > i { font-style: normal; width: 32px; height: 32px; border-radius: 50%; background: var(--crit); color: #fff; display: grid; place-items: center; font-weight: 700; }
+.passou b { display: block; font-size: 15px; } .passou small { color: var(--ink-3); font-size: 13px; }
+.ripass { margin: 0 0 12px; border: 1px solid color-mix(in srgb, var(--crit) 35%, var(--line)); border-radius: 12px; overflow: hidden; } .ripass .passou:first-child { border-top: 0; }
+.tglist { display: grid; gap: 2px; }
+.tgrow { display: grid; grid-template-columns: 20px 16px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 8px 6px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+.tgrow:hover { background: var(--surface-2); } .tgrow .sq { width: 16px; height: 16px; border-radius: 4px; background: var(--tc); } .tgrow small { color: var(--ink-3); font-weight: 500; }
+.tgcr { display: grid; grid-template-columns: 220px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); }
+.tgcr .tags { justify-self: start; }
+@media (max-width: 760px) { .tgcr { grid-template-columns: minmax(0, 1fr) auto; } .tgcr > .muted { grid-column: 1 / -1; grid-row: 2; } }
+.tgpal { display: flex; flex-wrap: wrap; gap: 8px; } .tgpal button { width: 30px; height: 30px; min-height: 0; padding: 0; border-radius: 7px; border: 0; background: var(--tc); cursor: pointer; }
+.tgpal button[aria-pressed="true"] { outline: 3px solid var(--ink); outline-offset: 2px; }
 .rigr { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; padding: 7px 14px; background: var(--sunken); border-top: 1px solid var(--line); font: 600 12.5px/1.3 var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
 .rigr b { color: var(--rir); } .rigr small { font: 400 12px var(--f-body); letter-spacing: 0; text-transform: none; color: var(--ink-3); }
 .rinone { padding: 14px; border-top: 1px solid var(--line); color: var(--ink-3); }
@@ -1299,6 +1347,8 @@ body.tabmode .main { padding: 0 !important; }
 .trvazio { padding: 22px; border: 1px dashed var(--line-2); border-radius: 12px; color: var(--ink-2); background: var(--surface); }
 .m3wrap { position: relative; height: calc(70vh / var(--cqz, 1)); min-height: 420px; border-radius: 16px; overflow: hidden; background: #07090b; border: 1px solid var(--line); }
 .m3wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.ramwrap { position: relative; height: calc(70vh / var(--cqz, 1)); min-height: 420px; border-radius: 16px; overflow: hidden; background: #121415; border: 1px solid var(--line); }
+.ramwrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
 .m3tb { flex: 1 0 auto; display: flex; flex-direction: column; } .m3tb .m3wrap { flex: 1; border-radius: 0; border: 0; }
 @media (max-width: 860px) { .m3view .vhead p { display: none; } .m3wrap { border-radius: 12px; } }
 .tbw > .tbb { flex: 1 0 auto; }
@@ -2281,6 +2331,7 @@ body.tbmini .ncsteps > * { font-size: 0; justify-content: center; padding: 0; }
 .rghd .grow { flex: 1; }
 .rgnf b { display: block; font: 700 30px/1.05 var(--f-display); }
 .rgnf span { display: block; font: 400 14.5px/1.45 var(--f-body); color: var(--ink-2); margin-top: 3px; } .rgnf .chip { margin-top: 6px; }
+.rgnf .ritgs .tags { display: flex; margin: 0; } .rgnf .ritgs .tg { display: inline-flex; font: 700 13px/1 var(--f-body); color: #fff; margin: 0; } .rgnf .ritgs .tags > span { margin-top: 0; }
 .rglot { all: unset; box-sizing: border-box; display: grid; gap: 4px; padding: 12px 14px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); }
 button.rglot { cursor: pointer; } button.rglot:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .rglot b { font: 600 16px var(--f-mono); } .rglot span { font: 400 14px/1.4 var(--f-body); color: var(--ink-2); } .rglot em { font-style: normal; font: 600 14.5px/1.35 var(--f-body); color: var(--ink-3); }
@@ -2638,6 +2689,7 @@ body.cq-ver .tbhd { top: 36px; }
       <a href="#auditoria" data-v="auditoria" style="--c:var(--warn)"><span class="sw"></span>Auditoria<span class="ct" id="ct-aud" hidden></span></a>
       <a href="#relatorio" data-v="relatorio" style="--c:var(--geral)"><span class="sw"></span>Relatórios</a>
       <a href="#manual" data-v="manual" style="--c:var(--geral)"><span class="sw"></span>Manual</a>
+      <a href="#ramos" data-v="ramos" title="A ramificação do processo, do recebimento ao destino: abra as ramificações com os dedos; modo apresentação para a TV" style="--c:var(--av)"><span class="sw"></span>Ramificações</a>
       <a href="#trein" data-v="trein" title="Simuladores de instrumentos e leitura de certificado de usina: treino, exercício e prova do inspetor" style="--c:var(--trn)"><span class="sw"></span>Treinamento</a>
       <a href="#trello" data-v="trello" style="--c:var(--jur)"><span class="sw"></span>Trello Jurong</a>
       <a href="#acomp" data-v="acomp" style="--c:var(--acj)"><span class="sw"></span>Acompanhamento Jurong</a>
@@ -5859,7 +5911,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 115; window.CQ_V = APP_V;
+    const APP_V = 120; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -6689,11 +6741,15 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (dest) st = 'dest';
       if (conts.length && !['pend', 'rnc', 'dest'].includes(st)) st = 'cont';
       const cev = ins.filter((e) => e.cor).pop();   /* v74: corrida anotada da peça no RIR */
-      out[k] = { cor: cev ? cev.cor : null, st, eff, rncs, evRncs, conc, lib: lib ? last : null, dest, conts, insp: useIe ? ie : null, ret: useIe && ie.ret ? ie.ret : null, evs, lock: st === 'pend' || st === 'rnc' || st === 'conc' || st === 'dest' || st === 'cont', sync: !!links };
+      out[k] = { semi: semiEv(evs), tags: tagsEv(evs), cor: cev ? cev.cor : null, st, eff, rncs, evRncs, conc, lib: lib ? last : null, dest, conts, insp: useIe ? ie : null, ret: useIe && ie.ret ? ie.ret : null, evs, lock: st === 'pend' || st === 'rnc' || st === 'conc' || st === 'dest' || st === 'cont', sync: !!links };
     });
     return out;
   }
-  const lotSt = (x) => (DB.lotSt && x && DB.lotSt[x.key]) || { st: null, rncs: [], evRncs: [], evs: [], conts: [], lock: false };
+  const lotSt = (x) => (DB.lotSt && x && DB.lotSt[x.key]) || { st: null, rncs: [], evRncs: [], evs: [], conts: [], tags: [], semi: null, lock: false };
+  /* v117: tags colocadas à mão na nota (eventos 'tag' e 'tagx' do lote, na ordem em que foram gravados) */
+  /* v118: sem inspeção (evento 'semi' com o motivo; 'semix' desfaz; resultado do RIR depois também desfaz os temporários) */
+  function semiEv(evs) { let cur = null; evs.forEach((e) => { if (e.t === 'semi' && e.mot) cur = e; else if (e.t === 'semix') cur = null; else if (e.t === 'insp' && cur && cur.mot !== 'lib') cur = null; }); return cur; }
+  function tagsEv(evs) { const s0 = new Set(); evs.forEach((e) => { if (e.t === 'tag' && e.tag) s0.add(e.tag); else if (e.t === 'tagx' && e.tag) s0.delete(e.tag); }); return Array.from(s0); }
   const motRepOf = (x) => { const s = lotSt(x); return (s.insp && s.insp.mot) || lotMeta(x).motRep || ''; };
   /* grava decisões (uma escrita para vários lotes) */
   async function addDecisions(list) {
@@ -6797,7 +6853,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     S.model.serv.forEach((x) => { x.sv = svOf(x.key); });
     S.model.rncc = computeRncc(DB.rnccItems || [], S.model.cfg, S.today, S.model.hol);
     const sevO = { alta: 0, media: 1, baixa: 2 };
-    S.audit = E.audit(S.model).concat(rnccAudit(S.model)).sort((a, b) => sevO[a.sev] - sevO[b.sev] || b.items.length - a.items.length);
+    S.audit = E.audit(S.model).concat(rnccAudit(S.model), semiAudit(S.model)).sort((a, b) => sevO[a.sev] - sevO[b.sev] || b.items.length - a.items.length);
     buildIndex();
     DB.last = Date.now();
     const ae = document.activeElement;
@@ -6888,6 +6944,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       updateChrome();
       const ae = document.activeElement, digitando = ae && ae.id === 'rit-q';
       if ((S.view === 'rir' || S.view === 'rirtab' || S.view === 'tabhome') && (RI.sub !== 'ed' || S.view === 'tabhome') && !$('#layer').innerHTML && !digitando) render();
+      else if ((S.view === 'rir' || S.view === 'rirtab') && RI.sub === 'ed' && RI.ed && riEdSig(RI.ed.rel.id) !== RI.edSig) { if ($('#layer').innerHTML) S.stale = true; else render(); }   /* v119 */
       else if (S.view === 'painel' && !$('#layer').innerHTML) render();
     }, (e) => { anotaErro('rir', e);  RI.ready = true; });
     db.doc('iqf/sit').onSnapshot((snap) => { IQSIT.s = (snap.exists && (snap.data() || {}).s) || {}; }, (e) => { anotaErro('iqf/sit', e); });
@@ -6939,8 +6996,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* acesso por módulo (versão hospedada): 'nao' = não vê, 'ver' = só consulta, 'lanca' = lança */
   /* módulos em teste: a conta dona esconde de todo mundo (inclusive administradores) até liberar.
      Sem escolha gravada, os módulos novos ou reformulados começam escondidos. */
-  const TESTE_MODS = [['rir', 'RIR · Relatório de Inspeção de Recebimento', 'módulo novo: checklist da nota recebida no tablet ou no computador, resultado por lote; reprovado vai para a fila da NCF'], ['ins', 'Calibração', 'reformulada: EMA, histórico, envio ao laboratório, etiqueta QR, cronograma e custos'], ['sold', 'Soldagem', 'módulo novo'], ['iqf', 'Avaliação de fornecedores', 'módulo novo'], ['certq', 'Certificados', 'módulo novo: fila de pedidos do Omie e emissão do certificado de qualidade'], ['rif', 'RIF · Relatório de Inspeção Final (Usinagem)', 'módulo novo: quadro da usinagem e relatório de inspeção final'], ['trein', 'Treinamento', 'módulo novo: simuladores de paquímetro, micrômetro e goniômetro e leitura de certificado de usina (treino, exercício e prova do inspetor gravada)']];
-  const TESTE_DEF = { rir: true, ins: true, sold: true, iqf: true, certq: true, rif: true, trein: true, ticker: true };
+  const TESTE_MODS = [['rir', 'RIR · Relatório de Inspeção de Recebimento', 'módulo novo: checklist da nota recebida no tablet ou no computador, resultado por lote; reprovado vai para a fila da NCF'], ['ins', 'Calibração', 'reformulada: EMA, histórico, envio ao laboratório, etiqueta QR, cronograma e custos'], ['sold', 'Soldagem', 'módulo novo'], ['iqf', 'Avaliação de fornecedores', 'módulo novo'], ['certq', 'Certificados', 'módulo novo: fila de pedidos do Omie e emissão do certificado de qualidade'], ['rif', 'RIF · Relatório de Inspeção Final (Usinagem)', 'módulo novo: quadro da usinagem e relatório de inspeção final'], ['trein', 'Treinamento', 'módulo novo: simuladores de paquímetro, micrômetro e goniômetro e leitura de certificado de usina (treino, exercício e prova do inspetor gravada)'], ['ramos', 'Ramificações do processo', 'módulo novo: o rio do processo com os lotes reais; abrir as ramificações com os dedos, linha do tempo, mesa de comparação e modo apresentação para a TV (só mostra, não grava nada)']];
+  const TESTE_DEF = { rir: true, ins: true, sold: true, iqf: true, certq: true, rif: true, trein: true, ramos: true, ticker: true };
   const ocultos = () => { const o = ((DB.cfg || {}).ocultos) || {}; return Object.assign({}, TESTE_DEF, o); };
   const emTeste = (col) => !!ocultos()[col];
   window.CQ_EMTESTE = (col) => emTeste(col); /* Usuários avisa quando a ferramenta do tablet ainda está em teste */
@@ -6960,6 +7017,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const viewOk = (v) => {
     if (v === 'tabhome') return !!S.model && ['rirtab', 'riftab', 'rnctab'].some((t) => viewOk(t));
     if (v === 'trein') return !!S.model && (DB.owner || !emTeste('trein')); /* v90: Treinamento é para todos que entram na Central (inclusive o tablet) */
+    if (v === 'ramos') return !!S.model && vis('av') && (DB.owner || !emTeste('ramos')); /* v116: módulo em teste até a Qualidade liberar */
     if (v === 'mapa3d') return MAPA3D && !!S.model; /* o mapa 3D é para todos que entram na Central (inclusive quem usa só o tablet) */
     if (v === 'riftab') return !!S.model && (tbOnly() ? tbTool('rif') && cw('rif') : vis('rif'));
     if (v === 'rirtab') return !!S.model && rirOn() && cw('rir') && (!tbOnly() || tbTool('rir'));
@@ -7178,13 +7236,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       org: '<rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M6 16v-4h12v4"/>',
       gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>',
       cube: '<path d="M12 2.8 4 7.2v9.6l8 4.4 8-4.4V7.2z"/><path d="M4 7.2 12 11.6l8-4.4M12 11.6v9.6"/>',
+      ramo: '<circle cx="5" cy="12" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 12h10M7 12c5 0 5-7 10-7M7 12c5 0 5 7 10 7"/>',
       cap: '<path d="M2 9.5 12 4.5l10 5-10 5z"/><path d="M6 11.5v4.8c3.3 2.3 8.7 2.3 12 0v-4.8M22 9.5v5"/>'
     };
-    const V = { painel: 'grid', alertas: 'bell', rastreio: 'route', equipe: 'org', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rir: 'rirc', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', manual: 'book', mapa3d: 'cube', trein: 'cap', trello: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
+    const V = { painel: 'grid', alertas: 'bell', rastreio: 'route', equipe: 'org', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rir: 'rirc', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', manual: 'book', mapa3d: 'cube', trein: 'cap', ramos: 'ramo', trello: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
     const o = {}; Object.keys(V).forEach((v) => { o[v] = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[V[v]]}</svg>`; });
     return o;
   })();
-  function navIcons() { $$('#nav a').forEach((a) => { const sw = a.querySelector('.sw'); if (sw && !sw.firstChild && NAV_ICO[a.dataset.v]) sw.innerHTML = NAV_ICO[a.dataset.v]; const col = VIEW_COL[a.dataset.v] || (a.dataset.v === 'trein' ? 'trein' : null); a.classList.toggle('emteste', !!(DB.owner && col && emTeste(col))); }); }
+  function navIcons() { $$('#nav a').forEach((a) => { const sw = a.querySelector('.sw'); if (sw && !sw.firstChild && NAV_ICO[a.dataset.v]) sw.innerHTML = NAV_ICO[a.dataset.v]; const col = VIEW_COL[a.dataset.v] || (a.dataset.v === 'trein' || a.dataset.v === 'ramos' ? a.dataset.v : null); a.classList.toggle('emteste', !!(DB.owner && col && emTeste(col))); }); }
   /* ---------- modo escuro: só o dono e os administradores; a escolha é de cada pessoa ---------- */
   const canTheme = () => !!(DB.owner || DB.admin === true);
   function applyTheme() {
@@ -7212,7 +7271,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (S.model) {
       const m = S.model;
       $('#dbcard').title = `Atualizado às ${hhmm(DB.last)} · ${NF.format(m.av.length)} lotes · ${NF.format(m.serv.length)} serviços · ${NF.format(m.rnc.length)} NCF · ${NF.format((m.rncc || []).length)} NCC · ${NF.format(m.ins.length)} instrumentos `;
-      const al = (vis('rnc') ? m.rnc.filter((x) => x.status === 'Atrasado').length + pendLots().length : 0) + (vis('rncc') ? (m.rncc || []).filter((x) => x.status === 'Atrasado').length : 0) + (vis('ins') ? m.ins.filter((x) => x.status === 'VENCIDO' || x.status === 'VENCE HOJE' || insImpPend(x)).length : 0) + ((soldAlertData() || { venc: [] }).venc.length) + riAtrasadas().length;
+      const al = (vis('rnc') ? m.rnc.filter((x) => x.status === 'Atrasado').length + pendLots().length : 0) + (vis('rncc') ? (m.rncc || []).filter((x) => x.status === 'Atrasado').length : 0) + (vis('ins') ? m.ins.filter((x) => x.status === 'VENCIDO' || x.status === 'VENCE HOJE' || insImpPend(x)).length : 0) + ((soldAlertData() || { venc: [] }).venc.length) + riAtrasadas().length + riTravAtr().length;
       const al2 = al + vyAvisos().length + cqCritAtras().length; const ca = $('#ct-alertas'); ca.hidden = !al2; ca.textContent = al2; ca.classList.toggle('hot', al2 > 0);
       const AU = S.audit.filter((a) => visMod(a.mod)), hi = AU.filter((a) => a.sev === 'alta').length;
       const cu = $('#ct-aud'); cu.hidden = !AU.length; cu.textContent = AU.length; cu.classList.toggle('hot', hi > 0);
@@ -7539,6 +7598,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         + (cw('rnc') && !lotSt(x).lock && ['em análise', 'em analise'].includes(E.low(x.insp)) ? `<button class="btn" type="button" data-act="av-conc" data-key="${esc(key)}">Liberar sob concessão</button>` : '') + editBtn;
       await resolveNames(lotSt(x).evs.map((e) => e.by));
       if (decHist(x)) pairs.push(['Decisões da NCF', decHist(x)]);
+      { const tg = tagsHTML([x], (cw('rir') || cw('av')) && x.key ? [x.key] : null); if (tg) pairs.push(['Tags', tg]); }
+      { const se = lotSt(x).semi; if (se && !E.filled(x.insp) && !lotSt(x).insp) pairs.splice(2, 0, ['Sem inspeção', `<span class="risit ${SEMI_MOT[se.mot][3]}">${SEMI_MOT[se.mot][0]}</span> ${se.aut ? `autorizado por <b>${esc(se.aut)}</b>${se.data != null ? ' em ' + fD(se.data) : ''} · ` : ''}marcado ${esc(dmy(se.at))} por ${esc(who(se.by))}${se.obs ? `<br><span class="muted" style="white-space:pre-wrap">${esc(se.obs)}</span>` : ''}`]); }
       const cc = lotSt(x).conc;
       if (cc) pairs.splice(3, 0, ['Concessão', `Autorizado por <b>${esc(cc.aut || '—')}</b> em ${fD(cc.data)}${cc.cli ? ` · aceite do cliente <b>${esc(cc.cli)}</b>` : ''}<br><span style="white-space:pre-wrap">${esc(cc.just || '')}</span>${cc.rnc ? `<br><span class="muted">NCF:</span> <span class="mono">${esc(cc.rnc)}</span>` : ''}`]);
     } else if (mod === 'SERV') {
@@ -8154,6 +8215,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (vis('rnc')) { const n = (M.rnc || []).filter((x) => x.aberta && (x.prazoFinal === S.today || x.prazoDisp === S.today)).length; if (n) pend.push(`${NF.format(n)} NCF ${n === 1 ? 'vence' : 'vencem'} hoje`); }
       if (vis('ins')) { const n = (M.ins || []).filter((x) => x.emUso && x.dias != null && x.dias >= 0 && x.dias <= 1).length; if (n) pend.push(`${NF.format(n)} ${n === 1 ? 'instrumento vence' : 'instrumentos vencem'} até amanhã`); }
       const ra = riAtrasadas().length; if (ra) pend.push(`${NF.format(ra)} ${ra === 1 ? 'nota atrasada' : 'notas atrasadas'} no RIR`);
+      const rt = riTravAtr().length; if (rt) pend.push(`${NF.format(rt)} ${rt === 1 ? 'nota travada' : 'notas travadas'} sem inspeção`);
       i3 = pend.length ? ['warn', `<b>Pendências do dia:</b> ${pend.join(' · ')}.`] : ['ok', '<b>Sem pendências</b> vencendo hoje.'];
     } else {
       const ult = TODAS[0], pri = TODAS[TODAS.length - 1];
@@ -9032,7 +9094,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const i2 = atr.length ? ['crit', `<b>${atr.length === 1 ? '1 nota atrasada' : atr.length + ' notas atrasadas'}:</b> NF ${esc(disp(atr[0].nf) || '—')} · ${esc(String(atr[0].forn || '').split(/\s+/).slice(0, 2).join(' '))}, há ${util(atr[0].data)} dias úteis sem RIR.`] : ['ok', '<b>Nenhuma nota atrasada</b> (2 dias úteis ou mais sem RIR).'];
     const tT = top ? med(tempos(top[1].L)) : null;
     const i3 = top && A.length ? ['info', `<b>${esc(String(top[0]).split(' ')[0])}</b> fez ${NF.format(Math.round(top[1].n / A.length * 100))}% dos RIR ${quando}${tT != null ? `; tempo médio dele: ${NF1.format(tT)} ${tT === 1 ? 'dia' : 'dias'}` : ''}.`] : ['info', `Sem RIR ${quando} para comparar os inspetores.`];
-    return sec(nxIns([i1, i2, i3], nxResumoT(P)) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Por inspetor<small>${esc(P.label)}</small></h3>${tabI(A, (v) => H.map((h) => v.L.length ? ab(h.a, h.b).filter((c) => E.key(c.nome || '') === v.k).length : 0))}</div>${rank}</div>`);
+    /* v118: lotes sem inspeção, pelos 3 motivos fixos, e as notas travadas agora */
+    const SL = M.av.filter((x) => { const e = lotSt(x).semi; if (!e || E.filled(x.insp) || lotSt(x).insp) return false; const d = msSer(e.at); return d >= P.a && d <= P.b; });
+    const TRv = riTravados();
+    const semRow = SL.length || TRv.length ? `<div class="nxc2b"><div class="chart"><h3>Lotes sem inspeção<small>${esc(P.label)} · ${NF.format(SL.length)} ${SL.length === 1 ? 'lote' : 'lotes'} pelo motivo</small></h3>${nxHbars('nxr-sem', ['lib', 'nenc', 'scond'].map((k) => { const n = SL.filter((x) => lotSt(x).semi.mot === k).length; return { l: SEMI_MOT[k][0], v: n, t: NF.format(n), tip: `${SEMI_MOT[k][0]}: ${n} ${n === 1 ? 'lote' : 'lotes'}`, go }; }), VERM, { min: 0, vazio: 'Nenhum lote sem inspeção no período.', vw: 40 })}</div>
+      <div class="chart"><h3>Travados agora<small>não encontrado ou sem condições · o mais antigo primeiro</small></h3>${TRv.length ? `<ul class="nxul">${TRv.slice(0, 5).map((o) => `<li data-go='${esc(JSON.stringify(go))}' tabindex="0">${av(who(o.ev.by), 'ehav st on')}<div><b>NF ${esc(disp(o.nf) || '—')} · ${esc(String(o.forn || '').split(/\s+/).slice(0, 2).join(' '))}</b><small>${esc(SEMI_MOT[o.mot][0])}${o.ev.obs ? ' · ' + esc(o.ev.obs) : ''}</small></div><div style="display:grid;justify-items:end;gap:2px"><em style="font:600 12px var(--f-mono);font-style:normal;color:${semiDias(o) > RI_UTEIS + 1 ? 'var(--crit)' : 'var(--ink-3)'}">há ${semiDias(o)} d úteis</em></div></li>`).join('')}</ul>` : '<p class="muted" style="margin:0">Nenhuma nota travada.</p>'}</div></div>` : '';
+    return sec(nxIns([i1, i2, i3], nxResumoT(P)) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Por inspetor<small>${esc(P.label)}</small></h3>${tabI(A, (v) => H.map((h) => v.L.length ? ab(h.a, h.b).filter((c) => E.key(c.nome || '') === v.k).length : 0))}</div>${rank}</div>${semRow}`);
   }
   /* ================= v108: RIF (inspeção final) no visual novo ================= */
   function rifNxPainelHTML() {
@@ -9365,7 +9432,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       return { d: 'Sem destino', at: null };
     };
     const lotes = (a, b) => M.av.filter((x) => dentro(x.data, a, b) && okF(x.forn));
-    const L = lotes(P.a, P.b), I = L.filter((x) => apr(x) || rep(x)), AG = L.filter((x) => !apr(x) && !rep(x)), AP = L.filter(apr), RP = L.filter(rep);
+    const semL = (x) => { const e = lotSt(x).semi; return !!(e && e.mot === 'lib' && !apr(x) && !rep(x)); };   /* v118: liberado sem inspeção sai do rio (não é "aguardando") */
+    const L = lotes(P.a, P.b).filter((x) => !semL(x)), I = L.filter((x) => apr(x) || rep(x)), AG = L.filter((x) => !apr(x) && !rep(x)), AP = L.filter(apr), RP = L.filter(rep);
     const RN = RP.filter((x) => ncfsDe(x).length), RS = RP.filter((x) => !ncfsDe(x).length);
     const dst = new Map(), add = (k, src) => { const o = dst.get(k) || { n: 0, ncf: 0, sem: 0 }; o.n++; o[src]++; dst.set(k, o); };
     RN.forEach((x) => add(destDe(x).d, 'ncf')); RS.forEach((x) => add(destDe(x).d, 'sem'));
@@ -9431,9 +9499,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const tm = [[D.tRIR, 'até o RIR'], [null, 'resultado do RIR'], [D.tNCF, 'até a NCF'], [D.tDest, 'até o destino']];
     tm.forEach(([t, l], i) => { const x = (X[i] + NW + X[i + 1]) / 2; body.push(`<text x="${x}" y="16" text-anchor="middle" class="sk tm">${i === 1 ? 'resultado' : t == null ? '—' : NF1.format(t) + ' d'}</text><text x="${x}" y="30" text-anchor="middle" class="sk sm">${i === 1 ? 'aprovado ou reprovado' : l}</text>`); });
     const yMax = Math.max(Y2 + 70, ...Object.values(N).map((o) => o.y + Math.max(o.h, 3) + 30));
-    if (rp) body.push(`<rect x="${X[2] - 26}" y="${Y2 - 22}" width="${W - X[2] + 16}" height="${yMax - Y2 + 2}" rx="10" fill="none" style="stroke:var(--n-rnc)" stroke-dasharray="4 4" opacity=".55"/><text x="${W - 18}" y="${yMax + 16}" text-anchor="end" class="sk sm lupa">ramificação dos reprovados ampliada ${zoom}× (lupa), para dar para ver</text>`);
+    if (rp) body.push(`<rect x="${X[2] - 26}" y="${Y2 - 22}" width="${W - X[2] + 16}" height="${yMax - Y2 + 2}" rx="10" fill="none" style="stroke:var(--n-rnc)" stroke-dasharray="4 4" opacity=".55"/><text x="${W - 18}" y="${yMax + 16}" text-anchor="end" class="sk sm lupa">ramificação dos reprovados ampliada ${zoom}×</text>`);
     else body.push(`<text x="${X[2]}" y="${Y2 + 10}" class="sk sm">Nenhum lote reprovado no período.</text>`);
-    const hsv = `<svg class="nxsvg sank prh" viewBox="0 0 ${W} ${yMax + 24}" role="img" aria-label="Rio do processo"><defs>${defs.join('')}</defs>${body.join('')}</svg>`;
+    const hsv = `<svg class="nxsvg sank prh" viewBox="0 0 ${W} ${yMax + 24}" role="img" aria-label="Ramificação do processo"><defs>${defs.join('')}</defs>${body.join('')}</svg>`;
     /* ---------- vertical (tablet em pé): a mesma coisa de cima para baixo; os destinos numa barra com a lista ---------- */
     const VW = 480, sx = 300 / rec, zx = rp ? Math.min(sx * 10, 150 / rp) : sx, R = [44, 150, 256, 362], NH = 10, vb = [], vd = [];
     const V = {}, vn = (k, row, x, w, cor, v, lab) => { V[k] = { x, y: R[row], w, cor, v, lab }; };
@@ -9452,7 +9520,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (agora && V.sem && agora.sem) vd.push(pulso(V.sem.x + 3, V.sem.y + NH / 2, ''));
     if (rp) vd.push(`<rect x="316" y="${R[2] - 28}" width="${VW - 322}" height="${R[3] - R[2] + 56 + (D.RS.length ? 24 : 0)}" rx="10" fill="none" style="stroke:var(--n-rnc)" stroke-dasharray="4 4" opacity=".55"/><text x="${VW - 10}" y="${R[2] - 34}" text-anchor="end" class="sk sm lupa">lupa ${zoom}×</text>`);
     const vH = R[3] + (D.RS.length ? 70 : 46);
-    const vsv = `<svg class="nxsvg sank prv" viewBox="0 0 ${VW} ${vH}" role="img" aria-label="Rio do processo">${vb.join('')}${vd.join('')}</svg>`;
+    const vsv = `<svg class="nxsvg sank prv" viewBox="0 0 ${VW} ${vH}" role="img" aria-label="Ramificação do processo">${vb.join('')}${vd.join('')}</svg>`;
     const dtot = D.DS.reduce((s2, [, o]) => s2 + o.n, 0);
     const dlist = D.DS.length ? `<div class="prd"><div class="nxsb">${D.DS.map(([d, o]) => `<span style="flex:${o.n};background:${dCor(d)}" title="${esc(d + ': ' + o.n)}"></span>`).join('')}</div><div class="nxsl">${D.DS.map(([d, o]) => `<span><i style="background:${dCor(d)}"></i>${esc(d)} <b>${n(o.n)}</b></span>`).join('')}</div><small class="muted">destino dos ${n(dtot)} reprovados</small></div>` : '';
     return `<div class="prio">${hsv}<div class="prvw">${vsv}${dlist}</div></div>`;
@@ -9501,7 +9569,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       { l: 'Até a decisão', v: D.tDec == null ? '—' : NF1.format(D.tDec) + ' d', sub: 'dias úteis, do recebimento ao destino', dl: D.tDec != null && Dp.tDec != null ? nxDl(D.tDec, Dp.tDec, P, 'desce', (v) => NF1.format(v) + ' d') : null, serie: hd.map((x) => x.tDec || 0) },
       { l: 'NCC de clientes', v: NF.format(D.ncc.length), sub: `${NF.format(D.ncc.filter((r) => E.low(r.origem) === 'fornecedor').length)} com origem no fornecedor`, dl: nxDl(D.ncc.length, Dp.ncc.length, P, 'desce', NF.format), serie: hd.map((x) => x.ncc.length), pct: D.ncc.length && D.ncc.filter((r) => E.low(r.origem) === 'fornecedor').length ? [D.ncc.filter((r) => E.low(r.origem) === 'fornecedor').length, D.ncc.length, 'origem fornecedor', 'warn'] : null, go: vis('rncc') ? { v: 'rncc' } : null }
     ];
-    const rio = `<div class="chart"><h3>Rio do processo<small>${esc(P.label)} · cada faixa é o caminho dos lotes · a largura é a quantidade · em cima, quanto tempo leva cada trecho</small></h3><div class="nxlg"><span><i style="background:var(--n-av)"></i>recebimento e liberação</span><span><i style="background:var(--n-rir)"></i>inspeção</span><span><i style="background:var(--n-rnc)"></i>reprovação e NCF</span><span><i style="background:var(--n-ouro)"></i>esperando</span>${P.cur ? '<span><i class="g" style="border-color:var(--n-rnc)"></i>parado agora (pulsando)</span>' : ''}</div>${procRio(D, P, agora)}</div>`;
+    const rio = `<div class="chart"><h3>Ramificação do processo<small>${esc(P.label)} · cada faixa é o caminho dos lotes · a largura é a quantidade · em cima, quanto tempo leva cada trecho</small></h3><div class="nxlg"><span><i style="background:var(--n-av)"></i>recebimento e liberação</span><span><i style="background:var(--n-rir)"></i>inspeção</span><span><i style="background:var(--n-rnc)"></i>reprovação e NCF</span><span><i style="background:var(--n-ouro)"></i>esperando</span>${P.cur ? '<span><i class="g" style="border-color:var(--n-rnc)"></i>parado agora (pulsando)</span>' : ''}</div>${procRio(D, P, agora)}</div>`;
     const sg = procSeguir(D, st.q);
     const seg = `<div class="chart"><h3>Seguir um lote<small>o caminho inteiro de um lote</small></h3><div class="sfind"><input id="nx-proc-q" class="inp" value="${esc(st.q || '')}" placeholder="nº do lote, da nota ou da NCF" autocomplete="off"><button class="btn primary" type="button" data-act="proc-seg">Seguir</button></div>${sg.html}</div>`;
     const segs = [['Sem RIR', pend.length, 'var(--n-ouro)'], ['Reprovado sem NCF', semN.length, 'var(--n-roxo)'], ['NCF sem destino', semD.length, 'var(--n-rnc)']];
@@ -10881,7 +10949,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     S.alertGroups = groups;
     const filt = S.f.alert || 'todas';
     const pick = { todas: ab, venc, atras, disp: dispV, soon, h24, h48, minhas: mine || [] }[filt] || ab;
-    const sA = soldAlertData(), nada = !riAtrasadas().length && !(sA && (sA.venc.length || sA.ren.length)) && !pendLots().length && !atras.length && !dispV.length && !soon.length && !lanes.some((ln) => ln.l.length) && !lanesB.slice(0, 3).some((ln) => ln.l.length) && !sem.length && !(M.rncc || []).some((x) => x.aberta && (x.status === 'Atrasado' || (x.respData == null && x.prazoResp != null && S.today > x.prazoResp)));
+    const sA = soldAlertData(), nada = !riAtrasadas().length && !riTravAtr().length && !(sA && (sA.venc.length || sA.ren.length)) && !pendLots().length && !atras.length && !dispV.length && !soon.length && !lanes.some((ln) => ln.l.length) && !lanesB.slice(0, 3).some((ln) => ln.l.length) && !sem.length && !(M.rncc || []).some((x) => x.aberta && (x.status === 'Atrasado' || (x.respData == null && x.prazoResp != null && S.today > x.prazoResp)));
     main.innerHTML = `<div class="view">${head('Alertas', 'O que precisa de ação hoje. Os prazos de NCF usam dias úteis e os feriados de Configurações.', (vis('rnc') ? '<button class="btn" type="button" data-act="rnc-resumo">Resumo das NCFs</button>' : '') + '<button class="btn" type="button" data-act="msg-cal">Texto do alerta de calibração</button>')}
       ${vyAvisosHTML()}${cqForaAlertHTML()}${cqCritAlertHTML()}${rirAlertHTML()}${cw('rnc') && rncRelOn() ? inbCorrsAlert() : ''}
       ${nada ? okSeal('Nenhum alerta urgente', 'Sem NCF atrasada, calibração vencida ou lote sem certificado. Tudo certo por aqui.') : ''}
@@ -11996,6 +12064,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     L.push('', 'Obrigado,', msgTexto('assinatura').corpo);
     return L.join('\n');
   }
+  /* v118: liberados sem inspeção (decisão final) aparecem na Auditoria, com quem autorizou */
+  function semiAudit(M) {
+    const L = (M.av || []).filter((x) => { const e = lotSt(x).semi; return e && e.mot === 'lib' && !E.filled(x.insp) && !lotSt(x).insp; });
+    return L.length ? [{ sev: 'media', mod: 'AV', title: 'Lote liberado sem inspeção', hint: 'O lote seguiu sem RIR (motivo “Liberado sem inspeção”). Confira a autorização; se a inspeção foi feita depois, lance o RIR.', items: L.map((x) => { const e = lotSt(x).semi; return { ref: x.id + ' › Sem inspeção', text: `NF ${disp(x.nf) || '—'} · autorizado por ${e.aut || '—'}${e.data != null ? ' em ' + fD(e.data) : ''}${e.obs ? ' · ' + e.obs : ''}`, rec: x }; }) }] : [];
+  }
   function rnccAudit(M) {
     const out = [], add = (sev, title, hint, items) => { if (items.length) out.push({ sev, mod: 'RNCC', title, hint, items }); };
     const R = M.rncc || [];
@@ -13019,7 +13092,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const lists = (mod) => CFG_LISTS.filter((l) => l[2] === mod).map(item).join('');
     const nm = (S.model.cfgDoc && S.model.cfgDoc.feriadosNomes) || {};
     const y0 = E.ymd(S.today).y;
-    const tabs = CFG_TABS.filter(([k, , mod]) => (k === 'zero' || k === 'teste' ? DB.owner : k === 'backup' ? bkPode() : k === 'certq' ? bkPode() && vis('certq') : k === 'rir' ? bkPode() && vis('rir') : k === 'rif' ? bkPode() && vis('rif') : !mod || visMod(mod)));
+    const tabs = CFG_TABS.filter(([k, , mod]) => (k === 'zero' || k === 'teste' ? DB.owner : k === 'backup' || k === 'tags' ? bkPode() : k === 'certq' ? bkPode() && vis('certq') : k === 'rir' ? bkPode() && vis('rir') : k === 'rif' ? bkPode() && vis('rif') : !mod || visMod(mod)));
     let tab = S.cfgTab || lsGet('cq-cfg-tab', 'geral');
     if (S.cfgFocus === 'FORN_EMAILS' || /^forn:/.test(S.cfgFocus || '')) tab = 'forn';
     if (!tabs.some(([k]) => k === tab)) tab = 'geral';
@@ -13036,6 +13109,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${sec('func', `<section class="sec">${band('GERAL', 'Níveis da hierarquia', 'vale para todas as áreas')}<div class="block"><div class="body nvbody" id="nv-host"></div></div></section><section class="sec">${band('GERAL', 'Funcionários')}<div class="block"><div class="body" id="pf-host"></div></div></section>`)}
       ${sec('forn', `<section class="sec">${band('AV', 'Fornecedores')}<div class="block"><div class="body" id="ent-forn"></div></div></section>`)}
       ${sec('cli', `<section class="sec">${band('RNCC', 'Clientes')}<div class="block"><div class="body" id="ent-cli"></div></div></section>`)}
+      ${bkPode() ? sec('tags', tagCfgHTML()) : ''}
       ${sec('emails', `<section class="sec">${band('GERAL', 'E-mails')}<div class="block"><div class="body">
         <div class="fsec" id="cfg-setormail"><h3>E-mails por setor (${Object.keys(c.SETOR_EMAILS || {}).length})</h3>
           <p class="use" style="margin:0">Usados na cobrança interna da NCF: o setor responsável da NCF já sugere estes e-mails. Para mais de um e-mail, separe com vírgula.</p>
@@ -13076,13 +13150,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${DB.owner ? sec('teste', testeHTML()) : ''}
       ${DB.owner ? sec('zero', resetHTML()) : ''}</div></div></div>`;
     const dirty = (el) => { const it = el.closest('.cfgitem') || el.closest('.fsec'); if (it) it.classList.add('dirty'); S.cfgDirty = true; const pn = el.closest('[data-tab]'); if (pn) { const b = $(`[data-ctab="${pn.dataset.tab}"]`); if (b) b.classList.add('dirty'); } };
-    const showTab = (k) => { S.cfgTab = k; lsSet('cq-cfg-tab', k); $$('.cfgpane').forEach((x) => { x.hidden = x.dataset.tab !== k; }); $$('[data-ctab]').forEach((b) => b.setAttribute('aria-selected', b.dataset.ctab === k)); const sv0 = $('#cfg-save'), nw = $('#pf-new'); if (sv0) sv0.hidden = ['func', 'forn', 'cli', 'zero', 'teste', 'backup', 'certq', 'rif', 'aparelho', 'modelos'].includes(k); if (nw) nw.hidden = k !== 'func'; gradeAgenda(); };
+    const showTab = (k) => { S.cfgTab = k; lsSet('cq-cfg-tab', k); $$('.cfgpane').forEach((x) => { x.hidden = x.dataset.tab !== k; }); $$('[data-ctab]').forEach((b) => b.setAttribute('aria-selected', b.dataset.ctab === k)); const sv0 = $('#cfg-save'), nw = $('#pf-new'); if (sv0) sv0.hidden = ['func', 'forn', 'cli', 'tags', 'zero', 'teste', 'backup', 'certq', 'rif', 'aparelho', 'modelos'].includes(k); if (nw) nw.hidden = k !== 'func'; gradeAgenda(); };
     $$('[data-ctab]').forEach((b) => { b.onclick = () => showTab(b.dataset.ctab); });
     showTab(S.cfgTab);
     renderPessoas(roA);
     eqNivRender(roA);
     renderEnt('forn', ro); renderEnt('cli', ro);
     riCfgWire();
+    tagCfgWire();
     $$('#tm-list [data-tm]').forEach((b) => { b.onclick = async () => {
       const k = b.dataset.tm, on = b.getAttribute('aria-pressed') !== 'true', o = Object.assign({}, ocultos(), { [k]: on });
       b.disabled = true;
@@ -13116,7 +13191,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     wireReset();
   };
   /* ---------- funcionários (cadastro único usado por todos os módulos) ---------- */
-  const CFG_TABS = [['geral', 'Geral'], ['func', 'Funcionários'], ['forn', 'Fornecedores'], ['cli', 'Clientes'], ['av', 'Lotes (AV)', 'AV'], ['serv', 'Serviços', 'SERV'], ['rnc', 'NCF', 'RNC'], ['rncc', 'NCC', 'RNCC'], ['cal', 'Calibração', 'INS'], ['certq', 'Certificados', 'CERTQ'], ['rir', 'RIR', 'RIR'], ['rif', 'RIF', 'RIF'], ['emails', 'E-mails'], ['modelos', 'Modelos de mensagem'], ['logo', 'Aparência, logo e Drive'], ['aparelho', 'Este aparelho'], ['manual', 'Manual da Qualidade'], ['backup', 'Backup por ano'], ['teste', 'Módulos em teste'], ['zero', 'Começar do zero']];
+  const CFG_TABS = [['geral', 'Geral'], ['func', 'Funcionários'], ['forn', 'Fornecedores'], ['cli', 'Clientes'], ['tags', 'Tags'], ['av', 'Lotes (AV)', 'AV'], ['serv', 'Serviços', 'SERV'], ['rnc', 'NCF', 'RNC'], ['rncc', 'NCC', 'RNCC'], ['cal', 'Calibração', 'INS'], ['certq', 'Certificados', 'CERTQ'], ['rir', 'RIR', 'RIR'], ['rif', 'RIF', 'RIF'], ['emails', 'E-mails'], ['modelos', 'Modelos de mensagem'], ['logo', 'Aparência, logo e Drive'], ['aparelho', 'Este aparelho'], ['manual', 'Manual da Qualidade'], ['backup', 'Backup por ano'], ['teste', 'Módulos em teste'], ['zero', 'Começar do zero']];
   const FUNC_COR = { conferente: 'var(--av)', emissor: 'var(--rnc)', comprador: 'var(--serv)', resp_cal: 'var(--cal)' };
   const FUNC_USO = { conferente: [['AV', 'conf']], emissor: [['RNC', 'emissor']], comprador: [['RNC', 'comprador']], resp_cal: [['INS', 'resp']] };
   const FUNC_ONDE = { conferente: 'Conferido por (lotes)', emissor: 'Emissor (NCF)', comprador: 'Comprador (NCF)', resp_cal: 'Responsável (calibração)' };
@@ -16346,13 +16421,66 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const rascK = new Set(riCards().filter((c) => c.st === 'r').map((c) => riCabAtual(c)).filter((c) => docN(c.nf)).map(riRascK));   /* v68: com o fornecedor/NF de hoje do lote */
     const g = new Map();
     S.model.av.forEach((x) => {
-      if (E.filled(x.insp) || lotSt(x).insp || emRasc.has(x.key)) return;
+      if (E.filled(x.insp) || lotSt(x).insp || lotSt(x).semi || emRasc.has(x.key)) return;
       const k = riNotaK(x);
       if (rascK.has(k)) return;
       if (!g.has(k)) g.set(k, { forn: x.forn || '', nf: x.nf, pc: x.pc, lots: [], data: x.data });
       const o = g.get(k); o.lots.push(x); if (x.data != null && (o.data == null || x.data < o.data)) o.data = x.data;
     });
     return Array.from(g.values()).sort((a, b) => (a.data || 0) - (b.data || 0));
+  }
+  /* v118: notas travadas (não encontrado ou sem condições), por nota e motivo · o mais antigo primeiro */
+  const SEMI_MOT = { nenc: ['Não encontrado', 'NÃO ENCONTRADO', 'O material não foi achado no recebimento. Sai da fila e fica em “Travados” até alguém achar.', 'trv'], scond: ['Sem condições', 'SEM CONDIÇÕES DE INSPEÇÃO', 'Não dá para inspecionar agora (sem acesso, sem instrumento, embalado…). Fica em “Travados” até resolver.', 'trv2'], lib: ['Liberado sem inspeção', 'LIBERADO SEM INSPEÇÃO', 'O lote segue sem RIR. Precisa de quem autorizou; fica registrado no lote, na rastreabilidade e na Auditoria.', 'lib'] };
+  const semiTemp = (e) => !!(e && (e.mot === 'nenc' || e.mot === 'scond'));
+  function riTravados() {
+    if (!S.model) return [];
+    const g = new Map();
+    S.model.av.forEach((x) => {
+      const e = lotSt(x).semi; if (!semiTemp(e) || E.filled(x.insp) || lotSt(x).insp) return;
+      const k = riNotaK(x) + '|' + e.mot;
+      if (!g.has(k)) g.set(k, { forn: x.forn || '', nf: x.nf, pc: x.pc, lots: [], ev: e, mot: e.mot, data: x.data });
+      const o = g.get(k); o.lots.push(x); if ((e.at || 0) < (o.ev.at || 0)) o.ev = e;
+    });
+    return Array.from(g.values()).sort((a, b) => (a.ev.at || 0) - (b.ev.at || 0));
+  }
+  const semiDias = (o) => riUteis(msSer(o.ev.at));
+  const riTravAtr = () => (rirOn() && vis('rir') && RI.ready && S.model ? riTravados().filter((o) => (semiDias(o) || 0) > RI_UTEIS + 1) : []);
+  function semiDialog(lots) {
+    lots = (lots || []).filter(Boolean); if (!lots.length || !cw('rir')) return;
+    const x = lots[0], nf = disp(x.nf) || '—';
+    openModal('Sem inspeção · NF ' + nf, `<p style="margin:0">${esc(x.forn || 'sem fornecedor')} · ${lots.length === 1 ? '1 lote' : lots.length + ' lotes'}: ${esc(lots.map((l) => l.id + (lotTxt(l) ? ' · ' + lotTxt(l) : '')).join(' — '))}</p>
+      <div class="field"><span>Motivo <b>*</b></span><div class="simot" role="radiogroup" aria-label="Motivo">${Object.entries(SEMI_MOT).map(([k, m]) => `<label data-sm="${k}"><input type="radio" name="sm" value="${k}"><div><b>${m[1]}<span class="smtag ${k === 'lib' ? 'f' : 't'}">${k === 'lib' ? 'final' : 'volta para a fila'}</span></b><small>${m[2]}</small></div></label>`).join('')}</div></div>
+      <datalist id="dl-semi-p">${optList((S.model.cfg.PESSOAS || []).filter((pp) => !pp.inativo).map((pp) => pp.nome))}</datalist>
+      <div class="fgrid cm-grid" id="sm-aut" hidden><label class="field"><span>Autorizado por <b>*</b></span><input id="sm-autn" list="dl-semi-p" autocomplete="off"></label><label class="field"><span>Data</span><input id="sm-data" type="date" value="${E.isoDate(S.today)}"></label></div>
+      <label class="field"><span>Observação (opcional)</span><textarea id="sm-obs" style="min-height:64px" placeholder="ex.: procurado no pátio 2 e na expedição"></textarea></label>
+      <div class="formfoot"><button class="btn primary" type="button" id="sm-ok">Salvar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    const mot = () => { const r = $('#layer input[name=sm]:checked'); return r ? r.value : ''; };
+    $$('#layer [data-sm] input').forEach((i) => { i.onchange = () => { $$('#layer [data-sm]').forEach((l) => l.classList.toggle('on', l.dataset.sm === mot())); $('#sm-aut').hidden = mot() !== 'lib'; if (mot() === 'lib') $('#sm-autn').focus(); }; });
+    $('#sm-ok').onclick = async () => {
+      const m = mot(), obs = $('#sm-obs').value.trim();
+      if (!m) { toast('Escolha o motivo.', true); return; }
+      const ev = { t: 'semi', mot: m, obs: obs || null };
+      if (m === 'lib') {
+        const aut = $('#sm-autn').value.trim(), d = E.fromIso($('#sm-data').value);
+        if (!aut) { toast('Informe quem autorizou.', true); $('#sm-autn').focus(); return; }
+        if (d == null) { toast('Data inválida.', true); return; }
+        ev.aut = aut; ev.data = d;
+      }
+      const b = $('#sm-ok'); b.disabled = true;
+      try {
+        await addDecisions(lots.map((l) => ({ k: l.key, ev })));
+        lots.forEach((l) => logEntry('RIR', l.key, 'alterado', `Lote ${l.id} · NF ${nf} · sem inspeção: ${SEMI_MOT[m][0].toLowerCase()}${ev.aut ? ' (autorizado por ' + ev.aut + ')' : ''}${obs ? ' · ' + obs : ''}`, null));
+        closeLayer(); toast(m === 'lib' ? 'Lote liberado sem inspeção.' : 'Nota em “Travados”. Volta para a fila quando resolver.');
+      } catch (err) { b.disabled = false; toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
+    };
+  }
+  async function semiVolta(o) {
+    if (!o || !cw('rir')) return;
+    try {
+      await addDecisions(o.lots.map((l) => ({ k: l.key, ev: { t: 'semix', era: o.mot } })));
+      o.lots.forEach((l) => logEntry('RIR', l.key, 'alterado', `Lote ${l.id} · NF ${disp(o.nf) || '—'} · voltou para a fila do RIR (era: ${SEMI_MOT[o.mot][0].toLowerCase()})`, null));
+      toast('A nota voltou para a fila do RIR.');
+    } catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
   }
   const lotEnt = (x) => { const f = entResolve('forn', x.forn); return f && f.id ? f.id : ''; };
   const riEscopos = (rel, it) => (it.esc === 'nf' ? ['nf'] : rel.lotes);
@@ -16457,6 +16585,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (!lots.length) return;
     const ja = riCards().find((c) => c.st === 'r' && (c.lotes || []).some((k) => lots.some((l) => l.key === k)));
     if (ja) { toast(`Esta nota já tem um RIR em andamento${ja.nome ? ' (' + ja.nome + ')' : ''}. Abrindo o rascunho.`); riAbrir(ja.id); return; }
+    try {   /* v119: dois tablets na mesma nota quase ao mesmo tempo: confere no banco antes de começar (sem RIR em dobro) */
+      const sn = await DB.db.doc('rir/m-' + mesId(Date.now())).get(), it = (sn.exists && (sn.data() || {}).items) || {};
+      const j2 = Object.keys(it).find((k) => { const c = it[k]; return c && !c._del && c.st === 'r' && (c.lotes || []).some((q) => lots.some((l) => l.key === q)); });
+      if (j2) { toast(`${it[j2].nome || 'Outro inspetor'} acabou de começar esta nota.`); riAbrir(j2); return; }
+    } catch (e) { /* sem internet: segue como antes */ }
     const x0 = lots[0], id = 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), at = Date.now();
     const res = { nf: x0.nf == null ? null : String(x0.nf), forn: x0.forn || null, fornId: lotEnt(x0) || null, pc: x0.pc == null ? null : String(x0.pc), lotes: lots.map((l) => l.key), ids: lots.map((l) => l.id), st: 'r', at, by: DB.me || null, nome: myPessoa() || DB.meName || '' };
     const MEUS = insMeus();   /* v63 */
@@ -16497,17 +16630,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const rel = s.data();
       if (!full && rel.status === 'finalizado') { RI.ed = { rel, ro: true, fotos: null }; riFicha(rel); return; }
       if (rel.status !== 'finalizado') { try { if (await riSyncCab(rel, 'ao abrir')) toast(`RIR atualizado com o lote: ${rel.forn || ''} · NF ${rel.nf || '—'}.`); } catch (e) { /* segue com o que está gravado */ } }   /* v68 */
+      /* v119: a nota de outro inspetor abre só para olhar; assumir é de propósito (botão, confirmação e motivo) */
       if (rel.status !== 'finalizado' && cw('rir') && !riMeu(rel) && !RI.assumindo) {
-        confirmBox('Nota com outro inspetor', `${rel.nome || 'Outro inspetor'} está inspecionando a NF ${rel.nf || '—'} desde ${dmy(rel.at)} às ${hhmm(rel.at)}. Se você continuar, a nota passa para você (as respostas já dadas ficam no RIR).`, 'Assumir a nota', async () => {
-          try {
-            const nome = myPessoa() || null;
-            rel.by = DB.me || null; rel.nome = nome;
-            await relGravar('rird', { rel }, rel);
-            await soldWrite('rir/m-' + rel.mes, { items: { [rel.id]: { by: DB.me || null, nome } } });
-            logEntry('RIR', rel.id, 'alterado', `RIR da NF ${rel.nf || '—'} assumido por ${nome || 'outra pessoa'}`, null);
-            RI.assumindo = true; await riAbrir(id, full);
-          } catch (err) { toast('Não foi possível assumir: ' + ((err && (err.message || err.code)) || err), true); } finally { RI.assumindo = false; }
-        });
+        RI.ed = { rel, ro: true, alheio: true, fotos: null }; RI.salvo = 0; RI.sub = 'ed'; RI.tpasso = 1; RI.tlote = 0; closeLayer();
+        if (S.view !== 'rir' && S.view !== 'rirtab') go(document.body.classList.contains('tabmode') ? 'rirtab' : 'rir'); else { render(); window.scrollTo(0, 0); }
         return;
       }
       if (rel.status !== 'finalizado' && cw('rir') && !RI.devOk) {   /* v69 */
@@ -16520,6 +16646,69 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (S.view !== 'rir' && S.view !== 'rirtab') go(document.body.classList.contains('tabmode') ? 'rirtab' : 'rir'); else { render(); window.scrollTo(0, 0); }
     } catch (err) { toast('Não foi possível abrir: ' + ((err && (err.message || err.code)) || err), true); }
   }
+  /* ---------- v119: assumir, pedir de volta e devolver ---------- */
+  const riCardDe = (id) => riCards().find((o) => o.id === id) || null;
+  const riEdSig = (id) => { const c = riCardDe(id) || {}; return [c.by || '', c.tr ? c.tr.at : '', c.pede ? c.pede.at : '', c.st || ''].join('|'); };
+  async function riPassar(id, para, mot) {
+    const s0 = await DB.db.doc('rird/' + id).get(); if (!s0.exists) throw new Error('RIR não encontrado');
+    const rel = s0.data(); if (rel.status === 'finalizado') { const e = new Error('Este RIR já foi concluído.'); e.fin = true; throw e; }
+    const tr = clean({ de: rel.by || null, deNome: rel.nome || null, para: para.by || null, paraNome: para.nome || null, mot: mot || null, at: Date.now(), por: DB.me || null });
+    rel.by = para.by || null; rel.nome = para.nome || null; rel.tr = tr;
+    await relGravar('rird', null, rel);
+    await soldWrite('rir/m-' + rel.mes, { items: { [rel.id]: { by: rel.by, nome: rel.nome, tr, pede: null } } });
+    logEntry('RIR', rel.id, 'alterado', `RIR da NF ${rel.nf || '—'} passou de ${tr.deNome || '—'} para ${tr.paraNome || '—'}${mot ? ' · ' + mot : ''}`, null);
+    return rel;
+  }
+  function riAssumirDlg() {
+    const ed = RI.ed; if (!ed || !ed.alheio || !cw('rir')) return;
+    const rel = ed.rel, de = rel.nome || 'outro inspetor', pri = String(de).split(/\s+/)[0];
+    const MOT = [pri + ' saiu', pri + ' pediu', 'Troca de turno', 'Outro'];
+    openModal(`Assumir a NF ${rel.nf || '—'}?`, `<p style="margin:0">A nota está com <b>${esc(de)}</b> desde ${esc(dmy(rel.at))} às ${esc(hhmm(rel.at))}. Se você assumir, ela passa para você e ${esc(pri)} recebe o aviso. As respostas já dadas continuam no RIR.</p>
+      <div class="field"><span>Por quê? <b>*</b></span><div class="motv" role="radiogroup" aria-label="Motivo">${MOT.map((m) => `<button type="button" data-mv="${esc(m)}" aria-pressed="false">${esc(m)}</button>`).join('')}</div></div>
+      <div class="formfoot"><button class="btn primary" type="button" id="as-ok">Assumir a nota</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    let mv = '';
+    $$('#layer [data-mv]').forEach((b) => { b.onclick = () => { mv = b.dataset.mv; $$('#layer [data-mv]').forEach((q) => q.setAttribute('aria-pressed', q === b)); }; });
+    $('#as-ok').onclick = async () => {
+      if (!mv) { toast('Escolha o motivo.', true); return; }
+      const b = $('#as-ok'); b.disabled = true;
+      try { await riPassar(rel.id, { by: DB.me || null, nome: myPessoa() || DB.meName || null }, mv); closeLayer(); toast('A nota agora é sua.'); await riAbrir(rel.id); }
+      catch (err) { b.disabled = false; toast((err && err.fin) ? err.message : 'Não foi possível assumir: ' + ((err && (err.message || err.code)) || err), true); }
+    };
+  }
+  async function riPedirDeVolta() {
+    const ed = RI.ed; if (!ed || !ed.perdeu) return; const rel = ed.rel;
+    try { await soldWrite('rir/m-' + rel.mes, { items: { [rel.id]: { pede: { by: DB.me || null, nome: myPessoa() || DB.meName || null, at: Date.now() } } } }); logEntry('RIR', rel.id, 'alterado', `Pediu de volta o RIR da NF ${rel.nf || '—'}`, null); toast('Pedido enviado para ' + (ed.perdeu.paraNome || 'quem assumiu') + '.'); render(); }
+    catch (err) { toast('Não foi possível pedir: ' + ((err && (err.message || err.code)) || err), true); }
+  }
+  async function riDevolver() {
+    const ed = RI.ed; if (!ed || ed.ro) return; const rel = ed.rel, c = riCardDe(rel.id); if (!c || !c.pede) return;
+    try {
+      await riGravar();
+      await riPassar(rel.id, { by: c.pede.by, nome: c.pede.nome }, 'devolvido a pedido');
+      RI.ed = null; RI.sub = 'ag'; toast('Nota devolvida para ' + (c.pede.nome || 'quem pediu') + '.'); render();
+    } catch (err) { toast('Não foi possível devolver: ' + ((err && (err.message || err.code)) || err), true); }
+  }
+  async function riPedeNao() {
+    const ed = RI.ed; if (!ed) return; const rel = ed.rel;
+    try { await soldWrite('rir/m-' + rel.mes, { items: { [rel.id]: { pede: null } } }); logEntry('RIR', rel.id, 'alterado', `Continuou com o RIR da NF ${rel.nf || '—'} (pedido de volta recusado)`, null); render(); }
+    catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
+  }
+  function riBanner(ed) {
+    const rel = ed.rel, c = riCardDe(rel.id) || {}, w = cw('rir'), fin = rel.status === 'finalizado';
+    const av = (n) => `<span class="av">${esc(nxIni(n || '?'))}</span>`;
+    if (ed.alheio && !fin) return `<div class="asban info">${av(rel.nome)}<div><b>Com ${esc(rel.nome || 'outro inspetor')} desde ${esc(hhmm(rel.at))} · só olhando</b><small>Você pode ver as respostas, mas não mexer.${w ? ' Para inspecionar no lugar, toque em Assumir.' : ''}</small></div><div class="asbts"><button class="btn" type="button" data-act="ri-voltar">← Voltar</button>${w ? '<button class="btn primary" type="button" data-act="ri-assumir">Assumir esta nota</button>' : ''}</div></div>`;
+    if (ed.perdeu && !fin) { const t = ed.perdeu, ped = c.pede && c.pede.by === DB.me;
+      return `<div class="asban warn">${av(t.paraNome || c.nome)}<div><b>${esc(t.paraNome || c.nome || 'Outra pessoa')} assumiu esta nota${t.at ? ' às ' + esc(hhmm(t.at)) : ''}</b><small>${t.mot ? 'Motivo: ' + esc(t.mot) + '. ' : ''}As respostas que você gravou ficaram no RIR. Daqui para a frente, só olhando.</small></div><div class="asbts"><button class="btn" type="button" data-act="ri-voltar">← Voltar para as notas</button>${ped ? '<span class="chip info"><i>✓</i>pedido de volta enviado</span>' : '<button class="btn" type="button" data-act="ri-pedir">Pedir de volta</button>'}</div></div>`; }
+    if (!ed.ro && !fin && c.pede && c.pede.by && c.pede.by !== DB.me) { const pri = String(c.pede.nome || 'Quem pediu').split(/\s+/)[0];
+      return `<div class="asban info">${av(c.pede.nome)}<div><b>${esc(c.pede.nome || 'Alguém')} pediu esta nota de volta às ${esc(hhmm(c.pede.at))}</b><small>Devolver passa a nota (com as suas respostas) para ${esc(pri)}.</small></div><div class="asbts"><button class="btn" type="button" data-act="ri-pedex">Continuar comigo</button><button class="btn primary" type="button" data-act="ri-devolver">Devolver para ${esc(pri)}</button></div></div>`; }
+    return '';
+  }
+  /* notas que passaram de mim para outra pessoa (até eu ver) */
+  function riPassouL() {
+    if (!DB.me) return [];
+    return riCards().filter((c) => c.st === 'r' && c.tr && c.tr.de === DB.me && c.by !== DB.me && Date.now() - (c.tr.at || 0) < 3 * 864e5 && lsGet('cq-rir-visto-' + c.id, '') !== String(c.tr.at));
+  }
+  const riPassouHTML = (L) => L.map((c) => `<div class="passou"><i>!</i><div><b>NF ${esc(disp(c.nf) || '—')} passou para ${esc(c.tr.paraNome || c.nome || 'outra pessoa')}</b><small>às ${esc(hhmm(c.tr.at))}${c.tr.mot ? ' · motivo: ' + esc(c.tr.mot) : ''} · suas respostas ficaram no RIR</small></div><button class="btn small" type="button" data-act="ri-visto" data-key="${esc(c.id)}">Ok</button></div>`).join('');
   function riAgendar() { clearTimeout(RI.saveT); riSalvoTxt('salvando…'); RI.saveT = setTimeout(() => { riGravar().then(() => { RI.falhou = false; }).catch((e) => { RI.falhou = true; if (semNet(e)) { riSalvoTxt('⚠ sem internet · não enviado · tentando de novo'); return; } riSalvoTxt('não salvo'); toast('Não foi possível salvar o rascunho: ' + ((e && (e.message || e.code)) || e), true); }); }, 800); }
   /* v49: "+ Medida": medida a mais só neste RIR (ex.: Diâmetro interno, Ovalização), escolhendo os lotes que levam a medida;
      nos outros lotes ela já fica N/A. O checklist padrão (Configurações › RIR) não muda. */
@@ -16690,6 +16879,111 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       + cel('k-ok', conc.length, 'Concluídos hoje', `${NF.format(lotH)} lote${lotH === 1 ? '' : 's'} hoje · no mês: ${NF.format(doMes.length)} RIR · ${lotM ? NF1.format(repM / lotM * 100) + '% reprovados' : 'sem lotes'}`) + '</div>';
   }
   /* ---------- tela: lista ---------- */
+  /* ================= v117: TAGS (como as do e-mail) =================
+     Cada tag tem nome e cor (Configurações › Tags, só administradores). A tag ligada a um cliente entra sozinha quando o PV
+     do lote é daquele cliente (a Central acha o cliente do PV na fila de pedidos do Omie); as outras, quem lança lotes ou RIR
+     coloca à mão no + da nota (eventos 'tag'/'tagx' de cada lote, em av/dec-AAAA-MM). Não muda nada na inspeção. */
+  const TAG_CORES = ['#1f5fbf', '#0d7a55', '#c4362d', '#7b4bb8', '#b7791f', '#0e7c86', '#c2185b', '#5b6770'];
+  const TAG_ICO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8" r="1.2" fill="currentColor"/></svg>';
+  const tagCor = (c) => (/^#[0-9a-f]{6}$/i.test(String(c || '')) ? c : TAG_CORES[7]);
+  const tagsCfg = () => (DB.cfg && Array.isArray(DB.cfg.tags) ? DB.cfg.tags : []).filter((t) => t && t.id && E.filled(t.nome));
+  const tagPode = () => cw('rir') || cw('av');
+  const TPV = { v: -1, m: new Map() };
+  function pvCliMap() {   /* PV → cliente, pela fila de pedidos do Omie (Certificados) */
+    if (TPV.v !== CQF.ver) { const m = new Map(); try { cqCards().forEach((c) => { const d = cqDig(c.pv); if (d && E.filled(c.cli) && !m.has(d)) m.set(d, c.cli); }); } catch (e) { /* fila ainda não carregada */ } TPV.m = m; TPV.v = CQF.ver; }
+    return TPV.m;
+  }
+  const tagCliOk = (t, cli) => {
+    if (!E.filled(t.cli) || !E.filled(cli)) return false;
+    const a = E.key(t.cli), o = entResolve('cli', cli), b = E.key(cli);
+    return (o && E.key(o.nome) === a) || b === a || (a.length >= 3 && (b.startsWith(a + ' ') || b.includes(' ' + a + ' ') || b.endsWith(' ' + a)));
+  };
+  /* tags de um conjunto de lotes (a nota): [{ t, auto }], na ordem da configuração */
+  function tagsDe(lots) {
+    const T = tagsCfg(); if (!T.length || !lots || !lots.length) return [];
+    const man = new Set(), auto = new Set(), pm = pvCliMap();
+    lots.forEach((x) => {
+      if (!x) return;
+      (lotSt(x).tags || []).forEach((id) => man.add(id));
+      docList(x.pv).forEach((p) => { const cli = pm.get(p); if (cli) T.forEach((t) => { if (tagCliOk(t, cli)) auto.add(t.id); }); });
+    });
+    return T.filter((t) => man.has(t.id) || auto.has(t.id)).map((t) => ({ t, auto: auto.has(t.id) }));
+  }
+  const tagChip = (o) => `<span class="tg${o.auto ? ' auto' : ''}" style="--tc:${tagCor(o.t.cor)}" title="${esc(o.t.nome)}${o.auto ? ' · entrou sozinha pelo PV' + (o.t.cli ? ' (cliente ' + esc(o.t.cli) + ')' : '') : ''}">${TAG_ICO}${esc(o.t.nome)}</span>`;
+  /* as tags da nota + o botão "+" (quem lança lotes ou RIR); keys = chaves dos lotes da nota */
+  function tagsHTML(lots, keys) {
+    const L = tagsDe(lots), pode = !!(keys && keys.length && tagPode() && tagsCfg().length);
+    if (!L.length && !pode) return '';
+    return `<span class="tags">${L.map(tagChip).join('')}${pode ? `<button type="button" class="tgadd" data-act="tg-nf" data-key="${esc(keys.join('|'))}" title="Tags desta nota" aria-label="Tags desta nota">+</button>` : ''}</span>`;
+  }
+  function tagDialog(keys) {
+    const lots = keys.map((k) => findRec('AV', k)).filter(Boolean), T = tagsCfg(); if (!lots.length) return;
+    const autoS = new Set(tagsDe(lots).filter((o) => o.auto).map((o) => o.t.id)), man = (id) => lots.some((x) => (lotSt(x).tags || []).includes(id));
+    const nf = disp(lots[0].nf) || '—';
+    openModal('Tags da NF ' + nf, `<div class="tglist">${T.map((t) => `<label class="tgrow" style="--tc:${tagCor(t.cor)}"><input type="checkbox" data-tg="${esc(t.id)}"${man(t.id) || autoS.has(t.id) ? ' checked' : ''}${autoS.has(t.id) ? ' disabled' : ''}><span class="sq"></span><span>${esc(t.nome)}</span><small>${autoS.has(t.id) ? 'pelo PV' : ''}</small></label>`).join('')}</div>
+      <p class="muted" style="margin:0;font-size:12.5px">Vale para ${lots.length === 1 ? 'o lote' : 'os ' + lots.length + ' lotes'} desta nota. A tag “pelo PV” entra e sai sozinha. ${bkPode() ? '<button type="button" class="linkbtn" data-act="tg-cfg">Criar ou mudar tags</button>' : 'Tag nova: peça a um administrador (Configurações › Tags).'}</p>
+      <div class="formfoot"><button class="btn primary" type="button" id="tg-ok">Salvar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    $('#tg-ok').onclick = async () => {
+      const list = [], mud = [];
+      $$('#layer [data-tg]').forEach((c) => {
+        if (c.disabled) return;
+        const id = c.dataset.tg, t = T.find((q) => q.id === id); let n = 0;
+        lots.forEach((x) => { const tem = (lotSt(x).tags || []).includes(id); if (c.checked && !tem) { list.push({ k: x.key, ev: { t: 'tag', tag: id } }); n++; } if (!c.checked && tem) { list.push({ k: x.key, ev: { t: 'tagx', tag: id } }); n++; } });
+        if (n && t) mud.push((c.checked ? '+ ' : '− ') + t.nome);
+      });
+      if (!list.length) { closeLayer(); return; }
+      const bt = $('#tg-ok'); bt.disabled = true;
+      try { await addDecisions(list); logEntry('AV', lots[0].key, 'alterado', `Tags da NF ${nf} (${lots.map((x) => x.id).join(', ')}): ${mud.join(', ')}`, null); toast('Tags gravadas.'); closeLayer(); }
+      catch (err) { bt.disabled = false; toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
+    };
+  }
+  /* Configurações › Tags */
+  function tagCfgInner() {
+    const T = tagsCfg();
+    return `<div class="tgcfg">${T.length ? T.map((t) => `<div class="tgcr"><span class="tags">${tagChip({ t, auto: !!t.cli })}</span><span class="muted">${t.cli ? `Entra sozinha quando o PV for do cliente <b>${esc(t.cli)}</b>` : 'Só à mão'}</span><button class="btn small" type="button" data-tge="${esc(t.id)}">Editar</button></div>`).join('') : '<div class="muted" style="padding:10px 0;border-top:1px solid var(--line)">Nenhuma tag ainda.</div>'}</div>
+      <div class="formfoot" style="justify-content:flex-start"><button class="btn" type="button" data-tge="">Nova tag</button></div>`;
+  }
+  function tagCfgHTML() {
+    return `<section class="sec">${band('GERAL', 'Tags', 'como as do e-mail: nome e cor')}<div class="block"><div class="body">
+      <p class="use" style="margin:0 0 10px">As tags aparecem nas notas do RIR (computador e tablet), dentro do RIR e na ficha do lote, e servem de filtro. A tag ligada a um cliente <b>entra sozinha</b> quando o PV do lote é desse cliente (a Central acha o cliente do PV na fila de pedidos do Omie; nota sem PV não ganha). As outras, quem lança lotes ou RIR coloca à mão no <b>+</b> ao lado da nota. Só administradores criam, mudam e apagam tags.</p>
+      <div id="tg-host">${tagCfgInner()}</div></div></div></section>`;
+  }
+  async function tagSalvaCfg(arr, label) {
+    await DB.db.doc('cfg/main').update({ tags: arr });
+    DB.cfg = Object.assign({}, DB.cfg, { tags: arr });
+    logEntry('GERAL', 'cfg', 'alterado', label, null);
+    const h = $('#tg-host'); if (h) { h.innerHTML = tagCfgInner(); tagCfgWire(); }
+  }
+  function tagEdit(id) {
+    const T = tagsCfg(), t0 = T.find((t) => t.id === id) || null, clis = cliList(t0 && t0.cli ? [t0.cli] : []);
+    let cor = tagCor(t0 ? t0.cor : TAG_CORES[T.length % TAG_CORES.length]);
+    openModal(t0 ? 'Editar tag' : 'Nova tag', `<div class="fgrid" style="grid-template-columns:1fr">
+        <label class="field"><span>Nome</span><input class="inp" id="tg-nome" maxlength="24" value="${esc(t0 ? t0.nome : '')}" placeholder="ex.: JURONG, URGENTE, AMOSTRA" autocomplete="off"></label>
+        <div class="field"><span>Cor</span><div class="tgpal" role="group" aria-label="Cor">${TAG_CORES.map((c) => `<button type="button" style="--tc:${c}" data-cor="${c}" aria-pressed="${c === cor}" aria-label="Cor ${c}"></button>`).join('')}</div></div>
+        <label class="field"><span>Entra sozinha quando o PV for do cliente (opcional)</span><select class="inp" id="tg-cli"><option value="">— só à mão —</option>${clis.map((c) => `<option${t0 && E.key(t0.cli || '') === E.key(c) ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select></label>
+        <div class="field"><span>Como fica</span><div id="tg-prev"></div></div></div>
+      <div class="formfoot">${t0 ? '<button class="btn danger" type="button" id="tg-del" style="margin-right:auto">Apagar tag</button>' : ''}<button class="btn primary" type="button" id="tg-sv">${t0 ? 'Salvar' : 'Criar tag'}</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    const nome = () => String($('#tg-nome').value || '').trim().toUpperCase();
+    const prev = () => { $('#tg-prev').innerHTML = `<span class="tags">${tagChip({ t: { nome: nome() || 'NOME DA TAG', cor, cli: $('#tg-cli').value }, auto: !!$('#tg-cli').value })}</span>`; };
+    $$('#layer [data-cor]').forEach((b) => { b.onclick = () => { cor = b.dataset.cor; $$('#layer [data-cor]').forEach((q) => q.setAttribute('aria-pressed', q === b)); prev(); }; });
+    $('#tg-nome').oninput = prev; $('#tg-cli').onchange = prev; prev();
+    $('#tg-sv').onclick = async () => {
+      const n = nome(), cli = $('#tg-cli').value;
+      if (!n) { toast('Escreva o nome da tag.', true); return; }
+      if (T.some((t) => t.id !== id && E.key(t.nome) === E.key(n))) { toast('Já existe uma tag com esse nome.', true); return; }
+      const novo = { id: t0 ? t0.id : 't' + Date.now().toString(36), nome: n, cor, cli: cli || null };
+      const arr = t0 ? T.map((t) => (t.id === id ? novo : t)) : T.concat([novo]);
+      try { await tagSalvaCfg(arr, `Tags: ${t0 ? 'alterada' : 'criada'} a tag ${n}${cli ? ' (cliente ' + cli + ')' : ''}`); closeLayer(); toast(t0 ? 'Tag salva.' : 'Tag criada.'); }
+      catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
+    };
+    const del = $('#tg-del');
+    if (del) del.onclick = async () => {
+      if (del.dataset.conf !== '1') { del.dataset.conf = '1'; del.textContent = 'Toque de novo para apagar'; return; }
+      try { await tagSalvaCfg(T.filter((t) => t.id !== id), `Tags: apagada a tag ${t0.nome}`); closeLayer(); toast('Tag apagada.'); }
+      catch (err) { toast('Não foi possível apagar: ' + ((err && (err.message || err.code)) || err), true); }
+    };
+  }
+  function tagCfgWire() { $$('#tg-host [data-tge]').forEach((b) => { b.onclick = () => tagEdit(b.dataset.tge || null); }); }
   VIEWS.rir = (main) => {
     const noTablet = S.view === 'rirtab';
     if (RI.sub === 'ed' && RI.ed) { riEdView(main, noTablet); return; }
@@ -16700,36 +16994,44 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     /* v78 etapa 2: busca e filtros fixos no alto (Todas · Aguardando · Em andamento · Atrasadas · Concluídos, inspetor, fornecedor) */
     const fx = ['todas', 'ag', 'and', 'atr', 'conc'].includes(RI.fx) ? RI.fx : RI.sub === 'conc' ? 'conc' : 'todas'; RI.fx = fx;
     const sub = fx === 'conc' ? 'conc' : 'ag'; RI.sub = sub;
-    const fi = RI.fi || '', ff = RI.ff || '', filtra = !!(q || fi || ff);
+    const TGS = tagsCfg(), ft = TGS.some((t) => t.id === RI.ft) ? RI.ft : '', fi = RI.fi || '', ff = RI.ff || '', filtra = !!(q || fi || ff || ft);
+    const okT = (lots) => !ft || tagsDe(lots).some((o) => o.t.id === ft), lotsDe = (ks) => (ks || []).map((k) => findRec('AV', k)).filter(Boolean);
     const bate = (txt) => !q || E.key(txt).includes(q), okI = (n) => !fi || E.key(n || '') === fi, okF = (f) => !ff || E.key(f || '') === ff;
-    const agF = P.map((g, i) => [g, i]).filter(([g]) => !fi && okF(g.forn) && bate([g.nf, g.forn, g.pc, g.lots.map((x) => x.id + ' ' + lotTxt(x)).join(' ')].join(' ')));
+    const agF = P.map((g, i) => [g, i]).filter(([g]) => !fi && okF(g.forn) && okT(g.lots) && bate([g.nf, g.forn, g.pc, g.lots.map((x) => x.id + ' ' + lotTxt(x)).join(' ')].join(' ')));
     const atrF = agF.filter(([g]) => riAtr(g));
-    const rasF = ras.filter((c0) => { const c = riCabAtual(c0); return okI(c.nome) && okF(c.forn) && bate([c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')); });
-    const concF = C.filter((c) => c.st === 'f' && okI(c.nome) && okF(c.forn) && bate([c.num, c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')));
+    const rasF = ras.filter((c0) => { const c = riCabAtual(c0); return okI(c.nome) && okF(c.forn) && okT(lotsDe(c.lotes)) && bate([c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')); });
+    const concF = C.filter((c) => c.st === 'f' && okI(c.nome) && okF(c.forn) && okT(lotsDe(c.lotes)) && bate([c.num, c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')));
     const opc = (L) => { const m = new Map(); L.forEach((n) => { const k = E.key(n || ''); if (k && !m.has(k)) m.set(k, String(n).trim()); }); return Array.from(m).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR')); };
     const insps = opc(C.filter((c) => c.st === 'r' || c.st === 'f').map((c) => (c.st === 'r' ? riCabAtual(c) : c).nome));
     const forns = opc([...P.map((g) => g.forn), ...ras.map((c) => riCabAtual(c).forn), ...C.filter((c) => c.st === 'f').map((c) => c.forn)]);
     const sel = (id, rot, L, v) => `<select id="${id}" class="inp" aria-label="${rot}"><option value="">${rot}: todos</option>${L.map(([k, n]) => `<option value="${esc(k)}"${k === v ? ' selected' : ''}>${esc(n)}</option>`).join('')}${v && !L.some(([k]) => k === v) ? `<option value="${esc(v)}" selected>${esc(v)}</option>` : ''}</select>`;
     const chip = (k, l, n) => `<button type="button" data-act="ri-fx" data-key="${k}" aria-pressed="${fx === k}">${l}<i>${NF.format(n)}</i></button>`;
-    const barra = `<div class="rifb" role="search"><input id="ri-q" class="inp" type="search" placeholder="Buscar NF, fornecedor, lote AV ou RIR…" value="${esc(RI.q || '')}" autocomplete="off" aria-label="Buscar">
+    const barra = `<div class="rifb${TGS.length ? ' has-tg' : ''}" role="search"><input id="ri-q" class="inp" type="search" placeholder="Buscar NF, fornecedor, lote AV ou RIR…" value="${esc(RI.q || '')}" autocomplete="off" aria-label="Buscar">
       <div class="seg rifx" role="group" aria-label="Mostrar">${chip('todas', 'Todas', agF.length + rasF.length)}${chip('ag', 'Aguardando', agF.length)}${chip('and', 'Em andamento', rasF.length)}${chip('atr', 'Atrasadas', atrF.length)}${chip('conc', 'Concluídos', concF.length)}</div>
-      ${sel('ri-fi', 'Inspetor', insps, fi)}${sel('ri-ff', 'Fornecedor', forns, ff)}</div>`;
+      ${sel('ri-fi', 'Inspetor', insps, fi)}${sel('ri-ff', 'Fornecedor', forns, ff)}${TGS.length ? sel('ri-ft', 'Tag', TGS.map((t) => [t.id, t.nome]), ft).replace('Tag: todos', 'Tag: todas') : ''}</div>`;
     /* v78 etapa 3: tabela compacta (Situação · NF · Fornecedor e lotes · Chegada · Progresso · Inspetor · botão) */
     const itCfg = rirItensCfg(), nNf = itCfg.filter((o) => o.esc === 'nf').length, nLt = itCfg.length - nNf;
     const idade = (d, quando, u) => (d == null ? '<span class="riage">—</span>' : `<span class="riage ${(u || 0) >= RI_UTEIS ? 'a2' : u >= 1 ? 'a1' : 'a0'}" title="${esc((quando || '') + (u != null ? ` · ${u} dia${u === 1 ? '' : 's'} út${u === 1 ? 'il' : 'eis'}` : ''))}">${d === 0 ? 'hoje' : NF.format(d) + (d === 1 ? ' dia' : ' dias')}</span>`);
     const prog = (ok, tot) => `<div class="ripg"><span class="bar"><i style="width:${tot ? Math.round((ok / tot) * 100) : 0}%"></i></span><em>${tot == null ? '—' : ok + '/' + tot}</em></div>`;
     const quem = (nome, eu) => { const p = String(nome || '').trim().split(/\s+/).filter(Boolean); if (!p.length) return '<span class="muted">—</span>'; const ini = eu ? 'VC' : p.length > 1 ? p[0][0] + p[p.length - 1][0] : p[0].slice(0, 2); return `<div class="riwho"><span class="riav">${esc(ini)}</span><span>${esc(eu ? 'você' : p[0])}</span></div>`; };
     const lotLn = (L) => (L.length <= 3 ? L.map((x) => (x.key ? `<button type="button" class="rilk" data-open="AV:${esc(x.key)}" title="Abrir o lote">${esc(x.id)}</button>` : `<span class="rilk">${esc(x.id)}</span>`)).join(' ') : `<span class="rilk" title="${esc(lotesResumo(L.map((x) => x.id)).full)}">${esc(lotesResumo(L.map((x) => x.id)).txt)}</span>`);
-    const linha = (sit, nf, fo, sb, age, pg, who, bt) => `<div class="rirw" role="row"><div class="c-sit">${sit}</div><div class="c-nf mono">${esc(nf || '—')}</div><div class="c-fo"><div class="fn"><span class="nfn">NF ${esc(nf || '—')} · </span>${esc(fo || 'sem fornecedor')}</div><div class="sb">${sb}</div></div><div class="c-age">${age}</div><div class="c-pg">${pg}</div><div class="c-who">${who}</div><div class="c-bt">${bt}</div></div>`;
+    const linha = (sit, nf, fo, sb, age, pg, who, bt, tg) => `<div class="rirw" role="row"><div class="c-sit">${sit}</div><div class="c-nf"><span class="mono">${esc(nf || '—')}</span>${tg || ''}</div><div class="c-fo"><div class="fn"><span class="nfn">NF ${esc(nf || '—')} · </span>${esc(fo || 'sem fornecedor')}</div><div class="sb">${sb}</div>${tg ? `<div class="ritg">${tg}</div>` : ''}</div><div class="c-age">${age}</div><div class="c-pg">${pg}</div><div class="c-who">${who}</div><div class="c-bt">${bt}</div></div>`;
     const grp = (g, i) => { const d = riDias(g), atr = riAtr(g), n = g.lots.length;
       return linha(atr ? '<span class="risit atr">Atrasada</span>' : '<span class="risit agu">Aguardando</span>', disp(g.nf), g.forn,
         `${riSitForn(g.forn)}${lotLn(g.lots)} · ${esc(lotTxt(g.lots[0]) || (n + (n === 1 ? ' lote' : ' lotes')))}${n > 1 && lotTxt(g.lots[0]) ? ' + ' + (n - 1) : ''}${g.pc ? ' · OC ' + esc(disp(g.pc)) : ''}`,
-        idade(d, 'recebido ' + fD(g.data), riUteis(g.data)), prog(0, nNf + nLt * n), quem(''), w ? `<button class="btn" type="button" data-act="ri-novo" data-key="${i}">Iniciar RIR</button>` : ''); };
+        idade(d, 'recebido ' + fD(g.data), riUteis(g.data)), prog(0, nNf + nLt * n), quem(''), w ? `<button class="btn" type="button" data-act="ri-novo" data-key="${i}">Iniciar RIR</button><button type="button" class="linkbtn" data-act="ri-semi" data-key="${i}">Sem inspeção…</button>` : '', tagsHTML(g.lots, g.lots.map((x) => x.key).filter(Boolean))); };
     const rasc = (c0) => { const c = riCabAtual(c0), eu = riMeu(c), L = (c.lotes || []).map((k, j) => { const x = findRec('AV', k); return { key: x ? k : '', id: (x && x.id) || (c.ids || [])[j] || k, x }; });
       const ds = L.map((o) => o.x && o.x.data).filter((v) => v != null), d0 = ds.length ? Math.min(...ds) : null, pr = (RI.prog || {})[c.id];
-      return linha('<span class="risit and">Em andamento</span>', c.nf, c.forn, `${lotLn(L)} · ${L.length} ${L.length === 1 ? 'lote' : 'lotes'} · começado ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}<span class="riwn"> · ${esc(eu ? 'com você' : c.nome || '')}</span>`,
+      return linha('<span class="risit and">Em andamento</span>', c.nf, c.forn, `${lotLn(L)} · ${L.length} ${L.length === 1 ? 'lote' : 'lotes'} · começado ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}${eu && c.pede && c.pede.by !== DB.me ? ` · <b style="color:var(--warn)">${esc(c.pede.nome || 'alguém')} pediu de volta</b>` : ''}<span class="riwn"> · ${esc(eu ? 'com você' : c.nome || '')}</span>`,
         idade(d0 == null ? null : Math.max(0, Math.floor(S.today - d0)), d0 == null ? '' : 'recebido ' + fD(d0), riUteis(d0)), pr && pr.tot != null ? prog(pr.ok, pr.tot) : prog(0, null), quem(c.nome, eu),
-        `<button class="btn ${eu ? 'primary' : ''}" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${!w ? 'Ver' : eu ? 'Continuar' : 'Assumir'}</button>`); };
+        `<button class="btn ${eu ? 'primary' : ''}" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${eu && w ? 'Continuar' : 'Ver'}</button>`, tagsHTML(L.map((o) => o.x).filter(Boolean), L.filter((o) => o.key).map((o) => o.key))); };
+    /* v118: travados (não encontrado / sem condições) */
+    const TR = riTravados(); RI.trav = TR;
+    const trF = TR.map((o, i) => [o, i]).filter(([o]) => !fi && okF(o.forn) && okT(o.lots) && bate([o.nf, o.forn, o.lots.map((x) => x.id + ' ' + lotTxt(x)).join(' '), o.ev.obs || ''].join(' ')));
+    const trav = (o, i) => { const n = o.lots.length, m = SEMI_MOT[o.mot], u = semiDias(o);
+      return linha(`<span class="risit ${m[3]}">${m[0]}</span>`, disp(o.nf), o.forn, `${lotLn(o.lots)} · ${esc(lotTxt(o.lots[0]) || (n + (n === 1 ? ' lote' : ' lotes')))}${n > 1 && lotTxt(o.lots[0]) ? ' + ' + (n - 1) : ''}`,
+        idade(Math.max(0, S.today - msSer(o.ev.at)), 'marcado em ' + dmy(o.ev.at), u), `<div class="siobs" title="${esc(o.ev.obs || '')}">${esc(o.ev.obs || '—')}</div>`, quem(who(o.ev.by)),
+        w ? `<button class="btn" type="button" data-act="ri-semix" data-key="${i}">Voltar para a fila</button>` : '', tagsHTML(o.lots, o.lots.map((x) => x.key).filter(Boolean))); };
     let body;
     if (!RI.ready) body = '<div class="loading"><span class="spin"></span><span>Carregando…</span></div>';
     else if (sub === 'ag') {
@@ -16737,21 +17039,23 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const verR = fx === 'todas' || fx === 'and', verA = fx !== 'and', LA = fx === 'atr' ? atrF : agF;
       const vazioA = fi ? 'As notas aguardando ainda não têm inspetor: escolha "Inspetor: todos" para vê-las.' : filtra ? 'Nenhuma nota aguardando com esses filtros.' : fx === 'atr' ? `Nenhuma nota parada há ${RI_UTEIS} dias úteis ou mais.` : 'Nenhuma nota aguardando inspeção de recebimento.';
       riProgBusca(rasF.map((c) => c.id));
-      body = `<div class="ritb" role="table"><div class="rirw h" role="row"><div>Situação</div><div>NF</div><div>Fornecedor · lotes</div><div>Chegada</div><div>Progresso</div><div>Inspetor</div><div></div></div>
+      body = `<div class="ritb" role="table"><div class="rirw h" role="row"><div>Situação</div><div>NF · tags</div><div>Fornecedor · lotes</div><div>Chegada</div><div>Progresso</div><div>Inspetor</div><div></div></div>
         ${verR && (rasF.length || fx === 'and') ? `<div class="rigr">Em andamento <b>${rasF.length}</b></div>${rasF.length ? rasF.map(rasc).join('') : `<div class="rinone">${filtra ? 'Nenhum RIR em andamento com esses filtros.' : 'Nenhum RIR em andamento.'}</div>`}` : ''}
         ${verA ? `<div class="rigr">${fx === 'atr' ? `Atrasadas · ${RI_UTEIS} dias úteis` : 'Aguardando RIR'} <b>${LA.length}</b><small>lotes lançados sem resultado de inspeção, agrupados por nota fiscal · a mais antiga primeiro</small></div>
-        ${LA.length ? LA.map(([g, i]) => grp(g, i)).join('') : `<div class="rinone">${vazioA}</div>`}` : ''}</div>`;
+        ${LA.length ? LA.map(([g, i]) => grp(g, i)).join('') : `<div class="rinone">${vazioA}</div>`}` : ''}
+        ${verA && fx !== 'atr' && trF.length ? `<div class="rigr">Travados · sem inspeção <b>${trF.length}</b><small>não encontrado ou sem condições: saem da fila e voltam quando resolver · o mais antigo primeiro</small></div>${trF.map(([o, i]) => trav(o, i)).join('')}` : ''}</div>`;
     } else {
       const L = concF;
       body = `${L.length ? `<div class="twrap"><table class="t"><thead><tr><th>RIR</th><th>Concluído</th><th>NF</th><th>Fornecedor</th><th>Lotes</th><th>Resultado</th><th>Inspetor</th></tr></thead><tbody>${L.slice(0, 300).map((c) => {
           const v = Object.values(c.res || {}), nr = v.filter((r) => r === 'Reprovado').length;
-          return `<tr class="click" data-act="ri-abrir" data-key="${esc(c.id)}"><td class="mono">${esc(c.num || '')}</td><td class="nw">${esc(dmy(c.fin || c.at))}</td><td class="mono">${esc(c.nf || '—')}</td><td>${esc(c.forn || '')}</td><td class="mono nw" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</td><td>${nr ? `<span class="chip crit"><i>✕</i>${nr} reprovado(s)</span>` : '<span class="chip ok"><i>✓</i>aprovado</span>'}</td><td>${esc(c.nome || '')}</td></tr>`;
+          return `<tr class="click" data-act="ri-abrir" data-key="${esc(c.id)}"><td class="mono">${esc(c.num || '')}</td><td class="nw">${esc(dmy(c.fin || c.at))}</td><td><span class="mono">${esc(c.nf || '—')}</span>${(() => { const tg = tagsHTML(lotsDe(c.lotes)); return tg ? '<br>' + tg : ''; })()}</td><td>${esc(c.forn || '')}</td><td class="mono nw" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</td><td>${nr ? `<span class="chip crit"><i>✕</i>${nr} reprovado(s)</span>` : '<span class="chip ok"><i>✓</i>aprovado</span>'}</td><td>${esc(c.nome || '')}</td></tr>`;
         }).join('')}</tbody></table></div>` : '<div class="empty">Nenhum RIR concluído' + (filtra ? ' com esses filtros' : '') + '.</div>'}`;
     }
     main.innerHTML = `<div class="view">${head(MOD.RIR.full, 'RIR · checklist da nota fiscal recebida, com o resultado de cada lote. Lote reprovado aqui vai sozinho para a fila da NCF.', ((DB.owner || DB.admin === true) ? '<button class="btn" type="button" data-act="ri-caneta">Imprimir folha à caneta</button>' : '') + (w ? '<button class="btn" type="button" data-go=\'{"v":"rirtab"}\'>Tela do tablet</button>' : ''))}
       ${riFaixa(P, ras, C, doMes, lotM, repM)}
+      ${(() => { const PL = riPassouL(); return PL.length ? `<div class="ripass">${riPassouHTML(PL)}</div>` : ''; })()}
       ${RI.ready ? barra : ''}${body}</div>`;
-    const fs = (id, k) => { const e = $('#' + id); if (e) e.onchange = () => { RI[k] = e.value; render(); }; }; fs('ri-fi', 'fi'); fs('ri-ff', 'ff');
+    const fs = (id, k) => { const e = $('#' + id); if (e) e.onchange = () => { RI[k] = e.value; render(); }; }; fs('ri-fi', 'fi'); fs('ri-ff', 'ff'); fs('ri-ft', 'ft');
     const qi = $('#ri-q'); if (qi) { let tm; qi.oninput = () => { clearTimeout(tm); tm = setTimeout(() => { RI.q = qi.value; const p = qi.selectionStart; render(); const q2 = $('#ri-q'); if (q2) { q2.focus(); try { q2.setSelectionRange(p, p); } catch (e) { /* ok */ } } }, 250); }; }
   };
 
@@ -16765,8 +17069,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const meus = C.filter((c) => c.st === 'f' && (c.by === DB.me || (eu && E.key(c.nome || '') === eu))).sort((a, b) => (b.fin || 0) - (a.fin || 0)).slice(0, 10);
     const bate = (txt) => !q || E.key(txt).includes(q);
     const lotTx = (L) => L.map((x) => x.id + (lotTxt(x) ? ' · ' + lotTxt(x) : '')).join(' — ');
-    const agRow = (g, i) => `<div class="tblr"><div><div class="t"><b>NF ${esc(disp(g.nf) || '—')}</b>${riSitForn(g.forn)}</div><div class="d">${esc(g.forn || 'sem fornecedor')}</div><div class="m">${g.lots.length} ${g.lots.length === 1 ? 'lote' : 'lotes'}: ${esc(lotTx(g.lots))}</div><div class="w">recebido ${esc(fD(g.data))}${g.pc ? ' · pedido de compra ' + esc(disp(g.pc)) : ''}</div></div><button class="btn rirb big" type="button" data-act="ri-novo" data-key="${i}" ${w ? '' : 'disabled'}>Inspecionar esta nota</button></div>`;
-    const rasRow = (c0) => { const c = riCabAtual(c0); return `<div class="tblr"><div><div class="t"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>em andamento</span></div><div class="d">${esc(c.forn || 'sem fornecedor')}</div><div class="m" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</div><div class="w">${esc(c.nome || '')} · começado ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${w ? 'Continuar' : 'Ver'}</button></div>`; };
+    const agRow = (g, i) => `<div class="tblr"><div><div class="t"><b>NF ${esc(disp(g.nf) || '—')}</b>${riSitForn(g.forn)}</div>${tagsHTML(g.lots, g.lots.map((x) => x.key).filter(Boolean))}<div class="d">${esc(g.forn || 'sem fornecedor')}</div><div class="m">${g.lots.length} ${g.lots.length === 1 ? 'lote' : 'lotes'}: ${esc(lotTx(g.lots))}</div><div class="w">recebido ${esc(fD(g.data))}${g.pc ? ' · pedido de compra ' + esc(disp(g.pc)) : ''}</div></div><div class="tbacts"><button class="btn rirb big" type="button" data-act="ri-novo" data-key="${i}" ${w ? '' : 'disabled'}>Inspecionar esta nota</button>${w ? `<button type="button" class="linkbtn" data-act="ri-semi" data-key="${i}">Sem inspeção…</button>` : ''}</div></div>`;
+    const rasRow = (c0) => { const c = riCabAtual(c0), lt = (c.lotes || []).map((k) => findRec('AV', k)).filter(Boolean); return `<div class="tblr"><div><div class="t"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>em andamento</span>${c.pede && c.pede.by !== DB.me ? `<span class="chip warn"><i>↩</i>${esc(String(c.pede.nome || 'alguém').split(/\s+/)[0])} pediu de volta</span>` : ''}</div>${tagsHTML(lt, lt.map((x) => x.key))}<div class="d">${esc(c.forn || 'sem fornecedor')}</div><div class="m" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</div><div class="w">${esc(c.nome || '')} · começado ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${w ? 'Continuar' : 'Ver'}</button></div>`; };
     const finRow = (c) => { const nr = Object.values(c.res || {}).filter((r) => r === 'Reprovado').length; return `<div class="tblr"><div><div class="t"><b>${esc(c.num || 'RIR')}</b>${nr ? `<span class="chip crit"><i>✕</i>${nr} reprovado(s)</span>` : '<span class="chip ok"><i>✓</i>aprovado</span>'}</div><div class="d">NF ${esc(c.nf || '—')} · ${esc(c.forn || '')}</div><div class="m" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</div><div class="w">concluído ${esc(dmy(c.fin || c.at))} às ${esc(hhmm(c.fin || c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">Ver</button></div>`; };
     const ag = P.map((g, i) => [g, i]).filter(([g]) => bate([g.nf, g.forn, g.pc, g.lots.map((x) => x.id).join(' ')].join(' ')));
     const rs = ras.filter((c) => bate([c.nf, c.forn, (c.ids || []).join(' ')].join(' ')));
@@ -16774,8 +17078,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <div class="tbrowq" style="grid-template-columns:1fr auto"><input id="rit-q" class="tbin" placeholder="Buscar NF, fornecedor ou lote" value="${esc(RI.tq || '')}" autocomplete="off"><button class="btn big" type="button" data-act="ri-tlimpa" ${RI.tq ? '' : 'disabled'}>Limpar</button></div>
       ${w ? '' : '<div class="tbwarn">Seu acesso ao RIR é só de consulta: dá para ver as notas, mas não para inspecionar.</div>'}
       <div class="rtk"><div style="--k:var(--rir)"><b>${NF.format(P.length)}</b><span>notas aguardando RIR</span></div><div style="--k:var(--info)"><b>${NF.format(ras.length)}</b><span>com você${nOutros ? ` · ${nOutros} com outros` : ''}</span></div><div style="--k:var(--ok)"><b>${NF.format(nHoje)}</b><span>lotes inspecionados hoje</span></div></div>
-      ${rs.length ? `<div class="tbcard"><div class="ch">Com você<span class="cnt">${rs.length}</span></div>${rs.map(rasRow).join('')}</div>` : ''}
+      ${(() => { const PL = riPassouL(); return rs.length || PL.length ? `<div class="tbcard"><div class="ch">Com você<span class="cnt">${rs.length}</span></div>${riPassouHTML(PL)}${rs.map(rasRow).join('')}</div>` : ''; })()}
       <div class="tbcard"><div class="ch">Notas aguardando inspeção<span class="cnt">${ag.length}</span></div>${ag.length ? ag.map(([g, i]) => agRow(g, i)).join('') : `<div class="tbnone">${q ? 'Nenhuma nota com essa busca.' : 'Nenhuma nota aguardando inspeção de recebimento. 👍'}</div>`}</div>
+      ${(() => { const TR = riTravados(); RI.trav = TR; const tr = TR.map((o, i) => [o, i]).filter(([o]) => bate([o.nf, o.forn, o.lots.map((x) => x.id).join(' ')].join(' ')));
+        return tr.length ? `<div class="tbcard"><div class="ch">Travados · sem inspeção<span class="cnt">${tr.length}</span></div>${tr.map(([o, i]) => `<div class="tblr"><div><div class="t"><b>NF ${esc(disp(o.nf) || '—')}</b><span class="risit ${SEMI_MOT[o.mot][3]}">${SEMI_MOT[o.mot][0]}</span></div>${tagsHTML(o.lots, o.lots.map((x) => x.key).filter(Boolean))}<div class="d">${esc(o.forn || 'sem fornecedor')}</div><div class="m">${o.lots.length} ${o.lots.length === 1 ? 'lote' : 'lotes'}: ${esc(lotTx(o.lots))}</div><div class="w">marcado ${esc(dmy(o.ev.at))} por ${esc(who(o.ev.by))}${o.ev.obs ? ' · ' + esc(o.ev.obs) : ''}</div></div>${w ? `<button class="btn big" type="button" data-act="ri-semix" data-key="${i}">Voltar para a fila</button>` : ''}</div>`).join('')}</div>` : ''; })()}
       ${meus.length && !q ? `<div class="tbcard"><div class="ch gr">Seus RIR concluídos</div>${meus.map(finRow).join('')}</div>` : ''}`;
     main.innerHTML = `<div class="tbw rirt">${tbHead('Recebimento · RIR', 'Notas esperando inspeção')}<div class="tbb">${body}</div><div class="tbf"><span class="tbnet"><i></i>a lista atualiza sozinha</span></div></div>`;
     const qi = $('#rit-q'); if (qi) qi.oninput = () => { RI.tq = qi.value; clearTimeout(RI.tqT); RI.tqT = setTimeout(() => { render(); const j = $('#rit-q'); if (j) { j.focus(); j.setSelectionRange(j.value.length, j.value.length); } }, 250); };
@@ -16809,7 +17115,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const passo = RI.tpasso === 2 ? 2 : 1;
     const cols = porLote ? [rel.lotes[RI.tlote]] : rel.lotes;
     const resTxt = (k) => { const r = riRes(rel, k), o2 = (rel.lotRes || {})[k] || {}, mot = r === 'Reprovado' ? String(o2.mot || riMotSug(rel, k) || '') : ''; return [r, mot]; };
-    const left = `<aside class="rgside"><button type="button" class="tbsmin" data-act="tb-mini" aria-label="Recolher ou abrir o painel do lado" title="Recolher ou abrir o painel"><span class="a">«</span><span class="b">»</span></button><div class="rgnf"><b>NF ${esc(rel.nf || '—')}</b><span>${esc([rel.forn, rel.pc ? 'pedido de compra ' + rel.pc : ''].filter(Boolean).join(' · '))}</span><span>começado ${esc(dmy(rel.at))} às ${esc(hhmm(rel.at))}${rel.nome ? ' · ' + esc(rel.nome) : ''}</span>${riSitForn(rel.forn)}</div>
+    const left = `<aside class="rgside"><button type="button" class="tbsmin" data-act="tb-mini" aria-label="Recolher ou abrir o painel do lado" title="Recolher ou abrir o painel"><span class="a">«</span><span class="b">»</span></button><div class="rgnf"><b>NF ${esc(rel.nf || '—')}</b><span>${esc([rel.forn, rel.pc ? 'pedido de compra ' + rel.pc : ''].filter(Boolean).join(' · '))}</span><span>começado ${esc(dmy(rel.at))} às ${esc(hhmm(rel.at))}${rel.nome ? ' · ' + esc(rel.nome) : ''}</span>${riSitForn(rel.forn)}${(() => { const lt = rel.lotes.map((k) => findRec('AV', k)).filter(Boolean), tg = tagsHTML(lt, lt.map((x) => x.key)); return tg ? `<div class="ritgs">${tg}</div>` : ''; })()}</div>
       ${rel.lotes.map((k, i) => { const x = findRec('AV', k), [r, mot] = resTxt(k), man = ((rel.lotRes || {})[k] || {}).man, bt = porLote && passo === 1; return `<${bt ? 'button type="button"' : 'div'} class="rglot ${r === 'Aprovado' ? 'ap' : r === 'Reprovado' ? 'rp' : r ? 'av' : ''}${bt && i === RI.tlote ? ' on' : ''}" ${bt ? `data-act="ri-tlote" data-key="${i}"` : ''}><b>${esc(lotId(k))}</b><i class="rgmini">${esc(String(lotId(k)).split('-').pop())}</i><span>${x ? esc([lotTxt(x), E.filled(x.corrida) ? 'corrida ' + x.corrida : '', x.quant != null && x.quant !== '' ? x.quant + ' ' + (x.und || '') : ''].filter(Boolean).join(' · ')) : ''}</span>${x && semCert(x) ? '<i class="rgsemc">sem certificado</i>' : ''}<em>${r === 'Aprovado' ? '✓ Aprovado' + (man ? '' : ' (sai sozinho)') : r === 'Reprovado' ? '✕ Reprovado' + (mot ? ': ' + esc(mot.length > 70 ? mot.slice(0, 70) + '…' : mot) : '') : r ? esc(r) : 'falta responder'}</em></${bt ? 'button' : 'div'}>`; }).join('')}
       <div class="rgins"><span>Instrumentos usados</span>${(rel.ins || []).map((i) => `<b><span class="mono">${esc(i.codigo)}</span> ${esc(i.desc || '')}${i.val ? ', válido até ' + esc(fD(E.fromIso(i.val)).slice(3)) : ''}</b>`).join('') || '<em>nenhum ainda · escolha na conclusão</em>'}</div></aside>`;
     let main;
@@ -16861,6 +17167,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
 
   /* ---------- tela: relatório ---------- */
   function riEdView(main, tab) {
+    { const ed0 = RI.ed, c0 = riCardDe(ed0.rel.id);   /* v119: alguém assumiu a nota que estava comigo */
+      if (!ed0.ro && c0 && c0.st === 'r' && c0.by && ed0.rel.by === DB.me && c0.by !== DB.me) { clearTimeout(RI.saveT); RI.saveT = null; ed0.ro = true; ed0.perdeu = Object.assign({ paraNome: c0.nome }, c0.tr || {}); }
+      else if (ed0.perdeu && c0 && c0.by === DB.me && !RI.reabrindo) { RI.reabrindo = true; RI.devOk = true; toast('A nota voltou para você.'); setTimeout(() => { riAbrir(ed0.rel.id).finally(() => { RI.reabrindo = false; RI.devOk = false; }); }, 0); }
+      RI.edSig = riEdSig(ed0.rel.id); }
     const ed = RI.ed, rel = ed.rel, ro = ed.ro, lots = rel.lotes.map((k) => findRec('AV', k)).filter(Boolean);
     if (!ro) { const n0 = (rel.itens || []).map(riItNorm); if (n0.some((o, i) => o !== rel.itens[i])) { rel.itens = n0; RI.autoMud = true; } if (riAuto(rel) || RI.autoMud) { RI.autoMud = false; riAgendar(); } }   /* v74 */
     const lotId = (k) => ((findRec('AV', k) || {}).id || (rel.ids || [])[rel.lotes.indexOf(k)] || k);
@@ -16898,7 +17208,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const corpo = `
       <div class="cqfrom">${tab ? '' : '<button class="btn ghost small" type="button" data-act="ri-voltar">‹ RIR</button>'}<b class="cqpv">${esc(rel.numero || 'RIR em andamento')}</b><span class="cqnf mono">NF ${esc(rel.nf || '—')}</span><span class="clip">${esc(rel.forn || '')}</span>${riSitForn(rel.forn)}${ro || tab ? '' : '<span class="chip ok" id="rie-salvo">rascunho</span>'}</div>
       ${rel.status === 'finalizado' ? `<div class="okbox" style="margin:8px 0">Concluído em ${esc(dmy(rel.fin))} às ${esc(hhmm(rel.fin))} · ${sigLine(rel.assin)}</div>` : ''}
-      <div class="fsec"><h3>Lotes desta nota</h3><div class="rils">${rel.lotes.map((k) => { const x = findRec('AV', k); return x ? lotBtn(k, `${esc(x.id)} <small>${esc(lotTxt(x))}${E.filled(x.corrida) ? ' · corrida ' + esc(x.corrida) : ''}${x.quant != null && x.quant !== '' ? ' · ' + esc(x.quant) + ' ' + esc(x.und || '') : ''}</small>`) : `<span class="lchip">${esc(lotId(k))}</span>`; }).join('')}</div>
+      <div class="fsec"><h3>Lotes desta nota</h3>${(() => { const lt = rel.lotes.map((k) => findRec('AV', k)).filter(Boolean), tg = tagsHTML(lt, lt.map((x) => x.key)); return tg ? `<div class="ritgs">${tg}</div>` : ''; })()}<div class="rils">${rel.lotes.map((k) => { const x = findRec('AV', k); return x ? lotBtn(k, `${esc(x.id)} <small>${esc(lotTxt(x))}${E.filled(x.corrida) ? ' · corrida ' + esc(x.corrida) : ''}${x.quant != null && x.quant !== '' ? ' · ' + esc(x.quant) + ' ' + esc(x.und || '') : ''}</small>`) : `<span class="lchip">${esc(lotId(k))}</span>`; }).join('')}</div>
         ${rel.pc ? `<p class="muted" style="margin:6px 0 0;font-size:12.5px">Pedido de compra <span class="mono">${esc(rel.pc)}</span></p>` : ''}</div>
       ${secs.map((s) => `<div class="fsec"><h3 class="rih3"><span>${esc(s)}</span>${!ro && rel.itens.some((it) => it.sec === s && it.med) ? `<button type="button" class="btn small" data-act="ri-madd" data-key="${esc(s)}">+ Medida</button>` : ''}</h3>${rel.itens.filter((it) => it.sec === s).map(item).join('')}</div>`).join('')}
       <div class="fsec"><h3>Instrumentos usados nas medidas</h3><div class="rils" id="ri-ins">${insHTML}</div></div>
@@ -16916,6 +17226,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (!ro) riSalvoTxt();
     riMfThumbs();   /* v73 */
     if (novosHTML) { const host = $('.tbw.rirt .tbb') || $('#rix'); if (host) host.insertAdjacentHTML('afterbegin', novosHTML); }
+    { const ban = riBanner(ed); if (ban) { const host = $('.tbw.rirt .tbb') || $('#rix'); if (host) host.insertAdjacentHTML('afterbegin', ban); } }
     { const iq = $('#ri-insq'); if (iq) iq.onkeydown = (e) => { if (e.key !== 'Enter') return; e.preventDefault(); const b = $('#ri-insr [data-act="ri-insp"]:not([disabled])'); if (b) riInsPoe(b.dataset.key); }; }
     const box = $('#rix');
     box.addEventListener('input', (e) => {
@@ -17075,6 +17386,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'ri-caneta') { if (DB.owner || DB.admin === true) printHTML(riCanetaHTML()); return true; }   /* v72 */
     if (a === 'ri-voltar') { if (RI.saveT) riGravar().catch(() => {}); RI.ed = null; RI.sub = 'ag'; render(); return true; }
     if (a === 'ri-novo') { const g = (RI.pend || [])[+key]; if (g) riNovo(g.lots); return true; }
+    if (a === 'ri-assumir') { riAssumirDlg(); return true; }   /* v119 */
+    if (a === 'ri-pedir') { riPedirDeVolta(); return true; }
+    if (a === 'ri-devolver') { riDevolver(); return true; }
+    if (a === 'ri-pedex') { riPedeNao(); return true; }
+    if (a === 'ri-visto') { const c = riCardDe(key); if (c && c.tr) lsSet('cq-rir-visto-' + key, String(c.tr.at)); render(); return true; }
+    if (a === 'ri-semi') { const g = (RI.pend || [])[+key]; if (g) semiDialog(g.lots); return true; }   /* v118 */
+    if (a === 'ri-semix') { const o = (RI.trav || [])[+key]; if (o) semiVolta(o); return true; }
     if (a === 'ri-puxar') { riPuxar(); return true; }
     if (a === 'ri-madd') { riMedidaNova(key); return true; }
     if (a === 'ri-mdel') { riMedidaDel(key); return true; }
@@ -17136,8 +17454,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* notas recebidas há 2 dias úteis ou mais sem RIR (Alertas e contador do menu) */
   const riAtrasadas = () => (rirOn() && vis('rir') && RI.ready && S.model ? riPend().filter(riAtr) : []);   /* v87: a mesma regra da tela do RIR */
   function rirAlertHTML() {
-    const P = riAtrasadas(); if (!P.length) return '';
-    return `<div class="rrwarn vyaviso" style="border-left-color:var(--rir)"><b>📋 ${P.length === 1 ? '1 nota recebida' : P.length + ' notas recebidas'} há 2 dias úteis ou mais sem RIR</b><div class="muted" style="margin-top:3px">${P.slice(0, 6).map((g) => 'NF ' + esc(disp(g.nf) || '—') + ' · ' + esc(g.forn || 'sem fornecedor')).join(' · ')}${P.length > 6 ? '…' : ''}. Enquanto não houver RIR, os lotes ficam sem resultado de inspeção.</div><div class="rrfoot" style="margin-top:8px"><button class="btn primary" type="button" data-go='{"v":"rir"}'>Abrir RIR</button></div></div>`;
+    const P = riAtrasadas(), TA = riTravAtr();
+    const tr = TA.length ? `<div class="rrwarn vyaviso" style="border-left-color:var(--crit)"><b>📋 ${TA.length === 1 ? '1 nota travada' : TA.length + ' notas travadas'} sem inspeção há mais de 3 dias úteis</b><div class="muted" style="margin-top:3px">${TA.slice(0, 6).map((o) => 'NF ' + esc(disp(o.nf) || '—') + ' · ' + esc(String(o.forn || 'sem fornecedor')) + ' · ' + esc(SEMI_MOT[o.mot][0].toLowerCase()) + ' há ' + semiDias(o) + ' dias úteis').join(' · ')}${TA.length > 6 ? '…' : ''}.</div><div class="rrfoot" style="margin-top:8px"><button class="btn primary" type="button" data-go='{"v":"rir"}'>Abrir RIR</button></div></div>` : '';
+    if (!P.length) return tr;
+    return tr + `<div class="rrwarn vyaviso" style="border-left-color:var(--rir)"><b>📋 ${P.length === 1 ? '1 nota recebida' : P.length + ' notas recebidas'} há 2 dias úteis ou mais sem RIR</b><div class="muted" style="margin-top:3px">${P.slice(0, 6).map((g) => 'NF ' + esc(disp(g.nf) || '—') + ' · ' + esc(g.forn || 'sem fornecedor')).join(' · ')}${P.length > 6 ? '…' : ''}. Enquanto não houver RIR, os lotes ficam sem resultado de inspeção.</div><div class="rrfoot" style="margin-top:8px"><button class="btn primary" type="button" data-go='{"v":"rir"}'>Abrir RIR</button></div></div>`;
   }
   /* configuração do checklist (Configurações › RIR) */
   function riCfgHTML() {
@@ -21577,6 +21897,51 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     w.style.height = Math.max(420, Math.round(window.innerHeight / Z - top - tkH - (tbOnly() ? 0 : 18))) + 'px';
   }
   addEventListener('resize', () => { if (S.view === 'mapa3d') m3Size(); });
+  /* ================= v116: RAMIFICAÇÕES DO PROCESSO (módulo em teste) =================
+     O rio da Visão do processo com gestos, em ramos.html (dentro da Central). A Central manda os lotes dos últimos 12 meses
+     por mensagem (só leitura: a página não fala com o banco) e abre a ficha quando a pessoa pede. */
+  function ramSize() {
+    const w = $('#ramwrap'); if (!w) return;
+    const Z = CQZ(), top = (w.getBoundingClientRect().top + window.scrollY) / Z, tk = $('#tk');
+    const tkH = document.body.classList.contains('has-tk') && tk && !tk.hidden ? tk.offsetHeight : 0;
+    w.style.height = Math.max(460, Math.round(window.innerHeight / Z - top - tkH - 18)) + 'px';
+  }
+  addEventListener('resize', () => { if (S.view === 'ramos') ramSize(); });
+  function ramosDados() {
+    const hoje = S.today, o = E.ymd(hoje), fl = Math.floor, meses = [], ini = [];
+    for (let i = 11; i >= 0; i--) { let m = o.m - i, y = o.y; while (m < 1) { m += 12; y--; } meses.push(MESES[m - 1] + '/' + String(y).slice(2)); ini.push(E.serialFromYMD(y, m, 1)); }
+    const D = procDados({ a: ini[0], b: hoje }, ''), hol = S.model.hol, wd = (a, b) => Math.max(0, E.workdaysBetween(fl(a), fl(b), hol));
+    const iso = (v) => (v == null || !isFinite(v) ? null : E.isoDate(fl(v)));
+    const prod = (x) => { const d = String(x.desc || '').toUpperCase(); return d ? (CQ_PROD.find(([, re]) => re.test(d)) || ['Outros'])[0] : 'Sem descrição'; };
+    const lotes = D.L.map((x) => {
+      const st = D.apr(x) ? 'apr' : D.rep(x) ? 'rep' : 'agu', di = D.dInsp.has(x.key) ? D.dInsp.get(x.key) : null;
+      let mes = 0; for (let i = 11; i >= 0; i--) if (fl(x.data) >= ini[i]) { mes = i; break; }
+      const l = { key: x.key, id: String(x.id || x.key), mes, d: iso(x.data), forn: String(x.forn || 'Sem fornecedor').toUpperCase(), prod: prod(x), nf: 'NF ' + (x.nf || '—'), st, dInsp: iso(di), tR: di != null ? wd(x.data, di) : null };
+      if (st === 'rep') {
+        const N = D.ncfsDe(x), r0 = N[0], de = D.destDe(x);
+        l.motivo = String(x.motRep || (r0 && r0.motivo) || 'Sem motivo informado').split(' (')[0];
+        l.ncf = N.length > 0; l.ncfNum = r0 ? r0.num : null; l.dNcf = r0 ? iso(r0.data) : null;
+        l.tN = r0 && r0.data != null ? wd(di != null ? di : x.data, r0.data) : null;
+        const rf = N.find((q) => q.fechDisp != null); l.tD = rf && rf.data != null ? wd(rf.data, rf.fechDisp) : null;
+        l.dest = de.d; l.dDest = iso(de.at);
+      }
+      return l;
+    });
+    return { type: 'ramos-dados', hoje: E.isoDate(hoje), meses, lotes };
+  }
+  let ramT = null;
+  function ramosEnvia() { clearTimeout(ramT); ramT = setTimeout(() => { const fr = $('#ramfr'); if (!fr || !fr.contentWindow || S.view !== 'ramos' || !S.model) return; try { fr.contentWindow.postMessage(ramosDados(), location.origin); } catch (e) { anotaErro('ramos', e); } }, 250); }
+  addEventListener('message', (e) => {
+    if (e.origin !== location.origin || !e.data || S.view !== 'ramos') return;
+    if (e.data.type === 'ramos-pronto') ramosEnvia();
+    else if (e.data.type === 'ramos-lote' && e.data.key && S.model && S.model.av.some((x) => x.key === e.data.key)) openRecord('AV', e.data.key);
+  });
+  VIEWS.ramos = (main) => {
+    /* a página não recarrega quando os dados mudam: só recebe os lotes novos (e continua onde a pessoa está) */
+    if ($('#ramfr', main)) { ramosEnvia(); ramSize(); return; }
+    main.innerHTML = `<div class="view ramview"><div class="ramwrap" id="ramwrap"><iframe id="ramfr" src="ramos.html?embed=1&amp;v=${window.CQ_V || 1}" title="Ramificações do processo" allow="fullscreen"></iframe></div></div>`;
+    ramSize(); setTimeout(ramSize, 0);
+  };
   VIEWS.mapa3d = (main) => {
     const src = `mapa3d.html?embed=1&sug=${m3Papel()}`, tab = tbOnly();
     /* os dados da Central mudam o tempo todo; o 3D não precisa recarregar por isso */
@@ -22697,6 +23062,8 @@ ${trGuil(W, H, M, B)}
     if (act) {
       const a = act.dataset.act, key = act.dataset.key;
       if (a === 'close') { if (TB.scan) TB.scan(); closeLayer(); return; }
+      if (a === 'tg-nf') { tagDialog(String(key || '').split('|').filter(Boolean)); return; }
+      if (a === 'tg-cfg') { closeLayer(); S.cfgTab = 'tags'; lsSet('cq-cfg-tab', 'tags'); go('config'); return; }
       if (a && a.startsWith('tb-') && tbAct(a, key)) return;
       if (a && a.startsWith('th-') && thAct(a, key)) return;
       if (a && a.startsWith('ap-') && apAct(a, key)) return;
@@ -22851,7 +23218,7 @@ ${trGuil(W, H, M, B)}
   $$('#nav a').forEach((a) => { if (a.dataset.v === navOf(S.view)) a.setAttribute('aria-current', 'page'); });
   setInterval(() => { if (S.model && E.todaySerial() !== S.today) scheduleRebuild(); else refreshBanner(); }, 60000);
   boot();
-  window.__CQ = { S, DB, go, openRecord, lotSt, T: { cqWsAcao: (k, v) => cqWsAcao(k, v), cqProd: (c) => cqProd(c), entDrawer, nfeFornCnpj, entPorCnpj, entPorRaiz, cqAbrirTeste: (k) => cqAbrir(cqFind(k)), abaEstado: () => abaEstado(), nomeArq, relEn, rcEn, avFind, normLotes, avIdFmt, caseVal, nomeProprio, listNorm, cqPlano, iqCalc, fornSit, cqConcluir, cqResumoDoc, cqApp, cqFind, lotCertAviso, numMax, insImpPend, nextRnc, nextRncc, createRecord, updateRecord, deleteRecord, addDecisions, addInsEvent, FT, docMatch, docList, entResolve, entPropagate, saveEnt, pesPropagate, corrGet, corrId, rncFotos, findRec, related, destDialog, cfgSeed } };
+  window.__CQ = { S, DB, go, openRecord, lotSt, RI, T: { cqWsAcao: (k, v) => cqWsAcao(k, v), cqProd: (c) => cqProd(c), entDrawer, nfeFornCnpj, entPorCnpj, entPorRaiz, cqAbrirTeste: (k) => cqAbrir(cqFind(k)), abaEstado: () => abaEstado(), nomeArq, relEn, rcEn, avFind, normLotes, avIdFmt, caseVal, nomeProprio, listNorm, cqPlano, iqCalc, fornSit, cqConcluir, cqResumoDoc, cqApp, cqFind, lotCertAviso, numMax, insImpPend, nextRnc, nextRncc, createRecord, updateRecord, deleteRecord, addDecisions, addInsEvent, FT, docMatch, docList, entResolve, entPropagate, saveEnt, pesPropagate, corrGet, corrId, rncFotos, findRec, related, destDialog, cfgSeed } };
 })();
 
 </script>
