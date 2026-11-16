@@ -258,6 +258,33 @@ button.ehpc { cursor: pointer; } button.ehpc:hover { border-color: var(--ink-3);
 .bdbar span { position: relative; display: block; text-align: center; font: 600 11.5px/18px var(--f-mono); color: var(--ink); }
 .bdt td small { display: block; margin-top: 2px; font-size: 11px; } .bdisen { display: grid; gap: 6px; }
 .bdres { border-radius: var(--r); padding: 8px 12px; border: 1px solid var(--line); border-left: 4px solid var(--ok); background: var(--surface-2); } .bdres.warn { border-left-color: var(--warn); } .bdres.crit { border-left-color: var(--crit); }
+/* v131: Desempenho por operador (Indicadores de certificados) */
+.dpwrap { margin-top: 14px; display: grid; gap: 12px; } .dpt { margin: 0; font-size: 14px; } .dpt small { font-weight: 400; color: var(--ink-3); margin-left: 6px; font-size: 12px; }
+.dpop { border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 12px; background: color-mix(in srgb, var(--surface-2) 60%, transparent); }
+.dphd { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; align-items: center; } .dphd b { display: block; font-size: 18px; } .dphd small { display: block; color: var(--ink-3); margin-top: 3px; }
+.dpfo { position: relative; width: 76px; height: 94px; border-radius: 10px; overflow: hidden; border: 2px solid var(--k); box-shadow: 0 0 14px color-mix(in srgb, var(--k) 35%, transparent); background: var(--surface-2); display: grid; place-items: center; }
+.dpfo img { width: 100%; height: 100%; object-fit: cover; display: block; } .dpfo span { font: 700 24px var(--f-display); color: var(--ink-3); }
+.dpfo i { position: absolute; left: 0; right: 0; bottom: 0; background: var(--k); color: var(--bg); font: 700 9.5px var(--f-body); font-style: normal; text-align: center; text-transform: uppercase; padding: 2px 0; }
+.dpop.db .dpfo i { color: #fff; }
+.dpchips { display: flex; flex-wrap: wrap; gap: 6px; } .dpch { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line-2); border-radius: 999px; padding: 3px 12px 3px 4px; background: none; color: var(--ink-2); font: 500 13px var(--f-body); cursor: pointer; }
+.dpch.on { border-color: var(--n-tcr); background: color-mix(in srgb, var(--n-tcr) 15%, transparent); color: var(--ink); font-weight: 600; }
+.dpav { width: 26px; height: 26px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: var(--surface-2); font: 700 10px var(--f-display); color: var(--ink-3); } .dpav img { width: 100%; height: 100%; object-fit: cover; }
+.dpks { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; } .dpk { border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; background: var(--surface); }
+.dpk span { display: block; font: 600 11px var(--f-body); text-transform: uppercase; letter-spacing: .05em; color: var(--ink-3); } .dpk b { display: block; font: 700 27px var(--f-display); margin: 2px 0; }
+.dpk small { color: var(--ink-3); font-size: 11.5px; } .dpk em { font-style: normal; font-weight: 600; } .dpk em.up { color: var(--ok); } .dpk em.dn { color: var(--crit); }
+.dpg3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; } .dpg3 > .chart { margin: 0; }
+.dpcal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; } .dpcal i { font-style: normal; height: 30px; border-radius: 5px; background: var(--surface-2); font-size: 9.5px; color: var(--ink-3); padding: 2px 4px; position: relative; }
+.dpcal i b { position: absolute; right: 4px; bottom: 2px; font: 700 12px var(--f-display); color: var(--ink); } .dpcal i.h { background: none; height: auto; text-align: center; font-weight: 600; } .dpcal i.v { background: none; }
+.dpcal .l1 { background: color-mix(in srgb, var(--k) 20%, var(--surface-2)); } .dpcal .l2 { background: color-mix(in srgb, var(--k) 40%, var(--surface-2)); } .dpcal .l3 { background: color-mix(in srgb, var(--k) 62%, var(--surface-2)); } .dpcal .l4 { background: color-mix(in srgb, var(--k) 86%, var(--surface-2)); }
+.dpcal .f { opacity: .35; } .dpcal .hj { outline: 2px solid var(--ink); }
+.dphm { display: grid; grid-template-columns: 30px repeat(11, 1fr); gap: 3px; align-items: center; } .dphm em { font-style: normal; font-size: 9.5px; color: var(--ink-3); text-align: center; } .dphm span { font-size: 11px; color: var(--ink-3); } .dphm i { height: 24px; border-radius: 4px; background: var(--n-tcr); }
+.dptl { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; } .dptl li { display: grid; grid-template-columns: 74px 10px minmax(0, 1fr); gap: 8px; align-items: start; }
+.dptl em { font: 500 11px var(--f-mono); font-style: normal; color: var(--ink-3); padding-top: 1px; } .dptl i { width: 10px; height: 10px; border-radius: 50%; margin-top: 4px; }
+.dptl b { display: block; font-size: 12.5px; } .dptl small { color: var(--ink-3); font-size: 11.5px; } .dpnt { margin: 6px 0 0; color: var(--ink-3); font-size: 11.5px; }
+.dpbr { display: grid; grid-template-columns: minmax(0, 150px) 1fr 40px; gap: 8px; align-items: center; margin: 5px 0; font-size: 12px; color: var(--ink-2); }
+.dpbr span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .dpbr i { height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; } .dpbr i b { display: block; height: 100%; border-radius: 4px; }
+.dpbr em { font: 700 14px var(--f-display); font-style: normal; text-align: right; } .dpsp svg { width: 100%; height: 70px; display: block; }
+@media (max-width: 1100px) { .dpks { grid-template-columns: repeat(3, minmax(0, 1fr)); } .dpg3 { grid-template-columns: minmax(0, 1fr); } }
 .ehpt b { font-weight: 600; color: var(--ink-2); }   /* v127 */
 .ehpt { font-size: 11px; letter-spacing: -.02em; gap: 6px; } .ehpt > span { white-space: nowrap; } .ehpt > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .ehnm em { font: 700 22px/1 var(--f-display); font-style: normal; white-space: nowrap; } .ehnm em small { font: 400 11px var(--f-body); color: var(--ink-3); margin-left: 3px; }
@@ -5951,7 +5978,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 129; window.CQ_V = APP_V;
+    const APP_V = 131; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -9206,8 +9233,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     /* v118: lotes sem inspeção, pelos 3 motivos fixos, e as notas travadas agora */
     const SL = M.av.filter((x) => { const e = lotSt(x).semi; if (!e || E.filled(x.insp) || lotSt(x).insp) return false; const d = msSer(e.at); return d >= P.a && d <= P.b; });
     const TRv = riTravados();
-    const semRow = SL.length || TRv.length ? `<div class="nxc2b"><div class="chart"><h3>Lotes sem inspeção<small>${esc(P.label)} · ${NF.format(SL.length)} ${SL.length === 1 ? 'lote' : 'lotes'} pelo motivo</small></h3>${nxHbars('nxr-sem', ['lib', 'nenc', 'scond'].map((k) => { const n = SL.filter((x) => lotSt(x).semi.mot === k).length; return { l: SEMI_MOT[k][0], v: n, t: NF.format(n), tip: `${SEMI_MOT[k][0]}: ${n} ${n === 1 ? 'lote' : 'lotes'}`, go }; }), VERM, { min: 0, vazio: 'Nenhum lote sem inspeção no período.', vw: 40 })}</div>
-      <div class="chart"><h3>Travados agora<small>não encontrado ou sem condições · o mais antigo primeiro</small></h3>${TRv.length ? `<ul class="nxul">${TRv.slice(0, 5).map((o) => `<li data-go='${esc(JSON.stringify(go))}' tabindex="0">${av(who(o.ev.by), 'ehav st on')}<div><b>NF ${esc(disp(o.nf) || '—')} · ${esc(String(o.forn || '').split(/\s+/).slice(0, 2).join(' '))}</b><small>${esc(SEMI_MOT[o.mot][0])}${o.ev.obs ? ' · ' + esc(o.ev.obs) : ''}</small></div><div style="display:grid;justify-items:end;gap:2px"><em style="font:600 12px var(--f-mono);font-style:normal;color:${semiDias(o) > RI_UTEIS + 1 ? 'var(--crit)' : 'var(--ink-3)'}">há ${semiDias(o)} d úteis</em></div></li>`).join('')}</ul>` : '<p class="muted" style="margin:0">Nenhuma nota travada.</p>'}</div></div>` : '';
+    const semRow = SL.length ? `<div class="nxc2b"${TRv.length ? '' : ' style="grid-template-columns:minmax(0,1fr)"'}><div class="chart"><h3>Lotes sem inspeção<small>${esc(P.label)} · ${NF.format(SL.length)} ${SL.length === 1 ? 'lote' : 'lotes'} pelo motivo</small></h3>${nxHbars('nxr-sem', ['lib', 'nenc', 'scond'].map((k) => { const n = SL.filter((x) => lotSt(x).semi.mot === k).length; return { l: SEMI_MOT[k][0], v: n, t: NF.format(n), tip: `${SEMI_MOT[k][0]}: ${n} ${n === 1 ? 'lote' : 'lotes'}`, go }; }), VERM, { min: 0, vazio: 'Nenhum lote sem inspeção no período.', vw: 40 })}</div>
+      ${!TRv.length ? '' : `<div class="chart"><h3>Travados agora<small>não encontrado ou sem condições · o mais antigo primeiro</small></h3>${TRv.length ? `<ul class="nxul">${TRv.slice(0, 5).map((o) => `<li data-go='${esc(JSON.stringify(go))}' tabindex="0">${av(who(o.ev.by), 'ehav st on')}<div><b>NF ${esc(disp(o.nf) || '—')} · ${esc(String(o.forn || '').split(/\s+/).slice(0, 2).join(' '))}</b><small>${esc(SEMI_MOT[o.mot][0])}${o.ev.obs ? ' · ' + esc(o.ev.obs) : ''}</small></div><div style="display:grid;justify-items:end;gap:2px"><em style="font:600 12px var(--f-mono);font-style:normal;color:${semiDias(o) > RI_UTEIS + 1 ? 'var(--crit)' : 'var(--ink-3)'}">há ${semiDias(o)} d úteis</em></div></li>`).join('')}</ul>` : '<p class="muted" style="margin:0">Nenhuma nota travada.</p>'}</div>`}</div>` : '';
     return sec(nxIns([i1, i2, i3], nxResumoT(P)) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Por inspetor<small>${esc(P.label)}</small></h3>${tabI(A, (v) => H.map((h) => v.L.length ? ab(h.a, h.b).filter((c) => E.key(c.nome || '') === v.k).length : 0))}</div>${rank}</div>${semRow}`);
   }
   /* ================= v108: RIF (inspeção final) no visual novo ================= */
@@ -9518,7 +9545,78 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const i1 = A.length ? ['ok', `<b>${NF.format(A.length)} ${A.length === 1 ? 'certificado emitido' : 'certificados emitidos'}</b> ${qual}${tA ? ` — em média ${NF1.format(tA.m)} ${tA.m === 1 ? 'dia útil' : 'dias úteis'} depois do faturamento` : ''}.`] : ['info', `<b>Nenhum certificado emitido</b> ${qual}.`];
     const i2 = FILA.length ? [atr.length ? 'crit' : 'warn', `<b>${FILA.length === 1 ? '1 pedido na fila' : FILA.length + ' pedidos na fila'}</b>${atr.length ? `, ${atr.length === 1 ? '1 atrasado' : atr.length + ' atrasados'}` : ''}${vh.length ? `, ${vh.length} com prazo vencendo hoje` : ''}.`] : ['ok', '<b>Fila vazia</b>: nenhum pedido esperando certificado.'];
     const i3 = topC ? ['info', `<b>${esc(String(topC[0]).split(/\s+/).slice(0, 3).join(' '))}</b> foi o cliente com mais certificados ${quando}: ${NF.format(topC[1])}.`] : ['info', `Sem certificados ${quando}.`];
-    return sec(nxIns([i1, i2, i3], nxResumoT(P)) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Por quem emitiu<small>${esc(P.label)}</small></h3>${tabP(A, (o) => H.map((h) => ab(h.a, h.b).filter((c) => E.key(nomeC(c)) === o.k).length))}</div>${rank}</div><details class="nxmore"><summary>Mais: a fila e os operadores semana a semana (o painel de antes)</summary>${cqIndHTML(LT)}</details>`);
+    /* v131: Desempenho por operador (no lugar do painel antigo): a pessoa, o dia a dia, o horário, o que fez,
+       clientes, produtos, comparação com a equipe e, para quem faz Data Book, a parte do Data Book (roxo) */
+    const opHTML = () => {
+      const a12 = P.b - 370, CC12 = CC.filter((c) => dC(c) >= a12 && dC(c) <= P.b);
+      const DBs = L.filter((c) => c.db && c.db.at), dD = (c) => cqSer(c.db.at), dbNome = (c) => String(c.db.nome || '—');
+      const cont = new Map(); const addN = (n, v) => { const k = E.key(n); if (!k || k === '—') return; const o = cont.get(k) || { k, nome: n, n: 0, t: 0 }; o.n += v; o.t++; cont.set(k, o); };
+      CC12.forEach((c) => addN(nomeC(c), dC(c) >= P.a ? 1 : 0)); DBs.filter((c) => dD(c) >= a12).forEach((c) => addN(dbNome(c), 0));
+      const OPS = Array.from(cont.values()).sort((a, b) => b.n - a.n || b.t - a.t || a.nome.localeCompare(b.nome, 'pt-BR'));
+      if (!OPS.length) return '';
+      const op = OPS.find((o) => o.k === st.op) || OPS[0], eh = (c) => E.key(nomeC(c)) === op.k, ehD = (c) => E.key(dbNome(c)) === op.k;
+      const A0 = ab(P.a, P.b), Ao = A0.filter(eh), Apo = ab(P.prev.a, P.prev.b).filter(eh), Hj = ab(hoje, hoje).filter(eh);
+      const tO = tempo(Ao), tE = tempo(A0), fora = (X) => X.filter((c) => tipo(c) === 'f').length, nPr = (X) => X.filter((c) => tipo(c) !== 'v').length;
+      const pcO = nPr(Ao) ? Math.round((nPr(Ao) - fora(Ao)) / nPr(Ao) * 100) : null;
+      const folhas = (X) => X.reduce((s2, c) => s2 + (c.conc.folhas || 0), 0);
+      const pend = FILA.filter((c) => c.pend && E.key(String(c.pend.nome || c.porNome || '')) === op.k).length;
+      const ult = Math.max(0, ...CC.filter(eh).map((c) => c.conc.at), ...DBs.filter(ehD).map((c) => c.db.at)), on = ult && Date.now() - ult < 15 * 60000;
+      const posI = OPS.slice().sort((a, b) => itens(A0.filter((c) => E.key(nomeC(c)) === b.k)) - itens(A0.filter((c) => E.key(nomeC(c)) === a.k))).findIndex((o) => o.k === op.k) + 1;
+      const foto = fotoN(op.nome), dbOp = DBs.filter(ehD), temDB = dbOp.some((c) => dD(c) >= a12);
+      const kp = (l, v, sub, cor, dl) => `<div class="dpk"><span>${l}</span><b${cor ? ` style="color:${cor}"` : ''}>${v}</b><small>${sub}${dl ? ' ' + dl : ''}</small></div>`;
+      const dlt = (a, b) => (b ? `<em class="${a >= b ? 'up' : 'dn'}">${a >= b ? '▲' : '▼'} ${NF.format(Math.abs(a - b))} vs o período anterior</em>` : '');
+      /* calendário do mês do fim do período */
+      const cal = (X, at, cor) => {
+        const o = E.ymd(P.b), M = nxMes(o.y, o.m), n0 = (E.dow(M.a) + 6) % 7, cnt = new Map(); X.forEach((c) => { const d = at(c); if (d >= M.a && d <= M.b) cnt.set(d, (cnt.get(d) || 0) + 1); });
+        const mx = Math.max(1, ...cnt.values()); let h = '<div class="dpcal">' + ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'].map((d) => `<i class="h">${d}</i>`).join('') + '<i class="v"></i>'.repeat(n0);
+        for (let d = M.a; d <= M.b; d++) { const v = cnt.get(d) || 0, lv = v ? Math.min(4, 1 + Math.floor((v / mx) * 3.99)) : 0; h += `<i class="l${lv}${d > hoje ? ' f' : ''}${d === hoje ? ' hj' : ''}" style="--k:${cor}" title="${esc(E.fmtDate(d))}: ${v}">${E.ymd(d).d}${v ? `<b>${v}</b>` : ''}</i>`; }
+        return h + '</div>';
+      };
+      const XH = P.m === 'd' ? CC.filter((c) => eh(c) && dC(c) > P.b - 31 && dC(c) <= P.b) : Ao;
+      const hm = (() => { const hs = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], g2 = {}; XH.forEach((c) => { const d = new Date(c.conc.at), w = d.getDay(), hh = d.getHours(); if (w < 1 || w > 5 || hh < 7 || hh > 17) return; const k = w + '-' + hh; g2[k] = (g2[k] || 0) + 1; });
+        const mx = Math.max(1, ...Object.values(g2)); return `<div class="dphm"><span></span>${hs.map((h) => `<em>${h}h</em>`).join('')}${['Seg', 'Ter', 'Qua', 'Qui', 'Sex'].map((dn, i) => `<span>${dn}</span>` + hs.map((h) => { const v = g2[(i + 1) + '-' + h] || 0; return `<i style="opacity:${v ? (0.25 + 0.75 * v / mx).toFixed(2) : 0.07}" title="${dn} ${h}h: ${v}"></i>`; }).join('')).join('')}</div>`; })();
+      const diaRef = Math.min(P.b, hoje), Dd = CC.filter((c) => eh(c) && dC(c) === diaRef).map((c) => ({ at: c.conc.at, cor: tipo(c) === 'f' ? VERM : C2, t: `PV ${cqNum(c)} · ${String(c.cli || '').split(/\s+/).slice(0, 2).join(' ')}`, s: `${c.conc.itens || 0} itens · ${cqProd(c)}${tipo(c) === 'f' ? ' · fora do prazo' : ''}` }))
+        .concat(FILA.filter((c) => c.pend && c.pend.at && cqSer(c.pend.at) === diaRef && E.key(String(c.pend.nome || '')) === op.k).map((c) => ({ at: c.pend.at, cor: OURO, t: `PV ${cqNum(c)} · pendência`, s: String(c.pend.m || 'aguardando') })))
+        .sort((a, b) => b.at - a.at);
+      const tl = (L2, vazio, hfun) => L2.length ? `<ul class="dptl">${L2.slice(0, 6).map((o) => `<li><em>${hfun ? hfun(o.at) : hhmm(o.at)}</em><i style="background:${o.cor}"></i><div><b>${esc(o.t)}</b><small>${esc(o.s)}</small></div></li>`).join('')}</ul>${L2.length > 6 ? `<p class="dpnt">e mais ${L2.length - 6}</p>` : ''}` : `<p class="dpnt">${vazio}</p>`;
+      const bars = (pares, cor) => { const mx = Math.max(1, ...pares.map((x) => x[1])); return pares.length ? pares.map(([n, v, t]) => `<div class="dpbr"><span title="${esc(n)}">${esc(n)}</span><i><b style="width:${(v / mx * 100).toFixed(0)}%;background:${cor}"></b></i><em>${t != null ? t : NF.format(v)}</em></div>`).join('') : '<p class="dpnt">Nada no período.</p>'; };
+      const topN = (X, f, n) => { const m = new Map(); X.forEach((c) => { const k = f(c); m.set(k, (m.get(k) || 0) + 1); }); return Array.from(m.entries()).sort((a, b) => b[1] - a[1]).slice(0, n); };
+      const ipc = (X) => (X.length ? itens(X) / X.length : 0), pf = (X) => (nPr(X) ? fora(X) / nPr(X) * 100 : 0);
+      const cmp = [[`Itens por certificado · ${NF1.format(ipc(Ao))}`, ipc(Ao), NF1.format(ipc(Ao))], [`Equipe · ${NF1.format(ipc(A0))}`, ipc(A0), NF1.format(ipc(A0))]];
+      const cmp2 = [[`Fora do prazo · ${NF.format(Math.round(pf(Ao)))}%`, pf(Ao), NF.format(Math.round(pf(Ao))) + '%'], [`Equipe · ${NF.format(Math.round(pf(A0)))}%`, pf(A0), NF.format(Math.round(pf(A0))) + '%']];
+      const cmp3 = tO && tE ? [[`Tempo de emissão · ${NF1.format(tO.m)} d`, tO.m, NF1.format(tO.m)], [`Equipe · ${NF1.format(tE.m)} d`, tE.m, NF1.format(tE.m)]] : [];
+      const chips = `<div class="dpchips">${OPS.map((o) => { const f = fotoN(o.nome); return `<button type="button" class="dpch${o.k === op.k ? ' on' : ''}" data-act="cq-op" data-key="${esc(o.k)}" aria-pressed="${o.k === op.k}"><span class="dpav${f ? ' fo' : ''}">${f ? `<img src="${esc(f)}" alt="" loading="lazy" decoding="async">` : esc(nxIni(o.nome))}</span>${esc(o.nome)}</button>`; }).join('')}</div>`;
+      const cab = (cor) => `<div class="dphd" style="--k:${cor}"><div class="dpfo${foto ? ' fo' : ''}">${foto ? `<img src="${esc(foto)}" alt="Foto de ${esc(op.nome)}">` : `<span>${esc(nxIni(op.nome))}</span>`}${on ? '<i>online agora</i>' : ''}</div><div><b>${esc(op.nome)}</b><small>${posI && Ao.length ? `${esc(P.label)}: ${posI}º em itens emitidos` : 'sem certificado no período'}${ult ? ' · último registro ' + (on ? 'há ' + Math.max(1, Math.round((Date.now() - ult) / 60000)) + ' min' : 'em ' + esc(dmy(ult)) + ' às ' + esc(hhmm(ult))) : ''}</small></div></div>`;
+      let h = `<div class="dpop">${cab(C2)}${chips}
+        <div class="dpks">${kp(P.m === 'd' ? 'Emitidos no dia' : 'Emitidos ' + qual, NF.format(Ao.length), `${NF.format(itens(Ao))} itens`, null, dlt(Ao.length, Apo.length))}${kp('Hoje', NF.format(Hj.length), `certificados · ${NF.format(itens(Hj))} itens`)}${kp('Tempo de emissão', tO ? NF1.format(tO.m) + ' d' : '—', 'dias úteis, faturamento → certificado')}${kp('No prazo', pcO == null ? '—' : pcO + '%', `${NF.format(fora(Ao))} fora do prazo`, pcO != null && pcO < 90 ? OURO : null)}${kp('Pendências abertas', NF.format(pend), 'pedidos marcados por ele, esperando')}${kp('Folhas', NF.format(folhas(Ao)), 'páginas de certificado emitidas')}</div>
+        <div class="dpg3"><div class="chart"><h3>Dia a dia<small>certificados por dia · ${esc(MESES_L[E.ymd(P.b).m - 1])}</small></h3>${cal(CC.filter(eh), dC, C2)}</div>
+          <div class="chart"><h3>Horário de produção<small>quando mais emite${P.m === 'd' ? ' · últimos 30 dias' : ''}</small></h3>${hm}</div>
+          <div class="chart"><h3>${diaRef === hoje ? 'Hoje, na ordem' : 'No dia ' + esc(E.fmtDate(diaRef))}<small>o mais novo em cima</small></h3>${tl(Dd, 'Nenhum certificado neste dia.')}</div></div>
+        <div class="dpg3"><div class="chart"><h3>Clientes que mais atende<small>${esc(P.label)}</small></h3>${bars(topN(Ao, (c) => String(c.cli || '—'), 5), C2)}</div>
+          <div class="chart"><h3>Tipo de produto<small>${esc(P.label)}</small></h3>${bars(topN(Ao, cqProd, 5), AZUL)}</div>
+          <div class="chart"><h3>Comparado com a equipe<small>${esc(P.label)}</small></h3>${bars(cmp, C2)}${bars(cmp2, VERM)}${cmp3.length ? bars(cmp3, OURO) : ''}</div></div></div>`;
+      if (temDB) {
+        const DBp = dbOp.filter((c) => dD(c) >= P.a && dD(c) <= P.b), DBpp = dbOp.filter((c) => dD(c) >= P.prev.a && dD(c) <= P.prev.b), comP = DBp.filter((c) => c.db.pags != null);
+        const sum = (X, f) => X.reduce((s2, c) => s2 + (c.db[f] || 0), 0), med = (X, f) => (X.length ? sum(X, f) / X.length : null);
+        const tDB = DBp.filter((c) => c.conc && c.conc.at && c.db.at >= c.conc.at).map((c) => E.workdaysBetween(cqSer(c.conc.at), dD(c), cqHol())), tM = tDB.length ? tDB.reduce((s2, v) => s2 + v, 0) / tDB.length : null;
+        const dbC = cqCfg().dbCli.map((x) => E.key(x)).filter(Boolean), pedeDB = (c) => dbC.some((x) => E.key(c.cli || '').includes(x));
+        const filaDB = dbC.length ? CC.filter((c) => !c.db && pedeDB(c) && dC(c) > hoje - 31).sort((a, b) => a.conc.at - b.conc.at) : [];
+        const lista = DBp.slice().sort((a, b) => b.db.at - a.db.at).map((c) => ({ at: c.db.at, cor: c.db.nf === false ? OURO : ROXO, t: `PV ${cqNum(c)} · ${String(c.cli || '').split(/\s+/).slice(0, 2).join(' ')}`, s: c.db.pags != null ? `${c.db.pags} pág. · ${c.db.orig || 0} origens · ${c.db.nf === false ? 'sem NF' : 'com NF'}` : 'salvo antes da v131 (sem os detalhes)' }));
+        const fl = filaDB.map((c) => { const d = E.workdaysBetween(dC(c), hoje, cqHol()); return { at: c.conc.at, cor: d >= 3 ? VERM : d >= 1 ? OURO : C2, t: `PV ${cqNum(c)} · ${String(c.cli || '').split(/\s+/).slice(0, 2).join(' ')}`, s: `certificado de ${dmy(c.conc.at)} · ${c.conc.itens || 0} itens`, d }; });
+        const sp = H.map((hh) => { const X = dbOp.filter((c) => dD(c) >= hh.a && dD(c) <= hh.b && c.db.pags != null); return X.length ? sum(X, 'pags') / X.length : 0; });
+        const nf1 = comP.filter((c) => c.db.nf !== false).length, nf0 = comP.filter((c) => c.db.nf === false).length;
+        h += `<div class="dpop db">${cab(ROXO)}
+          <div class="dpks">${kp(P.m === 'd' ? 'Data Books no dia' : 'Data Books ' + qual, NF.format(DBp.length), 'NF + certificado + origem', ROXO, dlt(DBp.length, DBpp.length))}${kp('Páginas montadas', comP.length ? NF.format(sum(comP, 'pags')) : '—', comP.length ? `média de ${NF.format(Math.round(med(comP, 'pags')))} por Data Book` : 'conta a partir da v131', ROXO)}${kp('Certificados de origem', comP.length ? NF.format(sum(comP, 'orig')) : '—', comP.length ? `${NF1.format(med(comP, 'orig'))} por Data Book` : 'conta a partir da v131')}${kp('Etiquetas de rastreio', comP.length ? NF.format(sum(comP, 'etq')) : '—', 'nos certificados de origem')}${kp('Do certificado ao Data Book', tM == null ? '—' : NF1.format(tM) + ' d', 'dias úteis, em média')}${kp('Fila de Data Book', dbC.length ? NF.format(fl.length) : '—', dbC.length ? 'certificado pronto, Data Book não salvo' : 'falta dizer quais clientes pedem', fl.length ? OURO : null)}</div>
+          <div class="dpg3"><div class="chart"><h3>Data Books por dia<small>${esc(MESES_L[E.ymd(P.b).m - 1])}</small></h3>${cal(dbOp, dD, ROXO)}</div>
+            <div class="chart"><h3>Data Books<small>${esc(P.label)} · o mais novo em cima</small></h3>${tl(lista, 'Nenhum Data Book no período.', (t) => dmy(t).slice(0, 5) + ' ' + hhmm(t))}</div>
+            <div class="chart"><h3>Fila de Data Book<small>certificado pronto, Data Book ainda não salvo</small></h3>${dbC.length ? tl(fl, 'Nada esperando Data Book. 👍', (t) => { const d = E.workdaysBetween(cqSer(t), hoje, cqHol()); return d ? 'há ' + d + ' d' : 'hoje'; }) + '<p class="dpnt">Clientes de Configurações › Certificados › "Clientes que pedem Data Book"; certificados dos últimos 30 dias.</p>' : '<p class="dpnt">Escreva em <b>Configurações › Certificados › Clientes que pedem Data Book</b> quais clientes pedem Data Book. Aí os certificados deles sem Data Book aparecem aqui.</p>'}</div></div>
+          <div class="dpg3"><div class="chart"><h3>Tamanho dos Data Books<small>páginas por Data Book · ${H.length} ${P.m === 't' ? 'trimestres' : P.m === 'd' ? 'dias' : 'meses'}</small></h3><div class="dpsp" style="--c:${ROXO}">${nxSpark(sp, 300, 70)}</div><p class="dpnt">${sp.some((v) => v) ? 'Média do período: ' + NF.format(Math.round(med(comP, 'pags') || 0)) + ' páginas.' : 'Os detalhes contam a partir da v131.'}</p></div>
+            <div class="chart"><h3>Com a NF junto<small>${esc(P.label)}</small></h3>${comP.length ? bars([['Com a NF', nf1], ['Sem a NF', nf0]], ROXO) : '<p class="dpnt">Conta a partir da v131.</p>'}</div>
+            <div class="chart"><h3>Clientes de Data Book<small>${esc(P.label)}</small></h3>${bars(topN(DBp, (c) => String(c.cli || '—'), 5), ROXO)}</div></div></div>`;
+      }
+      return `<div class="dpwrap"><h3 class="dpt">Desempenho por operador<small>${esc(P.label)} · toque na foto para trocar de pessoa · o período é o de cima</small></h3>${h}</div>`;
+    };
+    return sec(nxIns([i1, i2, i3], nxResumoT(P)) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Por quem emitiu<small>${esc(P.label)}</small></h3>${tabP(A, (o) => H.map((h) => ab(h.a, h.b).filter((c) => E.key(nomeC(c)) === o.k).length))}</div>${rank}</div>${opHTML()}`);
   }
   /* ================= v114: VISÃO DO PROCESSO no visual novo (aprovado: "Rio do processo") =================
      O caminho dos lotes do período, do recebimento ao destino: a largura de cada faixa é a quantidade; a ramificação dos
@@ -9541,7 +9639,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       return { d: 'Sem destino', at: null };
     };
     const lotes = (a, b) => M.av.filter((x) => dentro(x.data, a, b) && okF(x.forn));
-    const semL = (x) => { const e = lotSt(x).semi; return !!(e && e.mot === 'lib' && !apr(x) && !rep(x)); };   /* v118: liberado sem inspeção sai do rio (não é "aguardando") */
+    const semL = (x) => { const e = lotSt(x).semi; return !!(e && !apr(x) && !rep(x)); };   /* v130: os três motivos saem do rio */   /* v118: liberado sem inspeção sai do rio (não é "aguardando") */
     const L = lotes(P.a, P.b).filter((x) => !semL(x)), I = L.filter((x) => apr(x) || rep(x)), AG = L.filter((x) => !apr(x) && !rep(x)), AP = L.filter(apr), RP = L.filter(rep);
     const RN = RP.filter((x) => ncfsDe(x).length), RS = RP.filter((x) => !ncfsDe(x).length);
     const dst = new Map(), add = (k, src) => { const o = dst.get(k) || { n: 0, ncf: 0, sem: 0 }; o.n++; o[src]++; dst.set(k, o); };
@@ -12175,8 +12273,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   /* v118: liberados sem inspeção (decisão final) aparecem na Auditoria, com quem autorizou */
   function semiAudit(M) {
-    const L = (M.av || []).filter((x) => { const e = lotSt(x).semi; return e && e.mot === 'lib' && !E.filled(x.insp) && !lotSt(x).insp; });
-    return L.length ? [{ sev: 'media', mod: 'AV', title: 'Lote liberado sem inspeção', hint: 'O lote seguiu sem RIR (motivo “Liberado sem inspeção”). Confira a autorização; se a inspeção foi feita depois, lance o RIR.', items: L.map((x) => { const e = lotSt(x).semi; return { ref: x.id + ' › Sem inspeção', text: `NF ${disp(x.nf) || '—'} · autorizado por ${e.aut || '—'}${e.data != null ? ' em ' + fD(e.data) : ''}${e.obs ? ' · ' + e.obs : ''}`, rec: x }; }) }] : [];
+    const sem = (mot) => (M.av || []).filter((x) => { const e = lotSt(x).semi; return e && e.mot === mot && !E.filled(x.insp) && !lotSt(x).insp; });
+    const L = sem('lib'), out = L.length ? [{ sev: 'media', mod: 'AV', title: 'Lote liberado sem inspeção', hint: 'O lote seguiu sem RIR (motivo “Liberado sem inspeção”). Confira a autorização; se a inspeção foi feita depois, lance o RIR.', items: L.map((x) => { const e = lotSt(x).semi; return { ref: x.id + ' › Sem inspeção', text: `NF ${disp(x.nf) || '—'} · autorizado por ${e.aut || '—'}${e.data != null ? ' em ' + fD(e.data) : ''}${e.obs ? ' · ' + e.obs : ''}`, rec: x }; }) }] : [];
+    /* v130: "Não encontrado" e "Sem condições" também são finais: aparecem na Auditoria com a observação */
+    ['nenc', 'scond'].forEach((k) => { const Lk = sem(k); if (Lk.length) out.push({ sev: 'media', mod: 'AV', title: 'Lote sem inspeção · ' + SEMI_MOT[k][0].toLowerCase(), hint: 'O lote saiu da fila do RIR sem inspeção. Confira a observação; se o material aparecer ou der para inspecionar, lance o RIR.', items: Lk.map((x) => { const e = lotSt(x).semi; return { ref: x.id + ' › Sem inspeção', text: `NF ${disp(x.nf) || '—'} · marcado por ${who(e.by)}${e.at ? ' em ' + dmy(e.at) : ''}${e.obs ? ' · ' + e.obs : ''}`, rec: x }; }) }); });
+    return out;
   }
   function rnccAudit(M) {
     const out = [], add = (sev, title, hint, items) => { if (items.length) out.push({ sev, mod: 'RNCC', title, hint, items }); };
@@ -14853,6 +14954,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     return {
       regras: Array.isArray(c.regras) ? c.regras.filter((r) => r && r.cli) : [],
       semCert: Array.isArray(c.semCert) ? c.semCert.filter(Boolean) : [],
+      dbCli: Array.isArray(c.dbCli) ? c.dbCli.filter(Boolean) : [],   /* v131: clientes que pedem Data Book (parte do nome) */
       prazo: typeof c.prazo === 'number' && c.prazo >= 0 ? c.prazo : 2,
       prazoCrit: typeof c.prazoCrit === 'number' && c.prazoCrit >= 0 ? c.prazoCrit : 1,
       motivos: Array.isArray(c.motivos) && c.motivos.length ? c.motivos : CQ_MOT.slice(),
@@ -15801,7 +15903,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const ed = S.cqEd, c = ed && ed.k ? cqFind(ed.k) : null;
     if (k === 'tipo') { cqTrocarTipo(v); return; }
     if (k === 'zerar') { cqLimpar(); return; }
-    if (k === 'log') { if (c && cw('certq')) { logEntry('CERTQ', cqNum(c), 'alterado', String(v || '').slice(0, 300), null); if (/^Documento completo/i.test(String(v || ''))) cqPatch(c, { db: { at: Date.now(), by: DB.me || null, nome: cqMeNome() } }, null).catch(() => {}); } return; }   /* v85: documento completo salvo; v113: marca o pedido (Data Book) */
+    if (k === 'log') { if (c && cw('certq')) { logEntry('CERTQ', cqNum(c), 'alterado', String(v || '').slice(0, 300), null); if (/^Documento completo/i.test(String(v || ''))) { const tx = String(v), nm = (re) => { const m = re.exec(tx); return m ? +m[1] : null; };   /* v131: guarda os números do Data Book para os indicadores */
+        cqPatch(c, { db: clean({ at: Date.now(), by: DB.me || null, nome: cqMeNome(), pags: nm(/(\d+) página/), orig: nm(/(\d+) certificado\(s\) de origem/), etq: nm(/(\d+) etiqueta/), nf: /com a NF/.test(tx) ? true : /sem a NF/.test(tx) ? false : null }) }, null).catch(() => {}); }; } return; }   /* v85: documento completo salvo; v113: marca o pedido (Data Book) */
     if (k === 'voltar') { cqAct('cq-voltar'); return; }
     if (k === 'rif') {
       if (!c) { toast('Certificado avulso: não tem pedido para conferir o RIF.', true); return; }
@@ -16175,6 +16278,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         ${cf.regras.map((r, i) => `<tr data-i="${i}"><td><input class="inp" data-cqr="cli" value="${esc(r.cli)}" ${dis}></td><td>${opSel(r.em)}</td><td><input type="checkbox" data-cqr="on" ${r.on !== false ? 'checked' : ''} ${dis}></td><td>${ro ? '' : '<button type="button" class="btn small ghost" data-cqrdel="1">Tirar</button>'}</td></tr>`).join('') || '<tr class="none"><td colspan="4" class="muted">Nenhuma regra ainda.</td></tr>'}
         </tbody></table></div>${ro ? '' : `<button class="btn small" type="button" id="cq-rgadd">+ Nova regra</button><datalist id="cq-clis">${clis.map((x) => `<option value="${esc(x)}">`).join('')}</datalist>`}</div>
       <div class="cfgitem"><b>Clientes que não precisam de certificado</b><span class="use">Um por linha (parte do nome). Entram direto em Concluídos como "Não precisa", sem passar pela fila.</span><textarea id="cq-sc" spellcheck="false" ${dis}>${esc(cf.semCert.join('\n'))}</textarea></div>
+      <div class="cfgitem"><b>Clientes que pedem Data Book</b><span class="use">Um por linha (parte do nome). Os certificados desses clientes sem Data Book salvo entram na "Fila de Data Book" do Painel (Desempenho por operador).</span><textarea id="cq-dbc" spellcheck="false" ${dis}>${esc(cf.dbCli.join('\n'))}</textarea></div>
       <div class="cfgitem"><b>Prazo</b><span class="use">Dias úteis depois do faturamento para o pedido contar como atrasado (só nos indicadores e para os administradores).</span><input class="inp" id="cq-pz" type="number" min="0" step="1" value="${cf.prazo}" style="width:110px" ${dis}></div>
       <div class="cfgitem"><b>★ Prazo do cliente crítico</b><span class="use">Dias úteis para os pedidos dos clientes marcados como críticos em Configurações › Clientes. O cartão mostra quanto falta para todos, e o atraso entra em Alertas.</span><input class="inp" id="cq-pzc" type="number" min="0" step="1" value="${cf.prazoCrit}" style="width:110px" ${dis}></div>
       <div class="cfgitem"><b>Motivos de pendência</b><span class="use">Um por linha. Aparecem ao registrar a pendência no cartão.</span><textarea id="cq-mt" spellcheck="false" ${dis}>${esc(cf.motivos.join('\n'))}</textarea></div>
@@ -16188,7 +16292,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const rows = () => $$('#cq-rg tbody tr[data-i]').map((tr) => { const em = tr.querySelector('[data-cqr="em"]').value, o = ops.find((x) => E.low(x.em) === E.low(em)); return { cli: tr.querySelector('[data-cqr="cli"]').value.trim(), em: em || null, nome: o ? o.nome || o.em : null, on: tr.querySelector('[data-cqr="on"]').checked }; }).filter((r) => r.cli);
     const save = async (opsNew) => {
       const b = $('#cq-cfgsave'); if (b) { b.disabled = true; b.textContent = 'Gravando…'; }
-      const o = { regras: rows().map(clean), semCert: lines('cq-sc'), prazo: Math.max(0, parseInt($('#cq-pz').value, 10) || 0), prazoCrit: Math.max(0, parseInt($('#cq-pzc').value, 10) || 0), motivos: lines('cq-mt').length ? lines('cq-mt') : CQ_MOT.slice(), ops: (opsNew || ops).map(clean) };
+      const o = { regras: rows().map(clean), semCert: lines('cq-sc'), dbCli: lines('cq-dbc'), prazo: Math.max(0, parseInt($('#cq-pz').value, 10) || 0), prazoCrit: Math.max(0, parseInt($('#cq-pzc').value, 10) || 0), motivos: lines('cq-mt').length ? lines('cq-mt') : CQ_MOT.slice(), ops: (opsNew || ops).map(clean) };
       try { await DB.db.doc('cfg/main').update({ certq: o }); logEntry('GERAL', 'cfg', 'alterado', 'Regras dos certificados', null); toast('Regras dos certificados gravadas.'); setTimeout(render, 300); }
       catch (err) { cqErr(err); if (b) { b.disabled = false; b.textContent = 'Salvar regras dos certificados'; } }
     };
@@ -16614,8 +16718,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     return Array.from(g.values()).sort((a, b) => (a.data || 0) - (b.data || 0));
   }
   /* v118: notas travadas (não encontrado ou sem condições), por nota e motivo · o mais antigo primeiro */
-  const SEMI_MOT = { nenc: ['Não encontrado', 'NÃO ENCONTRADO', 'O material não foi achado no recebimento. Sai da fila e fica em “Travados” até alguém achar.', 'trv'], scond: ['Sem condições', 'SEM CONDIÇÕES DE INSPEÇÃO', 'Não dá para inspecionar agora (sem acesso, sem instrumento, embalado…). Fica em “Travados” até resolver.', 'trv2'], lib: ['Liberado sem inspeção', 'LIBERADO SEM INSPEÇÃO', 'O lote segue sem RIR. Precisa de quem autorizou; fica registrado no lote, na rastreabilidade e na Auditoria.', 'lib'] };
-  const semiTemp = (e) => !!(e && (e.mot === 'nenc' || e.mot === 'scond'));
+  const SEMI_MOT = { nenc: ['Não encontrado', 'NÃO ENCONTRADO', 'O material não foi achado no recebimento. Sai da fila de vez; fica registrado no lote, na rastreabilidade e na Auditoria.', 'trv'], scond: ['Sem condições', 'SEM CONDIÇÕES DE INSPEÇÃO', 'Não dá para inspecionar (sem acesso, sem instrumento, embalado…). Sai da fila de vez; fica registrado no lote, na rastreabilidade e na Auditoria.', 'trv2'], lib: ['Liberado sem inspeção', 'LIBERADO SEM INSPEÇÃO', 'O lote segue sem RIR. Precisa de quem autorizou; fica registrado no lote, na rastreabilidade e na Auditoria.', 'lib'] };
+  const semiTemp = () => false;   /* v130: os três motivos são finais (não voltam mais para a fila; não existe mais "Travados") */
   function riTravados() {
     if (!S.model) return [];
     const g = new Map();
@@ -16633,16 +16737,17 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     lots = (lots || []).filter(Boolean); if (!lots.length || !cw('rir')) return;
     const x = lots[0], nf = disp(x.nf) || '—';
     openModal('Sem inspeção · NF ' + nf, `<p style="margin:0">${esc(x.forn || 'sem fornecedor')} · ${lots.length === 1 ? '1 lote' : lots.length + ' lotes'}: ${esc(lots.map((l) => l.id + (lotTxt(l) ? ' · ' + lotTxt(l) : '')).join(' — '))}</p>
-      <div class="field"><span>Motivo <b>*</b></span><div class="simot" role="radiogroup" aria-label="Motivo">${Object.entries(SEMI_MOT).map(([k, m]) => `<label data-sm="${k}"><input type="radio" name="sm" value="${k}"><div><b>${m[1]}<span class="smtag ${k === 'lib' ? 'f' : 't'}">${k === 'lib' ? 'final' : 'volta para a fila'}</span></b><small>${m[2]}</small></div></label>`).join('')}</div></div>
+      <div class="field"><span>Motivo <b>*</b></span><div class="simot" role="radiogroup" aria-label="Motivo">${Object.entries(SEMI_MOT).map(([k, m]) => `<label data-sm="${k}"><input type="radio" name="sm" value="${k}"><div><b>${m[1]}<span class="smtag f">final</span></b><small>${m[2]}</small></div></label>`).join('')}</div></div>
       <datalist id="dl-semi-p">${optList((S.model.cfg.PESSOAS || []).filter((pp) => !pp.inativo).map((pp) => pp.nome))}</datalist>
       <div class="fgrid cm-grid" id="sm-aut" hidden><label class="field"><span>Autorizado por <b>*</b></span><input id="sm-autn" list="dl-semi-p" autocomplete="off"></label><label class="field"><span>Data</span><input id="sm-data" type="date" value="${E.isoDate(S.today)}"></label></div>
-      <label class="field"><span>Observação (opcional)</span><textarea id="sm-obs" style="min-height:64px" placeholder="ex.: procurado no pátio 2 e na expedição"></textarea></label>
+      <label class="field"><span id="sm-obsl">Observação <b>*</b></span><textarea id="sm-obs" style="min-height:64px" placeholder="ex.: procurado no pátio 2 e na expedição"></textarea></label>
       <div class="formfoot"><button class="btn primary" type="button" id="sm-ok">Salvar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
     const mot = () => { const r = $('#layer input[name=sm]:checked'); return r ? r.value : ''; };
-    $$('#layer [data-sm] input').forEach((i) => { i.onchange = () => { $$('#layer [data-sm]').forEach((l) => l.classList.toggle('on', l.dataset.sm === mot())); $('#sm-aut').hidden = mot() !== 'lib'; if (mot() === 'lib') $('#sm-autn').focus(); }; });
+    $$('#layer [data-sm] input').forEach((i) => { i.onchange = () => { $$('#layer [data-sm]').forEach((l) => l.classList.toggle('on', l.dataset.sm === mot())); $('#sm-aut').hidden = mot() !== 'lib'; $('#sm-obsl').innerHTML = mot() === 'lib' ? 'Observação (opcional)' : 'Observação <b>*</b>'; if (mot() === 'lib') $('#sm-autn').focus(); else $('#sm-obs').focus(); }; });
     $('#sm-ok').onclick = async () => {
       const m = mot(), obs = $('#sm-obs').value.trim();
       if (!m) { toast('Escolha o motivo.', true); return; }
+      if (m !== 'lib' && !obs) { toast('Escreva a observação: o que aconteceu com o material.', true); $('#sm-obs').focus(); return; }   /* v130 */
       const ev = { t: 'semi', mot: m, obs: obs || null };
       if (m === 'lib') {
         const aut = $('#sm-autn').value.trim(), d = E.fromIso($('#sm-data').value);
@@ -16654,7 +16759,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       try {
         await addDecisions(lots.map((l) => ({ k: l.key, ev })));
         lots.forEach((l) => logEntry('RIR', l.key, 'alterado', `Lote ${l.id} · NF ${nf} · sem inspeção: ${SEMI_MOT[m][0].toLowerCase()}${ev.aut ? ' (autorizado por ' + ev.aut + ')' : ''}${obs ? ' · ' + obs : ''}`, null));
-        closeLayer(); toast(m === 'lib' ? 'Lote liberado sem inspeção.' : 'Nota em “Travados”. Volta para a fila quando resolver.');
+        closeLayer(); toast(m === 'lib' ? 'Lote liberado sem inspeção.' : 'Nota tirada da fila: fica registrada no lote, na rastreabilidade e na Auditoria.');
       } catch (err) { b.disabled = false; toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
     };
   }
@@ -23349,6 +23454,7 @@ ${trGuil(W, H, M, B)}
       if (a && a.startsWith('tr-') && trAct(a, key)) return;
       if (a && a.startsWith('rt-') && rtAct(a, key, act)) return;
       if (a && a.startsWith('eh-') && ehAct(a, key)) return;   /* v99: Equipe hoje no Painel */
+      if (a === 'cq-op') { NX.cq.op = key; nxAtualiza('cq'); return; }   /* v131 */
       if (a === 'proc-seg') { const i = $('#nx-proc-q'); NX.proc.q = i ? i.value : ''; nxAtualiza('proc'); const n2 = $('#nx-proc-q'); if (n2) n2.focus(); return; }   /* v114: seguir um lote */
       if (a && a.startsWith('nx-') && nxAct(a, key)) return;   /* v101: indicadores no visual novo */
       if (a && a.startsWith('eq-') && eqAct(a, key)) return;
