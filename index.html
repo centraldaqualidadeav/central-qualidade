@@ -1888,7 +1888,8 @@ table.t tbody tr.sel td { background: color-mix(in srgb, var(--rif) 9%, var(--su
 .pfu { display: flex; gap: 4px; flex-wrap: wrap; }
 .pfu span { font: 600 10.5px var(--f-body); border: 1px solid var(--line-2); border-radius: 10px; padding: 1px 7px; color: var(--ink-2); }
 /* organograma */
-.org { overflow-x: auto; padding: 8px 4px 16px; }
+.org { overflow-x: auto; padding: 8px 4px 16px; position: relative; isolation: isolate; }
+.orgcv { position: absolute; left: 0; top: 0; z-index: -1; pointer-events: none; }   /* v124: constelação atrás do organograma */
 .org ul { display: flex; justify-content: center; padding-top: 18px; position: relative; margin: 0; padding-left: 0; list-style: none; }
 .org li { display: flex; flex-direction: column; align-items: center; position: relative; padding: 18px 6px 0; }
 .org li::before, .org li::after { content: ''; position: absolute; top: 0; right: 50%; width: 50%; height: 18px; border-top: 2px solid var(--line-2); }
@@ -5925,7 +5926,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 123; window.CQ_V = APP_V;
+    const APP_V = 124; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -19350,6 +19351,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${soOrg ? '' : `<div class="pbar">${filtros}<span class="seg">${[['cards', 'Cartões'], ['lista', 'Lista'], ['org', 'Organograma']].map(([k, l]) => `<button type="button" data-act="eq-modo" data-key="${k}" aria-pressed="${modo === k}">${l}</button>`).join('')}</span></div>`}
       <div id="eq-body">${!all.length ? '<div class="readonly">Nenhum funcionário cadastrado ainda.' + (adm ? ' Use “+ Novo funcionário”.' : '') + '</div>' : modo === 'org' ? eqOrgHTML(ativos, soOrg) : modo === 'lista' ? eqListaHTML(eqFiltra(all)) : eqCardsHTML(eqFiltra(all))}</div></div>`;
     const redraw = () => { const b = $('#eq-body'); if (b) b.innerHTML = EQ.modo === 'lista' || (!EQ.modo && lsGet('cq-eq-modo', 'cards') === 'lista') ? eqListaHTML(eqFiltra(all)) : eqCardsHTML(eqFiltra(all)); };
+    eqConst();
     const q = $('#eq-q'); if (q) q.oninput = () => { f.q = q.value; redraw(); };
     [['eq-set', 'set'], ['eq-fil', 'fil'], ['eq-sit', 'sit']].forEach(([id, k]) => { const el = $('#' + id); if (el) el.onchange = () => { f[k] = el.value; redraw(); }; });
   };
@@ -19378,7 +19380,40 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (EQ.org === 'all') EQ.org = new Set(uniq(L.map(eqSetK)).filter((x) => x !== pri && x !== k));
     else { const S0 = new Set(EQ.org || []); if (S0.has(k)) S0.delete(k); else S0.add(k); EQ.org = S0.size ? S0 : null; }
   }
-  function eqOrgRedraw() { const b = $('#eq-body'); if (b) b.innerHTML = eqOrgHTML(eqAll().filter((p) => !p.inativo), eqNivel() === 'org'); }
+  function eqOrgRedraw() { const b = $('#eq-body'); if (b) b.innerHTML = eqOrgHTML(eqAll().filter((p) => !p.inativo), eqNivel() === 'org'); eqConst(); }
+  /* v124: constelação atrás do organograma (pontinhos andando devagar, ligados por linhas finas; força "Mais forte").
+     Uma animação só; para sozinha quando o organograma sai da tela; quase parada para quem pede menos movimento. */
+  const EQC = { on: false, cv: null, pts: [], W: 0, H: 0, last: 0, cl: '159,179,200', cd: '207,224,238' };
+  function eqConst() {
+    if (EQC.on) return; EQC.on = true; EQC.last = performance.now();
+    const reduz = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches, K = 1.6, D = 130, DPR = Math.min(2, window.devicePixelRatio || 1);
+    const novo = () => { const a = Math.random() * 6.283, v = 4 + Math.random() * 8; return { x: Math.random() * EQC.W, y: Math.random() * EQC.H, vx: Math.cos(a) * v, vy: Math.sin(a) * v, r: 0.8 + Math.random() * 1.4, f: Math.random() * 6.283 }; };
+    const frame = (now) => {
+      const cv = document.querySelector('#eq-body .orgcv');
+      if (!cv || S.view !== 'equipe') { EQC.on = false; EQC.cv = null; return; }
+      const org = cv.parentElement, W = org.scrollWidth, H = org.scrollHeight;
+      if (cv !== EQC.cv || W !== EQC.W || H !== EQC.H) {
+        EQC.cv = cv; EQC.W = W; EQC.H = H; cv.width = W * DPR; cv.height = H * DPR; cv.style.width = W + 'px'; cv.style.height = H + 'px';
+        const n = Math.round((W * H) / 9000); while (EQC.pts.length < n) EQC.pts.push(novo()); EQC.pts.length = n;
+        EQC.pts.forEach((p) => { if (p.x > W + 20 || p.y > H + 20) { p.x = Math.random() * W; p.y = Math.random() * H; } });
+        /* tema escuro: as cores do protótipo aprovado; tema claro: o cinza do texto fraco */
+        const rgb = (v) => { const m = /#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i.exec(v.trim()); return m ? [m[1], m[2], m[3]].map((h) => parseInt(h, 16)) : null; };
+        const ink = rgb(getComputedStyle(org).getPropertyValue('--ink')) || [0, 0, 0], esc_ = ink[0] + ink[1] + ink[2] > 384, i3 = rgb(getComputedStyle(org).getPropertyValue('--ink-3')) || [115, 125, 119];
+        EQC.cl = esc_ ? '159,179,200' : i3.join(','); EQC.cd = esc_ ? '207,224,238' : i3.join(',');
+      }
+      const dt = Math.min(0.05, (now - EQC.last) / 1000) * (reduz ? 0.25 : 1); EQC.last = now;
+      const g = cv.getContext('2d'), P = EQC.pts; g.setTransform(DPR, 0, 0, DPR, 0, 0); g.clearRect(0, 0, W, H);
+      for (const p of P) { p.x += p.vx * dt; p.y += p.vy * dt; p.f += dt * 0.8; if (p.x < -20) p.x = W + 20; if (p.x > W + 20) p.x = -20; if (p.y < -20) p.y = H + 20; if (p.y > H + 20) p.y = -20; }
+      g.lineWidth = 1;
+      for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) {
+        const dx = P[i].x - P[j].x, dy = P[i].y - P[j].y, d2 = dx * dx + dy * dy;
+        if (d2 < D * D) { const d = Math.sqrt(d2); g.strokeStyle = `rgba(${EQC.cl},${(0.17 * K * (1 - d / D)).toFixed(3)})`; g.beginPath(); g.moveTo(P[i].x, P[i].y); g.lineTo(P[j].x, P[j].y); g.stroke(); }
+      }
+      for (const p of P) { g.fillStyle = `rgba(${EQC.cd},${((0.3 + 0.25 * Math.sin(p.f)) * K).toFixed(3)})`; g.beginPath(); g.arc(p.x, p.y, p.r, 0, 7); g.fill(); }
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
   function eqOrgBarHTML(L, pri) {
     const nome = (k) => (k === EQ_SEM ? 'Sem setor' : (L.find((p) => eqSetK(p) === k) || {}).setor || k);
     const ord = eqSetores().map((x) => E.key(x)), ks = uniq(L.map(eqSetK)).filter((k) => k !== pri).sort((a, b2) => ((ord.indexOf(a) + 1) || 999) - ((ord.indexOf(b2) + 1) || 999) || nome(a).localeCompare(nome(b2), 'pt-BR'));
@@ -19440,7 +19475,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${pri ? eqOrgBarHTML(L0, pri) : ''}
       <div class="orgleg">${setores.map((s) => `<span style="--k:${eqCor(s)}"><i></i>${esc(s)}</span>`).join('')}</div>
       ${confere.length ? `<div class="warnbox"><b>Conferir a hierarquia:</b><ul style="margin:4px 0 0;padding-left:18px">${confere.map((t) => `<li>${t}</li>`).join('')}</ul></div>` : ''}
-      ${chefes.length ? `<div class="org"><div class="orgroots">${arvores}</div></div>` : ''}
+      ${chefes.length ? `<div class="org"><canvas class="orgcv" aria-hidden="true"></canvas><div class="orgroots">${arvores}</div></div>` : ''}
       ${soltos.length ? `<div class="fsec"><h3>Sem “Responde a” preenchido (${soltos.length})</h3><div class="orgsolto">${soltos.map(node).join('')}</div></div>` : ''}
       ${soOrg ? '' : '<span class="muted" style="font-size:12.5px">Toque numa pessoa para abrir a ficha. Para montar a hierarquia, preencha “Responde a” na ficha de cada um.</span>'}</div></div></section>`;
   }
