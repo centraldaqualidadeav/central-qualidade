@@ -252,6 +252,12 @@ button.ehpc { cursor: pointer; } button.ehpc:hover { border-color: var(--ink-3);
 .ehnm { grid-area: nome; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; min-width: 0; }
 .ehnm b { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .tbwho { margin-top: 4px; } .tbwho > span:last-child { white-space: normal; }   /* v128 */
+.bdbar { position: relative; height: 20px; border-radius: 5px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; min-width: 150px; }
+.bdbar i { position: absolute; left: 0; top: 0; bottom: 0; background: color-mix(in srgb, var(--ok) 45%, transparent); }
+.bdbar.warn i { background: color-mix(in srgb, var(--warn) 55%, transparent); } .bdbar.crit i { background: color-mix(in srgb, var(--crit) 55%, transparent); } .bdbar.off i { display: none; }
+.bdbar span { position: relative; display: block; text-align: center; font: 600 11.5px/18px var(--f-mono); color: var(--ink); }
+.bdt td small { display: block; margin-top: 2px; font-size: 11px; } .bdisen { display: grid; gap: 6px; }
+.bdres { border-radius: var(--r); padding: 8px 12px; border: 1px solid var(--line); border-left: 4px solid var(--ok); background: var(--surface-2); } .bdres.warn { border-left-color: var(--warn); } .bdres.crit { border-left-color: var(--crit); }
 .ehpt b { font-weight: 600; color: var(--ink-2); }   /* v127 */
 .ehpt { font-size: 11px; letter-spacing: -.02em; gap: 6px; } .ehpt > span { white-space: nowrap; } .ehpt > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .ehnm em { font: 700 22px/1 var(--f-display); font-style: normal; white-space: nowrap; } .ehnm em small { font: 400 11px var(--f-body); color: var(--ink-3); margin-left: 3px; }
@@ -5945,7 +5951,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 128; window.CQ_V = APP_V;
+    const APP_V = 129; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -11054,7 +11060,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const pick = { todas: ab, venc, atras, disp: dispV, soon, h24, h48, minhas: mine || [] }[filt] || ab;
     const sA = soldAlertData(), nada = !riAtrasadas().length && !riTravAtr().length && !(sA && (sA.venc.length || sA.ren.length)) && !pendLots().length && !atras.length && !dispV.length && !soon.length && !lanes.some((ln) => ln.l.length) && !lanesB.slice(0, 3).some((ln) => ln.l.length) && !sem.length && !(M.rncc || []).some((x) => x.aberta && (x.status === 'Atrasado' || (x.respData == null && x.prazoResp != null && S.today > x.prazoResp)));
     main.innerHTML = `<div class="view">${head('Alertas', 'O que precisa de ação hoje. Os prazos de NCF usam dias úteis e os feriados de Configurações.', (vis('rnc') ? '<button class="btn" type="button" data-act="rnc-resumo">Resumo das NCFs</button>' : '') + '<button class="btn" type="button" data-act="msg-cal">Texto do alerta de calibração</button>')}
-      ${vyAvisosHTML()}${cqForaAlertHTML()}${cqCritAlertHTML()}${rirAlertHTML()}${cw('rnc') && rncRelOn() ? inbCorrsAlert() : ''}
+      ${vyAvisosHTML()}${bdAlertHTML()}${cqForaAlertHTML()}${cqCritAlertHTML()}${rirAlertHTML()}${cw('rnc') && rncRelOn() ? inbCorrsAlert() : ''}
       ${nada ? okSeal('Nenhum alerta urgente', 'Sem NCF atrasada, calibração vencida ou lote sem certificado. Tudo certo por aqui.') : ''}
       <div class="kpis">
         ${vis('rnc') && pendLots().length ? kpiHTML({ l: 'Lotes aguardando decisão', v: NF.format(pendLots().length), sub: 'reprovados e bloqueados', c: MOD.RNC.c, cls: 'crit' }) : ''}
@@ -13195,7 +13201,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const lists = (mod) => CFG_LISTS.filter((l) => l[2] === mod).map(item).join('');
     const nm = (S.model.cfgDoc && S.model.cfgDoc.feriadosNomes) || {};
     const y0 = E.ymd(S.today).y;
-    const tabs = CFG_TABS.filter(([k, , mod]) => (k === 'zero' || k === 'teste' ? DB.owner : k === 'backup' || k === 'tags' ? bkPode() : k === 'certq' ? bkPode() && vis('certq') : k === 'rir' ? bkPode() && vis('rir') : k === 'rif' ? bkPode() && vis('rif') : !mod || visMod(mod)));
+    const tabs = CFG_TABS.filter(([k, , mod]) => (k === 'zero' || k === 'teste' ? DB.owner : k === 'backup' || k === 'tags' || k === 'saude' ? bkPode() : k === 'certq' ? bkPode() && vis('certq') : k === 'rir' ? bkPode() && vis('rir') : k === 'rif' ? bkPode() && vis('rif') : !mod || visMod(mod)));
     let tab = S.cfgTab || lsGet('cq-cfg-tab', 'geral');
     if (S.cfgFocus === 'FORN_EMAILS' || /^forn:/.test(S.cfgFocus || '')) tab = 'forn';
     if (!tabs.some(([k]) => k === tab)) tab = 'geral';
@@ -13213,6 +13219,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${sec('forn', `<section class="sec">${band('AV', 'Fornecedores')}<div class="block"><div class="body" id="ent-forn"></div></div></section>`)}
       ${sec('cli', `<section class="sec">${band('RNCC', 'Clientes')}<div class="block"><div class="body" id="ent-cli"></div></div></section>`)}
       ${bkPode() ? sec('tags', tagCfgHTML()) : ''}
+      ${bkPode() ? sec('saude', bdCfgHTML()) : ''}
       ${sec('emails', `<section class="sec">${band('GERAL', 'E-mails')}<div class="block"><div class="body">
         <div class="fsec" id="cfg-setormail"><h3>E-mails por setor (${Object.keys(c.SETOR_EMAILS || {}).length})</h3>
           <p class="use" style="margin:0">Usados na cobrança interna da NCF: o setor responsável da NCF já sugere estes e-mails. Para mais de um e-mail, separe com vírgula.</p>
@@ -13294,7 +13301,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     wireReset();
   };
   /* ---------- funcionários (cadastro único usado por todos os módulos) ---------- */
-  const CFG_TABS = [['geral', 'Geral'], ['func', 'Funcionários'], ['forn', 'Fornecedores'], ['cli', 'Clientes'], ['tags', 'Tags'], ['av', 'Lotes (AV)', 'AV'], ['serv', 'Serviços', 'SERV'], ['rnc', 'NCF', 'RNC'], ['rncc', 'NCC', 'RNCC'], ['cal', 'Calibração', 'INS'], ['certq', 'Certificados', 'CERTQ'], ['rir', 'RIR', 'RIR'], ['rif', 'RIF', 'RIF'], ['emails', 'E-mails'], ['modelos', 'Modelos de mensagem'], ['logo', 'Aparência, logo e Drive'], ['aparelho', 'Este aparelho'], ['manual', 'Manual da Qualidade'], ['backup', 'Backup por ano'], ['teste', 'Módulos em teste'], ['zero', 'Começar do zero']];
+  const CFG_TABS = [['geral', 'Geral'], ['func', 'Funcionários'], ['forn', 'Fornecedores'], ['cli', 'Clientes'], ['tags', 'Tags'], ['saude', 'Saúde do banco'], ['av', 'Lotes (AV)', 'AV'], ['serv', 'Serviços', 'SERV'], ['rnc', 'NCF', 'RNC'], ['rncc', 'NCC', 'RNCC'], ['cal', 'Calibração', 'INS'], ['certq', 'Certificados', 'CERTQ'], ['rir', 'RIR', 'RIR'], ['rif', 'RIF', 'RIF'], ['emails', 'E-mails'], ['modelos', 'Modelos de mensagem'], ['logo', 'Aparência, logo e Drive'], ['aparelho', 'Este aparelho'], ['manual', 'Manual da Qualidade'], ['backup', 'Backup por ano'], ['teste', 'Módulos em teste'], ['zero', 'Começar do zero']];
   const FUNC_COR = { conferente: 'var(--av)', emissor: 'var(--rnc)', comprador: 'var(--serv)', resp_cal: 'var(--cal)' };
   const FUNC_USO = { conferente: [['AV', 'conf']], emissor: [['RNC', 'emissor']], comprador: [['RNC', 'comprador']], resp_cal: [['INS', 'resp']] };
   const FUNC_ONDE = { conferente: 'Conferido por (lotes)', emissor: 'Emissor (NCF)', comprador: 'Comprador (NCF)', resp_cal: 'Responsável (calibração)' };
@@ -14852,12 +14859,79 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ops: Array.isArray(c.ops) ? c.ops.filter((o) => o && o.em) : []
     };
   }
+  /* ================= v129: tamanho dos documentos do banco =================
+     Limites do Firestore (iguais em todos os planos): 1 MB por documento e 40 mil entradas de índice por documento.
+     A Central mede cada documento que já tem na memória (estimativa) e, nos que crescem com o mês (Certificados e RIR),
+     começa sozinha um documento novo do mesmo mês (m-AAAA-MM-p2, -p3…) antes de chegar perto do limite. */
+  const BDL = { bytes: 1048576, idx: 40000 };
+  const BD_PARTE = { itens: 200, bytes: 350000, idx: 15000 };
+  const BDM = new WeakMap(), bdEnc = typeof TextEncoder !== 'undefined' ? new TextEncoder() : null;
+  function bdMede(o) {
+    if (o && typeof o === 'object' && BDM.has(o)) return BDM.get(o);
+    let i = 0;
+    const walk = (v) => { if (v && typeof v === 'object') { if (Array.isArray(v)) { i += 2; v.forEach((x) => { i += 1; if (x && typeof x === 'object') walk(x); }); } else { i += 2; Object.keys(v).forEach((k) => walk(v[k])); } } else i += 2; };
+    walk(o);
+    let b = 0; try { const t = JSON.stringify(o) || ''; b = bdEnc ? bdEnc.encode(t).length : t.length; } catch (e) { b = 0; }
+    const r = { b, i }; if (o && typeof o === 'object') BDM.set(o, r); return r;
+  }
+  const bdParteId = (base, n) => (n <= 1 ? base : base + '-p' + n);
+  const bdParteN = (base, id) => (id === base ? 1 : (+String(id).slice(base.length + 2) || 0));
+  /* devolve uma função que dá o documento de cada registro novo do mês (vai para o próximo quando o atual enche) */
+  function bdPartes(docs, base) {
+    let n = Math.max(1, ...Object.keys(docs || {}).filter((id) => id === base || new RegExp('^' + base + '-p\\d+$').test(id)).map((id) => bdParteN(base, id)));
+    const d0 = (docs || {})[bdParteId(base, n)], m0 = d0 ? bdMede(d0) : { b: 0, i: 0 };
+    let it = d0 ? Object.keys(d0.items || {}).length : 0, b = m0.b, ix = m0.i;
+    return (novo) => {
+      const mn = novo ? bdMede(novo) : { b: 600, i: 60 };
+      if (it > 0 && (it + 1 > BD_PARTE.itens || b + mn.b > BD_PARTE.bytes || ix + mn.i > BD_PARTE.idx)) { n++; it = 0; b = 0; ix = 0; }
+      it++; b += mn.b; ix += mn.i; return bdParteId(base, n);
+    };
+  }
+  const bdParte = (docs, base, novo) => bdPartes(docs, base)(novo);
+  const BD_MES_RE = /^m-\d{4}-\d{2}(-p\d+)?$/;
+  /* v129: Saúde do banco (Configurações, administradores) e aviso nos Alertas aos 60% */
+  const BD_ALERTA = 0.6;
+  function bdLista() {
+    const L = [], add = (col, docs, nome) => Object.keys(docs || {}).forEach((id) => {
+      const d = docs[id]; if (!d || typeof d !== 'object') return;
+      const m = bdMede(d), campos = Object.keys(d).map((f) => [f, bdMede(d[f]).i]).sort((a, b) => b[1] - a[1]), campo = campos.length ? campos[0][0] : '';
+      const n = d.items ? Object.keys(d.items).length : d.d ? Object.keys(d.d).length : d.e ? Object.keys(d.e).length : null;
+      L.push({ col, id, nome, campo, n, b: m.b, i: m.i, pb: m.b / BDL.bytes, pi: m.i / BDL.idx });
+    });
+    add('certq', CQF.docs, 'Certificados'); add('rir', RI.docs, 'RIR');
+    (typeof MODS !== 'undefined' ? MODS : []).forEach((mod) => add(MOD[mod].col, DB.docs[mod], MOD[mod].name));
+    if (typeof SD !== 'undefined') add('sold', SD.docs, 'Soldagem');
+    const isen = new Set(((DB.cfg || {}).saude || {}).isen || []);
+    L.forEach((o) => { o.isen = isen.has(o.col + '/' + o.campo); o.p = Math.max(o.pb, o.isen ? 0 : o.pi); });
+    return L.sort((a, b) => b.p - a.p);
+  }
+  const bdPct = (v) => Math.min(999, Math.round(v * 100));
+  const bdBar = (v, off) => `<div class="bdbar${off ? ' off' : v >= 0.85 ? ' crit' : v >= BD_ALERTA ? ' warn' : ''}"><i style="width:${Math.min(100, v * 100).toFixed(1)}%"></i><span>${off ? 'isenção feita' : bdPct(v) + '%'}</span></div>`;
+  const bdKB = (b) => (b >= 1048576 ? (b / 1048576).toFixed(2).replace('.', ',') + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB');
+  function bdCfgHTML() {
+    const L = bdLista(), top = L.slice(0, 15), pior = L[0];
+    const cols = [...new Map(L.filter((o) => o.pi >= 0.3).map((o) => [o.col + '/' + o.campo, o])).values()];
+    return `<section class="sec">${band('GERAL', 'Saúde do banco', 'quanto cada documento grande já usou dos limites do Firebase')}<div class="block"><div class="body" style="display:grid;gap:12px">
+      <p style="margin:0;max-width:90ch">Cada documento do banco aceita no máximo <b>1 MB</b> e <b>40 mil índices</b> (é igual em todos os planos do Firebase). Certificados e RIR já começam sozinhos um documento novo do mês antes de encher. Os números são uma estimativa feita aqui na Central; acima de <b>60%</b> aparece um aviso nos Alertas.</p>
+      ${pior ? `<div class="bdres ${pior.p >= 0.85 ? 'crit' : pior.p >= BD_ALERTA ? 'warn' : 'ok'}"><b>${pior.p >= BD_ALERTA ? 'Atenção: ' + esc(pior.nome) + ' · ' + esc(pior.id) + ' em ' + bdPct(pior.p) + '% do limite' : 'Tudo bem: o documento mais cheio está em ' + bdPct(pior.p) + '% do limite'}</b></div>` : ''}
+      <div class="twrap"><table class="t bdt"><thead><tr><th class="nosort">Módulo</th><th class="nosort">Documento</th><th class="nosort r">Registros</th><th class="nosort">Tamanho (de 1 MB)</th><th class="nosort">Índices (de 40 mil)</th></tr></thead><tbody>
+        ${top.map((o) => `<tr><td>${esc(o.nome)}</td><td class="mono">${esc(o.col + '/' + o.id)}</td><td class="r">${o.n == null ? '—' : NF.format(o.n)}</td><td>${bdBar(o.pb)}<small class="muted">${bdKB(o.b)}</small></td><td>${bdBar(o.pi, o.isen)}<small class="muted">${o.isen ? 'campo ' + esc(o.campo) : '~' + NF.format(o.i)}</small></td></tr>`).join('')}
+      </tbody></table></div>
+      ${cols.length ? `<div class="fsec"><h3>Isenção de índice feita no Firebase</h3><p class="use" style="margin:0 0 6px">Marque depois de fazer a isenção no Console do Firebase (Firestore › Índices › Automático › Adicionar isenção, os três índices desativados). Com a isenção, o limite de índices deixa de valer para aquele campo.</p>
+        <div class="bdisen">${cols.map((o) => `<label class="check"><input type="checkbox" data-act="bd-isen" data-key="${esc(o.col + '/' + o.campo)}" ${o.isen ? 'checked' : ''}> coleção <b class="mono">${esc(o.col)}</b> · campo <b class="mono">${esc(o.campo)}</b></label>`).join('')}</div></div>` : ''}
+    </div></div></section>`;
+  }
+  function bdAlertHTML() {
+    if (!bkPode()) return '';
+    const L = bdLista().filter((o) => o.p >= BD_ALERTA); if (!L.length) return '';
+    return `<div class="rrwarn vyaviso" style="border-left-color:var(${L[0].p >= 0.85 ? '--crit' : '--warn'})"><b>🗄️ ${L.length === 1 ? '1 documento do banco' : L.length + ' documentos do banco'} acima de 60% do limite do Firebase</b><div class="muted" style="margin-top:3px">${L.slice(0, 4).map((o) => `${esc(o.nome)} · <span class="mono">${esc(o.col + '/' + o.id)}</span> em ${bdPct(o.p)}%${o.pi > o.pb && !o.isen ? ' (índices: faça a isenção do campo ' + esc(o.campo) + ')' : ''}`).join(' · ')}</div><button class="btn small" type="button" data-act="bd-ver" style="margin-top:6px">Ver Saúde do banco</button></div>`;
+  }
   let CQM = null, CQMv = -1;
   function cqCards() {
     if (CQM && CQMv === CQF.ver) return CQM;
     const L = [];
     Object.keys(CQF.docs).forEach((id) => {
-      if (!/^m-\d{4}-\d{2}$/.test(id)) return;
+      if (!BD_MES_RE.test(id)) return;   /* v129: o mês pode ter mais de um documento */
       const it = (CQF.docs[id] || {}).items || {};
       Object.keys(it).forEach((k) => { const c = it[k]; if (c && !c._del && c.pv) L.push(Object.assign({}, c, { k, doc: id })); });
     });
@@ -15057,7 +15131,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         ok.disabled = true; ok.textContent = 'Gravando…';
         try {
           const byDoc = {};
-          P.novos.forEach(({ k, c }) => { const d = 'm-' + cqMes(c.fat || c.imp); (byDoc[d] = byDoc[d] || {})[k] = clean(c); });
+          const prox = {};   /* v129: cada mês enche um documento e passa para o próximo */
+          P.novos.forEach(({ k, c }) => { const base = 'm-' + cqMes(c.fat || c.imp), cc = clean(c); prox[base] = prox[base] || bdPartes(CQF.docs, base); const d = prox[base](cc); (byDoc[d] = byDoc[d] || {})[k] = cc; });
           for (const d of Object.keys(byDoc)) await soldWrite('certq/' + d, { items: byDoc[d] });
           for (const m of P.muda) { await cqPatch(m.c, m.patch, 'Omie: ' + m.txt); if (m.depois) await m.depois(); }
           logEntry('CERTQ', 'importacao', 'importado', `Lista do Omie: ${P.novos.length} pedido(s) novo(s), ${P.muda.length} atualizado(s), ${P.rep.length} repetido(s) barrado(s)`, null);
@@ -15151,7 +15226,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       try {
         if (!plano.novos.length) { toast('O pedido já está na Central.', true); travar(false); return; }
         const { k, c } = plano.novos[0];
-        await soldWrite('certq/m-' + cqMes(c.fat || c.imp), { items: { [k]: clean(c) } });
+        await soldWrite('certq/' + bdParte(CQF.docs, 'm-' + cqMes(c.fat || c.imp), clean(c)), { items: { [k]: clean(c) } });
         logEntry('CERTQ', cqNum(c), 'criado', `Pedido pelo link do Omie: ${c.cli || 'cliente não lido'}${nf ? ' · NF ' + nf : ' · Aguardando NF'}${c.st === 'n' ? ' · cliente não precisa de certificado (Concluídos)' : ''}`, null);
         if (!fazer || c.st !== 'p') { closeLayer(); toast(c.st === 'p' ? `Pedido ${cqNum(c)} na fila${nf ? '' : ' como “Aguardando NF”'}.` : `Pedido ${cqNum(c)} foi para Concluídos: o cliente não precisa de certificado.`); S.cqSub = 'pend'; render(); return; }
         let cc = null; for (let i = 0; i < 80 && !cc; i++) { cc = cqFind(k); if (!cc) await new Promise((r) => setTimeout(r, 100)); }
@@ -16031,7 +16106,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         await cqPatch(c, { st: 'c', conc, pend: null, porEm: c.porEm || cqMe(), porNome: c.porNome || cqMeNome() }, `Certificado salvo (${R.itens} itens) — pedido concluído`);
         if (ed && ed.key !== c.k) await soldWrite('certd/r-' + c.k, { tipo: conc.modelo, docs: { [conc.modelo]: JSON.stringify(app.doc) }, lotes: conc.lotes, at: Date.now(), by: DB.me || null, k: c.k });
       } else {
-        const k = cqKey(P.pv, P.seq), d = 'm-' + cqMes(Date.now()), v = (((app && app.doc.certs[0]) || {}).v) || {};
+        const k = cqKey(P.pv, P.seq), ex = cqFind(k), d = ex ? ex.doc : bdParte(CQF.docs, 'm-' + cqMes(Date.now())), v = (((app && app.doc.certs[0]) || {}).v) || {};
         await soldWrite('certq/' + d, { items: { [k]: clean({ pv: P.pv, seq: P.seq || 0, nf: cqDig(v.G12) || null, cli: String(v.A10 || '').trim(), fat: Date.now(), imp: Date.now(), impBy: DB.me || null, st: 'c', avulso: true, porEm: cqMe(), porNome: cqMeNome(), conc }) } });
         await soldWrite('certd/r-' + k, { tipo: conc.modelo, docs: { [conc.modelo]: JSON.stringify(app.doc) }, lotes: conc.lotes, at: Date.now(), by: DB.me || null, k });
         logEntry('CERTQ', R.num, 'criado', `Certificado avulso salvo (${R.itens} itens)`, null);
@@ -16507,7 +16582,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function riCards() {
     const L = [];
     Object.keys(RI.docs).forEach((id) => {
-      if (!/^m-\d{4}-\d{2}$/.test(id)) return;
+      if (!BD_MES_RE.test(id)) return;   /* v129 */
       const it = (RI.docs[id] || {}).items || {};
       Object.keys(it).forEach((k) => { const c = it[k]; if (c && !c._del) L.push(Object.assign({}, c, { id: k, doc: id })); });
     });
@@ -16695,14 +16770,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const ja = riCards().find((c) => c.st === 'r' && (c.lotes || []).some((k) => lots.some((l) => l.key === k)));
     if (ja) { toast(`Esta nota já tem um RIR em andamento${ja.nome ? ' (' + ja.nome + ')' : ''}. Abrindo o rascunho.`); riAbrir(ja.id); return; }
     try {   /* v119: dois tablets na mesma nota quase ao mesmo tempo: confere no banco antes de começar (sem RIR em dobro) */
-      const sn = await DB.db.doc('rir/m-' + mesId(Date.now())).get(), it = (sn.exists && (sn.data() || {}).items) || {};
+      const sn = await DB.db.doc('rir/' + bdParte(RI.docs, 'm-' + mesId(Date.now()))).get(), it = (sn.exists && (sn.data() || {}).items) || {};
       const j2 = Object.keys(it).find((k) => { const c = it[k]; return c && !c._del && c.st === 'r' && (c.lotes || []).some((q) => lots.some((l) => l.key === q)); });
       if (j2) { toast(`${it[j2].nome || 'Outro inspetor'} acabou de começar esta nota.`); riAbrir(j2); return; }
     } catch (e) { /* sem internet: segue como antes */ }
     const x0 = lots[0], id = 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), at = Date.now();
     const res = { nf: x0.nf == null ? null : String(x0.nf), forn: x0.forn || null, fornId: lotEnt(x0) || null, pc: x0.pc == null ? null : String(x0.pc), lotes: lots.map((l) => l.key), ids: lots.map((l) => l.id), st: 'r', at, by: DB.me || null, nome: myPessoa() || DB.meName || '' };
     const MEUS = insMeus();   /* v63 */
-    const rel = Object.assign({ id, mes: mesId(at), status: 'rascunho', itens: rirItensCfg().map((o) => Object.assign({}, o)), ck: {}, lotRes: {}, ins: MEUS.ok, obs: '', nFotos: 0 }, res);
+    const rel = Object.assign({ id, mes: bdParte(RI.docs, 'm-' + mesId(at), res).slice(2), status: 'rascunho', itens: rirItensCfg().map((o) => Object.assign({}, o)), ck: {}, lotRes: {}, ins: MEUS.ok, obs: '', nFotos: 0 }, res);
     try {
       await DB.db.doc('rird/' + id).set(rel);
       await soldWrite('rir/m-' + rel.mes, { items: { [id]: res } });
@@ -23254,6 +23329,9 @@ ${trGuil(W, H, M, B)}
       const a = act.dataset.act, key = act.dataset.key;
       if (a === 'close') { if (TB.scan) TB.scan(); closeLayer(); return; }
       if (a === 'tg-nf') { tagDialog(String(key || '').split('|').filter(Boolean)); return; }
+      if (a === 'bd-ver') { closeLayer(); S.cfgTab = 'saude'; lsSet('cq-cfg-tab', 'saude'); go('config'); return; }
+      if (a === 'bd-isen') { const L = new Set(((DB.cfg || {}).saude || {}).isen || []), on = !!act.checked; if (on) L.add(key); else L.delete(key); const saude = Object.assign({}, (DB.cfg || {}).saude || {}, { isen: Array.from(L) });
+        DB.db.doc('cfg/main').update({ saude }).then(() => { DB.cfg = Object.assign({}, DB.cfg, { saude }); logEntry('GERAL', 'cfg', 'alterado', `Saúde do banco: isenção ${on ? 'marcada' : 'desmarcada'} (${key})`, null); toast(on ? 'Isenção marcada.' : 'Isenção desmarcada.'); }).catch((err) => { act.checked = !on; toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }); return; }
       if (a === 'tg-cfg') { closeLayer(); S.cfgTab = 'tags'; lsSet('cq-cfg-tab', 'tags'); go('config'); return; }
       if (a && a.startsWith('tb-') && tbAct(a, key)) return;
       if (a && a.startsWith('th-') && thAct(a, key)) return;
@@ -23409,7 +23487,7 @@ ${trGuil(W, H, M, B)}
   $$('#nav a').forEach((a) => { if (a.dataset.v === navOf(S.view)) a.setAttribute('aria-current', 'page'); });
   setInterval(() => { if (S.model && E.todaySerial() !== S.today) scheduleRebuild(); else refreshBanner(); }, 60000);
   boot();
-  window.__CQ = { S, DB, go, openRecord, lotSt, RI, T: { cqWsAcao: (k, v) => cqWsAcao(k, v), cqProd: (c) => cqProd(c), entDrawer, nfeFornCnpj, entPorCnpj, entPorRaiz, cqAbrirTeste: (k) => cqAbrir(cqFind(k)), abaEstado: () => abaEstado(), nomeArq, relEn, rcEn, avFind, normLotes, avIdFmt, caseVal, nomeProprio, listNorm, cqPlano, iqCalc, fornSit, cqConcluir, cqResumoDoc, cqApp, cqFind, lotCertAviso, numMax, insImpPend, nextRnc, nextRncc, createRecord, updateRecord, deleteRecord, addDecisions, addInsEvent, FT, docMatch, docList, entResolve, entPropagate, saveEnt, pesPropagate, corrGet, corrId, rncFotos, findRec, related, destDialog, cfgSeed } };
+  window.__CQ = { S, DB, go, openRecord, lotSt, RI, T: { bdParte: (d, b, n) => bdParte(d, b, n), bdLista: () => bdLista(), cqCards: () => cqCards(), CQF, cqWsAcao: (k, v) => cqWsAcao(k, v), cqProd: (c) => cqProd(c), entDrawer, nfeFornCnpj, entPorCnpj, entPorRaiz, cqAbrirTeste: (k) => cqAbrir(cqFind(k)), abaEstado: () => abaEstado(), nomeArq, relEn, rcEn, avFind, normLotes, avIdFmt, caseVal, nomeProprio, listNorm, cqPlano, iqCalc, fornSit, cqConcluir, cqResumoDoc, cqApp, cqFind, lotCertAviso, numMax, insImpPend, nextRnc, nextRncc, createRecord, updateRecord, deleteRecord, addDecisions, addInsEvent, FT, docMatch, docList, entResolve, entPropagate, saveEnt, pesPropagate, corrGet, corrId, rncFotos, findRec, related, destDialog, cfgSeed } };
 })();
 
 </script>
