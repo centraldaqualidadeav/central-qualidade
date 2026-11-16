@@ -253,6 +253,7 @@ button.ehpc { cursor: pointer; } button.ehpc:hover { border-color: var(--ink-3);
 .ehnm b { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .ehnm em { font: 700 22px/1 var(--f-display); font-style: normal; white-space: nowrap; } .ehnm em small { font: 400 11px var(--f-body); color: var(--ink-3); margin-left: 3px; }
 .ehst { grid-area: st; align-self: start; margin-top: 3px; line-height: 16px; font-size: 12px; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 6px; min-width: 0; }
+.ehpc.on .ehst { padding-left: 4px; }   /* v123: o anel da bolinha não fica mais cortado */
 .ehst i { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-3); flex: none; } .ehpc.on .ehst { color: var(--ok); font-weight: 600; } .ehpc.on .ehst i { background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent); }
 .ehpc > .ehpms { grid-area: chips; align-self: end; align-content: flex-end; min-width: 0; }   /* nenhuma etiqueta cortada: as que não cabem em 2 linhas viram "+N" (ehChipsFit) */
 .ehpm { max-width: 100%; min-width: 0; } .ehpm > span { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -452,6 +453,7 @@ button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 .ripg .bar { display: block; height: 6px; border-radius: 3px; background: var(--sunken); border: 1px solid var(--line); overflow: hidden; } .ripg .bar i { display: block; height: 100%; background: var(--rir); }
 .ripg em { font: 12px var(--f-mono); font-style: normal; color: var(--ink-2); text-align: right; }
 .riwho { display: flex; align-items: center; gap: 8px; min-width: 0; } .riwho > span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.riav.fo, .asban .av.fo { overflow: hidden; background: var(--surface-2); padding: 0; } .riav.fo img, .asban .av.fo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .riav { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font: 700 11px var(--f-display); letter-spacing: .03em; text-transform: uppercase; background: color-mix(in srgb, var(--rir) 25%, transparent); color: var(--ink); }
 .rirw .c-bt .btn { width: 100%; }
 @media (max-width: 1180px) { .rirw { grid-template-columns: 120px minmax(0, 1fr) 76px 110px 120px; column-gap: 12px; } .rirw > .c-who, .rirw > .c-nf, .rirw.h > div:nth-child(2), .rirw.h > div:nth-child(6) { display: none; } .rirw .riwn, .rirw .nfn { display: inline; } }
@@ -1906,6 +1908,18 @@ table.t tbody tr.sel td { background: color-mix(in srgb, var(--rif) 9%, var(--su
 .onode.mais { width: auto; grid-template-columns: 1fr; text-align: center; box-shadow: none; border-style: dashed; color: var(--ink-2); font-size: 12px; }
 .orgleg { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--ink-2); }
 .orgleg span { display: inline-flex; align-items: center; gap: 6px; } .orgleg i { width: 10px; height: 10px; border-radius: 3px; background: var(--k); }
+/* v121: organograma com a Qualidade primeiro; os outros setores entram quando a pessoa toca */
+.orgset { display: grid; gap: 8px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface-2); padding: 10px 12px; }
+.orgset .l1 { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.orgset .t { font: 700 12px var(--f-body); color: var(--ink-2); margin-right: 4px; }
+.osc { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; border: 1px dashed var(--line-2); border-radius: 999px; padding: 3px 11px; font: 600 12.5px var(--f-body); color: var(--ink-2); background: var(--surface); cursor: pointer; }
+.osc i { width: 10px; height: 10px; border-radius: 3px; border: 1.5px solid var(--k); flex: none; }
+.osc small { font-weight: 500; color: var(--ink-3); }
+.osc[aria-pressed="true"] { border-style: solid; border-color: var(--k); color: var(--ink); box-shadow: inset 0 0 0 1px var(--k); } .osc[aria-pressed="true"] i { background: var(--k); }
+.osc.pri { background: var(--k); color: #fff; border: 1px solid var(--k); box-shadow: none; } .osc.pri i { background: #fff; border-color: #fff; } .osc.pri small { color: rgba(255, 255, 255, .85); }
+.osc.all { border-style: solid; margin-left: auto; } .osc.all[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); box-shadow: none; }
+.orgset .nt { font-size: 12px; color: var(--ink-3); }
+.onode.ctx { opacity: .5; border-style: dashed; box-shadow: none; }
 /* ficha */
 .pteam { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
 .pteam div { display: grid; grid-template-columns: 34px 1fr; gap: 8px; align-items: center; border: 1px solid var(--line); border-radius: var(--r); padding: 6px 8px; background: var(--surface); font-size: 12.5px; }
@@ -5911,7 +5925,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 120; window.CQ_V = APP_V;
+    const APP_V = 123; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7688,6 +7702,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       v = firstView() || 'painel';
     }
     if (v !== 'cadastro') { S.editKey = null; S.linkBack = null; S.rncRir = null; }
+    if (v === 'equipe' && S.view !== 'equipe') eqOrgReset();   /* v121: o organograma sempre abre só com a Qualidade */
     S.view = v; S.stale = false;
     try { if (replace) history.replaceState(null, '', '#' + v); else history.pushState(null, '', '#' + v); } catch (e) { /* sem histórico */ }
     $$('#nav a').forEach((a) => { if (a.dataset.v === navOf(v)) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
@@ -8111,7 +8126,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     });
   }
   let ehFitT = 0; window.addEventListener('resize', () => { clearTimeout(ehFitT); ehFitT = setTimeout(ehChipsFit, 120); });
-  function ehFotosAtualiza() { if (S.view !== 'painel') return; if (document.getElementById('eh-sec')) ehAtualiza(); if (NX.cal.m !== 'd') nxAtualiza('cal'); }
+  function ehFotosAtualiza() { if ((S.view === 'rir' || S.view === 'rirtab') && !RI.ed && !$('#layer').innerHTML) { render(); return; } if (S.view !== 'painel') return; if (document.getElementById('eh-sec')) ehAtualiza(); if (NX.cal.m !== 'd') nxAtualiza('cal'); }
   const ehImg = (f) => `<img src="${esc(f)}" alt="" loading="lazy" decoding="async">`;
   /* v105: crachá no cartão; redonda pequena nas listas (cls = 'ehav', 'ehav st' ou 'nxav') */
   const ehCracha = (uid, nome, on) => { const f = ehFoto(uid); return `<span class="ehfoto${f ? ' fo' : ''}">${f ? ehImg(f) : esc(ehIni(nome))}${on ? '<i>agora</i>' : ''}</span>`; };
@@ -8206,7 +8221,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const mods = Array.from(porMod.entries()).sort((a, b) => b[1] - a[1]);
     const nOn = pessoas.filter(on).length, hAgora = new Date().getHours();
     const i1 = hoje
-      ? ['ok', `<b>${nOn ? NF.format(nOn) + (nOn === 1 ? ' pessoa trabalhando' : ' pessoas trabalhando') : 'Ninguém mexendo'}</b> na Central agora · ${NF.format(TODAS.length)} ${TODAS.length === 1 ? 'ação' : 'ações'} até as ${hAgora}h.`]
+      ? ['ok', `<b>${nOn ? NF.format(nOn) + (nOn === 1 ? ' pessoa trabalhando' : ' pessoas trabalhando') : 'Ninguém online'}</b> na Central agora · ${NF.format(TODAS.length)} ${TODAS.length === 1 ? 'ação' : 'ações'} até as ${hAgora}h.`]
       : ['ok', `<b>${NF.format(pessoas.length)} ${pessoas.length === 1 ? 'pessoa trabalhou' : 'pessoas trabalharam'}</b> na Central · ${NF.format(TODAS.length)} ${TODAS.length === 1 ? 'ação' : 'ações'} no dia.`];
     const i2 = ['info', `<b>${esc(EH_NOME[mods[0][0]] || mods[0][0])}</b> foi o módulo mais movimentado${EH.ins ? ' para ' + esc(P.get(EH.ins).nome.split(' ')[0]) : ''}: ${NF.format(mods[0][1])} ${mods[0][1] === 1 ? 'ação' : 'ações'}.`];
     let i3;
@@ -8226,7 +8241,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const card = (p) => {
       const u = p.L[0], o = on(p), cm = new Map(); p.L.forEach((x) => cm.set(x.mod, (cm.get(x.mod) || 0) + 1));
       const chips = Array.from(cm.entries()).sort((a, b) => b[1] - a[1]).map(([m, n]) => `<span class="ehpm" style="--m:${ehCor(m)}" title="${n} ${n === 1 ? 'ação' : 'ações'} em ${esc(EH_NOME[m] || m)}"><b>${n}</b><span>${esc(EH_NOME[m] || m)}</span></span>`).join('') + (cm.size > 1 ? `<span class="ehpm mais" style="display:none"><b>+0</b></span>` : '');
-      return `<button type="button" class="ehpc${o ? ' on' : ''}" data-act="eh-p" data-key="${esc(p.k)}" aria-pressed="${EH.ins === p.k}" title="${EH.ins === p.k ? 'Mostrar todos' : 'Ver só ' + esc(p.nome)}">${ehCracha(p.k, p.nome, o)}<div class="ehnm"><b>${esc(p.nome)}</b><em>${NF.format(p.L.length)}<small>${p.L.length === 1 ? 'ação' : 'ações'}</small></em></div><small class="ehst"><i></i>${o ? 'mexendo agora' : hoje ? 'última ação ' + ehHa(u.at) : 'última ação às ' + hhmm(u.at)}</small>
+      return `<button type="button" class="ehpc${o ? ' on' : ''}" data-act="eh-p" data-key="${esc(p.k)}" aria-pressed="${EH.ins === p.k}" title="${EH.ins === p.k ? 'Mostrar todos' : 'Ver só ' + esc(p.nome)}">${ehCracha(p.k, p.nome, o)}<div class="ehnm"><b>${esc(p.nome)}</b><em>${NF.format(p.L.length)}<small>${p.L.length === 1 ? 'ação' : 'ações'}</small></em></div><small class="ehst"><i></i>${o ? 'online agora' : hoje ? 'última ação ' + ehHa(u.at) : 'última ação às ' + hhmm(u.at)}</small>
         <p title="${esc((EH_VERBO[u.act] || 'alterou') + ' · ' + (u.label || u.key || ''))}"><span class="ehtx3">${ehTxt(u, true)}</span></p><div class="ehpms">${chips}</div><div class="ehpt"><span>começou ${hhmm(p.L[p.L.length - 1].at)}</span><span>${hoje ? ehHa(u.at) : 'última ' + hhmm(u.at)}</span></div></button>`;
     };
     requestAnimationFrame(ehChipsFit);
@@ -8308,11 +8323,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       gTit = 'RIR por dia útil'; gSub = MESES_L[per.mm - 1] + ' ' + per.y;
     }
     /* por inspetor */
-    const im = new Map(); CP.forEach((c) => { const k = E.key(c.nome || '') || '—'; const v = im.get(k) || { k, nome: String(c.nome || '(sem inspetor)').trim(), L: [] }; v.L.push(c); im.set(k, v); });
+    const im = new Map(); CP.forEach((c) => { const k = E.key(c.nome || '') || '—'; const v = im.get(k) || { k, nome: String(c.nome || '(sem inspetor)').trim(), by: c.by, L: [] }; v.L.push(c); im.set(k, v); });
     const IL = Array.from(im.values()).sort((a, b) => b.L.length - a.L.length || a.nome.localeCompare(b.nome, 'pt-BR')).filter((v) => !RIND.ins || v.k === RIND.ins);
     const ini = (n) => { const p = n.split(/\s+/).filter(Boolean); return p.length > 1 ? p[0][0] + p[p.length - 1][0] : (p[0] || '—').slice(0, 2); };
     const iRow = (v) => { const l = lots(v.L), r = reps(v.L), t = med(tempos(v.L)), pc = CP.length ? Math.round((v.L.length / CP.length) * 100) : 0;
-      return `<tr><td><div class="rindw"><span class="riav">${esc(ini(v.nome))}</span>${esc(v.nome)}</div></td><td class="n">${NF.format(v.L.length)}</td><td class="n">${NF.format(l)}</td><td class="n${r ? ' crit' : ''}">${NF.format(r)}</td><td class="n">${t == null ? '—' : NF1.format(t) + ' d'}</td><td><div class="rindp"><span><i style="width:${pc}%"></i></span><em>${pc}%</em></div></td></tr>`; };
+      return `<tr><td><div class="rindw">${riAvHTML(v.nome, v.by, ini(v.nome))}${esc(v.nome)}</div></td><td class="n">${NF.format(v.L.length)}</td><td class="n">${NF.format(l)}</td><td class="n${r ? ' crit' : ''}">${NF.format(r)}</td><td class="n">${t == null ? '—' : NF1.format(t) + ' d'}</td><td><div class="rindp"><span><i style="width:${pc}%"></i></span><em>${pc}%</em></div></td></tr>`; };
     const tab = IL.length ? `<table class="rindt"><thead><tr><th>Inspetor</th><th class="n">RIR</th><th class="n">Lotes</th><th class="n">Reprovados</th><th class="n">Tempo médio</th><th class="pp">Participação nos RIR</th></tr></thead><tbody>${IL.map(iRow).join('')}</tbody>
       ${IL.length > 1 ? `<tfoot><tr><td>Total</td><td class="n">${NF.format(CI.length)}</td><td class="n">${NF.format(nL)}</td><td class="n">${NF.format(nR)}</td><td class="n">${tM == null ? '—' : NF1.format(tM) + ' d'}</td><td></td></tr></tfoot>` : ''}</table>` : `<div class="empty">Nenhum RIR concluído ${dia ? 'neste dia' : 'neste mês'}.</div>`;
     /* 6 e 12 meses (como antes) */
@@ -16693,9 +16708,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     try { await soldWrite('rir/m-' + rel.mes, { items: { [rel.id]: { pede: null } } }); logEntry('RIR', rel.id, 'alterado', `Continuou com o RIR da NF ${rel.nf || '—'} (pedido de volta recusado)`, null); render(); }
     catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
   }
+  /* v122: foto do inspetor (da ficha da Equipe) no lugar das iniciais; sem foto, ficam as iniciais */
+  function riAvHTML(nome, uid, ini) { const f = (uid && ehFoto(uid)) || ehFotoNome(nome); return `<span class="riav${f ? ' fo' : ''}">${f ? ehImg(f) : esc(ini)}</span>`; }
   function riBanner(ed) {
     const rel = ed.rel, c = riCardDe(rel.id) || {}, w = cw('rir'), fin = rel.status === 'finalizado';
-    const av = (n) => `<span class="av">${esc(nxIni(n || '?'))}</span>`;
+    const av = (n, uid) => { const f = (uid && ehFoto(uid)) || ehFotoNome(n); return `<span class="av${f ? ' fo' : ''}">${f ? ehImg(f) : esc(nxIni(n || '?'))}</span>`; };
     if (ed.alheio && !fin) return `<div class="asban info">${av(rel.nome)}<div><b>Com ${esc(rel.nome || 'outro inspetor')} desde ${esc(hhmm(rel.at))} · só olhando</b><small>Você pode ver as respostas, mas não mexer.${w ? ' Para inspecionar no lugar, toque em Assumir.' : ''}</small></div><div class="asbts"><button class="btn" type="button" data-act="ri-voltar">← Voltar</button>${w ? '<button class="btn primary" type="button" data-act="ri-assumir">Assumir esta nota</button>' : ''}</div></div>`;
     if (ed.perdeu && !fin) { const t = ed.perdeu, ped = c.pede && c.pede.by === DB.me;
       return `<div class="asban warn">${av(t.paraNome || c.nome)}<div><b>${esc(t.paraNome || c.nome || 'Outra pessoa')} assumiu esta nota${t.at ? ' às ' + esc(hhmm(t.at)) : ''}</b><small>${t.mot ? 'Motivo: ' + esc(t.mot) + '. ' : ''}As respostas que você gravou ficaram no RIR. Daqui para a frente, só olhando.</small></div><div class="asbts"><button class="btn" type="button" data-act="ri-voltar">← Voltar para as notas</button>${ped ? '<span class="chip info"><i>✓</i>pedido de volta enviado</span>' : '<button class="btn" type="button" data-act="ri-pedir">Pedir de volta</button>'}</div></div>`; }
@@ -17013,7 +17030,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const itCfg = rirItensCfg(), nNf = itCfg.filter((o) => o.esc === 'nf').length, nLt = itCfg.length - nNf;
     const idade = (d, quando, u) => (d == null ? '<span class="riage">—</span>' : `<span class="riage ${(u || 0) >= RI_UTEIS ? 'a2' : u >= 1 ? 'a1' : 'a0'}" title="${esc((quando || '') + (u != null ? ` · ${u} dia${u === 1 ? '' : 's'} út${u === 1 ? 'il' : 'eis'}` : ''))}">${d === 0 ? 'hoje' : NF.format(d) + (d === 1 ? ' dia' : ' dias')}</span>`);
     const prog = (ok, tot) => `<div class="ripg"><span class="bar"><i style="width:${tot ? Math.round((ok / tot) * 100) : 0}%"></i></span><em>${tot == null ? '—' : ok + '/' + tot}</em></div>`;
-    const quem = (nome, eu) => { const p = String(nome || '').trim().split(/\s+/).filter(Boolean); if (!p.length) return '<span class="muted">—</span>'; const ini = eu ? 'VC' : p.length > 1 ? p[0][0] + p[p.length - 1][0] : p[0].slice(0, 2); return `<div class="riwho"><span class="riav">${esc(ini)}</span><span>${esc(eu ? 'você' : p[0])}</span></div>`; };
+    const quem = (nome, eu, uid) => { const p = String(nome || '').trim().split(/\s+/).filter(Boolean); if (!p.length) return '<span class="muted">—</span>'; const ini = eu ? 'VC' : p.length > 1 ? p[0][0] + p[p.length - 1][0] : p[0].slice(0, 2); return `<div class="riwho">${riAvHTML(nome, uid, ini)}<span>${esc(eu ? 'você' : p[0])}</span></div>`; };
     const lotLn = (L) => (L.length <= 3 ? L.map((x) => (x.key ? `<button type="button" class="rilk" data-open="AV:${esc(x.key)}" title="Abrir o lote">${esc(x.id)}</button>` : `<span class="rilk">${esc(x.id)}</span>`)).join(' ') : `<span class="rilk" title="${esc(lotesResumo(L.map((x) => x.id)).full)}">${esc(lotesResumo(L.map((x) => x.id)).txt)}</span>`);
     const linha = (sit, nf, fo, sb, age, pg, who, bt, tg) => `<div class="rirw" role="row"><div class="c-sit">${sit}</div><div class="c-nf"><span class="mono">${esc(nf || '—')}</span>${tg || ''}</div><div class="c-fo"><div class="fn"><span class="nfn">NF ${esc(nf || '—')} · </span>${esc(fo || 'sem fornecedor')}</div><div class="sb">${sb}</div>${tg ? `<div class="ritg">${tg}</div>` : ''}</div><div class="c-age">${age}</div><div class="c-pg">${pg}</div><div class="c-who">${who}</div><div class="c-bt">${bt}</div></div>`;
     const grp = (g, i) => { const d = riDias(g), atr = riAtr(g), n = g.lots.length;
@@ -17023,14 +17040,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const rasc = (c0) => { const c = riCabAtual(c0), eu = riMeu(c), L = (c.lotes || []).map((k, j) => { const x = findRec('AV', k); return { key: x ? k : '', id: (x && x.id) || (c.ids || [])[j] || k, x }; });
       const ds = L.map((o) => o.x && o.x.data).filter((v) => v != null), d0 = ds.length ? Math.min(...ds) : null, pr = (RI.prog || {})[c.id];
       return linha('<span class="risit and">Em andamento</span>', c.nf, c.forn, `${lotLn(L)} · ${L.length} ${L.length === 1 ? 'lote' : 'lotes'} · começado ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}${eu && c.pede && c.pede.by !== DB.me ? ` · <b style="color:var(--warn)">${esc(c.pede.nome || 'alguém')} pediu de volta</b>` : ''}<span class="riwn"> · ${esc(eu ? 'com você' : c.nome || '')}</span>`,
-        idade(d0 == null ? null : Math.max(0, Math.floor(S.today - d0)), d0 == null ? '' : 'recebido ' + fD(d0), riUteis(d0)), pr && pr.tot != null ? prog(pr.ok, pr.tot) : prog(0, null), quem(c.nome, eu),
+        idade(d0 == null ? null : Math.max(0, Math.floor(S.today - d0)), d0 == null ? '' : 'recebido ' + fD(d0), riUteis(d0)), pr && pr.tot != null ? prog(pr.ok, pr.tot) : prog(0, null), quem(c.nome, eu, c.by),
         `<button class="btn ${eu ? 'primary' : ''}" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${eu && w ? 'Continuar' : 'Ver'}</button>`, tagsHTML(L.map((o) => o.x).filter(Boolean), L.filter((o) => o.key).map((o) => o.key))); };
     /* v118: travados (não encontrado / sem condições) */
     const TR = riTravados(); RI.trav = TR;
     const trF = TR.map((o, i) => [o, i]).filter(([o]) => !fi && okF(o.forn) && okT(o.lots) && bate([o.nf, o.forn, o.lots.map((x) => x.id + ' ' + lotTxt(x)).join(' '), o.ev.obs || ''].join(' ')));
     const trav = (o, i) => { const n = o.lots.length, m = SEMI_MOT[o.mot], u = semiDias(o);
       return linha(`<span class="risit ${m[3]}">${m[0]}</span>`, disp(o.nf), o.forn, `${lotLn(o.lots)} · ${esc(lotTxt(o.lots[0]) || (n + (n === 1 ? ' lote' : ' lotes')))}${n > 1 && lotTxt(o.lots[0]) ? ' + ' + (n - 1) : ''}`,
-        idade(Math.max(0, S.today - msSer(o.ev.at)), 'marcado em ' + dmy(o.ev.at), u), `<div class="siobs" title="${esc(o.ev.obs || '')}">${esc(o.ev.obs || '—')}</div>`, quem(who(o.ev.by)),
+        idade(Math.max(0, S.today - msSer(o.ev.at)), 'marcado em ' + dmy(o.ev.at), u), `<div class="siobs" title="${esc(o.ev.obs || '')}">${esc(o.ev.obs || '—')}</div>`, quem(who(o.ev.by), false, o.ev.by),
         w ? `<button class="btn" type="button" data-act="ri-semix" data-key="${i}">Voltar para a fila</button>` : '', tagsHTML(o.lots, o.lots.map((x) => x.key).filter(Boolean))); };
     let body;
     if (!RI.ready) body = '<div class="loading"><span class="spin"></span><span>Carregando…</span></div>';
@@ -19349,13 +19366,48 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     return `<p class="muted" style="margin:0 0 6px;font-size:12.5px"><b>${NF.format(L.length)}</b> funcionário(s)</p><div class="twrap twin"><table class="t"><thead><tr><th class="nosort">Nome</th><th class="nosort">Cargo</th><th class="nosort">Setor</th><th class="nosort">Filial</th><th class="nosort">Responde a</th><th class="nosort">Funções</th><th class="nosort">E-mail</th><th class="nosort">Telefone / ramal</th><th class="nosort">Situação</th></tr></thead><tbody>
       ${L.map((p) => { const g = eqBy(p.gestor); return `<tr class="click" data-act="eq-ver" data-key="${esc(p.id)}"><td class="nw"><span class="eqav">${eqFoto(p) ? `<img src="${eqFoto(p)}" alt="">` : esc(eqIni(p.nome))}</span><b>${esc(p.nome)}</b></td><td>${p.cargo ? esc(p.cargo) : d}</td><td>${p.setor ? esc(p.setor) : d}</td><td>${p.filial ? esc(p.filial) : d}</td><td>${g ? esc(g.nome) : d}</td><td>${(p.funcoes || []).map((k) => esc(fl(k))).join(', ') || d}</td><td>${p.email ? esc(p.email) : d}</td><td class="nw">${[p.tel, p.ramal ? 'ramal ' + p.ramal : ''].filter(Boolean).map(esc).join(' · ') || d}</td><td>${p.inativo ? '<span class="chip off"><i>–</i>inativo</span>' : '<span class="chip ok"><i>✓</i>ativo</span>'}</td></tr>`; }).join('')}</tbody></table></div>`;
   }
+  /* v121: setor principal do organograma (Qualidade) e os setores que a pessoa foi abrindo.
+     EQ.org: null = só a Qualidade · 'all' = empresa toda · Set = Qualidade + estes setores. */
+  const EQ_SEM = '~sem';
+  const eqSetK = (p) => (p.setor ? E.key(p.setor) : EQ_SEM);
+  function eqOrgPri(L) { const k = E.key('Qualidade'); return L.some((p) => p.setor && E.key(p.setor) === k) ? k : null; }
+  function eqOrgReset() { EQ.org = null; }
+  function eqOrgToca(k) {
+    const L = eqAll().filter((p) => !p.inativo), pri = eqOrgPri(L);
+    if (k === pri) { EQ.org = null; return; }
+    if (EQ.org === 'all') EQ.org = new Set(uniq(L.map(eqSetK)).filter((x) => x !== pri && x !== k));
+    else { const S0 = new Set(EQ.org || []); if (S0.has(k)) S0.delete(k); else S0.add(k); EQ.org = S0.size ? S0 : null; }
+  }
+  function eqOrgRedraw() { const b = $('#eq-body'); if (b) b.innerHTML = eqOrgHTML(eqAll().filter((p) => !p.inativo), eqNivel() === 'org'); }
+  function eqOrgBarHTML(L, pri) {
+    const nome = (k) => (k === EQ_SEM ? 'Sem setor' : (L.find((p) => eqSetK(p) === k) || {}).setor || k);
+    const ord = eqSetores().map((x) => E.key(x)), ks = uniq(L.map(eqSetK)).filter((k) => k !== pri).sort((a, b2) => ((ord.indexOf(a) + 1) || 999) - ((ord.indexOf(b2) + 1) || 999) || nome(a).localeCompare(nome(b2), 'pt-BR'));
+    if (!ks.length) return '';
+    const n = (k) => L.filter((p) => eqSetK(p) === k).length, all = EQ.org === 'all', on = (k) => all || (EQ.org instanceof Set && EQ.org.has(k));
+    const chips = `<button type="button" class="osc pri" data-act="eq-oset" data-key="${esc(pri)}" style="--k:${eqCor(nome(pri))}" title="Voltar só para a ${esc(nome(pri))}"><i></i>${esc(nome(pri))} <small>principal · ${n(pri)}</small></button>`
+      + ks.map((k) => `<button type="button" class="osc" data-act="eq-oset" data-key="${esc(k)}" aria-pressed="${on(k)}" style="--k:${k === EQ_SEM ? 'var(--ink-3)' : eqCor(nome(k))}"><i></i>${on(k) ? '' : '+ '}${esc(nome(k))} <small>${n(k)}</small></button>`).join('');
+    const vis_ = ks.filter(on).map(nome);
+    const nt = all ? `Empresa toda: todos os setores. Toque em “${esc(nome(pri))}” para voltar só para ela.`
+      : vis_.length ? `${esc(nome(pri))} + ${esc(vis_.join(' + '))}. Toque de novo no setor para esconder; “Empresa toda” mostra todos.`
+      : `Abre sempre assim: só a ${esc(nome(pri))}. Quem está acima (a quem ela responde) aparece apagado, só para mostrar onde ela fica. Toque num setor para ir mostrando.`;
+    return `<div class="orgset"><div class="l1"><span class="t">Mostrar no organograma:</span>${chips}<button type="button" class="osc all" data-act="eq-oall" aria-pressed="${all}">Empresa toda</button></div><div class="nt">${nt}</div></div>`;
+  }
   /* organograma: monta sozinho pelo "Responde a" */
-  function eqOrgHTML(L, soOrg) {
+  function eqOrgHTML(L0, soOrg) {
+    /* v121: só a Qualidade (e os setores escolhidos); quem está acima e é de outro setor aparece apagado ("ctx") */
+    const pri = eqOrgPri(L0), porId0 = new Map(L0.map((p) => [p.id, p])), ctx = new Set();
+    let L = L0;
+    if (pri && EQ.org !== 'all') {
+      const mostra = (p) => eqSetK(p) === pri || (EQ.org instanceof Set && EQ.org.has(eqSetK(p)));
+      const keep = new Set(L0.filter(mostra).map((p) => p.id));
+      Array.from(keep).forEach((id) => { let g = porId0.get(id).gestor, n = 0; while (g && porId0.has(g) && !keep.has(g) && n++ < 50) { keep.add(g); ctx.add(g); g = porId0.get(g).gestor; } });
+      L = L0.filter((p) => keep.has(p.id));
+    }
     const ids = new Set(L.map((p) => p.id)), filhos = {}; L.forEach((p) => { const g = p.gestor && ids.has(p.gestor) && p.gestor !== p.id ? p.gestor : '_'; (filhos[g] = filhos[g] || []).push(p); });
     /* ordem dos irmãos: primeiro o nível da hierarquia (1, 2, 2.1, 2.2… de Configurações › Funcionários › Níveis), depois quem tem equipe, depois o nome */
     const rk = (p) => { const r = eqNivRank(p.nivel); return r < 0 ? 999 : r; };
     Object.values(filhos).forEach((a) => a.sort((x, y) => rk(x) - rk(y) || (filhos[y.id] ? 1 : 0) - (filhos[x.id] ? 1 : 0) || x.nome.localeCompare(y.nome, 'pt-BR')));
-    const node = (p) => `<${soOrg ? 'div' : 'button type="button"'} class="onode" style="--k:${eqCor(p.setor)}${soOrg ? ';cursor:default' : ''}" ${soOrg ? '' : `data-act="eq-ver" data-key="${esc(p.id)}"`}>${eqFoto(p) ? `<img src="${eqFoto(p)}" alt="">` : `<span class="oi">${esc(eqIni(p.nome))}</span>`}<span><em>${esc(p.setor || 'sem setor')}</em><b>${esc(p.nome)}</b><span>${esc(p.cargo || '')}</span></span></${soOrg ? 'div' : 'button'}>`;
+    const node = (p) => `<${soOrg ? 'div' : 'button type="button"'} class="onode${ctx.has(p.id) ? ' ctx' : ''}" style="--k:${eqCor(p.setor)}${soOrg ? ';cursor:default' : ''}" ${soOrg ? '' : `data-act="eq-ver" data-key="${esc(p.id)}"`}>${eqFoto(p) ? `<img src="${eqFoto(p)}" alt="">` : `<span class="oi">${esc(eqIni(p.nome))}</span>`}<span><em>${esc(p.setor || 'sem setor')}</em><b>${esc(p.nome)}</b><span>${esc(p.cargo || '')}</span></span></${soOrg ? 'div' : 'button'}>`;
     const seen = new Set();
     const tree = (p) => {
       if (seen.has(p.id)) return ''; seen.add(p.id);
@@ -19365,23 +19417,27 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       return `<li>${node(p)}${k.length ? `<ul class="${folhas ? 'vert' : ''}">${mostra.map(tree).join('')}${mais}</ul>` : ''}</li>`;
     };
     const raiz = filhos._ || [], soltos = raiz.filter((p) => !filhos[p.id]), chefes = raiz.filter((p) => filhos[p.id]);
-    const setores = uniq(L.map((p) => p.setor).filter(Boolean));
+    const setores = uniq(L.filter((p) => !ctx.has(p.id)).map((p) => p.setor).filter(Boolean));
     const arvores = chefes.map((p) => `<ul>${tree(p)}</ul>`).join('');
     /* conferência da hierarquia (quem pode editar a equipe): nível igual/abaixo do chefe, círculo e chefe inativo */
     const confere = [];
     if (!soOrg) {
       const todos = eqAll(), porId = new Map(todos.map((p) => [p.id, p])), nv = (p) => eqNiv(p.nivel);
-      L.forEach((p) => {
+      /* v121: a conferência olha todo mundo (não só os setores mostrados); quem fica no "+N pessoa(s)" não é círculo */
+      const ids0 = new Set(L0.map((p) => p.id)), f0 = {}; L0.forEach((p) => { const g = p.gestor && ids0.has(p.gestor) && p.gestor !== p.id ? p.gestor : '_'; (f0[g] = f0[g] || []).push(p); });
+      const seen0 = new Set(), walk = (p) => { if (seen0.has(p.id)) return; seen0.add(p.id); (f0[p.id] || []).forEach(walk); }; (f0._ || []).forEach(walk);
+      L0.forEach((p) => {
         const g = p.gestor && porId.get(p.gestor);
         if (g && g.inativo) confere.push(`<b>${esc(p.nome)}</b> responde a <b>${esc(g.nome)}</b>, que está inativo.`);
-        else if (g && ids.has(g.id) && nv(p) && nv(g) && rk(p) <= rk(g)) confere.push(`<b>${esc(p.nome)}</b> (nível ${esc(nv(p).num)} · ${esc(nv(p).nome)}) responde a <b>${esc(g.nome)}</b> (nível ${esc(nv(g).num)} · ${esc(nv(g).nome)}): o nível de quem responde deveria ficar abaixo do chefe.`);
+        else if (g && ids0.has(g.id) && nv(p) && nv(g) && rk(p) <= rk(g)) confere.push(`<b>${esc(p.nome)}</b> (nível ${esc(nv(p).num)} · ${esc(nv(p).nome)}) responde a <b>${esc(g.nome)}</b> (nível ${esc(nv(g).num)} · ${esc(nv(g).nome)}): o nível de quem responde deveria ficar abaixo do chefe.`);
       });
-      const fora = L.filter((p) => !seen.has(p.id) && !soltos.includes(p));
+      const fora = L0.filter((p) => !seen0.has(p.id));
       if (fora.length) confere.push(`Hierarquia em círculo (um responde ao outro): ${fora.map((p) => '<b>' + esc(p.nome) + '</b>').join(', ')}. Corrija o “Responde a” de um deles.`);
-      const semNv = L.filter((p) => !nv(p)).length;
+      const semNv = L0.filter((p) => !nv(p)).length;
       if (semNv) confere.push(`${semNv} pessoa(s) sem <b>nível</b> no cadastro: elas aparecem por último entre os colegas. Preencha o nível na ficha (Editar).`);
     }
     return `<section class="sec">${band('GERAL', 'Organograma', 'monta sozinho pelo campo "Responde a" de cada ficha')}<div class="block"><div class="body" style="display:grid;gap:10px">
+      ${pri ? eqOrgBarHTML(L0, pri) : ''}
       <div class="orgleg">${setores.map((s) => `<span style="--k:${eqCor(s)}"><i></i>${esc(s)}</span>`).join('')}</div>
       ${confere.length ? `<div class="warnbox"><b>Conferir a hierarquia:</b><ul style="margin:4px 0 0;padding-left:18px">${confere.map((t) => `<li>${t}</li>`).join('')}</ul></div>` : ''}
       ${chefes.length ? `<div class="org"><div class="orgroots">${arvores}</div></div>` : ''}
@@ -19634,7 +19690,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'eq-print') { eqPrint(key); return true; }
     if (a === 'eq-exp') { eqExport(); return true; }
     if (a === 'eq-modo') { EQ.modo = key; lsSet('cq-eq-modo', key); render(); return true; }
-    if (a === 'eq-abre') { EQ.abre[key] = true; const b = $('#eq-body'); if (b) b.innerHTML = eqOrgHTML(eqAll().filter((p) => !p.inativo)); return true; }
+    if (a === 'eq-abre') { EQ.abre[key] = true; eqOrgRedraw(); return true; }
+    if (a === 'eq-oset') { eqOrgToca(key); eqOrgRedraw(); return true; }
+    if (a === 'eq-oall') { EQ.org = EQ.org === 'all' ? null : 'all'; eqOrgRedraw(); return true; }
     return false;
   }
 
