@@ -251,6 +251,9 @@ button.ehpc { cursor: pointer; } button.ehpc:hover { border-color: var(--ink-3);
 .ehpc { grid-template-columns: 64px minmax(0, 1fr); grid-template-rows: 28px 24px 60px auto 1fr; grid-template-areas: "nome nome" "foto st" "foto chips" "bal bal" "pt pt"; column-gap: 12px; row-gap: 0; align-items: start; }
 .ehnm { grid-area: nome; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; min-width: 0; }
 .ehnm b { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.tbwho { margin-top: 4px; } .tbwho > span:last-child { white-space: normal; }   /* v128 */
+.ehpt b { font-weight: 600; color: var(--ink-2); }   /* v127 */
+.ehpt { font-size: 11px; letter-spacing: -.02em; gap: 6px; } .ehpt > span { white-space: nowrap; } .ehpt > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .ehnm em { font: 700 22px/1 var(--f-display); font-style: normal; white-space: nowrap; } .ehnm em small { font: 400 11px var(--f-body); color: var(--ink-3); margin-left: 3px; }
 .ehst { grid-area: st; align-self: start; margin-top: 3px; line-height: 16px; font-size: 12px; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 6px; min-width: 0; }
 .ehpc.on .ehst { padding-left: 4px; }   /* v123: o anel da bolinha não fica mais cortado */
@@ -5942,7 +5945,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 126; window.CQ_V = APP_V;
+    const APP_V = 128; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -8141,6 +8144,21 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const EH = { dia: null, ins: '', docs: {}, ouvindo: null, un: null, lendo: {} };
   const EH_COR = { AV: 'av', SERV: 'serv', RNC: 'rnc', RNCC: 'rncc', INS: 'cal', SOLD: 'sold', IQF: 'iqf', CERTQ: 'tcr', RIF: 'rif', RIR: 'rir', GERAL: 'geral' };
   const EH_NOME = { AV: 'Lotes', SERV: 'Serviços', RNC: 'NCF', RNCC: 'NCC', INS: 'Calibração', SOLD: 'Soldagem', IQF: 'IQF', CERTQ: 'Certificados', RIF: 'RIF', RIR: 'RIR', GERAL: 'Configuração' };
+  /* v127: "concluído" = o que fecha alguma coisa (RIR finalizado, NCF aberta/concluída, NCC aberta/concluída, lote lançado,
+     certificado emitido, calibração registrada, RIF aprovado/reprovado, serviço lançado); o resto é edição */
+  function ehConc(x) {
+    const m = x.mod, a = x.act, L = String(x.label || ''), c = x.campos || {};
+    if (a === 'excluído' || a === 'excluido') return false;
+    if (m === 'AV' || m === 'SERV') return a === 'novo';
+    if (m === 'RNC') return a === 'novo' || /aprovada e conclu/i.test(L) || !!(c.conclusao && c.conclusao[1]);
+    if (m === 'RNCC') return a === 'novo' || a === 'criado' || !!(c.conclusao && c.conclusao[1]) || /\bconclu[ií]d/i.test(L);
+    if (m === 'RIR') return /\bconclu[ií]do · NF/i.test(L);
+    if (m === 'RIF') return /^\S+ (aprovado|reprovado)\b/i.test(L);
+    if (m === 'CERTQ') return (a === 'criado' && /^Certificado avulso/i.test(L)) || (/conclu[ií]d/i.test(L) && !/voltou/i.test(L));
+    if (m === 'INS') return !!(c.dataCal && c.dataCal[1]);
+    return false;
+  }
+  const ehTotTxt = (L) => { const c = L.filter(ehConc).length, e = L.length - c; return `${NF.format(c)} ${c === 1 ? 'concluído' : 'concluídos'} e ${NF.format(e)} ${e === 1 ? 'edição' : 'edições'}`; };
   const EH_VERBO = { novo: 'lançou', criado: 'criou', importado: 'importou', 'excluído': 'excluiu', excluido: 'excluiu', alterado: 'alterou' };
   const ehCor = (m) => `var(--n-${EH_COR[m] || 'geral'})`;
   const ehHoje = () => today8();
@@ -8291,9 +8309,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const mods = Array.from(porMod.entries()).sort((a, b) => b[1] - a[1]);
     const nOn = pessoas.filter(on).length, hAgora = new Date().getHours();
     const i1 = hoje
-      ? ['ok', `<b>${nOn ? NF.format(nOn) + (nOn === 1 ? ' pessoa trabalhando' : ' pessoas trabalhando') : 'Ninguém online'}</b> na Central agora · ${NF.format(TODAS.length)} ${TODAS.length === 1 ? 'ação' : 'ações'} até as ${hAgora}h.`]
-      : ['ok', `<b>${NF.format(pessoas.length)} ${pessoas.length === 1 ? 'pessoa trabalhou' : 'pessoas trabalharam'}</b> na Central · ${NF.format(TODAS.length)} ${TODAS.length === 1 ? 'ação' : 'ações'} no dia.`];
-    const i2 = ['info', `<b>${esc(EH_NOME[mods[0][0]] || mods[0][0])}</b> foi o módulo mais movimentado${EH.ins ? ' para ' + esc(P.get(EH.ins).nome.split(' ')[0]) : ''}: ${NF.format(mods[0][1])} ${mods[0][1] === 1 ? 'ação' : 'ações'}.`];
+      ? ['ok', `<b>${nOn ? NF.format(nOn) + (nOn === 1 ? ' pessoa trabalhando' : ' pessoas trabalhando') : 'Ninguém online'}</b> na Central agora · ${ehTotTxt(TODAS)} até as ${hAgora}h.`]
+      : ['ok', `<b>${NF.format(pessoas.length)} ${pessoas.length === 1 ? 'pessoa trabalhou' : 'pessoas trabalharam'}</b> na Central · ${ehTotTxt(TODAS)} no dia.`];
+    const i2 = ['info', `<b>${esc(EH_NOME[mods[0][0]] || mods[0][0])}</b> foi o módulo mais movimentado${EH.ins ? ' para ' + esc(P.get(EH.ins).nome.split(' ')[0]) : ''}: ${NF.format(mods[0][1])} ${mods[0][1] === 1 ? 'registro' : 'registros'}.`];
     let i3;
     if (hoje) {
       const M = S.model, pend = [];
@@ -8309,10 +8327,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const ins = `<div class="ehins"><div class="ehinsh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 6.2L21 9l-5 4.3L17.5 20 12 16.6 6.5 20 8 13.3 3 9l6.6-.8z"/></svg><b>Resumo do dia</b><small>gerado pela Central</small></div><ul>${[i1, i2, i3].map(([t, h]) => `<li class="${t}"><i></i><span>${h}</span></li>`).join('')}</ul></div>`;
     /* um cartão por pessoa (toque no cartão filtra) */
     const card = (p) => {
-      const u = p.L[0], o = on(p), cm = new Map(); p.L.forEach((x) => cm.set(x.mod, (cm.get(x.mod) || 0) + 1));
-      const chips = Array.from(cm.entries()).sort((a, b) => b[1] - a[1]).map(([m, n]) => `<span class="ehpm" style="--m:${ehCor(m)}" title="${n} ${n === 1 ? 'ação' : 'ações'} em ${esc(EH_NOME[m] || m)}"><b>${n}</b><span>${esc(EH_NOME[m] || m)}</span></span>`).join('') + (cm.size > 1 ? `<span class="ehpm mais" style="display:none"><b>+0</b></span>` : '');
-      return `<button type="button" class="ehpc${o ? ' on' : ''}" data-act="eh-p" data-key="${esc(p.k)}" aria-pressed="${EH.ins === p.k}" title="${EH.ins === p.k ? 'Mostrar todos' : 'Ver só ' + esc(p.nome)}">${ehCracha(p.k, p.nome, o)}<div class="ehnm"><b>${esc(p.nome)}</b><em>${NF.format(p.L.length)}<small>${p.L.length === 1 ? 'ação' : 'ações'}</small></em></div><small class="ehst"><i></i>${o ? 'online agora' : hoje ? 'última ação ' + ehHa(u.at) : 'última ação às ' + hhmm(u.at)}</small>
-        <p title="${esc((EH_VERBO[u.act] || 'alterou') + ' · ' + (u.label || u.key || ''))}"><span class="ehtx3">${ehTxt(u, true)}</span></p><div class="ehpms">${chips}</div><div class="ehpt"><span>começou ${hhmm(p.L[p.L.length - 1].at)}</span><span>${hoje ? ehHa(u.at) : 'última ' + hhmm(u.at)}</span></div></button>`;
+      const u = p.L[0], o = on(p), cm = new Map(), nC = p.L.filter(ehConc).length, nE = p.L.length - nC; p.L.forEach((x) => cm.set(x.mod, (cm.get(x.mod) || 0) + 1));
+      const chips = Array.from(cm.entries()).sort((a, b) => b[1] - a[1]).map(([m, n]) => `<span class="ehpm" style="--m:${ehCor(m)}" title="${n} ${n === 1 ? 'registro' : 'registros'} em ${esc(EH_NOME[m] || m)}"><b>${n}</b><span>${esc(EH_NOME[m] || m)}</span></span>`).join('') + (cm.size > 1 ? `<span class="ehpm mais" style="display:none"><b>+0</b></span>` : '');
+      return `<button type="button" class="ehpc${o ? ' on' : ''}" data-act="eh-p" data-key="${esc(p.k)}" aria-pressed="${EH.ins === p.k}" title="${EH.ins === p.k ? 'Mostrar todos' : 'Ver só ' + esc(p.nome)}">${ehCracha(p.k, p.nome, o)}<div class="ehnm"><b>${esc(p.nome)}</b><em title="${NF.format(nC)} ${nC === 1 ? 'concluído' : 'concluídos'} · ${NF.format(nE)} ${nE === 1 ? 'edição' : 'edições'}">${NF.format(nC)}<small>${nC === 1 ? 'concluído' : 'concluídos'}</small></em></div><small class="ehst"><i></i>${o ? 'online agora' : hoje ? 'última ação ' + ehHa(u.at) : 'última ação às ' + hhmm(u.at)}</small>
+        <p title="${esc((EH_VERBO[u.act] || 'alterou') + ' · ' + (u.label || u.key || ''))}"><span class="ehtx3">${ehTxt(u, true)}</span></p><div class="ehpms">${chips}</div><div class="ehpt"><span>desde ${hhmm(p.L[p.L.length - 1].at)}${nE ? ` · <b>${NF.format(nE)} ${nE === 1 ? 'edição' : 'edições'}</b>` : ''}</span><span>${hoje ? ehHa(u.at) : 'última ' + hhmm(u.at)}</span></div></button>`;
     };
     requestAnimationFrame(ehChipsFit);
     const cards = `<div class="ehpcs">${(EH.ins ? pessoas.filter((p) => p.k === EH.ins) : pessoas).map(card).join('')}</div>`;
@@ -17164,6 +17182,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const lotTx = (L) => L.map((x) => x.id + (lotTxt(x) ? ' · ' + lotTxt(x) : '')).join(' — ');
     const agRow = (g, i) => `<div class="tblr"><div><div class="t"><b>NF ${esc(disp(g.nf) || '—')}</b>${riSitForn(g.forn)}</div>${tagsHTML(g.lots, g.lots.map((x) => x.key).filter(Boolean))}<div class="d">${esc(g.forn || 'sem fornecedor')}</div><div class="m">${g.lots.length} ${g.lots.length === 1 ? 'lote' : 'lotes'}: ${esc(lotTx(g.lots))}</div><div class="w">recebido ${esc(fD(g.data))}${g.pc ? ' · pedido de compra ' + esc(disp(g.pc)) : ''}</div></div><div class="tbacts"><button class="btn rirb big" type="button" data-act="ri-novo" data-key="${i}" ${w ? '' : 'disabled'}>Inspecionar esta nota</button>${w ? `<button type="button" class="linkbtn" data-act="ri-semi" data-key="${i}">Sem inspeção…</button>` : ''}</div></div>`;
     const rasRow = (c0) => { const c = riCabAtual(c0), lt = (c.lotes || []).map((k) => findRec('AV', k)).filter(Boolean); return `<div class="tblr"><div><div class="t"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>em andamento</span>${c.pede && c.pede.by !== DB.me ? `<span class="chip warn"><i>↩</i>${esc(String(c.pede.nome || 'alguém').split(/\s+/)[0])} pediu de volta</span>` : ''}</div>${tagsHTML(lt, lt.map((x) => x.key))}<div class="d">${esc(c.forn || 'sem fornecedor')}</div><div class="m" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</div><div class="w">${esc(c.nome || '')} · começado ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">${w ? 'Continuar' : 'Ver'}</button></div>`; };
+    const outRow = (c0) => { const c = riCabAtual(c0), lt = (c.lotes || []).map((k) => findRec('AV', k)).filter(Boolean), pi = String(c.nome || '').trim().split(/\s+/).filter(Boolean), ini = pi.length > 1 ? pi[0][0] + pi[pi.length - 1][0] : (pi[0] || '?').slice(0, 2);
+      return `<div class="tblr"><div><div class="t"><b>NF ${esc(c.nf || '—')}</b><span class="chip info"><i>✎</i>em andamento</span></div>${tagsHTML(lt, lt.map((x) => x.key))}<div class="d">${esc(c.forn || 'sem fornecedor')}</div><div class="m" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</div><div class="w riwho tbwho">${riAvHTML(c.nome, c.by, ini)}<span>com ${esc(c.nome || 'outro inspetor')} desde ${esc(dmy(c.at))} às ${esc(hhmm(c.at))}</span></div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">Ver</button></div>`; };
     const finRow = (c) => { const nr = Object.values(c.res || {}).filter((r) => r === 'Reprovado').length; return `<div class="tblr"><div><div class="t"><b>${esc(c.num || 'RIR')}</b>${nr ? `<span class="chip crit"><i>✕</i>${nr} reprovado(s)</span>` : '<span class="chip ok"><i>✓</i>aprovado</span>'}</div><div class="d">NF ${esc(c.nf || '—')} · ${esc(c.forn || '')}</div><div class="m" title="${esc(lotesResumo(c.ids).full)}">${esc(lotesResumo(c.ids).txt)}</div><div class="w">concluído ${esc(dmy(c.fin || c.at))} às ${esc(hhmm(c.fin || c.at))}</div></div><button class="btn big" type="button" data-act="ri-abrir" data-key="${esc(c.id)}">Ver</button></div>`; };
     const ag = P.map((g, i) => [g, i]).filter(([g]) => bate([g.nf, g.forn, g.pc, g.lots.map((x) => x.id).join(' ')].join(' ')));
     const rs = ras.filter((c) => bate([c.nf, c.forn, (c.ids || []).join(' ')].join(' ')));
@@ -17172,6 +17192,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${w ? '' : '<div class="tbwarn">Seu acesso ao RIR é só de consulta: dá para ver as notas, mas não para inspecionar.</div>'}
       <div class="rtk"><div style="--k:var(--rir)"><b>${NF.format(P.length)}</b><span>notas aguardando RIR</span></div><div style="--k:var(--info)"><b>${NF.format(ras.length)}</b><span>com você${nOutros ? ` · ${nOutros} com outros` : ''}</span></div><div style="--k:var(--ok)"><b>${NF.format(nHoje)}</b><span>lotes inspecionados hoje</span></div></div>
       ${(() => { const PL = riPassouL(); return rs.length || PL.length ? `<div class="tbcard"><div class="ch">Com você<span class="cnt">${rs.length}</span></div>${riPassouHTML(PL)}${rs.map(rasRow).join('')}</div>` : ''; })()}
+      ${(() => { const ou = rasT.filter((c) => !riMeu(c)).filter((c) => bate([c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')));   /* v128: notas com outros inspetores também no tablet (Ver → só olhando → Assumir) */
+        return ou.length ? `<div class="tbcard"><div class="ch">Com outros inspetores<span class="cnt">${ou.length}</span></div>${ou.map(outRow).join('')}</div>` : ''; })()}
       <div class="tbcard"><div class="ch">Notas aguardando inspeção<span class="cnt">${ag.length}</span></div>${ag.length ? ag.map(([g, i]) => agRow(g, i)).join('') : `<div class="tbnone">${q ? 'Nenhuma nota com essa busca.' : 'Nenhuma nota aguardando inspeção de recebimento. 👍'}</div>`}</div>
       ${(() => { const TR = riTravados(); RI.trav = TR; const tr = TR.map((o, i) => [o, i]).filter(([o]) => bate([o.nf, o.forn, o.lots.map((x) => x.id).join(' ')].join(' ')));
         return tr.length ? `<div class="tbcard"><div class="ch">Travados · sem inspeção<span class="cnt">${tr.length}</span></div>${tr.map(([o, i]) => `<div class="tblr"><div><div class="t"><b>NF ${esc(disp(o.nf) || '—')}</b><span class="risit ${SEMI_MOT[o.mot][3]}">${SEMI_MOT[o.mot][0]}</span></div>${tagsHTML(o.lots, o.lots.map((x) => x.key).filter(Boolean))}<div class="d">${esc(o.forn || 'sem fornecedor')}</div><div class="m">${o.lots.length} ${o.lots.length === 1 ? 'lote' : 'lotes'}: ${esc(lotTx(o.lots))}</div><div class="w">marcado ${esc(dmy(o.ev.at))} por ${esc(who(o.ev.by))}${o.ev.obs ? ' · ' + esc(o.ev.obs) : ''}</div></div>${w ? `<button class="btn big" type="button" data-act="ri-semix" data-key="${i}">Voltar para a fila</button>` : ''}</div>`).join('')}</div>` : ''; })()}
