@@ -517,6 +517,21 @@ button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 table.t { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 12.8px; }
 table.t th { position: sticky; top: 0; background: var(--surface-2); text-align: left; font: 600 11px/1.2 var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); padding: 9px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; cursor: pointer; user-select: none; }
 table.t th.nosort { cursor: default; }
+/* v126: filtro em cada coluna (Lotes AV) */
+table.t th .thf { display: inline-grid; place-items: center; width: 18px; height: 18px; margin-left: 4px; padding: 0; border: 1px solid transparent; border-radius: 4px; background: none; color: var(--ink-3); font-size: 10px; line-height: 1; cursor: pointer; vertical-align: middle; }
+table.t th .thf:hover { border-color: var(--line-2); color: var(--ink); }
+table.t th .thf.on { background: var(--av); border-color: var(--av); color: #fff; }
+.cfpop { position: absolute; z-index: 300; width: 270px; background: var(--surface); border: 1px solid var(--line-2); border-radius: 10px; box-shadow: 0 12px 32px rgba(0, 0, 0, .3); padding: 10px; display: grid; gap: 8px; }
+.cfpop .cfh { font-size: 12.5px; color: var(--ink-2); } .cfpop .inp { width: 100%; height: 34px; }
+.cfpop .cfl { max-height: 290px; overflow: auto; display: grid; gap: 2px; }
+.cfi { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 5px 6px; border-radius: 6px; font-size: 13px; cursor: pointer; }
+.cfi span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .cfi small { color: var(--ink-3); font-family: var(--f-mono); font-size: 11.5px; }
+.cfi.on { background: color-mix(in srgb, var(--av) 12%, transparent); } .cfi input { margin: 0; accent-color: var(--av); }
+.cfm { color: var(--ink-3); font-size: 12px; padding: 4px 6px; }
+.cfb { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; border-top: 1px solid var(--line); padding-top: 8px; }
+.cfchips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 8px 0; } .cfchips .n { font-size: 12.5px; color: var(--ink-2); margin-right: 2px; }
+.cfc { display: inline-flex; gap: 6px; align-items: center; border: 1px solid var(--av); border-radius: 999px; padding: 4px 10px; font: 400 12.5px var(--f-body); color: var(--ink); background: color-mix(in srgb, var(--av) 10%, transparent); cursor: pointer; }
+.cfc b { font-weight: 600; } .cfc i { font-style: normal; color: var(--ink-3); font-weight: 700; }
 table.t th .ar { color: var(--ink-3); margin-left: 4px; }
 table.t td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; max-width: 320px; }
 table.t td.mono { white-space: nowrap; }
@@ -1138,6 +1153,7 @@ table.mz tbody tr[data-open] { cursor: pointer; } table.mz tbody tr[data-open]:h
 .riit { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: var(--surface); }
 .riit .rit { display: flex; align-items: center; gap: 8px; font-weight: 600; margin-bottom: 4px; } .riit .rit small { font-weight: 400; color: var(--ink-3); } .riit .rit .btn { margin-left: auto; }
 .rirow { display: grid; grid-template-columns: minmax(70px, 120px) auto minmax(90px, 140px) minmax(0, 1fr); gap: 6px 10px; align-items: center; padding: 5px 0; border-top: 1px dashed var(--line); }
+.ril .ripc { display: block; font-size: 11.5px; color: var(--ink-3); margin-top: 1px; font-weight: 400; }   /* v125 */
 .rirow:first-of-type { border-top: 0; } .rirow.nc .ril b { color: var(--crit); }
 .riseg button { padding: 9px 12px; min-width: 64px; font-size: 13px; }
 .riseg button.rC[aria-pressed="true"] { background: var(--ok); } .riseg button.rNC[aria-pressed="true"] { background: var(--crit); } .riseg button.rNA[aria-pressed="true"] { background: var(--ink-3); }
@@ -5926,7 +5942,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 124; window.CQ_V = APP_V;
+    const APP_V = 126; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7667,19 +7683,72 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (typeof a === 'number' && typeof b === 'number') return a - b;
     return String(a).localeCompare(String(b), 'pt-BR', { numeric: true, sensitivity: 'base' });
   }
+  /* v126: filtro em cada coluna, como no Excel (cfg.colf): ▾ no cabeçalho, lista dos valores com a quantidade, busca e caixinhas */
+  const CF_VAZIO = '(em branco)';
+  function cfVal(c, x) {
+    let v = c.x ? c.x(x) : x[c.k];
+    if (v && typeof v === 'object' && v.t === 'n' && v.z) v = fD(v.v);
+    v = v == null ? '' : String(disp(v)).trim();
+    return v || CF_VAZIO;
+  }
+  function cfAplica(rows, cols, cf, menos) {
+    const ks = Object.keys(cf || {}).filter((k) => k !== menos && cf[k] && cf[k].length);
+    if (!ks.length) return rows;
+    const cs = ks.map((k) => [cols.find((c) => c.k === k), new Set(cf[k])]).filter((a) => a[0]);
+    return rows.filter((x) => cs.every(([c, S0]) => S0.has(cfVal(c, x))));
+  }
   function mountTable(host, cfg) {
     const st = S.t[cfg.id] || (S.t[cfg.id] = { sort: cfg.sort || null, dir: cfg.dir || -1, page: 0 });
     const size = cfg.size || 50;
+    if (cfg.colf && !st.cf) st.cf = {};
+    function cfAbre(k, th) {
+      const c = cfg.cols.find((o) => o.k === k); if (!c) return;
+      $$('.cfpop').forEach((e) => e.remove());
+      const base = cfAplica(cfg.rows, cfg.cols, st.cf, k), cont = new Map();
+      base.forEach((x) => { const v = cfVal(c, x); cont.set(v, (cont.get(v) || 0) + 1); });
+      const sel = new Set(st.cf[k] || []);
+      (st.cf[k] || []).forEach((v) => { if (!cont.has(v)) cont.set(v, 0); });
+      const vals = Array.from(cont.entries()).sort((a, b) => (a[0] === CF_VAZIO) - (b[0] === CF_VAZIO) || b[1] - a[1] || String(a[0]).localeCompare(String(b[0]), 'pt-BR', { numeric: true }));
+      const pop = document.createElement('div'); pop.className = 'cfpop'; pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-label', 'Filtrar ' + c.l);
+      pop.innerHTML = `<div class="cfh">Filtrar <b>${esc(c.l)}</b></div><input class="inp" type="search" placeholder="buscar…" autocomplete="off"><div class="cfl"></div>
+        <div class="cfb"><button class="btn small" type="button" data-cfx="limpa">Limpar</button><button class="btn small primary" type="button" data-cfx="ok">Aplicar</button></div>`;
+      document.body.appendChild(pop);
+      const lista = pop.querySelector('.cfl'), q = pop.querySelector('input');
+      const desenha = () => {
+        const t = E.key(q.value || ''), L = vals.filter(([v]) => !t || E.key(v).includes(t)), M = 300;
+        lista.innerHTML = L.slice(0, M).map(([v, n]) => `<label class="cfi${sel.has(v) ? ' on' : ''}"><input type="checkbox" value="${esc(v)}" ${sel.has(v) ? 'checked' : ''}><span>${esc(v)}</span><small>${NF.format(n)}</small></label>`).join('')
+          + (L.length > M ? `<div class="cfm">mais ${NF.format(L.length - M)} · use a busca</div>` : '') + (!L.length ? '<div class="cfm">nada com essa busca</div>' : '');
+        lista.querySelectorAll('input').forEach((i) => { i.onchange = () => { if (i.checked) sel.add(i.value); else sel.delete(i.value); i.parentElement.classList.toggle('on', i.checked); }; });
+      };
+      desenha(); q.oninput = desenha;
+      const r = th.getBoundingClientRect(), w = 270;
+      pop.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, r.left)) + 'px'; pop.style.top = (r.bottom + window.scrollY + 4) + 'px';
+      const fecha = () => { pop.remove(); document.removeEventListener('pointerdown', fora, true); document.removeEventListener('keydown', esc_, true); };
+      const fora = (e) => { if (!pop.contains(e.target) && !e.target.closest('[data-cf]')) fecha(); };
+      const esc_ = (e) => { if (e.key === 'Escape') fecha(); };
+      setTimeout(() => { document.addEventListener('pointerdown', fora, true); document.addEventListener('keydown', esc_, true); }, 0);
+      q.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); pop.querySelector('[data-cfx=ok]').click(); } };
+      pop.querySelector('[data-cfx=limpa]').onclick = () => { delete st.cf[k]; st.page = 0; fecha(); draw(); };
+      pop.querySelector('[data-cfx=ok]').onclick = () => { if (sel.size) st.cf[k] = Array.from(sel); else delete st.cf[k]; st.page = 0; fecha(); draw(); };
+      setTimeout(() => q.focus(), 0);
+    }
+    function cfChips() {
+      const ks = Object.keys(st.cf).filter((k) => (st.cf[k] || []).length && cfg.cols.some((c) => c.k === k));
+      if (!ks.length) return '';
+      return `<div class="cfchips"><span class="n">Filtros nas colunas:</span>${ks.map((k) => { const c = cfg.cols.find((o) => o.k === k), L = st.cf[k]; return `<button type="button" class="cfc" data-cfrm="${esc(k)}" title="Tirar o filtro de ${esc(c.l)}">${esc(c.l)}: <b>${esc(L.slice(0, 3).join(', '))}${L.length > 3 ? ' +' + (L.length - 3) : ''}</b><i aria-hidden="true">✕</i></button>`; }).join('')}${ks.length > 1 ? '<button type="button" class="linkbtn" data-cfrm="*">tirar todos</button>' : ''}</div>`;
+    }
     function draw() {
-      let rows = cfg.rows.slice();
+      let rows = cfg.colf ? cfAplica(cfg.rows, cfg.cols, st.cf) : cfg.rows.slice();
       if (st.sort) { const col = cfg.cols.find((c) => c.k === st.sort); if (col) { const f = col.s || ((x) => x[col.k]); rows.sort((a, b) => cmp(f(a), f(b)) * st.dir || (a.row - b.row)); } }
       const pages = Math.max(1, Math.ceil(rows.length / size));
       if (st.page >= pages) st.page = pages - 1;
       const slice = rows.slice(st.page * size, st.page * size + size), vcols = cfg.cols.filter((c) => !c.hide);
       host.innerHTML = `<div class="tbar"><span class="cnt"><b>${NF.format(rows.length)}</b> ${esc(cfg.noun || 'registros')}${cfg.total != null && rows.length !== cfg.total ? ` de ${NF.format(cfg.total)}` : ''}</span>${cfg.bar || ''}<span class="pager">${pages > 1 ? `<button class="btn small" type="button" data-pg="-1" ${st.page === 0 ? 'disabled' : ''}>‹ Anterior</button><span class="muted num">página ${st.page + 1} de ${pages}</span><button class="btn small" type="button" data-pg="1" ${st.page >= pages - 1 ? 'disabled' : ''}>Próxima ›</button>` : ''}${cfg.export ? '<button class="btn small" type="button" data-exp="1">Exportar lista (.xlsx)</button>' : ''}</span></div>
-      <div class="twrap twin"><table class="t"><thead><tr>${vcols.map((c) => `<th class="${c.r ? 'r' : ''}${c.nosort ? ' nosort' : ''}" ${c.nosort ? '' : `data-sort="${c.k}"`} scope="col">${esc(c.l)}${st.sort === c.k ? `<span class="ar">${st.dir > 0 ? '▲' : '▼'}</span>` : ''}</th>`).join('')}</tr></thead>
+      ${cfg.colf ? cfChips() : ''}<div class="twrap twin"><table class="t"><thead><tr>${vcols.map((c) => `<th class="${c.r ? 'r' : ''}${c.nosort ? ' nosort' : ''}" ${c.nosort ? '' : `data-sort="${c.k}"`} scope="col">${esc(c.l)}${st.sort === c.k ? `<span class="ar">${st.dir > 0 ? '▲' : '▼'}</span>` : ''}${cfg.colf ? `<button type="button" class="thf${(st.cf[c.k] || []).length ? ' on' : ''}" data-cf="${c.k}" aria-label="Filtrar ${esc(c.l)}" title="Filtrar ${esc(c.l)}">▾</button>` : ''}</th>`).join('')}</tr></thead>
       <tbody>${slice.map((x) => `<tr class="${cfg.open ? 'click' : ''}" ${cfg.open ? `data-open="${x.mod}:${esc(x.key)}" tabindex="0"` : ''}>${vcols.map((c) => `<td class="${c.cls || ''}${c.r ? ' r' : ''}${!c.cls && c.w && c.w <= 12 ? ' nw' : ''}">${c.f ? c.f(x) : esc(disp(x[c.k]))}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${vcols.length}" class="muted">Nenhum registro com esses filtros.</td></tr>`}</tbody></table></div>`;
-      host.querySelectorAll('[data-sort]').forEach((th) => th.onclick = () => { const k = th.dataset.sort; if (st.sort === k) st.dir = -st.dir; else { st.sort = k; st.dir = 1; } draw(); });
+      host.querySelectorAll('[data-sort]').forEach((th) => th.onclick = (e) => { if (e.target.closest('[data-cf]')) return; const k = th.dataset.sort; if (st.sort === k) st.dir = -st.dir; else { st.sort = k; st.dir = 1; } draw(); });
+      host.querySelectorAll('[data-cf]').forEach((b) => b.onclick = (e) => { e.stopPropagation(); const k = b.dataset.cf; if ($('.cfpop') && $('.cfpop').dataset.k === k) { $('.cfpop').remove(); return; } cfAbre(k, b.closest('th')); const pp = $('.cfpop'); if (pp) pp.dataset.k = k; });
+      host.querySelectorAll('[data-cfrm]').forEach((b) => b.onclick = () => { const k = b.dataset.cfrm; if (k === '*') st.cf = {}; else delete st.cf[k]; st.page = 0; draw(); });
       host.querySelectorAll('[data-pg]').forEach((b) => b.onclick = () => { st.page += +b.dataset.pg; draw(); host.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
       const ex = host.querySelector('[data-exp]'); if (ex) ex.onclick = () => exportRows(cfg.export, cfg.cols.filter((c) => !c.nosort), rows);
     }
@@ -11115,7 +11184,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       b.setAttribute('aria-pressed', f.status.includes(v));
       (S.t[mod] || {}).page = 0; redraw();
     });
-    const clr = $('#f-clear'); if (clr) clr.onclick = () => { S.f[mod] = {}; render(); };
+    const clr = $('#f-clear'); if (clr) clr.onclick = () => { S.f[mod] = {}; if (S.t[mod]) S.t[mod].cf = {}; render(); };   /* v126: limpa também os filtros das colunas */
   }
   const txtMatch = (q, vals) => { if (!q) return true; const k = E.key(q); return vals.some((v) => E.filled(v) && E.key(v).includes(k)); };
   const eqL = (a, b) => !b || E.low(a) === E.low(b);
@@ -11130,7 +11199,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <div id="tbl"></div></div>`;
     const draw = () => {
       const rows = M.av.filter((x) => txtMatch(f.q, [x.id, x.corrida, x.volume, x.nf, x.pc, x.pv, x.desc, x.cert, x.liga, x.norma]) && eqL(x.filial, f.filial) && (!f.forn || E.key(x.forn).includes(E.key(f.forn))) && eqL(x.conf, f.conf) && eqL(avRet(x), f.retrab) && dateIn(x.data, f.de, f.ate) && (!f.cert || (f.cert === 'sem') === semCert(x)) && (!f.insp || (f.insp === 'Sem registro' ? !x.insp : eqL(x.insp, f.insp))));
-      mountTable($('#tbl'), { id: 'av', rows, total: M.av.length, noun: 'lotes', open: true, sort: 'id', dir: -1, cols: COLS.AV, export: 'Lotes_AV' });
+      mountTable($('#tbl'), { id: 'av', rows, total: M.av.length, noun: 'lotes', open: true, sort: 'id', dir: -1, cols: COLS.AV, export: 'Lotes_AV', colf: true });
     };
     wireFilters('av', [['fa-q', 'q'], ['fa-filial', 'filial'], ['fa-forn', 'forn'], ['fa-conf', 'conf'], ['fa-de', 'de'], ['fa-ate', 'ate'], ['fa-cert', 'cert'], ['fa-retrab', 'retrab'], ['fa-insp', 'insp']], draw);
     draw();
@@ -16356,7 +16425,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
                     lotRes: { chave: { res, mot, man } }, ins: [instrumentos], obs, assin, inspetor, status }
      rirf/<id>…     fotos (uma por documento, via FT) */
   const RIR_PADRAO = [
-    { id: 'd1', sec: 'Documentação', t: 'NF confere com o pedido de compra', esc: 'nf' },
+    { id: 'd1', sec: 'Documentação', t: 'NF confere com o pedido de compra', esc: 'lote' },
     { id: 'd2', sec: 'Documentação', t: 'Certificado recebido?', esc: 'lote' },
     { id: 'd3', sec: 'Documentação', t: 'Certificado confere com a norma pedida', esc: 'lote' },
     { id: 'i1', sec: 'Identificação', t: 'Corrida / marcação legível no material', esc: 'lote' },
@@ -16377,7 +16446,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* RIR ligado = módulo liberado em Módulos em teste (vale para todos, inclusive quem lança lotes sem ver o RIR);
      enquanto está em teste, só os lançamentos da conta dona passam pelo RIR */
   const rirOn = () => !emTeste('rir') || !!DB.owner;
-  const riItNorm = (o) => (o && o.t === 'Certificado da usina recebido' ? Object.assign({}, o, { t: 'Certificado recebido?' }) : o);   /* v74 */
+  const riItNorm0 = (o) => (o && o.t === 'Certificado da usina recebido' ? Object.assign({}, o, { t: 'Certificado recebido?' }) : o);   /* v74 */
+  /* v125: "NF confere com o pedido de compra" é respondido lote por lote (pode reprovar só 1 lote); vale também para a lista já gravada */
+  const riEhPc = (it) => !!(it && /confere com o pedido de compra/i.test(String(it.t || '')));
+  const riItNorm = (o) => { const x = riItNorm0(o); return riEhPc(x) && x.esc === 'nf' ? Object.assign({}, x, { esc: 'lote' }) : x; };
+  /* v125: todos os pedidos de compra da nota (um por lote, sem repetir); RIR antigo sem lotes achados fica com o que foi gravado */
+  function riPcs(rel) { const L = uniq((rel.lotes || []).map((k) => { const x = findRec('AV', k); return x && E.filled(x.pc) ? String(x.pc) : ''; }).filter(Boolean)); return L.length ? L : rel.pc ? [String(rel.pc)] : []; }
+  const riPcTxt = (rel) => riPcs(rel).join(' · ');
   const rirItensCfg = () => { const L = ((DB.cfg || {}).rir || {}).itens; return (Array.isArray(L) && L.length ? L : RIR_PADRAO).map(riItNorm); };
   /* v74: certificado e corrida vêm do lançamento do lote (operadora).
      cert   = "Certificado recebido?": preenchido sozinho (veio = AP com o nº; não veio = N/A "sem", não abre NCF)
@@ -16633,7 +16708,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const medTxt = med.length ? rel.lotes.map((k) => `${rel.lotes.length > 1 ? `<span class="mono">${esc(lotId(k))}</span>: ` : ''}${med.map((it) => { const a = riAns(rel, it, k); return `${esc(it.t)} <b>${a.v ? esc(a.v) : '—'}</b>${a.r ? ` <span style="color:${a.r === 'NC' ? 'var(--crit)' : 'var(--ok)'};font-size:12px">${RI_MARCA[a.r]}</span>` : ''}`; }).join(' · ')}`).join('<br>') : '';
     const pairs = [['Número', `<span class="mono">${esc(rel.numero || '')}</span>`],
       ['Resultado', nRep ? `<span class="chip crit">${nRep === rel.lotes.length ? 'Reprovado' : nRep + ' de ' + rel.lotes.length + ' lote(s) reprovado(s)'}</span>` : '<span class="chip ok">✓ Aprovado</span>'],
-      ['Assinatura', rel.assin ? esc(sigLine(rel.assin)) : ''], ['Nota fiscal', t(rel.nf)], ['Fornecedor', t(rel.forn)], ['Pedido de compra', t(rel.pc)],
+      ['Assinatura', rel.assin ? esc(sigLine(rel.assin)) : ''], ['Nota fiscal', t(rel.nf)], ['Fornecedor', t(rel.forn)], [riPcs(rel).length > 1 ? 'Pedidos de compra' : 'Pedido de compra', esc(riPcTxt(rel))],
       ['Lotes', lotes], ['Checklist', ckTxt], med.length ? ['Medidas', medTxt] : null,
       ['Instrumentos', (rel.ins || []).map((i) => esc(i.codigo + ' · ' + (i.desc || '') + (i.val ? ' · validade ' + fD(E.fromIso(i.val)) : ''))).join('<br>')],
       ['Fotos', rel.nFotos ? `${NF.format(rel.nFotos)} foto(s) · aparecem no relatório` : ''], rel.obs ? ['Observações', `<span style="white-space:pre-wrap">${esc(rel.obs)}</span>`] : null];
@@ -17133,7 +17208,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const passo = RI.tpasso === 2 ? 2 : 1;
     const cols = porLote ? [rel.lotes[RI.tlote]] : rel.lotes;
     const resTxt = (k) => { const r = riRes(rel, k), o2 = (rel.lotRes || {})[k] || {}, mot = r === 'Reprovado' ? String(o2.mot || riMotSug(rel, k) || '') : ''; return [r, mot]; };
-    const left = `<aside class="rgside"><button type="button" class="tbsmin" data-act="tb-mini" aria-label="Recolher ou abrir o painel do lado" title="Recolher ou abrir o painel"><span class="a">«</span><span class="b">»</span></button><div class="rgnf"><b>NF ${esc(rel.nf || '—')}</b><span>${esc([rel.forn, rel.pc ? 'pedido de compra ' + rel.pc : ''].filter(Boolean).join(' · '))}</span><span>começado ${esc(dmy(rel.at))} às ${esc(hhmm(rel.at))}${rel.nome ? ' · ' + esc(rel.nome) : ''}</span>${riSitForn(rel.forn)}${(() => { const lt = rel.lotes.map((k) => findRec('AV', k)).filter(Boolean), tg = tagsHTML(lt, lt.map((x) => x.key)); return tg ? `<div class="ritgs">${tg}</div>` : ''; })()}</div>
+    const left = `<aside class="rgside"><button type="button" class="tbsmin" data-act="tb-mini" aria-label="Recolher ou abrir o painel do lado" title="Recolher ou abrir o painel"><span class="a">«</span><span class="b">»</span></button><div class="rgnf"><b>NF ${esc(rel.nf || '—')}</b><span>${esc([rel.forn, riPcs(rel).length ? (riPcs(rel).length > 1 ? 'pedidos de compra ' : 'pedido de compra ') + riPcTxt(rel) : ''].filter(Boolean).join(' · '))}</span><span>começado ${esc(dmy(rel.at))} às ${esc(hhmm(rel.at))}${rel.nome ? ' · ' + esc(rel.nome) : ''}</span>${riSitForn(rel.forn)}${(() => { const lt = rel.lotes.map((k) => findRec('AV', k)).filter(Boolean), tg = tagsHTML(lt, lt.map((x) => x.key)); return tg ? `<div class="ritgs">${tg}</div>` : ''; })()}</div>
       ${rel.lotes.map((k, i) => { const x = findRec('AV', k), [r, mot] = resTxt(k), man = ((rel.lotRes || {})[k] || {}).man, bt = porLote && passo === 1; return `<${bt ? 'button type="button"' : 'div'} class="rglot ${r === 'Aprovado' ? 'ap' : r === 'Reprovado' ? 'rp' : r ? 'av' : ''}${bt && i === RI.tlote ? ' on' : ''}" ${bt ? `data-act="ri-tlote" data-key="${i}"` : ''}><b>${esc(lotId(k))}</b><i class="rgmini">${esc(String(lotId(k)).split('-').pop())}</i><span>${x ? esc([lotTxt(x), E.filled(x.corrida) ? 'corrida ' + x.corrida : '', x.quant != null && x.quant !== '' ? x.quant + ' ' + (x.und || '') : ''].filter(Boolean).join(' · ')) : ''}</span>${x && semCert(x) ? '<i class="rgsemc">sem certificado</i>' : ''}<em>${r === 'Aprovado' ? '✓ Aprovado' + (man ? '' : ' (sai sozinho)') : r === 'Reprovado' ? '✕ Reprovado' + (mot ? ': ' + esc(mot.length > 70 ? mot.slice(0, 70) + '…' : mot) : '') : r ? esc(r) : 'falta responder'}</em></${bt ? 'button' : 'div'}>`; }).join('')}
       <div class="rgins"><span>Instrumentos usados</span>${(rel.ins || []).map((i) => `<b><span class="mono">${esc(i.codigo)}</span> ${esc(i.desc || '')}${i.val ? ', válido até ' + esc(fD(E.fromIso(i.val)).slice(3)) : ''}</b>`).join('') || '<em>nenhum ainda · escolha na conclusão</em>'}</div></aside>`;
     let main;
@@ -17196,7 +17271,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     /* AP = aprovado · RP = reprovado · N/A = não aplicável (gravado como C / NC / NA) */
     const rbtn = (it, sc) => { const a = riAns(rel, it, sc); return `<div class="seg riseg" role="group">${['C', 'NC', 'NA'].map((v) => `<button type="button" ${ro ? 'disabled' : ''} data-act="ri-r" data-key="${esc(it.id)}" data-sc="${esc(sc)}" data-v="${v}" aria-pressed="${a.r === v}" class="r${v}" title="${v === 'C' ? 'Aprovado' : v === 'NC' ? 'Reprovado' : 'Não aplicável'}">${RI_MARCA[v]}</button>`).join('')}</div>`; };
     const linha = (it, sc) => {
-      const a = riAns(rel, it, sc), lab = sc === 'nf' ? '<span class="muted">nota inteira</span>' : `<b class="mono">${esc(lotId(sc))}</b>`, tp = riTipo(it), au = riAutoTxt(rel, it, sc);
+      const pcL = sc !== 'nf' && riEhPc(it) ? (findRec('AV', sc) || {}).pc : null;   /* v125: o pedido de compra de cada lote embaixo do lote */
+      const a = riAns(rel, it, sc), lab = sc === 'nf' ? '<span class="muted">nota inteira</span>' : `<b class="mono">${esc(lotId(sc))}</b>${E.filled(pcL) ? `<small class="ripc">PC <span class="mono">${esc(pcL)}</span></small>` : ''}`, tp = riTipo(it), au = riAutoTxt(rel, it, sc);
       if (au) return `<div class="rirow"><div class="ril">${lab}</div><span class="chip ${a.auto === 'sem' ? 'warn' : 'ok'} riauto"><i>${a.auto === 'sem' ? '!' : '✓'}</i>${esc(au)}</span><span class="muted riautot">${a.auto === 'sem' && tp === 'cert' ? 'lançado sem certificado · não abre NCF' : 'vem do lançamento do lote'}</span></div>`;   /* v74 */
       if (tp === 'corrida' && sc !== 'nf') {
         const x = findRec('AV', sc) || {};
@@ -17227,7 +17303,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <div class="cqfrom">${tab ? '' : '<button class="btn ghost small" type="button" data-act="ri-voltar">‹ RIR</button>'}<b class="cqpv">${esc(rel.numero || 'RIR em andamento')}</b><span class="cqnf mono">NF ${esc(rel.nf || '—')}</span><span class="clip">${esc(rel.forn || '')}</span>${riSitForn(rel.forn)}${ro || tab ? '' : '<span class="chip ok" id="rie-salvo">rascunho</span>'}</div>
       ${rel.status === 'finalizado' ? `<div class="okbox" style="margin:8px 0">Concluído em ${esc(dmy(rel.fin))} às ${esc(hhmm(rel.fin))} · ${sigLine(rel.assin)}</div>` : ''}
       <div class="fsec"><h3>Lotes desta nota</h3>${(() => { const lt = rel.lotes.map((k) => findRec('AV', k)).filter(Boolean), tg = tagsHTML(lt, lt.map((x) => x.key)); return tg ? `<div class="ritgs">${tg}</div>` : ''; })()}<div class="rils">${rel.lotes.map((k) => { const x = findRec('AV', k); return x ? lotBtn(k, `${esc(x.id)} <small>${esc(lotTxt(x))}${E.filled(x.corrida) ? ' · corrida ' + esc(x.corrida) : ''}${x.quant != null && x.quant !== '' ? ' · ' + esc(x.quant) + ' ' + esc(x.und || '') : ''}</small>`) : `<span class="lchip">${esc(lotId(k))}</span>`; }).join('')}</div>
-        ${rel.pc ? `<p class="muted" style="margin:6px 0 0;font-size:12.5px">Pedido de compra <span class="mono">${esc(rel.pc)}</span></p>` : ''}</div>
+        ${riPcs(rel).length ? `<p class="muted" style="margin:6px 0 0;font-size:12.5px">${riPcs(rel).length > 1 ? 'Pedidos de compra' : 'Pedido de compra'} ${riPcs(rel).map((v) => `<span class="mono">${esc(v)}</span>`).join(' · ')}</p>` : ''}</div>
       ${secs.map((s) => `<div class="fsec"><h3 class="rih3"><span>${esc(s)}</span>${!ro && rel.itens.some((it) => it.sec === s && it.med) ? `<button type="button" class="btn small" data-act="ri-madd" data-key="${esc(s)}">+ Medida</button>` : ''}</h3>${rel.itens.filter((it) => it.sec === s).map(item).join('')}</div>`).join('')}
       <div class="fsec"><h3>Instrumentos usados nas medidas</h3><div class="rils" id="ri-ins">${insHTML}</div></div>
       <div class="fsec"><h3>Fotos</h3><div class="rphs" id="ri-fotos"><span class="muted">${rel.nFotos ? 'Carregando fotos…' : 'Sem fotos.'}</span></div>
@@ -17387,7 +17463,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const L = (pt) => biL(pt), itEn = (it) => { const a = relEn(it.sec), b = relEn(it.t); return a && b ? a + ' · ' + b : ''; };
     printHTML(relDocHTML({ en: true, extra: '.fsub{display:flex;gap:3mm;align-items:baseline;padding:1.6mm 2.5mm;border-top:1px solid #999;background:#f3f3f3;font-size:8.6pt;break-after:avoid}.fsub span{color:#444}.fsub .n{margin-left:auto}.sec .fsub:first-of-type{border-top:0}', titulo: esc(rel.numero || 'RIR-rascunho' + (rfDig(rel.nf) ? '-NF' + rfDig(rel.nf) : '')), cor: '#3f541b', nome: 'RELATÓRIO DE INSPEÇÃO DE RECEBIMENTO', sub: 'Checklist da nota fiscal · resultado por lote', subEn: esc(relEn('Checklist da nota fiscal · resultado por lote')), num: rel.numero ? esc(rel.numero) : biL('RASCUNHO'),
       linhas: `<div><span>${L('Data')}</span><b>${esc(dmy(rel.fin || rel.at))}</b></div><div><span>${L('NF')}</span><b>${t(rel.nf)}</b></div>`,
-      corpo: `<div class="sec"><div class="sh">${biS('1', 'Identificação')}</div><table><tr><td class="k">${L('Fornecedor')}</td><td>${t(rel.forn)}</td><td class="k">${L('Nota fiscal')}</td><td>${t(rel.nf)}</td></tr><tr><td class="k">${L('Pedido de compra')}</td><td>${t(rel.pc)}</td><td class="k">${L('Lotes')}</td><td>${esc((rel.ids || []).join(', '))}</td></tr></table></div>
+      corpo: `<div class="sec"><div class="sh">${biS('1', 'Identificação')}</div><table><tr><td class="k">${L('Fornecedor')}</td><td>${t(rel.forn)}</td><td class="k">${L('Nota fiscal')}</td><td>${t(rel.nf)}</td></tr><tr><td class="k">${L('Pedido de compra')}</td><td>${esc(riPcTxt(rel))}</td><td class="k">${L('Lotes')}</td><td>${esc((rel.ids || []).join(', '))}</td></tr></table></div>
         <div class="sec"><div class="sh">${biS('2', 'Lotes e resultado')}</div><table><tr><td class="k">${L('Lote')}</td><td class="k" style="width:auto">${L('Material')}</td><td class="k" style="width:auto">${L('Corrida')}</td><td class="k" style="width:auto">${L('Resultado')}</td></tr>${cols.map((k) => { const x = findRec('AV', k) || {}; return `<tr><td class="mono">${esc(lotId(k))}</td><td>${esc(lotTxt(x) || '—')}</td><td>${E.filled(x.corrida) ? esc(x.corrida) : '—'}</td><td>${res(k)}</td></tr>`; }).join('')}</table></div>
         <div class="sec"><div class="sh">${biS('3', 'Checklist')} <span>${L('AP = aprovado · RP = reprovado · N/A = não aplicável')}</span></div><table><tr><td class="k" style="width:auto">${L('Item')}</td>${cols.map((k) => `<td class="k" style="width:auto;text-align:center">${esc(lotId(k))}</td>`).join('')}</tr>${ckRows}</table></div>
         <div class="sec"><div class="sh">${biS('4', 'Instrumentos')}</div><table><tr><td>${(rel.ins || []).map((i) => esc(i.codigo + ' · ' + (i.desc || '')) + (i.val ? ' · ' + biI('validade') + ' ' + esc(fD(E.fromIso(i.val))) : '')).join('<br>') || '—'}</td></tr></table></div>
