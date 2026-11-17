@@ -259,14 +259,14 @@ button.ehpc { cursor: pointer; } button.ehpc:hover { border-color: var(--ink-3);
 .bdt td small { display: block; margin-top: 2px; font-size: 11px; } .bdisen { display: grid; gap: 6px; }
 .bdres { border-radius: var(--r); padding: 8px 12px; border: 1px solid var(--line); border-left: 4px solid var(--ok); background: var(--surface-2); } .bdres.warn { border-left-color: var(--warn); } .bdres.crit { border-left-color: var(--crit); }
 /* v131: Desempenho por operador (Indicadores de certificados) */
-.dpwrap { margin-top: 14px; display: grid; gap: 12px; } .dpt { margin: 0; font-size: 14px; } .dpt small { font-weight: 400; color: var(--ink-3); margin-left: 6px; font-size: 12px; }
+.dpwrap { margin-top: 14px; } .dpin { display: grid; gap: 12px; } .dpwrap > summary small { font-weight: 400; color: var(--ink-3); margin-left: 6px; } .dpt { margin: 0; font-size: 14px; } .dpt small { font-weight: 400; color: var(--ink-3); margin-left: 6px; font-size: 12px; }
 .dpop { border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 12px; background: color-mix(in srgb, var(--surface-2) 60%, transparent); }
 .dphd { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; align-items: center; } .dphd b { display: block; font-size: 18px; } .dphd small { display: block; color: var(--ink-3); margin-top: 3px; }
 .dpfo { position: relative; width: 76px; height: 94px; border-radius: 10px; overflow: hidden; border: 2px solid var(--k); box-shadow: 0 0 14px color-mix(in srgb, var(--k) 35%, transparent); background: var(--surface-2); display: grid; place-items: center; }
 .dpfo img { width: 100%; height: 100%; object-fit: cover; display: block; } .dpfo span { font: 700 24px var(--f-display); color: var(--ink-3); }
 .dpfo i { position: absolute; left: 0; right: 0; bottom: 0; background: var(--k); color: var(--bg); font: 700 9.5px var(--f-body); font-style: normal; text-align: center; text-transform: uppercase; padding: 2px 0; }
-.dpop.db .dpfo i { color: #fff; }
-.dpchips { display: flex; flex-wrap: wrap; gap: 6px; } .dpch { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line-2); border-radius: 999px; padding: 3px 12px 3px 4px; background: none; color: var(--ink-2); font: 500 13px var(--f-body); cursor: pointer; }
+.dpdb { display: grid; gap: 12px; border-top: 1px dashed var(--line-2); padding-top: 12px; } .dpsubt { margin: 0; font-size: 14px; } .dpsubt small { font-weight: 400; color: var(--ink-3); margin-left: 6px; font-size: 12px; }
+.dpchips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; } .dpseg { margin-left: auto; grid-auto-columns: auto; height: 34px; } .dpseg button { padding: 0 14px; font-size: 13px; } .dpch { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line-2); border-radius: 999px; padding: 3px 12px 3px 4px; background: none; color: var(--ink-2); font: 500 13px var(--f-body); cursor: pointer; }
 .dpch.on { border-color: var(--n-tcr); background: color-mix(in srgb, var(--n-tcr) 15%, transparent); color: var(--ink); font-weight: 600; }
 .dpav { width: 26px; height: 26px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: var(--surface-2); font: 700 10px var(--f-display); color: var(--ink-3); } .dpav img { width: 100%; height: 100%; object-fit: cover; }
 .dpks { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; } .dpk { border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; background: var(--surface); }
@@ -283,8 +283,68 @@ button.ehpc { cursor: pointer; } button.ehpc:hover { border-color: var(--ink-3);
 .dptl b { display: block; font-size: 12.5px; } .dptl small { color: var(--ink-3); font-size: 11.5px; } .dpnt { margin: 6px 0 0; color: var(--ink-3); font-size: 11.5px; }
 .dpbr { display: grid; grid-template-columns: minmax(0, 150px) 1fr 40px; gap: 8px; align-items: center; margin: 5px 0; font-size: 12px; color: var(--ink-2); }
 .dpbr span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .dpbr i { height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; } .dpbr i b { display: block; height: 100%; border-radius: 4px; }
+.dpcal i u { position: absolute; right: 3px; top: 1px; text-decoration: none; font: 700 9px var(--f-body); color: var(--ink); opacity: .85; }
+.dpsts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; } .dpst span { display: block; font-size: 11px; color: var(--ink-3); } .dpst b { font: 700 18px var(--f-display); }
 .dpbr em { font: 700 14px var(--f-display); font-style: normal; text-align: right; } .dpsp svg { width: 100%; height: 70px; display: block; }
 @media (max-width: 1100px) { .dpks { grid-template-columns: repeat(3, minmax(0, 1fr)); } .dpg3 { grid-template-columns: minmax(0, 1fr); } }
+/* v134: Desempenho por operador — visual novo (cartão da pessoa + números com minigráfico), só na cor do módulo */
+.dvop { container-type: inline-size; --c: var(--n-tcr); --cc: color-mix(in srgb, var(--n-tcr) 14%, transparent); border-radius: 16px; background: radial-gradient(900px 300px at 0 0, color-mix(in srgb, var(--c) 9%, transparent), transparent 60%), color-mix(in srgb, var(--surface-2) 60%, transparent); }
+.dvop .dpchips { gap: 6px; } .dvop .dpch { border-radius: 999px; } .dvop .dpch.on { box-shadow: 0 0 0 3px var(--cc); }
+.dvop .dpseg { border-radius: 999px; padding: 3px; height: auto; background: var(--surface); grid-auto-columns: auto; gap: 2px; } .dvop .dpseg button { border: 0; border-radius: 999px; padding: 5px 15px; background: none; font-size: 13px; }
+.dvop .dpseg button + button { border-left: 0; } .dvop .dpseg button[aria-pressed="true"] { background: var(--c); color: #111413; }
+.dvc2 { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 12px; align-items: stretch; } .dvrc { display: flex; flex-direction: column; gap: 12px; min-width: 0; } .dvrc > .dvrow:last-child { flex: 1; }
+.dvt { position: relative; overflow: hidden; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; min-width: 0; }
+.dvk { display: block; font: 600 10.5px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dvdm { font-style: normal; color: var(--c); }
+.dvth { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; min-width: 0; } .dvth b { font-weight: 600; font-size: 14px; white-space: nowrap; } .dvth small { color: var(--ink-3); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* cartão da pessoa */
+.dvpf { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 22px; }
+.dvgl { position: absolute; inset: 0 0 auto; height: 190px; background: radial-gradient(220px 150px at 50% 0, color-mix(in srgb, var(--c) 28%, transparent), transparent 70%); pointer-events: none; }
+.dvph { position: relative; width: 118px; height: 118px; border-radius: 50%; padding: 4px; background: conic-gradient(var(--c), color-mix(in srgb, var(--c) 25%, transparent), var(--c)); box-shadow: 0 0 22px color-mix(in srgb, var(--c) 35%, transparent); flex: none; }
+.dvph img, .dvph > span { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; object-fit: cover; background: var(--surface-2); font: 700 30px var(--f-display); color: var(--ink-3); }
+.dvph i { position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%); background: var(--c); color: #111413; font: 700 9.5px var(--f-body); font-style: normal; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.dvnm { margin-top: 14px; font: 600 20px var(--f-body); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .dvsb { color: var(--ink-3); font-size: 11.5px; }
+.dvsec { align-self: stretch; text-align: left; font: 600 10.5px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-top: 16px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+.dvr { position: relative; width: 210px; height: 210px; margin: 12px 0 8px; flex: none; } .dvr svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.dvr .tr { fill: none; stroke: color-mix(in srgb, var(--ink) 7%, transparent); stroke-width: 13; } .dvr .v { fill: none; stroke: var(--c); stroke-width: 13; stroke-linecap: round; filter: drop-shadow(0 0 4px color-mix(in srgb, var(--c) 45%, transparent)); }
+.dvr .v1 { stroke-opacity: .75; } .dvr .v2 { stroke-opacity: .5; } .dvr > div { position: absolute; inset: 0; display: grid; place-content: center; } .dvr b { font: 700 40px/1 var(--f-display); } .dvr small { font-size: 11px; line-height: 1.2; color: var(--ink-3); }
+.dvrl { list-style: none; padding: 0; margin: 0; display: grid; gap: 5px; width: 100%; text-align: left; font-size: 12px; color: var(--ink-2); }
+.dvrl li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 8px; align-items: center; } .dvrl span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .dvrl i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); } .dvrl .o1 { opacity: .75; } .dvrl .o2 { opacity: .5; } .dvrl b { color: var(--ink); font-weight: 600; }
+.dvpq { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; width: 100%; margin-top: auto; padding-top: 14px; }
+.dvpq > div { background: var(--surface-2); border-radius: 12px; padding: 8px 10px; text-align: left; min-width: 0; } .dvpq b { display: block; font: 700 26px/1.1 var(--f-display); } .dvpq b.ru { color: var(--n-rnc); } .dvpq small { display: block; font-size: 11px; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* números com minigráfico */
+.dvms { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.dvm { display: flex; flex-direction: column; } .dvm .dvk, .dvm small { white-space: normal; overflow-wrap: anywhere; }
+@supports (grid-template-rows: subgrid) { .dvms { grid-template-rows: auto auto auto 1fr; row-gap: 0; } .dvm { display: grid; grid-row: span 4; grid-template-rows: subgrid; } .dvm .dvspk { align-self: end; } } .dvmr { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; } .dvmr b { font: 700 34px/1.1 var(--f-display); white-space: nowrap; }
+.dvd { font-style: normal; color: var(--c); font-size: 12px; font-weight: 600; white-space: nowrap; } .dvm small { color: var(--ink-3); font-size: 11.5px; }
+.dvspk { display: block; width: 100%; height: 36px; margin-top: auto; padding-top: 8px; box-sizing: content-box; } .dvspk .a { fill: var(--c); opacity: .15; } .dvspk .l { fill: none; stroke: var(--c); stroke-width: 2; }
+/* o dia */
+.dvdia { display: block; width: 100%; height: auto; } .dvdia text { font-family: var(--f-body); text-anchor: middle; } .dvdia .hx { font: 10px var(--f-mono); fill: var(--ink-3); }
+.dvdia .tk { stroke: color-mix(in srgb, var(--ink) 15%, transparent); stroke-width: 2; } .dvdia .fe { stroke: var(--c); stroke-width: 3; } .dvdia .tq { stroke: color-mix(in srgb, var(--ink) 22%, transparent); }
+.dvdia .et { font-size: 11px; font-weight: 600; fill: var(--ink); } .dvdia .es { font-size: 10px; fill: var(--ink-3); }
+.dvdia .pe { stroke-opacity: .5; stroke: var(--c); } .dvdia .pe.r { stroke: var(--n-rnc); } .dvdia .pe.p { stroke: var(--n-ouro); }
+.dvdia .pt { fill: var(--c); stroke: var(--surface); stroke-width: 2; } .dvdia .pt.r { fill: var(--n-rnc); } .dvdia .pt.p { fill: var(--n-ouro); }
+.dvdia .dd { fill: var(--surface); stroke: var(--c); stroke-width: 2.5; } .dvdia .ag { fill: var(--c); opacity: .2; } .dvdia .agb { fill: var(--surface); } .dvdia .agt { font: 10px var(--f-mono); fill: var(--c); }
+ul.dvdl, p.dvdl { display: none !important; } .dvdl { list-style: none; margin: 0; padding: 0; gap: 9px; } .dvdl li { display: grid; grid-template-columns: 44px 12px minmax(0, 1fr); gap: 10px; align-items: start; }
+.dvdl em { font: normal 11.5px var(--f-mono); color: var(--ink-3); padding-top: 1px; } .dvdl i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); margin-top: 3px; } .dvdl i.r { background: var(--n-rnc); } .dvdl i.p { background: var(--n-ouro); }
+.dvdl i.d { border-radius: 2px; transform: rotate(45deg) scale(.85); background: none; border: 2px solid var(--c); box-sizing: border-box; } .dvdl b { display: block; font-weight: 600; font-size: 12.5px; } .dvdl small { color: var(--ink-3); font-size: 11.5px; }
+/* ritmo + clientes */
+.dvrow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; } .dvrit { display: flex; flex-direction: column; } .dvrt { display: block; width: 100%; height: auto; margin-top: auto; }
+.dvrt .gd { stroke: color-mix(in srgb, var(--ink) 6%, transparent); } .dvrt .s0 { stop-color: var(--c); stop-opacity: .42; } .dvrt .s1 { stop-color: var(--c); stop-opacity: 0; } .dvrt .ar { fill: url(#dvgr); }
+.dvrt .ln { fill: none; stroke: var(--c); stroke-width: 2.4; stroke-linejoin: round; } .dvrt .eq { fill: none; stroke: var(--ink); stroke-opacity: .45; stroke-width: 1.5; stroke-dasharray: 4 4; }
+.dvrt .lb { fill: none; stroke: var(--c); stroke-opacity: .7; stroke-width: 1.6; } .dvrt .db { fill: var(--surface); stroke: var(--c); stroke-width: 1.6; } .dvrt .fp { fill: var(--c); stroke: var(--surface); stroke-width: 2; }
+.dvrt .hx { font: 10px var(--f-mono); fill: var(--ink-3); text-anchor: middle; }
+.dvlg { display: flex; flex-wrap: wrap; gap: 4px 16px; color: var(--ink-3); font-size: 11.5px; margin-top: 6px; } .dvlg i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; background: var(--c); }
+.dvlg .l2 { height: 2px; opacity: .7; } .dvlg .l3 { background: repeating-linear-gradient(90deg, var(--ink-2) 0 4px, transparent 4px 7px); }
+.dvfx { display: flex; height: 12px; border-radius: 999px; overflow: hidden; gap: 3px; margin-bottom: 14px; } .dvfx i { display: block; background: var(--c); }
+.dvcl { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; } .dvcl li { display: grid; grid-template-columns: 22px minmax(0, 3fr) minmax(36px, 1fr) 28px 36px; gap: 10px; align-items: center; font-size: 12.5px; }
+.dvcl .cp { width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; background: var(--cc); color: var(--c); font: 600 11px var(--f-mono); }
+.dvcl .cn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .dvcl .cb { height: 8px; border-radius: 999px; background: var(--surface-2); position: relative; overflow: hidden; } .dvcl .cb i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--c); }
+.dvcl b { font: 700 17px var(--f-display); text-align: right; } .dvcl em { font: normal 11.5px var(--f-mono); color: var(--ink-3); text-align: right; }
+.dvfl { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; } .dvfl li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+.dvfl i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); } .dvfl i.r { background: var(--n-rnc); } .dvfl i.p { background: var(--n-ouro); } .dvfl b { display: block; font-weight: 600; font-size: 12.5px; } .dvfl small { color: var(--ink-3); font-size: 11.5px; } .dvfl em { font: normal 11.5px var(--f-mono); color: var(--ink-3); }
+@container (max-width: 860px) { .dvc2 { grid-template-columns: minmax(0, 1fr); } .dvr { width: 180px; height: 180px; } }
+@container (max-width: 640px) { .dvms { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dvrow { grid-template-columns: minmax(0, 1fr); } .dvop .dpseg { margin-left: 0; } .dvth { flex-wrap: wrap; row-gap: 2px; } .dvth small { white-space: normal; } .dvdw { display: none; } ul.dvdl { display: grid !important; } p.dvdl { display: block !important; } }
 .ehpt b { font-weight: 600; color: var(--ink-2); }   /* v127 */
 .ehpt { font-size: 11px; letter-spacing: -.02em; gap: 6px; } .ehpt > span { white-space: nowrap; } .ehpt > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .ehnm em { font: 700 22px/1 var(--f-display); font-style: normal; white-space: nowrap; } .ehnm em small { font: 400 11px var(--f-body); color: var(--ink-3); margin-left: 3px; }
@@ -5978,7 +6038,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 131; window.CQ_V = APP_V;
+    const APP_V = 134; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -9499,6 +9559,147 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const media = (V) => (V.length ? V.reduce((s, v) => s + v, 0) / V.length : null);
     const kFila = { l: 'Na fila · agora', v: NF.format(FILA.length), sub: `${NF.format(pegos.length)} já com operador`, pct: FILA.length && vh.length ? [vh.length, FILA.length, 'vencem hoje', 'warn'] : null, cls: FILA.length ? 'warn' : '', go };
     const kAtr = { l: 'Atrasados · agora', v: NF.format(atr.length), sub: 'passaram do prazo', pct: atr.length && FILA.length ? [atr.length, FILA.length, 'da fila', 'crit'] : null, cls: atr.length ? 'crit' : 'ok', go };
+    const opHTML = () => {
+      const qual = { d: 'no dia', m: 'no mês', t: 'no trimestre', a: 'em 12 meses' }[P.m], H = P.hist, PV = P.prev || { a: (P.ant || [P.a - 1])[0], b: (P.ant || [P.a - 1])[0] };
+      const a12 = P.b - 370, CC12 = CC.filter((c) => dC(c) >= a12 && dC(c) <= P.b);
+      const DBs = L.filter((c) => c.db && c.db.at), dD = (c) => cqSer(c.db.at), dbNome = (c) => String(c.db.nome || '—');
+      const cont = new Map(); const addN = (n, v) => { const k = E.key(n); if (!k || k === '—') return; const o = cont.get(k) || { k, nome: n, n: 0, t: 0 }; o.n += v; o.t++; cont.set(k, o); };
+      CC12.forEach((c) => addN(nomeC(c), dC(c) >= P.a ? 1 : 0)); DBs.filter((c) => dD(c) >= a12).forEach((c) => addN(dbNome(c), 0));
+      const OPS = Array.from(cont.values()).sort((a, b) => b.n - a.n || b.t - a.t || a.nome.localeCompare(b.nome, 'pt-BR'));
+      if (!OPS.length) return '';
+      const op = OPS.find((o) => o.k === st.op) || OPS[0], eh = (c) => E.key(nomeC(c)) === op.k, ehD = (c) => E.key(dbNome(c)) === op.k;
+      const A0 = ab(P.a, P.b), Ao = A0.filter(eh), Apo = ab(PV.a, PV.b).filter(eh), Hj = ab(hoje, hoje).filter(eh);
+      const tO = tempo(Ao), tE = tempo(A0), fora = (X) => X.filter((c) => tipo(c) === 'f').length, nPr = (X) => X.filter((c) => tipo(c) !== 'v').length;
+      const pcO = nPr(Ao) ? Math.round((nPr(Ao) - fora(Ao)) / nPr(Ao) * 100) : null;
+      const folhas = (X) => X.reduce((s2, c) => s2 + (c.conc.folhas || 0), 0);
+      const pend = FILA.filter((c) => c.pend && E.key(String(c.pend.nome || c.porNome || '')) === op.k).length;
+      const ult = Math.max(0, ...CC.filter(eh).map((c) => c.conc.at), ...DBs.filter(ehD).map((c) => c.db.at)), on = ult && Date.now() - ult < 15 * 60000;
+      const posI = OPS.slice().sort((a, b) => itens(A0.filter((c) => E.key(nomeC(c)) === b.k)) - itens(A0.filter((c) => E.key(nomeC(c)) === a.k))).findIndex((o) => o.k === op.k) + 1;
+      const foto = fotoN(op.nome), dbOp = DBs.filter(ehD), temDB = dbOp.some((c) => dD(c) >= a12);
+      const diaRef = Math.min(P.b, hoje);
+      const chips = `<div class="dpchips">${OPS.map((o) => { const f = fotoN(o.nome); return `<button type="button" class="dpch${o.k === op.k ? ' on' : ''}" data-act="cq-op" data-key="${esc(o.k)}" aria-pressed="${o.k === op.k}"><span class="dpav${f ? ' fo' : ''}">${f ? `<img src="${esc(f)}" alt="" loading="lazy" decoding="async">` : esc(nxIni(o.nome))}</span>${esc(o.nome)}</button>`; }).join('')}</div>`;
+      /* v133: um quadro só, para qualquer operador: quem fez Data Book ganha os números de Data Book no mesmo quadro */
+      let D = null;
+      if (temDB) {
+        const DBp = dbOp.filter((c) => dD(c) >= P.a && dD(c) <= P.b), DBpp = dbOp.filter((c) => dD(c) >= PV.a && dD(c) <= PV.b), comP = DBp.filter((c) => c.db.pags != null);
+        const sum = (X, f) => X.reduce((s2, c) => s2 + (c.db[f] || 0), 0), med = (X, f) => (X.length ? sum(X, f) / X.length : null);
+        const tDB = DBp.filter((c) => c.conc && c.conc.at && c.db.at >= c.conc.at).map((c) => E.workdaysBetween(cqSer(c.conc.at), dD(c), cqHol())), tM = tDB.length ? tDB.reduce((s2, v) => s2 + v, 0) / tDB.length : null;
+        const dbC = cqCfg().dbCli.map((x) => E.key(x)).filter(Boolean), pedeDB = (c) => dbC.some((x) => E.key(c.cli || '').includes(x));
+        const filaDB = dbC.length ? CC.filter((c) => !c.db && pedeDB(c) && dC(c) > hoje - 31).sort((a, b) => a.conc.at - b.conc.at) : [];
+        const lista = DBp.slice().sort((a, b) => b.db.at - a.db.at).map((c) => ({ at: c.db.at, cor: c.db.nf === false ? OURO : C2, t: `PV ${cqNum(c)} · ${String(c.cli || '').split(/\s+/).slice(0, 2).join(' ')}`, s: c.db.pags != null ? `${c.db.pags} pág. · ${c.db.orig || 0} origens · ${c.db.nf === false ? 'sem NF' : 'com NF'}` : 'salvo antes da v131 (sem os detalhes)' }));
+        const fl = filaDB.map((c) => { const d = E.workdaysBetween(dC(c), hoje, cqHol()); return { at: c.conc.at, cor: d >= 3 ? VERM : d >= 1 ? OURO : C2, t: `PV ${cqNum(c)} · ${String(c.cli || '').split(/\s+/).slice(0, 2).join(' ')}`, s: `certificado de ${dmy(c.conc.at)} · ${c.conc.itens || 0} itens` }; });
+        const sp = H.map((hh) => { const X = dbOp.filter((c) => dD(c) >= hh.a && dD(c) <= hh.b && c.db.pags != null); return X.length ? sum(X, 'pags') / X.length : 0; });
+        D = { DBp, DBpp, comP, sum, med, tM, dbC, lista, fl, sp, nf1: comP.filter((c) => c.db.nf !== false).length };
+      }
+      /* v134: o quadro da imagem aprovada: botões das pessoas + período; quem faz Data Book vê o quadro de Data Book */
+      const reabL = L.flatMap((c) => (Array.isArray(c.reab) ? c.reab : []).map((r) => Object.assign({ c }, r))).filter((r) => E.key(String(r.de || '')) === op.k);
+      const reabP = reabL.filter((r) => cqSer(r.at) >= P.a && cqSer(r.at) <= P.b), reabE = L.flatMap((c) => (Array.isArray(c.reab) ? c.reab : [])).filter((r) => cqSer(r.at) >= P.a && cqSer(r.at) <= P.b);
+      const seg = `<div class="nxseg dpseg" role="group" aria-label="Período">${[['m', 'Mês'], ['d', 'Dia'], ['t', 'Trimestre'], ['a', '12 meses']].map(([k, l]) => `<button type="button" data-act="nx-p" data-key="cq|${k}" aria-pressed="${P.m === k}">${l}</button>`).join('')}</div>`;
+      const topo = chips.replace(/<\/div>$/, seg + '</div>');
+      /* v134: visual novo (opção 2 aprovada): cartão da pessoa com anéis + números com minigráfico + o dia + ritmo + clientes.
+         A parte ◆ Data Book é a mesma para todos: aparece para quem fez Data Book nos últimos 12 meses. */
+      const hol = cqHol(), ateHoje = Math.min(P.b, hoje), util = (a, b) => { let n = 0; for (let t = a; t <= b; t++) if (riUtil(t, hol)) n++; return n; };
+      const nUt = Math.max(1, util(P.a, ateHoje)), fr = (a, b) => (b > 0 ? Math.max(0, Math.min(1, a / b)) : 0);
+      const melhorL = { d: 'melhor dia', m: 'melhor mês', t: 'melhor trimestre', a: '12 meses antes' }[P.m], doP = { d: 'do dia', m: 'do mês', t: 'do trimestre', a: 'em 12 meses' }[P.m];
+      const cmpBest = (V, x) => (P.m === 'a' ? V : Math.max(x, ...V));
+      const aneis = (vals, centro, sub) => { const R = [92, 74, 56]; return `<div class="dvr"><svg viewBox="0 0 210 210" aria-hidden="true">${vals.map((p, i) => { const c = 2 * Math.PI * R[i]; return `<circle class="tr" cx="105" cy="105" r="${R[i]}"/>${p > 0 ? `<circle class="v v${i}" cx="105" cy="105" r="${R[i]}" stroke-dasharray="${(c * p).toFixed(1)} ${c.toFixed(1)}"/>` : ''}`; }).join('')}</svg><div><b>${centro}</b><small>${sub}</small></div></div>`; };
+      const leg = (L2) => `<ul class="dvrl">${L2.map(([l, v], i) => `<li><i class="o${i}"></i><span>${l}</span><b>${v}</b></li>`).join('')}</ul>`;
+      const DM = '<i class="dvdm" aria-hidden="true">◆</i>';
+      const spk = (V) => { const n = V.length; if (n < 2) return ''; const mx = Math.max(1e-9, ...V), w = 150, h = 36, X = (i) => 2 + (i * (w - 4)) / (n - 1), Y = (v) => h - 3 - (v / mx) * (h - 8);
+        const d = V.map((v, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
+        return `<svg class="dvspk" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="a" d="${d} L${X(n - 1).toFixed(1)},${h} L2,${h} Z"/><path class="l" d="${d}" vector-effect="non-scaling-stroke"/></svg>`; };
+      const dlt2 = (a, b, fmt) => (a == null || b == null || !isFinite(a) || !isFinite(b) || Math.abs(a - b) < 1e-9 ? '' : `<em class="dvd" title="comparado com o período anterior">${a > b ? '▲' : '▼'} ${fmt(Math.abs(a - b), b)}</em>`);
+      const mini = (l, v, sub, dl, V, db) => `<div class="dvt dvm"><span class="dvk">${db ? DM + ' ' : ''}${l}</span><div class="dvmr"><b>${v}</b>${dl || ''}</div><small>${sub}</small>${spk(V)}</div>`;
+      const nf = (n) => NF.format(n), pcT = (x, b) => (b ? Math.round((x / b) * 100) + '%' : nf(x));
+      /* séries por período do histórico (para os minigráficos) */
+      const hX = H.map((hh) => ab(hh.a, hh.b).filter(eh)), hD = H.map((hh) => dbOp.filter((c) => dD(c) >= hh.a && dD(c) <= hh.b));
+      const okP = (X) => (nPr(X) ? ((nPr(X) - fora(X)) / nPr(X)) * 100 : 0), tApo = tempo(Apo);
+      const itB = cmpBest(P.m === 'a' ? itens(Apo) : hX.map(itens), itens(Ao)), dS = (V) => { const S2 = new Set(V); return [S2.size, nUt + Array.from(S2).filter((t) => t <= ateHoje && !riUtil(t, hol)).length]; }, [diasC, denC] = dS(Ao.map(dC));
+      const cargo = (() => { const k = E.key(op.nome), ps = ((S.model && S.model.cfg && S.model.cfg.PESSOAS) || []).filter((x) => E.key(x.nome || '') === k); return ps.length === 1 ? String(ps[0].cargo || '') : ''; })();
+      const ultTxt = ult ? 'último registro ' + (on ? 'há ' + Math.max(1, Math.round((Date.now() - ult) / 60000)) + ' min' : 'em ' + dmy(ult) + ' às ' + hhmm(ult)) : '';
+      let perfil = `<div class="dvt dvpf"><div class="dvgl"></div><div class="dvph${foto ? ' fo' : ''}">${foto ? `<img src="${esc(foto)}" alt="Foto de ${esc(op.nome)}">` : `<span>${esc(nxIni(op.nome))}</span>`}${on ? '<i>online agora</i>' : ''}</div>
+        <b class="dvnm">${esc(op.nome)}</b><small class="dvsb">${esc(cargo || ultTxt)}</small>${cargo && ultTxt ? `<small class="dvsb">${esc(ultTxt)}</small>` : ''}
+        <span class="dvsec">Certificados</span>${aneis([fr(itens(Ao), itB), (pcO || 0) / 100, fr(diasC, denC)], Ao.length && posI ? posI + 'º' : '—', `em itens<br>${qual}`)}
+        ${leg([[`Itens ${doP} × ${melhorL}`, `${nf(itens(Ao))} / ${nf(itB)}`], ['No prazo', pcO == null ? '—' : pcO + '%'], ['Dias com produção', `${diasC} de ${denC}`]])}`;
+      let minisDB = '', linhaDB = '';
+      if (D) {
+        const dbB = cmpBest(P.m === 'a' ? D.DBpp.length : hD.map((X) => X.length), D.DBp.length), [diasD, denD] = dS(D.DBp.map(dD)), comNF = D.comP.length ? Math.round((D.nf1 / D.comP.length) * 100) : null;
+        perfil += `<span class="dvsec">${DM} Data Book</span>${aneis([fr(D.DBp.length, dbB), (comNF || 0) / 100, fr(diasD, denD)], nf(D.DBp.length), `Data Books<br>${qual}`)}
+        ${leg([[`Data Books × ${melhorL}`, `${nf(D.DBp.length)} / ${nf(dbB)}`], ['Com a NF junto', comNF == null ? '—' : comNF + '%'], ['Dias com Data Book', `${diasD} de ${denD}`]])}`;
+        const tem = D.comP.length, pg = D.sum(D.comP, 'pags'), og = D.sum(D.comP, 'orig'), et = D.sum(D.comP, 'etq'), hC = hD.map((X) => X.filter((c) => c.db.pags != null));
+        minisDB = `<div class="dvms">${[mini('Data Books', nf(D.DBp.length), qual, dlt2(D.DBp.length, D.DBpp.length, (v) => nf(v)), hD.map((X) => X.length), 1),
+          mini('Páginas montadas', tem ? nf(pg) : '—', tem ? `média de ${nf(Math.round(pg / tem))} por Data Book` : 'conta a partir da v131', '', hC.map((X) => D.sum(X, 'pags')), 1),
+          mini('Cert. de origem', tem ? nf(og) : '—', tem ? `${NF1.format(og / tem)} por Data Book` : 'conta a partir da v131', '', hC.map((X) => D.sum(X, 'orig')), 1),
+          mini('Etiquetas de rastreio', tem ? nf(et) : '—', tem && og ? `${NF1.format(et / og)} por certificado de origem` : tem ? 'nos certificados de origem' : 'conta a partir da v131', '', hC.map((X) => D.sum(X, 'etq')), 1)].join('')}</div>`;
+      }
+      perfil += `<div class="dvpq"><div><span class="dvk">Pendências</span><b>${nf(pend)}</b><small>esperando cliente</small></div><div><span class="dvk">Reabertos</span><b${reabP.length ? ' class="ru"' : ''}>${nf(reabP.length)}</b><small>voltaram para a fila</small></div></div></div>`;
+      const minis1 = `<div class="dvms">${[mini(P.m === 'd' ? 'Emitidos no dia' : 'Emitidos', nf(Ao.length), P.m === 'd' ? 'certificados' : 'certificados ' + qual, dlt2(Ao.length, Apo.length, (v) => nf(v)), hX.map((X) => X.length)),
+        mini('Itens', nf(itens(Ao)), qual, dlt2(itens(Ao), itens(Apo), (v, b) => pcT(v, b)), hX.map(itens)),
+        mini('Tempo de emissão', tO ? NF1.format(tO.m) + ' d' : '—', tE ? `equipe ${NF1.format(tE.m)} d` : 'dias úteis', tO && tApo ? dlt2(tO.m, tApo.m, (v) => NF1.format(v) + ' d') : '', hX.map((X) => { const t = tempo(X); return t ? t.m : 0; })),
+        mini('No prazo', pcO == null ? '—' : pcO + '%', `${nf(fora(Ao))} fora do prazo`, '', hX.map(okP))].join('')}</div>`;
+      /* o dia: cada ponto é um registro (● certificado, ◆ Data Book) */
+      const evs = CC.filter((c) => eh(c) && dC(c) === diaRef).map((c) => ({ at: c.conc.at, k: tipo(c) === 'f' ? 'r' : 'c', t: `PV ${cqNum(c)}`, s: tipo(c) === 'f' ? 'fora do prazo' : `${c.conc.itens || 0} itens` }))
+        .concat(FILA.filter((c) => c.pend && c.pend.at && cqSer(c.pend.at) === diaRef && E.key(String(c.pend.nome || '')) === op.k).map((c) => ({ at: c.pend.at, k: 'p', t: `PV ${cqNum(c)}`, s: 'pendência' })))
+        .concat(reabL.filter((r) => cqSer(r.at) === diaRef).map((r) => ({ at: r.at, k: 'r', t: `PV ${cqNum(r.c)}`, s: 'reaberto' })))
+        .concat(dbOp.filter((c) => dD(c) === diaRef).map((c) => ({ at: c.db.at, k: 'd', t: 'Data Book', s: `PV ${cqNum(c)}${c.db.pags != null ? ' · ' + c.db.pags + ' pág.' : ''}` })))
+        .sort((a, b) => a.at - b.at);
+      const linhaDia = (() => {
+        if (!evs.length) return '<p class="dpnt">Nada neste dia.</p>';
+        const hr = (t) => { const d = new Date(t); return d.getHours() + d.getMinutes() / 60; }, agora = diaRef === hoje ? hr(Date.now()) : null;
+        const h0 = Math.min(7, Math.floor(hr(evs[0].at))), h1 = Math.max(17, Math.ceil(hr(evs[evs.length - 1].at)), agora != null ? Math.ceil(agora + 0.6) : 0), w = 760, h = 120, x = (t) => 14 + ((t - h0) / (h1 - h0)) * (w - 28);
+        const fim = agora != null ? Math.min(h1, agora) : h1;
+        let s = `<svg class="dvdia" viewBox="0 0 ${w} ${h}" role="img" aria-label="Linha do dia"><line class="tk" x1="14" x2="${w - 14}" y1="60" y2="60"/><line class="fe" x1="14" x2="${x(fim).toFixed(1)}" y1="60" y2="60"/>`;
+        for (let k = h0; k <= h1; k++) s += `${k <= fim ? `<line class="tq" x1="${x(k).toFixed(1)}" x2="${x(k).toFixed(1)}" y1="56" y2="64"/>` : ''}<text class="hx" x="${x(k).toFixed(1)}" y="${h - 4}">${k}h</text>`;
+        const ult2 = [-1e9, -1e9]; let lado = 1;
+        evs.forEach((e) => {
+          const X = x(hr(e.at)); let ln = ult2[lado] < X - 74 ? lado : ult2[1 - lado] < X - 74 ? 1 - lado : -1;
+          const cl = e.k === 'r' ? 'r' : e.k === 'p' ? 'p' : 'c', tip = `<title>${esc(hhmm(e.at) + ' · ' + e.t + ' · ' + e.s)}</title>`;
+          if (ln >= 0) { const y = ln ? 22 : 84; s += `<line class="pe ${cl}" x1="${X.toFixed(1)}" x2="${X.toFixed(1)}" y1="60" y2="${ln ? y + 10 : y - 10}"/><text class="et" x="${X.toFixed(1)}" y="${y}">${esc(e.t)}</text><text class="es" x="${X.toFixed(1)}" y="${y + 12}">${esc(e.s)}</text>`; ult2[ln] = X; lado = 1 - ln; }
+          s += e.k === 'd' ? `<rect class="dd" x="${(X - 6).toFixed(1)}" y="54" width="12" height="12" transform="rotate(45 ${X.toFixed(1)} 60)">${tip}</rect>` : `<circle class="pt ${cl}" cx="${X.toFixed(1)}" cy="60" r="5.5">${tip}</circle>`;
+        });
+        if (agora != null && agora <= h1) s += `<circle class="ag" cx="${x(agora).toFixed(1)}" cy="60" r="10"/><rect class="agb" x="${(x(agora) + 11).toFixed(1)}" y="52" width="38" height="16"/><text class="agt" x="${(x(agora) + 30).toFixed(1)}" y="64">agora</text>`;
+        return s + '</svg>';
+      })();
+      const nDiaC = evs.filter((e) => e.k === 'c' || (e.k === 'r' && e.s === 'fora do prazo')).length, itDia = itens(CC.filter((c) => eh(c) && dC(c) === diaRef)), nDiaD = evs.filter((e) => e.k === 'd').length;
+      const diaSub = `${diaRef === hoje ? 'hoje' : esc(E.fmtDate(diaRef))} · ● certificado${D ? ' · ◆ Data Book' : ''} · ${nf(nDiaC)} certificado${nDiaC === 1 ? '' : 's'}, ${nf(itDia)} itens${D ? `, ${nf(nDiaD)} Data Book${nDiaD === 1 ? '' : 's'}` : ''}`;
+      /* ritmo: certificados (área), Data Books (◆) e a média da equipe (tracejado) */
+      const ritmo = (() => {
+        let B = [];
+        const dm = (t) => { const o = E.ymd(t); return String(o.d).padStart(2, '0') + '/' + String(o.m).padStart(2, '0'); };
+        if (P.m === 'a') B = H.map((hh) => ({ a: hh.a, b: hh.b, l: hh.l || MES3[E.ymd(hh.a).m - 1] }));
+        else if (P.m === 't') for (let t = P.a; t <= ateHoje; t += 7) B.push({ a: t, b: Math.min(t + 6, ateHoje), l: dm(t) });
+        else for (let t = P.m === 'd' ? diaRef - 29 : P.a; t <= ateHoje; t++) if (riUtil(t, hol)) B.push({ a: t, b: t, l: dm(t) });
+        const un = P.m === 'a' ? 'por mês' : P.m === 't' ? 'por semana' : P.m === 'd' ? 'por dia · últimos 30 dias' : 'por dia';
+        if (B.length < 2) return { un, svg: '<p class="dpnt">Ainda não dá para desenhar: poucos dias no período.</p>' };
+        const nAt = Math.max(1, OPS.filter((o) => o.n > 0).length), CO = CC.filter(eh);
+        const vC = B.map((b) => CO.filter((c) => dC(c) >= b.a && dC(c) <= b.b).length), vE = B.map((b) => ab(b.a, b.b).length / nAt), vD = D ? B.map((b) => dbOp.filter((c) => dD(c) >= b.a && dD(c) <= b.b).length) : null;
+        const w = 370, h = D ? 170 : 250, pd = 18, n = B.length, mx = Math.max(1, ...vC, ...vE, ...(vD || [])) * 1.15, X = (i) => pd + (i * (w - 2 * pd)) / (n - 1), Y = (v) => h - 18 - (v / mx) * (h - 30);
+        const sm = (V) => { const p = V.map((v, i) => [X(i), Y(v)]); let d = `M${p[0][0].toFixed(1)},${p[0][1].toFixed(1)}`; for (let i = 0; i < p.length - 1; i++) { const a = p[Math.max(0, i - 1)], b = p[i], c = p[i + 1], e = p[Math.min(p.length - 1, i + 2)]; d += ` C${(b[0] + (c[0] - a[0]) / 6).toFixed(1)},${Math.min(h - 18, b[1] + (c[1] - a[1]) / 6).toFixed(1)} ${(c[0] - (e[0] - b[0]) / 6).toFixed(1)},${Math.min(h - 18, c[1] - (e[1] - b[1]) / 6).toFixed(1)} ${c[0].toFixed(1)},${c[1].toFixed(1)}`; } return d; };
+        let s = `<svg class="dvrt" viewBox="0 0 ${w} ${h}" role="img" aria-label="Ritmo"><defs><linearGradient id="dvgr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="s0"/><stop offset="1" class="s1"/></linearGradient></defs>`;
+        for (let k = 0; k < 4; k++) s += `<line class="gd" x1="${pd}" x2="${w - pd}" y1="${(12 + (k * (h - 30)) / 3).toFixed(0)}" y2="${(12 + (k * (h - 30)) / 3).toFixed(0)}"/>`;
+        const dC2 = sm(vC); s += `<path class="ar" d="${dC2} L${X(n - 1).toFixed(1)},${h - 18} L${X(0).toFixed(1)},${h - 18} Z"/><path class="eq" d="${sm(vE)}"/><path class="ln" d="${dC2}"/>`;
+        if (vD) { s += `<path class="lb" d="${sm(vD)}"/>`; vD.forEach((v, i) => { s += `<rect class="db" x="${(X(i) - 3.5).toFixed(1)}" y="${(Y(v) - 3.5).toFixed(1)}" width="7" height="7" transform="rotate(45 ${X(i).toFixed(1)} ${Y(v).toFixed(1)})"><title>${esc(B[i].l)}: ${v} Data Book(s)</title></rect>`; }); }
+        s += `<circle class="fp" cx="${X(n - 1).toFixed(1)}" cy="${Y(vC[n - 1]).toFixed(1)}" r="4.5"/>`;
+        const pa = Math.max(1, Math.ceil(n / 6)); for (let i = 0; i < n; i += pa) s += `<text class="hx" x="${X(i).toFixed(1)}" y="${h - 3}">${esc(B[i].l)}</text>`;
+        return { un, svg: s + '</svg>' + `<div class="dvlg"><span><i class="l1"></i>certificados</span>${vD ? '<span><i class="l2"></i>◆ Data Books</span>' : ''}<span><i class="l3"></i>média da equipe</span></div>` };
+      })();
+      const clis = (X, f, titulo) => {
+        const m = new Map(); X.forEach((c) => { const k = String(f(c) || '—').trim() || '—'; m.set(k, (m.get(k) || 0) + 1); });
+        const T = Array.from(m.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5), tot = X.length, mx = T.length ? T[0][1] : 1, opc = (k) => (1 - k * 0.16).toFixed(2);
+        return `<div class="dvt"><div class="dvth"><b>${titulo}</b><small>${nf(tot)} no total</small></div>${T.length ? `<div class="dvfx">${T.map(([, v], k) => `<i style="flex:${v};opacity:${opc(k)}"></i>`).join('')}</div><ul class="dvcl">${T.map(([n, v], k) => `<li><span class="cp">${k + 1}</span><span class="cn" title="${esc(n)}">${esc(n)}</span><span class="cb"><i style="width:${((v / mx) * 100).toFixed(0)}%;opacity:${opc(k)}"></i></span><b>${nf(v)}</b><em>${tot ? Math.round((v / tot) * 100) : 0}%</em></li>`).join('')}</ul>` : '<p class="dpnt">Nada no período.</p>'}</div>`;
+      };
+      let corpo = `${minis1}${minisDB}<div class="dvt"><div class="dvth"><b>O dia dele</b><small>${diaSub}</small></div><div class="dvdw">${linhaDia}</div>${evs.length ? `<ul class="dvdl">${evs.slice().reverse().slice(0, 8).map((e) => `<li><em>${hhmm(e.at)}</em><i class="${e.k === 'd' ? 'd' : e.k}"></i><div><b>${esc(e.t)}</b><small>${esc(e.s)}</small></div></li>`).join('')}</ul>${evs.length > 8 ? `<p class="dpnt dvdl">e mais ${evs.length - 8}</p>` : ''}` : ''}</div>
+        <div class="dvrow"><div class="dvt dvrit"><div class="dvth"><b>Ritmo ${P.m === 'a' ? 'dos 12 meses' : P.m === 't' ? 'do trimestre' : 'do mês'}</b><small>${ritmo.un}</small></div>${ritmo.svg}</div>${clis(Ao, (c) => c.cli, 'Clientes')}</div>`;
+      if (D) {
+        const F = D.fl.slice(0, 4), filaH = !D.dbC.length ? '<p class="dpnt">Escreva em <b>Configurações › Certificados › Clientes que pedem Data Book</b> quais clientes pedem Data Book. Aí os certificados deles sem Data Book aparecem aqui.</p>'
+          : F.length ? `<ul class="dvfl">${F.map((o) => { const d = E.workdaysBetween(cqSer(o.at), hoje, hol); return `<li><i class="${d >= 3 ? 'r' : d >= 1 ? 'p' : ''}"></i><div><b>${esc(o.t)}</b><small>${esc(o.s)}</small></div><em>${d ? 'há ' + d + ' d' : 'hoje'}</em></li>`; }).join('')}</ul>${D.fl.length > 4 ? `<p class="dpnt">e mais ${D.fl.length - 4}</p>` : ''}` : '<p class="dpnt">Nada esperando Data Book. 👍</p>';
+        corpo += `<div class="dvrow"><div class="dvt"><div class="dvth"><b>${DM} Fila de Data Book</b><small>certificado pronto, sem Data Book</small></div>${filaH}</div>${clis(D.DBp, (c) => c.cli, DM + ' Clientes de Data Book')}</div>`;
+      }
+      let h = `<div class="dpop dvop">${topo}<div class="dvc2">${perfil}<div class="dvrc">${corpo}</div></div></div>`;
+      /* v132: dá para minimizar (como o "Mais" de antes); lembra aberto/fechado neste aparelho */
+      const aberto = lsGet('cq-dp-aberto', '1') !== '0';
+      return `<details class="nxmore dpwrap" data-dp${aberto ? ' open' : ''}><summary>Desempenho por operador <small>${esc(op.nome)} · ${esc(P.label)} · toque na foto para trocar de pessoa</small></summary><div class="dpin">${h}</div></details>`;
+    };
     if (P.m === 'd') {
       const d = P.a, CD = ab(d, d), hist6 = P.hist.map((h) => h.a), mE = media(P.ant.map((t) => ab(t, t).length)), tD = tempo(CD);
       const porQ = Array.from(pegos.reduce((m, c) => m.set(String(c.porNome || '—').split(' ')[0], (m.get(String(c.porNome || '—').split(' ')[0]) || 0) + 1), new Map()));
@@ -9518,7 +9719,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const i1 = CD.length ? ['ok', `<b>${NF.format(CD.length)} ${CD.length === 1 ? 'certificado emitido' : 'certificados emitidos'}</b> ${P.cur ? 'hoje' : 'no dia'} com ${NF.format(itens(CD))} itens${mE ? ` (a média do dia é ${NF1.format(mE)})` : ''}.`] : ['info', `<b>Nenhum certificado emitido</b> ${P.cur ? 'hoje ainda' : 'neste dia'}.`];
       const i2 = pegos.length ? ['info', `<b>${pegos.length === 1 ? '1 pedido pego' : pegos.length + ' pedidos pegos'}:</b> ${esc(porQ.map(([n, q]) => `${q} com ${n}`).join(' · '))}.`] : ['info', 'Ninguém com pedido pego agora.'];
       const i3 = atr.length ? ['crit', `<b>${atr.length === 1 ? '1 pedido atrasado' : atr.length + ' pedidos atrasados'}</b> na fila: o mais atrasado é o PV ${esc(cqNum(atr[0]))} · ${esc(String(atr[0].cli || '').split(/\s+/).slice(0, 2).join(' '))}.`] : ['ok', `<b>Nenhum pedido atrasado</b> na fila${vh.length ? ` (${vh.length} vence${vh.length === 1 ? '' : 'm'} hoje)` : ''}.`];
-      return sec(nxIns([i1, i2, i3], 'Resumo do dia') + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}<div style="display:grid;gap:14px;align-content:start">${comH}${urgH(3)}</div></div><div class="nxc2b ehc2">${tl}<div class="chart"><h3>Por quem emitiu<small>${esc(P.label)}</small></h3>${tabP(CD, (o) => horas.map((h) => o.L.filter((c) => new Date(c.conc.at).getHours() === h).length))}</div></div>`);
+      return sec(nxIns([i1, i2, i3], 'Resumo do dia') + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}<div style="display:grid;gap:14px;align-content:start">${comH}${urgH(3)}</div></div><div class="nxc2b ehc2">${tl}<div class="chart"><h3>Por quem emitiu<small>${esc(P.label)}</small></h3>${tabP(CD, (o) => horas.map((h) => o.L.filter((c) => new Date(c.conc.at).getHours() === h).length))}</div></div>${opHTML()}`);
     }
     /* Mês / Trimestre / 12 meses */
     const A = ab(P.a, P.b), Ap = ab(P.prev.a, P.prev.b), H = P.hist, qual = { m: 'no mês', t: 'no trimestre', a: 'em 12 meses' }[P.m], quando = nxQuando(P);
@@ -9547,75 +9748,6 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const i3 = topC ? ['info', `<b>${esc(String(topC[0]).split(/\s+/).slice(0, 3).join(' '))}</b> foi o cliente com mais certificados ${quando}: ${NF.format(topC[1])}.`] : ['info', `Sem certificados ${quando}.`];
     /* v131: Desempenho por operador (no lugar do painel antigo): a pessoa, o dia a dia, o horário, o que fez,
        clientes, produtos, comparação com a equipe e, para quem faz Data Book, a parte do Data Book (roxo) */
-    const opHTML = () => {
-      const a12 = P.b - 370, CC12 = CC.filter((c) => dC(c) >= a12 && dC(c) <= P.b);
-      const DBs = L.filter((c) => c.db && c.db.at), dD = (c) => cqSer(c.db.at), dbNome = (c) => String(c.db.nome || '—');
-      const cont = new Map(); const addN = (n, v) => { const k = E.key(n); if (!k || k === '—') return; const o = cont.get(k) || { k, nome: n, n: 0, t: 0 }; o.n += v; o.t++; cont.set(k, o); };
-      CC12.forEach((c) => addN(nomeC(c), dC(c) >= P.a ? 1 : 0)); DBs.filter((c) => dD(c) >= a12).forEach((c) => addN(dbNome(c), 0));
-      const OPS = Array.from(cont.values()).sort((a, b) => b.n - a.n || b.t - a.t || a.nome.localeCompare(b.nome, 'pt-BR'));
-      if (!OPS.length) return '';
-      const op = OPS.find((o) => o.k === st.op) || OPS[0], eh = (c) => E.key(nomeC(c)) === op.k, ehD = (c) => E.key(dbNome(c)) === op.k;
-      const A0 = ab(P.a, P.b), Ao = A0.filter(eh), Apo = ab(P.prev.a, P.prev.b).filter(eh), Hj = ab(hoje, hoje).filter(eh);
-      const tO = tempo(Ao), tE = tempo(A0), fora = (X) => X.filter((c) => tipo(c) === 'f').length, nPr = (X) => X.filter((c) => tipo(c) !== 'v').length;
-      const pcO = nPr(Ao) ? Math.round((nPr(Ao) - fora(Ao)) / nPr(Ao) * 100) : null;
-      const folhas = (X) => X.reduce((s2, c) => s2 + (c.conc.folhas || 0), 0);
-      const pend = FILA.filter((c) => c.pend && E.key(String(c.pend.nome || c.porNome || '')) === op.k).length;
-      const ult = Math.max(0, ...CC.filter(eh).map((c) => c.conc.at), ...DBs.filter(ehD).map((c) => c.db.at)), on = ult && Date.now() - ult < 15 * 60000;
-      const posI = OPS.slice().sort((a, b) => itens(A0.filter((c) => E.key(nomeC(c)) === b.k)) - itens(A0.filter((c) => E.key(nomeC(c)) === a.k))).findIndex((o) => o.k === op.k) + 1;
-      const foto = fotoN(op.nome), dbOp = DBs.filter(ehD), temDB = dbOp.some((c) => dD(c) >= a12);
-      const kp = (l, v, sub, cor, dl) => `<div class="dpk"><span>${l}</span><b${cor ? ` style="color:${cor}"` : ''}>${v}</b><small>${sub}${dl ? ' ' + dl : ''}</small></div>`;
-      const dlt = (a, b) => (b ? `<em class="${a >= b ? 'up' : 'dn'}">${a >= b ? '▲' : '▼'} ${NF.format(Math.abs(a - b))} vs o período anterior</em>` : '');
-      /* calendário do mês do fim do período */
-      const cal = (X, at, cor) => {
-        const o = E.ymd(P.b), M = nxMes(o.y, o.m), n0 = (E.dow(M.a) + 6) % 7, cnt = new Map(); X.forEach((c) => { const d = at(c); if (d >= M.a && d <= M.b) cnt.set(d, (cnt.get(d) || 0) + 1); });
-        const mx = Math.max(1, ...cnt.values()); let h = '<div class="dpcal">' + ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'].map((d) => `<i class="h">${d}</i>`).join('') + '<i class="v"></i>'.repeat(n0);
-        for (let d = M.a; d <= M.b; d++) { const v = cnt.get(d) || 0, lv = v ? Math.min(4, 1 + Math.floor((v / mx) * 3.99)) : 0; h += `<i class="l${lv}${d > hoje ? ' f' : ''}${d === hoje ? ' hj' : ''}" style="--k:${cor}" title="${esc(E.fmtDate(d))}: ${v}">${E.ymd(d).d}${v ? `<b>${v}</b>` : ''}</i>`; }
-        return h + '</div>';
-      };
-      const XH = P.m === 'd' ? CC.filter((c) => eh(c) && dC(c) > P.b - 31 && dC(c) <= P.b) : Ao;
-      const hm = (() => { const hs = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], g2 = {}; XH.forEach((c) => { const d = new Date(c.conc.at), w = d.getDay(), hh = d.getHours(); if (w < 1 || w > 5 || hh < 7 || hh > 17) return; const k = w + '-' + hh; g2[k] = (g2[k] || 0) + 1; });
-        const mx = Math.max(1, ...Object.values(g2)); return `<div class="dphm"><span></span>${hs.map((h) => `<em>${h}h</em>`).join('')}${['Seg', 'Ter', 'Qua', 'Qui', 'Sex'].map((dn, i) => `<span>${dn}</span>` + hs.map((h) => { const v = g2[(i + 1) + '-' + h] || 0; return `<i style="opacity:${v ? (0.25 + 0.75 * v / mx).toFixed(2) : 0.07}" title="${dn} ${h}h: ${v}"></i>`; }).join('')).join('')}</div>`; })();
-      const diaRef = Math.min(P.b, hoje), Dd = CC.filter((c) => eh(c) && dC(c) === diaRef).map((c) => ({ at: c.conc.at, cor: tipo(c) === 'f' ? VERM : C2, t: `PV ${cqNum(c)} · ${String(c.cli || '').split(/\s+/).slice(0, 2).join(' ')}`, s: `${c.conc.itens || 0} itens · ${cqProd(c)}${tipo(c) === 'f' ? ' · fora do prazo' : ''}` }))
-        .concat(FILA.filter((c) => c.pend && c.pend.at && cqSer(c.pend.at) === diaRef && E.key(String(c.pend.nome || '')) === op.k).map((c) => ({ at: c.pend.at, cor: OURO, t: `PV ${cqNum(c)} · pendência`, s: String(c.pend.m || 'aguardando') })))
-        .sort((a, b) => b.at - a.at);
-      const tl = (L2, vazio, hfun) => L2.length ? `<ul class="dptl">${L2.slice(0, 6).map((o) => `<li><em>${hfun ? hfun(o.at) : hhmm(o.at)}</em><i style="background:${o.cor}"></i><div><b>${esc(o.t)}</b><small>${esc(o.s)}</small></div></li>`).join('')}</ul>${L2.length > 6 ? `<p class="dpnt">e mais ${L2.length - 6}</p>` : ''}` : `<p class="dpnt">${vazio}</p>`;
-      const bars = (pares, cor) => { const mx = Math.max(1, ...pares.map((x) => x[1])); return pares.length ? pares.map(([n, v, t]) => `<div class="dpbr"><span title="${esc(n)}">${esc(n)}</span><i><b style="width:${(v / mx * 100).toFixed(0)}%;background:${cor}"></b></i><em>${t != null ? t : NF.format(v)}</em></div>`).join('') : '<p class="dpnt">Nada no período.</p>'; };
-      const topN = (X, f, n) => { const m = new Map(); X.forEach((c) => { const k = f(c); m.set(k, (m.get(k) || 0) + 1); }); return Array.from(m.entries()).sort((a, b) => b[1] - a[1]).slice(0, n); };
-      const ipc = (X) => (X.length ? itens(X) / X.length : 0), pf = (X) => (nPr(X) ? fora(X) / nPr(X) * 100 : 0);
-      const cmp = [[`Itens por certificado · ${NF1.format(ipc(Ao))}`, ipc(Ao), NF1.format(ipc(Ao))], [`Equipe · ${NF1.format(ipc(A0))}`, ipc(A0), NF1.format(ipc(A0))]];
-      const cmp2 = [[`Fora do prazo · ${NF.format(Math.round(pf(Ao)))}%`, pf(Ao), NF.format(Math.round(pf(Ao))) + '%'], [`Equipe · ${NF.format(Math.round(pf(A0)))}%`, pf(A0), NF.format(Math.round(pf(A0))) + '%']];
-      const cmp3 = tO && tE ? [[`Tempo de emissão · ${NF1.format(tO.m)} d`, tO.m, NF1.format(tO.m)], [`Equipe · ${NF1.format(tE.m)} d`, tE.m, NF1.format(tE.m)]] : [];
-      const chips = `<div class="dpchips">${OPS.map((o) => { const f = fotoN(o.nome); return `<button type="button" class="dpch${o.k === op.k ? ' on' : ''}" data-act="cq-op" data-key="${esc(o.k)}" aria-pressed="${o.k === op.k}"><span class="dpav${f ? ' fo' : ''}">${f ? `<img src="${esc(f)}" alt="" loading="lazy" decoding="async">` : esc(nxIni(o.nome))}</span>${esc(o.nome)}</button>`; }).join('')}</div>`;
-      const cab = (cor) => `<div class="dphd" style="--k:${cor}"><div class="dpfo${foto ? ' fo' : ''}">${foto ? `<img src="${esc(foto)}" alt="Foto de ${esc(op.nome)}">` : `<span>${esc(nxIni(op.nome))}</span>`}${on ? '<i>online agora</i>' : ''}</div><div><b>${esc(op.nome)}</b><small>${posI && Ao.length ? `${esc(P.label)}: ${posI}º em itens emitidos` : 'sem certificado no período'}${ult ? ' · último registro ' + (on ? 'há ' + Math.max(1, Math.round((Date.now() - ult) / 60000)) + ' min' : 'em ' + esc(dmy(ult)) + ' às ' + esc(hhmm(ult))) : ''}</small></div></div>`;
-      let h = `<div class="dpop">${cab(C2)}${chips}
-        <div class="dpks">${kp(P.m === 'd' ? 'Emitidos no dia' : 'Emitidos ' + qual, NF.format(Ao.length), `${NF.format(itens(Ao))} itens`, null, dlt(Ao.length, Apo.length))}${kp('Hoje', NF.format(Hj.length), `certificados · ${NF.format(itens(Hj))} itens`)}${kp('Tempo de emissão', tO ? NF1.format(tO.m) + ' d' : '—', 'dias úteis, faturamento → certificado')}${kp('No prazo', pcO == null ? '—' : pcO + '%', `${NF.format(fora(Ao))} fora do prazo`, pcO != null && pcO < 90 ? OURO : null)}${kp('Pendências abertas', NF.format(pend), 'pedidos marcados por ele, esperando')}${kp('Folhas', NF.format(folhas(Ao)), 'páginas de certificado emitidas')}</div>
-        <div class="dpg3"><div class="chart"><h3>Dia a dia<small>certificados por dia · ${esc(MESES_L[E.ymd(P.b).m - 1])}</small></h3>${cal(CC.filter(eh), dC, C2)}</div>
-          <div class="chart"><h3>Horário de produção<small>quando mais emite${P.m === 'd' ? ' · últimos 30 dias' : ''}</small></h3>${hm}</div>
-          <div class="chart"><h3>${diaRef === hoje ? 'Hoje, na ordem' : 'No dia ' + esc(E.fmtDate(diaRef))}<small>o mais novo em cima</small></h3>${tl(Dd, 'Nenhum certificado neste dia.')}</div></div>
-        <div class="dpg3"><div class="chart"><h3>Clientes que mais atende<small>${esc(P.label)}</small></h3>${bars(topN(Ao, (c) => String(c.cli || '—'), 5), C2)}</div>
-          <div class="chart"><h3>Tipo de produto<small>${esc(P.label)}</small></h3>${bars(topN(Ao, cqProd, 5), AZUL)}</div>
-          <div class="chart"><h3>Comparado com a equipe<small>${esc(P.label)}</small></h3>${bars(cmp, C2)}${bars(cmp2, VERM)}${cmp3.length ? bars(cmp3, OURO) : ''}</div></div></div>`;
-      if (temDB) {
-        const DBp = dbOp.filter((c) => dD(c) >= P.a && dD(c) <= P.b), DBpp = dbOp.filter((c) => dD(c) >= P.prev.a && dD(c) <= P.prev.b), comP = DBp.filter((c) => c.db.pags != null);
-        const sum = (X, f) => X.reduce((s2, c) => s2 + (c.db[f] || 0), 0), med = (X, f) => (X.length ? sum(X, f) / X.length : null);
-        const tDB = DBp.filter((c) => c.conc && c.conc.at && c.db.at >= c.conc.at).map((c) => E.workdaysBetween(cqSer(c.conc.at), dD(c), cqHol())), tM = tDB.length ? tDB.reduce((s2, v) => s2 + v, 0) / tDB.length : null;
-        const dbC = cqCfg().dbCli.map((x) => E.key(x)).filter(Boolean), pedeDB = (c) => dbC.some((x) => E.key(c.cli || '').includes(x));
-        const filaDB = dbC.length ? CC.filter((c) => !c.db && pedeDB(c) && dC(c) > hoje - 31).sort((a, b) => a.conc.at - b.conc.at) : [];
-        const lista = DBp.slice().sort((a, b) => b.db.at - a.db.at).map((c) => ({ at: c.db.at, cor: c.db.nf === false ? OURO : ROXO, t: `PV ${cqNum(c)} · ${String(c.cli || '').split(/\s+/).slice(0, 2).join(' ')}`, s: c.db.pags != null ? `${c.db.pags} pág. · ${c.db.orig || 0} origens · ${c.db.nf === false ? 'sem NF' : 'com NF'}` : 'salvo antes da v131 (sem os detalhes)' }));
-        const fl = filaDB.map((c) => { const d = E.workdaysBetween(dC(c), hoje, cqHol()); return { at: c.conc.at, cor: d >= 3 ? VERM : d >= 1 ? OURO : C2, t: `PV ${cqNum(c)} · ${String(c.cli || '').split(/\s+/).slice(0, 2).join(' ')}`, s: `certificado de ${dmy(c.conc.at)} · ${c.conc.itens || 0} itens`, d }; });
-        const sp = H.map((hh) => { const X = dbOp.filter((c) => dD(c) >= hh.a && dD(c) <= hh.b && c.db.pags != null); return X.length ? sum(X, 'pags') / X.length : 0; });
-        const nf1 = comP.filter((c) => c.db.nf !== false).length, nf0 = comP.filter((c) => c.db.nf === false).length;
-        h += `<div class="dpop db">${cab(ROXO)}
-          <div class="dpks">${kp(P.m === 'd' ? 'Data Books no dia' : 'Data Books ' + qual, NF.format(DBp.length), 'NF + certificado + origem', ROXO, dlt(DBp.length, DBpp.length))}${kp('Páginas montadas', comP.length ? NF.format(sum(comP, 'pags')) : '—', comP.length ? `média de ${NF.format(Math.round(med(comP, 'pags')))} por Data Book` : 'conta a partir da v131', ROXO)}${kp('Certificados de origem', comP.length ? NF.format(sum(comP, 'orig')) : '—', comP.length ? `${NF1.format(med(comP, 'orig'))} por Data Book` : 'conta a partir da v131')}${kp('Etiquetas de rastreio', comP.length ? NF.format(sum(comP, 'etq')) : '—', 'nos certificados de origem')}${kp('Do certificado ao Data Book', tM == null ? '—' : NF1.format(tM) + ' d', 'dias úteis, em média')}${kp('Fila de Data Book', dbC.length ? NF.format(fl.length) : '—', dbC.length ? 'certificado pronto, Data Book não salvo' : 'falta dizer quais clientes pedem', fl.length ? OURO : null)}</div>
-          <div class="dpg3"><div class="chart"><h3>Data Books por dia<small>${esc(MESES_L[E.ymd(P.b).m - 1])}</small></h3>${cal(dbOp, dD, ROXO)}</div>
-            <div class="chart"><h3>Data Books<small>${esc(P.label)} · o mais novo em cima</small></h3>${tl(lista, 'Nenhum Data Book no período.', (t) => dmy(t).slice(0, 5) + ' ' + hhmm(t))}</div>
-            <div class="chart"><h3>Fila de Data Book<small>certificado pronto, Data Book ainda não salvo</small></h3>${dbC.length ? tl(fl, 'Nada esperando Data Book. 👍', (t) => { const d = E.workdaysBetween(cqSer(t), hoje, cqHol()); return d ? 'há ' + d + ' d' : 'hoje'; }) + '<p class="dpnt">Clientes de Configurações › Certificados › "Clientes que pedem Data Book"; certificados dos últimos 30 dias.</p>' : '<p class="dpnt">Escreva em <b>Configurações › Certificados › Clientes que pedem Data Book</b> quais clientes pedem Data Book. Aí os certificados deles sem Data Book aparecem aqui.</p>'}</div></div>
-          <div class="dpg3"><div class="chart"><h3>Tamanho dos Data Books<small>páginas por Data Book · ${H.length} ${P.m === 't' ? 'trimestres' : P.m === 'd' ? 'dias' : 'meses'}</small></h3><div class="dpsp" style="--c:${ROXO}">${nxSpark(sp, 300, 70)}</div><p class="dpnt">${sp.some((v) => v) ? 'Média do período: ' + NF.format(Math.round(med(comP, 'pags') || 0)) + ' páginas.' : 'Os detalhes contam a partir da v131.'}</p></div>
-            <div class="chart"><h3>Com a NF junto<small>${esc(P.label)}</small></h3>${comP.length ? bars([['Com a NF', nf1], ['Sem a NF', nf0]], ROXO) : '<p class="dpnt">Conta a partir da v131.</p>'}</div>
-            <div class="chart"><h3>Clientes de Data Book<small>${esc(P.label)}</small></h3>${bars(topN(DBp, (c) => String(c.cli || '—'), 5), ROXO)}</div></div></div>`;
-      }
-      return `<div class="dpwrap"><h3 class="dpt">Desempenho por operador<small>${esc(P.label)} · toque na foto para trocar de pessoa · o período é o de cima</small></h3>${h}</div>`;
-    };
     return sec(nxIns([i1, i2, i3], nxResumoT(P)) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Por quem emitiu<small>${esc(P.label)}</small></h3>${tabP(A, (o) => H.map((h) => ab(h.a, h.b).filter((c) => E.key(nomeC(c)) === o.k).length))}</div>${rank}</div>${opHTML()}`);
   }
   /* ================= v114: VISÃO DO PROCESSO no visual novo (aprovado: "Rio do processo") =================
@@ -16250,7 +16382,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'cq-nao') { cqConcForm(c, true); return true; }
     if (a === 'cq-anf') { cqNotaPendForm(c); return true; }
     if (a === 'cq-anf-volta') { cqPatch(c, { st: 'p', npend: null }, 'Voltou de Aguardando NF para A fazer').then(() => { closeLayer(); toast(`Pedido ${cqNum(c)} voltou para A fazer.`); render(); }).catch(cqErr); return true; }
-    if (a === 'cq-reabrir') { cqPatch(c, { st: 'p', conc: null }, 'Voltou para a fila').then(() => { closeLayer(); toast(`Pedido ${cqNum(c)} voltou para A fazer.`); render(); }).catch(cqErr); return true; }
+    if (a === 'cq-reabrir') { cqPatch(c, { st: 'p', conc: null, reab: (Array.isArray(c.reab) ? c.reab : []).concat([clean({ at: Date.now(), by: DB.me || null, nome: cqMeNome(), de: (c.conc && (c.conc.nome || c.conc.em)) || null })]).slice(-10) }, 'Voltou para a fila')   /* v134: conta os reabertos de quem emitiu */.then(() => { closeLayer(); toast(`Pedido ${cqNum(c)} voltou para A fazer.`); render(); }).catch(cqErr); return true; }
     if (a === 'cq-del') { confirmBox('Tirar da fila', `Tirar o pedido ${cqNum(c)} da Central? Use só para pedido importado por engano. Se ele vier de novo num arquivo do Omie, entra outra vez.`, 'Tirar da fila', () => { soldWrite('certq/' + c.doc, { items: { [c.k]: { _del: true, _u: Date.now(), _ub: DB.me || null } } }).then(() => { logEntry('CERTQ', cqNum(c), 'excluido', 'Tirado da fila', null); toast('Pedido tirado da fila.'); render(); }).catch(cqErr); }, true); return true; }
     return false;
   }
@@ -23427,6 +23559,7 @@ ${trGuil(W, H, M, B)}
   const corrLines = (m) => (Array.isArray(m.abCorr) ? m.abCorr : []).map((c) => `Abertura corrigida por ${esc(c.nome || '')} em ${dmy(c.at)} às ${hhmm(c.at)}: ${esc(c.motivo || '')}`);
 
   /* ================= eventos globais ================= */
+  document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.matches && d.matches('details[data-dp]')) lsSet('cq-dp-aberto', d.open ? '1' : '0'); }, true);   /* v132 */
   document.addEventListener('click', (e) => {
     const t = e.target;
     const act = t.closest('[data-act]'), op = t.closest('[data-open]'), g = t.closest('[data-go]');
