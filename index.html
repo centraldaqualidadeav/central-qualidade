@@ -6038,7 +6038,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 136; window.CQ_V = APP_V;
+    const APP_V = 137; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -9088,7 +9088,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* a situação de cada instrumento numa data vem da última calibração até aquela data (histórico + data da calibração atual) e da frequência */
   const CALH = { m: null, ev: null, L: null };
   function calLinha(M) {
-    const D = insEvents(); if (CALH.m === M && CALH.ev === D) return CALH.L;
+    const D = insEvsComFicha(); if (CALH.m === M && CALH.ev === D) return CALH.L;
     const L = new Map(), fl = Math.floor;
     M.ins.forEach((x) => {
       const cals = new Set(), envs = [], ce = [];
@@ -10465,9 +10465,24 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (h.obs) p.push(h.obs);
     return p.join(' · ');
   }
+  /* v137: calibração lançada só na ficha (Editar/planilha, com data e custo) e sem a linha "calibração" daquele dia no histórico: entra nos custos assim mesmo (uma vez só) */
+  const INSFC = { ev: null, m: null, D: null };
+  function insEvsComFicha() {
+    const D = insEvents(), M = S.model; if (INSFC.ev === D && INSFC.m === M) return INSFC.D;
+    const out = {}, fl = Math.floor;
+    Object.keys(D).forEach((k) => { out[k] = D[k]; });
+    (M.ins || []).forEach((x) => {
+      if (x.dataCal == null || x.custo == null) return;
+      const L = D[x.key] || []; if (L.some((h) => h.t === 'cal' && h.d != null && fl(h.d) === fl(x.dataCal))) return;
+      out[x.key] = L.concat([{ t: 'cal', d: x.dataCal, lab: x.lab || '', cert: x.cert || '', custo: x.custo, at: 0, ficha: true }]).sort((p, q) => (p.d == null ? 1e15 : p.d) - (q.d == null ? 1e15 : q.d) || (p.at || 0) - (q.at || 0));
+    });
+    INSFC.ev = D; INSFC.m = M; INSFC.D = out; return out;
+  }
   function insHistAll() { const D = insEvents(), out = []; S.model.ins.forEach((x) => (D[x.key] || []).forEach((h) => out.push(Object.assign({ codigo: x.codigo }, h)))); return out.sort((a, b) => (b.d || 0) - (a.d || 0) || b.at - a.at); }
+  let insEvUlt = 0;
   async function addInsEvent(k, ev) {
-    const at = Date.now(), ref = DB.db.doc('ins/h-' + mesId(at)), id = at + '-' + TAB;
+    const at = Math.max(Date.now(), insEvUlt + 1); insEvUlt = at;   /* v137: dois registros no mesmo milissegundo não se sobrescrevem */
+    const ref = DB.db.doc('ins/h-' + mesId(at)), id = at + '-' + TAB;
     const h = { [k]: { [id]: clean(Object.assign({}, ev, { at, by: DB.me || null })) } };
     if (typeof ref.merge === 'function') await ref.merge({ h });
     else { try { await ref.update({ h }); } catch (e) { await ref.set({ h }); } }
@@ -11847,11 +11862,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   /* custos e indicadores, a partir do histórico de calibrações */
   function calCustoHTML(M) {
-    const all = insHistAll(), cals = all.filter((h) => h.t === 'cal' && h.d != null), y = E.ymd(S.today).y;
+    const all = insHistAll(), DF = insEvsComFicha(), cals = [], y = E.ymd(S.today).y;
+    Object.keys(DF).forEach((k) => DF[k].forEach((h) => { if (h.t === 'cal' && h.d != null) cals.push(h); }));   /* v137: inclui as lançadas só na ficha */
     const doAno = cals.filter((h) => E.ymd(h.d).y === y), soma = (l) => l.reduce((p, h) => p + (h.custo || 0), 0);
     const rep = doAno.filter((h) => h.res === 'REPROVADO').length;
     /* tempo no laboratório: do envio até a calibração seguinte do mesmo instrumento */
-    const D = insEvents(), tempos = [], porLab = new Map();
+    const D = DF, tempos = [], porLab = new Map();
     const labOf = (n) => { const k = n || '(sem laboratório)'; if (!porLab.has(k)) porLab.set(k, { lab: k, n: 0, gasto: 0, comCusto: 0, rep: 0, dias: [] }); return porLab.get(k); };
     Object.keys(D).forEach((k) => {
       const evs = D[k];
@@ -13227,7 +13243,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     S.rncOk = false;
     const btn = $('#fx-save'); btn.disabled = true; const old = btn.textContent; btn.textContent = 'Gravando…';
     try {
-      const calP = fd.mod === 'INS' && (S.form === 'cal' || (c.isNew && c.vals.E)) ? insCalPrep(c, c.isNew ? null : c.rec) : null;
+      const dNova = fd.mod === 'INS' && !c.isNew && c.rec && c.vals.E ? E.fromIso(c.vals.E) : null;   /* v137: no Editar, data da calibração nova grava a linha "calibração" no histórico */
+      const calP = fd.mod === 'INS' && (S.form === 'cal' || (c.isNew && c.vals.E) || (dNova != null && (c.rec.dataCal == null || Math.floor(dNova) > Math.floor(c.rec.dataCal)))) ? insCalPrep(c, c.isNew ? null : c.rec) : null;
       const RR = fd.mod === 'RNC' && c.isNew ? S.rncRir : null;
       if (RR) { S.rncRir = null; Object.assign(c.fields, clean({ descNc: c.fields.descNc || RR.desc, origem: c.fields.origem || 'Recebimento', rir: RR.rir, nFotos: RR.fotos.length || undefined, info: appendInfo(c.fields.info || '', `Aberta a partir do ${RR.rir}${RR.insp ? ' (inspecionado e assinado por ' + RR.insp + ')' : ''}${RR.fotos.length ? ', com ' + RR.fotos.length + ' foto(s) do RIR' : ''}.`) })); }
       if (c.isNew) {
@@ -13248,6 +13265,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         const rec = c.rec, key = rec.key;
         const label = fd.label(c.vals, recTitle(rec), rec);
         await updateRecord(fd.mod, key, c.changes);
+        if (calP && calP.ev && dNova != null && rec.dataCal != null && (rec.custo != null || rec.lab) && !(insEvents()[key] || []).some((h) => h.t === 'cal' && h.d != null && Math.floor(h.d) === Math.floor(rec.dataCal))) {
+          try { await addInsEvent(key, { t: 'cal', d: rec.dataCal, lab: rec.lab || '', cert: rec.cert || '', custo: rec.custo != null ? rec.custo : null, freq: rec.freq != null ? rec.freq : null, obs: 'calibração anterior, que estava só na ficha', ficha: true }); } catch (e) { console.warn('histórico do instrumento não gravado', e); }   /* v137: não perde a calibração anterior */
+        }
         if (calP && calP.ev) { try { await addInsEvent(key, calP.ev); } catch (e) { console.warn('histórico do instrumento não gravado', e); } }
         pubQueueLots(fd.mod, c.changes, c.before);
         const diff = {}; Object.keys(c.changes).forEach((f) => { const bf = c.before[f], af = c.changes[f]; diff[f] = (f === 'info' && bf && af && String(af).startsWith(String(bf))) ? ['…', '+ ' + String(af).slice(String(bf).length).trim()] : [bf, af]; });
