@@ -406,6 +406,9 @@ ul.dvdl, p.dvdl { display: none !important; } .dvdl { list-style: none; margin: 
 .nxins li.ok i { background: var(--ok); } .nxins li.warn i { background: var(--warn); } .nxins li.info i { background: var(--info); } .nxins li.crit i { background: var(--crit); box-shadow: 0 0 0 3px color-mix(in srgb, var(--crit) 25%, transparent); }
 .nxks { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
 .nxk { position: relative; display: grid; grid-template-rows: auto auto 1fr auto; gap: 4px; padding: 12px 14px 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); overflow: hidden; min-height: 190px; text-align: left; font: inherit; color: inherit; }
+.nxcx { display: grid; gap: 6px; margin-bottom: 6px; } .nxcmix { display: flex; height: 8px; border-radius: 4px; overflow: hidden; gap: 2px; } .nxcmix i, .nxclg i { display: block; background: var(--c); }   /* v138 */
+.nxclg { display: grid; gap: 2px; font-size: 12px; color: var(--ink-2); } .nxclg span { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 7px; align-items: center; } .nxclg i { width: 10px; height: 10px; border-radius: 3px; } .nxclg b { color: var(--ink); font-weight: 600; }
+.nxcx .o1 { opacity: .72; } .nxcx .o2 { opacity: .5; } .nxcx .o3 { opacity: .3; }
 button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 .nxk::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--c); }
 .nxk .lbl { font: 600 11px/1.25 var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); padding-right: 6px; }
@@ -709,6 +712,15 @@ table.t tbody tr.pend td:first-child { box-shadow: inset 3px 0 0 var(--warn); }
 .formwrap { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
 .fgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr)); gap: 12px 14px; }
 .fgrid .s2 { grid-column: span 2; } .fgrid .s3 { grid-column: 1 / -1; }
+/* v138: onde foi calibrado / visita do técnico; enviar junto */
+.calvis { display: grid; gap: 8px; } .cvseg { display: inline-flex; border: 1px solid var(--line-2); border-radius: 8px; overflow: hidden; width: max-content; max-width: 100%; }
+.cvseg button { border: 0; background: var(--surface); color: var(--ink-2); padding: 8px 14px; font: 500 13px var(--f-body); cursor: pointer; } .cvseg button + button { border-left: 1px solid var(--line); }
+.cvseg button[aria-pressed="true"] { background: color-mix(in srgb, var(--cal) 22%, transparent); color: var(--ink); font-weight: 600; }
+.cvrow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 14px; align-items: start; } .cvrow > div > span, .cvrow label > span:first-child { display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+.cvchips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; } .cvc { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--cal); background: color-mix(in srgb, var(--cal) 14%, transparent); border-radius: 999px; padding: 3px 10px; font: 600 12.5px var(--f-mono); }
+.cvc button { border: 0; background: none; color: var(--ink-3); cursor: pointer; padding: 0 0 0 2px; } .cvchips input { width: 190px; max-width: 100%; }
+.cvrow > .cvinfo { margin-top: 26px; } .cvinfo { border: 1px solid color-mix(in srgb, var(--cal) 45%, transparent); background: color-mix(in srgb, var(--cal) 8%, transparent); border-radius: 8px; padding: 9px 12px; color: var(--ink-2); }
+@media (max-width: 640px) { .cvrow { grid-template-columns: minmax(0, 1fr); } }
 /* v50: Nota fiscal e recebimento do lote em 3 colunas fechadas */
 .fgrid.avnota { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-flow: row dense; }
 .fgrid.avnota :is(input, select) { min-width: 0; max-width: 100%; box-sizing: border-box; }
@@ -6038,7 +6050,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 137; window.CQ_V = APP_V;
+    const APP_V = 138; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -6427,7 +6439,8 @@ var ENGINE = (function () {
       var x = { mod: 'INS', row: r, key: o.__k, codigo: str(o.A), desc: str(o.B), marca: str(o.C), cert: str(o.D), dataCal: toSerial(o.E), freq: (typeof o.F === 'number' ? o.F : (o.F == null ? null : +o.F)),
         resp: str(o.K), depto: str(o.L), obs: str(o.M), tipo: str(o.P), resCal: o.Q, situacao: str(o.S), pending: mins.pend.get(r) || null, raw: o,
         serie: str(o.U), faixa: str(o.V), resol: str(o.W), emaInst: num(o.X), incert: num(o.Y), lab: str(o.Z), custo: num(o.AA), local: str(o.AB),
-        envio: toSerial(o.AC), prevRet: toSerial(o.AD), verifFreq: num(o.AE), verifData: toSerial(o.AF), baixaData: toSerial(o.AG), baixaMotivo: str(o.AH), com: str(o.AI) };
+        envio: toSerial(o.AC), prevRet: toSerial(o.AD), verifFreq: num(o.AE), verifData: toSerial(o.AF), baixaData: toSerial(o.AG), baixaMotivo: str(o.AH), com: str(o.AI),
+        custoTr: num(o.AJ), custoDesl: num(o.AK), custoOut: num(o.AL), custoOutQ: str(o.AM), deslPend: o.AN && typeof o.AN === 'object' ? o.AN : null };   /* v138 */
       var t = tipos[low(o.P)];
       /* critério de aceitação = Erro Máximo Admissível (EMA): o do instrumento ou, se vazio, o do tipo de equipamento */
       x.emaTipo = (t && typeof t.ema === 'number') ? t.ema : null;
@@ -6556,14 +6569,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     AV: { A: 'id', B: 'data', C: 'filial', D: 'volume', E: 'corrida', F: 'desc', G: 'diam', H: 'esp', I: 'liga', J: 'norma', K: 'forn', L: 'nf', M: 'pc', N: 'pv', O: 'cert', P: 'conf', Q: 'retrab', R: 'quant', S: 'und', T: 'certLink', U: 'insp', V: 'motRep', W: 'prom' },
     SERV: { A: 'data', B: 'desc', C: 'nf', D: 'forn', E: 'pc', F: 'pv', G: 'cert' },
     RNC: { A: 'num', B: 'data', D: 'comprador', E: 'filial', F: 'emissor', G: 'forn', H: 'cliente', I: 'nf', J: 'pv', K: 'oc', L: 'depto', M: 'motivo', P: 'disp', Q: 'fechDisp', R: 'corretiva', T: 'nivel', V: 'analise', X: 'conclusao', Y: 'cancel', Z: 'info', AA: 'emPara', AB: 'emCc', AC: 'lotesAV', AD: 'abrang', AE: 'abrJust' },
-    INS: { A: 'codigo', B: 'desc', C: 'marca', D: 'cert', E: 'dataCal', F: 'freq', K: 'resp', L: 'depto', M: 'obs', P: 'tipo', Q: 'resCal', S: 'situacao', U: 'serie', V: 'faixa', W: 'resol', X: 'emaInst', Y: 'incert', Z: 'lab', AA: 'custo', AB: 'local', AC: 'envio', AD: 'prevRet', AE: 'verifFreq', AF: 'verifData', AG: 'baixaData', AH: 'baixaMotivo', AI: 'com' },
+    INS: { A: 'codigo', B: 'desc', C: 'marca', D: 'cert', E: 'dataCal', F: 'freq', K: 'resp', L: 'depto', M: 'obs', P: 'tipo', Q: 'resCal', S: 'situacao', U: 'serie', V: 'faixa', W: 'resol', X: 'emaInst', Y: 'incert', Z: 'lab', AA: 'custo', AB: 'local', AC: 'envio', AD: 'prevRet', AE: 'verifFreq', AF: 'verifData', AG: 'baixaData', AH: 'baixaMotivo', AI: 'com', AJ: 'custoTr', AK: 'custoDesl', AL: 'custoOut', AM: 'custoOutQ', AN: 'deslPend' },
     RNCC: { A: 'num', B: 'data', C: 'filial', D: 'emissor', E: 'cliente', F: 'contato', G: 'canal', H: 'nf', I: 'pv', J: 'lotes', K: 'produto', L: 'qtd', M: 'desc', N: 'motivo', O: 'gravidade', P: 'procedente', Q: 'contencao', R: 'contData', S: 'disp', T: 'setor', U: 'origem', V: 'rncf', W: 'causa', X: 'acao', Y: 'resp', Z: 'acaoPrazo', AA: 'respData', AB: 'eficacia', AC: 'eficData', AD: 'conclusao', AE: 'cancel', AF: 'info' }
   };
   const FLABEL = {
     id: 'ID', data: 'Data', filial: 'Filial', volume: 'Volume', corrida: 'Corrida', desc: 'Descrição', diam: 'Diâmetro', esp: 'Espessura', liga: 'Liga/Tipo', norma: 'Material', forn: 'Fornecedor', nf: 'Nota fiscal', pc: 'Pedido de compra', pv: 'Pedido de venda',
     cert: 'Certificado', conf: 'Conferido', retrab: 'Retrabalho', num: 'Número', comprador: 'Comprador', emissor: 'Emissor', cliente: 'Cliente', oc: 'Ordem de compra', depto: 'Departamento', motivo: 'Motivo', disp: 'Disposição',
     fechDisp: 'Fechamento da disposição', corretiva: 'Corretiva?', nivel: 'Nível do prazo', analise: 'Análise crítica', conclusao: 'Conclusão', cancel: 'Cancelada', info: 'Informações', codigo: 'Código', marca: 'Marca', dataCal: 'Data da calibração',
-    freq: 'Frequência', resp: 'Responsável', obs: 'Observação', tipo: 'Tipo de equipamento', resCal: 'Maior erro encontrado', situacao: 'Situação', serie: 'Nº de série', faixa: 'Faixa de medição', resol: 'Resolução', emaInst: 'EMA do instrumento', incert: 'Incerteza (U)', lab: 'Laboratório', custo: 'Custo da calibração', local: 'Local', com: 'Com quem está', envio: 'Enviado ao laboratório em', prevRet: 'Previsão de retorno', verifFreq: 'Verificação intermediária (meses)', verifData: 'Última verificação intermediária', baixaData: 'Data da baixa', baixaMotivo: 'Motivo da baixa',
+    freq: 'Frequência', resp: 'Responsável', obs: 'Observação', tipo: 'Tipo de equipamento', resCal: 'Maior erro encontrado', situacao: 'Situação', serie: 'Nº de série', faixa: 'Faixa de medição', resol: 'Resolução', emaInst: 'EMA do instrumento', incert: 'Incerteza (U)', lab: 'Laboratório', custo: 'Custo da calibração', custoTr: 'Transporte', custoDesl: 'Deslocamento do técnico', custoOut: 'Outros custos', custoOutQ: 'Outros custos: do quê', deslPend: 'Deslocamento da visita (a lançar)', local: 'Local', com: 'Com quem está', envio: 'Enviado ao laboratório em', prevRet: 'Previsão de retorno', verifFreq: 'Verificação intermediária (meses)', verifData: 'Última verificação intermediária', baixaData: 'Data da baixa', baixaMotivo: 'Motivo da baixa',
     contato: 'Contato', canal: 'Canal', lotes: 'Lotes / corridas', produto: 'Produto', qtd: 'Quantidade afetada', gravidade: 'Gravidade', procedente: 'Procedente', contencao: 'Contenção', contData: 'Data da contenção', setor: 'Setor responsável',
     origem: 'Origem da causa', prom: 'Entrega prometida', quant: 'Quantidade', und: 'Unidade', certLink: 'Link do certificado', insp: 'Resultado da inspeção', rncf: 'NCF vinculada', causa: 'Causa raiz', acao: 'Ação corretiva', acaoPrazo: 'Prazo da ação', respData: 'Resposta ao cliente', eficacia: 'Eficácia', eficData: 'Data da verificação', emPara: 'E-mails (Para)', emCc: 'E-mails (Cópia)', lotesAV: 'Lotes afetados', motRep: 'Motivo da reprovação', abrang: 'Abrangência da NCF', abrJust: 'Justificativa (sem lote)'
   };
@@ -8618,7 +8631,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function nxKpi(k, P) {
     const tag = k.go ? 'button' : 'div', go = k.go ? ` type="button" data-go="${esc(JSON.stringify(k.go))}"` : '';
     const dl = k.dl ? `<span class="nxdl ${k.dl[1]}">${esc(k.dl[0])}</span>` : '';
-    return `<${tag} class="nxk ${k.cls || ''}"${go}><span class="lbl">${esc(k.l)}</span><div class="vr"><b class="val">${k.v}</b>${dl}</div><span class="sub">${esc(k.sub || '')}</span>${k.pct ? pctRing(k.pct) : ''}<div class="nxsp">${k.serie ? nxSpark(k.serie) : ''}<span>${esc(P.spl)}</span></div></${tag}>`;
+    return `<${tag} class="nxk ${k.cls || ''}"${go}><span class="lbl">${esc(k.l)}</span><div class="vr"><b class="val">${k.v}</b>${dl}</div><span class="sub">${esc(k.sub || '')}</span>${k.extra || ''}${k.pct ? pctRing(k.pct) : ''}<div class="nxsp">${k.serie ? nxSpark(k.serie) : ''}<span>${esc(P.spl)}</span></div></${tag}>`;
   }
   const nxIns = (L, titulo) => `<div class="nxins"><div class="ehinsh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 6.2L21 9l-5 4.3L17.5 20 12 16.6 6.5 20 8 13.3 3 9l6.6-.8z"/></svg><b>${esc(titulo)}</b><small>gerado pela Central</small></div><ul>${L.map(([t, h]) => `<li class="${t}"><i></i><span>${h}</span></li>`).join('')}</ul></div>`;
   /* colunas empilhadas em degradê neon (id = prefixo único do gráfico) */
@@ -9118,7 +9131,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     /* calibrações feitas (pela data da calibração) e o que estava previsto vencer (cada ciclo de cada instrumento) */
     const CE = (a, b) => { const o = []; R.forEach((x) => (LH.get(x.key) || { ce: [] }).ce.forEach((h) => { if (fl(h.d) >= a && fl(h.d) <= b) o.push(Object.assign({ x }, h)); })); return o; };
     const prevE = (a, b) => R.reduce((s, x) => s + (LH.get(x.key) || { cals: [] }).cals.filter((c) => { const v = E.edate(c, x.freq || 0); return x.freq && v >= a && v <= b; }).length, 0);
-    const soma = (L) => L.reduce((s, h) => s + (h.custo || 0), 0);
+    const soma = (L) => L.reduce((s, h) => s + insCustoTot(h), 0);   /* v138: os 4 custos */
     const reais = (v) => (v >= 10000 ? 'R$ ' + NF1.format(Math.round(v / 100) / 10) + ' mil' : 'R$ ' + money(v));
     const quemI = (x) => (E.filled(x.com) ? x.com : E.filled(x.depto) ? x.depto + ' (setor)' : '(sem responsável)');
     /* agora: vencidos, vencendo e no laboratório */
@@ -9157,13 +9170,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const eA = emDia(U, tA), eP = emDia(U, tP), pA = pctD(eA), pP = pctD(eP);
     const vA = conta(U, tA, 'v30'), vP = conta(U, tP, 'v30'), sem = U.filter((x) => { const v = valAt(x, tA); return v != null && v - tA >= 0 && v - tA <= 7; }).length;
     const xA = conta(U, tA, 'venc'), xP = conta(U, tP, 'venc'), lA = R.filter((x) => noLab(x, tA)).length, lP = R.filter((x) => noLab(x, tP)).length;
-    const cA = CE(P.a, P.b), cP = CE(P.prev.a, P.prev.b), gA = soma(cA), gP = soma(cP), semCusto = cA.filter((h) => h.custo == null).length;
+    const cA = CE(P.a, P.b), cP = CE(P.prev.a, P.prev.b), gA = soma(cA), gP = soma(cP), semCusto = cA.filter((h) => !insCustoTem(h)).length;
     const ks = [
       { l: 'Em dia', v: pA == null ? '—' : NF.format(Math.round(pA)) + '%', sub: `${NF.format(eA.n)} de ${NF.format(eA.d)} em uso`, dl: pA != null && pP != null ? nxDl(pA, pP, P, 'sobe', (v) => NF1.format(v) + ' p.p.') : null, serie: H.map((h) => pctD(emDia(U, h.b)) || 0), pct: null /* o próprio número já é o % (o anel repetiria e bateria na variação) */, cls: eA.d && eA.n === eA.d ? 'ok' : '', go: goC({ status: ['CONFORME', 'VENCE EM BREVE', 'VENCE HOJE'] }) },
       { l: 'Vencem em 30 dias', v: NF.format(vA), sub: P.cur ? `${NF.format(sem)} nesta semana` : `${NF.format(sem)} na semana seguinte`, dl: nxDl(vA, vP, P, 'desce', NF.format), serie: H.map((h) => conta(U, h.b, 'v30')), pct: vA && eA.d ? [vA, eA.d, 'do parque', 'warn'] : null, cls: vA ? 'warn' : '', go: P.cur ? goC({ status: ['VENCE EM BREVE', 'VENCE HOJE'] }) : null },
       { l: 'Vencidos', v: NF.format(xA), sub: 'usar só depois de calibrar', dl: nxDl(xA, xP, P, 'desce', NF.format), serie: H.map((h) => conta(U, h.b, 'venc')), pct: xA && eA.d ? [xA, eA.d, 'do parque', 'crit'] : null, cls: xA ? 'crit' : '', go: P.cur ? goC({ status: ['VENCIDO'] }) : null },
       { l: 'No laboratório', v: NF.format(lA), sub: P.cur && retA.length ? `${NF.format(retA.length)} com retorno atrasado` : 'em calibração', dl: nxDl(lA, lP, P, 'desce', NF.format), serie: H.map((h) => R.filter((x) => noLab(x, h.b)).length), pct: lA && R.length ? [lA, R.length, 'do parque', P.cur && retA.length ? 'crit' : 'info'] : null, cls: P.cur && retA.length ? 'crit' : '', go: P.cur ? goC({ status: ['NO LABORATÓRIO'] }) : null },
-      { l: 'Custo ' + quando, v: cA.length && cA.length > semCusto ? reais(gA) : '—', sub: `${NF.format(cA.length)} ${cA.length === 1 ? 'calibração' : 'calibrações'}${semCusto ? ` · ${NF.format(semCusto)} sem custo lançado` : ''}`, dl: gP > 0 && cA.length > semCusto ? nxDl((gA - gP) / gP * 100, 0, P, 'desce', (v) => NF.format(Math.round(v)) + '%') : null, serie: H.map((h) => soma(CE(h.a, h.b))), go: goC({}, 'custos') }
+      { l: 'Custo ' + quando, v: cA.length && cA.length > semCusto ? reais(gA) : '—', sub: `${NF.format(cA.length)} ${cA.length === 1 ? 'calibração' : 'calibrações'}${semCusto ? ` · ${NF.format(semCusto)} sem custo lançado` : ''}`, extra: gA > 0 ? (() => { const pt = INS_CUSTOS.map(([k, l], i) => [l, cA.reduce((s2, h) => s2 + (h[k] || 0), 0), i]); return `<div class="nxcx"><div class="nxcmix">${pt.filter((p2) => p2[1] > 0).map(([, v, i]) => `<i class="o${i}" style="flex:${v}"></i>`).join('')}</div><div class="nxclg">${pt.map(([l, v, i]) => `<span><i class="o${i}"></i>${l}<b>${reais(v)}</b></span>`).join('')}</div></div>`; })() : '', dl: gP > 0 && cA.length > semCusto ? nxDl((gA - gP) / gP * 100, 0, P, 'desce', (v) => NF.format(Math.round(v)) + '%') : null, serie: H.map((h) => soma(CE(h.a, h.b))), go: goC({}, 'custos') }
     ];
     /* vencimentos dos próximos 12 meses por tipo de instrumento (sempre a partir de hoje) */
     const o0 = E.ymd(hoje), M12 = []; for (let k = 0; k < 12; k++) { const y = o0.y + Math.floor((o0.m - 1 + k) / 12), m = ((o0.m - 1 + k) % 12) + 1, r = nxMes(y, m); M12.push({ a: Math.max(r.a, hoje), b: r.b, l: MES3[m - 1] + (m === 1 ? '/' + String(y).slice(2) : ''), t: MESES_L[m - 1] + ' ' + y }); }
@@ -9184,7 +9197,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const tituloC = { m: 'Calibrações por dia útil', t: 'Calibrações por semana', a: 'Calibrações feitas por mês' }[P.m];
     const grafC = `<div class="chart"><h3>${tituloC}<small>${esc(P.label)} · a tracejada é o previsto (vencimentos)</small></h3>${nxCols('nxc-f', g.cols, [{ nome: 'Feitas', cor: C, v: feitas }], nxTeto(Math.max(1, ...feitas, ...previstas)), { agora: g.agora, tip: tipsC, aria: tituloC, linha: { nome: 'previsto', v: previstas } })}</div>`;
     /* mais gráficos: custo por laboratório, situação, setor, faixas */
-    const pl = new Map(); cA.forEach((h) => { const k = h.lab || '(sem laboratório)'; const o = pl.get(k) || { n: 0, v: 0 }; o.n++; o.v += h.custo || 0; pl.set(k, o); });
+    const pl = new Map(); cA.forEach((h) => { const k = h.lab || '(sem laboratório)'; const o = pl.get(k) || { n: 0, v: 0 }; o.n++; o.v += insCustoTot(h); pl.set(k, o); });
     const stN = countBy(R, (x) => ({ CONFORME: 'Em dia', 'VENCE EM BREVE': 'Vence em até 30 dias', 'VENCE HOJE': 'Vence hoje', VENCIDO: 'Vencido', BLOQUEADO: 'Bloqueado (não usar)', 'NO LABORATÓRIO': 'No laboratório', 'MANUTENÇÃO': 'Em manutenção', 'FORA DE USO': 'Fora de uso' }[x.status] || 'Sem calibração'));
     const mais = `<details class="nxmore"><summary>Mais gráficos de calibração (custo por laboratório, situação, setor, faixas de vencimento) · ${esc(P.label)}</summary><div class="charts">
       <div class="chart"><h3>Custo por laboratório<small>${esc(P.label)}</small></h3>${nxHbars('nxc-hl', Array.from(pl.entries()).sort((a, b) => b[1].v - a[1].v).slice(0, 8).map(([l, o]) => ({ l, v: o.v, t: 'R$ ' + NF.format(Math.round(o.v)), tip: `${l}: ${o.n} calibração(ões) · R$ ${money(o.v)}`, go: goC({}, 'custos') })), C, { vazio: 'Sem calibrações no período.', vw: 84 })}</div>
@@ -10456,8 +10469,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (h.t === 'cal') {
       if (h.lab) p.push(h.lab); if (h.cert) p.push('certificado ' + h.cert);
       p.push(h.erro == null ? 'maior erro não lançado' : 'maior erro ' + fNum(h.erro) + (h.inc != null ? ' · incerteza ' + fNum(h.inc) : '') + (h.ema != null ? ' · EMA ±' + fNum(h.ema) : ''));
-      if (h.custo != null) p.push('R$ ' + money(h.custo));
-    } else if (h.t === 'env') { if (h.lab) p.push(h.lab); if (h.prev != null) p.push('retorno previsto ' + fD(h.prev)); }
+      if (insCustoTem(h)) { const pt = INS_CUSTOS.filter(([k]) => h[k]).map(([k, l]) => `${l} R$ ${money(h[k])}`); p.push('R$ ' + money(insCustoTot(h)) + (pt.length > 1 || (pt.length && !h.custo) ? ' (' + pt.join(' + ') + (h.outQ ? ': ' + h.outQ : '') + ')' : '')); }   /* v138 */
+    } else if (h.t === 'env') { if (h.lab) p.push(h.lab); if (h.prev != null) p.push('retorno previsto ' + fD(h.prev)); if (h.tr) p.push(`transporte R$ ${money(h.tr)}${h.n > 1 ? ` (R$ ${money(h.trTot)} ÷ ${h.n})` : ''}`); }
     else if (h.t === 'imp') { if (h.dec) p.push(h.dec); if (h.dest) p.push('destino: ' + h.dest); }
     else if (h.t === 'ver') { if (h.padrao) p.push('padrão: ' + h.padrao); }
     else if (h.t === 'uso') { p.push([h.tipo, h.doc].filter(Boolean).join(' ')); if (h.ref) p.push(h.ref); if (h.lotes && h.lotes.length) p.push('lotes ' + h.lotes.join(', ')); }
@@ -10465,6 +10478,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (h.obs) p.push(h.obs);
     return p.join(' · ');
   }
+  /* v138: os 4 custos de uma calibração (calibração, transporte, deslocamento do técnico, outros) */
+  const INS_CUSTOS = [['custo', 'calibração'], ['tr', 'transporte'], ['desl', 'deslocamento'], ['out', 'outros']];
+  const insCustoTem = (h) => INS_CUSTOS.some(([k]) => h[k] != null);
+  const insCustoTot = (h) => INS_CUSTOS.reduce((s2, [k]) => s2 + (h[k] || 0), 0);
   /* v137: calibração lançada só na ficha (Editar/planilha, com data e custo) e sem a linha "calibração" daquele dia no histórico: entra nos custos assim mesmo (uma vez só) */
   const INSFC = { ev: null, m: null, D: null };
   function insEvsComFicha() {
@@ -10472,9 +10489,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const out = {}, fl = Math.floor;
     Object.keys(D).forEach((k) => { out[k] = D[k]; });
     (M.ins || []).forEach((x) => {
-      if (x.dataCal == null || x.custo == null) return;
+      if (x.dataCal == null || (x.custo == null && x.custoTr == null && x.custoDesl == null && x.custoOut == null)) return;
       const L = D[x.key] || []; if (L.some((h) => h.t === 'cal' && h.d != null && fl(h.d) === fl(x.dataCal))) return;
-      out[x.key] = L.concat([{ t: 'cal', d: x.dataCal, lab: x.lab || '', cert: x.cert || '', custo: x.custo, at: 0, ficha: true }]).sort((p, q) => (p.d == null ? 1e15 : p.d) - (q.d == null ? 1e15 : q.d) || (p.at || 0) - (q.at || 0));
+      out[x.key] = L.concat([{ t: 'cal', d: x.dataCal, lab: x.lab || '', cert: x.cert || '', custo: x.custo, tr: x.custoTr, desl: x.custoDesl, out: x.custoOut, outQ: x.custoOutQ || null, at: 0, ficha: true }]).sort((p, q) => (p.d == null ? 1e15 : p.d) - (q.d == null ? 1e15 : q.d) || (p.at || 0) - (q.at || 0));
     });
     INSFC.ev = D; INSFC.m = M; INSFC.D = out; return out;
   }
@@ -10528,18 +10545,75 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       setTimeout(after || (() => openRecord('INS', x.key)), 350);
     } catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); if (b) { b.disabled = false; b.textContent = old; } }
   }
-  function insEnvDialog(x) {
+  /* v138: Registrar calibração já vem com a parte do transporte do envio e do deslocamento da visita do técnico */
+  function insCustoPrefill(rec) {
+    if (S.form !== 'cal') return;
+    const ev = insEvents()[rec.key] || [], uc = ev.filter((h) => h.t === 'cal' && h.d != null).reduce((m, h) => Math.max(m, h.d), -Infinity);
+    const tr = ev.filter((h) => h.t === 'env' && h.tr && (h.d == null || h.d >= uc)).reduce((s2, h) => s2 + h.tr, 0);
+    const fmt = (v) => String(Math.round(v * 100) / 100).replace('.', ',');
+    const aj = $('#ff-AJ'), ak = $('#ff-AK');
+    if (aj && !aj.value && tr) aj.value = fmt(tr);
+    S.calVis = { on: false, keys: [rec.key], tot: null };
+    const host = ak && ak.closest('.field'); if (!host) return;
+    const old = $('#calvis'); if (old) old.remove();
+    const dp = rec.deslPend;
+    if (dp && dp.v != null && ak && !ak.value) ak.value = fmt(dp.v);
+    const insOk = S.model.ins.filter((x) => x.status !== 'DESCARTADO');
+    const box = document.createElement('div'); box.id = 'calvis'; box.className = 'field s3 calvis';
+    const desenha = () => {
+      const V = S.calVis, n = V.keys.length, sh = V.tot != null && n ? V.tot / n : null;
+      box.innerHTML = dp ? `<span>Onde foi calibrado</span><div class="cvinfo">Na empresa (o técnico veio): deslocamento da visita de ${esc(fD(dp.d))}, R$ ${esc(money(dp.tot || dp.v))}${dp.n > 1 ? ` ÷ ${dp.n} instrumentos` : ''}${dp.de ? ` (lançado no ${esc(dp.de)})` : ''}. A parte deste já está em "Deslocamento do técnico".</div>`
+        : `<span>Onde foi calibrado</span><div class="cvseg" role="group"><button type="button" data-cv="0" aria-pressed="${!V.on}">No laboratório</button><button type="button" data-cv="1" aria-pressed="${V.on}">Na empresa (o técnico veio)</button></div>
+        ${V.on ? `<div class="cvrow"><div><span>Calibrados na mesma visita</span><div class="cvchips">${V.keys.map((k) => { const x = S.model.ins.find((i) => i.key === k); return `<span class="cvc">${esc(x ? x.codigo : k)}${k === rec.key ? '' : ` <button type="button" data-cvx="${esc(k)}" aria-label="Tirar">✕</button>`}</span>`; }).join('')}<input id="cv-add" list="cv-dl" placeholder="+ adicionar instrumento" autocomplete="off"><datalist id="cv-dl">${optList(insOk.filter((x) => !V.keys.includes(x.key)).map((x) => x.codigo))}</datalist></div></div>
+          <label><span>Deslocamento do técnico na visita (R$)</span><input id="cv-tot" type="text" inputmode="decimal" placeholder="ex.: 200,00" value="${V.tot != null ? esc(fmt(V.tot)) : ''}"><span class="help">Viagem, km, pedágio, diária. ${sh != null ? `Dividido entre os <b>${n}</b>: <b>R$ ${esc(money(sh))}</b> cada.` : 'É dividido igualmente entre os instrumentos da visita.'}</span></label></div>` : ''}`;
+      box.querySelectorAll('[data-cv]').forEach((b) => { b.onclick = () => { V.on = b.dataset.cv === '1'; if (!V.on) { V.tot = null; } desenha(); }; });
+      box.querySelectorAll('[data-cvx]').forEach((b) => { b.onclick = () => { V.keys = V.keys.filter((k) => k !== b.dataset.cvx); aplica(); desenha(); }; });
+      const ad = box.querySelector('#cv-add'); if (ad) ad.onchange = () => { const x = insOk.find((i) => E.key(i.codigo) === E.key(ad.value)); if (x && !V.keys.includes(x.key)) { V.keys.push(x.key); aplica(); desenha(); const a2 = box.querySelector('#cv-add'); if (a2) a2.focus(); } };
+      const tt = box.querySelector('#cv-tot'); if (tt) tt.oninput = () => { const v = numIn(tt.value); V.tot = v == null || isNaN(v) ? null : v; aplica(); const hp = tt.parentNode.querySelector('.help'); const n2 = V.keys.length; if (hp) hp.innerHTML = 'Viagem, km, pedágio, diária. ' + (V.tot != null ? `Dividido entre os <b>${n2}</b>: <b>R$ ${esc(money(V.tot / n2))}</b> cada.` : 'É dividido igualmente entre os instrumentos da visita.'); };
+    };
+    const aplica = () => { const V = S.calVis; if (V.on && V.tot != null && V.keys.length) { ak.value = fmt(V.tot / V.keys.length); ak.dispatchEvent(new Event('input', { bubbles: true })); } };
+    host.parentNode.insertBefore(box, host.parentNode.firstChild);
+    desenha();
+  }
+  function insEnvDialog(x) {   /* v138: enviar vários juntos + transporte dividido */
+    const podeIr = (i) => i.status !== 'DESCARTADO' && ['em uso', 'bloqueado', 'manutenção', ''].includes(E.low(i.situacao || ''));
+    const G = { keys: [x.key] }, cand = () => S.model.ins.filter((i) => podeIr(i) && !G.keys.includes(i.key));
     openModal('Enviar para calibração · ' + x.codigo, `<p style="margin:0">O instrumento sai de uso e aparece como <b>No laboratório</b> até você registrar a calibração na volta. Enquanto estiver lá, ele não conta como “vencido em uso”.</p>
       <div class="fgrid cm-grid"><label class="field"><span>Data do envio <b>*</b></span><input type="date" id="ie-d" value="${E.isoDate(S.today)}"></label>
       <label class="field"><span>Laboratório</span><input id="ie-lab" list="ie-labs" autocomplete="off" value="${esc(x.lab || '')}" placeholder="digite ou escolha"><datalist id="ie-labs">${optList(insLabs())}</datalist></label>
       <label class="field"><span>Previsão de retorno</span><input type="date" id="ie-prev"></label></div>
+      <div class="field"><span>Enviar junto</span><div class="cvchips" id="ie-jt"></div><span class="help">Os outros instrumentos que vão no mesmo envio. Todos ficam “No laboratório”.</span></div>
+      <div class="cvrow"><label class="field"><span>Transporte (R$)</span><input id="ie-tr" type="text" inputmode="decimal" placeholder="ex.: 50,00" autocomplete="off"><span class="help">Frete da ida (motoboy, correio, transportadora). Se já souber, inclua a volta.</span></label><div class="cvinfo" id="ie-div" hidden></div></div>
       <label class="field"><span>Observação</span><textarea id="ie-obs" style="min-height:60px"></textarea></label>
       <div class="formfoot"><button class="btn primary" type="button" id="ie-ok">Registrar envio</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    const trV = () => { const v = numIn($('#ie-tr').value); return v == null || isNaN(v) || v <= 0 ? null : v; };
+    const conta = () => { const n = G.keys.length, t = trV(), dv = $('#ie-div'); dv.hidden = !(t && n > 1); if (t && n > 1) dv.innerHTML = `Dividido entre os <b>${n} instrumentos</b>:<br><b>R$ ${esc(money(t / n))}</b> para cada um`; $('#ie-ok').textContent = n > 1 ? `Registrar envio (${n})` : 'Registrar envio'; };
+    const chips = () => {
+      $('#ie-jt').innerHTML = G.keys.map((k) => { const i = S.model.ins.find((y) => y.key === k); return `<span class="cvc">${esc(i ? i.codigo : k)}${k === x.key ? '' : ` <button type="button" data-ijx="${esc(k)}" aria-label="Tirar">✕</button>`}</span>`; }).join('') + `<input id="ie-add" list="ie-dl" placeholder="+ adicionar instrumento" autocomplete="off"><datalist id="ie-dl">${optList(cand().map((i) => i.codigo))}</datalist>`;
+      $$('#ie-jt [data-ijx]').forEach((b) => { b.onclick = () => { G.keys = G.keys.filter((k) => k !== b.dataset.ijx); chips(); }; });
+      $('#ie-add').onchange = () => { const v = $('#ie-add').value, i = cand().find((y) => E.key(y.codigo) === E.key(v)); if (i) { G.keys.push(i.key); chips(); $('#ie-add').focus(); } };
+      conta();
+    };
+    chips(); $('#ie-tr').oninput = conta;
     $('#ie-ok').onclick = async () => {
-      const d = E.fromIso($('#ie-d').value), prev = $('#ie-prev').value ? E.fromIso($('#ie-prev').value) : null, lab = $('#ie-lab').value.trim(), obs = $('#ie-obs').value.trim();
+      const d = E.fromIso($('#ie-d').value), prev = $('#ie-prev').value ? E.fromIso($('#ie-prev').value) : null, lab = $('#ie-lab').value.trim(), obs = $('#ie-obs').value.trim(), t = trV(), n = G.keys.length;
       if (d == null) { toast('Informe a data do envio.', true); return; }
       if (prev != null && prev < d) { toast('A previsão de retorno está antes do envio.', true); return; }
-      await insSave(x, '#ie-ok', { situacao: 'Enviado para calibração', envio: d, prevRet: prev, lab: lab || x.lab || null }, { t: 'env', d, lab, prev, obs }, `${x.codigo} · enviado para calibração${lab ? ' (' + lab + ')' : ''}`);
+      if (n === 1) { await insSave(x, '#ie-ok', { situacao: 'Enviado para calibração', envio: d, prevRet: prev, lab: lab || x.lab || null }, clean({ t: 'env', d, lab, prev, obs, tr: t, trTot: t, n: 1 }), `${x.codigo} · enviado para calibração${lab ? ' (' + lab + ')' : ''}${t ? ' · transporte R$ ' + money(t) : ''}`); return; }
+      const b = $('#ie-ok'); b.disabled = true; b.textContent = 'Gravando…';
+      const sh = t ? Math.round((t / n) * 100) / 100 : null, grp = Date.now().toString(36), cods = G.keys.map((k) => (S.model.ins.find((y) => y.key === k) || {}).codigo).filter(Boolean);
+      try {
+        for (const k of G.keys) {
+          const i = S.model.ins.find((y) => y.key === k); if (!i) continue;
+          const ch = { situacao: 'Enviado para calibração', envio: d, prevRet: prev, lab: lab || i.lab || null }, before = {}; Object.keys(ch).forEach((f) => { before[f] = i[f] == null || i[f] === '' ? null : i[f]; });
+          await updateRecord('INS', k, ch);
+          await addInsEvent(k, clean({ t: 'env', d, lab, prev, obs, tr: sh, trTot: t, n, grp, junto: cods.filter((c) => c !== i.codigo).join(', ') }));
+          const diff = {}; Object.keys(ch).forEach((f) => { if (before[f] !== ch[f]) diff[f] = [before[f], ch[f]]; });
+          logEntry('INS', k, 'alterado', `${i.codigo} · enviado para calibração${lab ? ' (' + lab + ')' : ''} junto com ${n - 1} instrumento(s)${t ? ` · transporte R$ ${money(sh)} (R$ ${money(t)} ÷ ${n})` : ''}`, Object.keys(diff).length ? diff : null);
+        }
+        closeLayer(); toast(`${n} instrumentos enviados para calibração — gravado.`);
+        setTimeout(() => openRecord('INS', x.key), 350);
+      } catch (err) { toast('Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; conta(); }
     };
   }
   const IMP_DEC = ['Sem impacto: as medições anteriores continuam válidas', 'Medições reavaliadas: nenhum problema encontrado', 'Medições reavaliadas: produto com problema (abrir NCF)', 'Outro (descrito abaixo)'];
@@ -10754,8 +10828,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     else if ((res === 'APROVADO' || res === 'SEM CRITÉRIO') && rec && (sitNow === 'enviado para calibração' || sitNow === 'bloqueado')) { tgt.situacao = 'Em uso'; c.before.situacao = rec.situacao || null; }
     else if (res === 'AGUARDANDO ANÁLISE' && rec && sitNow === 'enviado para calibração') { tgt.situacao = 'Bloqueado'; c.before.situacao = rec.situacao || null; } /* voltou do laboratório sem o maior erro: só volta ao uso depois da análise */
     if (rec && sitNow === 'enviado para calibração') { if (rec.envio != null) { tgt.envio = null; c.before.envio = rec.envio; } if (rec.prevRet != null) { tgt.prevRet = null; c.before.prevRet = rec.prevRet; } }
-    const custo = numIn(v.AA);
-    return { res, ev: v.E ? { t: 'cal', d: E.fromIso(v.E), lab: v.Z || '', cert: v.D || '', erro: erro == null || isNaN(erro) ? null : erro, inc: inc == null || isNaN(inc) ? null : inc, ema, res, custo: custo == null || isNaN(custo) ? null : custo, freq: numIn(v.F), obs: v.M || '' } : null };
+    const nn = (x) => { const n = numIn(x); return n == null || isNaN(n) ? null : n; }, custo = nn(v.AA), tr = nn(v.AJ), desl = nn(v.AK), out = nn(v.AL);   /* v138: transporte, deslocamento e outros */
+    return { res, ev: v.E ? { t: 'cal', d: E.fromIso(v.E), lab: v.Z || '', cert: v.D || '', erro: erro == null || isNaN(erro) ? null : erro, inc: inc == null || isNaN(inc) ? null : inc, ema, res, custo, tr, desl, out, outQ: out != null ? String(v.AM || '').trim() || null : null, onde: desl ? 'emp' : null, freq: numIn(v.F), obs: v.M || '' } : null };
   }
   function calMsg() {
     const act = S.model.ins.filter((x) => x.dias != null && x.emUso);
@@ -11864,30 +11938,32 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function calCustoHTML(M) {
     const all = insHistAll(), DF = insEvsComFicha(), cals = [], y = E.ymd(S.today).y;
     Object.keys(DF).forEach((k) => DF[k].forEach((h) => { if (h.t === 'cal' && h.d != null) cals.push(h); }));   /* v137: inclui as lançadas só na ficha */
-    const doAno = cals.filter((h) => E.ymd(h.d).y === y), soma = (l) => l.reduce((p, h) => p + (h.custo || 0), 0);
+    const doAno = cals.filter((h) => E.ymd(h.d).y === y), soma = (l) => l.reduce((p, h) => p + insCustoTot(h), 0), somaK = (l, k) => l.reduce((p, h) => p + (h[k] || 0), 0);   /* v138: os 4 custos */
     const rep = doAno.filter((h) => h.res === 'REPROVADO').length;
     /* tempo no laboratório: do envio até a calibração seguinte do mesmo instrumento */
     const D = DF, tempos = [], porLab = new Map();
-    const labOf = (n) => { const k = n || '(sem laboratório)'; if (!porLab.has(k)) porLab.set(k, { lab: k, n: 0, gasto: 0, comCusto: 0, rep: 0, dias: [] }); return porLab.get(k); };
+    const labOf = (n) => { const k = n || '(sem laboratório)'; if (!porLab.has(k)) porLab.set(k, { lab: k, n: 0, gasto: 0, comCusto: 0, rep: 0, dias: [], custo: 0, tr: 0, desl: 0, out: 0 }); return porLab.get(k); };
     Object.keys(D).forEach((k) => {
       const evs = D[k];
       evs.forEach((h, i) => {
-        if (h.t === 'cal') { const L = labOf(h.lab); L.n++; if (h.custo != null) { L.gasto += h.custo; L.comCusto++; } if (h.res === 'REPROVADO') L.rep++; }
+        if (h.t === 'cal') { const L = labOf(h.lab); L.n++; if (insCustoTem(h)) { L.gasto += insCustoTot(h); L.comCusto++; INS_CUSTOS.forEach(([k2]) => { L[k2] += h[k2] || 0; }); } if (h.res === 'REPROVADO') L.rep++; }
         if (h.t === 'env' && h.d != null) { const nx = evs.slice(i + 1).find((e) => e.t === 'cal' && e.d != null); if (nx) { const dd = Math.max(0, Math.round(nx.d - h.d)); tempos.push(dd); labOf(nx.lab || h.lab).dias.push(dd); } }
       });
     });
     const med = (l) => (l.length ? Math.round(l.reduce((p, q) => p + q, 0) / l.length) : null);
-    const mb = monthsBack(12, S.today).map((m) => ({ label: m.label, tip: MESES_L[m.m - 1] + ' ' + m.y + ' · R$', value: Math.round(soma(cals.filter((h) => inRange(h.d, m.start, m.end)))) }));
+    const MB = monthsBack(12, S.today), mbC = MB.map((m) => cals.filter((h) => inRange(h.d, m.start, m.end)));
+    const ser = INS_CUSTOS.map(([k, l], i) => ({ nome: l, cor: `color-mix(in srgb, ${MOD.INS.c} ${[100, 72, 50, 30][i]}%, transparent)`, v: mbC.map((L) => Math.round(somaK(L, k))) }));
+    const mxM = Math.max(1, ...mbC.map((L) => Math.round(soma(L))));
     const labs = Array.from(porLab.values()).filter((L) => L.n || L.dias.length).sort((a, b) => b.gasto - a.gasto || b.n - a.n);
     const ult = all.slice(0, 40);
     return `<div class="kpis sm">
         ${kpiHTML({ l: 'Calibrações em ' + y, v: NF.format(doAno.length), c: MOD.INS.c })}
-        ${kpiHTML({ l: 'Gasto em ' + y, v: 'R$ ' + money(soma(doAno)), sub: doAno.filter((h) => h.custo == null).length ? NF.format(doAno.filter((h) => h.custo == null).length) + ' calibração(ões) sem custo lançado' : '', c: MOD.INS.c })}
+        ${kpiHTML({ l: 'Gasto em ' + y, v: 'R$ ' + money(soma(doAno)), sub: INS_CUSTOS.map(([k, l]) => `${l} R$ ${money(somaK(doAno, k))}`).join(' · ') + (doAno.filter((h) => !insCustoTem(h)).length ? ' · ' + NF.format(doAno.filter((h) => !insCustoTem(h)).length) + ' sem custo lançado' : ''), c: MOD.INS.c })}
         ${kpiHTML({ l: 'Reprovadas em ' + y, v: NF.format(rep), c: MOD.INS.c, pct: [rep, doAno.length, 'das calibrações', 'crit'], cls: rep ? 'crit' : '' })}
         ${kpiHTML({ l: 'Tempo médio no laboratório', v: med(tempos) == null ? '—' : NF.format(med(tempos)) + ' dias', sub: tempos.length ? 'de ' + NF.format(tempos.length) + ' envio(s) registrados' : 'use “Enviar para calibração” para medir', c: MOD.INS.c })}
       </div>
-      <div class="charts">${chartHTML('Gasto com calibração por mês (R$)', colsHTML(mb, MOD.INS.c), 'últimos 12 meses')}
-        <div class="chart"><h3>Por laboratório<small>todo o histórico</small></h3>${labs.length ? `<div class="ihist"><table><thead><tr><th>Laboratório</th><th class="r">Calibrações</th><th class="r">Gasto</th><th class="r">Custo médio</th><th class="r">Reprovadas</th><th class="r">Dias no lab.</th></tr></thead><tbody>${labs.map((L) => `<tr><td>${esc(L.lab)}</td><td class="r">${NF.format(L.n)}</td><td class="r nw">${L.comCusto ? 'R$ ' + money(L.gasto) : '—'}</td><td class="r nw">${L.comCusto ? 'R$ ' + money(L.gasto / L.comCusto) : '—'}</td><td class="r">${NF.format(L.rep)}</td><td class="r">${med(L.dias) == null ? '—' : NF.format(med(L.dias))}</td></tr>`).join('')}</tbody></table></div>` : '<div class="empty">As calibrações registradas a partir de agora aparecem aqui.</div>'}</div></div>
+      <div class="charts"><div class="chart" style="grid-column:1/-1"><h3>Gasto com calibração por mês (R$)<small>últimos 12 meses</small></h3>${nxCols('cc-gm', MB.map((m) => m.label), ser, nxTeto(mxM), { tip: MB.map((m) => MESES_L[m.m - 1] + ' ' + m.y) })}</div>
+        <div class="chart" style="grid-column:1/-1"><h3>Por laboratório<small>todo o histórico</small></h3>${labs.length ? `<div class="ihist"><table><thead><tr><th>Laboratório</th><th class="r">Calibrações</th><th class="r">Calibração</th><th class="r">Transporte</th><th class="r">Desloc.</th><th class="r">Outros</th><th class="r">Total</th><th class="r">Por calibração</th><th class="r">Reprovadas</th><th class="r">Dias no lab.</th></tr></thead><tbody>${labs.map((L) => `<tr><td>${esc(L.lab)}</td><td class="r">${NF.format(L.n)}</td>${INS_CUSTOS.map(([k2]) => `<td class="r nw">${L.comCusto ? 'R$ ' + money(L[k2]) : '—'}</td>`).join('')}<td class="r nw"><b>${L.comCusto ? 'R$ ' + money(L.gasto) : '—'}</b></td><td class="r nw">${L.comCusto ? 'R$ ' + money(L.gasto / L.comCusto) : '—'}</td><td class="r">${NF.format(L.rep)}</td><td class="r">${med(L.dias) == null ? '—' : NF.format(med(L.dias))}</td></tr>`).join('')}</tbody></table></div>` : '<div class="empty">As calibrações registradas a partir de agora aparecem aqui.</div>'}</div></div>
       <div class="chart"><h3>Últimos registros<small>calibrações, envios, verificações, análises e baixas</small></h3>${ult.length ? `<div class="ihist"><table><tbody>${ult.map((h) => `<tr data-open="INS:${esc(h.k)}" tabindex="0" style="cursor:pointer"><td class="nw">${fD(h.d)}</td><td class="mono nw">${esc(h.codigo)}</td><td><b>${esc(insEvName(h))}</b>${h.t === 'cal' && h.res ? ' ' + chipRes(h.res) : h.t === 'ver' ? (h.ok === 'NOK' ? ' <span class="chip crit"><i>✕</i>Não OK</span>' : ' <span class="chip ok"><i>✓</i>OK</span>') : ''}<div class="muted">${esc(insEvTxt(h))}</div></td></tr>`).join('')}</tbody></table></div>` : '<div class="empty">Nada registrado ainda.</div>'}</div>`;
   }
 
@@ -12590,19 +12666,25 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         { c: 'F', l: 'Frequência (meses)', type: 'select', store: 'num', opts: () => cfgL('CAL_FREQUENCIAS'), req: 1, def: () => '12' },
         { c: 'Q', l: 'Maior erro encontrado', type: 'text', store: 'num', help: 'O maior erro (sem o sinal) entre os pontos medidos no certificado, na mesma unidade do EMA. Sem ele a calibração fica “Aguardando análise”.' },
         { c: 'Y', l: 'Incerteza (U)', type: 'text', store: 'num', help: 'Incerteza expandida informada no certificado, na mesma unidade. Se o certificado não traz, deixe vazio.' },
-        { c: 'AA', l: 'Custo da calibração (R$)', type: 'text', store: 'num', ph: 'ex.: 85,00' },
         { c: 'K', l: 'Responsável pela análise', type: 'select', opts: () => cfgL('CAL_RESPONSAVEIS') }];
       f.push({ c: 'M', l: 'Observação', type: 'area', w: 's3' });
       return { t: req ? 'Nova calibração' : 'Calibração atual', f };
-    }
+    },
+    /* v138: os 4 custos da calibração */
+    insCusto: () => ({ t: 'Custos da calibração', f: [
+      { c: 'AA', l: 'Calibração (R$)', type: 'text', store: 'num', ph: 'ex.: 85,00', help: 'O serviço do laboratório (ou do técnico).' },
+      { c: 'AJ', l: 'Transporte (R$)', type: 'text', store: 'num', ph: 'ex.: 10,00', help: 'Frete até o laboratório. Já vem a parte do envio; some a volta, se tiver.' },
+      { c: 'AK', l: 'Deslocamento do técnico (R$)', type: 'text', store: 'num', ph: 'ex.: 50,00', help: 'Técnico veio calibrar na empresa: a parte deste instrumento na visita.' },
+      { c: 'AL', l: 'Outros custos (R$)', type: 'text', store: 'num', ph: 'ex.: 15,00', help: 'Ajuste, reparo, taxa de urgência…' },
+      { c: 'AM', l: 'Outros custos: do quê?', type: 'text', store: 'text', ph: 'ex.: ajuste do bico', w: 's2' }] })
   };
   const FORMS = {
     rncc: { t: 'Nova NCC', et: 'Editar NCC', mod: 'RNCC', btn: 'Abrir NCC', secs: () => [SEC.rnccAb(), SEC.rnccRast(), SEC.rnccRecl(1), SEC.rnccCont()], editSecs: () => [SEC.rnccAb(), SEC.rnccRast(), SEC.rnccRecl(0), SEC.rnccHi(), SEC.rnccEnc()], label: (v, k) => `${k} · ${v.E || 'cliente'}` },
     av: { t: 'Novo lote (AV)', et: 'Editar lote', mod: 'AV', btn: 'Gravar lote', secs: () => [SEC.avNota(), SEC.avMat()], keep: 'BCKLMNW', label: (v, k) => `Lote ${k} · ${v.F || ''} · NF ${v.L || ''}` },
     serv: { t: 'Novo serviço', et: 'Editar serviço', mod: 'SERV', btn: 'Gravar serviço', secs: () => [SEC.serv()], keep: 'A', label: (v, k, rec) => `${rec ? rec.sv || 'Serviço' : svOf(k) || 'Serviço'} · ${v.B || ''} · NF ${v.C || ''}` },
     rnc: { t: 'Nova NCF', et: 'Editar NCF', mod: 'RNC', btn: 'Abrir NCF', secs: () => [SEC.rncAb(), SEC.rncId(1), SEC.rncEm(), SEC.rncHi('Informações complementares')], editSecs: () => [SEC.rncAb(), SEC.rncId(0), SEC.rncAn(), SEC.rncFe(), SEC.rncEm(), SEC.rncHi()], label: (v, k) => `${k} · ${v.G || 'sem fornecedor'}` },
-    cal: { t: 'Registrar calibração', mod: 'INS', btn: 'Registrar calibração', pick: 'INS', fresh: { E: () => E.isoDate(S.today), D: () => '', Q: () => '', Y: () => '', AA: () => '', M: () => '' }, secs: () => [SEC.insCal(1)], label: (v, k, rec) => `Calibração ${rec ? rec.codigo : ''} em ${v.E ? E.fmtDate(E.fromIso(v.E)) : ''}` },
-    ins: { t: 'Novo instrumento', et: 'Editar instrumento', mod: 'INS', btn: 'Gravar instrumento', secs: () => [SEC.insId(), SEC.insCal(0)], label: (v) => `Instrumento ${v.A} · ${v.B}` }
+    cal: { t: 'Registrar calibração', mod: 'INS', btn: 'Registrar calibração', pick: 'INS', fresh: { E: () => E.isoDate(S.today), D: () => '', Q: () => '', Y: () => '', AA: () => '', AJ: () => '', AK: () => '', AL: () => '', AM: () => '', M: () => '' }, secs: () => [SEC.insCal(1), SEC.insCusto()], label: (v, k, rec) => `Calibração ${rec ? rec.codigo : ''} em ${v.E ? E.fmtDate(E.fromIso(v.E)) : ''}` },
+    ins: { t: 'Novo instrumento', et: 'Editar instrumento', mod: 'INS', btn: 'Gravar instrumento', secs: () => [SEC.insId(), SEC.insCal(0), SEC.insCusto()], label: (v) => `Instrumento ${v.A} · ${v.B}` }
   };
   const FORM_FOR = { AV: 'av', SERV: 'serv', RNC: 'rnc', INS: 'ins', RNCC: 'rncc' };
   const FORM_ORDER = [['av', 'Lote AV'], ['serv', 'Serviço'], ['rnc', 'NCF'], ['rncc', 'NCC'], ['cal', 'Calibração'], ['ins', 'Instrumento']];
@@ -13083,6 +13165,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         S.pickRec = rec;
         $('#fx-fields').hidden = !rec;
         if (rec) setFieldValues(fd, rec);
+        if (rec && fd.mod === 'INS') insCustoPrefill(rec);   /* v138 */
         preview();
       };
       pk.addEventListener('change', load);
@@ -13205,6 +13288,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       html += `<div class="pv"><h3>${fd.pick ? 'Depois da calibração' : 'Instrumento'}</h3><div class="big mono">${esc(r.codigo || vals.A || '')}</div>
         ${pvRow('Validade', fD(r.validade))}${pvRow('Dias para vencer', r.dias == null ? '—' : NF.format(r.dias))}${pvRow('Status', chipIns(r.status))}
         ${pvRow('EMA (critério)', r.ema == null ? '<span class="muted">sem EMA</span>' : '± ' + fNum(r.ema) + (r.emaInst != null ? ' <span class="muted">(do instrumento)</span>' : ''))}${pvRow('Erro + incerteza', r.resCal == null || r.resCal === '' ? '—' : fNum(Math.round((Math.abs(+r.resCal) + Math.abs(r.incert || 0)) * 1e6) / 1e6))}${pvRow('Resultado', chipRes(r.resultado) || '—')}</div>`;
+      { const cv = ['AA', 'AJ', 'AK', 'AL'].map((cc) => { const n = numIn(vals[cc]); return n == null || isNaN(n) ? 0 : n; }), tot = cv.reduce((a, b) => a + b, 0);   /* v138: total da calibração */
+        if (tot > 0) html += `<div class="pv"><h3>Custos desta calibração</h3>${pvRow('Total', '<b>R$ ' + money(tot) + '</b>')}${['Calibração', 'Transporte', 'Deslocamento do técnico', 'Outros'].map((l, i) => (cv[i] ? pvRow(l, 'R$ ' + money(cv[i])) : '')).join('')}</div>`; }
       if (r.resultado === 'REPROVADO') warn.push(`<b>Reprovado:</b> maior erro ${esc(fNum(r.resCal))}${r.incert ? ' + incerteza ' + esc(fNum(r.incert)) : ''} passa do EMA ±${esc(fNum(r.ema))}. Ao gravar, o instrumento fica <b>bloqueado</b> e a Central pede a análise de impacto.`);
       else if (r.resultado === 'SEM CRITÉRIO') warn.push('Este tipo de equipamento ainda não tem EMA: a calibração fica “Sem EMA” até você preencher o EMA em Configurações › Calibração (ou o EMA próprio do instrumento).');
       else if (r.resultado === 'AGUARDANDO ANÁLISE' && fd.pick) warn.push('Sem o maior erro do certificado, a calibração fica “Aguardando análise”.');
@@ -13264,9 +13349,15 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       } else {
         const rec = c.rec, key = rec.key;
         const label = fd.label(c.vals, recTitle(rec), rec);
+        if (calP && rec.deslPend) { c.changes.deslPend = null; c.before.deslPend = rec.deslPend; }   /* v138: a parte da visita já entrou */
         await updateRecord(fd.mod, key, c.changes);
-        if (calP && calP.ev && dNova != null && rec.dataCal != null && (rec.custo != null || rec.lab) && !(insEvents()[key] || []).some((h) => h.t === 'cal' && h.d != null && Math.floor(h.d) === Math.floor(rec.dataCal))) {
-          try { await addInsEvent(key, { t: 'cal', d: rec.dataCal, lab: rec.lab || '', cert: rec.cert || '', custo: rec.custo != null ? rec.custo : null, freq: rec.freq != null ? rec.freq : null, obs: 'calibração anterior, que estava só na ficha', ficha: true }); } catch (e) { console.warn('histórico do instrumento não gravado', e); }   /* v137: não perde a calibração anterior */
+        if (calP && calP.ev && S.form === 'cal' && S.calVis && S.calVis.on && S.calVis.tot && S.calVis.keys.length > 1) {   /* v138: deslocamento da visita fica pendente nos outros instrumentos */
+          const V = S.calVis, n = V.keys.length, sh = Math.round((V.tot / n) * 100) / 100;
+          for (const k2 of V.keys.filter((k3) => k3 !== key)) { try { await updateRecord('INS', k2, { deslPend: { d: calP.ev.d, v: sh, tot: V.tot, n, de: rec.codigo, lab: calP.ev.lab || '' } }); } catch (e) { console.warn('visita: não gravou em', k2, e); } }
+          S.calVis = null;
+        }
+        if (calP && calP.ev && dNova != null && rec.dataCal != null && (rec.custo != null || rec.custoTr != null || rec.custoDesl != null || rec.custoOut != null) && !(insEvents()[key] || []).some((h) => h.t === 'cal' && h.d != null && Math.floor(h.d) === Math.floor(rec.dataCal))) {
+          try { await addInsEvent(key, { t: 'cal', d: rec.dataCal, lab: rec.lab || '', cert: rec.cert || '', custo: rec.custo != null ? rec.custo : null, tr: rec.custoTr, desl: rec.custoDesl, out: rec.custoOut, outQ: rec.custoOutQ || null, freq: rec.freq != null ? rec.freq : null, obs: 'calibração anterior, que estava só na ficha', ficha: true }); } catch (e) { console.warn('histórico do instrumento não gravado', e); }   /* v137: não perde a calibração anterior */
         }
         if (calP && calP.ev) { try { await addInsEvent(key, calP.ev); } catch (e) { console.warn('histórico do instrumento não gravado', e); } }
         pubQueueLots(fd.mod, c.changes, c.before);
