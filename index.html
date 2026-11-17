@@ -6038,7 +6038,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 134; window.CQ_V = APP_V;
+    const APP_V = 135; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7878,6 +7878,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function render() {
     const main = $('#main');
     if (!S.model) return;
+    try { cqDbRecAuto(); } catch (e) { /* v135 */ }
     if (CQ_ABA) { S.view = 'certq'; VIEWS.certq(main); return; }   /* v42: a aba de certificados só tem esta tela */
     if (!viewOk(S.view)) {
       const fv = firstView();
@@ -9635,7 +9636,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       perfil += `<div class="dvpq"><div><span class="dvk">Pendências</span><b>${nf(pend)}</b><small>esperando cliente</small></div><div><span class="dvk">Reabertos</span><b${reabP.length ? ' class="ru"' : ''}>${nf(reabP.length)}</b><small>voltaram para a fila</small></div></div></div>`;
       const minis1 = `<div class="dvms">${[mini(P.m === 'd' ? 'Emitidos no dia' : 'Emitidos', nf(Ao.length), P.m === 'd' ? 'certificados' : 'certificados ' + qual, dlt2(Ao.length, Apo.length, (v) => nf(v)), hX.map((X) => X.length)),
         mini('Itens', nf(itens(Ao)), qual, dlt2(itens(Ao), itens(Apo), (v, b) => pcT(v, b)), hX.map(itens)),
-        mini('Tempo de emissão', tO ? NF1.format(tO.m) + ' d' : '—', tE ? `equipe ${NF1.format(tE.m)} d` : 'dias úteis', tO && tApo ? dlt2(tO.m, tApo.m, (v) => NF1.format(v) + ' d') : '', hX.map((X) => { const t = tempo(X); return t ? t.m : 0; })),
+        (() => { /* v135: ★ clientes críticos no prazo (no lugar de "Tempo de emissão") */
+          const cb = (X) => X.filter((c) => tipo(c) !== 'v' && cqCrit(c)), pc = (X) => { const B2 = cb(X); return B2.length ? (B2.filter(cqNoPrazo).length / B2.length) * 100 : null; };
+          const Bo = cb(Ao), vo = pc(Ao), ve = pc(A0), vp = pc(Apo);
+          return mini('<i class="dvdm" aria-hidden="true">★</i> Críticos no prazo', vo == null ? '—' : Math.round(vo) + '%', Bo.length ? `${nf(Bo.filter(cqNoPrazo).length)} de ${nf(Bo.length)} pedidos${ve != null ? ` · equipe ${Math.round(ve)}%` : ''}` : temCrit() ? 'nenhum pedido de cliente crítico' : 'marque os críticos em Configurações › Clientes', vo != null && vp != null ? dlt2(vo, vp, (v) => Math.round(v) + ' p.p.') : '', hX.map((X) => pc(X) || 0));
+        })(),
         mini('No prazo', pcO == null ? '—' : pcO + '%', `${nf(fora(Ao))} fora do prazo`, '', hX.map(okP))].join('')}</div>`;
       /* o dia: cada ponto é um registro (● certificado, ◆ Data Book) */
       const evs = CC.filter((c) => eh(c) && dC(c) === diaRef).map((c) => ({ at: c.conc.at, k: tipo(c) === 'f' ? 'r' : 'c', t: `PV ${cqNum(c)}`, s: tipo(c) === 'f' ? 'fora do prazo' : `${c.conc.itens || 0} itens` }))
@@ -9697,7 +9702,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       }
       let h = `<div class="dpop dvop">${topo}<div class="dvc2">${perfil}<div class="dvrc">${corpo}</div></div></div>`;
       /* v132: dá para minimizar (como o "Mais" de antes); lembra aberto/fechado neste aparelho */
-      const aberto = lsGet('cq-dp-aberto', '1') !== '0';
+      const aberto = !!window.__cqDpAberto;   /* v135: abre fechado; fica aberto só enquanto a Central estiver aberta */
       return `<details class="nxmore dpwrap" data-dp${aberto ? ' open' : ''}><summary>Desempenho por operador <small>${esc(op.nome)} · ${esc(P.label)} · toque na foto para trocar de pessoa</small></summary><div class="dpin">${h}</div></details>`;
     };
     if (P.m === 'd') {
@@ -16416,6 +16421,50 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <div class="cfgitem"><b>Motivos de pendência</b><span class="use">Um por linha. Aparecem ao registrar a pendência no cartão.</span><textarea id="cq-mt" spellcheck="false" ${dis}>${esc(cf.motivos.join('\n'))}</textarea></div>
       ${ro ? '' : '<div class="formfoot"><button class="btn primary" type="button" id="cq-cfgsave">Salvar regras dos certificados</button></div>'}
     </div></div></div></section>`;
+  }
+  /* v135: Data Books antigos — os números sempre ficaram na linha "Documento completo salvo: … N página(s) · com a NF · K certificado(s) de origem · E etiqueta(s)"
+     do histórico (log/AAAA-MM-DD). Lê o histórico dia a dia (uma leitura por dia, uma vez só), completa os Data Books sem números e marca os de antes da v113. Sem botão: roda sozinha. */
+  async function cqDbRecupera() {
+    const C = cqCards(); if (!C.length) return null;
+    {
+      const ini = Math.min(Date.now(), ...C.map((c) => Math.min((c.conc && c.conc.at) || Infinity, (c.db && c.db.at) || Infinity, c.imp || Infinity)).filter(isFinite));
+      const dias = []; for (let d = new Date(ini); d.getTime() <= Date.now() + 864e5; d.setDate(d.getDate() + 1)) { const k = today8(d); if (!dias.includes(k)) dias.push(k); }
+      const porNum = new Map(); C.forEach((c) => { const k = cqNum(c); porNum.set(k, (porNum.get(k) || []).concat([c])); });
+      const achou = new Map(); let lidos = 0;
+      for (let i = 0; i < dias.length; i += 8) {
+        const snaps = await Promise.all(dias.slice(i, i + 8).map((d) => DB.db.doc('log/' + d).get().catch(() => null)));
+        snaps.forEach((sn) => { const e = (sn && sn.exists && (sn.data() || {}).e) || {}; Object.values(e).forEach((x) => {
+          if (!x || x.mod !== 'CERTQ' || !/^Documento completo/i.test(String(x.label || ''))) return;
+          const L = porNum.get(String(x.key || '')); if (!L) return;
+          const c = L.length === 1 ? L[0] : L.filter((y) => !y.conc || !y.conc.at || y.conc.at <= x.at + 864e5).sort((p, q) => ((q.conc || {}).at || 0) - ((p.conc || {}).at || 0))[0] || L[0];
+          const o = achou.get(c.k); if (!o || o.x.at < x.at) achou.set(c.k, { c, x });
+        }); });
+        lidos = Math.min(dias.length, i + 8);
+      }
+      await resolveNames(Array.from(achou.values()).map((o) => o.x.by).filter(Boolean));
+      const nomeU = (u) => { const p = u ? ehPessoa(u) : null; return (p && p.nome) || (u && (DB.names[u] || (DB.perfU[u] || {}).email)) || null; };
+      let comp = 0, marc = 0, n = 0; const tarefas = [];
+      achou.forEach(({ c, x }) => {
+        const tx = String(x.label || ''), nm = (re) => { const m = re.exec(tx); return m ? +m[1] : null; };
+        const num = { pags: nm(/(\d+) página/), orig: nm(/(\d+) certificado\(s\) de origem/), etq: nm(/(\d+) etiqueta/), nf: /com a NF/.test(tx) ? true : /sem a NF/.test(tx) ? false : null };
+        if (c.db && c.db.pags != null) return;
+        if (c.db) { if (num.pags == null) return; tarefas.push([c, Object.assign({}, c.db, num), 'c']); }
+        else tarefas.push([c, Object.assign({ at: x.at, by: x.by || null, nome: nomeU(x.by), rec: true }, num), 'm']);
+      });
+      for (const [c, db, t] of tarefas) { n++; await cqPatch(c, { db: clean(db) }, null); if (t === 'c') comp++; else marc++; }
+      const falta = cqCards().filter((c) => c.db && c.db.at && c.db.pags == null).length;
+      if (comp || marc) logEntry('GERAL', 'cfg', 'alterado', `Data Books antigos recuperados do histórico: ${comp} completados, ${marc} marcados`, null);
+      return { at: Date.now(), by: DB.me || null, dias: dias.length, comp, marc, falta };
+    }
+  }
+  /* roda sozinha uma vez: a primeira vez que um administrador abre a Central depois da v135 (marca em cfg/main.dbRec; se cair no meio, tenta de novo na próxima) */
+  function cqDbRecAuto() {
+    if (window.__cqDbRecIni || !S.model || (DB.cfg || {}).dbRec || !bkPode() || !cw('certq') || !cqCards().length) return;
+    window.__cqDbRecIni = true;
+    setTimeout(async () => {
+      try { const r = await cqDbRecupera(); if (r) await DB.db.doc('cfg/main').update({ dbRec: r }); }
+      catch (e) { console.warn('Data Books antigos: não terminou, tenta de novo na próxima vez', e); window.__cqDbRecIni = false; }
+    }, window.__cqDbRecEspera != null ? window.__cqDbRecEspera : 8000);
   }
   function cqCfgWire(ro) {
     if (ro || !$('#cq-cfg')) return;
@@ -23559,7 +23608,7 @@ ${trGuil(W, H, M, B)}
   const corrLines = (m) => (Array.isArray(m.abCorr) ? m.abCorr : []).map((c) => `Abertura corrigida por ${esc(c.nome || '')} em ${dmy(c.at)} às ${hhmm(c.at)}: ${esc(c.motivo || '')}`);
 
   /* ================= eventos globais ================= */
-  document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.matches && d.matches('details[data-dp]')) lsSet('cq-dp-aberto', d.open ? '1' : '0'); }, true);   /* v132 */
+  document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.matches && d.matches('details[data-dp]')) window.__cqDpAberto = d.open; }, true);   /* v132; v135: não guarda no aparelho */
   document.addEventListener('click', (e) => {
     const t = e.target;
     const act = t.closest('[data-act]'), op = t.closest('[data-open]'), g = t.closest('[data-go]');
