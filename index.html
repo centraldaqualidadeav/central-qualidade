@@ -1588,7 +1588,7 @@ body.tabmode .main { padding: 0 !important; }
 .ibxr .muted { font-size: 12.5px; margin-top: 2px; } .ibxr .chip { margin-left: 4px; }
 .imgzoom { position: fixed; inset: 0; z-index: 400; background: rgba(0,0,0,.85); display: grid; place-items: center; padding: 20px; cursor: zoom-out; }
 .imgzoom img { max-width: 100%; max-height: calc(calc(100vh / var(--cqz, 1)) - 80px); border-radius: 6px; } .imgzoom .btn { position: absolute; top: 14px; right: 14px; }
-.insfotos img[data-zoom] { cursor: zoom-in; }
+.insfotos img[data-zoom] { cursor: zoom-in; } .rrfotos figure img, .fot img, .rffot .ph img, .tbfotos .ft img { cursor: zoom-in; }   /* v139 */
 .insfotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
 .insfotos figure { position: relative; margin: 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface-2); }
 .insfotos img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
@@ -6050,7 +6050,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 138; window.CQ_V = APP_V;
+    const APP_V = 140; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -10713,6 +10713,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const esc1 = (e) => { if (e.key === 'Escape') { e.stopPropagation(); fecha(); } };
     o.onclick = fecha; document.addEventListener('keydown', esc1, true); document.body.appendChild(o);
   }
+  /* v139: fotos da NCF, do RIR e do RIF abrem grandes ao tocar (antes só a miniatura) */
+  const ZOOM_SEL = '.rrfotos figure img, .fot img, .rffot .ph img, .tbfotos .ft img';
+  document.addEventListener('click', (e) => { const im = e.target && e.target.closest && e.target.closest(ZOOM_SEL); if (im && im.src) { e.preventDefault(); e.stopPropagation(); imgZoom(im.src); } }, true);
   /* ---------- fotos e estado do instrumento (insfot/{key}: índice com fotos, estado e miniatura; insfot/{key}__{id}: a foto) ---------- */
   const INSF = {};
   async function insFotoIdx(key, fresh) {
@@ -15195,7 +15198,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     Object.keys(idx).forEach((k) => { if (k !== atual && agora - (idx[k] || 0) > 3 * 864e5) { ['tipo'].concat(CQ_TIPOS).forEach((t) => { try { localStorage.removeItem(cqK(t, k)); } catch (e) { /* sem armazenamento */ } }); delete idx[k]; } });
     idx[atual] = agora; cqLS(CQ_NS_IDX, JSON.stringify(idx));
   }
-  const CQ_MOD = { tubos: 'Principal', grades: 'Grade de piso', valvulas: 'Válvulas' };
+  const CQ_MOD = { tubos: 'Principal', grades: 'Produtos fabricados', valvulas: 'Válvulas' };   /* v140 */
   const cqAdm = () => bkPode();
   const cqDig = (v) => docN(v);
   const cqKey = (pv, seq) => cqDig(pv) + (seq ? '-' + seq : '');
@@ -15871,7 +15874,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (tipo === 'valvulas') v.I51 = 'Pressão (bar)';
     const s = tipo === 'grades' ? { itens: 1, inicio: 1, comps: 1, corrs: 1, opt: { galv: true }, v, cb: {} }
       : tipo === 'valvulas' ? { itens: 1, inicio: 1, comps: 1, corrs: 1, testes: 1, trats: 1, v, cb: {} } : { itens: 1, inicio: 1, v, cb: {} };
-    return JSON.stringify(tipo === 'grades' ? { certs: [s], atual: 0, syncExtras: true } : { certs: [s], atual: 0, syncExtras: true, mec: 2 });
+    return JSON.stringify(tipo === 'grades' ? { certs: [s], atual: 0, syncExtras: true, pf: 1 } : { certs: [s], atual: 0, syncExtras: true, mec: 2 });
   }
   const cqLS = (k, v) => { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { /* sem armazenamento */ } };
   const cqLG = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
@@ -16348,12 +16351,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if ((app.TIPO === 'grades' || app.TIPO === 'valvulas') && typeof app.atualizarCorridas === 'function') {
       try { app.atualizarCorridas(); } catch (e) { /* segue */ }
       /* tabela de corridas: química e mecânica do certificado da usina */
-      const s2 = JSON.parse(JSON.stringify(app.state)), sg2 = s2.sug || (s2.sug = {}), cr = F.filter((g) => g.tbl === 'corr'), MG = { 'escoamento (mpa)': 'esc', 'resistência (mpa)': 'res', 'alongamento (%)': 'along' };
+      const s2 = JSON.parse(JSON.stringify(app.state)), sg2 = s2.sug || (s2.sug = {}), cr = F.filter((g) => g.tbl === 'corr' || g.tbl === 'mec'), MG = { 'escoamento (mpa)': 'esc', 'resistência (mpa)': 'res', 'alongamento (%)': 'along', 'redução de área (%)': 'red', 'dureza (hb)': 'dur', 'impacto – temperatura (°c)': 'chT', 'impacto – média (j)': 'chJ' };   /* v140: tabela 4 (mecânica) também */
       let mexeu = false;
       for (let n = 1; n <= (s2.corrs || 0); n++) {
         const fc = cr.find((g) => g.linha === n && g.label === 'Corrida'), cv = fc && s2.v[fc.ref]; if (!cv) continue;
         const x = lots.find((l) => E.key(l.corrida) === E.key(cv)), d = x && CD[x.id]; if (!corrTem(d)) continue;
-        cr.filter((g) => g.linha === n).forEach((g) => {
+        cr.filter((g) => g.linha === n && g.c1 !== 1).forEach((g) => {
           const el = quimEl(g.label), mk = MG[String(g.label).toLowerCase()], val = el ? (d.quim || {})[el] : mk ? (d.mec || {})[mk] : null;
           if (E.filled(val) && !s2.v[g.ref]) { s2.v[g.ref] = String(val); sg2[g.ref] = true; mexeu = true; }
         });
