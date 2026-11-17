@@ -6038,7 +6038,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 135; window.CQ_V = APP_V;
+    const APP_V = 136; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -8691,7 +8691,17 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     return `<table class="nxtb"><thead><tr>${th}</tr></thead><tbody>${linhas.map(tr).join('')}</tbody>${tot ? `<tfoot><tr><td>Total</td>${tot.map((x) => `<td class="n">${x}</td>`).join('')}<td class="nxsc"></td><td></td></tr></tfoot>` : ''}</table>`;
   }
   const NXF = { rnc: () => ncfPainelHTML(), rncc: () => nccPainelHTML(), av: () => avPainelHTML(), serv: () => servPainelHTML(), cal: () => calPainelHTML(), rir: () => rirNxPainelHTML(), rif: () => rifNxPainelHTML(), sold: () => soldNxPainelHTML(), iqf: () => iqfNxPainelHTML(), cq: () => cqNxPainelHTML(), proc: () => procNxPainelHTML() };
-  function nxAtualiza(mod) { const el = document.getElementById('nx-' + mod); if (el && S.view === 'painel' && NXF[mod]) el.outerHTML = NXF[mod](); }
+  /* v136: ao trocar período/pessoa, o botão tocado fica no mesmo lugar da tela (a página não pula para cima ou para baixo) */
+  let nxUltClick = null;
+  document.addEventListener('click', (e) => { nxUltClick = e.target && e.target.closest ? e.target.closest('[data-act]') : null; }, true);
+  const nxRolador = (n) => { for (let p = n && n.parentElement; p && p !== document.body; p = p.parentElement) { const o = getComputedStyle(p).overflowY; if ((o === 'auto' || o === 'scroll') && p.scrollHeight > p.clientHeight) return p; } return null; };
+  function nxAtualiza(mod) {
+    const el = document.getElementById('nx-' + mod); if (!(el && S.view === 'painel' && NXF[mod])) return;
+    let anc = null;
+    if (nxUltClick && el.contains(nxUltClick) && nxUltClick.isConnected) { const sel = `[data-act="${CSS.escape(nxUltClick.dataset.act)}"]${nxUltClick.dataset.key != null ? `[data-key="${CSS.escape(nxUltClick.dataset.key)}"]` : ''}`; anc = { sel, i: Array.from(el.querySelectorAll(sel)).indexOf(nxUltClick), top: nxUltClick.getBoundingClientRect().top }; }
+    el.outerHTML = NXF[mod]();
+    if (anc && anc.i >= 0) { const n = document.getElementById('nx-' + mod), b = n && n.querySelectorAll(anc.sel)[anc.i]; if (b) { const d = b.getBoundingClientRect().top - anc.top; if (Math.abs(d) > 1) { const r = nxRolador(b); if (r) r.scrollTop += d; else window.scrollBy(0, d); } } }
+  }
   const nxAtualizaDia = () => Object.keys(NX).forEach((m) => { if (NX[m].m === 'd') nxAtualiza(m); });
   function nxAct(a, key) {
     const [mod, k] = String(key || '').split('|'), st = NX[mod]; if (!st) return false;
