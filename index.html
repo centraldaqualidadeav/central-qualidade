@@ -6051,7 +6051,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 143; window.CQ_V = APP_V;
+    const APP_V = 144; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -9006,9 +9006,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     /* v143: Desempenho por quem lança (lotes), mesmo visual dos Certificados e do RIR, na cor dos Lotes */
     const avOpHTML = () => {
       const mt = (x) => (DB.meta.AV || {})[x.key] || {}, cS = (x) => { const m = mt(x); return m._c ? msSer(m._c) : null; };
-      const nomeU = (u) => { const p = u ? ehPessoa(u) : null; return (p && p.nome) || (u && DB.names[u]) || ''; };
+      const nomeU = (u) => { const p = u ? ehPessoa(u) : null; return (p && p.nome) || (u && DB.names[u]) || (u && (DB.perfU[u] || {}).email) || ''; };
       const semNome = TODOS.map((x) => mt(x)._cb).filter((u) => u && !(u in DB.names));
-      if (semNome.length && !window.__avNomes) { window.__avNomes = true; resolveNames(Array.from(new Set(semNome))).then(() => nxAtualiza('av')).catch(() => {}); }
+      if (semNome.length && !window.__avNomes) { window.__avNomes = true; resolveNames(Array.from(new Set(semNome))).catch(() => {}).then(() => nxAtualiza('av')); }
       const a12 = P.b - 370, fora = avFora(), qual = { d: 'no dia', m: 'no mês', t: 'no trimestre', a: 'em 12 meses' }[P.m];
       const L = TODOS.filter((x) => { const d = cS(x); return d != null && d <= P.b && d >= a12 && mt(x)._cb; });
       const cont = new Map(); L.forEach((x) => { const u = mt(x)._cb, nm = nomeU(u), k = E.key(nm || u); if (!nm || fora.has(E.key(nm))) return; const o = cont.get(k) || { k, nome: nm, u: new Set(), n: 0, t: 0 }; o.u.add(u); if (cS(x) >= P.a) o.n++; o.t++; cont.set(k, o); });
@@ -18262,13 +18262,16 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* v143: quem não aparece no "Desempenho por quem lança" (Painel › Lotes); os lotes da pessoa continuam nos totais */
   const avFora = () => new Set(((DB.cfg || {}).avFora || []).map((n) => E.key(n)).filter(Boolean));
   function avForaHTML() {
-    const fora = avFora(), m = new Map(), mt = DB.meta.AV || {};
-    Object.values(mt).forEach((r) => { const u = r && r._cb; if (!u) return; const p = ehPessoa(u), n = (p && p.nome) || DB.names[u]; if (n && !m.has(E.key(n))) m.set(E.key(n), n); });
+    const fora = avFora(), m = new Map(), mt = DB.meta.AV || {}, falta = new Set();
+    const tent = window.__nomeTent || (window.__nomeTent = new Set());
+    Object.values(mt).forEach((r) => { const u = r && r._cb; if (!u) return; if (!(u in DB.names) && !tent.has(u)) { falta.add(u); return; } const p = ehPessoa(u), n = (p && p.nome) || DB.names[u] || (DB.perfU[u] || {}).email; if (n && !m.has(E.key(n))) m.set(E.key(n), n); });
+    /* v144: os nomes de quem lançou vêm do cadastro de usuários; na 1ª vez ainda não estão carregados: busca e redesenha a seção */
+    if (falta.size && !avForaHTML.busy) { avForaHTML.busy = true; falta.forEach((u) => tent.add(u)); resolveNames(Array.from(falta)).catch(() => {}).then(() => { avForaHTML.busy = false; const el = document.getElementById('av-fora'); if (el) { el.outerHTML = avForaHTML(); avForaWire(); } }); }
     ((DB.cfg || {}).avFora || []).forEach((n) => { const k = E.key(n); if (k && !m.has(k)) m.set(k, String(n).trim()); });
     const L = Array.from(m.entries()).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR'));
-    return `<section class="sec">${band('AV', 'Desempenho por quem lança (Painel)')}<div class="block"><div class="body">
+    return `<section class="sec" id="av-fora">${band('AV', 'Desempenho por quem lança (Painel)')}<div class="block"><div class="body">
       <p style="margin:0 0 10px;max-width:80ch">Marque quem <b>não</b> deve aparecer no quadro "Desempenho por quem lança" do Painel. Os lotes dessas pessoas continuam contando nos totais de lotes e na média da equipe.</p>
-      ${L.length ? `<div class="rifora">${L.map(([k, n]) => `<label><input type="checkbox" data-avf="${esc(n)}"${fora.has(k) ? ' checked' : ''}> ${esc(n)}</label>`).join('')}</div>` : '<p class="muted">Ninguém lançou lote pela Central ainda.</p>'}
+      ${L.length ? `<div class="rifora">${L.map(([k, n]) => `<label><input type="checkbox" data-avf="${esc(n)}"${fora.has(k) ? ' checked' : ''}> ${esc(n)}</label>`).join('')}</div>` : falta.size ? '<p class="muted">Carregando os nomes…</p>' : '<p class="muted">Ninguém lançou lote pela Central ainda.</p>'}
       <div class="formfoot"><button class="btn primary" type="button" id="av-forok">Salvar</button></div></div></div></section>`;
   }
   function avForaWire() {
