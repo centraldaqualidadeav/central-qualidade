@@ -341,6 +341,11 @@ ul.dvdl, p.dvdl { display: none !important; } .dvdl { list-style: none; margin: 
 .dvcl .cp { width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; background: var(--cc); color: var(--c); font: 600 11px var(--f-mono); }
 .dvcl .cn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .dvcl .cb { height: 8px; border-radius: 999px; background: var(--surface-2); position: relative; overflow: hidden; } .dvcl .cb i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--c); }
 .dvcl b { font: 700 17px var(--f-display); text-align: right; } .dvcl em { font: normal 11.5px var(--f-mono); color: var(--ink-3); text-align: right; }
+.dvfi > .dpchips + .dpchips { margin-top: 10px; } .dvfi .dvmodo { margin-left: 0; } .dvfi .dvmodo + .dpseg { margin-left: auto; }
+.dpav.dvico, .dvph > span.dvico { color: var(--ink-3); } .dpav.dvico svg { width: 18px; height: 18px; } .dvph > span.dvico svg { width: 58%; height: 58%; }
+.dvcols { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 7px; height: 150px; } .dvco { display: grid; grid-template-rows: 1fr auto auto; text-align: center; gap: 3px; min-width: 0; }
+.dvcb { display: flex; align-items: flex-end; background: color-mix(in srgb, var(--ink) 4%, transparent); border-radius: 8px; overflow: hidden; } .dvcb i { display: block; width: 100%; border-radius: 8px; background: linear-gradient(180deg, var(--c), color-mix(in srgb, var(--c) 20%, transparent)); }
+.dvco b { font: 700 15px var(--f-display); } .dvco span { font-size: 11px; color: var(--ink-3); } .dvgo { cursor: pointer; } .dvgo:hover .cn, .dvgo:hover b { color: var(--c); }
 .dvfl { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; } .dvfl li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
 .dvfl i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); } .dvfl i.r { background: var(--n-rnc); } .dvfl i.p { background: var(--n-ouro); } .dvfl b { display: block; font-weight: 600; font-size: 12.5px; } .dvfl small { color: var(--ink-3); font-size: 11.5px; } .dvfl em { font: normal 11.5px var(--f-mono); color: var(--ink-3); }
 @container (max-width: 860px) { .dvc2 { grid-template-columns: minmax(0, 1fr); } .dvr { width: 180px; height: 180px; } }
@@ -6051,7 +6056,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 144; window.CQ_V = APP_V;
+    const APP_V = 145; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -8989,7 +8994,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const ab = (a, b) => R.filter((x) => dentro(x.data, a, b)), cc = (a, b) => R.filter((x) => dentro(dInsp.get(x.key), a, b));
     const fornOpc = new Map(); TODOS.forEach((x) => { const k = E.key(x.forn || ''); if (k && !fornOpc.has(k)) fornOpc.set(k, String(x.forn).trim()); });
     const filtro = `<select id="nx-av-f" class="inp" aria-label="Fornecedor"><option value="">Fornecedor: todos</option>${Array.from(fornOpc).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR')).map(([k, n]) => `<option value="${esc(k)}"${k === fk ? ' selected' : ''}>${esc(n)}</option>`).join('')}</select>`;
-    const sec = (corpo) => `<section class="sec nxsec" id="nx-av" style="--c:var(--n-av)">${band('AV', 'Indicadores de lotes (AV)')}<div class="block"><div class="body">${nxBarra('av', st, P, filtro, dia)}${corpo}${avOpHTML()}</div></div></section>`;   /* v143: + Desempenho por quem lança */
+    const sec = (corpo) => `<section class="sec nxsec" id="nx-av" style="--c:var(--n-av)">${band('AV', 'Indicadores de lotes (AV)')}<div class="block"><div class="body">${nxBarra('av', st, P, filtro, dia)}${corpo}${avFiHTML()}${avOpHTML()}</div></div></section>`;   /* v143: + Desempenho por quem lança; v145: + por filial e top 10 fornecedores */
     const C = 'var(--n-av)', ROXO = 'var(--n-roxo)', OURO = 'var(--n-ouro)', VERM = 'var(--n-rnc)', CINZA = 'var(--n-geral)';
     const goA = (f) => ({ v: 'av', f: Object.assign(fk ? { forn: fornOpc.get(fk) } : {}, f || {}) });
     /* lotes parados (sem resultado): pela fila do RIR quando ele está ligado */
@@ -9102,6 +9107,127 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const h = `<div class="dpop dvop" style="--c:var(--n-av);--cc:color-mix(in srgb, var(--n-av) 14%, transparent)">${chips}<div class="dvc2">${perfil}<div class="dvrc">${corpo}</div></div></div>`;
       return `<details class="nxmore dpwrap" data-dp="av"${window.__avDpAberto ? ' open' : ''}><summary>Desempenho por quem lança <small>${esc(op.nome)} · ${esc(P.label)} · toque na foto para trocar de pessoa</small></summary><div class="dpin">${h}</div></details>`;
     };
+    /* v145: Desempenho por filial e top 10 fornecedores (no lugar de "Mais gráficos de lotes"); mesmo visual do "por quem lança" */
+    const avFiHTML = () => {
+      const modo = st.fm === 'fo' ? 'fo' : 'fi', nf = (n) => NF.format(n), fr = (a, b) => (b > 0 ? Math.max(0, Math.min(1, a / b)) : 0);
+      const qual = { d: 'no dia', m: 'no mês', t: 'no trimestre', a: 'em 12 meses' }[P.m], doP = { d: 'do dia', m: 'do mês', t: 'do trimestre', a: 'em 12 meses' }[P.m];
+      const melhorL = { d: 'melhor dia', m: 'melhor mês', t: 'melhor trimestre', a: '12 meses antes' }[P.m];
+      const a12 = P.b - 370, PV = P.prev || { a: (P.ant || [P.a - 1])[0], b: (P.ant || [P.a - 1])[0] }, H = P.hist, hol = M.hol, ateHoje = Math.min(P.b, hoje);
+      const L12 = R.filter((x) => dentro(x.data, a12, P.b));
+      const chaveF = (x) => E.key(x.filial || ''), chaveN = (x) => E.key(x.forn || ''), chave = modo === 'fi' ? chaveF : chaveN;
+      const cont = new Map(); L12.forEach((x) => { const k = chave(x); if (!k) return; const o = cont.get(k) || { k, nome: String((modo === 'fi' ? x.filial : x.forn) || '').trim(), n: 0, t: 0 }; if (fl(x.data) >= P.a) o.n++; o.t++; cont.set(k, o); });
+      let ENT = Array.from(cont.values()).sort((a, b) => b.n - a.n || b.t - a.t || a.nome.localeCompare(b.nome, 'pt-BR'));
+      if (modo === 'fo') { const comN = ENT.filter((o) => o.n > 0); ENT = (comN.length ? comN : ENT).slice(0, 10); }
+      const seg2 = `<div class="nxseg dpseg dvmodo" role="group" aria-label="Ver por">${[['fi', 'Filiais'], ['fo', 'Top 10 fornecedores']].map(([k, l]) => `<button type="button" data-act="av-fm" data-key="${k}" aria-pressed="${modo === k}">${l}</button>`).join('')}</div>`;
+      const segP = `<div class="nxseg dpseg" role="group" aria-label="Período">${[['m', 'Mês'], ['d', 'Dia'], ['t', 'Trimestre'], ['a', '12 meses']].map(([k, l]) => `<button type="button" data-act="nx-p" data-key="av|${k}" aria-pressed="${P.m === k}">${l}</button>`).join('')}</div>`;
+      const titulo = 'Desempenho por filial e top 10 fornecedores', wrap = (sub, h) => `<details class="nxmore dpwrap" data-dp="avfi"${window.__avFiAberto ? ' open' : ''}><summary>${titulo} <small>${sub}</small></summary><div class="dpin"><div class="dpop dvop dvfi" style="--c:var(--n-av);--cc:color-mix(in srgb, var(--n-av) 14%, transparent)"><div class="dpchips">${seg2}${segP}</div>${h}</div></div></details>`;
+      if (!L12.length) return '';
+      if (!ENT.length) return wrap(esc(P.label), `<p class="dpnt">${modo === 'fi' ? 'Nenhum lote com filial preenchida nos últimos 12 meses.' : 'Nenhum lote com fornecedor nos últimos 12 meses.'}</p>`);
+      const sel = modo === 'fi' ? st.fi : st.fo, it = ENT.find((o) => o.k === sel) || ENT[0], eh = (x) => chave(x) === it.k;
+      const em = (a, b, f) => R.filter((x) => dentro(x.data, a, b) && (!f || f(x)));
+      const A0 = em(P.a, P.b), Ao = A0.filter(eh), Apo = em(PV.a, PV.b, eh), hX = H.map((hh) => em(hh.a, hh.b, eh));
+      const lB = P.m === 'a' ? Apo.length : Math.max(Ao.length, ...hX.map((X) => X.length));
+      const taxa = (X) => { const I = X.filter(comRes); return I.length ? (I.filter(apr).length / I.length) * 100 : null; }, pc = (v) => (v == null ? '—' : Math.round(v) + '%');
+      const notas = (X) => new Set(X.map((x) => E.key(x.forn || '') + '|' + E.key(String(x.nf || '')))).size;
+      const okCert = (x) => E.filled(x.cert) && !E.isStar(x.cert), okCorr = (x) => E.filled(x.corrida) && !E.isStar(x.corrida);
+      const compl = (X) => (X.length ? (X.filter((x) => okCert(x) && okCorr(x)).length / X.length) * 100 : null), comCert = (X) => (X.length ? (X.filter(okCert).length / X.length) * 100 : null);
+      const posI = ENT.findIndex((o) => o.k === it.k) + 1, parte = A0.length ? Math.round((Ao.length / A0.length) * 100) : 0, tx = taxa(Ao);
+      const aneis = (vals, centro, sub) => { const RR = [92, 74, 56]; return `<div class="dvr"><svg viewBox="0 0 210 210" aria-hidden="true">${vals.map((p, i) => { const cc = 2 * Math.PI * RR[i]; return `<circle class="tr" cx="105" cy="105" r="${RR[i]}"/>${p > 0 ? `<circle class="v v${i}" cx="105" cy="105" r="${RR[i]}" stroke-dasharray="${(cc * p).toFixed(1)} ${cc.toFixed(1)}"/>` : ''}`; }).join('')}</svg><div><b>${centro}</b><small>${sub}</small></div></div>`; };
+      const leg = (L2) => `<ul class="dvrl">${L2.map(([l, v], i) => `<li><i class="o${i}"></i><span>${l}</span><b>${v}</b></li>`).join('')}</ul>`;
+      const spk = (V) => { const n = V.length; if (n < 2) return ''; const mx = Math.max(1e-9, ...V), w = 150, h = 36, X = (i) => 2 + (i * (w - 4)) / (n - 1), Y = (v) => h - 3 - (v / mx) * (h - 8); const d = V.map((v, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' '); return `<svg class="dvspk" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="a" d="${d} L${X(n - 1).toFixed(1)},${h} L2,${h} Z"/><path class="l" d="${d}" vector-effect="non-scaling-stroke"/></svg>`; };
+      const dl = (a, b, fmt) => (a == null || b == null || !isFinite(a) || !isFinite(b) || Math.abs(a - b) < 1e-9 ? '' : `<em class="dvd" title="comparado com o período anterior">${a > b ? '▲' : '▼'} ${fmt(Math.abs(a - b), b)}</em>`);
+      const mini = (l, v, sub, d2, V) => `<div class="dvt dvm"><span class="dvk">${l}</span><div class="dvmr"><b>${v}</b>${d2 || ''}</div><small>${sub}</small>${spk(V)}</div>`;
+      const lista5 = (pares, tit, sub, vazio) => {
+        const tot = pares.reduce((a, b) => a + b[1], 0), mx = pares.length ? Math.max(...pares.map((p) => p[1])) : 1, opc = (k) => (1 - k * 0.16).toFixed(2);
+        return `<div class="dvt"><div class="dvth"><b>${tit}</b><small>${sub}</small></div>${pares.length ? `<div class="dvfx">${pares.map(([, v, c2], k) => `<i style="flex:${v};opacity:${c2 ? 1 : opc(k)}${c2 ? ';background:' + c2 : ''}"></i>`).join('')}</div><ul class="dvcl">${pares.map(([n, v, c2, go], k) => `<li${go ? ` data-go="${esc(JSON.stringify(go))}" tabindex="0" class="dvgo"` : ''}><span class="cp"${c2 ? ` style="background:color-mix(in srgb, ${c2} 18%, transparent);color:${c2}"` : ''}>${c2 === OURO ? '!' : c2 === VERM ? '✕' : c2 === 'ok' ? '✓' : k + 1}</span><span class="cn" title="${esc(n)}">${esc(n)}</span><span class="cb"><i style="width:${((v / mx) * 100).toFixed(0)}%;opacity:${c2 && c2 !== 'ok' ? 1 : opc(k)}${c2 && c2 !== 'ok' ? ';background:' + c2 : ''}"></i></span><b>${nf(v)}</b><em>${tot ? Math.round((v / tot) * 100) : 0}%</em></li>`).join('')}</ul>` : `<p class="dpnt">${vazio || 'Nada no período.'}</p>`}</div>`;
+      };
+      const PREDIO = '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M11 33V12l10-5v26M21 15l9 3v15M8 33h25" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M14.5 15h3M14.5 20h3M14.5 25h3M24.5 22h2.5M24.5 27h2.5" stroke="currentColor" stroke-width="2.2"/></svg>';
+      const av = (o) => (modo === 'fi' ? PREDIO : esc(nxIni(o.nome)));
+      const ord = modo === 'fi' ? 'ª' : 'º';
+      const semC = R.filter((x) => eh(x) && dentro(x.data, a12, P.b) && !okCert(x)).length;
+      let pq;
+      if (modo === 'fi') { const par = parados.reduce((s2, g) => s2 + (g.lots || []).filter((x) => x && eh(x)).length, 0); pq = [['Sem certificado', nf(semC), 'lotes esperando', ''], ['Parados sem RIR', nf(par), `há ${RI_UTEIS} dias úteis +`, par ? 'ru' : '']]; }
+      else { const nRp = Ao.filter(rep).length; pq = [['Reprovados', nf(nRp), `${qual} → NCF`, nRp ? 'ru' : ''], ['Sem certificado', nf(semC), 'lotes esperando', '']]; }
+      const v3 = modo === 'fi' ? compl(Ao) : comCert(Ao);
+      const perfil = `<div class="dvt dvpf"><div class="dvgl"></div><div class="dvph"><span class="${modo === 'fi' ? 'dvico' : ''}">${av(it)}</span></div>
+        <b class="dvnm" title="${esc(it.nome)}">${esc(it.nome)}</b><small class="dvsb">${modo === 'fi' ? `${parte}% dos lotes ${doP}` : `${Ao.length ? posI + 'º em lotes · ' : ''}${parte}% do total ${doP}`}</small>
+        ${aneis([fr(Ao.length, lB), (tx || 0) / 100, (v3 || 0) / 100], Ao.length ? posI + ord : '—', `em lotes<br>${qual}`)}
+        ${leg([[`Lotes ${doP} × ${melhorL}`, `${nf(Ao.length)} / ${nf(lB)}`], ['Aprovação na inspeção', pc(tx)], [modo === 'fi' ? 'Lotes completos' : 'Com certificado', pc(v3)]])}
+        <div class="dvpq">${pq.map(([k, v, s2, c2]) => `<div><span class="dvk">${k}</span><b${c2 ? ` class="${c2}"` : ''}>${v}</b><small>${s2}</small></div>`).join('')}</div></div>`;
+      const top10 = new Set(ENT.map((o) => o.k)), txRef = modo === 'fi' ? taxa(A0) : taxa(A0.filter((x) => top10.has(chaveN(x))));
+      const nForn = (X) => new Set(X.map(chaveN).filter(Boolean)).size;
+      const ncfAb = modo === 'fo' ? (S.model.rnc || []).filter((r) => r.aberta && E.key(r.forn || '') === it.k).length : 0;
+      const minis = `<div class="dvms">${[mini('Lotes recebidos', nf(Ao.length), qual, dl(Ao.length, Apo.length, (v, b) => (b ? Math.round((v / b) * 100) + '%' : nf(v))), hX.map((X) => X.length)),
+        mini('Notas fiscais', nf(notas(Ao)), qual, dl(notas(Ao), notas(Apo), (v) => nf(v)), hX.map(notas)),
+        mini('Aprovação na inspeção', pc(tx), txRef == null ? 'resultado do RIR' : `${modo === 'fi' ? 'empresa' : 'média dos ' + ENT.length + ':'} ${Math.round(txRef)}%`, tx != null && taxa(Apo) != null ? dl(tx, taxa(Apo), (v) => Math.round(v) + ' p.p.') : '', hX.map((X) => taxa(X) || 0)),
+        modo === 'fi' ? mini('Fornecedores', nf(nForn(Ao)), 'diferentes ' + qual, dl(nForn(Ao), nForn(Apo), (v) => nf(v)), hX.map(nForn))
+          : mini('NCF abertas', nf(ncfAb), 'deste fornecedor', '', [])].join('')}</div>`;
+      let meio, linhas;
+      if (modo === 'fi') {
+        /* o dia: cada ponto é uma nota lançada na Central para a filial */
+        const mt = (x) => (DB.meta.AV || {})[x.key] || {}, cS = (x) => { const m = mt(x); return m._c ? msSer(m._c) : null; };
+        const diaRef = Math.min(P.b, hoje), gN = new Map();
+        R.filter((x) => eh(x) && cS(x) === diaRef).forEach((x) => { const k = chaveN(x) + '|' + E.key(String(x.nf || '')); const g = gN.get(k) || { at: Infinity, nf: x.nf, forn: x.forn, n: 0, semC: 0, rp: 0 }; g.at = Math.min(g.at, +mt(x)._c); g.n++; if (!okCert(x)) g.semC++; if (rep(x)) g.rp++; gN.set(k, g); });
+        const fN = (s2) => String(s2 || '').trim().split(/\s+/)[0] || '—';
+        const evs = Array.from(gN.values()).map((g) => ({ at: g.at, k: g.rp ? 'r' : g.semC ? 'p' : 'c', t: `NF ${disp(g.nf) || '—'}`, s: g.rp ? 'reprovado' : g.semC ? 'sem certificado' : `${fN(g.forn)} · ${g.n} ${g.n === 1 ? 'lote' : 'lotes'}` })).sort((a, b) => a.at - b.at);
+        const linhaDia = (() => {
+          if (!evs.length) return '<p class="dpnt">Nenhuma nota desta filial lançada neste dia.</p>';
+          const hr = (t) => { const d = new Date(t); return d.getHours() + d.getMinutes() / 60; }, agora = diaRef === hoje ? hr(Date.now()) : null;
+          const h0 = Math.min(7, Math.floor(hr(evs[0].at))), h1 = Math.max(17, Math.ceil(hr(evs[evs.length - 1].at)), agora != null ? Math.ceil(agora + 0.6) : 0), w = 760, h = 120, x = (t) => 14 + ((t - h0) / (h1 - h0)) * (w - 28);
+          const fim = agora != null ? Math.min(h1, agora) : h1;
+          let s = `<svg class="dvdia" viewBox="0 0 ${w} ${h}" role="img" aria-label="Linha do dia"><line class="tk" x1="14" x2="${w - 14}" y1="60" y2="60"/><line class="fe" x1="14" x2="${x(fim).toFixed(1)}" y1="60" y2="60"/>`;
+          for (let k = h0; k <= h1; k++) s += `${k <= fim ? `<line class="tq" x1="${x(k).toFixed(1)}" x2="${x(k).toFixed(1)}" y1="56" y2="64"/>` : ''}<text class="hx" x="${x(k).toFixed(1)}" y="${h - 4}">${k}h</text>`;
+          const u2 = [-1e9, -1e9]; let lado = 1;
+          evs.forEach((e) => {
+            const X = x(hr(e.at)), ln = u2[lado] < X - 74 ? lado : u2[1 - lado] < X - 74 ? 1 - lado : -1, cl = e.k, tip = `<title>${esc(hhmm(e.at) + ' · ' + e.t + ' · ' + e.s)}</title>`;
+            if (ln >= 0) { const y = ln ? 22 : 84; s += `<line class="pe ${cl}" x1="${X.toFixed(1)}" x2="${X.toFixed(1)}" y1="60" y2="${ln ? y + 10 : y - 10}"/><text class="et" x="${X.toFixed(1)}" y="${y}">${esc(e.t)}</text><text class="es" x="${X.toFixed(1)}" y="${y + 12}">${esc(e.s)}</text>`; u2[ln] = X; lado = 1 - ln; }
+            s += `<circle class="pt ${cl}" cx="${X.toFixed(1)}" cy="60" r="5.5">${tip}</circle>`;
+          });
+          if (agora != null && agora <= h1) s += `<circle class="ag" cx="${x(agora).toFixed(1)}" cy="60" r="10"/><rect class="agb" x="${(x(agora) + 11).toFixed(1)}" y="52" width="38" height="16"/><text class="agt" x="${(x(agora) + 30).toFixed(1)}" y="64">agora</text>`;
+          return s + '</svg>';
+        })();
+        const lista = evs.length ? `<ul class="dvdl">${evs.slice().reverse().slice(0, 8).map((e) => `<li><em>${hhmm(e.at)}</em><i class="${e.k}"></i><div><b>${esc(e.t)}</b><small>${esc(e.s)}</small></div></li>`).join('')}</ul>` : '';
+        const diaSub = `${diaRef === hoje ? 'hoje' : esc(E.fmtDate(diaRef))} · cada ponto é uma nota lançada · amarelo = sem certificado · vermelho = reprovado`;
+        meio = `<div class="dvt"><div class="dvth"><b>O dia da filial</b><small>${diaSub}</small></div><div class="dvdw">${linhaDia}</div>${lista}</div>`;
+        const ritmo = (() => {
+          let B = []; const dm = (t) => { const o = E.ymd(t); return String(o.d).padStart(2, '0') + '/' + String(o.m).padStart(2, '0'); };
+          if (P.m === 'a') B = H.map((hh) => ({ a: hh.a, b: hh.b, l: hh.l || MES3[E.ymd(hh.a).m - 1] }));
+          else if (P.m === 't') for (let t = P.a; t <= ateHoje; t += 7) B.push({ a: t, b: Math.min(t + 6, ateHoje), l: dm(t) });
+          else for (let t = P.m === 'd' ? diaRef - 29 : P.a; t <= ateHoje; t++) if (riUtil(t, hol)) B.push({ a: t, b: t, l: dm(t) });
+          const un = P.m === 'a' ? 'lotes por mês' : P.m === 't' ? 'lotes por semana' : P.m === 'd' ? 'lotes por dia · últimos 30 dias' : 'lotes por dia';
+          if (B.length < 2) return { un, svg: '<p class="dpnt">Ainda não dá para desenhar: poucos dias no período.</p>' };
+          const nOut = ENT.length - 1, vC = B.map((b) => em(b.a, b.b, eh).length), vE = nOut > 0 ? B.map((b) => em(b.a, b.b, (x) => chaveF(x) && !eh(x)).length / nOut) : null;
+          const w = 370, h = 250, pd = 18, n = B.length, mx = Math.max(1, ...vC, ...(vE || [])) * 1.15, X = (i) => pd + (i * (w - 2 * pd)) / (n - 1), Y = (v) => h - 18 - (v / mx) * (h - 30);
+          const sm = (V) => { const p = V.map((v, i) => [X(i), Y(v)]); let d = `M${p[0][0].toFixed(1)},${p[0][1].toFixed(1)}`; for (let i = 0; i < p.length - 1; i++) { const a = p[Math.max(0, i - 1)], b = p[i], c = p[i + 1], e = p[Math.min(p.length - 1, i + 2)]; d += ` C${(b[0] + (c[0] - a[0]) / 6).toFixed(1)},${Math.min(h - 18, b[1] + (c[1] - a[1]) / 6).toFixed(1)} ${(c[0] - (e[0] - b[0]) / 6).toFixed(1)},${Math.min(h - 18, c[1] - (e[1] - b[1]) / 6).toFixed(1)} ${c[0].toFixed(1)},${c[1].toFixed(1)}`; } return d; };
+          let s = `<svg class="dvrt" viewBox="0 0 ${w} ${h}" role="img" aria-label="Ritmo"><defs><linearGradient id="dvgr4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="s0"/><stop offset="1" class="s1"/></linearGradient></defs>`;
+          for (let k = 0; k < 4; k++) s += `<line class="gd" x1="${pd}" x2="${w - pd}" y1="${(12 + (k * (h - 30)) / 3).toFixed(0)}" y2="${(12 + (k * (h - 30)) / 3).toFixed(0)}"/>`;
+          const dC2 = sm(vC); s += `<path class="ar" style="fill:url(#dvgr4)" d="${dC2} L${X(n - 1).toFixed(1)},${h - 18} L${X(0).toFixed(1)},${h - 18} Z"/>${vE ? `<path class="eq" d="${sm(vE)}"/>` : ''}<path class="ln" d="${dC2}"/><circle class="fp" cx="${X(n - 1).toFixed(1)}" cy="${Y(vC[n - 1]).toFixed(1)}" r="4.5"/>`;
+          const pa = Math.max(1, Math.ceil(n / 6)); for (let i = 0; i < n; i += pa) s += `<text class="hx" x="${X(i).toFixed(1)}" y="${h - 3}">${esc(B[i].l)}</text>`;
+          return { un, svg: s + `</svg><div class="dvlg"><span><i class="l1"></i>lotes da filial</span>${vE ? '<span><i class="l3"></i>média das outras filiais</span>' : ''}</div>` };
+        })();
+        const fm = new Map(); Ao.forEach((x) => { const k = String(x.forn || '(sem fornecedor)').trim(); fm.set(k, (fm.get(k) || 0) + 1); });
+        const forn = Array.from(fm.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([n, v]) => [n, v, null, goA({ forn: n, filial: it.nome, de: E.isoDate(P.a), ate: E.isoDate(P.b) })]);
+        linhas = `<div class="dvrow"><div class="dvt dvrit"><div class="dvth"><b>Ritmo ${P.m === 'a' ? 'dos 12 meses' : P.m === 't' ? 'do trimestre' : 'do mês'}</b><small>${ritmo.un}</small></div>${ritmo.svg}</div>${lista5(forn, 'Fornecedores da filial', `lotes ${qual} · ${nf(Ao.length)} no total`)}</div>`;
+      } else {
+        /* lotes por mês: sempre os últimos 12 meses */
+        const fm0 = E.ymd(ateHoje), MS = []; for (let k = 11; k >= 0; k--) { let y = fm0.y, m = fm0.m - k; while (m < 1) { m += 12; y--; } const r = nxMes(y, m); MS.push({ a: r.a, b: r.b, l: MES3[m - 1] }); }
+        const vM = MS.map((mm) => em(mm.a, mm.b, eh).length), mxM = Math.max(1, ...vM);
+        meio = `<div class="dvt"><div class="dvth"><b>Lotes por mês</b><small>últimos 12 meses · ${esc(it.nome)}</small></div><div class="dvcols">${MS.map((mm, i) => `<div class="dvco" title="${esc(mm.l + ': ' + vM[i] + ' lotes')}"><div class="dvcb"><i style="height:${((vM[i] / mxM) * 100).toFixed(0)}%"></i></div><b>${nf(vM[i])}</b><span>${mm.l}</span></div>`).join('')}</div></div>`;
+        const tm = new Map(); Ao.forEach((x) => { const w = (String(x.desc || '').trim().split(/\s+/)[0] || 'Outros').toUpperCase(); const k = w.charAt(0) + w.slice(1).toLowerCase(); tm.set(k, (tm.get(k) || 0) + 1); });
+        const tipos = Array.from(tm.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5);
+        const nA = Ao.filter(apr).length, nCc = Ao.filter(conc).length, nRp = Ao.filter(rep).length, nAg = Ao.length - nA - nCc - nRp;
+        const saiu = [['Aprovados', nA, 'ok'], ['Sob concessão', nCc, OURO], ['Reprovados (→ NCF)', nRp, VERM]].filter((x) => x[1]);
+        const fil = new Map(); Ao.forEach((x) => { const k = String(x.filial || '(sem filial)').trim(); fil.set(k, (fil.get(k) || 0) + 1); });
+        const fils = Array.from(fil.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([n, v]) => [n, v, null, goA({ forn: it.nome, filial: n, de: E.isoDate(P.a), ate: E.isoDate(P.b) })]);
+        const dRp = (x) => (dInsp.has(x.key) ? dInsp.get(x.key) : fl(x.data));
+        const RP = R.filter((x) => eh(x) && dentro(x.data, a12, P.b) && (rep(x) || conc(x))).sort((a, b) => dRp(b) - dRp(a)).slice(0, 4);
+        const ultRp = RP.length ? `<ul class="dvfl">${RP.map((x) => { const nc = lotRncs(x)[0], mot = motRepOf(x); return `<li data-open="${nc ? esc(nc.rec.mod + ':' + nc.rec.key) : 'AV:' + esc(x.key)}" tabindex="0" class="dvgo"><i class="${conc(x) ? 'p' : 'r'}"></i><div><b>NF ${esc(disp(x.nf) || '—')} · ${esc(x.id || '')}</b><small>${esc([conc(x) ? 'sob concessão' : '', mot, nc ? nc.rec.num : ''].filter(Boolean).join(' · ') || 'reprovado')}</small></div><em>${esc(E.fmtDate(dRp(x)))}</em></li>`; }).join('')}</ul>` : '<p class="dpnt">Nenhuma reprovação nos últimos 12 meses.</p>';
+        linhas = `<div class="dvrow">${lista5(tipos, 'Tipo de material', `lotes ${qual} · ${nf(Ao.length)} no total`)}${lista5(saiu, 'Como foi na inspeção', `lotes ${qual}${nAg ? ' · ' + nf(nAg) + ' aguardando o RIR' : ''}`, 'Nenhum lote do período passou pelo RIR ainda.')}</div>
+          <div class="dvrow">${lista5(fils, 'Para qual filial foi', `lotes ${qual}`)}<div class="dvt"><div class="dvth"><b>Últimas reprovações</b><small>12 meses · toque para abrir</small></div>${ultRp}</div></div>`;
+      }
+      const chips = `<div class="dpchips dvfich">${ENT.map((o) => `<button type="button" class="dpch${o.k === it.k ? ' on' : ''}" data-act="av-fi" data-key="${esc(o.k)}" aria-pressed="${o.k === it.k}"><span class="dpav${modo === 'fi' ? ' dvico' : ''}">${av(o)}</span>${esc(o.nome)}</button>`).join('')}</div>`;
+      return wrap(`${esc(it.nome)} · ${esc(P.label)}`, `${chips}<div class="dvc2">${perfil}<div class="dvrc">${minis}${meio}${linhas}</div></div>`);
+    };
     if (P.m === 'd') {
       const repDia = (t) => R.filter((x) => dInsp.get(x.key) === t && (rep(x) || conc(x)));
       return nxDiaHTML({ P, R, ab, cc, abertasAgora: [], atrAgora: Array(lotPar).fill(0), atrEm, prox: () => null, urgH, goR: goA, sec, mod: 'AV', id: 'nxa', sigla: 'lotes', cor: C, quem: (x) => x.forn, resp: () => '', venc: () => [],
@@ -9143,11 +9269,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const i2 = parados.length ? ['crit', `<b>${lotPar === 1 ? '1 lote parado' : NF.format(lotPar) + ' lotes parados'}</b> sem ${comRIR ? 'inspeção' : 'resultado'} há ${RI_UTEIS} dias úteis ou mais (${parados.length === 1 ? '1 nota' : parados.length + ' notas'}).`] : ['ok', '<b>Nenhum lote parado</b> há 2 dias úteis ou mais.'];
     const topF = GF[0];
     const i3 = topF ? ['info', `<b>${esc(String(topF.nome).split(/\s+/).slice(0, 2).join(' '))}</b> mandou ${NF.format(Math.round(topF.n / totA * 100))}% dos lotes ${quando}${topF.r ? `, com ${topF.r} reprovado(s)` : ', sem reprovação'}.`] : ['info', `Nenhum lote ${quando}.`];
-    const mais = `<details class="nxmore"><summary>Mais gráficos de lotes (quem lançou, filial, top 10 fornecedores) · ${esc(P.label)}</summary><div class="charts">
-      ${chartHTML('Lotes por quem lançou', barsHTML(countBy(A, avQuemLancou), MOD.AV.c, { max: 10 }))}
-      ${chartHTML('Lotes por filial', barsHTML(countBy(A, (x) => x.filial).map((i) => ({ ...i, go: goA({ filial: i.label }) })), MOD.AV.c))}
-      ${chartHTML('Top 10 fornecedores', barsHTML(countBy(A, (x) => x.forn).map((i) => ({ ...i, go: goA({ forn: i.label }) })), MOD.AV.c, { max: 10 }), 'nº de lotes')}</div></details>`;
-    return sec(nxIns([i1, i2, i3], nxResumoT(P)) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Por fornecedor<small>${esc(P.label)}</small></h3>${tabF}</div>${rank}</div>${mais}`);
+    /* v145: "Mais gráficos de lotes" virou "Desempenho por filial e top 10 fornecedores" (avFiHTML) */
+    return sec(nxIns([i1, i2, i3], nxResumoT(P)) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Por fornecedor<small>${esc(P.label)}</small></h3>${tabF}</div>${rank}</div>`);
   }
 
   /* ================= v103: SERVIÇOS ================= */
@@ -23964,7 +24087,7 @@ ${trGuil(W, H, M, B)}
   const corrLines = (m) => (Array.isArray(m.abCorr) ? m.abCorr : []).map((c) => `Abertura corrigida por ${esc(c.nome || '')} em ${dmy(c.at)} às ${hhmm(c.at)}: ${esc(c.motivo || '')}`);
 
   /* ================= eventos globais ================= */
-  document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.matches && d.matches('details[data-dp]')) { if (d.dataset.dp === 'rir') window.__rirDpAberto = d.open; else if (d.dataset.dp === 'av') window.__avDpAberto = d.open; else window.__cqDpAberto = d.open; } }, true);   /* v132; v135: não guarda no aparelho */
+  document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.matches && d.matches('details[data-dp]')) { if (d.dataset.dp === 'rir') window.__rirDpAberto = d.open; else if (d.dataset.dp === 'av') window.__avDpAberto = d.open; else if (d.dataset.dp === 'avfi') window.__avFiAberto = d.open; else window.__cqDpAberto = d.open; } }, true);   /* v132; v135: não guarda no aparelho */
   document.addEventListener('click', (e) => {
     const t = e.target;
     const act = t.closest('[data-act]'), op = t.closest('[data-open]'), g = t.closest('[data-go]');
@@ -23995,6 +24118,8 @@ ${trGuil(W, H, M, B)}
       if (a === 'cq-op') { NX.cq.op = key; nxAtualiza('cq'); return; }   /* v131 */
       if (a === 'rir-op') { NX.rir.op = key; nxAtualiza('rir'); return; }   /* v141 */
       if (a === 'av-op') { NX.av.op = key; nxAtualiza('av'); return; }   /* v143 */
+      if (a === 'av-fm') { NX.av.fm = key; nxAtualiza('av'); return; }   /* v145 */
+      if (a === 'av-fi') { if (NX.av.fm === 'fo') NX.av.fo = key; else NX.av.fi = key; nxAtualiza('av'); return; }
       if (a === 'proc-seg') { const i = $('#nx-proc-q'); NX.proc.q = i ? i.value : ''; nxAtualiza('proc'); const n2 = $('#nx-proc-q'); if (n2) n2.focus(); return; }   /* v114: seguir um lote */
       if (a && a.startsWith('nx-') && nxAct(a, key)) return;   /* v101: indicadores no visual novo */
       if (a && a.startsWith('eq-') && eqAct(a, key)) return;
