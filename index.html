@@ -711,6 +711,7 @@ table.t tbody tr.pend td:first-child { box-shadow: inset 3px 0 0 var(--warn); }
 /* ---------- cadastro ---------- */
 .formwrap { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
 .fgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr)); gap: 12px 14px; }
+.rifora { display: flex; flex-wrap: wrap; gap: 8px 18px; } .rifora label { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; }   /* v142 */
 .fgrid .s2 { grid-column: span 2; } .fgrid .s3 { grid-column: 1 / -1; }
 /* v138: onde foi calibrado / visita do técnico; enviar junto */
 .calvis { display: grid; gap: 8px; } .cvseg { display: inline-flex; border: 1px solid var(--line-2); border-radius: 8px; overflow: hidden; width: max-content; max-width: 100%; }
@@ -6050,7 +6051,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 141; window.CQ_V = APP_V;
+    const APP_V = 142; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -9265,7 +9266,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     /* v141: Desempenho por inspetor (mesmo visual do "Desempenho por operador" dos Certificados), na cor do RIR */
     const insOpHTML = () => {
       const a12 = P.b - 370, dD = (c) => dFin(c), qual = { d: 'no dia', m: 'no mês', t: 'no trimestre', a: 'em 12 meses' }[P.m];
-      const cont = new Map(); C.filter((c) => dD(c) >= a12 && dD(c) <= P.b).forEach((c) => { const k = E.key(c.nome || ''); if (!k) return; const o = cont.get(k) || { k, nome: String(c.nome).trim(), n: 0, t: 0 }; if (dD(c) >= P.a) o.n += Object.keys(c.res || {}).length; o.t++; cont.set(k, o); });
+      const cont = new Map(), fora = riFora(); C.filter((c) => dD(c) >= a12 && dD(c) <= P.b).forEach((c) => { const k = E.key(c.nome || ''); if (!k || fora.has(k)) return;   /* v142: Configurações › RIR › fora do quadro */ const o = cont.get(k) || { k, nome: String(c.nome).trim(), n: 0, t: 0 }; if (dD(c) >= P.a) o.n += Object.keys(c.res || {}).length; o.t++; cont.set(k, o); });
       const OPS = Array.from(cont.values()).sort((a, b) => b.n - a.n || b.t - a.t || a.nome.localeCompare(b.nome, 'pt-BR'));
       if (!OPS.length) return '';
       const op = OPS.find((o) => o.k === st.op) || OPS[0], eh = (c) => E.key(c.nome || '') === op.k;
@@ -18157,9 +18158,27 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     return `<section class="sec">${band('RIR', 'RIR — checklist de recebimento')}<div class="block"><div class="body">
       <p style="margin:0 0 10px;max-width:80ch">Um item por linha, no formato <span class="mono">Seção ; item ; nf ou lote ; medida</span>. <b>nf</b> = respondido uma vez para a nota inteira; <b>lote</b> = respondido para cada lote. Escreva <b>medida</b> no fim quando o item pede o valor medido (com instrumento). Os RIR já começados guardam a lista do dia em que foram abertos.</p>
       <textarea id="ri-cfg" class="inp mono" style="width:100%;min-height:260px">${esc(L.map((o) => [o.sec, o.t, o.esc, o.med ? 'medida' : ''].filter((v, i) => i < 3 || v).join(' ; ')).join('\n'))}</textarea>
-      <div class="formfoot"><button class="btn primary" type="button" id="ri-cfgok">Salvar checklist</button><button class="btn" type="button" id="ri-cfgpad">Voltar à lista padrão</button></div></div></div></section>`;
+      <div class="formfoot"><button class="btn primary" type="button" id="ri-cfgok">Salvar checklist</button><button class="btn" type="button" id="ri-cfgpad">Voltar à lista padrão</button></div></div></div></section>${riForaHTML()}`;
+  }
+  /* v142: quem não aparece no "Desempenho por inspetor" (Painel › RIR); os RIR da pessoa continuam nos totais */
+  const riFora = () => new Set(((DB.cfg || {}).rirFora || []).map((n) => E.key(n)).filter(Boolean));
+  function riForaHTML() {
+    const fora = riFora(), m = new Map();
+    riCards().filter((c) => c.st === 'f' && E.filled(c.nome)).forEach((c) => { const k = E.key(c.nome); if (!m.has(k)) m.set(k, String(c.nome).trim()); });
+    ((DB.cfg || {}).rirFora || []).forEach((n) => { const k = E.key(n); if (k && !m.has(k)) m.set(k, String(n).trim()); });
+    const L = Array.from(m.entries()).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR'));
+    return `<section class="sec">${band('RIR', 'Desempenho por inspetor (Painel)')}<div class="block"><div class="body">
+      <p style="margin:0 0 10px;max-width:80ch">Marque quem <b>não</b> deve aparecer no quadro "Desempenho por inspetor" do Painel. Os RIR dessas pessoas continuam contando nos totais do RIR e na média da equipe.</p>
+      ${L.length ? `<div class="rifora">${L.map(([k, n]) => `<label><input type="checkbox" data-rif="${esc(n)}"${fora.has(k) ? ' checked' : ''}> ${esc(n)}</label>`).join('')}</div>` : '<p class="muted">Ninguém concluiu RIR ainda.</p>'}
+      <div class="formfoot"><button class="btn primary" type="button" id="ri-forok">Salvar</button></div></div></div></section>`;
   }
   function riCfgWire() {
+    const fo = $('#ri-forok');
+    if (fo) fo.onclick = async () => {
+      const L = $$('[data-rif]').filter((c) => c.checked).map((c) => c.dataset.rif);
+      try { await DB.db.doc('cfg/main').update({ rirFora: L }); logEntry('GERAL', 'cfg', 'alterado', 'Desempenho por inspetor: fora do quadro — ' + (L.join(', ') || 'ninguém'), null); toast('Gravado. ' + (L.length ? L.join(', ') + (L.length === 1 ? ' não aparece' : ' não aparecem') + ' mais no quadro do Painel.' : 'Todos aparecem no quadro do Painel.')); }
+      catch (err) { toast(err && (err.code === 'invalid_argument' || err.code === 'permission_denied') ? TXT.cfgDenied : 'Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); }
+    };
     const ok = $('#ri-cfgok'); if (!ok) return;
     const grava = async (itens, msg) => {
       try { await DB.db.doc('cfg/main').update({ rir: { itens } }); logEntry('GERAL', 'cfg', 'alterado', msg, null); toast('Checklist do RIR gravado.'); }
