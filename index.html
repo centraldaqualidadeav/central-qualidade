@@ -343,7 +343,7 @@ ul.dvdl, p.dvdl { display: none !important; } .dvdl { list-style: none; margin: 
 .dvcl b { font: 700 17px var(--f-display); text-align: right; } .dvcl em { font: normal 11.5px var(--f-mono); color: var(--ink-3); text-align: right; }
 .dvfi > .dpchips + .dpchips { margin-top: 10px; } .dvfi .dvmodo { margin-left: 0; } .dvfi .dvmodo + .dpseg { margin-left: auto; }
 .dpav.dvico, .dvph > span.dvico { color: var(--ink-3); } .dpav.dvico svg { width: 18px; height: 18px; } .dvph > span.dvico svg { width: 58%; height: 58%; }
-.dvpq b.ou { color: var(--n-ouro); }
+.dvpq b.ou { color: var(--n-ouro); } .dvfl i.g { background: var(--ok); }
 .dvcols { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 7px; height: 150px; } .dvco { display: grid; grid-template-rows: 1fr auto auto; text-align: center; gap: 3px; min-width: 0; }
 .dvcb { display: flex; align-items: flex-end; background: color-mix(in srgb, var(--ink) 4%, transparent); border-radius: 8px; overflow: hidden; } .dvcb i { display: block; width: 100%; border-radius: 8px; background: linear-gradient(180deg, var(--c), color-mix(in srgb, var(--c) 20%, transparent)); }
 .dvco b { font: 700 15px var(--f-display); } .dvco span { font-size: 11px; color: var(--ink-3); } .dvgo { cursor: pointer; } .dvgo:hover .cn, .dvgo:hover b { color: var(--c); }
@@ -479,6 +479,9 @@ button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 .nxmore { border: 1px solid var(--line); border-radius: var(--r); padding: 10px 14px; background: var(--surface); }
 .nxmore summary { cursor: pointer; font-weight: 600; font-size: 13px; color: var(--ink-2); } .nxmore[open] summary { margin-bottom: 12px; }
 @media (max-width: 1280px) { .nxks { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* v148: de 981 a 1280 px os cartões não deixam buraco: 5 cartões = 3 em cima + 2 mais largos embaixo; 4 cartões = 2 + 2 */
+@media (min-width: 981px) and (max-width: 1280px) { .nxks { grid-template-columns: repeat(6, minmax(0, 1fr)); } .nxks > .nxk { grid-column: span 2; }
+  .nxks > .nxk:nth-child(4):nth-last-child(2), .nxks > .nxk:nth-child(4):nth-last-child(2) ~ .nxk, .nxks > .nxk:first-child:nth-last-child(4), .nxks > .nxk:first-child:nth-last-child(4) ~ .nxk { grid-column: span 3; } }
 /* v105: barra do indicador em telas de 981 a ~1400 px: em vez de espremer (botões por baixo da data), vira uma grade 2×2 alinhada */
 .nxsec > .block > .body { container: nxb / inline-size; }
 @container nxb (max-width: 1040px) { .nxbar { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .nxbar .nxseg { grid-auto-columns: minmax(0, 1fr); } .nxbar .rindn { grid-template-columns: 40px minmax(0, 1fr) 40px; } }
@@ -6057,7 +6060,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 147; window.CQ_V = APP_V;
+    const APP_V = 151; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -8872,13 +8875,79 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const i2 = atrAgora.length ? ['crit', `<b>${atrAgora.length === 1 ? '1 NCF atrasada' : atrAgora.length + ' NCF atrasadas'} agora</b> — a mais antiga é da <b>${esc(String(velha.forn || 'sem fornecedor').split(/\s+/).slice(0, 2).join(' '))}</b>, há ${NF.format(Math.max(0, hoje - velha.prazoFinal))} dia(s) do prazo final.`] : ['ok', '<b>Nenhuma NCF atrasada</b> agora.'];
     const m1 = mot(A), m0 = mot(Ap), pm = (m, L) => (m && L.length ? Math.round(L.filter((x) => (x.motivo || '(sem motivo)') === m[0]).length / L.length * 100) : 0);
     const i3 = m1 ? ['info', `<b>${esc(m1[0])}</b> responde por ${pm(m1, A)}% das NCF ${quando}${Ap.length ? `; em ${esc(P.cmpL)} era ${pm(m1, Ap)}%` : ''}.`] : ['info', `Nenhuma NCF ${quando}.`];
-    /* gráficos de antes (comprador, filial, reincidência), no período, recolhidos */
-    const mais = `<details class="nxmore"><summary>Mais gráficos de NCF (comprador, filial, reincidência por fornecedor) · ${esc(P.label)}</summary><div class="charts">
-      ${chartHTML('NCF por comprador', barsHTML(countBy(A, (x) => x.comprador).map((i) => ({ ...i, go: goR({ comprador: i.label }) })), MOD.RNC.c, { max: 12 }))}
-      ${chartHTML('NCF por filial', barsHTML(countBy(A, (x) => x.filial).map((i) => ({ ...i, go: goR({ filial: i.label }) })), MOD.RNC.c))}
-      ${chartHTML('Fornecedores com reincidência', barsHTML(countBy(A.filter((x) => x.reinc === 'Sim'), (x) => x.forn).map((i) => ({ ...i, go: goR({ forn: i.label, reinc: 'Sim' }) })), MOD.RNC.c, { max: 10 }), 'top 10')}</div></details>`;
+    /* v149: Desempenho por comprador, filial e top 10 fornecedores (no lugar de "Mais gráficos de NCF") */
+    const ncfFiHTML = () => {
+      const modo = ['cmp', 'fil', 'for'].includes(st.fm) ? st.fm : 'cmp', nf = (n) => NF.format(n), fr = (a, b) => (b > 0 ? Math.max(0, Math.min(1, a / b)) : 0);
+      const qual = { m: 'no mês', t: 'no trimestre', a: 'em 12 meses' }[P.m], doP = { m: 'do mês', t: 'do trimestre', a: 'em 12 meses' }[P.m];
+      const maiorL = { m: 'maior mês', t: 'maior trimestre', a: '12 meses antes' }[P.m], a12 = Math.min(P.b, hoje) - 370, PV = P.prev, H = P.hist;
+      const pc = (v) => (v == null ? '—' : Math.round(v) + '%'), nomeL = (s2) => String(s2 || '').trim();
+      const chave = (x) => E.key(nomeL(modo === 'cmp' ? x.comprador : modo === 'fil' ? x.filial : x.forn));
+      const cont = new Map(); R.filter((x) => dentro(x.data, a12, P.b)).forEach((x) => { const k = chave(x); if (!k) return; const o = cont.get(k) || { k, nome: nomeL(modo === 'cmp' ? x.comprador : modo === 'fil' ? x.filial : x.forn), n: 0, t: 0 }; if (fl(x.data) >= P.a) o.n++; o.t++; cont.set(k, o); });
+      let ENT = Array.from(cont.values()).sort((a, b) => b.n - a.n || b.t - a.t || a.nome.localeCompare(b.nome, 'pt-BR'));
+      if (modo === 'for') { const comN = ENT.filter((o) => o.n > 0); ENT = (comN.length ? comN : ENT).slice(0, 10); }
+      const seg3 = `<div class="nxseg dpseg dvmodo" role="group" aria-label="Ver por">${[['cmp', 'Compradores'], ['fil', 'Filiais'], ['for', 'Top 10 fornecedores']].map(([k, l]) => `<button type="button" data-act="rnc-fm" data-key="${k}" aria-pressed="${modo === k}">${l}</button>`).join('')}</div>`;
+      const segP = `<div class="nxseg dpseg" role="group" aria-label="Período">${[['m', 'Mês'], ['t', 'Trimestre'], ['a', '12 meses']].map(([k, l]) => `<button type="button" data-act="nx-p" data-key="rnc|${k}" aria-pressed="${P.m === k}">${l}</button>`).join('')}</div>`;
+      const wrap = (sub, h) => `<details class="nxmore dpwrap" data-dp="rncfi"${window.__rncFiAberto ? ' open' : ''}><summary>Desempenho por comprador, filial e top 10 fornecedores <small>${sub}</small></summary><div class="dpin"><div class="dpop dvop dvfi" style="--c:var(--n-rnc);--cc:color-mix(in srgb, var(--n-rnc) 14%, transparent)"><div class="dpchips">${seg3}${segP}</div>${h}</div></div></details>`;
+      if (!R.some((x) => dentro(x.data, a12, P.b))) return '';
+      if (!ENT.length) return wrap(esc(P.label), `<p class="dpnt">${{ cmp: 'Nenhuma NCF com comprador preenchido nos últimos 12 meses.', fil: 'Nenhuma NCF com filial preenchida nos últimos 12 meses.', for: 'Nenhuma NCF com fornecedor nos últimos 12 meses.' }[modo]}</p>`);
+      const it = ENT.find((o) => o.k === st['f' + modo]) || ENT[0], eh = (x) => chave(x) === it.k;
+      const em = (a, b, f) => R.filter((x) => dentro(x.data, a, b) && (!f || f(x)));
+      const A0 = em(P.a, P.b), Ao = A0.filter(eh), Apo = em(PV.a, PV.b, eh), hX = H.map((hh) => em(hh.a, hh.b, eh));
+      const lB = P.m === 'a' ? Apo.length : Math.max(Ao.length, ...hX.map((X) => X.length)), parte = A0.length ? Math.round((Ao.length / A0.length) * 100) : 0;
+      const dispOk = (X) => { const D2 = X.filter((x) => x.disp && x.fechDisp != null && x.dispDue != null); return D2.length ? (D2.filter((x) => x.fechDisp <= fl(x.dispDue + 1e-9)).length / D2.length) * 100 : null; };
+      const resol = (X) => (X.length ? (X.filter((x) => !x.aberta).length / X.length) * 100 : null);
+      const nLot = (X) => X.reduce((s2, x) => s2 + lotTokens(x.lotesAV).length, 0), nRein = (X) => X.filter((x) => x.reinc === 'Sim').length;
+      const aneis = (vals, centro, sub) => { const RR = [92, 74, 56]; return `<div class="dvr"><svg viewBox="0 0 210 210" aria-hidden="true">${vals.map((p, i) => { const cc2 = 2 * Math.PI * RR[i]; return `<circle class="tr" cx="105" cy="105" r="${RR[i]}"/>${p > 0 ? `<circle class="v v${i}" cx="105" cy="105" r="${RR[i]}" stroke-dasharray="${(cc2 * p).toFixed(1)} ${cc2.toFixed(1)}"/>` : ''}`; }).join('')}</svg><div><b>${centro}</b><small>${sub}</small></div></div>`; };
+      const leg = (L2) => `<ul class="dvrl">${L2.map(([l, v], i) => `<li><i class="o${i}"></i><span>${l}</span><b>${v}</b></li>`).join('')}</ul>`;
+      const spk = (V) => { const n = V.length; if (n < 2) return ''; const mx = Math.max(1e-9, ...V), w = 150, h = 36, X = (i) => 2 + (i * (w - 4)) / (n - 1), Y = (v) => h - 3 - (v / mx) * (h - 8); const d = V.map((v, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' '); return `<svg class="dvspk" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="a" d="${d} L${X(n - 1).toFixed(1)},${h} L2,${h} Z"/><path class="l" d="${d}" vector-effect="non-scaling-stroke"/></svg>`; };
+      const dl = (a, b, fmt) => (a == null || b == null || !isFinite(a) || !isFinite(b) || Math.abs(a - b) < 1e-9 ? '' : `<em class="dvd" title="comparado com o período anterior">${a > b ? '▲' : '▼'} ${fmt(Math.abs(a - b), b)}</em>`);
+      const mini = (l, v, sub, d2, V) => `<div class="dvt dvm"><span class="dvk">${l}</span><div class="dvmr"><b>${v}</b>${d2 || ''}</div><small>${sub}</small>${spk(V)}</div>`;
+      const lista5 = (pares, tit, sub, vazio) => {
+        const tot = pares.reduce((a, b) => a + b[1], 0), mx = pares.length ? Math.max(1e-9, ...pares.map((p) => p[1])) : 1, opc = (k) => (1 - k * 0.16).toFixed(2);
+        return `<div class="dvt"><div class="dvth"><b>${tit}</b><small>${sub}</small></div>${pares.length && tot > 0 ? `<div class="dvfx">${pares.filter((p) => p[1] > 0).map(([, v, c2], k) => `<i style="flex:${v};opacity:${c2 ? 1 : opc(k)}${c2 ? ';background:' + c2 : ''}"></i>`).join('')}</div><ul class="dvcl">${pares.map(([n, v, c2, go, ic], k) => `<li${go ? ` data-go="${esc(JSON.stringify(go))}" tabindex="0" class="dvgo"` : ''}><span class="cp"${c2 ? ` style="background:color-mix(in srgb, ${c2} 18%, transparent);color:${c2}"` : ''}>${ic || k + 1}</span><span class="cn" title="${esc(n)}">${esc(n)}</span><span class="cb"><i style="width:${((v / mx) * 100).toFixed(0)}%;opacity:${c2 ? 1 : opc(k)}${c2 ? ';background:' + c2 : ''}"></i></span><b>${nf(v)}</b><em>${tot ? Math.round((v / tot) * 100) : 0}%</em></li>`).join('')}</ul>` : `<p class="dpnt">${vazio || 'Nada no período.'}</p>`}</div>`;
+      };
+      const conta2 = (L, f, go) => { const m = new Map(); L.forEach((o) => { const n = f(o); if (!n) return; m.set(n, (m.get(n) || 0) + 1); }); return Array.from(m.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([n, v]) => [n, v, null, go ? go(n) : null]); };
+      const PREDIO = '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M11 33V12l10-5v26M21 15l9 3v15M8 33h25" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M14.5 15h3M14.5 20h3M14.5 25h3M24.5 22h2.5M24.5 27h2.5" stroke="currentColor" stroke-width="2.2"/></svg>';
+      const fotoN = (n) => (modo === 'cmp' && E.filled(n) ? ehFotoNome(n) : null);
+      const av = (o, grande) => { if (modo === 'fil') return { cls: 'dvico', h: PREDIO }; const f = fotoN(o.nome); return f ? { cls: 'fo', h: `<img src="${esc(f)}" alt="${grande ? 'Foto de ' + esc(o.nome) : ''}" loading="lazy" decoding="async">` } : { cls: '', h: esc(nxIni(o.nome)) }; };
+      const aG = av(it, true), dP = dispOk(Ao), rP = resol(Ao), abN = R.filter((x) => eh(x) && x.aberta), atN = abN.filter((x) => x.status === 'Atrasado');
+      const f12 = R.filter((x) => eh(x) && dentro(x.data, a12, P.b)), reinc12 = nRein(f12);
+      const pq = modo === 'for' ? [['Reincidência', reinc12 ? 'Sim' : 'Não', reinc12 ? `${nf(reinc12)} em 12 meses` : 'nos últimos 12 meses', reinc12 ? 'ru' : ''], ['Abertas agora', nf(abN.length), 'esperando solução', '']]
+        : [['Abertas agora', nf(abN.length), 'esperando solução', ''], ['Atrasadas', nf(atN.length), 'fora do prazo', atN.length ? 'ru' : '']];
+      const perfil = `<div class="dvt dvpf"><div class="dvgl"></div><div class="dvph${aG.cls === 'fo' ? ' fo' : ''}">${aG.cls === 'fo' ? aG.h : `<span class="${aG.cls}">${aG.h}</span>`}</div>
+        <b class="dvnm" title="${esc(it.nome)}">${esc(it.nome)}</b><small class="dvsb">${parte}% das NCF ${doP}</small>
+        ${aneis([fr(Ao.length, lB), (rP || 0) / 100, (dP || 0) / 100], pc(dP), 'disposição<br>no prazo')}
+        ${leg([[`NCF ${doP} × ${maiorL}`, `${nf(Ao.length)} / ${nf(lB)}`], ['Resolvidas', pc(rP)], ['Disposição no prazo', pc(dP)]])}
+        <div class="dvpq">${pq.map(([k, v, s2, c2]) => `<div><span class="dvk">${k}</span><b${c2 ? ` class="${c2}"` : ''}>${v}</b><small>${s2}</small></div>`).join('')}</div></div>`;
+      const top10 = new Set(ENT.map((o) => o.k)), dRef = modo === 'for' ? dispOk(A0.filter((x) => top10.has(chave(x)))) : dispOk(A0);
+      const lotesF = (a, b) => M.av.filter((x) => dentro(x.data, a, b) && E.key(nomeL(x.forn)) === it.k).length;
+      const p100 = (X, a, b) => { const l = lotesF(a, b); return l ? (X.length / l) * 100 : null; };
+      const p100t = (() => { const l = M.av.filter((x) => dentro(x.data, P.a, P.b) && top10.has(E.key(nomeL(x.forn)))).length; return l ? (A0.filter((x) => top10.has(chave(x))).length / l) * 100 : null; })();
+      const f1 = (v) => (v == null ? '—' : NF1.format(Math.round(v * 10) / 10));
+      const m2 = modo === 'for' ? mini('NCF a cada 100 lotes', f1(p100(Ao, P.a, P.b)), p100t == null ? 'lotes recebidos dele' : `média dos ${ENT.length}: ${f1(p100t)}`, p100(Ao, P.a, P.b) != null && p100(Apo, PV.a, PV.b) != null ? dl(p100(Ao, P.a, P.b), p100(Apo, PV.a, PV.b), (v) => f1(v)) : '', H.map((hh, i) => p100(hX[i], hh.a, hh.b) || 0))
+        : mini('Lotes afetados', nf(nLot(Ao)), qual, dl(nLot(Ao), nLot(Apo), (v) => nf(v)), hX.map(nLot));
+      const minis = `<div class="dvms">${[mini('NCF abertas', nf(Ao.length), qual, dl(Ao.length, Apo.length, (v) => nf(v)), hX.map((X) => X.length)), m2,
+        mini('Disposição no prazo', pc(dP), dRef == null ? 'prazo da disposição' : `${modo === 'for' ? 'média dos ' + ENT.length + ':' : 'empresa'} ${Math.round(dRef)}%`, dP != null && dispOk(Apo) != null ? dl(dP, dispOk(Apo), (v) => Math.round(v) + ' p.p.') : '', hX.map((X) => dispOk(X) || 0)),
+        mini('Reincidências', nf(nRein(Ao)), modo === 'for' ? qual : 'fornecedor repetido', dl(nRein(Ao), nRein(Apo), (v) => nf(v)), hX.map(nRein))].join('')}</div>`;
+      const MS = (() => { const f0 = E.ymd(Math.min(P.b, hoje)), o = []; for (let k = 11; k >= 0; k--) { let y = f0.y, m = f0.m - k; while (m < 1) { m += 12; y--; } const r = nxMes(y, m); o.push({ a: r.a, b: r.b, l: MES3[m - 1] + (m === 1 ? '/' + String(y).slice(2) : '') }); } return o; })();
+      const vM = MS.map((mm) => em(mm.a, mm.b, eh).length), mxM = Math.max(1, ...vM);
+      const meio = `<div class="dvt"><div class="dvth"><b>NCF por mês</b><small>últimos 12 meses · ${esc(it.nome)}</small></div><div class="dvcols">${MS.map((mm, i) => `<div class="dvco" title="${esc(mm.l + ': ' + vM[i] + ' NCF')}"><div class="dvcb"><i style="height:${((vM[i] / mxM) * 100).toFixed(0)}%"></i></div><b>${nf(vM[i])}</b><span>${mm.l}</span></div>`).join('')}</div></div>`;
+      const nRes = Ao.filter((x) => !x.aberta).length, nAt = Ao.filter((x) => x.aberta && x.status === 'Atrasado').length, nAn = Ao.length - nRes - nAt;
+      const sit = [['Resolvidas', nRes, 'var(--ok)', null, '✓'], ['Em andamento', nAn, OURO, null, '…'], ['Atrasadas', nAt, VERM, null, '!']];
+      const per = { de: E.isoDate(P.a), ate: E.isoDate(P.b) }, campo = { cmp: 'comprador', fil: 'filial', for: 'forn' }[modo], base = Object.assign({ [campo]: it.nome }, per);
+      const fornL = lista5(conta2(Ao, (x) => nomeL(x.forn) || '(sem fornecedor)', (n) => goR(Object.assign({}, base, { forn: n }))), 'Fornecedores das NCF', `${qual} · ${nf(Ao.length)} no total`);
+      const motL = lista5(conta2(Ao, (x) => nomeL(x.motivo) || '(sem motivo)'), 'Motivos', `${qual} · ${nf(Ao.length)} no total`);
+      const filL = lista5(conta2(Ao, (x) => nomeL(x.filial) || '(sem filial)', (n) => goR(Object.assign({}, base, { filial: n }))), 'Em qual filial', qual);
+      const sitL = lista5(sit, 'Situação', `NCF ${doP}`, 'Nenhuma NCF no período.');
+      const UL = R.filter((x) => eh(x) && dentro(x.data, a12, P.b)).sort((a, b) => b.data - a.data).slice(0, 4);
+      const ult = `<div class="dvt"><div class="dvth"><b>Últimas NCF</b><small>toque para abrir</small></div>${UL.length ? `<ul class="dvfl">${UL.map((x) => { const nl = lotTokens(x.lotesAV).length, cl = !x.aberta ? 'g' : x.status === 'Atrasado' ? 'r' : 'p';
+        return `<li data-open="RNC:${esc(x.key)}" tabindex="0" class="dvgo"><i class="${cl}"></i><div><b>${esc(x.num)} · ${esc(modo === 'for' ? (x.nf ? 'NF ' + disp(x.nf) : nomeL(x.filial)) : nomeL(x.forn).split(/\s+/).slice(0, 2).join(' ') || '—')}</b><small>${esc([nomeL(x.motivo), nl ? nl + (nl === 1 ? ' lote' : ' lotes') : '', !x.aberta ? 'resolvida' : x.status === 'Atrasado' ? 'atrasada' : 'em andamento', x.reinc === 'Sim' ? 'reincidência' : ''].filter(Boolean).join(' · '))}</small></div><em>${esc(fD(x.data).slice(0, 5))}</em></li>`; }).join('')}</ul>` : '<p class="dpnt">Nenhuma NCF nos últimos 12 meses.</p>'}</div>`;
+      const linhas = modo === 'for' ? `<div class="dvrow">${motL}${sitL}</div><div class="dvrow">${filL}${ult}</div>` : `<div class="dvrow">${fornL}${sitL}</div><div class="dvrow">${motL}${ult}</div>`;
+      const chips = `<div class="dpchips dvfich">${ENT.map((o) => { const a2 = av(o); return `<button type="button" class="dpch${o.k === it.k ? ' on' : ''}" data-act="rnc-fi" data-key="${esc(o.k)}" aria-pressed="${o.k === it.k}"><span class="dpav ${a2.cls}">${a2.h}</span>${esc(o.nome)}</button>`; }).join('')}</div>`;
+      return wrap(`${esc(it.nome)} · ${esc(P.label)}`, `${chips}<div class="dvc2">${perfil}<div class="dvrc">${minis}${meio}${linhas}</div></div>`);
+    };
     void fimP;
-    return sec(nxIns([i1, i2, i3], { m: 'Resumo do mês', t: 'Resumo do trimestre', a: 'Resumo dos 12 meses' }[P.m]) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b">${`<div class="chart"><h3>Por fornecedor<small>${esc(P.label)}</small></h3>${tabF}</div>`}${par}</div>${mais}`);
+    return sec(nxIns([i1, i2, i3], { m: 'Resumo do mês', t: 'Resumo do trimestre', a: 'Resumo dos 12 meses' }[P.m]) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b">${`<div class="chart"><h3>Por fornecedor<small>${esc(P.label)}</small></h3>${tabF}</div>`}${par}</div>${ncfFiHTML()}`);
   }
   /* v102: NCC (reclamações de clientes) no visual novo — mesmas peças da NCF */
   function nccPainelHTML() {
@@ -8956,11 +9025,72 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const mot = (L) => { const m = new Map(); L.forEach((x) => m.set(x.motivo || '(sem motivo)', (m.get(x.motivo || '(sem motivo)') || 0) + 1)); return Array.from(m.entries()).sort((a, b) => b[1] - a[1])[0]; };
     const m1 = mot(A), pm = (m, L) => (m && L.length ? Math.round(L.filter((x) => (x.motivo || '(sem motivo)') === m[0]).length / L.length * 100) : 0);
     const i3 = m1 ? ['info', `<b>${esc(m1[0])}</b> é o motivo de ${pm(m1, A)}% das reclamações ${quando}${Ap.length ? `; em ${esc(P.cmpL)} era ${pm(m1, Ap)}%` : ''}.`] : ['info', `Nenhuma reclamação ${quando}.`];
-    const mais = `<details class="nxmore"><summary>Mais gráficos de NCC (setor responsável, origem da causa, gravidade) · ${esc(P.label)}</summary><div class="charts">
-      ${chartHTML('Por setor responsável', barsHTML(countBy(A, (x) => x.setor).map((i) => ({ ...i, go: goK({ setor: i.label }) })), MOD.RNCC.c, { max: 10 }))}
-      ${chartHTML('Por origem da causa', barsHTML(countBy(A, (x) => x.origem), MOD.RNCC.c))}
-      ${chartHTML('Por gravidade', barsHTML(countBy(A, (x) => x.gravidade), MOD.RNCC.c))}</div></details>`;
-    return sec(nxIns([i1, i2, i3], { m: 'Resumo do mês', t: 'Resumo do trimestre', a: 'Resumo dos 12 meses' }[P.m]) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Por cliente<small>${esc(P.label)}</small></h3>${tabC}</div>${par}</div>${mais}`);
+    /* v150: Desempenho por setor, origem da causa e top 10 clientes (no lugar de "Mais gráficos de NCC"); sem "Dia" */
+    const nccFiHTML = () => {
+      const modo = ['set', 'ori', 'cli'].includes(st.fm) ? st.fm : 'set', nf = (n) => NF.format(n), fr = (a, b) => (b > 0 ? Math.max(0, Math.min(1, a / b)) : 0);
+      const qual = { m: 'no mês', t: 'no trimestre', a: 'em 12 meses' }[P.m], doP = { m: 'do mês', t: 'do trimestre', a: 'em 12 meses' }[P.m];
+      const maiorL = { m: 'maior mês', t: 'maior trimestre', a: '12 meses antes' }[P.m], a12 = Math.min(P.b, hoje) - 370, PV = P.prev, H = P.hist;
+      const pc = (v) => (v == null ? '—' : Math.round(v) + '%'), nomeL = (s2) => String(s2 || '').trim();
+      const campoN = (x) => nomeL(modo === 'set' ? x.setor : modo === 'ori' ? x.origem : x.cliente), chave = (x) => E.key(campoN(x));
+      const cont = new Map(); R.filter((x) => dentro(x.data, a12, P.b)).forEach((x) => { const k = chave(x); if (!k) return; const o = cont.get(k) || { k, nome: campoN(x), n: 0, t: 0 }; if (fl(x.data) >= P.a) o.n++; o.t++; cont.set(k, o); });
+      let ENT = Array.from(cont.values()).sort((a, b) => b.n - a.n || b.t - a.t || a.nome.localeCompare(b.nome, 'pt-BR'));
+      if (modo === 'cli') { const comN = ENT.filter((o) => o.n > 0); ENT = (comN.length ? comN : ENT).slice(0, 10); }
+      const seg3 = `<div class="nxseg dpseg dvmodo" role="group" aria-label="Ver por">${[['set', 'Setores'], ['ori', 'Origem da causa'], ['cli', 'Top 10 clientes']].map(([k, l]) => `<button type="button" data-act="rncc-fm" data-key="${k}" aria-pressed="${modo === k}">${l}</button>`).join('')}</div>`;
+      const segP = `<div class="nxseg dpseg" role="group" aria-label="Período">${[['m', 'Mês'], ['t', 'Trimestre'], ['a', '12 meses']].map(([k, l]) => `<button type="button" data-act="nx-p" data-key="rncc|${k}" aria-pressed="${P.m === k}">${l}</button>`).join('')}</div>`;
+      const wrap = (sub, h) => `<details class="nxmore dpwrap" data-dp="rnccfi"${window.__rnccFiAberto ? ' open' : ''}><summary>Desempenho por setor, origem da causa e top 10 clientes <small>${sub}</small></summary><div class="dpin"><div class="dpop dvop dvfi" style="--c:var(--n-rncc);--cc:color-mix(in srgb, var(--n-rncc) 14%, transparent)"><div class="dpchips">${seg3}${segP}</div>${h}</div></div></details>`;
+      if (!R.some((x) => dentro(x.data, a12, P.b))) return '';
+      if (!ENT.length) return wrap(esc(P.label), `<p class="dpnt">${{ set: 'Nenhuma NCC com setor responsável preenchido nos últimos 12 meses.', ori: 'Nenhuma NCC com origem da causa preenchida nos últimos 12 meses.', cli: 'Nenhuma NCC com cliente nos últimos 12 meses.' }[modo]}</p>`);
+      const it = ENT.find((o) => o.k === st['f' + modo]) || ENT[0], eh = (x) => chave(x) === it.k;
+      const em = (a, b, f) => R.filter((x) => dentro(x.data, a, b) && (!f || f(x)));
+      const A0 = em(P.a, P.b), Ao = A0.filter(eh), Apo = em(PV.a, PV.b, eh), hX = H.map((hh) => em(hh.a, hh.b, eh));
+      const lB = P.m === 'a' ? Apo.length : Math.max(Ao.length, ...hX.map((X) => X.length)), parte = A0.length ? Math.round((Ao.length / A0.length) * 100) : 0;
+      const rOk = (X) => { const D2 = X.filter((x) => x.respData != null && x.prazoResp != null); return D2.length ? (D2.filter((x) => fl(x.respData) <= x.prazoResp).length / D2.length) * 100 : null; };
+      const resol = (X) => (X.length ? (X.filter((x) => !x.aberta).length / X.length) * 100 : null);
+      const tResp = (X) => media(X.map((x) => x.diasResposta).filter((v) => v != null));
+      const efc = (X) => { const L = X.filter((x) => ['eficaz', 'não eficaz', 'nao eficaz'].includes(E.low(x.eficacia))); return L.length ? (L.filter((x) => E.low(x.eficacia) === 'eficaz').length / L.length) * 100 : null; };
+      const aneis = (vals, centro, sub) => { const RR = [92, 74, 56]; return `<div class="dvr"><svg viewBox="0 0 210 210" aria-hidden="true">${vals.map((p, i) => { const cc2 = 2 * Math.PI * RR[i]; return `<circle class="tr" cx="105" cy="105" r="${RR[i]}"/>${p > 0 ? `<circle class="v v${i}" cx="105" cy="105" r="${RR[i]}" stroke-dasharray="${(cc2 * p).toFixed(1)} ${cc2.toFixed(1)}"/>` : ''}`; }).join('')}</svg><div><b>${centro}</b><small>${sub}</small></div></div>`; };
+      const leg = (L2) => `<ul class="dvrl">${L2.map(([l, v], i) => `<li><i class="o${i}"></i><span>${l}</span><b>${v}</b></li>`).join('')}</ul>`;
+      const spk = (V) => { const n = V.length; if (n < 2) return ''; const mx = Math.max(1e-9, ...V), w = 150, h = 36, X = (i) => 2 + (i * (w - 4)) / (n - 1), Y = (v) => h - 3 - (v / mx) * (h - 8); const d = V.map((v, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' '); return `<svg class="dvspk" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="a" d="${d} L${X(n - 1).toFixed(1)},${h} L2,${h} Z"/><path class="l" d="${d}" vector-effect="non-scaling-stroke"/></svg>`; };
+      const dl = (a, b, fmt) => (a == null || b == null || !isFinite(a) || !isFinite(b) || Math.abs(a - b) < 1e-9 ? '' : `<em class="dvd" title="comparado com o período anterior">${a > b ? '▲' : '▼'} ${fmt(Math.abs(a - b), b)}</em>`);
+      const mini = (l, v, sub, d2, V) => `<div class="dvt dvm"><span class="dvk">${l}</span><div class="dvmr"><b>${v}</b>${d2 || ''}</div><small>${sub}</small>${spk(V)}</div>`;
+      const lista5 = (pares, tit, sub, vazio) => {
+        const tot = pares.reduce((a, b) => a + b[1], 0), mx = pares.length ? Math.max(1e-9, ...pares.map((p) => p[1])) : 1, opc = (k) => (1 - k * 0.16).toFixed(2);
+        return `<div class="dvt"><div class="dvth"><b>${tit}</b><small>${sub}</small></div>${pares.length && tot > 0 ? `<div class="dvfx">${pares.filter((p) => p[1] > 0).map(([, v, c2], k) => `<i style="flex:${v};opacity:${c2 ? 1 : opc(k)}${c2 ? ';background:' + c2 : ''}"></i>`).join('')}</div><ul class="dvcl">${pares.map(([n, v, c2, go, ic], k) => `<li${go ? ` data-go="${esc(JSON.stringify(go))}" tabindex="0" class="dvgo"` : ''}><span class="cp"${c2 ? ` style="background:color-mix(in srgb, ${c2} 18%, transparent);color:${c2}"` : ''}>${ic || k + 1}</span><span class="cn" title="${esc(n)}">${esc(n)}</span><span class="cb"><i style="width:${((v / mx) * 100).toFixed(0)}%;opacity:${c2 ? 1 : opc(k)}${c2 ? ';background:' + c2 : ''}"></i></span><b>${nf(v)}</b><em>${tot ? Math.round((v / tot) * 100) : 0}%</em></li>`).join('')}</ul>` : `<p class="dpnt">${vazio || 'Nada no período.'}</p>`}</div>`;
+      };
+      const conta2 = (L, f, go) => { const m = new Map(); L.forEach((o) => { const n = f(o); if (!n) return; m.set(n, (m.get(n) || 0) + 1); }); return Array.from(m.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([n, v]) => [n, v, null, go ? go(n) : null]); };
+      const ICO = { set: '<rect x="9" y="9" width="22" height="22" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9 20h12M21 9v22" stroke="currentColor" stroke-width="2"/><circle cx="26" cy="26" r="2" fill="currentColor"/>',
+        ori: '<circle cx="12" cy="11" r="3.2" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="28" cy="11" r="3.2" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="20" cy="30" r="3.2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 14.5c0 6 8 6 8 12M28 14.5c0 6-8 6-8 12" fill="none" stroke="currentColor" stroke-width="2.2"/>' };
+      const av = (o) => (modo === 'cli' ? { cls: '', h: esc(nxIni(o.nome)) } : { cls: 'dvico', h: `<svg viewBox="0 0 40 40" aria-hidden="true">${ICO[modo]}</svg>` });
+      const aG = av(it), dP = rOk(Ao), rP = resol(Ao), abN = R.filter((x) => eh(x) && x.aberta), atN = abN.filter((x) => x.status === 'Atrasado');
+      const pq = [['Abertas agora', nf(abN.length), 'esperando solução', ''], ['Atrasadas', nf(atN.length), 'fora do prazo', atN.length ? 'ru' : '']];
+      const perfil = `<div class="dvt dvpf"><div class="dvgl"></div><div class="dvph"><span class="${aG.cls}">${aG.h}</span></div>
+        <b class="dvnm" title="${esc(it.nome)}">${esc(it.nome)}</b><small class="dvsb">${parte}% das NCC ${doP}</small>
+        ${aneis([fr(Ao.length, lB), (rP || 0) / 100, (dP || 0) / 100], pc(dP), 'respondidas<br>no prazo')}
+        ${leg([[`NCC ${doP} × ${maiorL}`, `${nf(Ao.length)} / ${nf(lB)}`], ['Resolvidas', pc(rP)], ['Resposta no prazo', pc(dP)]])}
+        <div class="dvpq">${pq.map(([k, v, s2, c2]) => `<div><span class="dvk">${k}</span><b${c2 ? ` class="${c2}"` : ''}>${v}</b><small>${s2}</small></div>`).join('')}</div></div>`;
+      const nPr = (X) => X.filter(proc).length, tE = tResp(A0), f1 = (v) => (v == null ? '—' : NF1.format(Math.round(v * 10) / 10) + ' d');
+      const minis = `<div class="dvms">${[mini('NCC abertas', nf(Ao.length), qual, dl(Ao.length, Apo.length, (v) => nf(v)), hX.map((X) => X.length)),
+        mini('Procedentes', nf(nPr(Ao)), Ao.length ? `${Math.round((nPr(Ao) / Ao.length) * 100)}% das NCC` : qual, dl(nPr(Ao), nPr(Apo), (v) => nf(v)), hX.map(nPr)),
+        mini('Primeira resposta', f1(tResp(Ao)), tE == null ? 'média até responder' : `empresa ${f1(tE)}`, tResp(Ao) != null && tResp(Apo) != null ? dl(tResp(Ao), tResp(Apo), (v) => f1(v)) : '', hX.map((X) => tResp(X) || 0)),
+        mini('Eficácia verificada', pc(efc(Ao)), 'ações que resolveram', efc(Ao) != null && efc(Apo) != null ? dl(efc(Ao), efc(Apo), (v) => Math.round(v) + ' p.p.') : '', hX.map((X) => efc(X) || 0))].join('')}</div>`;
+      const MS = (() => { const f0 = E.ymd(Math.min(P.b, hoje)), o = []; for (let k = 11; k >= 0; k--) { let y = f0.y, m = f0.m - k; while (m < 1) { m += 12; y--; } const r = nxMes(y, m); o.push({ a: r.a, b: r.b, l: MES3[m - 1] + (m === 1 ? '/' + String(y).slice(2) : '') }); } return o; })();
+      const vM = MS.map((mm) => em(mm.a, mm.b, eh).length), mxM = Math.max(1, ...vM);
+      const meio = `<div class="dvt"><div class="dvth"><b>NCC por mês</b><small>últimos 12 meses · ${esc(it.nome)}</small></div><div class="dvcols">${MS.map((mm, i) => `<div class="dvco" title="${esc(mm.l + ': ' + vM[i] + ' NCC')}"><div class="dvcb"><i style="height:${((vM[i] / mxM) * 100).toFixed(0)}%"></i></div><b>${nf(vM[i])}</b><span>${mm.l}</span></div>`).join('')}</div></div>`;
+      const nRes = Ao.filter((x) => !x.aberta).length, nAt = Ao.filter((x) => x.aberta && x.status === 'Atrasado').length, nAn = Ao.length - nRes - nAt;
+      const sit = [['Resolvidas', nRes, 'var(--ok)', null, '✓'], ['Em andamento', nAn, OURO, null, '…'], ['Atrasadas', nAt, VERM, null, '!']];
+      const per = { de: E.isoDate(P.a), ate: E.isoDate(P.b) }, base = Object.assign(modo === 'set' ? { setor: it.nome } : modo === 'cli' ? { cliente: it.nome } : {}, per);
+      const motL = lista5(conta2(Ao, (x) => nomeL(x.motivo) || '(sem motivo)'), 'Motivos', `${qual} · ${nf(Ao.length)} no total`);
+      const cliL = lista5(conta2(Ao, (x) => nomeL(x.cliente) || '(sem cliente)', (n) => goK(Object.assign({}, base, { cliente: n }))), 'Clientes', qual);
+      const setL = lista5(conta2(Ao, (x) => nomeL(x.setor) || '(sem setor)', (n) => goK(Object.assign({}, base, { setor: n }))), 'Setores responsáveis', qual);
+      const sitL = lista5(sit, 'Situação', `NCC ${doP}`, 'Nenhuma NCC no período.');
+      const UL = R.filter((x) => eh(x) && dentro(x.data, a12, P.b)).sort((a, b) => b.data - a.data).slice(0, 4);
+      const ult = `<div class="dvt"><div class="dvth"><b>Últimas NCC</b><small>toque para abrir</small></div>${UL.length ? `<ul class="dvfl">${UL.map((x) => { const cl = !x.aberta ? 'g' : x.status === 'Atrasado' ? 'r' : 'p';
+        return `<li data-open="RNCC:${esc(x.key)}" tabindex="0" class="dvgo"><i class="${cl}"></i><div><b>${esc(x.num)} · ${esc(modo === 'cli' ? nomeL(x.setor) || nomeL(x.motivo) || '—' : nomeL(x.cliente).split(/\s+/).slice(0, 2).join(' ') || '—')}</b><small>${esc([nomeL(x.motivo), proc(x) ? 'procedente' : improc(x) ? 'improcedente' : '', !x.aberta ? 'resolvida' : x.status === 'Atrasado' ? 'atrasada' : 'em andamento'].filter(Boolean).join(' · '))}</small></div><em>${esc(fD(x.data).slice(0, 5))}</em></li>`; }).join('')}</ul>` : '<p class="dpnt">Nenhuma NCC nos últimos 12 meses.</p>'}</div>`;
+      const linhas = `<div class="dvrow">${motL}${sitL}</div><div class="dvrow">${modo === 'set' ? cliL : setL}${ult}</div>`;
+      const chips = `<div class="dpchips dvfich">${ENT.map((o) => { const a2 = av(o); return `<button type="button" class="dpch${o.k === it.k ? ' on' : ''}" data-act="rncc-fi" data-key="${esc(o.k)}" aria-pressed="${o.k === it.k}"><span class="dpav ${a2.cls}">${a2.h}</span>${esc(o.nome)}</button>`; }).join('')}</div>`;
+      return wrap(`${esc(it.nome)} · ${esc(P.label)}`, `${chips}<div class="dvc2">${perfil}<div class="dvrc">${minis}${meio}${linhas}</div></div>`);
+    };
+    return sec(nxIns([i1, i2, i3], { m: 'Resumo do mês', t: 'Resumo do trimestre', a: 'Resumo dos 12 meses' }[P.m]) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Por cliente<small>${esc(P.label)}</small></h3>${tabC}</div>${par}</div>${nccFiHTML()}`);
   }
   /* v103: barras horizontais em degradê neon (rankings) */
   function nxHbars(id, itens, cor, o = {}) {
@@ -9337,7 +9467,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   function calPainelHTML() {
     const M = S.model; if (!M || !vis('ins')) return '';
-    const st = NX.cal, dia = viewOk('historico'); if (st.m === 'd' && !dia) st.m = 'm';
+    const st = NX.cal, dia = false; if (st.m === 'd') st.m = 'm';   /* v148: a Calibração não tem "Dia" (quase nada acontece num dia só) */
     const P = nxPer(st), fk = st.f, hoje = S.today, fl = Math.floor, LH = calLinha(M);
     const VIVO = M.ins.filter(insVivo), R = fk ? VIVO.filter((x) => E.key(x.com || '') === fk) : VIVO, U = R.filter((x) => x.emUso);
     const comOpc = new Map(); VIVO.forEach((x) => { const k = E.key(x.com || ''); if (k && !comOpc.has(k)) comOpc.set(k, String(x.com).trim()); });
@@ -9396,10 +9526,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const xA = conta(U, tA, 'venc'), xP = conta(U, tP, 'venc'), lA = R.filter((x) => noLab(x, tA)).length, lP = R.filter((x) => noLab(x, tP)).length;
     const cA = CE(P.a, P.b), cP = CE(P.prev.a, P.prev.b), gA = soma(cA), gP = soma(cP), semCusto = cA.filter((h) => !insCustoTem(h)).length;
     const ks = [
-      { l: 'Em dia', v: pA == null ? '—' : NF.format(Math.round(pA)) + '%', sub: `${NF.format(eA.n)} de ${NF.format(eA.d)} em uso`, dl: pA != null && pP != null ? nxDl(pA, pP, P, 'sobe', (v) => NF1.format(v) + ' p.p.') : null, serie: H.map((h) => pctD(emDia(U, h.b)) || 0), pct: null /* o próprio número já é o % (o anel repetiria e bateria na variação) */, cls: eA.d && eA.n === eA.d ? 'ok' : '', go: goC({ status: ['CONFORME', 'VENCE EM BREVE', 'VENCE HOJE'] }) },
+      { l: 'Em dia', v: pA == null ? '—' : NF.format(Math.round(pA)) + '%', sub: `${NF.format(eA.n)} de ${NF.format(eA.d)} em uso · ${xA ? (xA === 1 ? '1 vencido' : NF.format(xA) + ' vencidos') : 'nenhum vencido'}`, dl: pA != null && pP != null ? nxDl(pA, pP, P, 'sobe', (v) => NF1.format(v) + ' p.p.') : null, serie: H.map((h) => pctD(emDia(U, h.b)) || 0), pct: null /* o próprio número já é o % (o anel repetiria e bateria na variação) */, cls: xA ? 'crit' : eA.d && eA.n === eA.d ? 'ok' : '', go: xA && P.cur ? goC({ status: ['VENCIDO'] }) : goC({ status: ['CONFORME', 'VENCE EM BREVE', 'VENCE HOJE'] }) },
       { l: 'Vencem em 30 dias', v: NF.format(vA), sub: P.cur ? `${NF.format(sem)} nesta semana` : `${NF.format(sem)} na semana seguinte`, dl: nxDl(vA, vP, P, 'desce', NF.format), serie: H.map((h) => conta(U, h.b, 'v30')), pct: vA && eA.d ? [vA, eA.d, 'do parque', 'warn'] : null, cls: vA ? 'warn' : '', go: P.cur ? goC({ status: ['VENCE EM BREVE', 'VENCE HOJE'] }) : null },
-      { l: 'Vencidos', v: NF.format(xA), sub: 'usar só depois de calibrar', dl: nxDl(xA, xP, P, 'desce', NF.format), serie: H.map((h) => conta(U, h.b, 'venc')), pct: xA && eA.d ? [xA, eA.d, 'do parque', 'crit'] : null, cls: xA ? 'crit' : '', go: P.cur ? goC({ status: ['VENCIDO'] }) : null },
       { l: 'No laboratório', v: NF.format(lA), sub: P.cur && retA.length ? `${NF.format(retA.length)} com retorno atrasado` : 'em calibração', dl: nxDl(lA, lP, P, 'desce', NF.format), serie: H.map((h) => R.filter((x) => noLab(x, h.b)).length), pct: lA && R.length ? [lA, R.length, 'do parque', P.cur && retA.length ? 'crit' : 'info'] : null, cls: P.cur && retA.length ? 'crit' : '', go: P.cur ? goC({ status: ['NO LABORATÓRIO'] }) : null },
+      { l: 'Calibrações feitas', v: NF.format(cA.length), sub: `de ${NF.format(prevE(P.a, P.b))} previstas pelos vencimentos`, dl: nxDl(cA.length, cP.length, P, 'sobe', NF.format), serie: H.map((h) => CE(h.a, h.b).length), pct: prevE(P.a, P.b) ? [Math.min(cA.length, prevE(P.a, P.b)), prevE(P.a, P.b), 'do previsto', cA.length >= prevE(P.a, P.b) ? 'ok' : 'warn'] : null },   /* v148 */
       { l: 'Custo ' + quando, v: cA.length && cA.length > semCusto ? reais(gA) : '—', sub: `${NF.format(cA.length)} ${cA.length === 1 ? 'calibração' : 'calibrações'}${semCusto ? ` · ${NF.format(semCusto)} sem custo lançado` : ''}`, extra: gA > 0 ? (() => { const pt = INS_CUSTOS.map(([k, l], i) => [l, cA.reduce((s2, h) => s2 + (h[k] || 0), 0), i]); return `<div class="nxcx"><div class="nxcmix">${pt.filter((p2) => p2[1] > 0).map(([, v, i]) => `<i class="o${i}" style="flex:${v}"></i>`).join('')}</div><div class="nxclg">${pt.map(([l, v, i]) => `<span><i class="o${i}"></i>${l}<b>${reais(v)}</b></span>`).join('')}</div></div>`; })() : '', dl: gP > 0 && cA.length > semCusto ? nxDl((gA - gP) / gP * 100, 0, P, 'desce', (v) => NF.format(Math.round(v)) + '%') : null, serie: H.map((h) => soma(CE(h.a, h.b))), go: goC({}, 'custos') }
     ];
     /* vencimentos dos próximos 12 meses por tipo de instrumento (sempre a partir de hoje) */
@@ -24172,7 +24302,7 @@ ${trGuil(W, H, M, B)}
   const corrLines = (m) => (Array.isArray(m.abCorr) ? m.abCorr : []).map((c) => `Abertura corrigida por ${esc(c.nome || '')} em ${dmy(c.at)} às ${hhmm(c.at)}: ${esc(c.motivo || '')}`);
 
   /* ================= eventos globais ================= */
-  document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.matches && d.matches('details[data-dp]')) { if (d.dataset.dp === 'rir') window.__rirDpAberto = d.open; else if (d.dataset.dp === 'av') window.__avDpAberto = d.open; else if (d.dataset.dp === 'avfi') window.__avFiAberto = d.open; else if (d.dataset.dp === 'calfi') window.__calFiAberto = d.open; else window.__cqDpAberto = d.open; } }, true);   /* v132; v135: não guarda no aparelho */
+  document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.matches && d.matches('details[data-dp]')) { if (d.dataset.dp === 'rir') window.__rirDpAberto = d.open; else if (d.dataset.dp === 'av') window.__avDpAberto = d.open; else if (d.dataset.dp === 'avfi') window.__avFiAberto = d.open; else if (d.dataset.dp === 'calfi') window.__calFiAberto = d.open; else if (d.dataset.dp === 'rncfi') window.__rncFiAberto = d.open; else if (d.dataset.dp === 'rnccfi') window.__rnccFiAberto = d.open; else window.__cqDpAberto = d.open; } }, true);   /* v132; v135: não guarda no aparelho */
   document.addEventListener('click', (e) => {
     const t = e.target;
     const act = t.closest('[data-act]'), op = t.closest('[data-open]'), g = t.closest('[data-go]');
@@ -24205,6 +24335,10 @@ ${trGuil(W, H, M, B)}
       if (a === 'av-op') { NX.av.op = key; nxAtualiza('av'); return; }   /* v143 */
       if (a === 'av-fm') { NX.av.fm = key; nxAtualiza('av'); return; }   /* v145 */
       if (a === 'cal-fm') { NX.cal.fm = key; nxAtualiza('cal'); return; }   /* v147 */
+      if (a === 'rnc-fm') { NX.rnc.fm = key; nxAtualiza('rnc'); return; }   /* v149 */
+      if (a === 'rncc-fm') { NX.rncc.fm = key; nxAtualiza('rncc'); return; }   /* v150 */
+      if (a === 'rncc-fi') { NX.rncc['f' + (['set', 'ori', 'cli'].includes(NX.rncc.fm) ? NX.rncc.fm : 'set')] = key; nxAtualiza('rncc'); return; }
+      if (a === 'rnc-fi') { NX.rnc['f' + (['cmp', 'fil', 'for'].includes(NX.rnc.fm) ? NX.rnc.fm : 'cmp')] = key; nxAtualiza('rnc'); return; }
       if (a === 'cal-fi') { NX.cal['f' + (['lab', 'set', 'tip'].includes(NX.cal.fm) ? NX.cal.fm : 'lab')] = key; nxAtualiza('cal'); return; }
       if (a === 'av-fi') { if (NX.av.fm === 'fo') NX.av.fo = key; else NX.av.fi = key; nxAtualiza('av'); return; }
       if (a === 'proc-seg') { const i = $('#nx-proc-q'); NX.proc.q = i ? i.value : ''; nxAtualiza('proc'); const n2 = $('#nx-proc-q'); if (n2) n2.focus(); return; }   /* v114: seguir um lote */
