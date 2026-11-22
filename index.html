@@ -343,6 +343,7 @@ ul.dvdl, p.dvdl { display: none !important; } .dvdl { list-style: none; margin: 
 .dvcl b { font: 700 17px var(--f-display); text-align: right; } .dvcl em { font: normal 11.5px var(--f-mono); color: var(--ink-3); text-align: right; }
 .dvfi > .dpchips + .dpchips { margin-top: 10px; } .dvfi .dvmodo { margin-left: 0; } .dvfi .dvmodo + .dpseg { margin-left: auto; }
 .dpav.dvico, .dvph > span.dvico { color: var(--ink-3); } .dpav.dvico svg { width: 18px; height: 18px; } .dvph > span.dvico svg { width: 58%; height: 58%; }
+.dvpq b.ou { color: var(--n-ouro); }
 .dvcols { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 7px; height: 150px; } .dvco { display: grid; grid-template-rows: 1fr auto auto; text-align: center; gap: 3px; min-width: 0; }
 .dvcb { display: flex; align-items: flex-end; background: color-mix(in srgb, var(--ink) 4%, transparent); border-radius: 8px; overflow: hidden; } .dvcb i { display: block; width: 100%; border-radius: 8px; background: linear-gradient(180deg, var(--c), color-mix(in srgb, var(--c) 20%, transparent)); }
 .dvco b { font: 700 15px var(--f-display); } .dvco span { font-size: 11px; color: var(--ink-3); } .dvgo { cursor: pointer; } .dvgo:hover .cn, .dvgo:hover b { color: var(--c); }
@@ -6056,7 +6057,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 145; window.CQ_V = APP_V;
+    const APP_V = 147; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -8166,7 +8167,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       ${soldNxPainelHTML() /* v110: a Soldagem no visual novo (soldPainelHTML, o de antes, ficou sem uso) */}
       ${iqfNxPainelHTML() /* v111: o IQF no visual novo (iqPainelHTML, o de antes, ficou sem uso) */}
       ${cqNxPainelHTML() /* v112: Certificados no visual novo (cqPainelHTML, o de antes, ficou dentro de "Mais") */}
-      ${procNxPainelHTML() /* v114: Visão do processo no visual novo (procPainelHTML, o de antes, ficou sem uso) */}
+      ${'' /* v146: "Visão do processo" saiu do Painel a pedido (procNxPainelHTML ficou sem uso; a Ramificações continua) */}
     </div>`;
 
   };
@@ -9419,14 +9420,98 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const tipsC = g.rng.map(([a, b], i) => { const c = soma(CE(a, b)); return g.tips[i] + (c ? ' · R$ ' + money(c) : '') + ' · previsto ' + previstas[i]; });
     const tituloC = { m: 'Calibrações por dia útil', t: 'Calibrações por semana', a: 'Calibrações feitas por mês' }[P.m];
     const grafC = `<div class="chart"><h3>${tituloC}<small>${esc(P.label)} · a tracejada é o previsto (vencimentos)</small></h3>${nxCols('nxc-f', g.cols, [{ nome: 'Feitas', cor: C, v: feitas }], nxTeto(Math.max(1, ...feitas, ...previstas)), { agora: g.agora, tip: tipsC, aria: tituloC, linha: { nome: 'previsto', v: previstas } })}</div>`;
-    /* mais gráficos: custo por laboratório, situação, setor, faixas */
-    const pl = new Map(); cA.forEach((h) => { const k = h.lab || '(sem laboratório)'; const o = pl.get(k) || { n: 0, v: 0 }; o.n++; o.v += insCustoTot(h); pl.set(k, o); });
-    const stN = countBy(R, (x) => ({ CONFORME: 'Em dia', 'VENCE EM BREVE': 'Vence em até 30 dias', 'VENCE HOJE': 'Vence hoje', VENCIDO: 'Vencido', BLOQUEADO: 'Bloqueado (não usar)', 'NO LABORATÓRIO': 'No laboratório', 'MANUTENÇÃO': 'Em manutenção', 'FORA DE USO': 'Fora de uso' }[x.status] || 'Sem calibração'));
-    const mais = `<details class="nxmore"><summary>Mais gráficos de calibração (custo por laboratório, situação, setor, faixas de vencimento) · ${esc(P.label)}</summary><div class="charts">
-      <div class="chart"><h3>Custo por laboratório<small>${esc(P.label)}</small></h3>${nxHbars('nxc-hl', Array.from(pl.entries()).sort((a, b) => b[1].v - a[1].v).slice(0, 8).map(([l, o]) => ({ l, v: o.v, t: 'R$ ' + NF.format(Math.round(o.v)), tip: `${l}: ${o.n} calibração(ões) · R$ ${money(o.v)}`, go: goC({}, 'custos') })), C, { vazio: 'Sem calibrações no período.', vw: 84 })}</div>
-      ${chartHTML('Instrumentos por situação', barsHTML(stN, MOD.INS.c), 'agora')}
-      ${chartHTML('Instrumentos por setor', barsHTML(countBy(R, (x) => x.depto).map((i) => ({ ...i, go: goC({ depto: i.label }) })), MOD.INS.c, { max: 10 }), 'top 10')}
-      ${chartHTML('Faixas de vencimento', barsHTML([7, 15, 30, 60].map((n) => ({ label: 'Vence em até ' + n + ' dias', value: U.filter((x) => x.dias != null && x.dias >= 0 && x.dias <= n).length })), MOD.INS.c), 'agora · em uso')}</div></details>`;
+    /* v147: Desempenho por laboratório, setor e tipo de instrumento (no lugar de "Mais gráficos de calibração"); sem "Dia" */
+    const calFiHTML = () => {
+      const modo = ['lab', 'set', 'tip'].includes(st.fm) ? st.fm : 'lab', nf = (n) => NF.format(n), fr = (a, b) => (b > 0 ? Math.max(0, Math.min(1, a / b)) : 0);
+      const qual = { m: 'no mês', t: 'no trimestre', a: 'em 12 meses' }[P.m], doP = { m: 'do mês', t: 'do trimestre', a: 'em 12 meses' }[P.m];
+      const melhorL = { m: 'maior mês', t: 'maior trimestre', a: '12 meses antes' }[P.m], a12 = Math.min(P.b, hoje) - 370, PV = P.prev;
+      const pc = (v) => (v == null ? '—' : Math.round(v) + '%'), rs = (v) => (v >= 10000 ? 'R$ ' + NF1.format(Math.round(v / 100) / 10) + ' mil' : 'R$ ' + NF.format(Math.round(v)));
+      const curto = (v) => (v >= 1000 ? NF1.format(Math.round(v / 100) / 10) + ' mil' : NF.format(Math.round(v)));
+      const nomeL = (s2) => String(s2 || '').trim(), kLab = (h) => E.key(nomeL(h.lab)), kSet = (x) => E.key(nomeL(x.depto)), kTip = (x) => E.key(nomeL(x.tipo));
+      const TOD = []; R.forEach((x) => (LH.get(x.key) || { ce: [] }).ce.forEach((h) => { if (h.d != null) TOD.push(Object.assign({ x }, h)); }));
+      const cEm = (a, b, f) => TOD.filter((h) => fl(h.d) >= a && fl(h.d) <= b && (!f || f(h)));
+      const cont = new Map(), add = (k, nome, n, t) => { if (!k) return; const o = cont.get(k) || { k, nome, n: 0, t: 0 }; o.n += n; o.t += t; cont.set(k, o); };
+      if (modo === 'lab') { cEm(a12, P.b).forEach((h) => add(kLab(h), nomeL(h.lab), fl(h.d) >= P.a ? 1 : 0, 1)); R.filter((x) => x.status === 'NO LABORATÓRIO').forEach((x) => add(E.key(nomeL(x.lab)), nomeL(x.lab), 0, 1)); }
+      else R.forEach((x) => { const k = modo === 'set' ? kSet(x) : kTip(x); add(k, nomeL(modo === 'set' ? x.depto : x.tipo), 1, 1); });
+      const ENT = Array.from(cont.values()).sort((a, b) => b.n - a.n || b.t - a.t || a.nome.localeCompare(b.nome, 'pt-BR'));
+      const seg3 = `<div class="nxseg dpseg dvmodo" role="group" aria-label="Ver por">${[['lab', 'Laboratórios'], ['set', 'Setores'], ['tip', 'Tipos de instrumento']].map(([k, l]) => `<button type="button" data-act="cal-fm" data-key="${k}" aria-pressed="${modo === k}">${l}</button>`).join('')}</div>`;
+      const segP = `<div class="nxseg dpseg" role="group" aria-label="Período">${[['m', 'Mês'], ['t', 'Trimestre'], ['a', '12 meses']].map(([k, l]) => `<button type="button" data-act="nx-p" data-key="cal|${k}" aria-pressed="${P.m === k}">${l}</button>`).join('')}</div>`;
+      const wrap = (sub, h) => `<details class="nxmore dpwrap" data-dp="calfi"${window.__calFiAberto ? ' open' : ''}><summary>Desempenho por laboratório, setor e tipo de instrumento <small>${sub}</small></summary><div class="dpin"><div class="dpop dvop dvfi" style="--c:var(--n-cal);--cc:color-mix(in srgb, var(--n-cal) 14%, transparent)"><div class="dpchips">${seg3}${segP}</div>${h}</div></div></details>`;
+      if (!R.length) return '';
+      if (!ENT.length) return wrap(esc(P.label), `<p class="dpnt">${{ lab: 'Nenhuma calibração com laboratório nos últimos 12 meses.', set: 'Nenhum instrumento com setor preenchido.', tip: 'Nenhum instrumento com tipo preenchido.' }[modo]}</p>`);
+      const sel = st['f' + modo], it = ENT.find((o) => o.k === sel) || ENT[0];
+      const aneis = (vals, centro, sub) => { const RR = [92, 74, 56]; return `<div class="dvr"><svg viewBox="0 0 210 210" aria-hidden="true">${vals.map((p, i) => { const cc = 2 * Math.PI * RR[i]; return `<circle class="tr" cx="105" cy="105" r="${RR[i]}"/>${p > 0 ? `<circle class="v v${i}" cx="105" cy="105" r="${RR[i]}" stroke-dasharray="${(cc * p).toFixed(1)} ${cc.toFixed(1)}"/>` : ''}`; }).join('')}</svg><div><b>${centro}</b><small>${sub}</small></div></div>`; };
+      const leg = (L2) => `<ul class="dvrl">${L2.map(([l, v], i) => `<li><i class="o${i}"></i><span>${l}</span><b>${v}</b></li>`).join('')}</ul>`;
+      const spk = (V) => { const n = V.length; if (n < 2) return ''; const mx = Math.max(1e-9, ...V), w = 150, h = 36, X = (i) => 2 + (i * (w - 4)) / (n - 1), Y = (v) => h - 3 - (v / mx) * (h - 8); const d = V.map((v, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' '); return `<svg class="dvspk" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="a" d="${d} L${X(n - 1).toFixed(1)},${h} L2,${h} Z"/><path class="l" d="${d}" vector-effect="non-scaling-stroke"/></svg>`; };
+      const dl = (a, b, fmt) => (a == null || b == null || !isFinite(a) || !isFinite(b) || Math.abs(a - b) < 1e-9 ? '' : `<em class="dvd" title="comparado com o período anterior">${a > b ? '▲' : '▼'} ${fmt(Math.abs(a - b), b)}</em>`);
+      const mini = (l, v, sub, d2, V) => `<div class="dvt dvm"><span class="dvk">${l}</span><div class="dvmr"><b>${v}</b>${d2 || ''}</div><small>${sub}</small>${spk(V)}</div>`;
+      const lista5 = (pares, tit, sub, vazio, fmt) => {
+        const tot = pares.reduce((a, b) => a + b[1], 0), mx = pares.length ? Math.max(1e-9, ...pares.map((p) => p[1])) : 1, opc = (k) => (1 - k * 0.16).toFixed(2), f2 = fmt || nf;
+        return `<div class="dvt"><div class="dvth"><b>${tit}</b><small>${sub}</small></div>${pares.length && tot > 0 ? `<div class="dvfx">${pares.filter((p) => p[1] > 0).map(([, v, c2], k) => `<i style="flex:${v};opacity:${c2 && c2 !== 'ok' ? 1 : opc(k)}${c2 && c2 !== 'ok' ? ';background:' + c2 : ''}"></i>`).join('')}</div><ul class="dvcl">${pares.map(([n, v, c2, go], k) => `<li${go ? ` data-go="${esc(JSON.stringify(go))}" tabindex="0" class="dvgo"` : ''}><span class="cp"${c2 && c2 !== 'ok' ? ` style="background:color-mix(in srgb, ${c2} 18%, transparent);color:${c2}"` : ''}>${c2 === OURO ? '!' : c2 === VERM ? '✕' : c2 === 'ok' ? '✓' : k + 1}</span><span class="cn" title="${esc(n)}">${esc(n)}</span><span class="cb"><i style="width:${((v / mx) * 100).toFixed(0)}%;opacity:${c2 && c2 !== 'ok' ? 1 : opc(k)}${c2 && c2 !== 'ok' ? ';background:' + c2 : ''}"></i></span><b>${f2(v)}</b><em>${tot ? Math.round((v / tot) * 100) : 0}%</em></li>`).join('')}</ul>` : `<p class="dpnt">${vazio || 'Nada no período.'}</p>`}</div>`;
+      };
+      const conta2 = (L, f) => { const m = new Map(); L.forEach((o) => { const n = f(o); if (!n) return; m.set(n, (m.get(n) || 0) + 1); }); return Array.from(m.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5); };
+      const ICO = { lab: '<path d="M16 9h8M17.5 9v8l-7 12.5a2 2 0 0 0 1.8 3h15.4a2 2 0 0 0 1.8-3L22.5 17V9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M13.5 25h13" stroke="currentColor" stroke-width="2"/>',
+        set: '<rect x="9" y="9" width="22" height="22" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9 20h12M21 9v22" stroke="currentColor" stroke-width="2"/><circle cx="26" cy="26" r="2" fill="currentColor"/>',
+        tip: '<path d="M7 14h26v6H7zM11 20v7M15 20v4M19 20v7M23 20v4M27 20v7M12 14V9h5v5" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/>' }[modo];
+      const icone = `<svg viewBox="0 0 40 40" aria-hidden="true">${ICO}</svg>`;
+      const mt12 = (() => { const f0 = E.ymd(Math.min(P.b, hoje)), o = []; for (let k = 11; k >= 0; k--) { let y = f0.y, m = f0.m - k; while (m < 1) { m += 12; y--; } const r = nxMes(y, m); o.push({ a: r.a, b: r.b, l: MES3[m - 1] + (m === 1 ? '/' + String(y).slice(2) : '') }); } return o; })();
+      const colunas = (V, L, tit, sub, fmt) => { const mx = Math.max(1e-9, ...V); return `<div class="dvt"><div class="dvth"><b>${tit}</b><small>${sub}</small></div><div class="dvcols">${V.map((v, i) => `<div class="dvco" title="${esc(L[i] + ': ' + fmt(v))}"><div class="dvcb"><i style="height:${((v / mx) * 100).toFixed(0)}%"></i></div><b>${fmt(v)}</b><span>${L[i]}</span></div>`).join('')}</div></div>`; };
+      const abrir = (L) => L.map(([x, t2, s2, d2, cl]) => `<li data-open="INS:${esc(x.key)}" tabindex="0" class="dvgo"><i class="${cl}"></i><div><b>${esc(x.codigo)}${E.filled(x.tipo) ? ' · ' + esc(x.tipo) : ''}</b><small>${esc(s2)}</small></div><em>${esc(d2)}</em></li>`).join('');
+      let perfil, minis, meio, linhas, sub0;
+      const okCert = (s2) => E.filled(s2) && !E.isStar(s2);
+      if (modo === 'lab') {
+        const eh = (h) => kLab(h) === it.k, Ao = cEm(P.a, P.b, eh), Apo = cEm(PV.a, PV.b, eh), A0 = cEm(P.a, P.b), hX = H.map((hh) => cEm(hh.a, hh.b, eh));
+        const lB = P.m === 'a' ? Apo.length : Math.max(Ao.length, ...hX.map((X) => X.length)), parte = A0.length ? Math.round((Ao.length / A0.length) * 100) : 0;
+        const custoM = (X) => { const c = X.filter(insCustoTem); return c.length ? soma(c) / c.length : null; };
+        const fora = (h) => { const e = ((LH.get(h.x.key) || { envs: [] }).envs || []).filter((t) => t <= fl(h.d)).pop(); const cs = (LH.get(h.x.key) || { cals: [] }).cals.filter((c) => c < fl(h.d)).pop(); return e != null && (cs == null || e > cs) ? fl(h.d) - e : null; };
+        const diasF = (X) => { const v = X.map(fora).filter((d) => d != null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+        const UL = U.filter((x) => E.key(nomeL(x.lab)) === it.k), eL = emDia(UL, tA), pL = pctD(eL);
+        const foraN = R.filter((x) => x.status === 'NO LABORATÓRIO' && E.key(nomeL(x.lab)) === it.k), atrN = foraN.filter(insRetAtras), cert = Ao.length ? (Ao.filter((h) => okCert(h.cert)).length / Ao.length) * 100 : null, dF = diasF(Ao);
+        sub0 = `${parte}% das calibrações ${doP}`;
+        perfil = `<div class="dvt dvpf"><div class="dvgl"></div><div class="dvph"><span class="dvico">${icone}</span></div><b class="dvnm" title="${esc(it.nome)}">${esc(it.nome)}</b><small class="dvsb">${sub0}</small>
+          ${aneis([fr(Ao.length, lB), (pL || 0) / 100, (cert || 0) / 100], pc(pL), 'dos instrumentos<br>dele em dia')}
+          ${leg([[`Calibrações ${doP} × ${melhorL}`, `${nf(Ao.length)} / ${nf(lB)}`], ['Instrumentos em dia', pc(pL)], ['Com certificado anexado', pc(cert)]])}
+          <div class="dvpq"><div><span class="dvk">Fora agora</span><b>${nf(foraN.length)}</b><small>instrumentos no lab</small></div><div><span class="dvk">Atrasados</span><b${atrN.length ? ' class="ru"' : ''}>${nf(atrN.length)}</b><small>passou da previsão</small></div></div></div>`;
+        minis = `<div class="dvms">${[mini('Calibrações', nf(Ao.length), qual, dl(Ao.length, Apo.length, (v) => nf(v)), hX.map((X) => X.length)),
+          mini('Custo total', Ao.some(insCustoTem) ? rs(soma(Ao)) : '—', 'todos os custos somados', dl(soma(Ao), soma(Apo), (v) => curto(v)), hX.map(soma)),
+          mini('Custo médio', custoM(Ao) == null ? '—' : rs(custoM(Ao)), 'por instrumento', custoM(Ao) != null && custoM(Apo) != null ? dl(custoM(Ao), custoM(Apo), (v) => curto(v)) : '', hX.map((X) => custoM(X) || 0)),
+          mini('Dias fora', dF == null ? '—' : NF.format(Math.round(dF)) + ' d', dF == null ? 'só com "Enviar para calibração"' : 'média de ida e volta', dF != null && diasF(Apo) != null ? dl(dF, diasF(Apo), (v) => NF.format(Math.round(v)) + ' d') : '', hX.map((X) => diasF(X) || 0))].join('')}</div>`;
+        meio = colunas(mt12.map((mm) => soma(cEm(mm.a, mm.b, eh))), mt12.map((mm) => mm.l), 'Custo por mês', `últimos 12 meses · ${esc(it.nome)} · em R$`, curto);
+        const pt = INS_CUSTOS.map(([k, l]) => [l.charAt(0).toUpperCase() + l.slice(1), Ao.reduce((s2, h) => s2 + (h[k] || 0), 0)]);
+        const ult = foraN.map((x) => [x, '', `no laboratório${x.envio != null ? ' há ' + Math.max(0, hoje - fl(x.envio)) + ' dias' : ''}${insRetAtras(x) ? ' · passou da previsão' : x.prevRet != null ? ' · volta ' + fD(x.prevRet).slice(0, 5) : ''}`, 'fora', insRetAtras(x) ? 'r' : 'p'])
+          .concat(cEm(a12, P.b, eh).sort((a, b) => b.d - a.d).map((h) => [h.x, '', [h.res === 'REPROVADO' ? 'reprovado' : 'voltou', insCustoTem(h) ? rs(insCustoTot(h)) : ''].filter(Boolean).join(' · '), fD(h.d).slice(0, 5), h.res === 'REPROVADO' ? 'r' : ''])).slice(0, 4);
+        linhas = `<div class="dvrow">${lista5(conta2(Ao, (h) => nomeL(h.x.tipo) || '(sem tipo)'), 'O que mais calibra', `${qual} · ${nf(Ao.length)} no total`)}${lista5(pt, 'Do que é feito o custo', `em R$ ${qual}`, 'Nenhum custo lançado no período.', (v) => NF.format(Math.round(v)))}</div>
+          <div class="dvrow">${lista5(conta2(Ao, (h) => nomeL(h.x.depto) || '(sem setor)'), 'Setores atendidos', `calibrações ${qual}`)}<div class="dvt"><div class="dvth"><b>Últimas calibrações</b><small>toque para abrir a ficha</small></div>${ult.length ? `<ul class="dvfl">${abrir(ult)}</ul>` : '<p class="dpnt">Nenhuma calibração nos últimos 12 meses.</p>'}</div></div>`;
+      } else {
+        const ehX = (x) => (modo === 'set' ? kSet(x) : kTip(x)) === it.k, G2 = R.filter(ehX), UG = G2.filter((x) => x.emUso), eh = (h) => ehX(h.x);
+        const Ao = cEm(P.a, P.b, eh), Apo = cEm(PV.a, PV.b, eh), hX = H.map((hh) => cEm(hh.a, hh.b, eh));
+        const eG = emDia(UG, tA), pG = pctD(eG), pGp = pctD(emDia(UG, tP)), pE = pctD(emDia(U, tA));
+        const antes = (() => { let n = 0, d = 0; cEm(a12, P.b, eh).forEach((h) => { const cs = (LH.get(h.x.key) || { cals: [] }).cals.filter((c) => c < fl(h.d)).pop(); if (cs == null || !h.x.freq) return; d++; if (fl(h.d) <= E.edate(cs, h.x.freq)) n++; }); return d ? (n / d) * 100 : null; })();
+        const cert = UG.length ? (UG.filter((x) => okCert(x.cert)).length / UG.length) * 100 : null, nV = conta(UG, tA, 'venc'), n30 = conta(UG, tA, 'v30');
+        const custoM = (X) => { const c = X.filter(insCustoTem); return c.length ? soma(c) / c.length : null; };
+        sub0 = `${nf(G2.length)} ${G2.length === 1 ? 'instrumento' : 'instrumentos'} · ${R.length ? Math.round((G2.length / R.length) * 100) : 0}% do total`;
+        perfil = `<div class="dvt dvpf"><div class="dvgl"></div><div class="dvph"><span class="dvico">${icone}</span></div><b class="dvnm" title="${esc(it.nome)}">${esc(it.nome)}</b><small class="dvsb">${sub0}</small>
+          ${aneis([fr(eG.n, eG.d), (antes || 0) / 100, (cert || 0) / 100], pc(pG), 'em dia')}
+          ${leg([['Instrumentos em dia', `${nf(eG.n)} / ${nf(eG.d)}`], ['Calibrados antes de vencer', pc(antes)], ['Com certificado anexado', pc(cert)]])}
+          <div class="dvpq"><div><span class="dvk">Vencidos</span><b${nV ? ' class="ru"' : ''}>${nf(nV)}</b><small>não usar</small></div><div><span class="dvk">Vencem logo</span><b${n30 ? ' class="ou"' : ''}>${nf(n30)}</b><small>em até 30 dias</small></div></div></div>`;
+        minis = `<div class="dvms">${[mini('Instrumentos', nf(G2.length), modo === 'set' ? 'no setor' : 'deste tipo', '', []),
+          mini('Em dia', pc(pG), pE == null ? 'em uso' : `empresa ${Math.round(pE)}%`, pG != null && pGp != null ? dl(pG, pGp, (v) => Math.round(v) + ' p.p.') : '', H.map((hh) => pctD(emDia(UG, hh.b)) || 0)),
+          mini('Calibrações', nf(Ao.length), qual, dl(Ao.length, Apo.length, (v) => nf(v)), hX.map((X) => X.length)),
+          modo === 'set' ? mini('Custo', Ao.some(insCustoTem) ? rs(soma(Ao)) : '—', qual, dl(soma(Ao), soma(Apo), (v) => curto(v)), hX.map(soma))
+            : mini('Custo médio', custoM(Ao) == null ? '—' : rs(custoM(Ao)), 'por calibração', custoM(Ao) != null && custoM(Apo) != null ? dl(custoM(Ao), custoM(Apo), (v) => curto(v)) : '', hX.map((X) => custoM(X) || 0))].join('')}</div>`;
+        const VG = VV.filter(ehX);
+        meio = colunas(M12.map((r) => VG.filter((x) => x.validade >= r.a && x.validade <= r.b).length), M12.map((r) => r.l), 'Vencimentos', `próximos 12 meses · ${esc(it.nome)} · instrumentos que vencem em cada mês`, (v) => nf(v));
+        const nLab = UG.filter((x) => x.status === 'NO LABORATÓRIO').length;
+        const sit = [['Folgados', Math.max(0, eG.n - n30), 'ok'], ['Vencem em 30 dias', n30, OURO], ['Vencidos', nV, VERM]];
+        const prox = UG.filter((x) => x.dias != null && x.dias <= 30 && x.status !== 'NO LABORATÓRIO').sort((a, b) => a.dias - b.dias).slice(0, 4)
+          .map((x) => [x, '', x.dias < 0 ? `venceu em ${fD(x.validade).slice(0, 5)} · não usar` : x.dias === 0 ? 'vence hoje' : `vence em ${fD(x.validade).slice(0, 5)}`, x.dias < 0 ? 'vencido' : x.dias + ' d', x.dias < 0 ? 'r' : 'p']);
+        const outra = modo === 'set' ? conta2(G2, (x) => nomeL(x.tipo) || '(sem tipo)') : conta2(G2, (x) => nomeL(x.depto) || '(sem setor)');
+        linhas = `<div class="dvrow">${lista5(outra, modo === 'set' ? 'Tipos de instrumento' : 'Em quais setores', `${modo === 'set' ? 'no setor' : 'deste tipo'} · ${nf(G2.length)} no total`)}${lista5(sit, 'Situação', `agora · folgados = mais de 30 dias${nLab ? ' · ' + nf(nLab) + ' no laboratório' : ''}`, 'Nenhum instrumento em uso com calibração registrada.')}</div>
+          <div class="dvrow">${lista5(conta2(cEm(a12, P.b, eh), (h) => nomeL(h.lab) || '(sem laboratório)'), 'Laboratórios usados', 'calibrações em 12 meses', 'Nenhuma calibração nos últimos 12 meses.')}<div class="dvt"><div class="dvth"><b>Próximos a vencer</b><small>toque para abrir a ficha</small></div>${prox.length ? `<ul class="dvfl">${abrir(prox)}</ul>` : '<p class="dpnt">Nada vencido nem vencendo nos próximos 30 dias.</p>'}</div></div>`;
+      }
+      const chips = `<div class="dpchips dvfich">${ENT.map((o) => `<button type="button" class="dpch${o.k === it.k ? ' on' : ''}" data-act="cal-fi" data-key="${esc(o.k)}" aria-pressed="${o.k === it.k}"><span class="dpav dvico">${icone}</span>${esc(o.nome)}</button>`).join('')}</div>`;
+      return wrap(`${esc(it.nome)} · ${esc(P.label)}`, `${chips}<div class="dvc2">${perfil}<div class="dvrc">${minis}${meio}${linhas}</div></div>`);
+    };
     /* resumo */
     const dPP = pA != null && pP != null ? Math.round((pA - pP) * 10) / 10 : null;
     const i1 = pA == null ? ['info', 'Nenhum instrumento em uso com calibração registrada.'] : [eA.n === eA.d ? 'ok' : pA >= 90 ? 'info' : 'warn', `<b>${NF.format(Math.round(pA))}% dos instrumentos em dia</b>${dPP ? ` — ${dPP > 0 ? 'subiu' : 'caiu'} ${NF1.format(Math.abs(dPP))} ${Math.abs(dPP) === 1 ? 'ponto' : 'pontos'} desde ${esc(P.cmpL)}` : dPP === 0 ? ` — igual a ${esc(P.cmpL)}` : ''}.`];
@@ -9438,7 +9523,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       : vencN.length ? ['crit', `<b>${vencN.length === 1 ? '1 instrumento vencido' : vencN.length + ' instrumentos vencidos'}</b> agora: ${vencN.slice(0, 3).map((x) => esc(x.codigo)).join(', ')} — usar só depois de calibrar.`]
       : cA.length > semCusto ? ['info', `<b>${reais(gA)}</b> em ${NF.format(cA.length)} ${cA.length === 1 ? 'calibração' : 'calibrações'} ${quando}${gP > 0 ? ` (${gA >= gP ? '+' : '−'}${NF.format(Math.abs(Math.round((gA - gP) / gP * 100)))}% vs ${esc(P.cmpL)})` : ''}.`]
       : ['ok', '<b>Nenhum vencido</b> e nenhum retorno atrasado.'];
-    return sec(nxIns([i1, i2, i3], nxResumoT(P)) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Com quem está<small>instrumentos em uso por pessoa · ${P.cur ? 'agora' : esc(P.label)}</small></h3>${tabQ}</div>${grafC}</div>${mais}`);
+    return sec(nxIns([i1, i2, i3], nxResumoT(P)) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Com quem está<small>instrumentos em uso por pessoa · ${P.cur ? 'agora' : esc(P.label)}</small></h3>${tabQ}</div>${grafC}</div>${calFiHTML()}`);
   }
   /* ================= v107: RIR (inspeção de recebimento) no visual novo ================= */
   function rirNxPainelHTML() {
@@ -24087,7 +24172,7 @@ ${trGuil(W, H, M, B)}
   const corrLines = (m) => (Array.isArray(m.abCorr) ? m.abCorr : []).map((c) => `Abertura corrigida por ${esc(c.nome || '')} em ${dmy(c.at)} às ${hhmm(c.at)}: ${esc(c.motivo || '')}`);
 
   /* ================= eventos globais ================= */
-  document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.matches && d.matches('details[data-dp]')) { if (d.dataset.dp === 'rir') window.__rirDpAberto = d.open; else if (d.dataset.dp === 'av') window.__avDpAberto = d.open; else if (d.dataset.dp === 'avfi') window.__avFiAberto = d.open; else window.__cqDpAberto = d.open; } }, true);   /* v132; v135: não guarda no aparelho */
+  document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.matches && d.matches('details[data-dp]')) { if (d.dataset.dp === 'rir') window.__rirDpAberto = d.open; else if (d.dataset.dp === 'av') window.__avDpAberto = d.open; else if (d.dataset.dp === 'avfi') window.__avFiAberto = d.open; else if (d.dataset.dp === 'calfi') window.__calFiAberto = d.open; else window.__cqDpAberto = d.open; } }, true);   /* v132; v135: não guarda no aparelho */
   document.addEventListener('click', (e) => {
     const t = e.target;
     const act = t.closest('[data-act]'), op = t.closest('[data-open]'), g = t.closest('[data-go]');
@@ -24119,6 +24204,8 @@ ${trGuil(W, H, M, B)}
       if (a === 'rir-op') { NX.rir.op = key; nxAtualiza('rir'); return; }   /* v141 */
       if (a === 'av-op') { NX.av.op = key; nxAtualiza('av'); return; }   /* v143 */
       if (a === 'av-fm') { NX.av.fm = key; nxAtualiza('av'); return; }   /* v145 */
+      if (a === 'cal-fm') { NX.cal.fm = key; nxAtualiza('cal'); return; }   /* v147 */
+      if (a === 'cal-fi') { NX.cal['f' + (['lab', 'set', 'tip'].includes(NX.cal.fm) ? NX.cal.fm : 'lab')] = key; nxAtualiza('cal'); return; }
       if (a === 'av-fi') { if (NX.av.fm === 'fo') NX.av.fo = key; else NX.av.fi = key; nxAtualiza('av'); return; }
       if (a === 'proc-seg') { const i = $('#nx-proc-q'); NX.proc.q = i ? i.value : ''; nxAtualiza('proc'); const n2 = $('#nx-proc-q'); if (n2) n2.focus(); return; }   /* v114: seguir um lote */
       if (a && a.startsWith('nx-') && nxAct(a, key)) return;   /* v101: indicadores no visual novo */
