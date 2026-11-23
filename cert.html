@@ -682,7 +682,6 @@ html.ws .ws-tit { gap: 12px; } html.ws.cq-embed .ws-tit .ws-nm { display: none; 
 html.ws[data-theme="dark"] { --tc: #b8c34a; --tc-ink: #111413; } html.ws.t-grades[data-theme="dark"] { --tc: #4fb3c9; } html.ws.t-valvulas[data-theme="dark"] { --tc: #c3ced6; }
 html.ws .ws-top { box-shadow: inset 0 3px 0 var(--tc); } html.ws.cq-embed .ws-top { border-color: color-mix(in srgb, var(--tc) 55%, var(--w-line)); }
 html.ws .ws-pr:not(.off):not(.fix) { border-color: var(--tc); } html.ws .ws-pr:not(.off):not(.fix) i { background: var(--tc); color: var(--tc-ink); }
-html.ws #ws { box-shadow: inset 3px 0 0 var(--tc); }
 .ws-ic { width: 36px; height: 36px; border-radius: 8px; background: #15191a; color: #f1f0eb; display: grid; place-content: center; justify-items: center; gap: 3px; flex: none; font: 700 15px/1 var(--w-disp); letter-spacing: .02em; }
 .ws-ic { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); }
 .ws-ic i { display: block; width: 21px; height: 2.5px; border-radius: 2px; background: var(--w-rev); }
@@ -765,7 +764,10 @@ html.t-grades .ws-sec .ws-gw:has(> .ws-g[data-t="corr"]), html.t-grades .ws-sec 
 .ws-st { display: flex; gap: 22px; align-items: center; border-top: 1px solid var(--w-line); margin-top: 10px; padding: 10px 2px 2px; font: 400 14px var(--w-body); color: var(--w-ink2); white-space: nowrap; overflow: hidden; }
 .ws-st b { color: var(--w-ink); font-weight: 600; } .ws-st .gr { flex: 1; }
 .ws-side { display: grid; gap: 16px; align-content: start; min-height: 0; overflow: auto; padding-top: 14px; }
-#ws-folha { display: none !important; }   /* v152: "Esta folha" saiu: cortava a prévia e as informações não eram importantes */
+#ws-folha { display: none !important; }
+html.ws.ws-fit .ws-body { grid-template-columns: minmax(0, 1fr) var(--ws-side, 380px); }   /* v153: coluna da prévia do tamanho da folha */
+html.ws.ws-fit .ws-side { grid-template-rows: minmax(0, 1fr); align-content: stretch; }
+html.ws.ws-fit .ws-prev { display: flex; flex-direction: column; min-height: 0; } html.ws.ws-fit .ws-pv { flex: 1 1 auto; min-height: 0; overflow: hidden auto; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; }   /* a área branca é a própria folha A4 */   /* v152: "Esta folha" saiu: cortava a prévia e as informações não eram importantes */
 .ws-card { background: var(--w-sf); border: 1px solid var(--w-line); border-radius: 12px; padding: 14px 16px; }
 .ws-ch { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
 .ws-ch b { font: 700 21px/1 var(--w-disp); } .ws-ch span { font: 400 13.5px var(--w-body); color: var(--w-ink3); }
@@ -789,7 +791,7 @@ html.t-grades .ws-sec .ws-gw:has(> .ws-g[data-t="corr"]), html.t-grades .ws-sec 
 .ws-fr button { height: 44px; border: 0; border-radius: 9px; background: var(--w-sf2); color: var(--w-ink); font: 500 15px var(--w-body); cursor: pointer; padding: 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ws-fr button:hover { background: var(--w-line); } .ws-fr button.nova { background: var(--w-sf); border: 1px dashed var(--w-line2); color: var(--w-ink2); }
 .ws-sig { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--w-line); border-radius: 10px; padding: 10px 12px; min-height: 64px; box-sizing: border-box; }
-.ws-sig img { max-height: 46px; max-width: 60%; } .ws-sig span { color: var(--w-ink3); font-size: 14.5px; }
+.ws-sig .ws-tb { flex: none; white-space: nowrap; padding: 0 12px; } .ws-sig img { max-height: 46px; max-width: 60%; } .ws-sig span { color: var(--w-ink3); font-size: 14.5px; }
 .ws-ck { display: flex; align-items: center; gap: 10px; min-height: 44px; font: 400 15px var(--w-body); cursor: pointer; }
 .ws-ck input { width: 20px; height: 20px; accent-color: var(--w-or); flex: none; }
 /* menus e janelas */
@@ -874,7 +876,7 @@ html.ws.cq-embed .ws-body { padding: 0 0 2px; }
 .ws-sech > em.ok { background: var(--w-okbg); color: var(--w-ok); } .ws-sech > em.cr { background: var(--w-critbg); color: var(--w-crit); } .ws-sech > em.wn { background: var(--w-warnbg); color: var(--w-warn); }
 .ws-sech .sp { flex: 1; }
 .ws-sech .ws-bar { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-left: auto; }
-.ws-sech .ws-bar .ws-tb { width: 150px; flex: none; }
+.ws-sech .ws-bar .ws-tb { min-width: 150px; width: auto; padding: 0 12px; flex: none; white-space: nowrap; }   /* v153: o nome do botão nunca é cortado */
 .ws-cnt { display: grid; grid-template-columns: auto 36px 40px 36px auto; align-items: center; gap: 6px; height: 36px; padding: 0 10px; border: 1px solid var(--w-line2); border-radius: 9px; background: var(--w-sf2); }
 .ws-cnt span { font: 600 12px var(--w-body); text-transform: uppercase; letter-spacing: .04em; color: var(--w-ink3); margin-right: 2px; }
 .ws-cnt button { width: 36px; height: 28px; border: 1px solid var(--w-line2); border-radius: 7px; background: var(--w-sf); color: var(--w-ink); font: 700 17px/1 var(--w-body); cursor: pointer; display: grid; place-items: center; padding: 0; }
@@ -7675,9 +7677,31 @@ function wsPrevia(abrir, inicio) {
 function wsZoom() {
   if (!WS.on || !LAYOUT) return;
   const box = $('ws-pv'); if (!box) return;
-  const card = box.parentElement, cs = getComputedStyle(card);
-  const w = card.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 2;
-  if (w > 50) applyZoom(Math.max(0.2, (w - 4) / (LAYOUT.W + 40)), false);
+  const card = box.parentElement, cs = getComputedStyle(card), root = document.documentElement;
+  const larga = window.innerWidth > 1100 && !root.classList.contains('ws-semprev');
+  /* v153: a prévia mostra a folha inteira, sem cortar as laterais, e a coluna da direita fica do tamanho da folha
+     (a página cabe na altura da tela; sem espaço sobrando embaixo) */
+  const z0 = parseFloat(paperEl.style.zoom) || 1, r = paperEl.getBoundingClientRect();
+  const W0 = (r.width || 1) / z0, H0 = W0 * 1.414;   /* a folha do PDF é A4 em pé */
+  const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) + 4;
+  let z;
+  if (larga) {
+    const ch = card.querySelector('.ws-ch'), top = card.getBoundingClientRect().top;
+    const livre = window.innerHeight - Math.max(0, top) - (ch ? ch.offsetHeight + 10 : 0) - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 4 - 18;
+    const body = document.querySelector('.ws-body'), bw = body ? body.clientWidth : window.innerWidth;
+    const zH = Math.max(0.15, livre / H0), maxW = Math.max(320, Math.min(bw * 0.42, 620)), minW = 300;
+    let lado = W0 * zH + padX;
+    if (lado > maxW) lado = maxW; if (lado < minW) lado = minW;
+    z = Math.min(zH, (lado - padX) / W0);
+    root.style.setProperty('--ws-side', Math.round(lado) + 'px'); root.classList.add('ws-fit');
+  } else {
+    root.classList.remove('ws-fit');
+    const w = card.clientWidth - padX;
+    z = (w - 2) / W0;
+  }
+  zoom = Math.max(0.12, Math.round(z * 1000) / 1000);
+  paperEl.style.zoom = zoom;
+  $('zoomVal').textContent = Math.round(zoom * 100) + '%';
 }
 /* aço carbono (A105, A350 LF2, A106 B, A234 WPB): o CE vazio é calculado sozinho, marcado como sugestão até alguém conferir */
 const WS_CE_NORMAS = ['A105', 'LF2', 'A106B', 'WPB'];
