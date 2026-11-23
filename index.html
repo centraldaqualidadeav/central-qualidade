@@ -1702,6 +1702,15 @@ body.tabmode .main { padding: 0 !important; }
 .cqc.crit .cqpb { color: var(--ink); }
 .cqc.crit .chip.warn { background: rgba(255, 255, 255, .16); color: #ffe7a3; }
 .cqtag.star { background: #7a1f24; color: #fff; }
+.cqc.ft { background-color: #1a1f1d; background-size: cover; background-position: center 55%; }   /* v157: foto do cliente no fundo, etiquetas pretas alinhadas */
+.cqc.ft .cqpv, .cqc.ft .cqnf, .cqc.ft .cqs .muted, .cqc.ft .cqcli, .cqc.ft .cqf .btn, .cqc.ft .cqmenu, .cqc.ft .cqdb, .cqc.ft .cqparc, .cqc.ft .cqras, .cqc.ft .cqwho, .cqc.ft .chip, .cqc.ft .cqtp {
+  background: #000; color: #fff; border: 0; border-radius: 5px; padding: 0 8px; margin: 0; box-shadow: none; }
+.cqc.ft .cqpv { line-height: 24px; width: max-content; } .cqc.ft .cqnf, .cqc.ft .cqs .muted, .cqc.ft .cqparc, .cqc.ft .cqras { line-height: 19px; }   /* mesma altura das linhas do cartão sem foto */
+.cqc.ft .cqs { gap: 8px; } .cqc.ft .cqs .muted, .cqc.ft .cqmenu { margin-left: auto; } .cqc.ft .cqdb { color: var(--n-tcr); line-height: 20px; } .cqc.ft .cqmenu { line-height: 22px; }
+.cqc.ft .cqcli { width: max-content; max-width: 100%; min-height: 0; line-height: 20px; -webkit-line-clamp: 1; } .cqc.ft .cqras { width: max-content; }
+.cqc.ft .cqf .btn { height: 28px; line-height: 28px; } .cqc.ft .cqf .btn.cqgo { background: #000; color: #fff; }
+.cqc.ft .cqtag { box-shadow: 0 0 0 2px #000; }
+.edimg { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 12px; align-items: start; } .edimg-th { width: 140px; height: 78px; border-radius: 8px; background: var(--surface-2) center / cover no-repeat; border: 1px solid var(--line); } .edimg-th.vz::after { content: 'sem imagem'; display: grid; place-items: center; height: 100%; font-size: 12px; color: var(--ink-3); }
 .crzb { margin-left: 6px; height: 28px; padding: 0 6px; font-size: 12px; width: auto; }
 /* v155: cliente crítico — fita zebrada a 45° no topo do cartão (amarelo/preto ou branco/preto, pelo cadastro do cliente) */
 .cqfita { margin: -9px -10px 3px; height: 24px; border-radius: 7px 7px 0 0; background: repeating-linear-gradient(-45deg, var(--z) 0 10px, #111 10px 20px); display: flex; align-items: center; justify-content: center; flex: none; }
@@ -6076,7 +6085,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 156; window.CQ_V = APP_V;
+    const APP_V = 157; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -14449,6 +14458,46 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       catch (e) { S.codRun = false; /* tenta de novo na próxima carga */ }
     }
   }
+  /* v157: imagem do cliente (só a conta dona): diminui para no máx. 720 px, guarda em cliimg/<id> e marca a ficha com a data */
+  async function cliImgReduz(file) {
+    const url = URL.createObjectURL(file);
+    try {
+      const img = await new Promise((res, rej) => { const i2 = new Image(); i2.onload = () => res(i2); i2.onerror = rej; i2.src = url; });
+      const k = Math.min(1, 720 / Math.max(img.naturalWidth, img.naturalHeight)), W = Math.round(img.naturalWidth * k), H = Math.round(img.naturalHeight * k);
+      const cv = document.createElement('canvas'); cv.width = W; cv.height = H; cv.getContext('2d').drawImage(img, 0, 0, W, H);
+      let q = 0.78, d = cv.toDataURL('image/jpeg', q); while (d.length > 160000 && q > 0.4) { q -= 0.1; d = cv.toDataURL('image/jpeg', q); }
+      return d;
+    } finally { URL.revokeObjectURL(url); }
+  }
+  function cliImgWire(nome, i) {
+    const th = $('#ed-img-th'), inp = $('#ed-img-file'), bIn = $('#ed-img-in'), bDel = $('#ed-img-del'); if (!th || !bIn) return;
+    const id = cliImgId(i.id ? i : { nome }), mostra = (src) => { th.style.backgroundImage = src ? `url("${src}")` : ''; th.classList.toggle('vz', !src); };
+    mostra(null);
+    if (i.foto) DB.db.doc('cliimg/' + id).get().then((sn) => { if (sn && sn.exists) mostra((sn.data() || {}).img); }).catch(() => {});
+    const marca = async (foto) => saveEnt('cli', (names, info) => {
+      const k = info.findIndex((o) => E.key(o.nome) === E.key(nome));
+      if (k >= 0) { const o = Object.assign({}, info[k]); if (foto) o.foto = foto; else delete o.foto; info[k] = o; } else if (foto) info.push({ nome, foto });
+      return { names, info };
+    }, `Cliente ${nome}: ${foto ? 'imagem nos cartões de certificados' : 'imagem tirada'}`);
+    bIn.onclick = () => inp.click();
+    inp.onchange = async () => {
+      const f = inp.files && inp.files[0]; inp.value = ''; if (!f) return;
+      bIn.disabled = true; const t0 = bIn.textContent; bIn.textContent = 'Guardando…';
+      try {
+        const img = await cliImgReduz(f), at = Date.now();
+        await DB.db.doc('cliimg/' + id).set({ img, nome, at, by: DB.me || null });
+        if (await marca(at)) { CLIIMG.m.set(id, { at, img }); cliImgCss(); try { localStorage.setItem('cq-cliimg-' + id, JSON.stringify({ at, img })); } catch (e) { /* ok */ } mostra(img); bIn.textContent = 'Trocar a imagem…'; toast(`Imagem de ${nome} guardada: aparece nos cartões de certificados.`); }
+        else bIn.textContent = t0;
+      } catch (err) { bIn.textContent = t0; toast('Não foi possível guardar a imagem: ' + ((err && (err.message || err.code)) || err), true); }
+      bIn.disabled = false;
+    };
+    if (bDel) bDel.onclick = async () => {
+      if (!bDel.dataset.ok) { bDel.dataset.ok = '1'; bDel.textContent = 'Clique de novo para tirar'; setTimeout(() => { if (bDel.isConnected) { delete bDel.dataset.ok; bDel.textContent = 'Tirar a imagem'; } }, 4000); return; }
+      bDel.disabled = true;
+      try { await marca(null); try { await DB.db.doc('cliimg/' + id).delete(); } catch (e) { /* a ficha já não aponta para ela */ } CLIIMG.m.delete(id); cliImgCss(); try { localStorage.removeItem('cq-cliimg-' + id); } catch (e) { /* ok */ } mostra(null); bDel.remove(); bIn.textContent = 'Incluir uma imagem…'; toast(`Imagem de ${nome} tirada.`); }
+      catch (err) { bDel.disabled = false; toast('Não foi possível tirar: ' + ((err && (err.message || err.code)) || err), true); }
+    };
+  }
   function entDrawer(kind, nome, ro, op) {
     op = op || {};
     const D = ENT[kind], novo = !nome, i = (nome && entInfo(kind, nome)) || (op.pre ? { cnpj: op.pre.cnpj ? cnpjFmt(op.pre.cnpj) : '' } : {}), st = nome ? (D.stats().get(E.key(nome)) || {}) : {};
@@ -14471,9 +14520,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <label class="field"><span>Observação</span><textarea id="ed-obs" style="min-height:64px" ${dis}>${esc(i.obs || '')}</textarea></label>
       <div class="field"><span>Situação</span><div class="seg" id="ed-sit"><button type="button" data-s="1" aria-pressed="${!i.inativo}" ${dis}>Ativo</button><button type="button" data-s="0" aria-pressed="${!!i.inativo}" ${dis}>Inativo</button></div></div>
       <div class="okbox" style="border-color:var(--info)">Para mais de um e-mail ou apelido, separe com vírgula. Filial da mesma empresa: ponha o CNPJ dela em Outros CNPJs (não precisa de outra ficha). Quem digitar um apelido grava o nome oficial. Renomear atualiza o nome em todos os registros. Inativo some das listas de escolha${uso ? `, mas continua nos ${NF.format(uso)} registro(s) em que aparece` : ''}.</div>
+      ${kind === 'cli' && nome && DB.owner ? `<div class="field" id="ed-img-f"><span>Imagem nos cartões de certificados <small class="muted">· só a conta dona vê</small></span><div class="edimg"><div class="edimg-th" id="ed-img-th"></div><div><button class="btn small" type="button" id="ed-img-in">${i.foto ? 'Trocar a imagem…' : 'Incluir uma imagem…'}</button> ${i.foto ? '<button class="btn small ghost" type="button" id="ed-img-del">Tirar a imagem</button>' : ''}<small class="muted" style="display:block;margin-top:6px">JPG ou PNG. A Central diminui a foto antes de guardar (fica leve). Aparece só dentro da Central, nos cartões deste cliente — nunca no certificado nem em e-mail.</small><input type="file" id="ed-img-file" accept="image/*" hidden></div></div></div>` : ''}
       <div id="ed-grupo"></div>
       ${ro ? '' : `<div class="formfoot"><button class="btn primary" type="button" id="ed-save">${novo ? 'Cadastrar' : 'Salvar'}</button><button class="btn" type="button" data-act="close">Cancelar</button>${novo ? '' : '<button class="btn ghost tcrit push" type="button" id="ed-del">Excluir</button>'}</div>`}
     </div>`, D.cor);
+    if (kind === 'cli' && nome && DB.owner) cliImgWire(nome, i);   /* v157 */
     if (ro) { const l = $('#ed-cjs-l'); if (l) l.innerHTML = (i.cnpjs || []).map((c) => `<span class="pvschip mono">${esc(c)}</span>`).join('') || '<span class="muted">nenhum</span>'; return; }
     $$('#ed-sit [data-s]').forEach((b) => { b.onclick = () => $$('#ed-sit [data-s]').forEach((x) => x.setAttribute('aria-pressed', x === b)); });
     $$('#ed-tipo [data-t]').forEach((b) => { b.onclick = () => $$('#ed-tipo [data-t]').forEach((x) => x.setAttribute('aria-pressed', x === b)); });
@@ -14563,7 +14614,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
           if (names.some((x, j) => j !== iN && E.key(x) === E.key(nn))) { toast(`Já existe um ${D.one} com esse nome.`, true); return null; }
           if (iN >= 0) names[iN] = nn; else names.push(nn);
           const ii = info.findIndex((o) => E.key(o.nome) === E.key(nome || nn));
-          if (ii >= 0) { ni.id = info[ii].id; if (info[ii].cod) ni.cod = info[ii].cod; if (info[ii].critico) ni.critico = true; if (info[ii].zebra) ni.zebra = info[ii].zebra; info[ii] = ni; } else info.push(ni);
+          if (ii >= 0) { ni.id = info[ii].id; if (info[ii].cod) ni.cod = info[ii].cod; if (info[ii].critico) ni.critico = true; if (info[ii].zebra) ni.zebra = info[ii].zebra; if (info[ii].foto) ni.foto = info[ii].foto; info[ii] = ni; } else info.push(ni);
           /* v64: fichas juntadas nesta: nome e apelidos viram apelidos, CNPJs e e-mails entram; a ficha sai */
           JUNTA.forEach((jt) => {
             const jk = E.key(jt.nome), o = info.find((x) => E.key(x.nome) === jk) || jt;
@@ -15885,6 +15936,31 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const cqNomesCrit = () => ((S.model && S.model.cfg.CLI_INFO) || []).filter((o) => o.critico && !o.inativo && CQ_ZEB[o.zebra]).map((o) => cqCliCurto(o.nome)).filter((x, i, A) => x && A.indexOf(x) === i).join(' / ');
   const cqPedeDB = (c) => cqCfg().dbCli.map((x) => E.key(x)).filter(Boolean).some((x) => E.key(c.cli || '').includes(x));
   const cqStarDB = (c) => `<span class="cqstar" style="--z:${cqZebCor(c)}" title="Cliente crítico">★</span>${cqPedeDB(c) ? '<span class="cqdb" title="Este cliente pede Data Book">◆ Data Book</span>' : ''}`;
+  /* v157: imagem do cliente nos cartões de certificados (a conta dona coloca no cadastro do cliente).
+     A foto fica em cliimg/<id> (fora da configuração, para não pesar para todo mundo); a ficha do cliente só guarda "foto: data".
+     Cada aparelho baixa a foto uma vez e guarda; os cartões usam uma classe CSS, não a foto repetida em cada cartão. */
+  const CLIIMG = { m: new Map(), pedindo: new Set() };
+  const cliImgId = (o) => 'c-' + String((o && (o.id || o.nome)) || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80);
+  function cliImgCss() {
+    let st = document.getElementById('cq-cliimg-css'); if (!st) { st = document.createElement('style'); st.id = 'cq-cliimg-css'; document.head.appendChild(st); }
+    st.textContent = Array.from(CLIIMG.m.entries()).filter(([, v]) => v && v.img).map(([k, v]) => `.cqc.ft.${k}{background-image:url("${v.img}")}`).join('\n');
+  }
+  function cqFotoCls(c) {
+    const o = c && c.cli ? entResolve('cli', c.cli) : null; if (!o || !o.foto) return '';
+    const id = cliImgId(o), v = CLIIMG.m.get(id);
+    if (v && v.at === o.foto) return v.img ? ` ft ${id}` : '';
+    if (!CLIIMG.pedindo.has(id)) {
+      CLIIMG.pedindo.add(id);
+      const lk = 'cq-cliimg-' + id; let ls = null; try { ls = JSON.parse(localStorage.getItem(lk) || 'null'); } catch (e) { ls = null; }
+      if (ls && ls.at === o.foto && ls.img) { CLIIMG.m.set(id, ls); CLIIMG.pedindo.delete(id); cliImgCss(); return ` ft ${id}`; }
+      DB.db.doc('cliimg/' + id).get().then((sn) => {
+        const d = sn && sn.exists ? sn.data() || {} : {}, v2 = { at: o.foto, img: d.img || null };
+        CLIIMG.m.set(id, v2); cliImgCss(); try { if (v2.img) localStorage.setItem(lk, JSON.stringify(v2)); } catch (e) { /* sem espaço: baixa de novo da próxima vez */ }
+        if (v2.img && (S.view === 'certq')) render();
+      }).catch(() => { CLIIMG.m.set(id, { at: o.foto, img: null }); }).finally(() => CLIIMG.pedindo.delete(id));
+    }
+    return '';
+  }
   function cqSeloCrit(c) {
     if (c.pend) return '<span class="cqtag star">★ Pendência</span>';
     if (!c.fat) return '<span class="cqtag star">★ Sem NF</span>';
@@ -16207,7 +16283,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function cqCardNF(c, crit) {
     const w = cw('certq'), np = c.npend || {}, naAba = !CQ_ABA && abaTem(c.k);
     const zb = crit && cqZeb(c);
-    return `<div class="cqc on${zb ? ' zc' : crit ? ' crit' : ''}" style="--q:${cqTom(c.porEm || np.by)}">${zb ? cqFita(c, 'certificado pronto') : ''}
+    return `<div class="cqc on${zb ? ' zc' : crit ? ' crit' : ''}${cqFotoCls(c)}" style="--q:${cqTom(c.porEm || np.by)}">${zb ? cqFita(c, 'certificado pronto') : ''}
       <div class="cqh"><b class="cqpv">${esc(cqNum(c))}</b>${zb ? cqStarDB(c) : ''}<span class="cqtag pronto">${crit && !zb ? '★ ' : ''}certificado pronto</span>${w ? `<button type="button" class="cqmenu" data-act="cq-menu" data-key="${esc(c.k)}" title="Outras ações" aria-label="Outras ações">⋯</button>` : ''}</div>
       <div class="cqs"><span class="chip warn" title="Conclui sozinho quando a NF chegar na atualização do Omie">Aguardando NF</span>${c.seq ? `<span class="cqparc">parte ${c.seq}</span>` : ''}<span class="muted">pronto ${esc(cqDH(np.at))}</span></div>
       <div class="cqcli" title="${esc(c.cli)}">${esc(c.cli || '—')}</div>
@@ -16222,7 +16298,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const pb = p ? `<div class="cqpb"><b>⚠ ${esc(p.m || 'Pendência')}</b>${p.oc ? ` <span class="mono">OC ${esc(p.oc)}</span>` : ''}${p.j ? `<p>${esc(p.j)}</p>` : ''}<small>desde ${esc(cqDH(p.at))}${p.nome ? ' · ' + esc(p.nome) : ''}</small>${cheg ? `<div class="cqok">✓ Chegou o lote <button type="button" class="lnk" data-open="AV:${esc(cheg.id)}">${esc(cheg.id)}</button> da OC ${esc(p.oc)}: conferir e resolver</div>` : ''}</div>` : '';
     const foot = c.porEm ? cqWho(c) : (w ? `<button class="btn small" type="button" data-act="cq-pegar" data-key="${esc(c.k)}">Pegar</button>` : '<span class="muted">livre</span>');
     const naAba = !CQ_ABA && abaTem(c.k);
-    return `<div class="cqc${p ? ' pd' : c.porEm ? ' on' : ''}${cheg ? ' cheg' : ''}${zb ? ' zc' : crit ? ' crit' : ''}"${c.porEm ? ` style="--q:${cqTom(c.porEm)}"` : ''}>${zb ? cqFita(c) : ''}
+    return `<div class="cqc${p ? ' pd' : c.porEm ? ' on' : ''}${cheg ? ' cheg' : ''}${zb ? ' zc' : crit ? ' crit' : ''}${cqFotoCls(c)}"${c.porEm ? ` style="--q:${cqTom(c.porEm)}"` : ''}>${zb ? cqFita(c) : ''}
       <div class="cqh"><b class="cqpv">${esc(cqNum(c))}</b>${tag}${naAba ? `<span class="cqtag aba" title="Aberto na aba de certificados">${tag ? 'na aba' : 'na aba de certificados'}</span>` : ''}${w ? `<button type="button" class="cqmenu" data-act="cq-menu" data-key="${esc(c.k)}" title="Pendência e outras ações" aria-label="Pendência e outras ações">⋯</button>` : ''}</div>
       <div class="cqs">${c.nf ? `<span class="cqnf mono">NF ${esc(c.nf)}</span>` : '<span class="chip warn" title="Pedido a faturar: o prazo começa quando a NF entrar numa importação do Omie">Aguardando NF</span>'}${c.seq ? `<span class="cqparc">parte ${c.seq}</span>` : ''}${c.fat ? `<span class="muted">fat. ${esc(cqDH(c.fat))}</span>` : ''}</div>
       <div class="cqcli" title="${esc(c.cli)}">${esc(c.cli || '—')}</div>
@@ -16648,7 +16724,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function abaCard(c, andamento) {
     const sel = S.cqEd && S.cqEd.k === c.k, est = andamento ? (c.st !== 'p' ? '<span class="cqtag sal">salvo</span>' : c.rasc || sel ? '<span class="cqtag ras">rascunho</span>' : '') : '';
     const tp = cqTipoDe(c.k);
-    return `<div class="cqmw"><button type="button" class="cqc cqm${cqCrit(c) && c.st === 'p' ? (cqZeb(c) ? ' zc' : ' crit') : ''}${sel ? ' sel' : ''}${tp ? ' tp-' + tp : ''}" data-act="aba-abrir" data-key="${esc(c.k)}" aria-current="${sel}">
+    return `<div class="cqmw"><button type="button" class="cqc cqm${cqCrit(c) && c.st === 'p' ? (cqZeb(c) ? ' zc' : ' crit') : ''}${cqFotoCls(c)}${sel ? ' sel' : ''}${tp ? ' tp-' + tp : ''}" data-act="aba-abrir" data-key="${esc(c.k)}" aria-current="${sel}">
       ${cqCrit(c) && c.st === 'p' && cqZeb(c) ? cqFita(c) : ''}<span class="cqh"><b class="cqpv">${esc(cqNum(c))}</b>${tp ? `<span class="cqtp" title="Certificado de ${CQ_TIPO_NOME[tp].toLowerCase()}">${cqTipoIco(tp)}</span>` : ''}${abaTags(c)}${est}</span><span class="cqcli">${esc(c.cli || '—')}</span>
       <span class="cqs">${c.nf ? `<span class="cqnf mono">NF ${esc(c.nf)}</span>` : ''}${c.fat ? `<span class="muted">fat. ${esc(dmy(c.fat).slice(0, 5))}</span>` : ''}${c.porEm && E.low(c.porEm) !== cqMe() ? `<span class="muted cqpor" title="Com ${esc(c.porNome || '')}">${esc(cqIni(c.porNome))}</span>` : ''}</span></button>
       ${andamento ? `<button type="button" class="cqmx" data-act="aba-tirar" data-key="${esc(c.k)}" title="Tirar de Em andamento (o rascunho continua salvo na Central)" aria-label="Tirar ${esc(cqNum(c))} de Em andamento">×</button>` : ''}</div>`;
