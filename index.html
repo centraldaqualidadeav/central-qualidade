@@ -1701,7 +1701,16 @@ body.tabmode .main { padding: 0 !important; }
 .cqc.crit .btn.cqgo, html[data-theme="dark"] .cqc.crit .btn.cqgo { background: #fff; border-color: #fff; color: #7a1f24; }
 .cqc.crit .cqpb { color: var(--ink); }
 .cqc.crit .chip.warn { background: rgba(255, 255, 255, .16); color: #ffe7a3; }
-.cqtag.star { background: #7a1f24; color: #fff; } .cqtag.star.hoje { box-shadow: 0 0 0 2px rgba(122, 31, 36, .35); } .cqtag.star.late { background: #1c2126; color: #fff; }
+.cqtag.star { background: #7a1f24; color: #fff; }
+.crzb { margin-left: 6px; height: 28px; padding: 0 6px; font-size: 12px; width: auto; }
+/* v155: cliente crítico — fita zebrada a 45° no topo do cartão (amarelo/preto ou branco/preto, pelo cadastro do cliente) */
+.cqfita { margin: -9px -10px 3px; height: 24px; border-radius: 7px 7px 0 0; background: repeating-linear-gradient(-45deg, var(--z) 0 10px, #111 10px 20px); display: flex; align-items: center; justify-content: center; flex: none; }
+.cqfita span { background: #111; color: var(--z); font: 700 10.5px/1 var(--f-body); letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 3px; white-space: nowrap; max-width: calc(100% - 24px); overflow: hidden; text-overflow: ellipsis; }
+.cqgrid.temz > .cqc:not(.zc)::before { content: ''; display: block; height: 24px; margin: -9px -10px 3px; flex: none; }   /* alinha com os cartões que têm fita */
+.cqstar { width: 20px; height: 20px; border-radius: 50%; background: var(--z); color: #111; display: inline-grid; place-items: center; font-size: 12px; font-weight: 700; flex: none; }
+.cqdb { font: 600 11px var(--f-body); color: var(--n-tcr); border: 1px solid color-mix(in srgb, var(--n-tcr) 45%, transparent); border-radius: 999px; padding: 1px 7px; white-space: nowrap; }
+.cqc.cqm.zc { padding-top: 9px; } .cqc.cqm .cqfita { margin: -9px -11px 3px; }
+.cqfpv.zc { border: 3px solid transparent; background: linear-gradient(var(--surface), var(--surface)) padding-box, repeating-linear-gradient(-45deg, var(--z) 0 6px, #111 6px 12px) border-box; } .cqtag.star.hoje { box-shadow: 0 0 0 2px rgba(122, 31, 36, .35); } .cqtag.star.late { background: #1c2126; color: #fff; }
 .cqc.crit .cqtag.star { background: #fff; color: #7a1f24; } .cqc.crit .cqtag.star.hoje { box-shadow: 0 0 0 2px rgba(255, 255, 255, .45); } .cqc.crit .cqtag.star.late { background: #1c2126; color: #fff; }
 html[data-theme="dark"] .cqc.crit { background: #5e1b20; border-color: #8f2a30; box-shadow: 0 0 0 1px #8f2a30; color: #fff; }
 html[data-theme="dark"] .cqc.crit .cqpv, html[data-theme="dark"] .cqc.crit .cqcli { color: #fff; }
@@ -6067,7 +6076,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 154; window.CQ_V = APP_V;
+    const APP_V = 156; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -14334,8 +14343,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         && (!q || E.key(r.nome).includes(q) || E.key(r.i.email || '').includes(q) || E.key(r.i.contato || '').includes(q) || E.key(r.i.cod || '').includes(q) || (qa.length >= 3 && entCnpjs(r.i).some((c) => cnpjRaw(c).includes(qa)))));
       const sem = rows.filter((r) => !r.i.email).length, semCj = rows.filter((r) => !r.i.cnpj && !r.i.estrangeiro).length, semTp = kind === 'forn' ? rows.filter((r) => !r.i.tipo).length : 0, dash = '<span class="muted">—</span>';
       $('#el-' + kind).innerHTML = `<p style="margin:0 0 6px;font-size:12.5px;color:var(--ink-2)"><b>${NF.format(rows.length)}</b> ${rows.length === 1 ? D.one : D.plural}${sem ? ` · <b style="color:var(--warn)">${NF.format(sem)} sem e-mail</b>` : ''}${semCj ? ` · <b style="color:var(--warn)">${NF.format(semCj)} sem CNPJ</b>` : ''}${semTp ? ` · <b style="color:var(--warn)">${NF.format(semTp)} sem tipo</b>` : ''} · clique no nome para ${ro ? 'ver' : 'editar'}</p>
-        <div class="twrap twin"><table class="t pft"><thead><tr><th>Código</th><th>${esc(D.Um)}</th><th>CNPJ</th>${kind === 'forn' ? '<th>Tipo</th>' : ''}<th>${esc(D.mailCol)}</th><th>Contato</th>${D.cols.map(([l]) => `<th class="r">${esc(l)}</th>`).join('')}${kind === 'cli' ? '<th>Prioridade</th>' : ''}<th>Situação</th></tr></thead><tbody>${rows.slice(0, 600).map((r) => `<tr class="click" data-ent="${esc(r.nome)}" tabindex="0"><td class="mono">${r.i.cod ? esc(r.i.cod) : dash}</td><td><b>${esc(r.nome)}</b></td><td class="mono">${r.i.cnpj ? esc(r.i.cnpj) + ((r.i.cnpjs || []).length ? ` <small class="muted" title="${esc(r.i.cnpjs.join(' · '))}">+${r.i.cnpjs.length} ${r.i.cnpjs.length === 1 ? 'filial' : 'filiais'}</small>` : '') : r.i.estrangeiro ? '<span class="chip info">estrangeiro</span>' : dash}</td>${kind === 'forn' ? `<td>${r.i.tipo ? esc(tipoNome(r.i.tipo)) : '<span class="chip warn">sem tipo</span>'}</td>` : ''}<td>${r.i.email ? esc(r.i.email) : '<span class="chip warn">sem e-mail</span>'}</td><td>${r.i.contato ? esc(r.i.contato) : dash}</td>${D.cols.map(([, fn, cl]) => { const v = fn(r.s) || 0; return `<td class="r">${v ? (cl ? `<span class="chip ${cl}">${NF.format(v)}</span>` : NF.format(v)) : dash}</td>`; }).join('')}${kind === 'cli' ? `<td>${ro ? (r.i.critico ? '<span class="crtg on">★ Crítico</span>' : dash) : `<button type="button" class="crtg${r.i.critico ? ' on' : ''}" data-crit="${esc(r.nome)}" title="${r.i.critico ? 'Tirar de cliente crítico' : 'Marcar como cliente crítico (atenção máxima na fila de certificados)'}">${r.i.critico ? '★ Crítico' : '☆ marcar'}</button>`}</td>` : ''}<td>${r.i.inativo ? '<span class="chip off">Inativo</span>' : '<span class="chip ok">Ativo</span>'}</td></tr>`).join('') || `<tr><td colspan="${7 + D.cols.length}" class="muted">Nenhum ${D.one} com esses filtros.</td></tr>`}</tbody></table></div>${rows.length > 600 ? `<p class="muted" style="font-size:12px">Mostrando 600 de ${NF.format(rows.length)}. Use a busca para achar os outros.</p>` : ''}`;
+        <div class="twrap twin"><table class="t pft"><thead><tr><th>Código</th><th>${esc(D.Um)}</th><th>CNPJ</th>${kind === 'forn' ? '<th>Tipo</th>' : ''}<th>${esc(D.mailCol)}</th><th>Contato</th>${D.cols.map(([l]) => `<th class="r">${esc(l)}</th>`).join('')}${kind === 'cli' ? '<th>Prioridade</th>' : ''}<th>Situação</th></tr></thead><tbody>${rows.slice(0, 600).map((r) => `<tr class="click" data-ent="${esc(r.nome)}" tabindex="0"><td class="mono">${r.i.cod ? esc(r.i.cod) : dash}</td><td><b>${esc(r.nome)}</b></td><td class="mono">${r.i.cnpj ? esc(r.i.cnpj) + ((r.i.cnpjs || []).length ? ` <small class="muted" title="${esc(r.i.cnpjs.join(' · '))}">+${r.i.cnpjs.length} ${r.i.cnpjs.length === 1 ? 'filial' : 'filiais'}</small>` : '') : r.i.estrangeiro ? '<span class="chip info">estrangeiro</span>' : dash}</td>${kind === 'forn' ? `<td>${r.i.tipo ? esc(tipoNome(r.i.tipo)) : '<span class="chip warn">sem tipo</span>'}</td>` : ''}<td>${r.i.email ? esc(r.i.email) : '<span class="chip warn">sem e-mail</span>'}</td><td>${r.i.contato ? esc(r.i.contato) : dash}</td>${D.cols.map(([, fn, cl]) => { const v = fn(r.s) || 0; return `<td class="r">${v ? (cl ? `<span class="chip ${cl}">${NF.format(v)}</span>` : NF.format(v)) : dash}</td>`; }).join('')}${kind === 'cli' ? `<td>${ro ? (r.i.critico ? '<span class="crtg on">★ Crítico</span>' : dash) : `<button type="button" class="crtg${r.i.critico ? ' on' : ''}" data-crit="${esc(r.nome)}" title="${r.i.critico ? 'Tirar de cliente crítico' : 'Marcar como cliente crítico (atenção máxima na fila de certificados)'}">${r.i.critico ? '★ Crítico' : '☆ marcar'}</button>${r.i.critico ? `<select class="inp crzb" data-zeb="${esc(r.nome)}" aria-label="Zebrado do cartão de ${esc(r.nome)}" title="Cor do cartão de certificados deste cliente crítico"><option value="">vinho (padrão)</option><option value="amarelo"${r.i.zebra === 'amarelo' ? ' selected' : ''}>zebrado amarelo</option><option value="branco"${r.i.zebra === 'branco' ? ' selected' : ''}>zebrado branco</option></select>` : ''}`}</td>` : ''}<td>${r.i.inativo ? '<span class="chip off">Inativo</span>' : '<span class="chip ok">Ativo</span>'}</td></tr>`).join('') || `<tr><td colspan="${7 + D.cols.length}" class="muted">Nenhum ${D.one} com esses filtros.</td></tr>`}</tbody></table></div>${rows.length > 600 ? `<p class="muted" style="font-size:12px">Mostrando 600 de ${NF.format(rows.length)}. Use a busca para achar os outros.</p>` : ''}`;
       $$('#el-' + kind + ' [data-ent]').forEach((tr) => { const open = () => entDrawer(kind, tr.dataset.ent, ro); tr.onclick = open; tr.onkeydown = (e) => { if (e.key === 'Enter') open(); }; });
+      $$('#el-' + kind + ' [data-zeb]').forEach((sl) => { sl.onclick = (e) => e.stopPropagation(); sl.onchange = async () => { sl.disabled = true; try { await entZebra(sl.dataset.zeb, sl.value); } catch (err) { toast(TXT.cfgDenied, true); } sl.disabled = false; }; });   /* v155 */
       $$('#el-' + kind + ' [data-crit]').forEach((b) => { b.onclick = async (e) => { e.stopPropagation(); b.disabled = true; try { await entCritToggle(b.dataset.crit); } catch (err) { toast(err && (err.code === 'invalid_argument' || err.code === 'permission_denied') ? TXT.cfgDenied : 'Não foi possível salvar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; } }; b.onkeydown = (e) => e.stopPropagation(); });
       S['entRows' + kind] = rows;
     };
@@ -14387,6 +14397,15 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   /* grava a lista de nomes e as fichas juntas (o que estiver na tela de outra pessoa não se perde: lê o atual antes) */
   /* cliente crítico: liga e desliga direto na lista (o resto da ficha não muda) */
+  /* v155: cor do zebrado do cliente crítico nos cartões de certificados (amarelo é o padrão) */
+  async function entZebra(nome, cor) {
+    const ok = await saveEnt('cli', (names, info) => {
+      const i = info.findIndex((o) => E.key(o.nome) === E.key(nome));
+      if (i >= 0) { const o = Object.assign({}, info[i]); if (cor) o.zebra = cor; else delete o.zebra; info[i] = o; }
+      return { names, info };
+    }, `Cliente crítico ${nome}: ${cor ? 'zebrado ' + cor : 'vinho'}`);
+    if (ok) { toast(`${nome}: ${cor ? 'zebrado ' + cor : 'vinho'} nos cartões de certificados.`); await sleep(250); S.stale = false; render(); }
+  }
   async function entCritToggle(nome) {
     const atual = entInfo('cli', nome), liga = !(atual && atual.critico);
     const ok = await saveEnt('cli', (names, info) => {
@@ -14544,7 +14563,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
           if (names.some((x, j) => j !== iN && E.key(x) === E.key(nn))) { toast(`Já existe um ${D.one} com esse nome.`, true); return null; }
           if (iN >= 0) names[iN] = nn; else names.push(nn);
           const ii = info.findIndex((o) => E.key(o.nome) === E.key(nome || nn));
-          if (ii >= 0) { ni.id = info[ii].id; if (info[ii].cod) ni.cod = info[ii].cod; if (info[ii].critico) ni.critico = true; info[ii] = ni; } else info.push(ni);
+          if (ii >= 0) { ni.id = info[ii].id; if (info[ii].cod) ni.cod = info[ii].cod; if (info[ii].critico) ni.critico = true; if (info[ii].zebra) ni.zebra = info[ii].zebra; info[ii] = ni; } else info.push(ni);
           /* v64: fichas juntadas nesta: nome e apelidos viram apelidos, CNPJs e e-mails entram; a ficha sai */
           JUNTA.forEach((jt) => {
             const jk = E.key(jt.nome), o = info.find((x) => E.key(x.nome) === jk) || jt;
@@ -14552,6 +14571,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
             entCnpjs(o).forEach((x) => { if (cnpjRaw(x) !== cnpjRaw(ni.cnpj || '') && !(ni.cnpjs || []).some((y) => cnpjRaw(y) === cnpjRaw(x))) ni.cnpjs = (ni.cnpjs || []).concat([cnpjFmt(x)]); });
             if (o.email) ni.email = normMails([ni.email, o.email].filter(Boolean).join(', ')).split(', ').filter((m, j2, A) => A.findIndex((b) => E.low(b) === E.low(m)) === j2).join(', ');
             if (o.critico) ni.critico = true;
+            if (o.zebra && !ni.zebra) ni.zebra = o.zebra;
             if (!ni.cnpj && entCnpjs(o).length && !ni.estrangeiro) { ni.cnpj = cnpjFmt(entCnpjs(o)[0]); ni.cnpjs = (ni.cnpjs || []).filter((y) => cnpjRaw(y) !== cnpjRaw(ni.cnpj)); }
             JUNTA_IDS.push(o.id); JUNTA_NOMES.push(o.nome);
             for (let a = names.length - 1; a >= 0; a--) if (E.key(names[a]) === jk) names.splice(a, 1);
@@ -15846,6 +15866,25 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const cqFalta = (c) => (c.fat ? cqPrazoDe(c) - cqDias(c) : null);
   const cqNoPrazo = (c) => cqDias(c) <= cqPrazoDe(c);
   const temCrit = () => ((S.model && S.model.cfg.CLI_INFO) || []).some((o) => o.critico && !o.inativo);
+  /* v155: cliente crítico com fita zebrada no topo do cartão (amarelo e preto; o cadastro do cliente pode trocar para branco e preto) */
+  const CQ_ZEB = { amarelo: '#f2c21b', branco: '#e9edf0' };
+  const cqCritInfo = (c) => { const o = c && c.cli ? entResolve('cli', c.cli) : null; return o && o.critico && !o.inativo ? o : null; };
+  const CQ_CLI_PULA = ['ESTALEIRO', 'ESTALEIROS', 'CIA', 'CIA.', 'COMPANHIA', 'EMPRESA', 'GRUPO', 'INDUSTRIA', 'INDÚSTRIA', 'IND.', 'DE', 'DO', 'DA'];
+  const cqCliCurto = (nome) => { const w = String(nome || '').toUpperCase().split(/\s+/).filter(Boolean); return (w.find((x) => !CQ_CLI_PULA.includes(x)) || w[0] || '').replace(/[.,]+$/, ''); };
+  /* v156: crítico é vinho (como antes); só quem tem zebrado escolhido no cadastro (Jurong amarelo, Polar1 branco) ganha a fita */
+  const cqZebCor = (c) => { const o = cqCritInfo(c); return (o && CQ_ZEB[o.zebra]) || null; };
+  const cqZeb = (c) => !!cqZebCor(c);
+  function cqPrazoTxt(c) {
+    if (c.pend) return 'pendência';
+    if (!c.fat) return 'sem NF';
+    const f = cqFalta(c);
+    return f > 0 ? `falta ${f} dia${f > 1 ? 's' : ''}` : f === 0 ? 'vence hoje' : `atrasado ${-f} dia${-f > 1 ? 's' : ''}`;
+  }
+  const cqFita = (c, extra) => { const o = cqCritInfo(c); return `<div class="cqfita" style="--z:${cqZebCor(c)}"><span>★ ${esc(cqCliCurto((o && o.nome) || c.cli))} · ${esc(extra || cqPrazoTxt(c))}</span></div>`; };
+  const cqCritZ = (c) => cqCrit(c) && cqZeb(c);   /* v156: a pendência separada é só dos críticos com zebrado (Jurong / Polar1) */
+  const cqNomesCrit = () => ((S.model && S.model.cfg.CLI_INFO) || []).filter((o) => o.critico && !o.inativo && CQ_ZEB[o.zebra]).map((o) => cqCliCurto(o.nome)).filter((x, i, A) => x && A.indexOf(x) === i).join(' / ');
+  const cqPedeDB = (c) => cqCfg().dbCli.map((x) => E.key(x)).filter(Boolean).some((x) => E.key(c.cli || '').includes(x));
+  const cqStarDB = (c) => `<span class="cqstar" style="--z:${cqZebCor(c)}" title="Cliente crítico">★</span>${cqPedeDB(c) ? '<span class="cqdb" title="Este cliente pede Data Book">◆ Data Book</span>' : ''}`;
   function cqSeloCrit(c) {
     if (c.pend) return '<span class="cqtag star">★ Pendência</span>';
     if (!c.fat) return '<span class="cqtag star">★ Sem NF</span>';
@@ -16167,8 +16206,9 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* v55: cartão da aba Aguardando NF (certificado pronto) */
   function cqCardNF(c, crit) {
     const w = cw('certq'), np = c.npend || {}, naAba = !CQ_ABA && abaTem(c.k);
-    return `<div class="cqc on${crit ? ' crit' : ''}" style="--q:${cqTom(c.porEm || np.by)}">
-      <div class="cqh"><b class="cqpv">${esc(cqNum(c))}</b><span class="cqtag pronto">${crit ? '★ ' : ''}certificado pronto</span>${w ? `<button type="button" class="cqmenu" data-act="cq-menu" data-key="${esc(c.k)}" title="Outras ações" aria-label="Outras ações">⋯</button>` : ''}</div>
+    const zb = crit && cqZeb(c);
+    return `<div class="cqc on${zb ? ' zc' : crit ? ' crit' : ''}" style="--q:${cqTom(c.porEm || np.by)}">${zb ? cqFita(c, 'certificado pronto') : ''}
+      <div class="cqh"><b class="cqpv">${esc(cqNum(c))}</b>${zb ? cqStarDB(c) : ''}<span class="cqtag pronto">${crit && !zb ? '★ ' : ''}certificado pronto</span>${w ? `<button type="button" class="cqmenu" data-act="cq-menu" data-key="${esc(c.k)}" title="Outras ações" aria-label="Outras ações">⋯</button>` : ''}</div>
       <div class="cqs"><span class="chip warn" title="Conclui sozinho quando a NF chegar na atualização do Omie">Aguardando NF</span>${c.seq ? `<span class="cqparc">parte ${c.seq}</span>` : ''}<span class="muted">pronto ${esc(cqDH(np.at))}</span></div>
       <div class="cqcli" title="${esc(c.cli)}">${esc(c.cli || '—')}</div>
       <div class="cqf">${c.porEm ? cqWho(c) : '<span class="muted">' + esc(np.nome || '') + '</span>'}${w ? (naAba ? `<button class="btn small cqgo" type="button" data-act="cq-iraba" data-key="${esc(c.k)}">Ir para a aba</button>` : `<button class="btn small cqgo" type="button" data-act="cq-fazer" data-key="${esc(c.k)}">Abrir certificado</button>`) : ''}</div></div>`;
@@ -16177,11 +16217,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const w = cw('certq'), p = c.pend, cheg = p ? cqChegou(c) : null, adm = cqAdm();
     const crit = cqCrit(c), late = adm && !p && cqDias(c) > cqCfg().prazo;
     if (c.st === 'f') return cqCardNF(c, crit);
-    const tag = crit ? cqSeloCrit(c) : p ? `<span class="cqtag${cheg ? ' ok' : ''}">${cheg ? 'material chegou' : 'pendência'}</span>` : late ? `<span class="cqtag late" title="Mais de ${cqCfg().prazo} dia(s) útil(eis) desde o faturamento">atrasado</span>` : '';
+    const zb = crit && cqZeb(c);
+    const tag = zb ? cqStarDB(c) + (p && cheg ? '<span class="cqtag ok">material chegou</span>' : '') : crit ? cqSeloCrit(c) : p ? `<span class="cqtag${cheg ? ' ok' : ''}">${cheg ? 'material chegou' : 'pendência'}</span>` : late ? `<span class="cqtag late" title="Mais de ${cqCfg().prazo} dia(s) útil(eis) desde o faturamento">atrasado</span>` : '';
     const pb = p ? `<div class="cqpb"><b>⚠ ${esc(p.m || 'Pendência')}</b>${p.oc ? ` <span class="mono">OC ${esc(p.oc)}</span>` : ''}${p.j ? `<p>${esc(p.j)}</p>` : ''}<small>desde ${esc(cqDH(p.at))}${p.nome ? ' · ' + esc(p.nome) : ''}</small>${cheg ? `<div class="cqok">✓ Chegou o lote <button type="button" class="lnk" data-open="AV:${esc(cheg.id)}">${esc(cheg.id)}</button> da OC ${esc(p.oc)}: conferir e resolver</div>` : ''}</div>` : '';
     const foot = c.porEm ? cqWho(c) : (w ? `<button class="btn small" type="button" data-act="cq-pegar" data-key="${esc(c.k)}">Pegar</button>` : '<span class="muted">livre</span>');
     const naAba = !CQ_ABA && abaTem(c.k);
-    return `<div class="cqc${p ? ' pd' : c.porEm ? ' on' : ''}${cheg ? ' cheg' : ''}${crit ? ' crit' : ''}"${c.porEm ? ` style="--q:${cqTom(c.porEm)}"` : ''}>
+    return `<div class="cqc${p ? ' pd' : c.porEm ? ' on' : ''}${cheg ? ' cheg' : ''}${zb ? ' zc' : crit ? ' crit' : ''}"${c.porEm ? ` style="--q:${cqTom(c.porEm)}"` : ''}>${zb ? cqFita(c) : ''}
       <div class="cqh"><b class="cqpv">${esc(cqNum(c))}</b>${tag}${naAba ? `<span class="cqtag aba" title="Aberto na aba de certificados">${tag ? 'na aba' : 'na aba de certificados'}</span>` : ''}${w ? `<button type="button" class="cqmenu" data-act="cq-menu" data-key="${esc(c.k)}" title="Pendência e outras ações" aria-label="Pendência e outras ações">⋯</button>` : ''}</div>
       <div class="cqs">${c.nf ? `<span class="cqnf mono">NF ${esc(c.nf)}</span>` : '<span class="chip warn" title="Pedido a faturar: o prazo começa quando a NF entrar numa importação do Omie">Aguardando NF</span>'}${c.seq ? `<span class="cqparc">parte ${c.seq}</span>` : ''}${c.fat ? `<span class="muted">fat. ${esc(cqDH(c.fat))}</span>` : ''}</div>
       <div class="cqcli" title="${esc(c.cli)}">${esc(c.cli || '—')}</div>
@@ -16195,15 +16236,17 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (S.cqSub === 'ed' && S.cqEd) { cqEditor(main); return; }
     const adm = cqAdm(), w = cw('certq'), L = cqCards();
     const pend = L.filter((c) => c.st === 'p'), npd = pend.filter((c) => c.pend).length, anf = L.filter((c) => c.st === 'f');
+    const nomesC = temCrit() ? cqNomesCrit() : '', npdC = nomesC ? pend.filter((c) => c.pend && cqCritZ(c)).length : 0;   /* v155: pendência dos clientes críticos separada */
     let sub = S.cqSub || 'pend'; if (sub === 'ind' || sub === 'ed') sub = 'pend'; S.cqSub = sub;
     const tab = (k, l) => `<button type="button" role="tab" data-act="cq-sub" data-key="${k}" aria-pressed="${sub === k}">${l}</button>`;
     let body = '';
     if (!CQF.ready) body = '<div class="empty">Carregando a fila…</div>';
-    else if (sub === 'pend' || sub === 'aguard') body = cqPendHTML(pend, sub === 'aguard');
+    else if (sub === 'pend' || sub === 'aguard') body = cqPendHTML(pend, sub === 'aguard', false, sub === 'aguard' && nomesC ? false : undefined);
+    else if (sub === 'pcrit') body = cqPendHTML(pend, true, false, true);
     else if (sub === 'anf') body = cqPendHTML(anf, false, true);
     else body = cqConcHTML(L);
     main.innerHTML = `<div class="view">${head('Certificados de qualidade', 'Os pedidos entram em “A fazer” pelo arquivo do Omie, com ou sem nota fiscal. Certificado salvo vai para Concluídos; sem a NF, vai para “Aguardando NF” e conclui sozinho quando a nota chega.', w ? '<button class="btn" type="button" data-act="cq-avulso">Certificado avulso</button><button class="btn" type="button" data-act="cq-link">Pedido pelo link do Omie</button><button class="btn primary" type="button" data-act="cq-imp">Importar lista do Omie (Excel ou CSV)</button>' : '')}
-      <div class="seg cqtabs" role="tablist">${tab('pend', `A fazer <b>${NF.format(pend.length - npd)}</b>`)}${tab('aguard', `Pendência <b class="${npd ? 'am' : ''}">${NF.format(npd)}</b>`)}${tab('anf', `Aguardando NF <b class="${anf.length ? 'am' : ''}">${NF.format(anf.length)}</b>`)}${tab('conc', 'Concluídos')}</div>
+      <div class="seg cqtabs" role="tablist">${tab('pend', `A fazer <b>${NF.format(pend.length - npd)}</b>`)}${tab('aguard', `Pendência <b class="${npd - npdC ? 'am' : ''}">${NF.format(npd - npdC)}</b>`)}${nomesC ? tab('pcrit', `Pendência ${esc(nomesC)} <b class="${npdC ? 'am' : ''}">${NF.format(npdC)}</b>`) : ''}${tab('anf', `Aguardando NF <b class="${anf.length ? 'am' : ''}">${NF.format(anf.length)}</b>`)}${tab('conc', 'Concluídos')}</div>
       ${body}</div>`;
     main.dataset.cqed = '';
     const q2 = $('#cq-q2'); if (q2) { let tm; q2.oninput = () => { clearTimeout(tm); tm = setTimeout(() => { S.cqQ2 = q2.value; const p = q2.selectionStart; render(); const q3 = $('#cq-q2'); if (q3) { q3.focus(); try { q3.setSelectionRange(p, p); } catch (e) { /* ok */ } } }, 250); }; }
@@ -16220,19 +16263,19 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     L.sort((a, b) => (b.pend ? 1 : 0) - (a.pend ? 1 : 0) || FZ.get(a) - FZ.get(b) || (CR.get(b) ? 1 : 0) - (CR.get(a) ? 1 : 0) || (a.fat || 9e15) - (b.fat || 9e15) || cmp(a.pv, b.pv) || (a.seq || 0) - (b.seq || 0));
     return L;
   }
-  function cqPendHTML(pend, soPend, nfMode) {
+  function cqPendHTML(pend, soPend, nfMode, critMode) {
     const flt = S.cqFlt || 'todos', qq = E.key(S.cqQ || '');
-    const base = nfMode ? pend : soPend ? pend.filter((c) => c.pend) : pend.filter((c) => !c.pend);   /* v55: com pendência fica só na aba Pendência */
+    const base = nfMode ? pend : soPend ? pend.filter((c) => c.pend && (critMode == null || cqCritZ(c) === critMode)) : pend.filter((c) => !c.pend);   /* v55: com pendência fica só na aba Pendência */
     const CR = new Map(base.map((c) => [c, cqCrit(c)])), nCrit = base.filter((c) => CR.get(c)).length;
     const L = cqOrdena(base, flt, qq);
     const comP = L.filter((c) => c.pend), resto = L.filter((c) => !c.pend), lim = 48 + (S.cqN || 0), vis2 = resto.slice(0, lim);
     const fb = (k, l) => `<button type="button" data-act="cq-flt" data-key="${k}" aria-pressed="${flt === k}">${l}</button>`;
     if (nfMode) L.sort((a, b) => ((a.npend || {}).at || 0) - ((b.npend || {}).at || 0));
-    return `<section class="cqcol"><header><b>${nfMode ? 'Aguardando NF' : soPend ? 'Pendência' : 'A fazer'}</b><span class="cqn">${NF.format(L.length)}</span><span class="muted">${nfMode ? 'certificado pronto · conclui sozinho quando a NF chegar' : soPend ? 'pedidos com pendência registrada' : 'o que vence primeiro em cima'}${nCrit ? ` · <b>${NF.format(nCrit)} de clientes críticos</b>` : ''}</span>
+    return `<section class="cqcol"><header><b>${nfMode ? 'Aguardando NF' : soPend ? (critMode ? 'Pendência ' + esc(cqNomesCrit()) : 'Pendência') : 'A fazer'}</b><span class="cqn">${NF.format(L.length)}</span><span class="muted">${nfMode ? 'certificado pronto · conclui sozinho quando a NF chegar' : soPend ? 'pedidos com pendência registrada' : 'o que vence primeiro em cima'}${nCrit ? ` · <b>${NF.format(nCrit)} de clientes críticos</b>` : ''}</span>
         <input id="cq-q" class="inp cqq" type="search" placeholder="PV, NF, cliente, OC…" value="${esc(S.cqQ || '')}" autocomplete="off"><span class="cqflt">${fb('todos', 'Todos')}${fb('livres', 'Livres')}${fb('meus', 'Meus')}${nCrit || flt === 'crit' ? fb('crit', '★ Críticos ' + NF.format(nCrit)) : ''}</span></header>
-      ${!base.length ? `<div class="empty">${nfMode ? 'Nenhum certificado esperando nota fiscal.' : soPend ? 'Nenhum pedido com pendência.' : 'Nenhum pedido a fazer. Importe a lista do Omie do dia pelo botão no alto.'}</div>` : !L.length ? '<div class="empty">Nada com esse filtro.</div>' : ''}
-      ${comP.length ? `${soPend ? '' : '<div class="cqsec">⚠ Com pendência · esperando solução</div>'}<div class="cqgrid">${comP.map(cqCardHTML).join('')}</div>` : ''}
-      ${!soPend && resto.length ? `${comP.length ? '<div class="cqsec">Na fila · o que vence primeiro</div>' : ''}<div class="cqgrid">${vis2.map(cqCardHTML).join('')}</div>${resto.length > lim ? `<div class="cqmore"><button class="btn small" type="button" data-act="cq-mais">Mostrar mais ${NF.format(Math.min(48, resto.length - lim))} de ${NF.format(resto.length - lim)}</button></div>` : ''}` : ''}</section>`;
+      ${!base.length ? `<div class="empty">${nfMode ? 'Nenhum certificado esperando nota fiscal.' : soPend ? (critMode ? 'Nenhum pedido de ' + esc(cqNomesCrit()) + ' com pendência.' : 'Nenhum pedido com pendência.') : 'Nenhum pedido a fazer. Importe a lista do Omie do dia pelo botão no alto.'}</div>` : !L.length ? '<div class="empty">Nada com esse filtro.</div>' : ''}
+      ${comP.length ? `${soPend ? '' : '<div class="cqsec">⚠ Com pendência · esperando solução</div>'}<div class="cqgrid${comP.some((c) => cqCrit(c) && cqZeb(c)) ? ' temz' : ''}">${comP.map(cqCardHTML).join('')}</div>` : ''}
+      ${!soPend && resto.length ? `${comP.length ? '<div class="cqsec">Na fila · o que vence primeiro</div>' : ''}<div class="cqgrid${vis2.some((c) => cqCrit(c) && cqZeb(c)) ? ' temz' : ''}">${vis2.map(cqCardHTML).join('')}</div>${resto.length > lim ? `<div class="cqmore"><button class="btn small" type="button" data-act="cq-mais">Mostrar mais ${NF.format(Math.min(48, resto.length - lim))} de ${NF.format(resto.length - lim)}</button></div>` : ''}` : ''}</section>`;
   }
   function cqConcHTML(L) {
     const adm = cqAdm(), mes = S.cqMes || cqMes(Date.now());
@@ -16595,7 +16638,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function abaTags(c) {
     const p = c.pend, crit = cqCrit(c), adm = cqAdm(), late = adm && !p && c.st === 'p' && cqDias(c) > cqCfg().prazo;
     const T = [];
-    if (crit && c.st === 'p') T.push(cqSeloCrit(c));
+    if (crit && c.st === 'p') T.push(cqZeb(c) ? cqStarDB(c) : cqSeloCrit(c));
     else if (p) T.push('<span class="cqtag">pendência</span>');
     else if (late) T.push('<span class="cqtag late">atrasado</span>');
     else if (!c.nf && c.st === 'p') T.push('<span class="cqtag nf">aguardando NF</span>');
@@ -16605,8 +16648,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   function abaCard(c, andamento) {
     const sel = S.cqEd && S.cqEd.k === c.k, est = andamento ? (c.st !== 'p' ? '<span class="cqtag sal">salvo</span>' : c.rasc || sel ? '<span class="cqtag ras">rascunho</span>' : '') : '';
     const tp = cqTipoDe(c.k);
-    return `<div class="cqmw"><button type="button" class="cqc cqm${cqCrit(c) && c.st === 'p' ? ' crit' : ''}${sel ? ' sel' : ''}${tp ? ' tp-' + tp : ''}" data-act="aba-abrir" data-key="${esc(c.k)}" aria-current="${sel}">
-      <span class="cqh"><b class="cqpv">${esc(cqNum(c))}</b>${tp ? `<span class="cqtp" title="Certificado de ${CQ_TIPO_NOME[tp].toLowerCase()}">${cqTipoIco(tp)}</span>` : ''}${abaTags(c)}${est}</span><span class="cqcli">${esc(c.cli || '—')}</span>
+    return `<div class="cqmw"><button type="button" class="cqc cqm${cqCrit(c) && c.st === 'p' ? (cqZeb(c) ? ' zc' : ' crit') : ''}${sel ? ' sel' : ''}${tp ? ' tp-' + tp : ''}" data-act="aba-abrir" data-key="${esc(c.k)}" aria-current="${sel}">
+      ${cqCrit(c) && c.st === 'p' && cqZeb(c) ? cqFita(c) : ''}<span class="cqh"><b class="cqpv">${esc(cqNum(c))}</b>${tp ? `<span class="cqtp" title="Certificado de ${CQ_TIPO_NOME[tp].toLowerCase()}">${cqTipoIco(tp)}</span>` : ''}${abaTags(c)}${est}</span><span class="cqcli">${esc(c.cli || '—')}</span>
       <span class="cqs">${c.nf ? `<span class="cqnf mono">NF ${esc(c.nf)}</span>` : ''}${c.fat ? `<span class="muted">fat. ${esc(dmy(c.fat).slice(0, 5))}</span>` : ''}${c.porEm && E.low(c.porEm) !== cqMe() ? `<span class="muted cqpor" title="Com ${esc(c.porNome || '')}">${esc(cqIni(c.porNome))}</span>` : ''}</span></button>
       ${andamento ? `<button type="button" class="cqmx" data-act="aba-tirar" data-key="${esc(c.k)}" title="Tirar de Em andamento (o rascunho continua salvo na Central)" aria-label="Tirar ${esc(cqNum(c))} de Em andamento">×</button>` : ''}</div>`;
   }
@@ -16614,13 +16657,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const L = cqCards(), and = ABA.abertos.map((k) => L.find((c) => c.k === k)).filter(Boolean);
     /* v44: na fila lateral não aparece o pedido que outra pessoa já pegou (na Central ele continua aparecendo) */
     const pend = L.filter((c) => c.st === 'p' && !c.pend && !ABA.abertos.includes(c.k) && !(c.porEm && E.low(c.porEm) !== cqMe()));
-    const comPend = L.filter((c) => c.st === 'p' && c.pend && !ABA.abertos.includes(c.k) && !(c.porEm && E.low(c.porEm) !== cqMe()));
-    const fila = cqOrdena(pend, ABA.flt, E.key(ABA.q || '')), pendL = cqOrdena(comPend, ABA.flt, E.key(ABA.q || ''));
-    return { and, fila, pendL, total: and.length + pend.length, nCrit: pend.filter(cqCrit).length };
+    const comPend0 = L.filter((c) => c.st === 'p' && c.pend && !ABA.abertos.includes(c.k) && !(c.porEm && E.low(c.porEm) !== cqMe()));
+    const comPend = comPend0.filter((c) => !cqCritZ(c)), comPendC = comPend0.filter(cqCritZ);   /* v155 */
+    const fila = cqOrdena(pend, ABA.flt, E.key(ABA.q || '')), pendL = cqOrdena(comPend, ABA.flt, E.key(ABA.q || '')), pendC = cqOrdena(comPendC, ABA.flt, E.key(ABA.q || ''));
+    return { and, fila, pendL, pendC, total: and.length + pend.length, nCrit: pend.filter(cqCrit).length };
   }
   function abaFila() {
     const el = $('#cqfila'); if (!el) return;
-    const { and, fila, pendL, total, nCrit } = abaListas(), fb = (k, l, t) => `<button type="button" data-act="aba-flt" data-key="${k}" aria-pressed="${ABA.flt === k}" title="${t || ''}">${l}</button>`;
+    const { and, fila, pendL, pendC, total, nCrit } = abaListas(), fb = (k, l, t) => `<button type="button" data-act="aba-flt" data-key="${k}" aria-pressed="${ABA.flt === k}" title="${t || ''}">${l}</button>`;
     const foco = document.activeElement && document.activeElement.id === 'aba-q', pos = foco ? document.activeElement.selectionStart : 0;
     el.innerHTML = `<div class="cqfh"><b>FILA</b><span class="cqn">${NF.format(total)}</span><button class="cqftg" type="button" data-act="aba-mini" title="Recolher a fila" aria-label="Recolher a fila">«</button></div>
       <input id="aba-q" class="inp cqfq" type="search" placeholder="PV, NF, cliente, O.C.…" value="${esc(ABA.q)}" autocomplete="off" aria-label="Procurar na fila">
@@ -16629,13 +16673,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <div class="cqfsec"><span>Na fila</span><span>${fila.length}</span></div>
       <div class="cqfl">${fila.length ? fila.slice(0, 80).map((c) => abaCard(c, false)).join('') : `<p class="muted cqfv">${ABA.q || ABA.flt !== 'todos' ? 'Nada com esse filtro.' : 'Nenhum pedido na fila.'}</p>`}${fila.length > 80 ? `<p class="muted cqfv">+ ${fila.length - 80} — use a busca</p>` : ''}</div>
       ${pendL.length ? `<button type="button" class="cqfsec cqfpend" data-act="aba-pend" aria-expanded="${!!ABA.pendAberta}" title="${ABA.pendAberta ? 'Recolher' : 'Mostrar'} os pedidos com pendência"><span>${ABA.pendAberta ? '▾' : '▸'} Pendência</span><span>${pendL.length}</span></button>${ABA.pendAberta ? `<div class="cqfl">${pendL.slice(0, 80).map((c) => abaCard(c, false)).join('')}</div>` : ''}` : ''}
+      ${pendC.length ? `<button type="button" class="cqfsec cqfpend" data-act="aba-pendc" aria-expanded="${!!ABA.pendCAberta}" title="${ABA.pendCAberta ? 'Recolher' : 'Mostrar'} os pedidos de ${esc(cqNomesCrit())} com pendência"><span>${ABA.pendCAberta ? '▾' : '▸'} Pendência ${esc(cqNomesCrit())}</span><span>${pendC.length}</span></button>${ABA.pendCAberta ? `<div class="cqfl">${pendC.slice(0, 80).map((c) => abaCard(c, false)).join('')}</div>` : ''}` : ''}
       <div class="cqfmini"><button class="cqftg" type="button" data-act="aba-mini" title="Abrir a fila" aria-label="Abrir a fila">»</button><span class="cqn">${NF.format(total)}</span>
         ${and.length ? `<small>Abertos</small>${and.map(abaMiniPv).join('')}` : ''}<small>Fila</small>${fila.slice(0, 30).map(abaMiniPv).join('')}</div>`;
     const q = $('#aba-q', el);
     q.oninput = () => { ABA.q = q.value; abaFila(); };
     if (foco) { const q2 = $('#aba-q'); q2.focus(); try { q2.setSelectionRange(pos, pos); } catch (e) { /* busca */ } }
   }
-  const abaMiniPv = (c) => `<button type="button" class="cqfpv${cqTipoDe(c.k) ? ' tp-' + cqTipoDe(c.k) : ''}${cqCrit(c) && c.st === 'p' ? ' crit' : ''}${S.cqEd && S.cqEd.k === c.k ? ' sel' : ''}${abaLate(c) ? ' late' : ''}" data-act="aba-abrir" data-key="${esc(c.k)}" title="${esc(cqNum(c) + ' · ' + (c.cli || ''))}${abaLate(c) ? ' · atrasado' : ''}">${esc(cqDig(c.pv))}</button>`;
+  const abaMiniPv = (c) => `<button type="button" class="cqfpv${cqTipoDe(c.k) ? ' tp-' + cqTipoDe(c.k) : ''}${cqCrit(c) && c.st === 'p' ? (cqZeb(c) ? ' zc' : ' crit') : ''}${S.cqEd && S.cqEd.k === c.k ? ' sel' : ''}${abaLate(c) ? ' late' : ''}"${cqCrit(c) && c.st === 'p' && cqZeb(c) ? ` style="--z:${cqZebCor(c)}"` : ''} data-act="aba-abrir" data-key="${esc(c.k)}" title="${esc(cqNum(c) + ' · ' + (c.cli || ''))}${abaLate(c) ? ' · atrasado' : ''}">${esc(cqDig(c.pv))}</button>`;
   function abaView(main) {
     if (ABA.dup) {
       main.innerHTML = `<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--info)">Certificados</span><h2>A aba de certificados já está aberta</h2><p>Neste computador só pode ter uma aba de certificados, para o mesmo pedido não ser aberto duas vezes.</p><div class="formfoot" style="justify-content:center"><button class="btn primary" type="button" data-act="aba-iroutra">Ir para a aba aberta</button><button class="btn" type="button" data-act="aba-fechar">Fechar esta</button></div></div></div>`;
@@ -16656,6 +16701,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (a === 'aba-tirar') { abaTirar(key); return true; }
     if (a === 'aba-flt') { ABA.flt = key; abaFila(); return true; }
     if (a === 'aba-pend') { ABA.pendAberta = !ABA.pendAberta; abaFila(); return true; }
+    if (a === 'aba-pendc') { ABA.pendCAberta = !ABA.pendCAberta; abaFila(); return true; }
     if (a === 'aba-mini') { const on = !document.body.classList.contains('filamini'); document.body.classList.toggle('filamini', on); lsSet('cq-aba-mini', on ? '1' : ''); return true; }
     if (a === 'aba-central') { abaVerCentral(); return true; }
     if (a === 'aba-fechar') { abaFechar(); return true; }
