@@ -608,6 +608,8 @@ select.fld option { color: #000; font-weight: normal; }
 .pv-table tr.pv-grp td { background: var(--brand); color: #FFFFFF; font-weight: bold; font-size: 12.5px; padding: 6px 10px; }
 .pv-table tr.pv-grp.outro td { background: #3B6CB0; }
 .pv-table tr.outro td.pv-dest { color: #3B6CB0; font-weight: bold; }
+.pv-table .pv-destl { display: block; } .pv-table .pv-troca { margin-top: 4px; font: inherit; font-size: 12px; font-weight: 400; color: var(--ink, inherit); max-width: 100%; padding: 2px 4px; border-radius: 6px; border: 1px solid var(--line, #c8cdd3); background: transparent; }
+.pv-table tr.off .pv-troca { opacity: .5; }
 .pv-table .pv-tipo { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 9px; font-size: 10.5px; font-weight: bold; background: #FDE6DC; color: #B23C0E; vertical-align: 1px; }
 .pv-table .pv-sug b { color: #9A6A00; }
 .pv.sem-sug .pv-sug { text-decoration: line-through; opacity: 0.5; }
@@ -671,6 +673,16 @@ html.ws .app, html.ws .topbar, html.ws .panel, html.ws .panel-hint { display: no
 .ws button { font-family: inherit; }
 .ws-top { display: flex; align-items: center; gap: 16px; height: 64px; padding: 0 20px; background: var(--w-sf); border-bottom: 1px solid var(--w-line); box-sizing: border-box; min-width: 0; }
 .ws-tit { display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1 1 auto; }
+/* v152: tom de cada tipo de certificado: tubos = verde-limão, fabricados = azul-piscina, válvulas = prata */
+html.ws { --tc: #707a2c; --tc-ink: #fff; } html.ws.t-grades { --tc: #1f7f96; } html.ws.t-valvulas { --tc: #6b7782; }
+.ws-selo { display: flex; align-items: center; gap: 9px; flex: none; border: 1.5px solid var(--tc); background: color-mix(in srgb, var(--tc) 14%, transparent); border-radius: 10px; padding: 4px 12px 4px 7px; color: var(--tc); }
+.ws-selo svg { width: 30px; height: 30px; display: block; } .ws-selo small { display: block; font: 400 10.5px/1.1 var(--w-body); color: var(--w-ink3); } .ws-selo b { display: block; font: 700 16px/1.05 var(--w-disp); letter-spacing: .02em; white-space: nowrap; }
+html.ws .ws-tit { gap: 12px; } html.ws.cq-embed .ws-tit .ws-nm { display: none; }   /* na Central o número e o cliente já estão na faixa de cima */
+@media (prefers-color-scheme: dark) { html.ws:not([data-theme="light"]) { --tc: #b8c34a; --tc-ink: #111413; } html.ws.t-grades:not([data-theme="light"]) { --tc: #4fb3c9; } html.ws.t-valvulas:not([data-theme="light"]) { --tc: #c3ced6; } }
+html.ws[data-theme="dark"] { --tc: #b8c34a; --tc-ink: #111413; } html.ws.t-grades[data-theme="dark"] { --tc: #4fb3c9; } html.ws.t-valvulas[data-theme="dark"] { --tc: #c3ced6; }
+html.ws .ws-top { box-shadow: inset 0 3px 0 var(--tc); } html.ws.cq-embed .ws-top { border-color: color-mix(in srgb, var(--tc) 55%, var(--w-line)); }
+html.ws .ws-pr:not(.off):not(.fix) { border-color: var(--tc); } html.ws .ws-pr:not(.off):not(.fix) i { background: var(--tc); color: var(--tc-ink); }
+html.ws #ws { box-shadow: inset 3px 0 0 var(--tc); }
 .ws-ic { width: 36px; height: 36px; border-radius: 8px; background: #15191a; color: #f1f0eb; display: grid; place-content: center; justify-items: center; gap: 3px; flex: none; font: 700 15px/1 var(--w-disp); letter-spacing: .02em; }
 .ws-ic { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); }
 .ws-ic i { display: block; width: 21px; height: 2.5px; border-radius: 2px; background: var(--w-rev); }
@@ -753,6 +765,7 @@ html.t-grades .ws-sec .ws-gw:has(> .ws-g[data-t="corr"]), html.t-grades .ws-sec 
 .ws-st { display: flex; gap: 22px; align-items: center; border-top: 1px solid var(--w-line); margin-top: 10px; padding: 10px 2px 2px; font: 400 14px var(--w-body); color: var(--w-ink2); white-space: nowrap; overflow: hidden; }
 .ws-st b { color: var(--w-ink); font-weight: 600; } .ws-st .gr { flex: 1; }
 .ws-side { display: grid; gap: 16px; align-content: start; min-height: 0; overflow: auto; padding-top: 14px; }
+#ws-folha { display: none !important; }   /* v152: "Esta folha" saiu: cortava a prévia e as informações não eram importantes */
 .ws-card { background: var(--w-sf); border: 1px solid var(--w-line); border-radius: 12px; padding: 14px 16px; }
 .ws-ch { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
 .ws-ch b { font: 700 21px/1 var(--w-disp); } .ws-ch span { font: 400 13.5px var(--w-body); color: var(--w-ink3); }
@@ -1720,7 +1733,7 @@ const TIPO = (() => {
 })();
 const GRADES = TIPO === 'grades';
 const VALV = TIPO === 'valvulas';
-if (GRADES) document.documentElement.classList.add('t-grades');   /* v151 */                                  // v54: certificado de válvulas (uma válvula por folha)
+document.documentElement.classList.add('t-' + TIPO);   /* v151: t-grades; v152: t-tubos / t-valvulas também (tom do tipo) */                                  // v54: certificado de válvulas (uma válvula por folha)
 const TIPOS = { tubos: 'Tubos e conexões', grades: 'Produtos fabricados', valvulas: 'Válvulas' };   /* v140: grades → produtos fabricados */
 const MODEL = MODELS[TIPO];
 const ASSETS = window.CERT_ASSETS;
@@ -6454,6 +6467,21 @@ function prepararGrades(ped) {
   }
 }
 const OUTRO_TIPO = GRADES ? 'tubos' : 'grades';
+/* v152: trocar o certificado de um item na conferência do pedido (fica guardado no item, também se ele for esperar no outro certificado) */
+function mudarTipoItem(it, tipo) {
+  if (!TIPOS[tipo] || it.tipoCert === tipo) return;
+  it.tipoForcado = tipo; it.tipoCert = tipo;
+  if (it.padrao) { it.padrao = false; it.resumida = false; it.sugerida = ''; }
+  delete it.grade; delete it.valv;
+  const txt = it.descricaoCompleta || it.descricao || '';
+  if (tipo === 'grades') {
+    /* grade/degrau: sugere componentes; outro produto fabricado (perfil, drain box…): só a descrição, o resto você preenche */
+    it.grade = ehGrade(txt) ? sugerirGrade(txt) : { tipo: '', norma: '', acabamento: /GALV/i.test(txt) ? 'Galvanizado a fogo' : /PINTAD|PINTURA/i.test(txt) ? 'Pintado' : '', medidas: { comprimento: '', largura: '', altura: '' }, componentes: [] };
+    const listaMat = GRADES ? FIELD[refOf(BLOCO.comp.base + 1, 10)].list : null;
+    if (listaMat) for (const c of it.grade.componentes) c.material = casarComLista(c.material, listaMat);
+  } else if (tipo === 'valvulas') it.valv = sugerirValvula(txt);
+  it.naoCabe = it.tipoCert === TIPO && !LYT && !descricaoCabe(it.descricao);
+}
 /* v54: tipo de certificado de cada item do pedido */
 function ehValvula(texto) { return /\bV[ÁA]LVULAS?\b|\bVALVES?\b/.test(String(texto || '').toUpperCase()); }
 const tipoDoItem = d => (ehValvula(d) ? 'valvulas' : ehGrade(d) ? 'grades' : 'tubos');
@@ -6489,12 +6517,13 @@ function distribuirGrades(itens) {
 }
 /* conferência + montagem de um pedido já lido (também o que ficou esperando no outro tipo de certificado) */
 async function importarPed(ped) {
-  for (const it of ped.itens) it.tipoCert = tipoDoItem(it.descricaoCompleta || it.descricao);
+  for (const it of ped.itens) it.tipoCert = it.tipoForcado || tipoDoItem(it.descricaoCompleta || it.descricao);   /* v152: respeita o tipo escolhido na conferência */
   prepararDescricoes(ped);
   if (!LYT) prepararNormas(ped);
   prepararGrades(ped);
   for (const it of ped.itens) if (it.tipoCert === 'valvulas') it.valv = sugerirValvula(it.descricaoCompleta || it.descricao || '');
-  const escolhidos = await conferirPedido(ped);
+  let escolhidos = await conferirPedido(ped);
+  while (escolhidos && escolhidos.refazer) escolhidos = await conferirPedido(ped, escolhidos.sel);   /* v152 */
   if (!escolhidos) return;
   const aqui = escolhidos.filter(i => ped.itens[i].tipoCert === TIPO);
   const la = escolhidos.filter(i => ped.itens[i].tipoCert !== TIPO);
@@ -6555,10 +6584,11 @@ function campoEditavel(texto, rotulo, muda) {
   e.addEventListener('blur', () => { const t = limpa(e.textContent).replace(/\s+/g, ' ').trim(); if (t !== e.textContent) e.textContent = t; muda(t); });
   return e;
 }
-function conferirPedido(ped) {
+function conferirPedido(ped, selAntes) {
   const N = ped.itens.length;
   const oc = ped.tipo === 'oc';
-  const sel = ped.itens.map(() => true);
+  const sel = ped.itens.map((x, i) => (selAntes ? selAntes[i] !== false : true));
+  let fechar = null;   /* v152: trocar o certificado de um item redesenha a conferência */
   const ordem = [...ped.itens.keys()].filter(i => ped.itens[i].tipoCert === TIPO)
     .concat([...ped.itens.keys()].filter(i => ped.itens[i].tipoCert !== TIPO));
   const nOutros = ordem.filter(i => ped.itens[i].tipoCert !== TIPO).length;
@@ -6637,7 +6667,7 @@ function conferirPedido(ped) {
     const td0 = el('td', '', 'pv-chk');
     const chk = document.createElement('input');
     chk.type = 'checkbox';
-    chk.checked = true;
+    chk.checked = sel[i];
     chk.setAttribute('aria-label', `Incluir o item ${oc && it.itemOC ? it.itemOC + ' da O.C.' : i + 1}`);
     td0.appendChild(chk);
     const desc = el('td');
@@ -6648,7 +6678,7 @@ function conferirPedido(ped) {
       else { it.naoCabe = it.tipoCert === TIPO && !LYT && !descricaoCabe(t); if (alertaCabe) alertaCabe.hidden = !it.naoCabe; }
     });
     desc.append(descTxt);
-    if (it.grade) desc.appendChild(el('span', it.grade.tipo, 'pv-tipo'));
+    if (it.grade && it.grade.tipo) desc.appendChild(el('span', it.grade.tipo, 'pv-tipo'));
     if (it.valv && (it.valv.tipo || it.valv.bitola || it.valv.classe) && it.tipoCert === TIPO) desc.appendChild(el('span', [it.valv.tipo, it.valv.bitola, it.valv.classe, it.valv.ext].filter(Boolean).join(' · '), 'pv-tipo'));
     let alertaCabe = null;
     if (it.padrao) {
@@ -6683,7 +6713,7 @@ function conferirPedido(ped) {
     alertaCabe.hidden = !it.naoCabe;
     desc.appendChild(alertaCabe);
     if (it.codigo) desc.appendChild(el('span', (oc ? 'Código do cliente: ' : '') + it.codigo, 'pv-cod'));
-    if (it.grade) {
+    if (it.grade && it.grade.componentes.length) {
       const sg = el('span', '', 'pv-sug');
       sg.append(el('b', 'Componentes sugeridos: '), document.createTextNode(textoComponentes(it.grade) +
         (it.grade.acabamento ? ` · acabamento: ${it.grade.acabamento.toLowerCase()}` : '')));
@@ -6695,6 +6725,12 @@ function conferirPedido(ped) {
       desc.appendChild(sg);
     }
     const dest = el('td', '', 'pv-dest');
+    /* v152: o item pode ir para outro tipo de certificado (ex.: perfil que é produto fabricado) */
+    const lbl = el('span', '', 'pv-destl'), troca = document.createElement('select');
+    troca.className = 'pv-troca'; troca.setAttribute('aria-label', 'Certificado deste item'); troca.title = 'Trocar o certificado deste item';
+    for (const [k, n] of Object.entries(TIPOS)) { const o = document.createElement('option'); o.value = k; o.textContent = n; if (k === it.tipoCert) o.selected = true; troca.appendChild(o); }
+    troca.addEventListener('change', () => { mudarTipoItem(it, troca.value); if (fechar) fechar({ refazer: true, sel: sel.slice() }); });
+    dest.append(lbl, troca);
     tr.append(td0, el('td', oc ? it.itemOC || '—' : String(i + 1), oc ? 'pv-n pv-ioc' : 'pv-n'), el('td', qtdCertificado(it.qtd), 'pv-q'), desc, dest);
     tbody.appendChild(tr);
     chk.addEventListener('click', e => {
@@ -6706,7 +6742,7 @@ function conferirPedido(ped) {
       ultimo = p;
       atualizar();
     });
-    rows.push({ i, tr, chk, dest, outro });
+    rows.push({ i, tr, chk, dest: lbl, outro });
   });
   table.append(thead, tbody);
   tw.appendChild(table);
@@ -6798,8 +6834,8 @@ function conferirPedido(ped) {
       { label: 'Cancelar', value: null },
       { label: 'Criar', primary: true, value: () => { ped.usarNormas = !!(optNormas && optNormas.checked); return sel.flatMap((s, i) => (s ? [i] : [])); } },
     ],
-    init: ({ buttons }) => {
-      btnOk = buttons[1];
+    init: ({ buttons, close }) => {
+      btnOk = buttons[1]; fechar = close;
       if (pvIn) {
         pvIn.addEventListener('input', () => { const v = pvNorm(pvIn.value); pvIn.classList.toggle('bad', !!pvIn.value.trim() && !v); ped.pv = v; atualizar(); });
         if (!pvIn.value) setTimeout(() => pvIn.focus(), 50);
@@ -7580,12 +7616,16 @@ function wsCE(n) {
 }
 
 /* ---------- montagem da tela ---------- */
+/* v152: selo do tipo de certificado (ícones desenhados para a Central: cano, grade, válvula) */
+const WS_TIPO_ICO = `<svg viewBox="0 0 40 40" aria-hidden="true">${{ tubos: '<path d="M6 14h20a6 6 0 0 1 0 12H6z" fill="none" stroke="currentColor" stroke-width="2.6"/><ellipse cx="6" cy="20" rx="2.6" ry="6" fill="none" stroke="currentColor" stroke-width="2.6"/>',
+  grades: '<rect x="6" y="8" width="28" height="24" rx="2" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M6 16h28M6 24h28M13 8v24M20 8v24M27 8v24" stroke="currentColor" stroke-width="2"/>',
+  valvulas: '<path d="M5 15v10l12-5zM35 15v10l-12-5z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M20 20V9M13 9h14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>' }[TIPO] || ''}</svg>`;
 function wsMontar() {
   document.documentElement.classList.add('ws');
   const root = wsEl('div', 'ws'); root.id = 'ws';
   root.innerHTML = `
     <header class="ws-top">
-      <div class="ws-tit"><span class="ws-ic" aria-hidden="true">CQ<i></i></span><span class="ws-nm"><b id="ws-t"></b><small id="ws-s"></small></span></div>
+      <div class="ws-tit"><span class="ws-selo" title="Tipo de certificado">${WS_TIPO_ICO}<span><small>Certificado de</small><b>${wsEsc(TIPOS[TIPO].toUpperCase())}</b></span></span><span class="ws-nm"><b id="ws-t"></b><small id="ws-s"></small></span></div>
       <div class="ws-fls" id="ws-fls" hidden></div>
       <div class="ws-acts">
         <button type="button" class="ws-b" id="ws-undo" title="Desfazer (Ctrl+Z)">↶ Desfazer <kbd>Ctrl+Z</kbd></button>
@@ -7664,7 +7704,7 @@ function wsRender() {
 }
 function wsTopo() {
   const num = cleanText(state.v[REF_NUMERO] || '').trim(), cli = cleanText(state.v[REF_CLIENTE] || '').trim();
-  $('ws-t').textContent = 'Certificado' + (num ? ' ' + num : '') + (cli ? ' · ' + cli : '');
+  $('ws-t').textContent = (num || 'Sem número') + (cli ? ' · ' + cli : '');   /* v152: o tipo fica no selo ao lado */
   const n = doc.certs.length;
   const sal = WS.central ? `rascunho salvo na Central às ${wsHora(WS.central)}` : WS.lastSave ? `rascunho salvo às ${wsHora(WS.lastSave)}` : 'rascunho';
   $('ws-s').textContent = [`folha ${doc.atual + 1} de ${n}`, VALV ? `válvula ${state.inicio} do pedido` : `${state.itens} de ${MAX_ITENS} ${NOME_ITEM[1]}`, sal].join(' · ');
