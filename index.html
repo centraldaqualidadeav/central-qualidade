@@ -288,6 +288,20 @@ button.ehpc { cursor: pointer; } button.ehpc:hover { border-color: var(--ink-3);
 .dpbr em { font: 700 14px var(--f-display); font-style: normal; text-align: right; } .dpsp svg { width: 100%; height: 70px; display: block; }
 @media (max-width: 1100px) { .dpks { grid-template-columns: repeat(3, minmax(0, 1fr)); } .dpg3 { grid-template-columns: minmax(0, 1fr); } }
 /* v134: Desempenho por operador — visual novo (cartão da pessoa + números com minigráfico), só na cor do módulo */
+.cnop { padding: 14px; } .cnop .dvc2 { grid-template-columns: 320px minmax(0, 1fr); }   /* v163 */
+.cnop .dvt.cnsit { align-items: stretch; text-align: left; } .cnop .cnst { text-align: center; }
+.cntt { display: grid; justify-items: center; text-align: center; gap: 2px; margin: 12px 0 14px; position: relative; } .cntt b { font: 700 64px/1 var(--f-display); text-shadow: 0 0 18px color-mix(in srgb, var(--c) 55%, transparent); } .cntt .dvk { color: var(--c); } .cntt small { color: var(--ink-3); font-size: 11.5px; }
+.cnbars { display: grid; gap: 12px; } .cnb { display: block; width: 100%; padding: 0; border: 0; background: none; font: inherit; color: inherit; text-align: left; border-radius: 8px; } button.cnb { cursor: pointer; } button.cnb:hover .cnbh span { color: var(--c); }
+.cnbh { display: grid; grid-template-columns: minmax(0, 1fr) auto 40px; gap: 8px; align-items: baseline; font-size: 12.5px; color: var(--ink-2); } .cnbh span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cnbh b { font: 700 18px var(--f-display); color: var(--ink); } .cnbh em { font: normal 11px var(--f-mono); color: var(--ink-3); text-align: right; }
+.cnbt { height: 8px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 7%, transparent); margin-top: 5px; } .cnbt i { display: block; height: 100%; border-radius: 999px; }
+.cnsit .dvpq small { display: block; font-size: 11px; color: var(--ink-3); }
+button.cnm { font: inherit; color: inherit; text-align: left; cursor: pointer; width: 100%; } button.cnm:hover { border-color: var(--c); }
+.cnpx { display: flex; flex-direction: column; } .cncu { cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; } .cnl { display: flex; flex-direction: column; min-width: 0; }   /* v164: custo na largura toda */ .cnv { font: 700 34px/1 var(--f-display); color: var(--c); text-shadow: 0 0 14px color-mix(in srgb, var(--c) 45%, transparent); margin-bottom: 12px; }
+.cncl li { grid-template-columns: 22px 96px minmax(20px, 1fr) 96px; } .cncl b { font: 700 15px var(--f-display); white-space: nowrap; }
+.cncu .cnco { height: auto; min-height: 150px; margin: 0; padding: 0; } .cncu .cnco .dvco { grid-template-rows: 1fr auto auto; } .cnco .dvco b { font-size: 12px; white-space: nowrap; }
+.cnsec { margin-top: 14px; } .cnok { margin-top: auto; border-radius: 12px; } .cnlv li { grid-template-columns: 10px minmax(0, 1fr); } .cnlv small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+@container (max-width: 860px) { .cnop .dvc2 { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 1100px) { .cnop .dvms { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cnop .dvrow { grid-template-columns: minmax(0, 1fr); } .cncu { grid-template-columns: minmax(0, 1fr); } .cnco { min-height: 110px; } }
 .dvop { container-type: inline-size; --c: var(--n-tcr); --cc: color-mix(in srgb, var(--n-tcr) 14%, transparent); border-radius: 16px; background: radial-gradient(900px 300px at 0 0, color-mix(in srgb, var(--c) 9%, transparent), transparent 60%), color-mix(in srgb, var(--surface-2) 60%, transparent); }
 .dvop .dpchips { gap: 6px; } .dvop .dpch { border-radius: 999px; } .dvop .dpch.on { box-shadow: 0 0 0 3px var(--cc); }
 .dvop .dpseg { border-radius: 999px; padding: 3px; height: auto; background: var(--surface); grid-auto-columns: auto; gap: 2px; } .dvop .dpseg button { border: 0; border-radius: 999px; padding: 5px 15px; background: none; font-size: 13px; }
@@ -612,7 +626,7 @@ button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 .rtorgs { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 3px; }
 .rtorg { display: inline-flex; align-items: center; font: 600 11px/1.5 var(--f-body); border-radius: 5px; padding: 0 7px; border: 1px solid color-mix(in srgb, var(--k) 35%, transparent); color: var(--k); background: color-mix(in srgb, var(--k) 9%, transparent); white-space: nowrap; }
 .rtorg.rt-rir { --k: var(--rir); } .rtorg.rt-ncc { --k: var(--rncc); } .rtorg.rt-av { --k: var(--ink-3); } .rtorg.rt-prev { --k: var(--ret); } .rtorg.rt-def { --k: var(--crit); }
-.view > .seg.rtsub { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); justify-self: stretch; width: 100%; } .rtsub button { text-align: center; }
+.view > .seg.rtsub { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); justify-self: stretch; width: 100%; } .rtsub button { text-align: center; }
 .rtsub small { font: 500 11.5px var(--f-mono); opacity: .75; margin-left: 3px; }
 @media (max-width: 640px) { .rtsub button { padding: 7px 4px; font-size: 12.5px; line-height: 1.25; } .rtsub small { display: block; margin: 2px 0 0; } }
 .rtpills { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -6106,7 +6120,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 161; window.CQ_V = APP_V;
+    const APP_V = 164; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7051,11 +7065,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     rncHours(S.model);
     S.model.rnc.forEach((x) => { x.lotesAV = normLotes((x.raw && x.raw.AC) || ''); });
     buildLotLinks();
-    if (autoOk()) { setTimeout(pubSync, 0); setTimeout(insPubSync, 0); setTimeout(rncDecSync, 400); }
+    if (autoOk()) { setTimeout(pubSync, 0); setTimeout(insPubSync, 0); setTimeout(rncDecSync, 400); setTimeout(insFotoSync, 1500); }
     S.model.serv.forEach((x) => { x.sv = svOf(x.key); });
     S.model.rncc = computeRncc(DB.rnccItems || [], S.model.cfg, S.today, S.model.hol);
     const sevO = { alta: 0, media: 1, baixa: 2 };
-    S.audit = E.audit(S.model).concat(rnccAudit(S.model), semiAudit(S.model)).sort((a, b) => sevO[a.sev] - sevO[b.sev] || b.items.length - a.items.length);
+    S.audit = E.audit(S.model).concat(rnccAudit(S.model), semiAudit(S.model), retAudit()).sort((a, b) => sevO[a.sev] - sevO[b.sev] || b.items.length - a.items.length);
     buildIndex();
     DB.last = Date.now();
     const ae = document.activeElement;
@@ -7124,6 +7138,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (!CQ_ABA && (accBanco('ret') !== 'nao' || accBanco('rir') !== 'nao')) db.collection('ret').onSnapshot((snap) => {   /* v160: Retrabalho */
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RTR.docs = o; RTR.ready = true; RTR.ver++;
       if (!S.model) return;
+      if (S.audit) { const sevO = { alta: 0, media: 1, baixa: 2 }; S.audit = S.audit.filter((a) => a.mod !== 'RET').concat(retAudit()).sort((a, b) => sevO[a.sev] - sevO[b.sev] || b.items.length - a.items.length); updateChrome(); }
       const dr = $('#layer .drawer'); if (dr && dr.dataset.ret && retGet(dr.dataset.ret)) { retFicha(dr.dataset.ret); return; }
       if (S.view === 'ret' || (S.view === 'rir' && RI.sub !== 'ed')) { const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
     }, (e) => { anotaErro('ret', e); RTR.ready = true; });
@@ -8769,10 +8784,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       <div class="rindn"><button type="button" class="btn" data-act="nx-nav" data-key="${mod}|-1" aria-label="${ant}">‹</button><b>${esc(P.label)}</b><button type="button" class="btn" data-act="nx-nav" data-key="${mod}|1" aria-label="${prox}" ${P.fim ? 'disabled' : ''}>›</button></div>
       <span class="nxh">${P.m === 'd' ? (P.cur ? '<span class="ehlive"><i></i>ao vivo</span><span>hoje · atualiza sozinho</span>' : `<button type="button" class="nxmais" data-act="nx-nav" data-key="${mod}|0">voltar para hoje</button>`) : `<span>comparando com ${esc(P.cmpL)}</span>${P.cur ? '<span>&nbsp;até o mesmo dia</span>' : ''}`}</span>${filtro}</div>`;
   }
-  function nxTab(cab, linhas, tot) {
-    const th = cab.map((c, i) => `<th${i && i < cab.length - 2 ? ' class="n"' : i === cab.length - 2 ? ' class="nxsc"' : ''}>${esc(c)}</th>`).join('');
-    const tr = (r) => `<tr${r.go ? ` data-go="${esc(JSON.stringify(r.go))}"` : ''}><td><div class="rw"><span class="nxav${r.foto ? ' fo' : ''}">${r.foto ? `<img src="${esc(r.foto)}" alt="" loading="lazy" decoding="async">` : esc(r.av)}</span><span>${esc(r.nome)}</span></div></td>${r.nums.map((x) => `<td class="n${x && x.crit ? ' crit' : ''}">${x && typeof x === 'object' ? x.v : x}</td>`).join('')}<td class="nxsc"><div class="tsp">${nxSpark(r.tend, 70, 22)}</div></td><td><div class="nxpp"><span><i style="width:${r.pct}%"></i></span><em>${r.pct}%</em></div></td></tr>`;
-    return `<table class="nxtb"><thead><tr>${th}</tr></thead><tbody>${linhas.map(tr).join('')}</tbody>${tot ? `<tfoot><tr><td>Total</td>${tot.map((x) => `<td class="n">${x}</td>`).join('')}<td class="nxsc"></td><td></td></tr></tfoot>` : ''}</table>`;
+  function nxTab(cab, linhas, tot, simples) {   /* v164: simples = sem Tendência e Parte */
+    const th = cab.map((c, i) => `<th${i && (simples || i < cab.length - 2) ? ' class="n"' : i === cab.length - 2 ? ' class="nxsc"' : ''}>${esc(c)}</th>`).join('');
+    const tr = (r) => `<tr${r.go ? ` data-go="${esc(JSON.stringify(r.go))}"` : ''}><td><div class="rw"><span class="nxav${r.foto ? ' fo' : ''}">${r.foto ? `<img src="${esc(r.foto)}" alt="" loading="lazy" decoding="async">` : esc(r.av)}</span><span>${esc(r.nome)}</span></div></td>${r.nums.map((x) => `<td class="n${x && x.crit ? ' crit' : ''}">${x && typeof x === 'object' ? x.v : x}</td>`).join('')}${simples ? '' : `<td class="nxsc"><div class="tsp">${nxSpark(r.tend, 70, 22)}</div></td><td><div class="nxpp"><span><i style="width:${r.pct}%"></i></span><em>${r.pct}%</em></div></td>`}</tr>`;
+    return `<table class="nxtb"><thead><tr>${th}</tr></thead><tbody>${linhas.map(tr).join('')}</tbody>${tot ? `<tfoot><tr><td>Total</td>${tot.map((x) => `<td class="n">${x}</td>`).join('')}${simples ? '' : '<td class="nxsc"></td><td></td>'}</tr></tfoot>` : ''}</table>`;
   }
   const NXF = { rnc: () => ncfPainelHTML(), rncc: () => nccPainelHTML(), av: () => avPainelHTML(), serv: () => servPainelHTML(), cal: () => calPainelHTML(), rir: () => rirNxPainelHTML(), rif: () => rifNxPainelHTML(), sold: () => soldNxPainelHTML(), iqf: () => iqfNxPainelHTML(), cq: () => cqNxPainelHTML(), proc: () => procNxPainelHTML() };
   /* v136: ao trocar período/pessoa, o botão tocado fica no mesmo lugar da tela (a página não pula para cima ou para baixo) */
@@ -9605,7 +9620,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const gq = new Map(); U.forEach((x) => { const n = quemI(x), k = E.key(n); const o = gq.get(k) || { nome: n, com: E.filled(x.com) ? x.com : '', L: [] }; o.L.push(x); gq.set(k, o); });
     const GQ = Array.from(gq.values()).sort((a, b) => b.L.length - a.L.length || a.nome.localeCompare(b.nome, 'pt-BR')), totU = U.length || 1;
     const vcd = (L, t) => L.filter((x) => { const s = sitAt(x, t); return s === 'v30' || s === 'venc'; }).length;
-    const tabQ = GQ.length ? nxTab(['Pessoa', 'Instr.', 'Em dia', 'Vencendo', 'Tendência', 'Parte'], GQ.slice(0, 6).map((o) => ({ av: nxIni(o.nome), foto: o.com ? ehFotoNome(o.com) : null, nome: o.nome, go: o.com ? goC({ q: o.com }) : null, nums: [o.L.length, emDia(o.L, tA).n, { v: vcd(o.L, tA), crit: conta(o.L, tA, 'venc') > 0 }], tend: H.map((h) => pctD(emDia(o.L, h.b)) || 0), pct: Math.round(o.L.length / totU * 100) })), [NF.format(U.length), NF.format(eA.n), NF.format(vcd(U, tA))]) : '<div class="empty">Nenhum instrumento em uso.</div>';
+    const tabQ = GQ.length ? nxTab(['Pessoa', 'Instr.', 'Em dia', 'Vencendo'], GQ.slice(0, 6).map((o) => ({ av: nxIni(o.nome), foto: o.com ? ehFotoNome(o.com) : null, nome: o.nome, go: o.com ? goC({ q: o.com }) : null, nums: [o.L.length, emDia(o.L, tA).n, { v: vcd(o.L, tA), crit: conta(o.L, tA, 'venc') > 0 }], tend: H.map((h) => pctD(emDia(o.L, h.b)) || 0), pct: Math.round(o.L.length / totU * 100) })), [NF.format(U.length), NF.format(eA.n), NF.format(vcd(U, tA))], true) : '<div class="empty">Nenhum instrumento em uso.</div>';
     /* calibrações feitas no período × previstas */
     const g = nxRng(P, (a, b) => CE(a, b).length), feitas = g.rng.map(([a, b]) => CE(a, b).length), previstas = g.rng.map(([a, b]) => prevE(a, b));
     const tipsC = g.rng.map(([a, b], i) => { const c = soma(CE(a, b)); return g.tips[i] + (c ? ' · R$ ' + money(c) : '') + ' · previsto ' + previstas[i]; });
@@ -9703,6 +9718,52 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const chips = `<div class="dpchips dvfich">${ENT.map((o) => `<button type="button" class="dpch${o.k === it.k ? ' on' : ''}" data-act="cal-fi" data-key="${esc(o.k)}" aria-pressed="${o.k === it.k}"><span class="dpav dvico">${icone}</span>${esc(o.nome)}</button>`).join('')}</div>`;
       return wrap(`${esc(it.nome)} · ${esc(P.label)}`, `${chips}<div class="dvc2">${perfil}<div class="dvrc">${minis}${meio}${linhas}</div></div>`);
     };
+    /* v163: indicador principal no visual neon (aprovado: opção B) — situação dos instrumentos, 4 cartões de calibração, custo e próximos vencimentos */
+    const calNeon = () => {
+      const T0 = R.length, nf = NF.format, pctT = (n) => (!T0 ? '—' : n / T0 * 100 > 0 && n / T0 * 100 < 1 ? '<1%' : Math.round(n / T0 * 100) + '%');
+      const cnt = (f) => R.filter(f).length, nUso = U.length, nLab = cnt((x) => x.status === 'NO LABORATÓRIO'), nMan = cnt((x) => x.status === 'MANUTENÇÃO'), nFora = cnt((x) => x.status === 'FORA DE USO'), nBlq = cnt((x) => x.status === 'BLOQUEADO'), nSem = cnt((x) => !x.status);
+      const nAg = U.filter((x) => x.resultado === 'AGUARDANDO ANÁLISE').length;
+      const FT = insFotos(), fotoAt = (t) => { let best = null; Object.keys(FT).forEach((k) => { const d = +k; if (d <= t && (!best || d > best.d)) best = { d, v: FT[k] }; }); return best && best.v; };
+      const fP = fk ? null : fotoAt(tP);
+      const cor = (c) => ({ ok: 'var(--ok)', warn: 'var(--warn)', crit: 'var(--crit)' }[c] || 'var(--ink-3)');
+      const dlx = (d) => (d ? `<em class="dvd" style="color:${cor(d[1])}" title="comparado com ${esc(P.cmpL)}">${esc(String(d[0]).replace(' ' + P.cmp, ''))}</em>` : '');
+      const spk = (V) => { V = (V || []).filter((v) => v != null && isFinite(v)); const n = V.length; if (n < 2) return '<span class="dvspk"></span>'; const mx = Math.max(1e-9, ...V), w = 150, h = 36, X = (i) => 2 + (i * (w - 4)) / (n - 1), Y = (v) => h - 3 - (v / mx) * (h - 8); const d = V.map((v, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' '); return `<svg class="dvspk" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="a" d="${d} L${X(n - 1).toFixed(1)},${h} L2,${h} Z"/><path class="l" d="${d}" vector-effect="non-scaling-stroke"/></svg>`; };
+      const mini = (l, v, sub, d, V, c, go) => `<${go ? 'button type="button"' : 'div'} class="dvt dvm cnm"${go ? ` data-go="${esc(JSON.stringify(go))}"` : ''} style="--c:${c}"><span class="dvk">${l}</span><div class="dvmr"><b style="color:${c}">${v}</b>${dlx(d)}</div><small>${sub}</small>${spk(V)}</${go ? 'button' : 'div'}>`;
+      /* situação dos instrumentos (agora) */
+      const SIT = [['Em utilização', nUso, 'var(--n-cal)', ['CONFORME', 'VENCE EM BREVE', 'VENCE HOJE', 'VENCIDO']], ['No laboratório', nLab, 'var(--trn)', ['NO LABORATÓRIO']], ['Em manutenção', nMan, 'var(--n-rncc)', ['MANUTENÇÃO']], ['Fora de uso', nFora, 'var(--ink-3)', ['FORA DE USO']], ['Bloqueados / reprovados', nBlq, 'var(--n-rnc)', ['BLOQUEADO']]]
+        .concat(nSem ? [['Sem calibração lançada', nSem, 'var(--n-ouro)', null]] : []);
+      const dT = fP && fP.tot != null ? nxDl(T0, fP.tot, P, 'sobe', nf) : null, par = T0 - nUso;
+      const sitH = `<div class="dvt dvpf cnsit" style="--c:var(--n-cal)"><div class="dvgl"></div><span class="dvk cnst">Situação dos instrumentos</span>
+        <div class="cntt"><b>${nf(T0)}</b><span class="dvk">Total de instrumentos</span><small>sem os descartados${dT ? ` · <span style="color:${cor(dT[1])}">${esc(dT[0])}</span>` : ''}</small></div>
+        <div class="cnbars">${SIT.map(([l, n, c, sts]) => `<${sts ? 'button type="button"' : 'div'} class="cnb"${sts ? ` data-go="${esc(JSON.stringify(goC({ status: sts })))}"` : ''}><div class="cnbh"><span>${l}</span><b${n && /rnc\)$/.test(c) ? ` style="color:${c}"` : ''}>${nf(n)}</b><em>${pctT(n)}</em></div><div class="cnbt"><i style="width:${T0 ? Math.max(n / T0 * 100, n ? 1.5 : 0) : 0}%;background:${c};box-shadow:0 0 10px ${c}"></i></div></${sts ? 'button' : 'div'}>`).join('')}</div>
+        <div class="dvpq"><div><small>Em uso</small><b>${pctT(nUso)}</b><small>${nf(nUso)} de ${nf(T0)}</small></div><div><small>Parados</small><b>${nf(par)}</b><small>sem uso agora</small></div></div></div>`;
+      /* calibração: 4 cartões */
+      const agH = H.map((h) => { const f = fotoAt(h.b); return h.b >= hoje ? nAg : f && f.ag != null ? f.ag : null; });
+      const ks4 = `<div class="dvms">
+        ${mini('Em dia', pA == null ? '—' : nf(Math.round(pA)) + '%', `${nf(eA.n)} de ${nf(eA.d)} em uso`, pA != null && pP != null ? nxDl(pA, pP, P, 'sobe', (v) => NF1.format(v) + ' p.p.') : null, H.map((h) => pctD(emDia(U, h.b))), 'var(--ok)', goC({ status: ['CONFORME'] }))}
+        ${mini('Calibração vencida', nf(xA), 'usar só depois de calibrar', nxDl(xA, xP, P, 'desce', nf), H.map((h) => conta(U, h.b, 'venc')), 'var(--n-rnc)', goC({ status: ['VENCIDO'] }))}
+        ${mini('Aguardando análise', nf(nAg), 'certificado sem o maior erro lançado', fP && fP.ag != null ? nxDl(nAg, fP.ag, P, 'desce', nf) : null, agH, 'var(--n-ouro)', null)}
+        ${mini('Calibrações realizadas', nf(cA.length), `de ${nf(prevE(P.a, P.b))} previstas${prevE(P.a, P.b) ? ' · ' + Math.round(Math.min(cA.length, prevE(P.a, P.b)) / prevE(P.a, P.b) * 100) + '%' : ''}`, nxDl(cA.length, cP.length, P, 'sobe', nf), H.map((h) => CE(h.a, h.b).length), 'var(--n-cal)', null)}</div>`;
+      /* custo */
+      const pt = INS_CUSTOS.map(([k, l]) => [l, cA.reduce((s2, h) => s2 + (h[k] || 0), 0)]), mxp = Math.max(1e-9, ...pt.map((p) => p[1]));
+      const cs = H.map((h) => soma(CE(h.a, h.b))), mxc = Math.max(1e-9, ...cs), hl = (h, i) => (P.m === 'a' ? h.l : P.m === 't' ? `${Math.floor((E.ymd(h.a).m - 1) / 3) + 1}º tri` : MES3[E.ymd(h.a).m - 1]);
+      const dG = gP > 0 && cA.length > semCusto ? nxDl((gA - gP) / gP * 100, 0, P, 'desce', (v) => NF.format(Math.round(v)) + '%') : null;
+      const custoH = `<div class="dvt cncu" data-go="${esc(JSON.stringify(goC({}, 'custos')))}"><div class="cnl"><div class="dvth"><b>Custo ${quando}</b><small>${nf(cA.length)} ${cA.length === 1 ? 'calibração' : 'calibrações'}${semCusto ? ` · ${nf(semCusto)} sem custo` : ''}${dG ? ` · <span style="color:${cor(dG[1])}">${esc(dG[0])}</span>` : ''}</small></div>
+        <b class="cnv">${cA.length && cA.length > semCusto ? 'R$ ' + money(gA) : '—'}</b>
+        ${gA > 0 ? `<div class="dvfx">${pt.map(([, v], k) => (v > 0 ? `<i style="flex:${v};opacity:${(1 - k * 0.22).toFixed(2)}"></i>` : '')).join('')}</div>` : ''}
+        <ul class="dvcl cncl">${pt.map(([l, v], k) => `<li><span class="cp">${k + 1}</span><span class="cn">${l}</span><span class="cb"><i style="width:${(v / mxp * 100).toFixed(0)}%"></i></span><b>R$ ${money(v)}</b></li>`).join('')}</ul></div>
+        <div class="dvcols cnco" style="grid-template-columns:repeat(${H.length},minmax(0,1fr))">${H.map((h, i) => `<div class="dvco" title="${esc('R$ ' + money(cs[i]))}"><div class="dvcb"><i style="height:${cs[i] ? Math.max(4, cs[i] / mxc * 100).toFixed(0) : 0}%"></i></div><b>${cs[i] >= 1000 ? NF1.format(Math.round(cs[i] / 100) / 10) + ' mil' : nf(Math.round(cs[i]))}</b><span>${esc(hl(h, i))}</span></div>`).join('')}</div></div>`;
+      /* próximos vencimentos (agora) */
+      const LV = vencN.map((x) => [x, `vencido há ${-x.dias} d`, 'r']).concat(retA.map((x) => [x, 'retorno do laboratório atrasado', 'r'])).concat(v30N.map((x) => [x, x.dias ? `vence em ${x.dias} d` : 'vence hoje', 'p']));
+      void LV; /* v164: "Próximos vencimentos" neon saiu (o clássico fica ao lado de Instrumentos por responsável) */
+      const proxH = `<div class="dvt cnpx"><div class="dvth"><b>Próximos vencimentos</b><small>agora · 30 dias</small></div>
+        <div class="dvfx">${[[okN, 'var(--ok)'], [v30N.length, 'var(--n-ouro)'], [vencN.length, 'var(--n-rnc)'], [labN.length, 'var(--trn)']].map(([n, c]) => (n ? `<i style="flex:${n};background:${c}"></i>` : '')).join('')}</div>
+        <ul class="dvfl">${[['g', 'Em dia', 'validade com mais de 30 dias', okN, ['CONFORME']], ['p', 'Vence em 30 dias', v30N.filter((x) => x.dias <= 7).length ? `${nf(v30N.filter((x) => x.dias <= 7).length)} nesta semana` : 'nenhum nesta semana', v30N.length, ['VENCE EM BREVE', 'VENCE HOJE']], ['r', 'Vencido', 'usar só depois de calibrar', vencN.length, ['VENCIDO']], ['l', 'No laboratório', retA.length ? `${nf(retA.length)} com retorno atrasado` : 'nenhum retorno atrasado', labN.length, ['NO LABORATÓRIO']]]
+          .map(([c, l, s2, n, sts]) => `<li class="dvgo" data-go="${esc(JSON.stringify(goC({ status: sts })))}"><i class="${c}"${c === 'l' ? ' style="background:var(--trn)"' : ''}></i><div><b>${l}</b><small>${s2}</small></div><b>${nf(n)}</b></li>`).join('')}</ul>
+        ${LV.length ? `<div class="dvsec cnsec">Para resolver</div><ul class="dvfl cnlv">${LV.slice(0, 3).map(([x, t, c]) => `<li class="dvgo" data-open="INS:${esc(x.key)}"><i class="${c}"></i><div><b>${esc(x.codigo)} · ${esc(x.desc || '')}</b><small>${esc(t)}${E.filled(x.com) ? ' · com ' + esc(x.com) : ''}</small></div><span></span></li>`).join('')}</ul>${LV.length > 3 ? `<button type="button" class="nxmais" data-go="${esc(JSON.stringify(goC({ status: ['VENCIDO', 'VENCE HOJE', 'VENCE EM BREVE'] })))}">Ver os ${nf(LV.length)} →</button>` : ''}` : '<div class="okbox cnok">✓ Nenhum instrumento vencido ou vencendo nos próximos 30 dias</div>'}</div>`;
+      void proxH;
+      return `<div class="dvop cnop" style="--c:var(--n-cal);--cc:color-mix(in srgb, var(--n-cal) 14%, transparent)"><div class="dvc2">${sitH}<div class="dvrc">${ks4}<div class="dvrow" style="grid-template-columns:minmax(0,1fr)">${custoH}</div></div></div></div>`;
+    };
     /* resumo */
     const dPP = pA != null && pP != null ? Math.round((pA - pP) * 10) / 10 : null;
     const i1 = pA == null ? ['info', 'Nenhum instrumento em uso com calibração registrada.'] : [eA.n === eA.d ? 'ok' : pA >= 90 ? 'info' : 'warn', `<b>${NF.format(Math.round(pA))}% dos instrumentos em dia</b>${dPP ? ` — ${dPP > 0 ? 'subiu' : 'caiu'} ${NF1.format(Math.abs(dPP))} ${Math.abs(dPP) === 1 ? 'ponto' : 'pontos'} desde ${esc(P.cmpL)}` : dPP === 0 ? ` — igual a ${esc(P.cmpL)}` : ''}.`];
@@ -9714,7 +9775,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       : vencN.length ? ['crit', `<b>${vencN.length === 1 ? '1 instrumento vencido' : vencN.length + ' instrumentos vencidos'}</b> agora: ${vencN.slice(0, 3).map((x) => esc(x.codigo)).join(', ')} — usar só depois de calibrar.`]
       : cA.length > semCusto ? ['info', `<b>${reais(gA)}</b> em ${NF.format(cA.length)} ${cA.length === 1 ? 'calibração' : 'calibrações'} ${quando}${gP > 0 ? ` (${gA >= gP ? '+' : '−'}${NF.format(Math.abs(Math.round((gA - gP) / gP * 100)))}% vs ${esc(P.cmpL)})` : ''}.`]
       : ['ok', '<b>Nenhum vencido</b> e nenhum retorno atrasado.'];
-    return sec(nxIns([i1, i2, i3], nxResumoT(P)) + `<div class="nxks">${ks.map((k) => nxKpi(k, P)).join('')}</div><div class="nxc2">${graf}${urgH()}</div><div class="nxc2b"><div class="chart"><h3>Com quem está<small>instrumentos em uso por pessoa · ${P.cur ? 'agora' : esc(P.label)}</small></h3>${tabQ}</div>${grafC}</div>${calFiHTML()}`);
+    void graf; void grafC; void ks;   /* v163: os cartões antigos, "Vencimentos nos próximos 12 meses" e "Calibrações por dia útil" saíram */
+    return sec(nxIns([i1, i2, i3], nxResumoT(P)) + calNeon() + `<div class="nxc2b" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="chart"><h3>Instrumentos por responsável<small>instrumentos em uso por pessoa · ${P.cur ? 'agora' : esc(P.label)}</small></h3>${tabQ}</div>${urgH()}</div>${calFiHTML()}`);   /* v164 */
   }
   /* ================= v107: RIR (inspeção de recebimento) no visual novo ================= */
   function rirNxPainelHTML() {
@@ -11069,6 +11131,18 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     return p.join(' · ');
   }
   /* v138: os 4 custos de uma calibração (calibração, transporte, deslocamento do técnico, outros) */
+  /* v163: foto diária da situação dos instrumentos (ins/foto-AAAA { d: { <serial>: { tot, uso, lab, man, fora, bloq, ag } } }):
+     guarda o que não tem histórico (total, manutenção, fora de uso, bloqueados, aguardando análise) para o "vs" e a linha de 6 meses */
+  function insFotos() { const o = {}; Object.keys((DB.docs && DB.docs.INS) || {}).forEach((id) => { if (/^foto-\d{4}$/.test(id)) Object.assign(o, (DB.docs.INS[id] || {}).d || {}); }); return o; }
+  let insFotoFeita = 0;
+  async function insFotoSync() {
+    if (!S.model || !autoOk() || !cw('ins') || insFotoFeita === S.today) return;
+    const FT = insFotos(); if (FT[S.today]) { insFotoFeita = S.today; return; }
+    const V = (S.model.ins || []).filter(insVivo), c = (f) => V.filter(f).length;
+    const f = { tot: V.length, uso: c((x) => x.emUso), lab: c((x) => x.status === 'NO LABORATÓRIO'), man: c((x) => x.status === 'MANUTENÇÃO'), fora: c((x) => x.status === 'FORA DE USO'), bloq: c((x) => x.status === 'BLOQUEADO'), ag: c((x) => x.emUso && x.resultado === 'AGUARDANDO ANÁLISE'), at: Date.now() };
+    insFotoFeita = S.today;
+    try { await soldWrite('ins/foto-' + E.ymd(S.today).y, { d: { [S.today]: f } }); } catch (e) { insFotoFeita = 0; console.warn('foto dos instrumentos não gravada', e); }
+  }
   const INS_CUSTOS = [['custo', 'calibração'], ['tr', 'transporte'], ['desl', 'deslocamento'], ['out', 'outros']];
   const insCustoTem = (h) => INS_CUSTOS.some(([k]) => h[k] != null);
   const insCustoTot = (h) => INS_CUSTOS.reduce((s2, [k]) => s2 + (h[k] || 0), 0);
@@ -18340,6 +18414,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const bate = (txt) => !q || E.key(txt).includes(q), okI = (n) => !fi || E.key(n || '') === fi, okF = (f) => !ff || E.key(f || '') === ff;
     const agF = P.map((g, i) => [g, i]).filter(([g]) => !fi && okF(g.forn) && okT(g.lots) && bate([g.nf, g.forn, g.pc, g.lots.map((x) => x.id + ' ' + lotTxt(x)).join(' ')].join(' ')));
     const atrF = agF.filter(([g]) => riAtr(g));
+    const rtLinha = (o) => { const rc = o.st === 'rec';   /* v162 */
+      return linha(rc ? `<span class="risit ${o.reAtr ? 'atr' : 'rtb'}">${o.reAtr ? 'Atrasada' : 'Recebido'}</span>` : '<span class="risit rtb">Em retrabalho</span>', o.nf, o.forn, `<button type="button" class="rilk" data-open="AV:${esc(o.loteK)}" title="Abrir o lote">${esc(o.lote || '')}</button> · ${esc(o.oque || '')} · ${esc(o.setor || '')} · <button type="button" class="rilk" data-open="RET:${esc(o.key)}">${esc(o.num)}</button>${o.ref ? ' · ' + esc(o.ref) : ''}`,
+        rc ? `<span class="riage ${o.reAtr ? 'a2' : o.reU >= 1 ? 'a1' : 'a0'}" title="recebido em ${esc(new Date(o.recAt).toLocaleString('pt-BR'))}${o.recPor ? ' por ' + esc(o.recPor) : ''}">${esc(new Date(o.recAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }))}</span>` : `<span class="riage ${o.venc ? 'a2' : o.dias != null && o.dias <= 1 ? 'a1' : 'a0'}" title="prazo de volta ${esc(fD(o.prazo))}">${esc(fD(o.prazo).slice(0, 5))}</span>`,
+        `<span class="mono" style="white-space:nowrap;font-size:12px;color:${(rc ? o.reAtr : o.venc) ? 'var(--crit)' : 'var(--ink-2)'}">${rc ? (o.reU ? NF.format(o.reU) + (o.reU === 1 ? ' dia útil' : ' dias úteis') : 'hoje') : o.venc ? esc(retPrazoTxt(o)) : NF.format(o.fora) + (o.fora === 1 ? ' dia' : ' dias') + ' fora'}</span>`,
+        quem(rc ? o.recPor || '' : o.criNome || '', false, rc ? o.recBy : o.by), rc && retInsp() ? `<button class="btn primary" type="button" data-act="ret-reins" data-key="${esc(o.key)}">Reinspecionar</button>` : '', ''); };
     const rtbF = retFilaRIR().filter((o) => !fi && okF(o.forn) && bate([o.nf, o.forn, o.lote, o.num, o.ref, o.oque, o.setor].join(' ')));   /* v161 */
     const rasF = ras.filter((c0) => { const c = riCabAtual(c0); return okI(c.nome) && okF(c.forn) && okT(lotsDe(c.lotes)) && bate([c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')); });
     const concF = C.filter((c) => c.st === 'f' && okI(c.nome) && okF(c.forn) && okT(lotsDe(c.lotes)) && bate([c.num, c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')));
@@ -18385,7 +18464,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         ${verR && (rasF.length || fx === 'and') ? `<div class="rigr">Em andamento <b>${rasF.length}</b></div>${rasF.length ? rasF.map(rasc).join('') : `<div class="rinone">${filtra ? 'Nenhum RIR em andamento com esses filtros.' : 'Nenhum RIR em andamento.'}</div>`}` : ''}
         ${verA ? `<div class="rigr">${fx === 'atr' ? `Atrasadas · ${RI_UTEIS} dias úteis` : 'Aguardando RIR'} <b>${LA.length}</b><small>lotes lançados sem resultado de inspeção, agrupados por nota fiscal · a mais antiga primeiro</small></div>
         ${LA.length ? LA.map(([g, i]) => grp(g, i)).join('') : `<div class="rinone">${vazioA}</div>`}` : ''}
-        ${fx === 'todas' && rtbF.length ? `<div class="rigr">↻ Em retrabalho <b>${rtbF.length}</b><small>lotes que o inspetor mandou para o retrabalho · quando voltar, reinspecionar · o prazo de volta mais perto primeiro</small></div>${rtbF.sort((a, b) => (a.prazo == null ? 1e9 : a.prazo) - (b.prazo == null ? 1e9 : b.prazo)).map((o) => linha('<span class="risit rtb">Em retrabalho</span>', o.nf, o.forn, `<button type="button" class="rilk" data-open="AV:${esc(o.loteK)}" title="Abrir o lote">${esc(o.lote || '')}</button> · ${esc(o.oque || '')} · ${esc(o.setor || '')} · <button type="button" class="rilk" data-open="RET:${esc(o.key)}">${esc(o.num)}</button>${o.ref ? ' · ' + esc(o.ref) : ''}`, `<span class="riage ${o.venc ? 'a2' : o.dias != null && o.dias <= 1 ? 'a1' : 'a0'}" title="prazo de volta ${esc(fD(o.prazo))}">${esc(fD(o.prazo).slice(0, 5))}</span>`, `<span class="mono" style="white-space:nowrap;font-size:12px;color:${o.venc ? 'var(--crit)' : 'var(--ink-2)'}">${o.venc ? esc(retPrazoTxt(o)) : NF.format(o.fora) + (o.fora === 1 ? ' dia' : ' dias') + ' fora'}</span>`, quem(o.criNome || '', false, o.by), retInsp() ? `<button class="btn" type="button" data-act="ret-reins" data-key="${esc(o.key)}">Reinspecionar</button>` : '', '')).join('')}` : ''}
+        ${fx === 'todas' && rtbF.some((o) => o.st === 'rec') ? `<div class="rigr">↻ Recebidos do retrabalho · reinspecionar <b>${rtbF.filter((o) => o.st === 'rec').length}</b><small>o material voltou · reinspecionar em até ${RI_UTEIS} dias úteis · o mais antigo primeiro</small></div>${rtbF.filter((o) => o.st === 'rec').sort((a, b) => (a.recAt || 0) - (b.recAt || 0)).map((o) => rtLinha(o)).join('')}` : ''}
+        ${fx === 'todas' && rtbF.some((o) => o.st === 'em') ? `<div class="rigr">↻ Em retrabalho · aguardando voltar <b>${rtbF.filter((o) => o.st === 'em').length}</b><small>lotes que o inspetor mandou para o retrabalho · quem recebe marca "Recebido do retrabalho" · o prazo de volta mais perto primeiro</small></div>${rtbF.filter((o) => o.st === 'em').sort((a, b) => (a.prazo == null ? 1e9 : a.prazo) - (b.prazo == null ? 1e9 : b.prazo)).map((o) => rtLinha(o)).join('')}` : ''}
         ${verA && fx !== 'atr' && trF.length ? `<div class="rigr">Travados · sem inspeção <b>${trF.length}</b><small>não encontrado ou sem condições: saem da fila e voltam quando resolver · o mais antigo primeiro</small></div>${trF.map(([o, i]) => trav(o, i)).join('')}` : ''}</div>`;
     } else {
       const L = concF;
@@ -21885,8 +21965,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const RTR = { docs: {}, ready: false, ver: 0 };
   const RET_TIPO = { prev: 'Previsto', def: 'Por defeito' };
   const RET_ORIG = { RIR: 'RIR', NCC: 'NCC', AV: 'Avulso' };
-  const RET_ST = { em: 'Em retrabalho', enc: 'Encerrada', canc: 'Cancelada' };
-  const RET_EV = { cria: 'Mandado para retrabalho', reap: 'Reinspeção aprovada · lote liberado', rerep: 'Reinspeção reprovada · volta para retrabalho', ncf: 'Reinspeção reprovada · lote vai para a NCF', dados: 'Dados alterados', canc: 'Ordem cancelada' };
+  const RET_ST = { em: 'Em retrabalho', rec: 'Recebido · aguardando reinspeção', enc: 'Encerrada', canc: 'Cancelada' };
+  const RET_EV = { cria: 'Mandado para retrabalho', rec: 'Recebido do retrabalho', lib: 'Liberado sem reinspeção', reap: 'Reinspeção aprovada · lote liberado', rerep: 'Reinspeção reprovada · volta para retrabalho', ncf: 'Reinspeção reprovada · lote vai para a NCF', dados: 'Dados alterados', canc: 'Ordem cancelada' };
   const retStN = (st) => (st === 'afazer' || st === 'pronto' ? 'em' : st);   /* ordens da v160 */
   function retAll() {
     const L = [];
@@ -21895,8 +21975,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       Object.keys(its).forEach((id) => {
         const r = its[id]; if (!r || r._del) return;
         const st = retStN(r.st), venc = st === 'em' && r.prazo != null && r.prazo < S.today;
-        const dias = r.prazo != null ? r.prazo - S.today : null, fora = Math.max(0, Math.floor(((st === 'enc' && r.encAt ? r.encAt : Date.now()) - (r.envAt || r.at || Date.now())) / 864e5));
-        L.push(Object.assign({}, r, { st, key: id, mod: 'RET', mes: docId.replace(/^m-/, ''), venc, dias, fora, aberta: st === 'em' }));
+        const dias = r.prazo != null ? r.prazo - S.today : null, fim = r.recAt || (st === 'enc' || st === 'canc' ? r.encAt || r.cancAt : null) || Date.now();
+        const fora = Math.max(0, Math.floor((fim - (r.envAt || r.at || fim)) / 864e5));
+        const reU = st === 'rec' && r.recAt ? riUteis(msSer(r.recAt)) : null;   /* v162: dias úteis esperando a reinspeção */
+        L.push(Object.assign({}, r, { st, key: id, mod: 'RET', mes: docId.replace(/^m-/, ''), venc, dias, fora, reU, reAtr: reU != null && reU >= RI_UTEIS, aberta: st === 'em' || st === 'rec' }));
       });
     });
     return L.sort((a, b) => (b.at || 0) - (a.at || 0));
@@ -21906,6 +21988,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const retInsp = () => cw('ret') || cw('rir');
   function retChip(o) {
     if (o.st === 'canc') return '<span class="chip off"><i>–</i>Cancelada</span>';
+    if (o.st === 'enc' && o.res === 'lib') return '<span class="chip warn"><i>!</i>Liberado sem reinspeção</span>';
+    if (o.st === 'rec') return o.reAtr ? '<span class="chip crit"><i>●</i>Reinspeção atrasada</span>' : '<span class="chip ok"><i>✓</i>Recebido · reinspecionar</span>';
     if (o.st === 'enc') return o.res === 'rep' ? '<span class="chip crit"><i>✕</i>Encerrada · NCF</span>' : '<span class="chip ok"><i>✓</i>Encerrada</span>';
     if (o.venc) return '<span class="chip crit"><i>●</i>Prazo vencido</span>';
     if (o.dias != null && o.dias <= 1) return `<span class="chip warn"><i>●</i>${o.dias === 0 ? 'Volta hoje' : 'Volta amanhã'}</span>`;
@@ -21934,24 +22018,26 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     return { id, num };
   }
   VIEWS.ret = (main) => {
-    const A = retAll(), sub = S.retSub === 'enc' ? 'enc' : 'em', w = retW(), f = S.f.ret || (S.f.ret = {});
-    const ab = A.filter((o) => o.aberta), nVen = ab.filter((o) => o.venc).length, ym = mesId(Date.now());
-    const encM = A.filter((o) => o.st === 'enc' && o.encAt && mesId(o.encAt) === ym), enc1 = encM.filter((o) => o.res !== 'rep' && !(o.tent > 1)).length;
-    const tm = encM.length ? encM.reduce((s, o) => s + o.fora, 0) / encM.length : null;
+    const A = retAll(), sub = ['enc', 'rec'].includes(S.retSub) ? S.retSub : 'em', w = retW(), f = S.f.ret || (S.f.ret = {});
+    const ab = A.filter((o) => o.aberta), emL = A.filter((o) => o.st === 'em'), recL = A.filter((o) => o.st === 'rec'), nVen = emL.filter((o) => o.venc).length, nReA = recL.filter((o) => o.reAtr).length, ym = mesId(Date.now());
+    const encM = A.filter((o) => o.st === 'enc' && o.encAt && mesId(o.encAt) === ym), reinsM = encM.filter((o) => o.res !== 'lib'), enc1 = reinsM.filter((o) => o.res === 'ap' && !(o.tent > 1)).length, libM = encM.filter((o) => o.res === 'lib').length;
+    const comRec = A.filter((o) => o.recAt && mesId(o.recAt) === ym), tm = comRec.length ? comRec.reduce((s, o) => s + o.fora, 0) / comRec.length : null;
     const kpis = `<div class="kpis sm">
-      ${kpiHTML({ l: 'Em retrabalho', v: NF.format(ab.length), sub: 'mandados, esperando voltar', c: MOD.RET.c })}
-      ${kpiHTML({ l: 'Prazo vencido', v: NF.format(nVen), sub: nVen ? 'ainda não voltaram: cobrar o setor' : 'nenhum atrasado', c: MOD.RET.c, cls: nVen ? 'crit' : '' })}
-      ${kpiHTML({ l: 'Encerradas no mês', v: NF.format(encM.length), sub: encM.length ? `${NF.format(enc1)} aprovadas na 1ª reinspeção` : '', c: MOD.RET.c, pct: encM.length ? [enc1, encM.length, 'aprovadas na 1ª reinspeção', 'ok'] : null })}
-      ${kpiHTML({ l: 'Tempo fora (média)', v: tm == null ? '—' : NF.format(Math.round(tm * 10) / 10) + (Math.round(tm) === 1 ? ' dia' : ' dias'), sub: 'do envio até a reinspeção, no mês', c: MOD.RET.c })}
+      ${kpiHTML({ l: 'Em retrabalho', v: NF.format(emL.length), sub: nVen ? `${NF.format(nVen)} com prazo de volta vencido` : 'esperando voltar do setor', c: MOD.RET.c, cls: nVen ? 'crit' : '' })}
+      ${kpiHTML({ l: 'Recebidos · aguardando reinspeção', v: NF.format(recL.length), sub: nReA ? `${NF.format(nReA)} há ${RI_UTEIS} dias úteis ou mais` : 'o inspetor reinspeciona', c: MOD.RET.c, cls: nReA ? 'crit' : '' })}
+      ${kpiHTML({ l: 'Encerradas no mês', v: NF.format(encM.length), sub: reinsM.length ? `${NF.format(enc1)} aprovadas na 1ª reinspeção` : '', c: MOD.RET.c, pct: reinsM.length ? [enc1, reinsM.length, 'aprovadas na 1ª reinspeção', 'ok'] : null })}
+      ${kpiHTML({ l: 'Liberados sem reinspeção', v: NF.format(libM), sub: 'no mês · aparecem na Auditoria', c: MOD.RET.c, cls: libM ? 'warn' : '' })}
+      ${kpiHTML({ l: 'Tempo fora (média)', v: tm == null ? '—' : NF.format(Math.round(tm * 10) / 10) + (Math.round(tm) === 1 ? ' dia' : ' dias'), sub: 'do envio até o recebimento, no mês', c: MOD.RET.c })}
     </div>`;
     const nEnc = A.filter((o) => o.st === 'enc' || o.st === 'canc').length;
-    const tabs = `<div class="seg calsub rtsub" role="group" aria-label="Ver">${[['em', 'Em retrabalho', ab.length], ['enc', 'Encerradas', nEnc]].map(([k, l, n]) => `<button type="button" data-act="ret-sub" data-key="${k}" aria-pressed="${sub === k}">${l} <small>${NF.format(n)}</small></button>`).join('')}</div>`;
+    const tabs = `<div class="seg calsub rtsub" role="group" aria-label="Ver">${[['em', 'Em retrabalho', emL.length], ['rec', 'Recebidos', recL.length], ['enc', 'Encerradas', nEnc]].map(([k, l, n]) => `<button type="button" data-act="ret-sub" data-key="${k}" aria-pressed="${sub === k}">${l} <small>${NF.format(n)}</small></button>`).join('')}</div>`;
     const acts = w ? '<button class="btn primary" type="button" data-act="ret-nova">+ Nova ordem</button>' : '';
-    const desc = 'O inspetor manda o lote para o retrabalho no RIR (ou aqui, para NCC e avulsos) e a Qualidade espera voltar. Quando volta, o inspetor faz a reinspeção. <b>Previsto</b> = a compra já sabia (não conta contra o fornecedor) · <b>por defeito</b> = lote reprovado.';
+    const desc = 'O inspetor manda o lote para o retrabalho no RIR (ou aqui, para NCC e avulsos). Quando o material volta, quem recebe marca <b>Recebido do retrabalho</b> e o inspetor faz a reinspeção. <b>Previsto</b> = a compra já sabia (não conta contra o fornecedor) · <b>por defeito</b> = lote reprovado.';
     main.innerHTML = `<div class="view">${head('Retrabalho', desc, acts)}${kpis}${tabs}<div class="filters">${ftext('rtf-q', 'Buscar', f.q, 'ordem, lote, RIR, fornecedor, setor…', 1)}${fsel('rtf-tipo', 'Tipo', ['Previsto', 'Por defeito'], f.tipo)}${fsel('rtf-setor', 'Setor', uniq(cfgL('RET_SETORES').concat(A.map((o) => o.setor).filter(Boolean))), f.setor)}</div><div id="rt-tbl"></div></div>`;
     const draw = () => {
-      const rows = A.filter((o) => (sub === 'em' ? o.aberta : !o.aberta) && (!f.tipo || RET_TIPO[o.tipo] === f.tipo) && eqL(o.setor, f.setor)
+      const rows = A.filter((o) => (sub === 'enc' ? !o.aberta : o.st === sub) && (!f.tipo || RET_TIPO[o.tipo] === f.tipo) && eqL(o.setor, f.setor)
         && txtMatch(f.q, [o.num, o.lote, o.ref, o.forn, o.resp, o.setor, o.oque, o.desc, o.nf]));
+      if (sub === 'rec') rows.sort((a, b) => (a.recAt || 0) - (b.recAt || 0));
       if (sub === 'em') rows.sort((a, b) => (b.venc - a.venc) || ((a.prazo == null ? 1e9 : a.prazo) - (b.prazo == null ? 1e9 : b.prazo)));
       mountTable($('#rt-tbl'), { id: 'ret-' + sub, rows, total: A.length, noun: 'ordens', open: true, export: 'Retrabalho', cols: [
         { k: 'st', l: 'Situação', f: retChip, x: (o) => (o.venc ? 'Prazo vencido' : RET_ST[o.st] || '') },
@@ -21959,7 +22045,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         { k: 'lote', l: 'Lote · o que fazer', f: (o) => `${o.lote ? `<span class="mono" style="color:var(--av)">${esc(o.lote)}</span>` : '<span class="muted">sem lote</span>'}<div class="muted">${esc([o.oque, o.qtd].filter(Boolean).join(' · '))}</div>`, x: (o) => [o.lote, o.oque, o.qtd].filter(Boolean).join(' · ') },
         { k: 'setor', l: 'Setor', f: (o) => `${esc(o.setor || '')}${o.resp ? `<div class="muted">${esc(o.resp)}</div>` : ''}`, x: (o) => [o.setor, o.resp].filter(Boolean).join(' · ') },
         { k: 'fora', l: 'Fora há', r: 1, f: (o) => `<span class="mono">${NF.format(o.fora)} ${o.fora === 1 ? 'dia' : 'dias'}</span>`, x: (o) => o.fora },
-        { k: 'prazo', l: sub === 'em' ? 'Prazo de volta' : 'Encerrada', f: (o) => (sub === 'em' ? `<span class="mono"${o.venc ? ' style="color:var(--crit)"' : ''}>${esc(retPrazoTxt(o))}</span>` : `<span class="mono">${o.encAt || o.cancAt ? new Date(o.encAt || o.cancAt).toLocaleDateString('pt-BR') : '—'}</span>`), x: (o) => (o.prazo != null ? fD(o.prazo) : '') }] });
+        { k: 'prazo', l: sub === 'em' ? 'Prazo de volta' : sub === 'rec' ? 'Recebido em' : 'Encerrada', f: (o) => (sub === 'em' ? `<span class="mono"${o.venc ? ' style="color:var(--crit)"' : ''}>${esc(retPrazoTxt(o))}</span>` : sub === 'rec' ? `<span class="mono"${o.reAtr ? ' style="color:var(--crit)"' : ''}>${new Date(o.recAt).toLocaleDateString('pt-BR')}</span>` : `<span class="mono">${o.encAt || o.cancAt ? new Date(o.encAt || o.cancAt).toLocaleDateString('pt-BR') : '—'}</span>`), x: (o) => (o.prazo != null ? fD(o.prazo) : '') }] });
     };
     wireFilters('ret', [['rtf-q', 'q'], ['rtf-tipo', 'tipo'], ['rtf-setor', 'setor']], draw); draw();
   };
@@ -22020,13 +22106,15 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const w = retW(), bt = (a, l, cls) => `<button class="btn${cls ? ' ' + cls : ''}" type="button" data-act="${a}" data-key="${esc(key)}">${l}</button>`;
     const evCor = (t) => (t === 'cria' ? 'var(--ret)' : t === 'reap' ? 'var(--ok)' : t === 'rerep' || t === 'ncf' || t === 'canc' ? 'var(--crit)' : 'var(--ink-3)');
     const tl = `<div class="rttl">${H.map((h) => `<div class="rtev" style="--c:${evCor(h.t)}"><b>${esc(RET_EV[h.t] || h.t)}</b>${h.txt ? `<span>${esc(h.txt)}</span>` : ''}<small>${new Date(h.at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })} · ${esc(h.nome || who(h.by))}</small></div>`).join('')}
-      ${o.aberta ? '<div class="rtev fut"><b>Voltou · reinspeção</b><span>o inspetor confere o lote; aprovado, o lote é liberado</span></div>' : ''}</div>`;
+      ${o.st === 'em' ? '<div class="rtev fut"><b>Recebido do retrabalho</b><span>quem recebe o material registra a data da volta</span></div>' : ''}${o.aberta ? '<div class="rtev fut"><b>Reinspeção</b><span>o inspetor confere o lote; aprovado, o lote é liberado</span></div>' : ''}</div>`;
     const pares = [['Tipo', esc(RET_TIPO[o.tipo] || '')], ['Origem', esc(o.orig === 'AV' ? 'Avulso' : o.ref || RET_ORIG[o.orig] || '')], ['Lote', o.lote ? `<span class="mono">${esc(o.lote)}</span>${o.desc ? ' · ' + esc(o.desc) : ''}` : ''], ['Nota · fornecedor', esc([o.nf ? 'NF ' + o.nf : '', o.forn].filter(Boolean).join(' · '))], ['Quantidade', esc(o.qtd || '')],
       ['Motivo', esc(o.motivo || '')], ['O que fazer', `<b>${esc(o.oque || '')}</b>`], ['Instrução', o.instr ? `<span style="white-space:pre-wrap">${esc(o.instr)}</span>` : ''], ['Setor', esc(o.setor || '')], ['Responsável', esc(o.resp || '')],
+      ['Recebido', o.recAt ? `${new Date(o.recAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}${o.recPor ? ' · ' + esc(o.recPor) : ''}` : ''], ['Liberado sem reinspeção', o.res === 'lib' ? `${esc(o.libMot || '')}${o.libPor ? ' · autorizado por <b>' + esc(o.libPor) + '</b>' : ''}` : ''],
       ['Prazo de volta', o.prazo != null ? `${fD(o.prazo)}${o.aberta ? ` <span class="muted">(${o.venc ? retPrazoTxt(o) : o.dias === 0 ? 'hoje' : 'daqui a ' + NF.format(o.dias) + (o.dias === 1 ? ' dia' : ' dias')})</span>` : ''}` : ''], ['Fora há', NF.format(o.fora) + (o.fora === 1 ? ' dia' : ' dias')], ['Tentativa', o.tent > 1 ? NF.format(o.tent) + 'ª' : '']].filter((p) => p[1]);
     const acts = [];
-    if (retInsp() && o.aberta) acts.push(bt('ret-reins', 'Voltou · reinspecionar', 'primary'));
-    if (w && o.aberta) acts.push(bt('ret-ed', 'Editar (prazo, setor…)'), bt('ret-canc', 'Cancelar ordem', 'danger'));
+    if (w && o.st === 'em') acts.push(bt('ret-rec', 'Recebido do retrabalho', 'primary'));
+    if (retInsp() && o.st === 'rec') acts.push(bt('ret-reins', 'Reinspecionar', 'primary'));
+    if (w && o.aberta) acts.push(bt('ret-lib', 'Liberado sem reinspeção'), bt('ret-ed', 'Editar (prazo, setor…)'), bt('ret-canc', 'Cancelar ordem', 'danger'));
     const body = `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${retChip(o)}<span class="rtorgs" style="margin:0">${retOrigTag(o)}</span></div>
       ${acts.length ? `<div class="formfoot" style="justify-content:flex-start">${acts.join('')}</div>` : ''}
       <div class="fsec"><dl class="rtdl">${pares.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></div>
@@ -22057,7 +22145,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
           await retWrite(o, { st: 'enc', res: 'ap', encAt: at }, { t: 'reap', txt: obs });
           if (o.loteK) await addDecisions([{ k: o.loteK, ev: { t: 'rtbx', ord: o.num, oid: o.key } }, { k: o.loteK, ev: clean({ t: 'insp', res: 'Aprovado', ret: 'Sim', rir: o.ref || undefined, reins: o.num, mot: obs || undefined }) }]);
         } else if (dec === 'denovo') {
-          await retWrite(o, { st: 'em', tent: (o.tent || 1) + 1, prazo: pz, envAt: at }, { t: 'rerep', txt: obs + ' · novo prazo ' + fD(pz) });
+          await retWrite(o, { st: 'em', tent: (o.tent || 1) + 1, prazo: pz, envAt: at, recAt: null, recPor: null, recBy: null }, { t: 'rerep', txt: obs + ' · novo prazo ' + fD(pz) });
         } else {
           await retWrite(o, { st: 'enc', res: 'rep', encAt: at }, { t: 'ncf', txt: obs });
           if (o.loteK) await addDecisions([{ k: o.loteK, ev: { t: 'rtbx', ord: o.num, oid: o.key } }, { k: o.loteK, ev: clean({ t: 'insp', res: 'Reprovado', rir: o.ref || undefined, reins: o.num, mot: 'Reprovado na reinspeção do retrabalho ' + o.num + ': ' + obs }) }]);
@@ -22079,6 +22167,45 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         logEntry('RET', key, 'alterado', `${o.num} cancelada: ${m}`, null); closeLayer(); toast(`${o.num} cancelada.`);
       } catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); }
     };
+  }
+  /* v162: quem recebe o material marca a volta (data certa da volta, separada da reinspeção) */
+  function retRecebido(key) {
+    const o = retGet(key); if (!o) return;
+    openModal(`Recebido do retrabalho · ${o.num}`, `<p style="margin:0">${o.lote ? `Lote <b class="mono">${esc(o.lote)}</b> · ` : ''}${esc(o.oque || '')} · ${esc(o.setor || '')}. Confirme que o material voltou. A data e a hora de agora ficam gravadas, e o lote vai para a reinspeção no RIR.</p>
+      ${sfield('rv-obs', 'Observação', '', { type: 'area', ph: 'ex.: voltaram 8 barras; falta 1' })}
+      <div class="formfoot"><button class="btn primary" type="button" id="rv-ok">Recebido do retrabalho</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    $('#rv-ok').onclick = async () => {
+      const obs = sv('rv-obs'), at = Date.now(), nome = myPessoa() || DB.meName || null, b = $('#rv-ok'); b.disabled = true; b.textContent = 'Gravando…';
+      try {
+        await retWrite(o, { st: 'rec', recAt: at, recPor: nome, recBy: DB.me || null }, { t: 'rec', txt: obs });
+        logEntry('RET', key, 'alterado', `${o.num} · recebido do retrabalho`, null);
+        closeLayer(); toast(`${o.num}: recebido. Agora aguarda a reinspeção.`); setTimeout(() => retFicha(key), 300);
+      } catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); b.disabled = false; b.textContent = 'Recebido do retrabalho'; }
+    };
+  }
+  /* v162: liberado sem reinspeção (motivo e quem autorizou são obrigatórios; aparece na Auditoria) */
+  function retLib(key) {
+    const o = retGet(key); if (!o) return;
+    const pes = eqAll().filter((p) => !p.inativo).map((p) => p.nome).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+    openModal(`Liberado sem reinspeção · ${o.num}`, `<div class="warnbox">O lote ${o.lote ? '<b class="mono">' + esc(o.lote) + '</b> ' : ''}é liberado sem a reinspeção da Qualidade. Fica registrado na ordem, no lote, nos indicadores e na Auditoria.</div>
+      ${sfield('rl-mot', 'Motivo <b>*</b>', '', { type: 'area', ph: 'ex.: urgência do cliente; material já embarcado; retrabalho simples conferido no setor' })}
+      <label class="field"><span>Quem autorizou <b>*</b></span><input id="rl-por" value="${esc(myPessoa() || '')}" list="rl-por-dl" autocomplete="off"><datalist id="rl-por-dl">${optList(pes)}</datalist></label>
+      <div class="formfoot"><button class="btn primary" type="button" id="rl-ok">Liberar sem reinspeção</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    $('#rl-ok').onclick = async () => {
+      const mot = sv('rl-mot'), por = sv('rl-por');
+      if (!mot || !por) { toast('Preencha o motivo e quem autorizou.', true); return; }
+      const at = Date.now(), b = $('#rl-ok'); b.disabled = true; b.textContent = 'Gravando…';
+      try {
+        await retWrite(o, { st: 'enc', res: 'lib', encAt: at, libMot: mot, libPor: por, recAt: o.recAt || at }, { t: 'lib', txt: `${mot} · autorizado por ${por}` });
+        if (o.loteK) await addDecisions([{ k: o.loteK, ev: { t: 'rtbx', ord: o.num, oid: o.key } }, { k: o.loteK, ev: clean({ t: 'insp', res: 'Aprovado', ret: 'Sim', rir: o.ref || undefined, reins: o.num, semRe: true, mot: `Liberado sem reinspeção (${o.num}): ${mot} · autorizado por ${por}` }) }]);
+        logEntry('RET', key, 'alterado', `${o.num} · liberado sem reinspeção: ${mot} · autorizado por ${por}`, null);
+        closeLayer(); toast(`${o.num}: lote liberado sem reinspeção.`); setTimeout(() => retFicha(key), 300);
+      } catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); b.disabled = false; b.textContent = 'Liberar sem reinspeção'; }
+    };
+  }
+  function retAudit() {
+    const L = retAll().filter((o) => o.st === 'enc' && o.res === 'lib' && o.encAt && Date.now() - o.encAt < 120 * 864e5);
+    return L.length ? [{ sev: 'media', mod: 'RET', title: 'Retrabalho liberado sem reinspeção', hint: 'O lote voltou do retrabalho e foi liberado sem a reinspeção da Qualidade (últimos 120 dias). Confira o motivo e quem autorizou.', items: L.map((o) => ({ ref: o.num + (o.lote ? ' › ' + o.lote : ''), text: `${o.libMot || ''} · autorizado por ${o.libPor || '—'}`, rec: o })) }] : [];
   }
   /* RIR: grupo "Em retrabalho" na fila (ordens abertas que têm lote) */
   function retFilaRIR() { return retAll().filter((o) => o.aberta && o.loteK); }
@@ -24842,6 +24969,8 @@ ${trGuil(W, H, M, B)}
       if (a === 'ret-nova') { retDialog(null); return; }
       if (a === 'ret-ed') { retDialog(key); return; }
       if (a === 'ret-reins') { retReins(key); return; }
+      if (a === 'ret-rec') { retRecebido(key); return; }
+      if (a === 'ret-lib') { retLib(key); return; }
       if (a === 'ret-canc') { retCancel(key); return; }
       if (a === 'sold-sub') { S.soldSub = key; render(); return; }
       if (a === 'sold-novo') { soldWDialog(null); return; }
