@@ -1,10 +1,13 @@
-Versão 159
+Versão 161 — Retrabalho pelo RIR (etapa 2)
 
-O que mudou:
-- Configurações > Clientes/Fornecedores > Importar Excel:
-  * mesmo nome com CNPJ diferente entra como filial da mesma ficha (Outros CNPJs), sem erro de "nome repetido";
-  * CNPJ que já está numa ficha atualiza essa ficha (o nome do cadastro continua o mesmo);
-  * e-mails das filiais entram juntos, sem repetir;
-  * a coluna "Outros CNPJs" do arquivo exportado pela Central também é lida.
+Como ficou:
+- No RIR, em "Resultado por lote", Retrabalho: Sim abre "Mandar para retrabalho" (o que fazer, setor, prazo de volta, instrução). Aprovado = previsto; Reprovado = por defeito (não vai para a fila da NCF).
+- Ao concluir o RIR: os outros lotes da nota são liberados na hora; o lote do retrabalho fica bloqueado ("Em retrabalho") e a ordem RT é criada sozinha.
+- Na fila do RIR (Todas) aparece o grupo "Em retrabalho" com o prazo de volta e o botão Reinspecionar.
+- Reinspeção aprovada: lote liberado e ordem encerrada. Reprovada: retrabalhar de novo (novo prazo) ou mandar para a NCF.
+- Módulo Retrabalho: sem "A fazer/Iniciar/Pronto" — a ordem nasce Em retrabalho e espera voltar. Abrir pela Central fica para NCC e avulsos.
+- Lote em retrabalho aparece na ficha do lote, no certificado (aviso) e no QR como aguardando reinspeção.
 
-Publicar no GitHub: index.html e sw.js.
+Publicar:
+1. firestore.rules no Firebase (o inspetor do RIR passa a gravar as ordens; o módulo lê os lotes).
+2. index.html e sw.js no GitHub.

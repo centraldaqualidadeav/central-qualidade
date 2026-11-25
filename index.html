@@ -622,6 +622,11 @@ button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 .rttl { position: relative; padding-left: 24px; } .rttl::before { content: ''; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px; background: var(--line); }
 .rtev { position: relative; margin-bottom: 12px; display: grid; gap: 1px; } .rtev::before { content: ''; position: absolute; left: -22px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 3px var(--surface); }
 .rtev span { color: var(--ink-2); font-size: 12.5px; } .rtev small { color: var(--ink-3); font: 500 11px var(--f-mono); }
+.rtcampos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; } .rtcampos .rtwide { grid-column: 1 / -1; }
+.rirtb { margin-top: 10px; padding: 12px; border: 1px solid color-mix(in srgb, var(--ret) 35%, var(--line)); border-left: 4px solid var(--ret); border-radius: 8px; background: color-mix(in srgb, var(--ret) 5%, var(--surface)); display: grid; gap: 10px; }
+.rirtb > b { color: var(--ret); font-size: 13.5px; } .rirtb > b small { color: var(--ink-3); font-weight: 500; margin-left: 6px; }
+.risit.rtb { color: var(--ret); background: color-mix(in srgb, var(--ret) 14%, transparent); }
+@media (max-width: 560px) { .rtcampos { grid-template-columns: minmax(0, 1fr); } }
 .rtev.fut::before { background: var(--surface); border: 2px dashed var(--ink-3); width: 8px; height: 8px; } .rtev.fut b { color: var(--ink-3); }
 .chip.ok { --k: var(--ok); } .chip.warn { --k: var(--warn); } .chip.serious { --k: var(--serious); } .chip.crit { --k: var(--crit); } .chip.info { --k: var(--info); } .chip.off { --k: var(--off); }
 .mtag { display: inline-flex; align-items: center; gap: 6px; font: 600 11px/1 var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
@@ -6101,7 +6106,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 160; window.CQ_V = APP_V;
+    const APP_V = 161; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -6933,8 +6938,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const dest = dst && (st === 'rnc' || st === 'pend') && !(last && last.at > dst.at) ? dst : null;
       if (dest) st = 'dest';
       if (conts.length && !['pend', 'rnc', 'dest'].includes(st)) st = 'cont';
+      /* v161: retrabalho aberto (rtb) até a reinspeção ou o cancelamento (rtbx): lote bloqueado */
+      const rtbM = {}; evs.forEach((e) => { if ((e.t === 'rtb' || e.t === 'rtbx') && e.ord) rtbM[e.ord] = e.t === 'rtb' ? e : null; });
+      const rtb = Object.values(rtbM).filter(Boolean).pop() || null;
+      if (rtb && st !== 'rnc') st = 'rtb';
       const cev = ins.filter((e) => e.cor).pop();   /* v74: corrida anotada da peça no RIR */
-      out[k] = { semi: semiEv(evs), tags: tagsEv(evs), cor: cev ? cev.cor : null, st, eff, rncs, evRncs, conc, lib: lib ? last : null, dest, conts, insp: useIe ? ie : null, ret: useIe && ie.ret ? ie.ret : null, evs, lock: st === 'pend' || st === 'rnc' || st === 'conc' || st === 'dest' || st === 'cont', sync: !!links };
+      out[k] = { semi: semiEv(evs), tags: tagsEv(evs), cor: cev ? cev.cor : null, st, eff, rncs, evRncs, conc, lib: lib ? last : null, dest, conts, insp: useIe ? ie : null, ret: useIe && ie.ret ? ie.ret : null, evs, lock: st === 'pend' || st === 'rnc' || st === 'conc' || st === 'dest' || st === 'cont' || st === 'rtb', rtb, sync: !!links };
     });
     return out;
   }
@@ -7112,11 +7121,11 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       updateChrome();
       if (['sold', 'painel', 'alertas', 'equipe'].includes(S.view)) { const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
     }, (e) => { anotaErro('sold', e);  SD.ready = true; });
-    if (!CQ_ABA && accBanco('ret') !== 'nao') db.collection('ret').onSnapshot((snap) => {   /* v160: Retrabalho */
+    if (!CQ_ABA && (accBanco('ret') !== 'nao' || accBanco('rir') !== 'nao')) db.collection('ret').onSnapshot((snap) => {   /* v160: Retrabalho */
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RTR.docs = o; RTR.ready = true; RTR.ver++;
       if (!S.model) return;
       const dr = $('#layer .drawer'); if (dr && dr.dataset.ret && retGet(dr.dataset.ret)) { retFicha(dr.dataset.ret); return; }
-      if (S.view === 'ret') { const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
+      if (S.view === 'ret' || (S.view === 'rir' && RI.sub !== 'ed')) { const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
     }, (e) => { anotaErro('ret', e); RTR.ready = true; });
     else RTR.ready = true;
     db.collection('certq').onSnapshot((snap) => {
@@ -11792,6 +11801,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (s0.st === 'conc') return ' <span class="chip off"><i>🔒</i>decisão da NCF</span>';
     if (s0.st === 'lib') return ' <span class="chip off">desbloqueado</span>';
     if (s0.st === 'cont') return ` <span class="chip crit"><i>⛔</i>em contenção · ${esc(s0.conts.join(', '))}</span>`;
+    if (s0.st === 'rtb') return ` <span class="chip" style="--k:var(--ret)"><i>↻</i>Em retrabalho · ${esc(s0.rtb.ord || '')}</span>`;
     if (s0.st === 'dest') return ` <span class="chip off"><i>${DEST[s0.dest.dest] ? DEST[s0.dest.dest][1] : '•'}</i>${esc(DEST[s0.dest.dest] ? DEST[s0.dest.dest][0] : 'destino registrado')}${s0.dest.data != null ? ' em ' + fD(s0.dest.data) : ''}</span>`;
     return '';
   }
@@ -11820,6 +11830,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (nc) o.forn = s(x.forn); /* o fornecedor só vai para a página de lote com NCF */
     const ds = lotSt(x).dest; if (ds && DEST[ds.dest]) o.dest = DEST[ds.dest][0] + (ds.data != null ? ' em ' + fD(ds.data) : '');
     if (lotSt(x).st === 'cont') o.bloq = 'Em contenção — não usar até a liberação da Qualidade';
+    if (lotSt(x).st === 'rtb') o.bloq = 'Aguardando reinspeção da Qualidade — não usar até a liberação';
     /* v67: para quem é de fora (o cliente pode ler o QR), concessão e retrabalho aparecem só como "Liberado"; os detalhes ficam na Central */
     const ds2 = lotSt(x).dest;
     if (lotSt(x).st === 'conc' || (lotSt(x).st === 'dest' && ds2 && ds2.dest === 'ret')) { o.insp = 'Liberado'; o.rnc = ''; delete o.forn; delete o.dest; }
@@ -16984,6 +16995,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (s0.st === 'rnc') return { crit: true, t: 'reprovado · ' + (s0.rncs.join(', ') || 'NCF') };
     if (s0.st === 'dest') return { crit: true, t: ((DEST[s0.dest.dest] || ['destino registrado'])[0]).toLowerCase() };
     if (s0.st === 'cont') return { crit: true, t: 'em contenção · ' + s0.conts.join(', ') };
+    if (s0.st === 'rtb') return { crit: true, t: 'em retrabalho · ' + (s0.rtb.ord || '') };
     if (lotRncAberta(x)) return { crit: true, t: 'tem NCF aberta' };
     if (['em análise', 'em analise'].includes(E.low(x.insp))) return { crit: true, t: 'inspeção em análise' };
     if (s0.st === 'conc') return { crit: false, t: 'liberado sob concessão' };
@@ -17830,6 +17842,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (semO.length) f.push(`descrever o que foi encontrado em ${semO.slice(0, 3).join(', ')}${semO.length > 3 ? '…' : ''}`);
     { const itc = rel.itens.find((o) => riTipo(o) === 'corrida'), lg = rel.itens.find((o) => riTipo(o) === 'legivel');   /* v74 */
       if (itc) rel.lotes.forEach((k) => { if (!riPedeCorrida(rel, k) || (lg && riAns(rel, lg, k).r === 'NC') || String(riAns(rel, itc, k).v || '').trim()) return; f.push(`corrida da peça do lote ${(findRec('AV', k) || {}).id || k} (${riSemCert(k) ? 'o certificado não veio' : 'lote sem corrida no lançamento'})`); }); }
+    { const semRt = rel.lotes.filter((k) => riRet(rel, k) === 'Sim' && (() => { const t = ((rel.lotRes || {})[k] || {}).rt || {}; return !t.oque || !t.setor || t.prazo == null; })()); if (semRt.length) f.push('completar o retrabalho (o que fazer, setor e prazo de volta) de ' + semRt.map((k) => (findRec('AV', k) || {}).id || k).join(', ')); }   /* v161 */
     const mediu = rel.itens.some((it) => it.med && riEscopos(rel, it).some((sc) => { const a = riAns(rel, it, sc); return a.r && a.r !== 'NA'; }));
     const okIns = new Map(rfInstr().map((x) => [x.id, x])), ruins = (rel.ins || []).filter((i) => { const x = okIns.get(i.id); return !x || x.venc; });
     if (ruins.length) f.push('trocar instrumento sem calibração válida ou bloqueado: ' + ruins.map((i) => i.codigo).join(', '));
@@ -18113,14 +18126,15 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   async function riFinalizar() {
     const ed = RI.ed; if (!ed || ed.ro) return; const rel = ed.rel, f = riFalta(rel);
     if (f.length) { toast('Falta para concluir: ' + f.join('; ') + '.', true); return; }
-    const rep = rel.lotes.filter((k) => riRes(rel, k) === 'Reprovado').map((k) => (findRec('AV', k) || {}).id || k);
-    confirmBox('Concluir e assinar o RIR', `O resultado vai para cada lote${rep.length ? ` e ${rep.length === 1 ? 'o lote reprovado ' + rep[0] + ' entra' : 'os lotes reprovados (' + rep.join(', ') + ') entram'} na fila da NCF` : ''}. O relatório sai com a sua assinatura eletrônica (${myPessoa() || DB.meName || 'você'}) e não pode mais ser alterado.`, 'Concluir e assinar', async () => {
+    const rep = rel.lotes.filter((k) => riRes(rel, k) === 'Reprovado' && riRet(rel, k) !== 'Sim').map((k) => (findRec('AV', k) || {}).id || k);
+    const rtL = rel.lotes.filter((k) => riRet(rel, k) === 'Sim').map((k) => (findRec('AV', k) || {}).id || k);   /* v161 */
+    confirmBox('Concluir e assinar o RIR', `${rtL.length ? (rtL.length === 1 ? 'O lote ' + rtL[0] + ' vai' : 'Os lotes ' + rtL.join(', ') + ' vão') + ' para o retrabalho e fica' + (rtL.length === 1 ? '' : 'm') + ' bloqueado' + (rtL.length === 1 ? '' : 's') + ' até a reinspeção. ' : ''}O resultado vai para cada lote${rep.length ? ` e ${rep.length === 1 ? 'o lote reprovado ' + rep[0] + ' entra' : 'os lotes reprovados (' + rep.join(', ') + ') entram'} na fila da NCF` : ''}. O relatório sai com a sua assinatura eletrônica (${myPessoa() || DB.meName || 'você'}) e não pode mais ser alterado.`, 'Concluir e assinar', async () => {
       try {
         clearTimeout(RI.saveT); RI.saveT = null; while (RI.gravando) { try { await RI.gravando; } catch (e) { /* segue */ } }   /* v69 */
         await lock('RIR');
         const ano = new Date().getFullYear(), nref = DB.db.doc('rir/n-' + ano), ns = await nref.get(), seq = (ns.exists ? +(ns.data().ultimo || 0) : 0) + 1;
         const numero = 'RIR-' + ano + '-' + E.pad(seq, 5), at = Date.now();
-        const lotRes = {}; rel.lotes.forEach((k) => { const r = riRes(rel, k), o = (rel.lotRes || {})[k] || {}; lotRes[k] = clean({ res: r, mot: r === 'Reprovado' ? String(o.mot || riMotSug(rel, k)).trim() : null, man: o.man || null }); });
+        const lotRes = {}, rtNums = []; rel.lotes.forEach((k) => { const r = riRes(rel, k), o = (rel.lotRes || {})[k] || {}; lotRes[k] = clean({ res: r, mot: r === 'Reprovado' ? String(o.mot || riMotSug(rel, k)).trim() : null, man: o.man || null, rt: riRet(rel, k) === 'Sim' && o.rt ? Object.assign({}, o.rt, { num: (() => { const n = retNum(rtNums); rtNums.push(n); return n; })() }) : undefined }); });
         const fin = Object.assign(JSON.parse(JSON.stringify(rel)), { status: 'finalizado', numero, ano, seq, lotRes, fin: at, inspetor: myPessoa() || DB.meName || '', assin: meSig(S.view === 'rirtab' ? 'tablet' : 'central') });
         { let outro = null; try { await DB.db.doc('rird/' + rel.id).setIf(fin, (cur) => { if (!cur) return true; if (cur.status === 'finalizado') return false; if ((cur.rev || 0) !== (rel.rev || 0)) { outro = cur.ed || {}; return false; } return true; }); }
           catch (e2) { if (e2 && e2.code === 'failed-precondition' && outro) { relConflito('RIR', { outro }, () => { RI.ed = null; riAbrir(rel.id); }); throw new Error('alterado em outro aparelho: abra a versão mais nova'); } throw e2; } }   /* v69 */
@@ -18129,11 +18143,15 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         await soldWrite('rir/m-' + rel.mes, { items: { [rel.id]: { st: 'f', num: numero, fin: at, res, nome: fin.inspetor } } });
         /* resultado de cada lote (vale como a inspeção do lote) */
         await addDecisions(rel.lotes.map((k) => ({ k, ev: clean({ t: 'insp', res: lotRes[k].res, mot: lotRes[k].mot, ret: riRet(rel, k) || undefined, cor: riCorPeca(rel, k) || undefined, rir: numero, rid: rel.id }) })));
+        /* v161: ordens de retrabalho dos lotes que o inspetor mandou (o lote fica bloqueado até a reinspeção) */
+        { const usados = []; for (const k of rel.lotes) { const lr = lotRes[k]; if (!lr.rt) continue; const x = findRec('AV', k) || {};
+          try { const r0 = await retCriar({ tipo: lr.res === 'Reprovado' ? 'def' : 'prev', orig: 'RIR', ref: numero, loteK: k, lote: x.id || k, desc: x.desc || null, forn: x.forn || rel.forn || null, nf: rel.nf != null ? String(rel.nf) : null, qtd: x.quant != null && x.quant !== '' ? String(x.quant) + (x.und ? ' ' + x.und : '') : null, motivo: lr.mot || null, oque: lr.rt.oque, setor: lr.rt.setor, prazo: lr.rt.prazo, instr: lr.rt.instr || null }, usados); usados.push(r0.num); }
+          catch (e) { toast('O RIR foi concluído, mas a ordem de retrabalho do lote ' + (x.id || k) + ' não foi gravada: abra pelo módulo Retrabalho.', true); } } }
         /* uso dos instrumentos: aparece no histórico do instrumento e na análise de impacto se ele reprovar depois */
         for (const i of rel.ins || []) { try { await addInsEvent(i.id, { t: 'uso', d: S.today, tipo: 'RIR', doc: numero, rid: rel.id, ref: `NF ${rel.nf || '—'} · ${rel.forn || ''}`, lotes: rel.ids }); } catch (e) { /* histórico do instrumento é complementar */ } }
         logEntry('RIR', rel.id, 'alterado', `${numero} concluído · NF ${rel.nf || '—'} · ${rel.forn || ''} · ${rel.ids.map((id, i) => id + ' ' + (res[rel.lotes[i]] || '').toLowerCase()).join(', ')}`, null);
         RI.ed = { rel: fin, ro: true, fotos: ed.fotos };
-        toast(`${numero} concluído.${rep.length ? ' Reprovado(s) na fila da NCF: ' + rep.join(', ') + '.' : ''}`);
+        toast(`${numero} concluído.${rep.length ? ' Reprovado(s) na fila da NCF: ' + rep.join(', ') + '.' : ''}${rtL.length ? ' Em retrabalho: ' + rtL.join(', ') + '.' : ''}`);
         render(); window.scrollTo(0, 0);
       } catch (err) { toast('Não foi possível concluir: ' + ((err && (err.message || err.code)) || err), true); }
     });
@@ -18322,6 +18340,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const bate = (txt) => !q || E.key(txt).includes(q), okI = (n) => !fi || E.key(n || '') === fi, okF = (f) => !ff || E.key(f || '') === ff;
     const agF = P.map((g, i) => [g, i]).filter(([g]) => !fi && okF(g.forn) && okT(g.lots) && bate([g.nf, g.forn, g.pc, g.lots.map((x) => x.id + ' ' + lotTxt(x)).join(' ')].join(' ')));
     const atrF = agF.filter(([g]) => riAtr(g));
+    const rtbF = retFilaRIR().filter((o) => !fi && okF(o.forn) && bate([o.nf, o.forn, o.lote, o.num, o.ref, o.oque, o.setor].join(' ')));   /* v161 */
     const rasF = ras.filter((c0) => { const c = riCabAtual(c0); return okI(c.nome) && okF(c.forn) && okT(lotsDe(c.lotes)) && bate([c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')); });
     const concF = C.filter((c) => c.st === 'f' && okI(c.nome) && okF(c.forn) && okT(lotsDe(c.lotes)) && bate([c.num, c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')));
     const opc = (L) => { const m = new Map(); L.forEach((n) => { const k = E.key(n || ''); if (k && !m.has(k)) m.set(k, String(n).trim()); }); return Array.from(m).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR')); };
@@ -18330,7 +18349,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const sel = (id, rot, L, v) => `<select id="${id}" class="inp" aria-label="${rot}"><option value="">${rot}: todos</option>${L.map(([k, n]) => `<option value="${esc(k)}"${k === v ? ' selected' : ''}>${esc(n)}</option>`).join('')}${v && !L.some(([k]) => k === v) ? `<option value="${esc(v)}" selected>${esc(v)}</option>` : ''}</select>`;
     const chip = (k, l, n) => `<button type="button" data-act="ri-fx" data-key="${k}" aria-pressed="${fx === k}">${l}<i>${NF.format(n)}</i></button>`;
     const barra = `<div class="rifb${TGS.length ? ' has-tg' : ''}" role="search"><input id="ri-q" class="inp" type="search" placeholder="Buscar NF, fornecedor, lote AV ou RIR…" value="${esc(RI.q || '')}" autocomplete="off" aria-label="Buscar">
-      <div class="seg rifx" role="group" aria-label="Mostrar">${chip('todas', 'Todas', agF.length + rasF.length)}${chip('ag', 'Aguardando', agF.length)}${chip('and', 'Em andamento', rasF.length)}${chip('atr', 'Atrasadas', atrF.length)}${chip('conc', 'Concluídos', concF.length)}</div>
+      <div class="seg rifx" role="group" aria-label="Mostrar">${chip('todas', 'Todas', agF.length + rasF.length + rtbF.length)}${chip('ag', 'Aguardando', agF.length)}${chip('and', 'Em andamento', rasF.length)}${chip('atr', 'Atrasadas', atrF.length)}${chip('conc', 'Concluídos', concF.length)}</div>
       ${sel('ri-fi', 'Inspetor', insps, fi)}${sel('ri-ff', 'Fornecedor', forns, ff)}${TGS.length ? sel('ri-ft', 'Tag', TGS.map((t) => [t.id, t.nome]), ft).replace('Tag: todos', 'Tag: todas') : ''}</div>`;
     /* v78 etapa 3: tabela compacta (Situação · NF · Fornecedor e lotes · Chegada · Progresso · Inspetor · botão) */
     const itCfg = rirItensCfg(), nNf = itCfg.filter((o) => o.esc === 'nf').length, nLt = itCfg.length - nNf;
@@ -18366,6 +18385,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         ${verR && (rasF.length || fx === 'and') ? `<div class="rigr">Em andamento <b>${rasF.length}</b></div>${rasF.length ? rasF.map(rasc).join('') : `<div class="rinone">${filtra ? 'Nenhum RIR em andamento com esses filtros.' : 'Nenhum RIR em andamento.'}</div>`}` : ''}
         ${verA ? `<div class="rigr">${fx === 'atr' ? `Atrasadas · ${RI_UTEIS} dias úteis` : 'Aguardando RIR'} <b>${LA.length}</b><small>lotes lançados sem resultado de inspeção, agrupados por nota fiscal · a mais antiga primeiro</small></div>
         ${LA.length ? LA.map(([g, i]) => grp(g, i)).join('') : `<div class="rinone">${vazioA}</div>`}` : ''}
+        ${fx === 'todas' && rtbF.length ? `<div class="rigr">↻ Em retrabalho <b>${rtbF.length}</b><small>lotes que o inspetor mandou para o retrabalho · quando voltar, reinspecionar · o prazo de volta mais perto primeiro</small></div>${rtbF.sort((a, b) => (a.prazo == null ? 1e9 : a.prazo) - (b.prazo == null ? 1e9 : b.prazo)).map((o) => linha('<span class="risit rtb">Em retrabalho</span>', o.nf, o.forn, `<button type="button" class="rilk" data-open="AV:${esc(o.loteK)}" title="Abrir o lote">${esc(o.lote || '')}</button> · ${esc(o.oque || '')} · ${esc(o.setor || '')} · <button type="button" class="rilk" data-open="RET:${esc(o.key)}">${esc(o.num)}</button>${o.ref ? ' · ' + esc(o.ref) : ''}`, `<span class="riage ${o.venc ? 'a2' : o.dias != null && o.dias <= 1 ? 'a1' : 'a0'}" title="prazo de volta ${esc(fD(o.prazo))}">${esc(fD(o.prazo).slice(0, 5))}</span>`, `<span class="mono" style="white-space:nowrap;font-size:12px;color:${o.venc ? 'var(--crit)' : 'var(--ink-2)'}">${o.venc ? esc(retPrazoTxt(o)) : NF.format(o.fora) + (o.fora === 1 ? ' dia' : ' dias') + ' fora'}</span>`, quem(o.criNome || '', false, o.by), retInsp() ? `<button class="btn" type="button" data-act="ret-reins" data-key="${esc(o.key)}">Reinspecionar</button>` : '', '')).join('')}` : ''}
         ${verA && fx !== 'atr' && trF.length ? `<div class="rigr">Travados · sem inspeção <b>${trF.length}</b><small>não encontrado ou sem condições: saem da fila e voltam quando resolver · o mais antigo primeiro</small></div>${trF.map(([o, i]) => trav(o, i)).join('')}` : ''}</div>`;
     } else {
       const L = concF;
@@ -18528,7 +18548,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       return `<div class="rires"><div><b class="mono">${esc(lotId(k))}</b><span class="muted">${x ? esc(lotTxt(x)) + (E.filled(x.corrida) ? ' · corrida ' + esc(x.corrida) : '') : ''}</span>${sug && !o.man ? '<small class="muted">sugerido pelo checklist</small>' : ''}</div>
         <div class="seg" role="group">${RI_RES.map((v) => `<button type="button" ${ro ? 'disabled' : ''} data-act="ri-res" data-key="${esc(k)}" data-v="${v}" aria-pressed="${r === v}">${v}</button>`).join('')}</div>
         <div class="riret"><span>Retrabalho</span><div class="seg" role="group" aria-label="Retrabalho do lote">${cfgL('AV_RETRABALHO').map((v) => `<button type="button" ${ro ? 'disabled' : ''} data-act="ri-ret" data-key="${esc(k)}" data-v="${esc(v)}" aria-pressed="${riRet(rel, k) === v}">${esc(v)}</button>`).join('')}</div></div>
-        ${r === 'Reprovado' ? `<input class="inp" ${ro ? 'disabled' : ''} data-rimot="${esc(k)}" value="${esc(mot)}" placeholder="motivo da reprovação (vai para a NCF)" autocomplete="off">` : ''}</div>`;
+        ${r === 'Reprovado' ? `<input class="inp" ${ro ? 'disabled' : ''} data-rimot="${esc(k)}" value="${esc(mot)}" placeholder="motivo da reprovação${riRet(rel, k) === 'Sim' ? '' : ' (vai para a NCF)'}" autocomplete="off">` : ''}
+        ${riRet(rel, k) === 'Sim' ? `<div class="rirtb" data-rtlot="${esc(k)}"><b>↻ Mandar para retrabalho · ${r === 'Reprovado' ? 'por defeito' : 'previsto'}<small>${o.rt && o.rt.num ? esc(o.rt.num) : r === 'Reprovado' ? 'em vez da fila da NCF · o lote fica bloqueado até a reinspeção' : 'a compra já sabia · o lote fica bloqueado até a reinspeção'}</small></b>${retCamposHTML('rib' + rel.lotes.indexOf(k), o.rt || {}, ro, 'ri-rtoq', k)}</div>` : ''}</div>`;
     }).join('');
     const falta = ro ? [] : riFalta(rel);
     /* no tablet do inspetor (sem acesso aos Lotes) o lote aparece sem abrir a ficha */
@@ -18571,6 +18592,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       else if (t.dataset.rio) slot(t.dataset.rio, t.dataset.sc).o = t.value;
       else if (t.dataset.rimot) { r.lotRes = r.lotRes || {}; r.lotRes[t.dataset.rimot] = Object.assign({}, r.lotRes[t.dataset.rimot] || {}, { mot: t.value, res: 'Reprovado', man: true }); }
       else if (t.id === 'ri-obs') r.obs = t.value;
+      else if (t.closest && t.closest('[data-rtlot]') && /-instr$/.test(t.id)) { const k = t.closest('[data-rtlot]').dataset.rtlot; r.lotRes = r.lotRes || {}; const lr = r.lotRes[k] = Object.assign({}, r.lotRes[k] || {}); lr.rt = Object.assign({}, lr.rt || {}, { instr: t.value.trim() }); }   /* v161 */
       else return;
       riAgendar(); riTabSync();
     });
@@ -18580,6 +18602,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (t.dataset && t.dataset.ricor) { if (!t.value.trim()) riRender(); return; }   /* v74: apagou a corrida: o aviso volta */
       if (t.id === 'ri-foto') { const fs = Array.from(t.files || []), alvo = RI.fotoAlvo; t.value = ''; RI.fotoAlvo = null; if (fs.length) riFotosAdd(fs, alvo); }
       if (t.dataset.riv || t.dataset.rio || t.dataset.rimot) riFaltaSync();
+      if (t.closest && t.closest('[data-rtlot]') && (t.tagName === 'SELECT' || t.type === 'date')) { const k = t.closest('[data-rtlot]').dataset.rtlot, f = /-setor$/.test(t.id) ? 'setor' : 'prazo'; r.lotRes = r.lotRes || {}; const lr = r.lotRes[k] = Object.assign({}, r.lotRes[k] || {}); lr.rt = Object.assign({}, lr.rt || {}, { [f]: f === 'prazo' ? (t.value ? E.fromIso(t.value) : null) : t.value }); riAgendar(); riFaltaSync(); }   /* v161 */
       if (t.dataset.riv && t.value.trim()) insFaixaConf(r, t.value, () => { riAgendar(); riRender(); });   /* v63 */
     });
     if (rel.nFotos) riFotosShow();
@@ -18743,6 +18766,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       riAgendar(); riRender(); if (v === 'NC' && cur.r !== 'NC') setTimeout(() => { const i = $(`[data-rio="${key}"][data-sc="${sc}"]`); if (i) i.focus(); }, 30); return true;
     }
     if (a === 'ri-todos') { rel.ck = rel.ck || {}; rel.ck[key] = rel.ck[key] || {}; const itT = rel.itens.find((o) => o.id === key); rel.lotes.forEach((k) => { if (riTipo(itT) === 'corrida' && riPedeCorrida(rel, k)) return; if (!(rel.ck[key][k] || {}).r) rel.ck[key][k] = Object.assign({}, rel.ck[key][k] || {}, { r: 'C' }); }); riAgendar(); riRender(); return true; }
+    if (a === 'ri-rtoq') { rel.lotRes = rel.lotRes || {}; const lr = rel.lotRes[key] = Object.assign({}, rel.lotRes[key] || {}); lr.rt = Object.assign({}, lr.rt || {}, { oque: el.dataset.v }); riAgendar(); riRender(); return true; }   /* v161 */
     if (a === 'ri-ret') { rel.lotRes = rel.lotRes || {}; rel.lotRes[key] = Object.assign({}, rel.lotRes[key] || {}, { ret: el.dataset.v }); riAgendar(); riRender(); return true; }
     if (a === 'ri-res') { rel.lotRes = rel.lotRes || {}; const v = el.dataset.v; rel.lotRes[key] = Object.assign({}, rel.lotRes[key] || {}, { res: v, man: true }); if (v === 'Reprovado' && !rel.lotRes[key].mot) rel.lotRes[key].mot = riMotSug(rel, key); riAgendar(); riRender(); return true; }
     if (a === 'ri-insp') { riInsPoe(key); return true; }
@@ -21852,41 +21876,42 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const mini = (o) => `<span class="iqmini">${[['q', 'Qual.'], ['r', 'Ocorr.'], ['d', 'Doc.'], ['a', 'NCF']].map(([c, l]) => `<span><small>${l}</small><i><b style="width:${o[c] == null ? 0 : o[c]}%;background:${o[c] == null ? 'transparent' : IQC[iqClsV(o[c], cf)]}"></b></i></span>`).join('')}</span>`;
     return `<div class="swall iqwall">${sl.map((o) => { const tr = iqTrend(o); return `<button type="button" class="scard iqcard${o.cls ? ' c' + o.cls : ''}" data-open="IQF:${esc(o.key)}"><span class="iqgw">${iqGauge(o.cls ? o.iqf : null, 124)}<span class="iqlt ${o.cls ? 'c' + o.cls : ''}">${o.cls || '–'}</span></span><span class="scb"><b class="iqn">${esc(o.nome)}</b><span class="iqme">${NF.format(o.lotes)} lote(s) · ${o.rnc} NCF${tr ? ' · ' + tr : ''}${o.cls ? '' : ' · poucos dados'}</span><span class="iqme2">nota mês a mês</span>${iqSpark(o.key, 180, 30)}${mini(o)}</span></button>`; }).join('')}</div>${rows.length > n ? `<div class="formfoot" style="justify-content:center;margin-top:12px"><button class="btn" type="button" data-act="iq-more">Mostrar mais ${NF.format(Math.min(60, rows.length - n))} (de ${NF.format(rows.length - n)} restantes)</button></div>` : ''}`;
   }
-  /* ================= v160: RETRABALHO (módulo próprio) =================
+  /* ================= v160/v161: RETRABALHO (módulo próprio) =================
      Ordens de retrabalho interno. Banco: ret/m-AAAA-MM { items: { <id>: ordem } } (mês da abertura).
+     v161: a Qualidade manda para o retrabalho e só espera voltar. A ordem nasce "em" (em retrabalho, aguardando a volta)
+     e fecha na reinspeção: aprovada → enc · reprovada → de novo (novo prazo, tentativa + 1) ou encerra e o lote vai para a fila da NCF.
      Tipo: 'prev' (previsto: a compra já sabia; lote aprovado; não conta contra o fornecedor) ou 'def' (por defeito: lote reprovado).
-     Origem: RIR, NCC ou avulso. Situação: afazer → em → pronto (aguarda reinspeção) → enc (encerrada) · canc (cancelada).
-     Reinspeção reprovada: o inspetor decide — retrabalhar de novo (volta para "a fazer", tentativa + 1) ou encerrar e abrir NCF. */
+     Origem: RIR (o inspetor manda na hora do RIR), NCC ou avulso. Lote em retrabalho fica bloqueado (eventos 'rtb'/'rtbx' do lote). */
   const RTR = { docs: {}, ready: false, ver: 0 };
   const RET_TIPO = { prev: 'Previsto', def: 'Por defeito' };
   const RET_ORIG = { RIR: 'RIR', NCC: 'NCC', AV: 'Avulso' };
-  const RET_ST = { afazer: 'A fazer', em: 'Em retrabalho', pronto: 'Aguardando reinspeção', enc: 'Encerrada', canc: 'Cancelada' };
-  const RET_EV = { cria: 'Ordem aberta', ini: 'Retrabalho iniciado', pronto: 'Marcado pronto · vai para reinspeção', reap: 'Reinspeção aprovada · lote liberado', rerep: 'Reinspeção reprovada', denovo: 'Volta para retrabalho', ncf: 'Encerrada · vai para NCF', dados: 'Dados alterados', canc: 'Ordem cancelada' };
+  const RET_ST = { em: 'Em retrabalho', enc: 'Encerrada', canc: 'Cancelada' };
+  const RET_EV = { cria: 'Mandado para retrabalho', reap: 'Reinspeção aprovada · lote liberado', rerep: 'Reinspeção reprovada · volta para retrabalho', ncf: 'Reinspeção reprovada · lote vai para a NCF', dados: 'Dados alterados', canc: 'Ordem cancelada' };
+  const retStN = (st) => (st === 'afazer' || st === 'pronto' ? 'em' : st);   /* ordens da v160 */
   function retAll() {
     const L = [];
     Object.keys(RTR.docs).forEach((docId) => {
       const its = (RTR.docs[docId] || {}).items || {};
       Object.keys(its).forEach((id) => {
         const r = its[id]; if (!r || r._del) return;
-        const venc = ['afazer', 'em'].includes(r.st) && r.prazo != null && r.prazo < S.today;
-        const dias = r.prazo != null ? r.prazo - S.today : null;
-        L.push(Object.assign({}, r, { key: id, mod: 'RET', mes: docId.replace(/^m-/, ''), venc, dias, aberta: ['afazer', 'em', 'pronto'].includes(r.st) }));
+        const st = retStN(r.st), venc = st === 'em' && r.prazo != null && r.prazo < S.today;
+        const dias = r.prazo != null ? r.prazo - S.today : null, fora = Math.max(0, Math.floor(((st === 'enc' && r.encAt ? r.encAt : Date.now()) - (r.envAt || r.at || Date.now())) / 864e5));
+        L.push(Object.assign({}, r, { st, key: id, mod: 'RET', mes: docId.replace(/^m-/, ''), venc, dias, fora, aberta: st === 'em' }));
       });
     });
     return L.sort((a, b) => (b.at || 0) - (a.at || 0));
   }
   const retGet = (k) => retAll().find((o) => o.key === k) || null;
   const retW = () => cw('ret');
+  const retInsp = () => cw('ret') || cw('rir');
   function retChip(o) {
     if (o.st === 'canc') return '<span class="chip off"><i>–</i>Cancelada</span>';
     if (o.st === 'enc') return o.res === 'rep' ? '<span class="chip crit"><i>✕</i>Encerrada · NCF</span>' : '<span class="chip ok"><i>✓</i>Encerrada</span>';
-    if (o.st === 'pronto') return '<span class="chip ok"><i>↻</i>Reinspeção</span>';
-    if (o.venc) return `<span class="chip crit"><i>●</i>Prazo vencido</span>`;
-    if (o.dias != null && o.dias <= 1) return `<span class="chip warn"><i>●</i>${o.dias === 0 ? 'Vence hoje' : 'Vence amanhã'}</span>`;
-    if (o.st === 'em') return '<span class="chip" style="--k:var(--ret)"><i>↻</i>Em retrabalho</span>';
-    return '<span class="chip off"><i>○</i>A fazer</span>';
+    if (o.venc) return '<span class="chip crit"><i>●</i>Prazo vencido</span>';
+    if (o.dias != null && o.dias <= 1) return `<span class="chip warn"><i>●</i>${o.dias === 0 ? 'Volta hoje' : 'Volta amanhã'}</span>`;
+    return '<span class="chip" style="--k:var(--ret)"><i>↻</i>Em retrabalho</span>';
   }
-  const retPrazoTxt = (o) => (o.prazo == null ? '—' : o.aberta && o.st !== 'pronto' && o.venc ? `${NF.format(-o.dias)} ${-o.dias === 1 ? 'dia' : 'dias'} atrasado` : fD(o.prazo));
+  const retPrazoTxt = (o) => (o.prazo == null ? '—' : o.venc ? `${NF.format(-o.dias)} ${-o.dias === 1 ? 'dia' : 'dias'} atrasado` : fD(o.prazo));
   const retOrigTag = (o) => `<span class="rtorg rt-${o.orig === 'RIR' ? 'rir' : o.orig === 'NCC' ? 'ncc' : 'av'}">${esc(o.orig === 'AV' ? 'Avulso' : (o.ref ? o.ref : RET_ORIG[o.orig] || ''))}</span><span class="rtorg rt-${o.tipo === 'def' ? 'def' : 'prev'}">${o.tipo === 'def' ? 'defeito' : 'previsto'}</span>`;
   async function retWrite(o, patch, ev) {
     const at = Date.now(), hid = at.toString(36) + Math.random().toString(36).slice(2, 5);
@@ -21894,153 +21919,169 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (ev) p.h = { [hid]: clean(Object.assign({ at, by: DB.me || null, nome: myPessoa() || DB.meName || null }, ev)) };
     await soldWrite('ret/m-' + o.mes, { items: { [o.key]: clean(p) } });
   }
-  function retNum() {
+  function retNum(extra) {
     const y = E.ymd(S.today).y; let mx = 0;
-    retAll().forEach((o) => { const m = /^RT-(\d{4})-(\d+)$/.exec(o.num || ''); if (m && +m[1] === y) mx = Math.max(mx, +m[2]); });
+    retAll().map((o) => o.num).concat(extra || []).forEach((n) => { const m = /^RT-(\d{4})-(\d+)$/.exec(n || ''); if (m && +m[1] === y) mx = Math.max(mx, +m[2]); });
     return `RT-${y}-${String(mx + 1).padStart(4, '0')}`;
   }
+  /* cria a ordem (de qualquer origem) e bloqueia o lote; d = { tipo, orig, ref, loteK, lote, desc, forn, nf, qtd, motivo, oque, setor, resp, prazo, instr } */
+  async function retCriar(d, usados) {
+    const at = Date.now(), id = 'R' + at.toString(36).toUpperCase() + Math.random().toString(36).slice(2, 5).toUpperCase(), mes = mesId(at), num = retNum(usados), nome = myPessoa() || DB.meName || null;
+    const nova = clean(Object.assign({}, d, { num, st: 'em', tent: 1, at, envAt: at, by: DB.me || null, criNome: nome, h: { [at.toString(36)]: { t: 'cria', at, by: DB.me || null, nome, txt: `${RET_TIPO[d.tipo]} · ${d.oque} · ${d.setor}${d.ref ? ' · ' + d.ref : ''}` } } }));
+    await soldWrite('ret/m-' + mes, { items: { [id]: nova } });
+    if (d.loteK) await addDecisions([{ k: d.loteK, ev: { t: 'rtb', ord: num, oid: id } }]);
+    logEntry('RET', id, 'novo', `${num} · ${d.oque}${d.lote ? ' · ' + d.lote : ''}`, null);
+    return { id, num };
+  }
   VIEWS.ret = (main) => {
-    const A = retAll(), sub = S.retSub || 'abertas', w = retW(), f = S.f.ret || (S.f.ret = {});
-    const ab = A.filter((o) => o.aberta), nAf = A.filter((o) => o.st === 'afazer').length, nEm = A.filter((o) => o.st === 'em').length, nPr = A.filter((o) => o.st === 'pronto').length;
-    const vAf = A.filter((o) => o.st === 'afazer' && o.venc).length, vEm = A.filter((o) => o.st === 'em' && o.venc).length, ym = mesId(Date.now());
+    const A = retAll(), sub = S.retSub === 'enc' ? 'enc' : 'em', w = retW(), f = S.f.ret || (S.f.ret = {});
+    const ab = A.filter((o) => o.aberta), nVen = ab.filter((o) => o.venc).length, ym = mesId(Date.now());
     const encM = A.filter((o) => o.st === 'enc' && o.encAt && mesId(o.encAt) === ym), enc1 = encM.filter((o) => o.res !== 'rep' && !(o.tent > 1)).length;
+    const tm = encM.length ? encM.reduce((s, o) => s + o.fora, 0) / encM.length : null;
     const kpis = `<div class="kpis sm">
-      ${kpiHTML({ l: 'A fazer', v: NF.format(nAf), sub: vAf ? `${NF.format(vAf)} com prazo vencido` : 'esperando o setor começar', c: MOD.RET.c, cls: vAf ? 'crit' : '' })}
-      ${kpiHTML({ l: 'Em retrabalho', v: NF.format(nEm), sub: vEm ? `${NF.format(vEm)} com prazo vencido` : 'nenhuma com prazo vencido', c: MOD.RET.c, cls: vEm ? 'crit' : '' })}
-      ${kpiHTML({ l: 'Aguardando reinspeção', v: NF.format(nPr), sub: 'prontas, esperando o RIR', c: MOD.RET.c })}
+      ${kpiHTML({ l: 'Em retrabalho', v: NF.format(ab.length), sub: 'mandados, esperando voltar', c: MOD.RET.c })}
+      ${kpiHTML({ l: 'Prazo vencido', v: NF.format(nVen), sub: nVen ? 'ainda não voltaram: cobrar o setor' : 'nenhum atrasado', c: MOD.RET.c, cls: nVen ? 'crit' : '' })}
       ${kpiHTML({ l: 'Encerradas no mês', v: NF.format(encM.length), sub: encM.length ? `${NF.format(enc1)} aprovadas na 1ª reinspeção` : '', c: MOD.RET.c, pct: encM.length ? [enc1, encM.length, 'aprovadas na 1ª reinspeção', 'ok'] : null })}
+      ${kpiHTML({ l: 'Tempo fora (média)', v: tm == null ? '—' : NF.format(Math.round(tm * 10) / 10) + (Math.round(tm) === 1 ? ' dia' : ' dias'), sub: 'do envio até a reinspeção, no mês', c: MOD.RET.c })}
     </div>`;
-    const SUBS = [['abertas', 'Abertas', ab.length], ['afazer', 'A fazer', nAf], ['em', 'Em retrabalho', nEm], ['pronto', 'Reinspeção', nPr], ['enc', 'Encerradas', A.filter((o) => o.st === 'enc' || o.st === 'canc').length]];
-    const tabs = `<div class="seg calsub rtsub" role="group" aria-label="Ver">${SUBS.map(([k, l, n]) => `<button type="button" data-act="ret-sub" data-key="${k}" aria-pressed="${sub === k}">${l} <small>${NF.format(n)}</small></button>`).join('')}</div>`;
+    const nEnc = A.filter((o) => o.st === 'enc' || o.st === 'canc').length;
+    const tabs = `<div class="seg calsub rtsub" role="group" aria-label="Ver">${[['em', 'Em retrabalho', ab.length], ['enc', 'Encerradas', nEnc]].map(([k, l, n]) => `<button type="button" data-act="ret-sub" data-key="${k}" aria-pressed="${sub === k}">${l} <small>${NF.format(n)}</small></button>`).join('')}</div>`;
     const acts = w ? '<button class="btn primary" type="button" data-act="ret-nova">+ Nova ordem</button>' : '';
-    const desc = 'Ordens de retrabalho interno: o que fazer, quem faz e até quando. Quando fica pronto, o lote volta para o RIR (reinspeção). <b>Previsto</b> = a compra já sabia (não conta contra o fornecedor) · <b>por defeito</b> = lote reprovado.';
-    main.innerHTML = `<div class="view">${head('Retrabalho', desc, acts)}${kpis}${tabs}<div class="filters">${ftext('rtf-q', 'Buscar', f.q, 'ordem, lote, RIR, fornecedor, responsável…', 1)}${fsel('rtf-tipo', 'Tipo', ['Previsto', 'Por defeito'], f.tipo)}${fsel('rtf-setor', 'Setor', uniq(cfgL('RET_SETORES').concat(A.map((o) => o.setor).filter(Boolean))), f.setor)}</div><div id="rt-tbl"></div></div>`;
+    const desc = 'O inspetor manda o lote para o retrabalho no RIR (ou aqui, para NCC e avulsos) e a Qualidade espera voltar. Quando volta, o inspetor faz a reinspeção. <b>Previsto</b> = a compra já sabia (não conta contra o fornecedor) · <b>por defeito</b> = lote reprovado.';
+    main.innerHTML = `<div class="view">${head('Retrabalho', desc, acts)}${kpis}${tabs}<div class="filters">${ftext('rtf-q', 'Buscar', f.q, 'ordem, lote, RIR, fornecedor, setor…', 1)}${fsel('rtf-tipo', 'Tipo', ['Previsto', 'Por defeito'], f.tipo)}${fsel('rtf-setor', 'Setor', uniq(cfgL('RET_SETORES').concat(A.map((o) => o.setor).filter(Boolean))), f.setor)}</div><div id="rt-tbl"></div></div>`;
     const draw = () => {
-      const rows = A.filter((o) => (sub === 'abertas' ? o.aberta : sub === 'enc' ? o.st === 'enc' || o.st === 'canc' : o.st === sub)
-        && (!f.tipo || RET_TIPO[o.tipo] === f.tipo) && eqL(o.setor, f.setor)
-        && txtMatch(f.q, [o.num, o.lote, o.ref, o.forn, o.resp, o.setor, o.oque, o.desc, o.cli]));
-      if (sub !== 'enc') rows.sort((a, b) => (a.st === 'pronto') - (b.st === 'pronto') || (b.venc - a.venc) || ((a.prazo == null ? 1e9 : a.prazo) - (b.prazo == null ? 1e9 : b.prazo)));
+      const rows = A.filter((o) => (sub === 'em' ? o.aberta : !o.aberta) && (!f.tipo || RET_TIPO[o.tipo] === f.tipo) && eqL(o.setor, f.setor)
+        && txtMatch(f.q, [o.num, o.lote, o.ref, o.forn, o.resp, o.setor, o.oque, o.desc, o.nf]));
+      if (sub === 'em') rows.sort((a, b) => (b.venc - a.venc) || ((a.prazo == null ? 1e9 : a.prazo) - (b.prazo == null ? 1e9 : b.prazo)));
       mountTable($('#rt-tbl'), { id: 'ret-' + sub, rows, total: A.length, noun: 'ordens', open: true, export: 'Retrabalho', cols: [
-        { k: 'st', l: 'Situação', f: retChip, x: (o) => (o.venc && o.aberta && o.st !== 'pronto' ? 'Prazo vencido' : RET_ST[o.st] || '') },
+        { k: 'st', l: 'Situação', f: retChip, x: (o) => (o.venc ? 'Prazo vencido' : RET_ST[o.st] || '') },
         { k: 'num', l: 'Ordem · origem', f: (o) => `<span class="mono">${esc(o.num || '')}</span><div class="rtorgs">${retOrigTag(o)}</div>`, x: (o) => `${o.num || ''} · ${o.orig === 'AV' ? 'Avulso' : o.ref || RET_ORIG[o.orig] || ''} · ${RET_TIPO[o.tipo] || ''}` },
         { k: 'lote', l: 'Lote · o que fazer', f: (o) => `${o.lote ? `<span class="mono" style="color:var(--av)">${esc(o.lote)}</span>` : '<span class="muted">sem lote</span>'}<div class="muted">${esc([o.oque, o.qtd].filter(Boolean).join(' · '))}</div>`, x: (o) => [o.lote, o.oque, o.qtd].filter(Boolean).join(' · ') },
-        { k: 'resp', l: 'Quem faz', f: (o) => `${esc(o.resp || 'sem responsável')}<div class="muted">${esc(o.setor || '')}</div>`, x: (o) => [o.resp, o.setor].filter(Boolean).join(' · ') },
-        { k: 'prazo', l: 'Prazo', f: (o) => (o.st === 'pronto' ? `<span class="muted">pronto em ${o.prontoAt ? new Date(o.prontoAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) : '—'}</span>` : `<span class="mono${o.venc && o.aberta ? '" style="color:var(--crit)' : ''}">${esc(retPrazoTxt(o))}</span>`), x: (o) => (o.prazo != null ? fD(o.prazo) : '') }] });
+        { k: 'setor', l: 'Setor', f: (o) => `${esc(o.setor || '')}${o.resp ? `<div class="muted">${esc(o.resp)}</div>` : ''}`, x: (o) => [o.setor, o.resp].filter(Boolean).join(' · ') },
+        { k: 'fora', l: 'Fora há', r: 1, f: (o) => `<span class="mono">${NF.format(o.fora)} ${o.fora === 1 ? 'dia' : 'dias'}</span>`, x: (o) => o.fora },
+        { k: 'prazo', l: sub === 'em' ? 'Prazo de volta' : 'Encerrada', f: (o) => (sub === 'em' ? `<span class="mono"${o.venc ? ' style="color:var(--crit)"' : ''}>${esc(retPrazoTxt(o))}</span>` : `<span class="mono">${o.encAt || o.cancAt ? new Date(o.encAt || o.cancAt).toLocaleDateString('pt-BR') : '—'}</span>`), x: (o) => (o.prazo != null ? fD(o.prazo) : '') }] });
     };
     wireFilters('ret', [['rtf-q', 'q'], ['rtf-tipo', 'tipo'], ['rtf-setor', 'setor']], draw); draw();
   };
-  /* nova ordem (ou editar a ordem aberta) */
-  function retDialog(key, pre) {
-    const o = key ? retGet(key) : null, c = S.model.cfg, P = Object.assign({ tipo: 'def', orig: 'RIR' }, pre || {}, o || {});
+  /* campos da ordem (usados aqui e no RIR) */
+  function retCamposHTML(pfx, P, ro, act, lk) {
     const tipos = uniq(cfgL('RET_TIPOS').concat(P.oque ? [P.oque] : [])), setores = uniq(cfgL('RET_SETORES').concat(P.setor ? [P.setor] : []));
+    const dis = ro ? ' disabled' : '';
+    return `<div class="rtcampos"><label class="field rtwide"><span>O que fazer <b>*</b></span><div class="rtpills" data-rtoq="${pfx}">${tipos.map((v) => `<button type="button" class="rtpill"${dis}${act ? ` data-act="${act}" data-key="${esc(lk)}"` : ''} data-v="${esc(v)}" aria-pressed="${E.key(v) === E.key(P.oque || '')}">${esc(v)}</button>`).join('')}</div></label>
+      <label class="field"><span>Setor <b>*</b></span><select id="${pfx}-setor"${dis}><option value=""></option>${setores.map((v) => `<option ${E.key(v) === E.key(P.setor || '') ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select></label>
+      <label class="field"><span>Prazo de volta <b>*</b></span><input type="date" id="${pfx}-prazo" value="${P.prazo != null && P.prazo !== '' ? E.isoDate(P.prazo) : ''}"${dis}></label>
+      <label class="field rtwide"><span>Instrução</span><input id="${pfx}-instr" value="${esc(P.instr || '')}" placeholder="o que exatamente fazer, medida, norma…" autocomplete="off"${dis}></label></div>`;
+  }
+  /* nova ordem pela Central (NCC, avulso ou RIR que ficou para depois) ou editar a ordem aberta */
+  function retDialog(key, pre) {
+    const o = key ? retGet(key) : null, P = Object.assign({ tipo: 'def', orig: 'AV' }, pre || {}, o || {});
     const lotes = (S.model.av || []).slice(-800).reverse().map((x) => x.id).filter(Boolean);
-    const pill = (v) => `<button type="button" class="rtpill" data-v="${esc(v)}" aria-pressed="${E.key(v) === E.key(P.oque || '')}">${esc(v)}</button>`;
-    openModal(o ? `Editar ${o.num}` : 'Nova ordem de retrabalho', `<div class="fgrid cm-grid">
+    openModal(o ? `Editar ${o.num}` : 'Nova ordem de retrabalho', `${o ? '' : '<p class="muted" style="margin:0">O caminho normal é o inspetor mandar no RIR. Use aqui para NCC, material achado no estoque ou um caso que ficou para depois.</p>'}<div class="fgrid cm-grid">
       <label class="field" style="grid-column:1/-1"><span>Tipo <b>*</b></span><div class="seg" id="rt-tp" style="display:grid;grid-template-columns:1fr 1fr">${Object.entries(RET_TIPO).map(([k, l]) => `<button type="button" data-v="${k}" aria-pressed="${P.tipo === k}">${l}</button>`).join('')}</div></label>
-      ${sfield('rt-orig', 'Origem', RET_ORIG[P.orig] || 'RIR', { type: 'select', opts: Object.values(RET_ORIG), blank: false })}${sfield('rt-ref', 'Número da origem', P.ref, { ph: 'ex.: RIR-2026-00152 ou NCC-2026-00008' })}
+      ${sfield('rt-orig', 'Origem', RET_ORIG[P.orig] || 'Avulso', { type: 'select', opts: Object.values(RET_ORIG), blank: false })}${sfield('rt-ref', 'Número da origem', P.ref, { ph: 'ex.: RIR-2026-00152 ou NCC-2026-00008' })}
       ${sfield('rt-lote', 'Lote (AV)', P.lote, { list: lotes, ph: 'ex.: AV-26-00211' })}${sfield('rt-qtd', 'Quantidade', P.qtd, { ph: 'ex.: 22 pç' })}
-      ${sfield('rt-mot', 'Motivo', P.motivo, { span: 1, ph: P.tipo === 'prev' ? 'ex.: tubo comprado maior para cortar no comprimento' : 'ex.: face com riscos acima do permitido' })}
-      <label class="field" style="grid-column:1/-1"><span>O que fazer <b>*</b></span><div class="rtpills" id="rt-oq">${tipos.map(pill).join('')}</div><small class="muted">A lista é editada em Configurações › Retrabalho.</small></label>
-      ${sfield('rt-setor', 'Setor <b>*</b>', P.setor, { type: 'select', opts: setores })}
-      <label class="field"><span>Responsável</span><select id="rt-resp"></select></label>
-      ${sfield('rt-prazo', 'Prazo <b>*</b>', P.prazo, { type: 'date' })}<div></div>
-      ${sfield('rt-instr', 'Instrução', P.instr, { type: 'area', span: 1, ph: 'o que exatamente fazer, medida, norma…' })}</div>
-      <div class="formfoot"><button class="btn primary" type="button" id="rt-ok">${o ? 'Salvar' : 'Abrir ordem'}</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
-    let tipo = P.tipo, oque = P.oque || '';
+      ${sfield('rt-mot', 'Motivo', P.motivo, { span: 1 })}</div>
+      ${retCamposHTML('rt', P)}
+      <label class="field"><span>Responsável no setor (opcional)</span><input id="rt-resp" value="${esc(P.resp || '')}" autocomplete="off" list="rt-resp-dl"><datalist id="rt-resp-dl">${optList(eqAll().filter((p) => !p.inativo).map((p) => p.nome))}</datalist></label>
+      <div class="formfoot"><button class="btn primary" type="button" id="rt-ok">${o ? 'Salvar' : 'Mandar para retrabalho'}</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    let tipo = P.tipo;
     $$('#rt-tp button').forEach((b) => { b.onclick = () => { tipo = b.dataset.v; $$('#rt-tp button').forEach((x) => x.setAttribute('aria-pressed', x === b)); }; });
-    $$('#rt-oq .rtpill').forEach((b) => { b.onclick = () => { oque = b.dataset.v; $$('#rt-oq .rtpill').forEach((x) => x.setAttribute('aria-pressed', x === b)); }; });
-    const respOpts = () => {
-      const st = sv('rt-setor'), all = eqAll().filter((p) => !p.inativo).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
-      const doSetor = all.filter((p) => st && E.key(p.setor || '') === E.key(st)), L = doSetor.length ? doSetor : all, cur = (o && o.resp) || P.resp || '';
-      $('#rt-resp').innerHTML = `<option value="">— sem responsável (o setor decide) —</option>${uniq(L.map((p) => p.nome).concat(cur ? [cur] : [])).map((n) => `<option ${E.key(n) === E.key(cur) ? 'selected' : ''}>${esc(n)}</option>`).join('')}`;
-    };
-    respOpts(); $('#rt-setor').onchange = respOpts;
+    retPillsWire($('.modal'));
+    if (o && o.loteK) { const el = $('#rt-lote'); if (el) el.disabled = true; }
     $('#rt-ok').onclick = async () => {
-      const setor = sv('rt-setor'), prazo = sdate('rt-prazo'), origL = sv('rt-orig'), orig = Object.keys(RET_ORIG).find((k) => RET_ORIG[k] === origL) || 'AV';
-      if (!oque || !setor || prazo == null) { toast('Preencha o que fazer, o setor e o prazo.', true); return; }
+      const oque = (($('.modal [data-rtoq] .rtpill[aria-pressed="true"]') || {}).dataset || {}).v || '', setor = sv('rt-setor'), prazo = sdate('rt-prazo'), origL = sv('rt-orig'), orig = Object.keys(RET_ORIG).find((k) => RET_ORIG[k] === origL) || 'AV';
+      if (!oque || !setor || prazo == null) { toast('Preencha o que fazer, o setor e o prazo de volta.', true); return; }
       const loteTxt = sv('rt-lote').toUpperCase(), lx = loteTxt ? (S.model.av || []).find((x) => E.key(x.id) === E.key(loteTxt)) : null;
-      const d = { tipo, orig, ref: sv('rt-ref').toUpperCase() || null, lote: loteTxt || null, loteK: lx ? lx.key : null, desc: lx ? lx.desc || null : null, forn: lx ? lx.forn || null : null, qtd: sv('rt-qtd') || null, motivo: sv('rt-mot') || null, oque, setor, resp: sv('rt-resp') || null, prazo, instr: sv('rt-instr') || null };
+      if (loteTxt && !lx) { toast('Lote não encontrado: ' + loteTxt, true); return; }
+      if (!o && lx && lotSt(lx).rtb) { toast(`O lote ${lx.id} já está em retrabalho (${lotSt(lx).rtb.ord}).`, true); return; }
+      const d = { tipo, orig, ref: sv('rt-ref').toUpperCase() || null, oque, setor, resp: sv('rt-resp') || null, prazo, instr: sv('rt-instr') || null, qtd: sv('rt-qtd') || null, motivo: sv('rt-mot') || null };
+      if (!o) Object.assign(d, { lote: lx ? lx.id : loteTxt || null, loteK: lx ? lx.key : null, desc: lx ? lx.desc || null : null, forn: lx ? lx.forn || null : null, nf: lx && lx.nf != null ? String(lx.nf) : null });
       const b = $('#rt-ok'); b.disabled = true; b.textContent = 'Gravando…';
       try {
         if (o) {
-          const mud = [['oque', 'o que fazer'], ['setor', 'setor'], ['resp', 'responsável'], ['prazo', 'prazo'], ['tipo', 'tipo'], ['lote', 'lote'], ['qtd', 'quantidade'], ['instr', 'instrução'], ['motivo', 'motivo']].filter(([k]) => String(o[k] ?? '') !== String(d[k] ?? '')).map(([, l]) => l);
+          const mud = [['oque', 'o que fazer'], ['setor', 'setor'], ['resp', 'responsável'], ['prazo', 'prazo'], ['tipo', 'tipo'], ['qtd', 'quantidade'], ['instr', 'instrução'], ['motivo', 'motivo'], ['ref', 'origem']].filter(([k]) => String(o[k] ?? '') !== String(d[k] ?? '')).map(([, l]) => l);
           await retWrite(o, d, mud.length ? { t: 'dados', txt: mud.join(', ') } : null);
           logEntry('RET', o.key, 'alterado', `${o.num} · ${mud.join(', ') || 'sem mudança'}`, null);
           closeLayer(); toast(`${o.num} salva.`); setTimeout(() => retFicha(o.key), 300); return;
         }
-        const at = Date.now(), id = 'R' + at.toString(36).toUpperCase() + Math.random().toString(36).slice(2, 4).toUpperCase(), mes = mesId(at), num = retNum();
-        const nova = clean(Object.assign(d, { num, st: 'afazer', tent: 1, at, by: DB.me || null, criNome: myPessoa() || DB.meName || null, h: { [at.toString(36)]: { t: 'cria', at, by: DB.me || null, nome: myPessoa() || DB.meName || null, txt: `${RET_TIPO[tipo]} · ${oque} · ${setor}` } } }));
-        await soldWrite('ret/m-' + mes, { items: { [id]: nova } });
-        logEntry('RET', id, 'novo', `${num} · ${oque}${d.lote ? ' · ' + d.lote : ''}`, null);
-        closeLayer(); toast(`${num} aberta.`); setTimeout(() => retFicha(id), 400);
-      } catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); b.disabled = false; b.textContent = o ? 'Salvar' : 'Abrir ordem'; }
+        const r = await retCriar(d);
+        closeLayer(); toast(`${r.num}: mandado para retrabalho.`); setTimeout(() => retFicha(r.id), 400);
+      } catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); b.disabled = false; b.textContent = o ? 'Salvar' : 'Mandar para retrabalho'; }
     };
+  }
+  function retPillsWire(host) {
+    if (!host) return;
+    host.querySelectorAll('[data-rtoq] .rtpill').forEach((b) => { b.onclick = () => { b.parentElement.querySelectorAll('.rtpill').forEach((x) => x.setAttribute('aria-pressed', x === b)); if (typeof b.parentElement.onrtpick === 'function') b.parentElement.onrtpick(b.dataset.v); }; });
   }
   async function retFicha(key) {
     const o = retGet(key); if (!o) return;
     const H = Object.keys(o.h || {}).map((k) => Object.assign({ id: k }, o.h[k])).sort((a, b) => (a.at || 0) - (b.at || 0));
     await resolveNames(H.map((h) => h.by));
-    const w = retW(), ins = w || cw('rir'), bt = (a, l, cls) => `<button class="btn${cls ? ' ' + cls : ''}" type="button" data-act="${a}" data-key="${esc(key)}">${l}</button>`;
-    const evCor = (t) => (t === 'cria' ? 'var(--rir)' : t === 'reap' ? 'var(--ok)' : t === 'rerep' || t === 'ncf' || t === 'canc' ? 'var(--crit)' : t === 'dados' ? 'var(--ink-3)' : 'var(--ret)');
+    const w = retW(), bt = (a, l, cls) => `<button class="btn${cls ? ' ' + cls : ''}" type="button" data-act="${a}" data-key="${esc(key)}">${l}</button>`;
+    const evCor = (t) => (t === 'cria' ? 'var(--ret)' : t === 'reap' ? 'var(--ok)' : t === 'rerep' || t === 'ncf' || t === 'canc' ? 'var(--crit)' : 'var(--ink-3)');
     const tl = `<div class="rttl">${H.map((h) => `<div class="rtev" style="--c:${evCor(h.t)}"><b>${esc(RET_EV[h.t] || h.t)}</b>${h.txt ? `<span>${esc(h.txt)}</span>` : ''}<small>${new Date(h.at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })} · ${esc(h.nome || who(h.by))}</small></div>`).join('')}
-      ${o.aberta ? `${o.st !== 'pronto' ? '<div class="rtev fut"><b>Pronto → reinspeção no RIR</b></div>' : ''}<div class="rtev fut"><b>Encerrada</b><span>reinspeção aprovada; lote liberado</span></div>` : ''}</div>`;
-    const pares = [['Tipo', esc(RET_TIPO[o.tipo] || '')], ['Origem', esc(o.orig === 'AV' ? 'Avulso' : o.ref || RET_ORIG[o.orig] || '')], ['Lote', o.lote ? `<span class="mono">${esc(o.lote)}</span>${o.desc ? ' · ' + esc(o.desc) : ''}` : ''], ['Fornecedor', esc(o.forn || '')], ['Quantidade', esc(o.qtd || '')],
-      ['Motivo', esc(o.motivo || '')], ['O que fazer', `<b>${esc(o.oque || '')}</b>`], ['Instrução', o.instr ? `<span style="white-space:pre-wrap">${esc(o.instr)}</span>` : ''], ['Setor', esc(o.setor || '')], ['Responsável', esc(o.resp || 'sem responsável')],
-      ['Prazo', o.prazo != null ? `${fD(o.prazo)}${o.aberta && o.st !== 'pronto' ? ` <span class="muted">(${o.venc ? retPrazoTxt(o) : o.dias === 0 ? 'hoje' : 'daqui a ' + NF.format(o.dias) + (o.dias === 1 ? ' dia' : ' dias')})</span>` : ''}` : ''], ['Tentativa', o.tent > 1 ? NF.format(o.tent) + 'ª' : '']].filter((p) => p[1]);
+      ${o.aberta ? '<div class="rtev fut"><b>Voltou · reinspeção</b><span>o inspetor confere o lote; aprovado, o lote é liberado</span></div>' : ''}</div>`;
+    const pares = [['Tipo', esc(RET_TIPO[o.tipo] || '')], ['Origem', esc(o.orig === 'AV' ? 'Avulso' : o.ref || RET_ORIG[o.orig] || '')], ['Lote', o.lote ? `<span class="mono">${esc(o.lote)}</span>${o.desc ? ' · ' + esc(o.desc) : ''}` : ''], ['Nota · fornecedor', esc([o.nf ? 'NF ' + o.nf : '', o.forn].filter(Boolean).join(' · '))], ['Quantidade', esc(o.qtd || '')],
+      ['Motivo', esc(o.motivo || '')], ['O que fazer', `<b>${esc(o.oque || '')}</b>`], ['Instrução', o.instr ? `<span style="white-space:pre-wrap">${esc(o.instr)}</span>` : ''], ['Setor', esc(o.setor || '')], ['Responsável', esc(o.resp || '')],
+      ['Prazo de volta', o.prazo != null ? `${fD(o.prazo)}${o.aberta ? ` <span class="muted">(${o.venc ? retPrazoTxt(o) : o.dias === 0 ? 'hoje' : 'daqui a ' + NF.format(o.dias) + (o.dias === 1 ? ' dia' : ' dias')})</span>` : ''}` : ''], ['Fora há', NF.format(o.fora) + (o.fora === 1 ? ' dia' : ' dias')], ['Tentativa', o.tent > 1 ? NF.format(o.tent) + 'ª' : '']].filter((p) => p[1]);
     const acts = [];
-    if (w && o.st === 'afazer') acts.push(bt('ret-ini', 'Iniciar', 'primary'));
-    if (w && ['afazer', 'em'].includes(o.st)) acts.push(bt('ret-pronto', 'Marcar pronto', o.st === 'em' ? 'primary' : ''));
-    if (ins && o.st === 'pronto') acts.push(bt('ret-reins', 'Registrar reinspeção', 'primary'));
-    if (w && o.aberta) acts.push(bt('ret-ed', 'Editar (responsável, prazo…)'), bt('ret-canc', 'Cancelar ordem', 'danger'));
-    const body = `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${retChip(o)}<span class="rtorgs">${retOrigTag(o)}</span></div>
+    if (retInsp() && o.aberta) acts.push(bt('ret-reins', 'Voltou · reinspecionar', 'primary'));
+    if (w && o.aberta) acts.push(bt('ret-ed', 'Editar (prazo, setor…)'), bt('ret-canc', 'Cancelar ordem', 'danger'));
+    const body = `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${retChip(o)}<span class="rtorgs" style="margin:0">${retOrigTag(o)}</span></div>
       ${acts.length ? `<div class="formfoot" style="justify-content:flex-start">${acts.join('')}</div>` : ''}
-      ${o.st === 'pronto' ? '<div class="warnbox">Pronto. Falta a <b>reinspeção</b>: o inspetor confere o lote e registra o resultado.</div>' : ''}
       <div class="fsec"><dl class="rtdl">${pares.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></div>
       <div class="fsec"><h3>Caminho da ordem</h3>${tl}</div>`;
     openDrawer(o.num || 'Ordem de retrabalho', 'Retrabalho · ' + (RET_ST[o.st] || ''), body, MOD.RET.c);
     const dr = $('#layer .drawer'); if (dr) dr.dataset.ret = key;
   }
-  async function retPasso(key, st) {
-    const o = retGet(key); if (!o) return;
-    const ev = st === 'em' ? { t: 'ini', txt: o.resp || '' } : { t: 'pronto', txt: '' }, at = Date.now();
-    try {
-      await retWrite(o, st === 'em' ? { st, iniAt: at } : { st, prontoAt: at }, ev);
-      logEntry('RET', key, 'alterado', `${o.num} · ${RET_ST[st]}`, null);
-      toast(st === 'em' ? `${o.num}: retrabalho iniciado.` : `${o.num}: pronto. Agora falta a reinspeção.`); setTimeout(() => retFicha(key), 300);
-    } catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); }
-  }
+  /* reinspeção: o material voltou do retrabalho */
   function retReins(key) {
     const o = retGet(key); if (!o) return;
-    openModal(`Reinspeção · ${o.num}`, `<p style="margin:0">${o.lote ? `Lote <b class="mono">${esc(o.lote)}</b> · ` : ''}${esc(o.oque || '')}. Confira o lote retrabalhado e registre o resultado.</p>
+    openModal(`Reinspeção · ${o.num}`, `<p style="margin:0">${o.lote ? `Lote <b class="mono">${esc(o.lote)}</b> · ` : ''}${esc(o.oque || '')}${o.setor ? ' · ' + esc(o.setor) : ''}. Confira o lote que voltou e registre o resultado.</p>
       <div class="seg" id="rr-res" style="display:grid;grid-template-columns:1fr 1fr"><button type="button" data-v="ap" aria-pressed="false">✓ Aprovado</button><button type="button" data-v="rep" aria-pressed="false">✕ Reprovado</button></div>
-      <div id="rr-rep" hidden><p class="muted" style="margin:0">Reprovado: o que fazer agora?</p><div class="seg" id="rr-dec" style="display:grid;grid-template-columns:1fr 1fr"><button type="button" data-v="denovo" aria-pressed="false">Retrabalhar de novo</button><button type="button" data-v="ncf" aria-pressed="false">Encerrar e abrir NCF</button></div></div>
-      ${sfield('rr-ref', 'RIR da reinspeção', '', { ph: 'ex.: RIR-2026-00160 (opcional)' })}${sfield('rr-obs', 'Observação', '', { type: 'area' })}
+      <div id="rr-rep" hidden><p class="muted" style="margin:0 0 6px">Reprovado: o que fazer agora?</p><div class="seg" id="rr-dec" style="display:grid;grid-template-columns:1fr 1fr"><button type="button" data-v="denovo" aria-pressed="false">Retrabalhar de novo</button><button type="button" data-v="ncf" aria-pressed="false">Mandar para a NCF</button></div>
+        <label class="field" id="rr-pz" hidden style="margin-top:8px"><span>Novo prazo de volta <b>*</b></span><input type="date" id="rr-prazo"></label></div>
+      ${sfield('rr-obs', 'Observação', '', { type: 'area', ph: 'o que foi conferido; se reprovado, o que ainda está errado' })}
       <div class="formfoot"><button class="btn primary" type="button" id="rr-ok">Registrar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
     let res = '', dec = '';
     $$('#rr-res button').forEach((b) => { b.onclick = () => { res = b.dataset.v; $$('#rr-res button').forEach((x) => x.setAttribute('aria-pressed', x === b)); $('#rr-rep').hidden = res !== 'rep'; }; });
-    $$('#rr-dec button').forEach((b) => { b.onclick = () => { dec = b.dataset.v; $$('#rr-dec button').forEach((x) => x.setAttribute('aria-pressed', x === b)); }; });
+    $$('#rr-dec button').forEach((b) => { b.onclick = () => { dec = b.dataset.v; $$('#rr-dec button').forEach((x) => x.setAttribute('aria-pressed', x === b)); $('#rr-pz').hidden = dec !== 'denovo'; }; });
     $('#rr-ok').onclick = async () => {
-      if (!res || (res === 'rep' && !dec)) { toast(res ? 'Escolha: retrabalhar de novo ou encerrar e abrir NCF.' : 'Escolha Aprovado ou Reprovado.', true); return; }
-      const at = Date.now(), ref = sv('rr-ref').toUpperCase(), obs = sv('rr-obs'), txt = [ref, obs].filter(Boolean).join(' · ');
-      const b = $('#rr-ok'); b.disabled = true; b.textContent = 'Gravando…';
+      if (!res || (res === 'rep' && !dec)) { toast(res ? 'Escolha: retrabalhar de novo ou mandar para a NCF.' : 'Escolha Aprovado ou Reprovado.', true); return; }
+      const pz = sdate('rr-prazo'), obs = sv('rr-obs');
+      if (res === 'rep' && dec === 'denovo' && pz == null) { toast('Escolha o novo prazo de volta.', true); return; }
+      if (res === 'rep' && !obs) { toast('Escreva o que ainda está errado.', true); return; }
+      const at = Date.now(), b = $('#rr-ok'); b.disabled = true; b.textContent = 'Gravando…';
       try {
-        if (res === 'ap') await retWrite(o, { st: 'enc', res: 'ap', encAt: at, reRef: ref || null }, { t: 'reap', txt });
-        else if (dec === 'denovo') await retWrite(o, { st: 'afazer', tent: (o.tent || 1) + 1, prontoAt: null, iniAt: null }, { t: 'rerep', txt: 'retrabalhar de novo' + (txt ? ' · ' + txt : '') });
-        else await retWrite(o, { st: 'enc', res: 'rep', encAt: at, reRef: ref || null }, { t: 'ncf', txt: txt || 'reprovado na reinspeção' });
-        logEntry('RET', key, 'alterado', `${o.num} · reinspeção ${res === 'ap' ? 'aprovada' : 'reprovada'}`, null);
-        closeLayer(); toast(res === 'ap' ? `${o.num} encerrada: lote liberado.` : dec === 'denovo' ? `${o.num} volta para retrabalho.` : `${o.num} encerrada. Abra a NCF do lote.`); setTimeout(() => retFicha(key), 300);
+        if (res === 'ap') {
+          await retWrite(o, { st: 'enc', res: 'ap', encAt: at }, { t: 'reap', txt: obs });
+          if (o.loteK) await addDecisions([{ k: o.loteK, ev: { t: 'rtbx', ord: o.num, oid: o.key } }, { k: o.loteK, ev: clean({ t: 'insp', res: 'Aprovado', ret: 'Sim', rir: o.ref || undefined, reins: o.num, mot: obs || undefined }) }]);
+        } else if (dec === 'denovo') {
+          await retWrite(o, { st: 'em', tent: (o.tent || 1) + 1, prazo: pz, envAt: at }, { t: 'rerep', txt: obs + ' · novo prazo ' + fD(pz) });
+        } else {
+          await retWrite(o, { st: 'enc', res: 'rep', encAt: at }, { t: 'ncf', txt: obs });
+          if (o.loteK) await addDecisions([{ k: o.loteK, ev: { t: 'rtbx', ord: o.num, oid: o.key } }, { k: o.loteK, ev: clean({ t: 'insp', res: 'Reprovado', rir: o.ref || undefined, reins: o.num, mot: 'Reprovado na reinspeção do retrabalho ' + o.num + ': ' + obs }) }]);
+        }
+        logEntry('RET', key, 'alterado', `${o.num} · reinspeção ${res === 'ap' ? 'aprovada' : dec === 'denovo' ? 'reprovada · retrabalhar de novo' : 'reprovada · NCF'}`, null);
+        closeLayer(); toast(res === 'ap' ? `${o.num} encerrada: lote liberado.` : dec === 'denovo' ? `${o.num} volta para retrabalho.` : `${o.num} encerrada. O lote entrou na fila da NCF.`);
+        if (S.view === 'ret') setTimeout(() => retFicha(key), 300); else render();
       } catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); b.disabled = false; b.textContent = 'Registrar'; }
     };
   }
   function retCancel(key) {
     const o = retGet(key); if (!o) return;
-    openModal(`Cancelar ${o.num}`, `${sfield('rc-mot', 'Motivo do cancelamento <b>*</b>', '', { type: 'area', ph: 'ex.: aberta por engano' })}<div class="formfoot"><button class="btn danger" type="button" id="rc-ok">Cancelar a ordem</button><button class="btn" type="button" data-act="close">Voltar</button></div>`);
+    openModal(`Cancelar ${o.num}`, `${o.loteK ? '<p style="margin:0">O lote sai do retrabalho e volta para a situação de antes (aprovado, ou reprovado na fila da NCF).</p>' : ''}${sfield('rc-mot', 'Motivo do cancelamento <b>*</b>', '', { type: 'area', ph: 'ex.: aberta por engano' })}<div class="formfoot"><button class="btn danger" type="button" id="rc-ok">Cancelar a ordem</button><button class="btn" type="button" data-act="close">Voltar</button></div>`);
     $('#rc-ok').onclick = async () => {
       const m = sv('rc-mot'); if (!m) { toast('Escreva o motivo.', true); return; }
-      try { await retWrite(o, { st: 'canc', cancAt: Date.now() }, { t: 'canc', txt: m }); logEntry('RET', key, 'alterado', `${o.num} cancelada: ${m}`, null); closeLayer(); toast(`${o.num} cancelada.`); }
-      catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); }
+      try {
+        await retWrite(o, { st: 'canc', cancAt: Date.now() }, { t: 'canc', txt: m });
+        if (o.loteK) await addDecisions([{ k: o.loteK, ev: { t: 'rtbx', ord: o.num, oid: o.key } }]);
+        logEntry('RET', key, 'alterado', `${o.num} cancelada: ${m}`, null); closeLayer(); toast(`${o.num} cancelada.`);
+      } catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); }
     };
   }
+  /* RIR: grupo "Em retrabalho" na fila (ordens abertas que têm lote) */
+  function retFilaRIR() { return retAll().filter((o) => o.aberta && o.loteK); }
   VIEWS.iqf = (main) => {
     const f = S.f.iqf || (S.f.iqf = {}), per = f.per || '12m', cf = iqCfg(), P = iqPeriod(per);
     const len = P.b - P.a, prevL = iqCalc(P.a - len, P.a), prev = new Map(prevL.map((o) => [o.key, o]));
@@ -24800,8 +24841,6 @@ ${trGuil(W, H, M, B)}
       if (a === 'ret-sub') { S.retSub = key; render(); return; }
       if (a === 'ret-nova') { retDialog(null); return; }
       if (a === 'ret-ed') { retDialog(key); return; }
-      if (a === 'ret-ini') { retPasso(key, 'em'); return; }
-      if (a === 'ret-pronto') { retPasso(key, 'pronto'); return; }
       if (a === 'ret-reins') { retReins(key); return; }
       if (a === 'ret-canc') { retCancel(key); return; }
       if (a === 'sold-sub') { S.soldSub = key; render(); return; }
