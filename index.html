@@ -394,6 +394,13 @@ ul.dvdl, p.dvdl { display: none !important; } .dvdl { list-style: none; margin: 
 .ehfz li span, .ehmv li span { display: block; font-size: 12.5px; line-height: 18px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ehfz li small, .ehmv li small { display: block; font: 500 11px var(--f-mono); color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ehfz .ehfz0 { font-size: 12.5px; color: var(--ink-3); }
+.ehfzr { display: flex; flex-wrap: nowrap; gap: 5px; overflow: hidden; min-width: 0; }   /* v169: numa linha só */
+.ehfzc { flex: none; display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0 8px 0 6px; border-radius: 8px; background: color-mix(in srgb, var(--m) 14%, transparent); }
+.ehfzc svg { width: 15px; height: 15px; fill: none; stroke: var(--m); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.ehfzc span { font: 600 10.5px var(--f-body); letter-spacing: .03em; color: var(--ink-2); }
+.ehfzc b { font: 700 15px/1 var(--f-display); color: var(--ink); }
+.ehfzc.mais { --m: var(--ink-3); padding: 0 9px; }
+.ehmv li span em { font-style: normal; font: 600 11px var(--f-mono); color: var(--ink-3); margin-left: 2px; }
 .ehpc > .ehmv { grid-area: mv; margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: var(--surface-2); display: grid; gap: 6px; min-width: 0; }
 .ehmv ol { list-style: none; margin: 0; padding: 0; display: grid; }
 .ehmv li { display: grid; grid-template-columns: 38px 12px minmax(0, 1fr); column-gap: 8px; }
@@ -6148,7 +6155,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 168; window.CQ_V = APP_V;
+    const APP_V = 169; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -8372,17 +8379,18 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   /* v168: "entrega" = o que a pessoa produziu no dia, por tipo (cada módulo tem as suas); o resto é ajuste.
      ehEnt devolve [tipo, referência curta, referência longa] ou null (ajuste) */
   const EH_ENT = {
-    av: ['lote lançado', 'lotes lançados', 'lote', 'Lançou lote'], serv: ['serviço lançado', 'serviços lançados', 'serv', 'Lançou serviço'],
-    ncfab: ['NCF aberta', 'NCF abertas', 'alerta', 'Abriu NCF'], ncfok: ['NCF concluída', 'NCF concluídas', 'ok', 'Concluiu NCF'],
-    nccab: ['NCC aberta', 'NCC abertas', 'alerta', 'Abriu NCC'], nccok: ['NCC concluída', 'NCC concluídas', 'ok', 'Concluiu NCC'],
-    rir: ['RIR concluído', 'RIR concluídos', 'rir', 'Concluiu RIR'], rifap: ['RIF aprovado', 'RIF aprovados', 'rir', 'Aprovou RIF'], rifrep: ['RIF reprovado', 'RIF reprovados', 'xis', 'Reprovou RIF'],
-    cq: ['certificado emitido', 'certificados emitidos', 'cert', 'Emitiu certificado'], cqav: ['certificado avulso', 'certificados avulsos', 'cert', 'Emitiu certificado avulso'],
-    cqpega: ['pedido pego na fila', 'pedidos pegos na fila', 'pega', 'Pegou o pedido'], cqpend: ['pendência registrada', 'pendências registradas', 'pend', 'Registrou pendência'],
-    cal: ['calibração registrada', 'calibrações registradas', 'cal', 'Registrou calibração'], insan: ['certificado analisado', 'certificados analisados', 'lupa', 'Analisou certificado'],
-    inscad: ['instrumento cadastrado', 'instrumentos cadastrados', 'mais', 'Cadastrou instrumento'], insenv: ['enviado ao laboratório', 'enviados ao laboratório', 'lab', 'Enviou ao laboratório'],
-    insbloq: ['instrumento bloqueado', 'instrumentos bloqueados', 'lock', 'Bloqueou instrumento'], insver: ['verificação intermediária', 'verificações intermediárias', 'lupa', 'Fez verificação intermediária'],
-    retenv: ['enviado ao retrabalho', 'enviados ao retrabalho', 'ret', 'Enviou ao retrabalho'], retrei: ['reinspeção de retrabalho', 'reinspeções de retrabalho', 'rir', 'Reinspecionou retrabalho'],
-    soldcad: ['soldador cadastrado', 'soldadores cadastrados', 'mais', 'Cadastrou soldador'], iqffech: ['fechamento do IQF', 'fechamentos do IQF', 'ok', 'Fechou o IQF'],
+    av: ['lote lançado', 'lotes lançados', 'lote', 'Lançou lote', 'LOTE'], serv: ['serviço lançado', 'serviços lançados', 'serv', 'Lançou serviço', 'SERV'],
+    ncfab: ['NCF aberta', 'NCF abertas', 'alerta', 'Abriu NCF', 'NCF'], ncfok: ['NCF concluída', 'NCF concluídas', 'ok', 'Concluiu NCF', 'NCF'],
+    nccab: ['NCC aberta', 'NCC abertas', 'alerta', 'Abriu NCC', 'NCC'], nccok: ['NCC concluída', 'NCC concluídas', 'ok', 'Concluiu NCC', 'NCC'],
+    rir: ['RIR concluído', 'RIR concluídos', 'rir', 'Concluiu RIR', 'RIR'], rifap: ['RIF aprovado', 'RIF aprovados', 'rir', 'Aprovou RIF', 'RIF'], rifrep: ['RIF reprovado', 'RIF reprovados', 'xis', 'Reprovou RIF', 'RIF'],
+    cq: ['certificado emitido', 'certificados emitidos', 'cert', 'Emitiu certificado', 'CERT'], cqav: ['certificado avulso', 'certificados avulsos', 'cert', 'Emitiu certificado avulso', 'AVULSO'],
+    cqpega: ['pedido pego na fila', 'pedidos pegos na fila', 'pega', 'Pegou o pedido', 'PEGOU'], cqpend: ['pendência registrada', 'pendências registradas', 'pend', 'Registrou pendência', 'PEND'],
+    cal: ['calibração registrada', 'calibrações registradas', 'cal', 'Registrou calibração', 'CAL'], insan: ['certificado analisado', 'certificados analisados', 'lupa', 'Analisou certificado', 'ANÁLISE'],
+    inscad: ['instrumento cadastrado', 'instrumentos cadastrados', 'mais', 'Cadastrou instrumento', 'CAD'], insenv: ['enviado ao laboratório', 'enviados ao laboratório', 'lab', 'Enviou ao laboratório', 'LAB'],
+    insbloq: ['instrumento bloqueado', 'instrumentos bloqueados', 'lock', 'Bloqueou instrumento', 'BLOQ'], insver: ['verificação intermediária', 'verificações intermediárias', 'lupa', 'Fez verificação intermediária', 'VERIF'],
+    retenv: ['enviado ao retrabalho', 'enviados ao retrabalho', 'ret', 'Enviou ao retrabalho', 'RET'], retrei: ['reinspeção de retrabalho', 'reinspeções de retrabalho', 'rir', 'Reinspecionou retrabalho', 'REINSP'],
+    soldcad: ['soldador cadastrado', 'soldadores cadastrados', 'mais', 'Cadastrou soldador', 'SOLD'], iqffech: ['fechamento do IQF', 'fechamentos do IQF', 'ok', 'Fechou o IQF', 'IQF'],
+    insatu: ['instrumento atualizado', 'instrumentos atualizados', 'edit', 'Atualizou instrumento', 'INST'], cfg: ['configuração alterada', 'configurações alteradas', 'eng', 'Alterou configuração', 'CFG'],
   };
   /* ícones desenhados para a Central (traço simples) */
   const EH_IC = {
@@ -8393,6 +8401,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     serv: '<path d="M14.5 6.5a4 4 0 0 0-5 5L4 17l3 3 5.5-5.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/>', lock: '<rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
     rir: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="m9 13 2 2 4-4"/>', alerta: '<path d="M12 4 3 20h18z"/><path d="M12 10v4M12 17v.5"/>',
     ok: '<circle cx="12" cy="12" r="8"/><path d="m8.5 12 2.5 2.5 4.5-5"/>', xis: '<circle cx="12" cy="12" r="8"/><path d="m9 9 6 6M15 9l-6 6"/>',
+    edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/>', eng: '<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>',
     ret: '<path d="M4 12a8 8 0 0 1 14-5.3L20 9"/><path d="M20 4v5h-5"/><path d="M20 12a8 8 0 0 1-14 5.3L4 15"/><path d="M4 20v-5h5"/>',
   };
   function ehEnt(x) {
@@ -8408,31 +8417,44 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
       const pv = /^\d/.test(String(x.key || '')) ? 'PV ' + x.key : s0, lg = ehCqExtra(x) || sg.slice(0, 2).join(' · ');
       if (a === 'criado' && /^Certificado avulso/i.test(L)) return ['cqav', String(x.key || s0), String(x.key || s0)];
       if (/conclu[ií]d/i.test(L) && !/voltou/i.test(L)) return ['cq', pv, lg];
-      if (/Pegou o pedido/i.test(L)) return ['cqpega', pv, lg];
+      /* v169: pegar o pedido na fila não conta como entrega */
       if (/(^|· )Pendência:/i.test(L)) return ['cqpend', pv, lg];
       return null;
     }
     if (m === 'INS') {
+      const s0 = (sg[0] || String(x.key || '')).replace(/^Instrumento\s+/i, '');
       if (a === 'novo') return ['inscad', s0, L];
       if (c.dataCal && c.dataCal[1]) return ['cal', s0, L];
       if (/enviado para calibração/i.test(L)) return ['insenv', s0, L];
       if (c.situacao && /bloq/i.test(String(c.situacao[1] || ''))) return ['insbloq', s0, L];
       if (c.resCal && c.resCal[1] != null && c.resCal[0] == null) return ['insan', s0, L];
       if (/verificação intermediária/i.test(L)) return ['insver', s0, L];
-      return null;
+      return ['insatu', s0, L.replace(/^Instrumento\s+/i, '')];   /* v169: edição do instrumento conta (uma vez por instrumento no dia) */
     }
     if (m === 'RET') return a === 'novo' ? ['retenv', s0, L] : /reinspeção (aprovada|reprovada)/i.test(L) ? ['retrei', s0, L] : null;
     if (m === 'SOLD') return a === 'novo' ? ['soldcad', s0.replace(/^Soldador\s+/i, ''), L.replace(/^Soldador\s+/i, '')] : null;
+    if (m === 'GERAL') { const t = /^Modelo de mensagem/i.test(L) ? L.split(':')[0].trim() : L; return ['cfg', t, L]; }   /* v169: alteração de configuração conta (uma vez por assunto no dia) */
     if (m === 'IQF') return /fechamento de/i.test(L) ? ['iqffech', L.replace(/^IQF:\s*/i, ''), L.replace(/^IQF:\s*/i, '')] : null;
     return null;
   }
-  const ehConcN = (L) => L.filter((x) => ehEnt(x)).length;
+  /* v169: entregas de uma pessoa agrupadas por tipo; "instrumento atualizado" e "configuração alterada" contam uma vez por item no dia
+     (e o instrumento que já teve outra entrega no dia não conta de novo como atualizado) */
+  const EH_UMA = { insatu: 1, cfg: 1 };
+  function ehGrupos(L) {
+    const G = new Map();
+    L.forEach((x) => { const e = ehEnt(x); if (!e) return; const g = G.get(e[0]) || { k: e[0], m: x.mod, n: 0, r: [], lg: e[2], at: x.at }; if (EH_UMA[e[0]] && e[1] && g.r.includes(e[1])) return; g.n++; if (e[1] && !g.r.includes(e[1])) g.r.push(e[1]); G.set(e[0], g); });
+    const ga = G.get('insatu');
+    if (ga) { const ja = new Set(); G.forEach((g) => { if (g.m === 'INS' && g.k !== 'insatu') g.r.forEach((r) => ja.add(r)); }); ga.r = ga.r.filter((r) => !ja.has(r)); ga.n = ga.r.length; if (ga.n === 1) ga.lg = ga.r[0]; if (!ga.n) G.delete('insatu'); }
+    const gs = Array.from(G.values()).sort((a, b) => b.n - a.n || b.at - a.at);
+    return { gs, n: gs.reduce((t, g) => t + g.n, 0) };
+  }
+  const ehConcN = (L) => { const P2 = new Map(); L.forEach((x) => { const k = x.by || '—'; (P2.get(k) || P2.set(k, []).get(k)).push(x); }); let n = 0; P2.forEach((l) => { n += ehGrupos(l).n; }); return n; };
   const ehTotTxt = (L) => { const c = ehConcN(L), e = L.length - c; return `${NF.format(c)} ${c === 1 ? 'entrega' : 'entregas'} e ${NF.format(e)} ${e === 1 ? 'ajuste' : 'ajustes'}`; };
   const EH_OBJ = { AV: 'lote', SERV: 'serviço', RNC: 'NCF', RNCC: 'NCC', INS: 'instrumento', SOLD: 'soldador', IQF: 'fornecedor', CERTQ: 'pedido', RIF: 'RIF', RIR: 'RIR', RET: 'retrabalho', GERAL: 'configuração' };
   /* movimentação: título curto (o que fez) e o detalhe (onde) */
   const ehMov = (x) => {
     const e = ehEnt(x), L = String(x.label || x.key || ''), pc = ehCqExtra(x);
-    if (e) return [EH_ENT[e[0]][3], e[2] || L];
+    if (e) return [EH_ENT[e[0]][3], x.mod === 'INS' ? (e[2] || L).replace(/^Instrumento\s+/i, '') : e[2] || L];
     if (x.mod === 'RIR' && x.act === 'novo') return ['Iniciou RIR', L.replace(/^RIR iniciado · /i, '')];
     const v = EH_VERBO[x.act] || 'alterou';
     return [`${v[0].toUpperCase() + v.slice(1)} ${EH_OBJ[x.mod] || ''}`.trim(), pc ? `${pc} · ${L}` : L];
@@ -8480,6 +8502,13 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   /* v105: as etiquetas de módulo do cartão ocupam no máximo 2 linhas (60 px) e nunca ficam cortadas:
      as que não cabem saem, da menor para a maior, e entra "+N outros" (o nome delas fica no "title") */
   function ehChipsFit() {
+    document.querySelectorAll('#eh-sec .ehfzr').forEach((row) => {   /* v169: "O que fez hoje" numa linha só */
+      const cs = Array.from(row.querySelectorAll('.ehfzc:not(.mais)')), mais = row.querySelector('.ehfzc.mais');
+      cs.forEach((c) => { c.style.display = ''; }); mais.style.display = 'none';
+      if (row.scrollWidth <= row.clientWidth + 1) return;
+      mais.style.display = ''; let n = cs.length;
+      while (n > 1 && row.scrollWidth > row.clientWidth + 1) { n--; cs[n].style.display = 'none'; const fora = cs.slice(n); mais.querySelector('b').textContent = '+' + fora.length; mais.title = fora.map((c) => c.dataset.t).join(' · '); }
+    });
     /* nome comprido que não cabe na linha: primeiro e último nome (o nome inteiro fica no "title") */
     document.querySelectorAll('#eh-sec .ehnm b').forEach((b) => { const full = b.dataset.n || b.textContent; b.dataset.n = full; b.textContent = full; b.title = full; if (b.scrollWidth > b.clientWidth + 1) { const p = full.trim().split(/\s+/); if (p.length > 2) b.textContent = p[0] + ' ' + p[p.length - 1]; } });
     document.querySelectorAll('#eh-sec .ehpc > .ehpms').forEach((box) => {
@@ -8606,15 +8635,14 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     /* um cartão por pessoa (toque no cartão filtra) */
     const card = (p) => {
       const u = p.L[0], o = on(p), cm = new Map(); p.L.forEach((x) => cm.set(x.mod, (cm.get(x.mod) || 0) + 1));
-      /* entregas por tipo (o mais feito em cima) */
-      const G = new Map(); p.L.forEach((x) => { const e = ehEnt(x); if (!e) return; const g = G.get(e[0]) || { k: e[0], m: x.mod, n: 0, r: [], lg: e[2], at: x.at }; g.n++; if (e[1] && !g.r.includes(e[1])) g.r.push(e[1]); G.set(e[0], g); });
-      const gs = Array.from(G.values()).sort((a, b) => b.n - a.n || b.at - a.at), nC = gs.reduce((t, g) => t + g.n, 0), nE = p.L.length - nC;
-      const ref = (g) => (g.n === 1 ? g.lg : g.r.slice(0, 2).join(', ') + (g.r.length > 2 ? ` +${g.r.length - 2}` : ''));
-      const linha = (g) => { const d = EH_ENT[g.k], r = ref(g); return `<li style="--m:${ehCor(g.m)}" title="${esc(g.n + ' ' + (g.n === 1 ? d[0] : d[1]) + (r ? ' · ' + r : ''))}"><em><svg viewBox="0 0 24 24" aria-hidden="true">${EH_IC[d[2]] || EH_IC.ok}</svg></em><b>${NF.format(g.n)}</b><div><span>${esc(g.n === 1 ? d[0] : d[1])}</span>${r ? `<small>${esc(r)}</small>` : ''}</div></li>`; };
-      const vis4 = gs.length > 4 ? gs.slice(0, 3) : gs, resto = gs.slice(vis4.length), nR = resto.reduce((t, g) => t + g.n, 0);
-      const fz = `<div class="ehfz"><span class="ehfzh">O que fez hoje</span>${gs.length ? `<ul>${vis4.map(linha).join('')}${resto.length ? `<li style="--m:var(--ink-3)" title="${esc(resto.map((g) => g.n + ' ' + (g.n === 1 ? EH_ENT[g.k][0] : EH_ENT[g.k][1])).join(' · '))}"><em><svg viewBox="0 0 24 24" aria-hidden="true">${EH_IC.mais}</svg></em><b>${NF.format(nR)}</b><div><span>${nR === 1 ? 'outra entrega' : 'outras entregas'}</span><small>${esc(resto.map((g) => EH_ENT[g.k][1]).join(', '))}</small></div></li>` : ''}</ul>` : `<span class="ehfz0">Nenhuma entrega ${hoje ? 'ainda' : 'neste dia'} · só ajustes</span>`}</div>`;
-      /* as 3 últimas movimentações (qualquer ação), a mais nova em cima */
-      const mv = `<div class="ehmv"><span class="ehfzh">Últimas movimentações</span><ol>${p.L.slice(0, 3).map((x) => { const [t, d] = ehMov(x); return `<li style="--m:${ehCor(x.mod)}" title="${esc(hhmm(x.at) + ' · ' + t + (d ? ' · ' + d : ''))}"><time>${hhmm(x.at)}</time><i></i><div><span>${esc(t)}</span>${d ? `<small>${esc(d)}</small>` : ''}</div></li>`; }).join('')}</ol></div>`;
+      /* v169: entregas numa linha só — ícone, sigla e quantidade (o mais feito primeiro); o que não cabe vira "+N" (ehChipsFit) */
+      const { gs, n: nC } = ehGrupos(p.L), nE = p.L.length - nC;
+      const ref = (g) => (g.n === 1 ? g.lg : g.r.slice(0, 3).join(', ') + (g.r.length > 3 ? ` +${g.r.length - 3}` : ''));
+      const chipE = (g) => { const d = EH_ENT[g.k], r = ref(g), t = g.n + ' ' + (g.n === 1 ? d[0] : d[1]) + (r ? ' · ' + r : ''); return `<span class="ehfzc" style="--m:${ehCor(g.m)}" title="${esc(t)}" data-t="${esc(t)}"><svg viewBox="0 0 24 24" aria-hidden="true">${EH_IC[d[2]] || EH_IC.ok}</svg><span>${esc(d[4] || '')}</span><b>${NF.format(g.n)}</b></span>`; };
+      const fz = `<div class="ehfz"><span class="ehfzh">O que fez hoje</span>${gs.length ? `<div class="ehfzr">${gs.map(chipE).join('')}<span class="ehfzc mais" style="display:none"><b>+0</b></span></div>` : `<span class="ehfz0">Nenhuma entrega ${hoje ? 'ainda' : 'neste dia'} · só ajustes</span>`}</div>`;
+      /* as 3 últimas movimentações; ações seguidas no mesmo item viram uma linha (×N) */
+      const MV = []; p.L.forEach((x) => { const l = MV[MV.length - 1]; if (l && l.x.mod === x.mod && l.x.key === x.key && l.x.act === x.act && ehMov(l.x)[0] === ehMov(x)[0]) l.n++; else MV.push({ x, n: 1 }); });
+      const mv = `<div class="ehmv"><span class="ehfzh">Últimas movimentações</span><ol>${MV.slice(0, 3).map(({ x, n }) => { const [t, d] = ehMov(x); return `<li style="--m:${ehCor(x.mod)}" title="${esc(hhmm(x.at) + ' · ' + t + (n > 1 ? ' ×' + n : '') + (d ? ' · ' + d : ''))}"><time>${hhmm(x.at)}</time><i></i><div><span>${esc(t)}${n > 1 ? ` <em>×${n}</em>` : ''}</span>${d ? `<small>${esc(d)}</small>` : ''}</div></li>`; }).join('')}</ol></div>`;
       const chips = Array.from(cm.entries()).sort((a, b) => b[1] - a[1]).map(([m, n]) => `<span class="ehpm" style="--m:${ehCor(m)}" title="${n} ${n === 1 ? 'registro' : 'registros'} em ${esc(EH_NOME[m] || m)}"><span>${esc(EH_NOME[m] || m)}</span></span>`).join('') + (cm.size > 1 ? `<span class="ehpm mais" style="display:none"><b>+0</b></span>` : '');
       return `<button type="button" class="ehpc${o ? ' on' : ''}" data-act="eh-p" data-key="${esc(p.k)}" aria-pressed="${EH.ins === p.k}" title="${EH.ins === p.k ? 'Mostrar todos' : 'Ver só ' + esc(p.nome)}">${ehCracha(p.k, p.nome, o)}<div class="ehnm"><b>${esc(p.nome)}</b><em title="${NF.format(nC)} ${nC === 1 ? 'entrega' : 'entregas'} · ${NF.format(nE)} ${nE === 1 ? 'ajuste' : 'ajustes'}">${NF.format(nC)}<small>${nC === 1 ? 'entrega' : 'entregas'}</small></em></div><small class="ehst"><i></i>${o ? 'online agora' : hoje ? 'última ação ' + ehHa(u.at) : 'última ação às ' + hhmm(u.at)}</small>
         <div class="ehpms">${chips}</div>${fz}${mv}<div class="ehpt"><span>desde ${hhmm(p.L[p.L.length - 1].at)}${nE ? ` · <b>${NF.format(nE)} ${nE === 1 ? 'ajuste' : 'ajustes'}</b>` : ''}</span><span>${hoje ? ehHa(u.at) : 'última ' + hhmm(u.at)}</span></div></button>`;
