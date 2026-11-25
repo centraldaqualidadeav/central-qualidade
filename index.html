@@ -788,9 +788,6 @@ table.t tbody tr.pend td:first-child { box-shadow: inset 3px 0 0 var(--warn); }
 .lane .none { padding: 12px; color: var(--ink-3); font-size: 12.5px; }
 .lane.crit > header { box-shadow: inset 0 3px 0 var(--crit); } .lane.serious > header { box-shadow: inset 0 3px 0 var(--serious); } .lane.warn > header { box-shadow: inset 0 3px 0 var(--warn); } .lane.info > header { box-shadow: inset 0 3px 0 var(--info); }
 
-/* ---------- rastreio ---------- */
-.bigsearch { display: flex; gap: 10px; flex-wrap: wrap; }
-.bigsearch input { flex: 1 1 320px; font-size: 18px; padding: 12px 14px; border: 1px solid var(--line-2); border-radius: 6px; background: var(--surface); min-width: 0; }
 .timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
 .timeline li { display: grid; grid-template-columns: 96px 14px 1fr; gap: 10px; align-items: start; padding: 6px 0; cursor: pointer; }
 .timeline li .d { font: 500 12px/1.6 var(--f-mono); color: var(--ink-2); text-align: right; }
@@ -2930,7 +2927,6 @@ body.cq-ver .tbhd { top: 36px; }
       <span class="grp">Visão geral</span>
       <a href="#painel" data-v="painel" style="--c:var(--geral)"><span class="sw"></span>Painel</a>
       <a href="#alertas" data-v="alertas" style="--c:var(--crit)"><span class="sw"></span>Alertas<span class="ct" id="ct-alertas" hidden></span></a>
-      <a href="#rastreio" data-v="rastreio" style="--c:var(--geral)"><span class="sw"></span>Rastreabilidade</a>
       <a href="#equipe" data-v="equipe" style="--c:var(--geral)"><span class="sw"></span>Equipe</a>
       <a href="#mapa3d" data-v="mapa3d" hidden title="Mapa de processos 3D: o caminho do material no galpão, etapa por etapa" style="--c:var(--geral)"><span class="sw"></span>Mapa 3D</a>
       <span class="grp">Módulos</span>
@@ -5849,9 +5845,9 @@ re2js/build/index.js:
   const TAB_FERR = [['rir', 'RIR', 'Inspeção de recebimento', 'checklist da nota recebida e resultado de cada lote'], ['rnc', 'NCF', 'Não conformidade', 'abre a NCF do lote reprovado; a Qualidade numera e acompanha na Central'], ['rif', 'RIF', 'Inspeção final', 'mede, fotografa e assina o RIF da peça']];
   const TAB_COL = { rir: 'rir', rnc: 'rnctab', rif: 'rif' };
   /* telas gerais: quem não tem a escolha gravada (cadastros antigos) vê tudo, consulta Configurações e exporta */
-  const TELAS = [['painel', 'Painel'], ['alertas', 'Alertas'], ['rastreio', 'Rastreabilidade'], ['auditoria', 'Auditoria'], ['relatorio', 'Relatórios'], ['historico', 'Histórico']];
+  const TELAS = [['painel', 'Painel'], ['alertas', 'Alertas'], ['auditoria', 'Auditoria'], ['relatorio', 'Relatórios'], ['historico', 'Histórico']];
   const TELA_OPC = { config: [['nao', 'Não vê'], ['ver', 'Só consulta'], ['edita', 'Edita']], exportar: [['sim', 'Permite'], ['nao', 'Não permite']], equipe: [['tudo', 'Fichas e organograma'], ['org', 'Só organograma'], ['nao', 'Não vê']] };
-  const TELA_DEF = { painel: 've', alertas: 've', rastreio: 've', equipe: 'tudo', auditoria: 've', relatorio: 've', historico: 've', config: 'ver', exportar: 'sim' };
+  const TELA_DEF = { painel: 've', alertas: 've', equipe: 'tudo', auditoria: 've', relatorio: 've', historico: 've', config: 'ver', exportar: 'sim' };
   /* "Ver como": a conta dona ou um administrador abre a Central com o acesso de outra pessoa (nada é gravado) */
   const VER = String(new URLSearchParams(location.search).get('vercomo') || '').trim().toLowerCase();
   let PREV = null;
@@ -6172,7 +6168,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 173; window.CQ_V = APP_V;
+    const APP_V = 174; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7516,7 +7512,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       retr: '<path d="M20 11a8 8 0 0 0-14.5-4.5L3 9"/><path d="M3 4v5h5"/><path d="M4 13a8 8 0 0 0 14.5 4.5L21 15"/><path d="M21 20v-5h-5"/>',
       cap: '<path d="M2 9.5 12 4.5l10 5-10 5z"/><path d="M6 11.5v4.8c3.3 2.3 8.7 2.3 12 0v-4.8M22 9.5v5"/>'
     };
-    const V = { painel: 'grid', alertas: 'bell', rastreio: 'route', equipe: 'org', ret: 'retr', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rir: 'rirc', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', manual: 'book', mapa3d: 'cube', trein: 'cap', ramos: 'ramo', trello: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
+    const V = { painel: 'grid', alertas: 'bell', equipe: 'org', ret: 'retr', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rir: 'rirc', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', manual: 'book', mapa3d: 'cube', trein: 'cap', ramos: 'ramo', trello: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
     const o = {}; Object.keys(V).forEach((v) => { o[v] = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[V[v]]}</svg>`; });
     return o;
   })();
@@ -12252,60 +12248,8 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
       { k: 'msg', l: '', nosort: 1, f: (g) => `<span style="white-space:nowrap">${cw('av') ? `<button class="btn small" type="button" data-act="cert-baixa" data-key="${g.row}">Dar baixa</button> ` : ''}<button class="btn small" type="button" data-act="cert-mail" data-key="${g.row}">E-mail ao fornecedor</button> <button class="btn small ghost" type="button" data-act="msg-cert" data-key="${g.row}">Texto interno</button></span>` }] });
   };
 
-  /* ================= RASTREABILIDADE ================= */
-  VIEWS.rastreio = (main) => {
-    main.innerHTML = `<div class="view">${head('Rastreabilidade', 'Busque por corrida, nota fiscal, pedido de compra ou venda, certificado, número de NCF, código de instrumento ou fornecedor. O app junta lote, serviço e NCF que compartilham o mesmo número.')}
-      <form class="bigsearch" id="rq-form" role="search"><label class="sr" for="rq">Buscar</label><input id="rq" type="search" placeholder="Ex.: 83268, 250703, NCF-2026-00409, Joytubos" value="${esc(S.rq)}" autocomplete="off"><button class="btn primary" type="submit">Buscar</button></form>
-      <div id="rq-out" class="hits"></div></div>`;
-    $('#rq-form').onsubmit = (e) => { e.preventDefault(); S.rq = $('#rq').value.trim(); drawRq(); };
-    drawRq();
-  };
-  function drawRq() {
-    const out = $('#rq-out'), q = E.key(S.rq);
-    if (q.length < 2) { out.innerHTML = '<div class="empty">Digite pelo menos 2 caracteres.</div>'; return; }
-    const qd = /^[\d.\s/-]+$/.test(S.rq.trim()) ? docN(S.rq) : '';
-    const M = S.model, hit = (vals) => vals.some((v) => E.filled(v) && (E.key(v).includes(q) || (qd.length >= 2 && docList(v).some((d) => d.includes(qd)))));
-    const exact = (vals) => vals.some((v) => E.filled(v) && E.key(v) === q);
-    const exactDoc = (vals) => !!qd && vals.some((v) => E.filled(v) && docList(v).includes(qd));
-    const av = M.av.filter((x) => hit([x.id, x.corrida, x.nf, x.pc, x.pv, x.cert, x.forn, x.desc]));
-    const sv = M.serv.filter((x) => hit([x.nf, x.pc, x.pv, x.cert, x.forn, x.desc]));
-    const rn = M.rnc.filter((x) => hit([x.num, x.nf, x.oc, x.pv, x.forn, x.cliente]));
-    const ins = M.ins.filter((x) => hit([x.codigo, x.cert, x.desc]));
-    const rc = (M.rncc || []).filter((x) => hit([x.num, x.nf, x.pv, x.lotes, x.cliente, x.produto, x.rncf]));
-    const avIds = new Set(av.map((a) => a.id));
-    const cqs = vis('certq') && CQF.ready ? cqCards().filter((c) => hit([c.pv, c.nf, c.cli, cqNum(c)]) || ((c.conc && c.conc.lotes) || []).some((id) => avIds.has(id))).slice(0, 60) : [];
-    const rfs = RFI.pedReady ? rfPeds().filter((p) => hit([p.pv, p.cli].concat(rfItens(p).map((i) => i.num)))).slice(0, 60) : [];
-    const rrs = vis('rir') && RI.ready ? riCards().filter((c) => hit([c.num, c.nf, c.forn].concat(c.ids || [])) || (c.ids || []).some((id) => avIds.has(id))).slice(0, 60) : [];
-    const extra = new Map();
-    [...av, ...sv, ...rn, ...rc].filter((x) => exact([x.id, x.corrida, x.nf, x.pc, x.oc, x.pv, x.num]) || exactDoc([x.nf, x.pc, x.oc, x.pv])).slice(0, 40).forEach((x) => related(x).forEach((r) => extra.set(r.rec.mod + ':' + r.rec.key, r.rec)));
-    const inSet = new Set([...av, ...sv, ...rn, ...rc].map((x) => x.mod + ':' + x.key));
-    const ligados = Array.from(extra.entries()).filter(([k]) => !inSet.has(k)).map(([, v]) => v);
-    const ev = [];
-    const push = (d, x, t) => { if (d != null) ev.push({ d, x, t }); };
-    [...av, ...ligados.filter((x) => x.mod === 'AV')].forEach((x) => push(x.data, x, `Lote ${x.id} recebido — ${x.desc || ''} ${E.filled(x.diam) ? x.diam : ''} · ${x.forn} · NF ${disp(x.nf)}${E.filled(x.cert) ? ' · cert. ' + x.cert : ' · sem certificado'}`));
-    [...sv, ...ligados.filter((x) => x.mod === 'SERV')].forEach((x) => push(x.data, x, `Serviço ${x.desc} — ${x.forn} · NF ${disp(x.nf)}${E.filled(x.cert) ? ' · cert. ' + x.cert : ''}`));
-    [...rn, ...ligados.filter((x) => x.mod === 'RNC')].forEach((x) => { push(x.data, x, `${x.num} aberta — ${x.forn || 'sem fornecedor'} · ${x.motivo || 'sem motivo'}`); push(x.conclusao, x, `${x.num} concluída`); });
-    ins.forEach((x) => push(x.dataCal, x, `${x.codigo} calibrado — ${x.desc}`));
-    [...rc, ...ligados.filter((x) => x.mod === 'RNCC')].forEach((x) => { push(x.data, x, `${x.num} — reclamação de ${x.cliente || 'cliente'} · ${x.motivo || 'sem motivo'}`); push(x.respData, x, `${x.num} respondida ao cliente`); push(x.conclusao, x, `${x.num} concluída`); });
-    const ms2s = (ms) => (ms ? Math.floor((ms - new Date(ms).getTimezoneOffset() * 60000) / 864e5) + 25569 : null);
-    cqs.forEach((c) => { if (c.st === 'c') push(ms2s((c.conc || {}).at), { mod: 'CERTQ', key: c.k }, `Certificado ${cqNum(c)} concluído — ${c.cli || ''} · NF ${c.nf || '—'}${(c.conc && c.conc.lotes || []).length ? ' · lotes ' + c.conc.lotes.join(', ') : ''}`); });
-    rfs.forEach((p) => rfItens(p).forEach((i) => { if (i.fin) push(ms2s(i.fin), { mod: 'RIF', key: p.id }, `${i.num || 'RIF'} ${i.st === 'x' ? 'reprovado' : 'aprovado'} — PV ${rfDig(p.pv)} · ${rfItTxt(i)}`); }));
-    rrs.forEach((c) => { if (c.st === 'f') push(ms2s(c.fin), { mod: 'RIR', key: c.id }, `${c.num} — recebimento NF ${c.nf || '—'} · ${c.forn || ''} · ${(c.ids || []).map((id, i) => id + ' ' + E.low((c.res || {})[(c.lotes || [])[i]] || '')).join(', ')}`); });
-    ev.sort((a, b) => b.d - a.d);
-    const docsHTML = cqs.length + rfs.length + rrs.length ? `<div class="chart"><h3>Certificados, RIF e RIR<small>${cqs.length + rfs.length + rrs.length}</small></h3><div class="rel">${rrs.map((c) => `<button type="button" style="--c:${MOD.RIR.c}" data-open="RIR:${esc(c.id)}">${esc(c.num || 'RIR em andamento')} · NF ${esc(c.nf || '—')}</button>`).join('')}${rfs.map((p) => `<button type="button" style="--c:${MOD.RIF.c}" data-open="RIF:${esc(p.id)}">RIF · PV ${esc(rfDig(p.pv))} · ${esc(p.cli || '')}</button>`).join('')}${cqs.map((c) => `<button type="button" style="--c:${MOD.CERTQ.c}" data-open="CERTQ:${esc(c.k)}">Certificado ${esc(cqNum(c))} · ${esc(c.st === 'c' ? 'concluído' : c.st === 'n' ? 'não precisa' : 'pendente')}</button>`).join('')}</div></div>` : '';
-    const total = av.length + sv.length + rn.length + ins.length + rc.length + cqs.length + rfs.length + rrs.length;
-    const sect = (mod, list) => list.length ? `<section class="sec">${band(mod, `${MOD[mod].name} · ${NF.format(list.length)}`)}<div class="block"><div class="body"><div id="rq-${mod}"></div></div></div></section>` : '';
-    out.innerHTML = total || ligados.length ? `
-      ${ev.length ? `<div class="chart"><h3>Linha do tempo<small>${ev.length > 120 ? 'os 120 eventos mais recentes' : ev.length + ' evento(s)'}</small></h3><ul class="timeline">${ev.slice(0, 120).map((e) => `<li data-open="${e.x.mod}:${esc(e.x.key)}" tabindex="0" style="--c:${MOD[e.x.mod].c}"><span class="d">${fD(e.d)}</span><span class="dot"></span><span class="tx">${esc(e.t)}</span></li>`).join('')}</ul></div>` : ''}
-      ${docsHTML}
-      ${ligados.length ? `<div class="chart"><h3>Ligados por NF, pedido ou corrida<small>${ligados.length}</small></h3><div class="rel">${ligados.slice(0, 80).map((r) => `<button type="button" style="--c:${MOD[r.mod].c}" data-open="${r.mod}:${esc(r.key)}">${esc(recLabel(r))}</button>`).join('')}</div></div>` : ''}
-      ${sect('AV', av)}${sect('SERV', sv)}${sect('RNC', rn)}${sect('RNCC', rc)}${sect('INS', ins)}` : `<div class="empty">Nada encontrado para “${esc(S.rq)}”.</div>`;
-    if (av.length) mountTable($('#rq-AV'), { id: 'rq-av', rows: av, noun: 'lotes', open: true, size: 25, cols: COLS.AV.slice(0, 12) });
-    if (sv.length) mountTable($('#rq-SERV'), { id: 'rq-sv', rows: sv, noun: 'serviços', open: true, size: 25, cols: COLS.SERV });
-    if (rn.length) mountTable($('#rq-RNC'), { id: 'rq-rn', rows: rn, noun: 'NCF', open: true, size: 25, cols: COLS.RNC.slice(0, 10) });
-    if (rc.length) mountTable($('#rq-RNCC'), { id: 'rq-rc', rows: rc, noun: 'NCC', open: true, size: 25, cols: COLS.RNCC.slice(0, 10) });
-    if (ins.length) mountTable($('#rq-INS'), { id: 'rq-ins', rows: ins, noun: 'instrumentos', open: true, size: 25, cols: COLS.INS.slice(0, 10) });
-  }
+  /* v174: a tela Rastreabilidade saiu a pedido (não era usada) */
+
 
   /* ================= MÓDULOS ================= */
   const semCert = (x) => E.isStar(x.cert) || E.blank(x.cert);
@@ -21161,11 +21105,17 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(v).trim()); return m ? `${m[1]}-${m[2]}-${m[3]}` : '';
   }
   /* mesma pessoa: todas as palavras do nome mais curto aparecem, na ordem, no mais comprido, começando pelo primeiro nome */
+  /* v174: inicial vale pela palavra ("J. Pablo Schiavoni" = "Jairo Pablo Schiavoni") */
+  const eqiIg = (a, b) => a === b || (a.length === 1 && b[0] === a) || (b.length === 1 && a[0] === b);
+  function eqiSeq(A, B) { let j = 0; for (const w of A) { while (j < B.length && !eqiIg(w, B[j])) j++; if (j >= B.length) return false; j++; } return true; }
   function eqiMesma(a, b) {
     let A = eqiTok(a), B = eqiTok(b); if (!A.length || !B.length) return false; if (A.length > B.length) [A, B] = [B, A];
-    if (A[0] !== B[0]) return false; let j = 0;
-    for (const w of A) { while (j < B.length && B[j] !== w) j++; if (j >= B.length) return false; j++; }
-    return true;
+    return eqiIg(A[0], B[0]) && eqiSeq(A, B);
+  }
+  /* v174: parecida (sem o primeiro nome: "Humberto" ↔ "José Humberto Martins da Silva") — a Central não liga sozinha, pergunta */
+  function eqiParecida(a, b) {
+    let A = eqiTok(a), B = eqiTok(b); if (!A.length || !B.length) return false; if (A.length > B.length) [A, B] = [B, A];
+    return A.some((w) => w.length >= 4) && eqiSeq(A, B);
   }
   function eqiLer(rows) {
     const nk = (c) => String(c || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
@@ -21195,6 +21145,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const setorDe = (d) => { if (!d) return ''; const k = E.key(d); return setores.find((x) => E.key(x) === k) || eqiCargo(d); };
     const R = L.map((x, i) => {
       const ig = all.filter((p) => E.key(p.nome) === E.key(x.nome)), ab = ig.length ? ig : all.filter((p) => eqiMesma(p.nome, x.nome));
+      if (!ab.length) { const pa = all.filter((p) => eqiParecida(p.nome, x.nome)); if (pa.length) return { i, x, cand: pa, p: null, amb: true, fraco: true }; }
       return { i, x, cand: ab, p: ab.length === 1 ? ab[0] : null, amb: ab.length > 1 };
     });
     const muda = (r) => {
@@ -21217,7 +21168,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const cols = (r) => `<td class="nw">${cel(r, eqDia((r.p || {}).admissao), eqDia(r.x.adm))}</td><td>${cel(r, (r.p || {}).cargo, r.x.cargo)}</td><td>${cel(r, (r.p || {}).setor, setorDe(r.x.dpto), true)}</td>`;
     const linha = (r) => {
       const M = r.amb ? [] : muda(r), sem = !r.amb && r.p && !M.length;
-      const alvo = r.amb ? `<select class="inp eqi-sel" data-i="${r.i}" aria-label="Qual pessoa da Central"><option value="">Qual destas pessoas?</option>${r.cand.map((p) => `<option value="${esc(p.id)}">${esc(p.nome)}</option>`).join('')}<option value="__novo">É outra pessoa (cadastrar)</option></select>`
+      const alvo = r.amb ? `<select class="inp eqi-sel" data-i="${r.i}" aria-label="Qual pessoa da Central"><option value="">${r.fraco ? (r.cand.length === 1 ? 'É esta pessoa?' : 'É uma destas?') : 'Qual destas pessoas?'}</option>${r.cand.map((p) => `<option value="${esc(p.id)}">${esc(p.nome)}</option>`).join('')}<option value="__novo">É outra pessoa (cadastrar)</option></select>`
         : r.p ? esc(r.p.nome) + (sem ? ' <span class="muted">· sem mudança</span>' : '') : '<span class="chip info"><i>+</i>Novo</span>';
       return `<tr data-i="${r.i}"${sem ? ' class="eqi-igual"' : ''}><td><input type="checkbox" class="eqi-ck" data-i="${r.i}" ${sem || r.amb ? '' : 'checked'} ${sem || r.amb ? 'disabled' : ''} aria-label="Gravar ${esc(eqiNome(r.x.nome))}"></td><td><b>${esc(eqiNome(r.x.nome))}</b></td><td class="eqi-al">${alvo}</td>${cols(r)}</tr>`;
     };
