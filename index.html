@@ -411,6 +411,13 @@ ul.dvdl, p.dvdl { display: none !important; } .dvdl { list-style: none; margin: 
 .ehan.hj { border-color: var(--n-ouro); box-shadow: 0 0 0 1px var(--n-ouro), 0 0 14px color-mix(in srgb, var(--n-ouro) 40%, transparent); } .ehan.hj > span small { color: var(--n-ouro); font-weight: 700; }
 .ehan.ja { opacity: .65; }
 .eqcasa { font-weight: 600; color: var(--ink-2); }
+.eqtip { position: fixed; z-index: 95; pointer-events: none; display: grid; gap: 2px; white-space: nowrap; padding: 8px 12px; border-radius: 10px; background: var(--surface-2); border: 1px solid color-mix(in srgb, var(--n-ouro) 55%, transparent); box-shadow: 0 0 16px color-mix(in srgb, var(--n-ouro) 25%, transparent), var(--shadow); }   /* v178 */
+.eqtip::after { content: ''; position: absolute; left: var(--sx, 50%); top: 100%; transform: translateX(-50%); border: 7px solid transparent; border-top-color: color-mix(in srgb, var(--n-ouro) 55%, transparent); }
+.eqtip.emb::after { top: auto; bottom: 100%; border-top-color: transparent; border-bottom-color: color-mix(in srgb, var(--n-ouro) 55%, transparent); }
+.eqtip small { font: 600 10.5px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.eqtip b { font: 700 14px var(--f-body); color: var(--ink); } .eqtip b em { font: 700 13px var(--f-body); font-style: normal; color: var(--n-ouro); margin-left: 6px; }
+.eqtip span { font-size: 11.5px; color: var(--ink-3); }
+.pcard.eqhv, .onode.eqhv { border-color: var(--n-ouro) !important; box-shadow: 0 0 0 1px var(--n-ouro), 0 0 14px color-mix(in srgb, var(--n-ouro) 35%, transparent) !important; }
 .eqit { width: 100%; border-collapse: collapse; font-size: 13px; } .eqit th { text-align: left; font: 600 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); padding: 6px 8px; border-bottom: 1px solid var(--line); }   /* v173: importar planilha */
 .eqiw { overflow-x: auto; margin: 0 -2px; }
 .eqit td { padding: 8px; border-bottom: 1px solid var(--line); vertical-align: middle; } .eqit th:first-child, .eqit td:first-child { width: 28px; padding-right: 0; }
@@ -6176,7 +6183,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 177; window.CQ_V = APP_V;
+    const APP_V = 178; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -20928,6 +20935,32 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const q = $('#eq-q'); if (q) q.oninput = () => { f.q = q.value; redraw(); };
     [['eq-set', 'set'], ['eq-fil', 'fil'], ['eq-sit', 'sit']].forEach(([id, k]) => { const el = $('#' + id); if (el) el.onchange = () => { f[k] = el.value; redraw(); }; });
   };
+  /* v178: passando o mouse no cartão ou no quadro do organograma, um balão mostra desde quando a pessoa está na Aços Vital */
+  const eqAdmAttr = (p) => (!p.inativo && /^\d{4}-\d{2}-\d{2}$/.test(p.admissao || '') ? ` data-adm="${esc(p.admissao)}"` : '');
+  function eqTipHTML(iso) {
+    const [y, m, d] = iso.split('-').map(Number), H = new Date(); H.setHours(0, 0, 0, 0);
+    let mm = (H.getFullYear() - y) * 12 + (H.getMonth() + 1 - m); if (H.getDate() < d) mm--;
+    const dias = Math.round((H - new Date(y, m - 1, d)) / 864e5); if (dias < 0) return '';
+    const a = Math.floor(mm / 12), r = mm % 12;
+    const tempo = mm < 1 ? `${dias} ${dias === 1 ? 'dia' : 'dias'}` : [a ? `${a} ${a === 1 ? 'ano' : 'anos'}` : '', r ? `${r} ${r === 1 ? 'mês' : 'meses'}` : ''].filter(Boolean).join(' e ');
+    let prox = new Date(H.getFullYear(), m - 1, d); if (prox < H) prox = new Date(H.getFullYear() + 1, m - 1, d);
+    const falta = Math.round((prox - H) / 864e5), na = prox.getFullYear() - y, dm = `${String(d).padStart(2, '0')}/${String(m).padStart(2, '0')}`;
+    const pe = !na ? 'chegou este ano' : falta === 0 ? `hoje faz ${na} ${na === 1 ? 'ano' : 'anos'} de casa!` : falta <= 30 ? `faz ${na} ${na === 1 ? 'ano' : 'anos'} de casa em ${falta} ${falta === 1 ? 'dia' : 'dias'}` : `aniversário de empresa em ${dm}`;
+    return `<small>Na Aços Vital desde</small><b>${eqDia(iso)}<em>${tempo}</em></b><span>${pe}</span>`;
+  }
+  const EQT = { el: null, alvo: null };
+  function eqTipShow(t) {
+    if (!EQT.el) { EQT.el = document.createElement('div'); EQT.el.className = 'eqtip'; EQT.el.setAttribute('role', 'tooltip'); document.body.appendChild(EQT.el); }
+    const h = eqTipHTML(t.dataset.adm); if (!h) return; EQT.alvo = t; t.classList.add('eqhv'); EQT.el.innerHTML = h; EQT.el.hidden = false;
+    const r = t.getBoundingClientRect(), w = EQT.el.offsetWidth, hh = EQT.el.offsetHeight, emb = r.top - hh - 12 < 8;
+    EQT.el.classList.toggle('emb', emb);
+    EQT.el.style.left = Math.round(Math.min(window.innerWidth - w - 8, Math.max(8, r.left + r.width / 2 - w / 2))) + 'px';
+    EQT.el.style.top = Math.round(emb ? r.bottom + 12 : r.top - hh - 12) + 'px';
+    EQT.el.style.setProperty('--sx', Math.round(r.left + r.width / 2 - parseFloat(EQT.el.style.left)) + 'px');
+  }
+  function eqTipHide() { if (EQT.alvo) EQT.alvo.classList.remove('eqhv'); EQT.alvo = null; if (EQT.el) EQT.el.hidden = true; }
+  document.addEventListener('mouseover', (e) => { const t = e.target.closest && e.target.closest('#eq-body [data-adm]'); if (t === EQT.alvo) return; eqTipHide(); if (t && (!window.matchMedia || matchMedia('(hover: hover)').matches)) eqTipShow(t); });
+  document.addEventListener('scroll', eqTipHide, true); document.addEventListener('click', eqTipHide, true);
   function eqKHTML(ativos, foto) {   /* v175: ativos · setores · filiais · sem foto */
     const ns = uniq(ativos.map((p) => p.setor).filter(Boolean)).length, nf = uniq(ativos.map((p) => p.filial).filter(Boolean)).length;
     return `<div class="eqk"><span><b>${NF.format(ativos.length)}</b>ativos</span><span><b>${NF.format(ns)}</b>${ns === 1 ? 'setor' : 'setores'}</span><span><b>${NF.format(nf)}</b>${nf === 1 ? 'filial' : 'filiais'}</span>${foto ? `<span><b>${NF.format(ativos.filter((p) => !eqFoto(p)).length)}</b>sem foto</span>` : ''}</div>`;
@@ -20938,7 +20971,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const ordem = eqSetores().filter((s) => grupos[s]).concat(Object.keys(grupos).filter((s) => !eqSetores().includes(s)));
     const iq = ordem.findIndex((s) => E.key(s) === E.key('Qualidade')); if (iq > 0) ordem.unshift(ordem.splice(iq, 1)[0]);   /* v176: a Qualidade (Aços Vital) sempre primeiro */
     const FN = funcoesAll(), fl = (k) => (FN.find((z) => z[0] === k) || [k, k])[1];
-    return ordem.map((s) => `<div class="eqset" style="--k:${eqCor(s)}"><i></i>${esc(s)}<span>${grupos[s].length} ${grupos[s].length === 1 ? 'pessoa' : 'pessoas'}</span></div><div class="swall">${grupos[s].map((p) => { const g = eqBy(p.gestor); return `<button type="button" class="scard pcard${p.inativo ? ' inat' : ''}" style="--k:${eqCor(p.setor)}" data-act="eq-ver" data-key="${esc(p.id)}">${eqFotoHTML(p, 'scph')}<span class="scb"><b>${esc(p.nome)}</b><span class="pcc">${esc(p.cargo || 'cargo não informado')}</span><span class="pcg">${esc([p.filial, g ? 'responde a ' + g.nome.split(' ')[0] : ''].filter(Boolean).join(' · ') || '—')}</span>${p.inativo ? '<span><span class="chip off"><i>–</i>inativo</span></span>' : ''}${(p.funcoes || []).length ? `<span class="pfu">${p.funcoes.map((k) => `<span>${esc(fl(k))}</span>`).join('')}</span>` : ''}</span></button>`; }).join('')}</div>`).join('');
+    return ordem.map((s) => `<div class="eqset" style="--k:${eqCor(s)}"><i></i>${esc(s)}<span>${grupos[s].length} ${grupos[s].length === 1 ? 'pessoa' : 'pessoas'}</span></div><div class="swall">${grupos[s].map((p) => { const g = eqBy(p.gestor); return `<button type="button" class="scard pcard${p.inativo ? ' inat' : ''}" style="--k:${eqCor(p.setor)}" data-act="eq-ver" data-key="${esc(p.id)}"${eqAdmAttr(p)}>${eqFotoHTML(p, 'scph')}<span class="scb"><b>${esc(p.nome)}</b><span class="pcc">${esc(p.cargo || 'cargo não informado')}</span><span class="pcg">${esc([p.filial, g ? 'responde a ' + g.nome.split(' ')[0] : ''].filter(Boolean).join(' · ') || '—')}</span>${p.inativo ? '<span><span class="chip off"><i>–</i>inativo</span></span>' : ''}${(p.funcoes || []).length ? `<span class="pfu">${p.funcoes.map((k) => `<span>${esc(fl(k))}</span>`).join('')}</span>` : ''}</span></button>`; }).join('')}</div>`).join('');
   }
   function eqListaHTML(L) {
     if (!L.length) return '<div class="empty">Ninguém com esses filtros.</div>';
@@ -21030,7 +21063,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     /* ordem dos irmãos: primeiro o nível da hierarquia (1, 2, 2.1, 2.2… de Configurações › Funcionários › Níveis), depois quem tem equipe, depois o nome */
     const rk = (p) => { const r = eqNivRank(p.nivel); return r < 0 ? 999 : r; };
     Object.values(filhos).forEach((a) => a.sort((x, y) => rk(x) - rk(y) || (filhos[y.id] ? 1 : 0) - (filhos[x.id] ? 1 : 0) || x.nome.localeCompare(y.nome, 'pt-BR')));
-    const node = (p) => `<${soOrg ? 'div' : 'button type="button"'} class="onode${ctx.has(p.id) ? ' ctx' : ''}" style="--k:${eqCor(p.setor)}${soOrg ? ';cursor:default' : ''}" ${soOrg ? '' : `data-act="eq-ver" data-key="${esc(p.id)}"`}>${eqFoto(p) ? `<img src="${eqFoto(p)}" alt="">` : `<span class="oi">${esc(eqIni(p.nome))}</span>`}<span><em>${esc(p.setor || 'sem setor')}</em><b>${esc(p.nome)}</b><span>${esc(p.cargo || '')}</span></span></${soOrg ? 'div' : 'button'}>`;
+    const node = (p) => `<${soOrg ? 'div' : 'button type="button"'} class="onode${ctx.has(p.id) ? ' ctx' : ''}" style="--k:${eqCor(p.setor)}${soOrg ? ';cursor:default' : ''}" ${soOrg ? '' : `data-act="eq-ver" data-key="${esc(p.id)}"`}${eqAdmAttr(p)}>${eqFoto(p) ? `<img src="${eqFoto(p)}" alt="">` : `<span class="oi">${esc(eqIni(p.nome))}</span>`}<span><em>${esc(p.setor || 'sem setor')}</em><b>${esc(p.nome)}</b><span>${esc(p.cargo || '')}</span></span></${soOrg ? 'div' : 'button'}>`;
     const seen = new Set();
     const tree = (p) => {
       if (seen.has(p.id)) return ''; seen.add(p.id);
