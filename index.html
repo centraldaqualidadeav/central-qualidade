@@ -6085,7 +6085,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 157; window.CQ_V = APP_V;
+    const APP_V = 159; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -14651,7 +14651,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* importação por Excel: mostra o que muda antes de gravar; nada é apagado */
   function entImport(kind) {
     const D = ENT[kind];
-    openModal(`Importar ${D.plural} (Excel)`, `<p style="margin:0">1. Baixe o modelo · 2. Preencha (Nome, CNPJ${kind === 'forn' ? ', Tipo' : ''}, E-mail, Contato, Telefone, Observação) · 3. Envie o arquivo. Nomes iguais (sem diferença de acento ou maiúscula) são atualizados; quem não está na planilha fica como está. O código é só para conferência: a Central gera sozinha. Empresa sem CNPJ: escreva <b>Estrangeiro</b> na coluna CNPJ.${kind === 'forn' ? ' Tipo: <b>Matéria-prima</b>, <b>Serviço</b> ou <b>Laboratório</b>.' : ''}</p>
+    openModal(`Importar ${D.plural} (Excel)`, `<p style="margin:0">1. Baixe o modelo · 2. Preencha (Nome, CNPJ${kind === 'forn' ? ', Tipo' : ''}, E-mail, Contato, Telefone, Observação) · 3. Envie o arquivo. Nomes iguais (sem diferença de acento ou maiúscula) são atualizados; o mesmo nome com outro CNPJ entra como filial na mesma ficha (Outros CNPJs); um CNPJ que já está numa ficha atualiza essa ficha. Quem não está na planilha fica como está. O código é só para conferência: a Central gera sozinha. Empresa sem CNPJ: escreva <b>Estrangeiro</b> na coluna CNPJ.${kind === 'forn' ? ' Tipo: <b>Matéria-prima</b>, <b>Serviço</b> ou <b>Laboratório</b>.' : ''}</p>
       <div class="formfoot"><button class="btn" type="button" id="im-model">Baixar modelo (.xlsx)</button><input type="file" id="im-file" accept=".xlsx,.xls,.csv" hidden><button class="btn primary" type="button" id="im-pick">Escolher arquivo</button></div>
       <div id="im-res"></div>`);
     $('#im-model').onclick = () => {
@@ -14673,34 +14673,64 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       const cN = col(E.key(D.Um), 'nome'), cE = col('email', 'e-mail', 'e mail'), cC = col('contato'), cT = col('telefone', 'fone'), cO = col('observacao', 'obs'), cJ = col('cnpj'), cTp = kind === 'forn' ? col('tipo') : -1;
       if (cN < 0) { $('#im-res').innerHTML = `<div class="warnbox crit">Não achei a coluna “${esc(D.Um)}” (ou “Nome”) na primeira linha. Use o modelo.</div>`; return; }
       const c = S.model.cfg, names = (c[D.list] || []).slice(), info = new Map((c[D.info] || []).map((o) => [E.key(o.nome), Object.assign({}, o)]));
-      const novos = [], muda = [], prob = [], seen = new Set(), seenCj = new Map();
+      /* v159: mesmo nome com CNPJ diferente = filial da mesma ficha (vai para Outros CNPJs);
+         CNPJ que já está numa ficha = atualiza essa ficha, mesmo com o nome escrito de outro jeito */
+      const novos = [], muda = [], prob = [], cOc = col('outros cnpj');
+      const fichaDoCnpj = (rw) => (c[D.info] || []).find((x) => entCnpjs(x).some((v) => cnpjRaw(v) === rw));
+      const LIN = [];
       rows.slice(1).forEach((r, ix) => {
         const g = (ci) => (ci >= 0 ? String(r[ci] == null ? '' : r[ci]).trim() : '');
         const nm = upTxt(g(cN)); if (!nm) return;
-        const k = E.key(nm); if (seen.has(k)) { prob.push([`linha ${ix + 2}`, 'nome repetido na planilha: ' + nm]); return; } seen.add(k);
-        const em = normMails(g(cE)); if (em && !okMails(em)) { prob.push([`linha ${ix + 2}`, 'e-mail inválido: ' + em]); return; }
+        const lin = `linha ${ix + 2}`;
+        const em = normMails(g(cE)); if (em && !okMails(em)) { prob.push([lin, 'e-mail inválido: ' + em]); return; }
         const cjT = g(cJ); let cj = '', estr = false;
         if (cjT) {
           if (/estrang|exterior|semcnpj|^ex$/.test(E.key(cjT).replace(/[^a-z]/g, ''))) estr = true;
-          else { cj = cnpjFmt(cnpjPlan(cjT)); if (!cnpjOk(cj)) { prob.push([`linha ${ix + 2}`, 'CNPJ inválido: ' + cjT]); return; } }
+          else { cj = cnpjFmt(cnpjPlan(cjT)); if (!cnpjOk(cj)) { prob.push([lin, 'CNPJ inválido: ' + cjT]); return; } }
         }
-        if (cj) {
-          const rw = cnpjRaw(cj), outra = (c[D.info] || []).find((x) => E.key(x.nome) !== k && entCnpjs(x).some((v) => cnpjRaw(v) === rw));
-          if (outra) { prob.push([`linha ${ix + 2}`, `CNPJ ${cj} já está na ficha de ${outra.nome}`]); return; }
-          if (seenCj.has(rw)) { prob.push([`linha ${ix + 2}`, `CNPJ ${cj} repetido na planilha (${seenCj.get(rw)})`]); return; }
-          seenCj.set(rw, nm);
-        }
-        const tp = cTp >= 0 ? tipoDe(g(cTp)) : ''; if (tp === null) { prob.push([`linha ${ix + 2}`, 'tipo não reconhecido: ' + g(cTp) + ' (use Matéria-prima, Serviço ou Laboratório)']); return; }
-        const cur = info.get(k), base = names.find((x) => E.key(x) === k);
-        const o = Object.assign({ nome: base || nm }, cur || {}), ch = [];
-        [['email', em, 'e-mail'], ['cnpj', cj, 'CNPJ'], ['tipo', tp, 'tipo'], ['contato', g(cC), 'contato'], ['tel', g(cT), 'telefone'], ['obs', g(cO), 'observação']].forEach(([f, v, l]) => { if (v && v !== (o[f] || '')) { o[f] = v; ch.push(l); } });
-        if (cj && o.estrangeiro) { delete o.estrangeiro; }
-        if (estr && !o.estrangeiro) { o.estrangeiro = true; delete o.cnpj; ch.push('sem CNPJ (estrangeiro)'); }
-        if (!base) novos.push(o); else if (ch.length) muda.push([o, ch]);
+        const outros = [];
+        for (const t of g(cOc).split(/[;,\n]+/).map((x) => x.trim()).filter(Boolean)) { const v = cnpjFmt(cnpjPlan(t)); if (!cnpjOk(v)) { prob.push([lin, 'CNPJ inválido em Outros CNPJs: ' + t]); return; } outros.push(v); }
+        const tp = cTp >= 0 ? tipoDe(g(cTp)) : ''; if (tp === null) { prob.push([lin, 'tipo não reconhecido: ' + g(cTp) + ' (use Matéria-prima, Serviço ou Laboratório)']); return; }
+        LIN.push({ lin, nm, k: E.key(nm), cj, outros, estr, em, tp, ct: g(cC), tel: g(cT), obs: g(cO) });
       });
+      /* junta as linhas da mesma empresa: mesmo nome ou mesmo CNPJ */
+      const pai = LIN.map((_, i) => i), raiz = (i) => (pai[i] === i ? i : (pai[i] = raiz(pai[i]))), une = (i, j) => { pai[raiz(i)] = raiz(j); };
+      const porNome = new Map(), porCj = new Map();
+      LIN.forEach((L, i) => {
+        if (porNome.has(L.k)) une(i, porNome.get(L.k)); else porNome.set(L.k, i);
+        [L.cj].concat(L.outros).filter(Boolean).forEach((v) => { const rw = cnpjRaw(v); if (porCj.has(rw)) une(i, porCj.get(rw)); else porCj.set(rw, i); });
+      });
+      const grupos = new Map(); LIN.forEach((L, i) => { const g0 = raiz(i); if (!grupos.has(g0)) grupos.set(g0, []); grupos.get(g0).push(L); });
+      for (const G of grupos.values()) {
+        const linhas = G.map((L) => L.lin.replace('linha ', '')).join(', ');
+        /* fichas do cadastro que essas linhas tocam (pelo CNPJ ou pelo nome) */
+        const alvo = new Map();
+        G.forEach((L) => {
+          [L.cj].concat(L.outros).filter(Boolean).forEach((v) => { const f = fichaDoCnpj(cnpjRaw(v)); if (f) alvo.set(E.key(f.nome), f.nome); });
+          const bn = names.find((x) => E.key(x) === L.k); if (bn) alvo.set(L.k, bn);
+        });
+        if (alvo.size > 1) { prob.push([`linha${G.length > 1 ? 's' : ''} ${linhas}`, `os CNPJs e nomes destas linhas estão em fichas diferentes (${Array.from(alvo.values()).join(' e ')}). Junte as fichas no cadastro antes de importar.`]); continue; }
+        const base = alvo.size ? Array.from(alvo.values())[0] : null;
+        const cur = base ? info.get(E.key(base)) : null;
+        const o = Object.assign({ nome: base || G[0].nm }, cur || {}), ch = [];
+        if (o.cnpjs) o.cnpjs = o.cnpjs.slice();
+        /* CNPJs: o primeiro vira o principal se a ficha ainda não tem; os outros entram em Outros CNPJs */
+        const novosCj = [];
+        G.forEach((L) => [L.cj].concat(L.outros).filter(Boolean).forEach((v) => { if (!entCnpjs(o).concat(novosCj).some((x) => cnpjRaw(x) === cnpjRaw(v))) novosCj.push(v); }));
+        if (novosCj.length) {
+          if (!o.cnpj) { o.cnpj = novosCj.shift(); ch.push('CNPJ'); if (o.estrangeiro) delete o.estrangeiro; }
+          if (novosCj.length) { o.cnpjs = (o.cnpjs || []).concat(novosCj); ch.push(novosCj.length === 1 ? 'mais 1 CNPJ (' + novosCj[0] + ')' : `mais ${novosCj.length} CNPJs`); }
+        }
+        if (G.some((L) => L.estr) && !o.estrangeiro && !entCnpjs(o).length) { o.estrangeiro = true; ch.push('sem CNPJ (estrangeiro)'); }
+        const em = normMails(G.map((L) => L.em).filter(Boolean).join(', ').split(', ').filter((m, j, A) => A.findIndex((y) => y.toLowerCase() === m.toLowerCase()) === j).join(', '));
+        const pri = (f) => (G.find((L) => L[f]) || {})[f] || '';
+        [['email', em, 'e-mail'], ['tipo', pri('tp'), 'tipo'], ['contato', pri('ct'), 'contato'], ['tel', pri('tel'), 'telefone'], ['obs', pri('obs'), 'observação']].forEach(([f, v, l]) => { if (v && v !== (o[f] || '')) { o[f] = v; ch.push(l); } });
+        if (base && G.some((L) => L.k !== E.key(base))) ch.push('nome na planilha: ' + Array.from(new Set(G.filter((L) => L.k !== E.key(base)).map((L) => L.nm))).join(' / ') + ' (fica ' + base + ')');
+        if (!base) { if (G.length > 1) ch.push(G.length + ' linhas juntas'); novos.push(o); } else if (ch.length) muda.push([o, ch]);
+      }
       S.entImp = { kind, novos, muda };
       $('#im-res').innerHTML = `<div class="kpis sm" style="margin:6px 0">${kpiHTML({ l: 'Com alteração', v: NF.format(muda.length), c: D.cor })}${kpiHTML({ l: `${D.plural.charAt(0).toUpperCase() + D.plural.slice(1)} novos`, v: NF.format(novos.length), c: D.cor })}${kpiHTML({ l: 'Linhas com problema', v: NF.format(prob.length), c: D.cor, cls: prob.length ? 'warn' : 'ok' })}</div>
-        <div class="twrap" style="max-height:240px;overflow:auto"><table class="t"><thead><tr><th>${esc(D.Um)}</th><th>O que muda</th></tr></thead><tbody>${muda.slice(0, 200).map(([o, ch]) => `<tr><td>${esc(o.nome)}</td><td>${esc(ch.join(', '))}</td></tr>`).join('')}${novos.slice(0, 200).map((o) => `<tr><td>${esc(o.nome)}</td><td><span class="chip info">novo</span></td></tr>`).join('')}${prob.map(([l, m]) => `<tr><td><i>${esc(l)}</i></td><td><span class="chip crit">${esc(m)}</span></td></tr>`).join('')}${!muda.length && !novos.length && !prob.length ? '<tr><td colspan="2" class="muted">Nada para mudar: a planilha está igual ao cadastro.</td></tr>' : ''}</tbody></table></div>
+        <div class="twrap" style="max-height:240px;overflow:auto"><table class="t"><thead><tr><th>${esc(D.Um)}</th><th>O que muda</th></tr></thead><tbody>${muda.slice(0, 200).map(([o, ch]) => `<tr><td>${esc(o.nome)}</td><td>${esc(ch.join(', '))}</td></tr>`).join('')}${novos.slice(0, 200).map((o) => `<tr><td>${esc(o.nome)}</td><td><span class="chip info">novo</span>${entCnpjs(o).length > 1 ? ` <span class="muted">· ${entCnpjs(o).length} CNPJs</span>` : ''}</td></tr>`).join('')}${prob.map(([l, m]) => `<tr><td><i>${esc(l)}</i></td><td><span class="chip crit">${esc(m)}</span></td></tr>`).join('')}${!muda.length && !novos.length && !prob.length ? '<tr><td colspan="2" class="muted">Nada para mudar: a planilha está igual ao cadastro.</td></tr>' : ''}</tbody></table></div>
         <div class="formfoot"><button class="btn primary" type="button" id="im-ok" ${muda.length + novos.length ? '' : 'disabled'}>Aplicar ${NF.format(muda.length + novos.length)} ${muda.length + novos.length === 1 ? 'alteração' : 'alterações'}</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`;
       $('#im-ok').onclick = async () => {
         const b = $('#im-ok'); b.disabled = true; b.textContent = 'Gravando…';
@@ -20549,7 +20579,18 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const eqBy = (id) => eqAll().find((p) => p.id === id) || null;
   const eqPorNome = (nome) => (nome ? eqAll().find((p) => E.key(p.nome) === E.key(nome)) || null : null);
   function eqSetores() { const c = (S.model && S.model.cfg) || {}; return uniq((c.GER_SETORES || []).concat(eqAll().map((p) => p.setor).filter(Boolean))); }
-  const eqCor = (setor) => { const all = eqAll(), L = eqSetores().filter((x) => all.some((p) => E.key(p.setor || '') === E.key(x))), i = L.findIndex((s) => E.key(s) === E.key(setor || '')); return i < 0 ? 'var(--ink-3)' : EQ_CORES[i % EQ_CORES.length]; };
+  const eqCor0 = (setor) => { const all = eqAll(), L = eqSetores().filter((x) => all.some((p) => E.key(p.setor || '') === E.key(x))), i = L.findIndex((s) => E.key(s) === E.key(setor || '')); return i < 0 ? 'var(--ink-3)' : EQ_CORES[i % EQ_CORES.length]; };
+  /* v158: a pedido, Qualidade e HRM - Qualidade trocam de cor entre si (Qualidade fica com a cor que era do HRM e vice-versa) */
+  const EQ_TROCA = [['QUALIDADE', 'HRM - QUALIDADE']];
+  const eqSo = (t) => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/[^A-Z0-9]/g, '');   /* "HRM - Qualidade", "HRM – Qualidade" e "HRM-Qualidade" são o mesmo */
+  const eqCor = (setor) => {
+    const k = eqSo(setor), S2 = eqSetores();
+    for (const [a, b] of EQ_TROCA) {
+      const ra = S2.find((x) => eqSo(x) === eqSo(a)), rb = S2.find((x) => eqSo(x) === eqSo(b));
+      if (ra && rb) { if (k === eqSo(a)) return eqCor0(rb); if (k === eqSo(b)) return eqCor0(ra); }
+    }
+    return eqCor0(setor);
+  };
   function eqSold(p) { if (!p || !SD.ready || !vis('sold')) return null; try { return soldModel().W.find((w) => w.pid === p.id) || null; } catch (e) { return null; } }
   function eqFoto(p) { const d = EQ.docs[p.id]; if (d && d.img) return d.img; const w = eqSold(p); return w && w.foto ? w.foto : null; }
   const eqIni = (n) => String(n || '?').trim().split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
