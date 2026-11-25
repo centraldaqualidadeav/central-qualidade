@@ -400,6 +400,22 @@ ul.dvdl, p.dvdl { display: none !important; } .dvdl { list-style: none; margin: 
 .ehfzc span { font: 600 10.5px var(--f-body); letter-spacing: .03em; color: var(--ink-2); }
 .ehfzc b { font: 700 15px/1 var(--f-display); color: var(--ink); }
 .ehfzc.mais { --m: var(--ink-3); padding: 0 9px; }
+.ehaniv { margin: 0; padding: 8px 10px 10px; border-radius: 10px; background: var(--surface-2); display: grid; gap: 8px; }   /* v173 */
+.ehaniv .ehfzh { display: inline-flex; align-items: center; gap: 6px; }
+.ehaniv .ehfzh svg { width: 14px; height: 14px; fill: none; stroke: var(--n-ouro); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ehanl { display: flex; flex-wrap: wrap; gap: 8px; }
+.ehan { display: inline-grid; grid-template-columns: 30px minmax(0, auto) auto; align-items: center; gap: 9px; padding: 4px 12px 4px 4px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: inherit; font: inherit; text-align: left; cursor: pointer; max-width: 100%; }
+.ehan:hover { border-color: var(--ink-3); }
+.ehan > span:nth-child(2) { display: grid; min-width: 0; } .ehan b { font-size: 12.5px; font-weight: 600; line-height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ehan > span small { font: 500 11px var(--f-mono); color: var(--ink-3); }
+.ehan em { font: 700 18px/1 var(--f-display); font-style: normal; color: var(--n-ouro); white-space: nowrap; } .ehan em small { font: 600 10.5px var(--f-body); color: var(--ink-3); margin-left: 3px; }
+.ehan.hj { border-color: var(--n-ouro); box-shadow: 0 0 0 1px var(--n-ouro), 0 0 14px color-mix(in srgb, var(--n-ouro) 40%, transparent); } .ehan.hj > span small { color: var(--n-ouro); font-weight: 700; }
+.ehan.ja { opacity: .65; }
+.eqcasa { font-weight: 600; color: var(--ink-2); }
+.eqit { width: 100%; border-collapse: collapse; font-size: 13px; } .eqit th { text-align: left; font: 600 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); padding: 6px 8px; border-bottom: 1px solid var(--line); }   /* v173: importar planilha */
+.eqiw { overflow-x: auto; margin: 0 -2px; }
+.eqit td { padding: 8px; border-bottom: 1px solid var(--line); vertical-align: middle; } .eqit th:first-child, .eqit td:first-child { width: 28px; padding-right: 0; }
+.eqit td b { font-weight: 600; } .eqit td s { text-decoration-thickness: 1px; } .eqit .nw { white-space: nowrap; }
+.eqit tr.eqi-igual td { color: var(--ink-3); } .eqit tr.eqi-igual td b { color: var(--ink-2); } .eqit select { max-width: 210px; }
 .ehmv li span em { font-style: normal; font: 600 11px var(--f-mono); color: var(--ink-3); margin-left: 2px; }
 .ehpc > .ehmv { grid-area: mv; margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: var(--surface-2); display: grid; gap: 6px; min-width: 0; }
 .ehmv ol { list-style: none; margin: 0; padding: 0; display: grid; }
@@ -2918,23 +2934,24 @@ body.cq-ver .tbhd { top: 36px; }
       <a href="#equipe" data-v="equipe" style="--c:var(--geral)"><span class="sw"></span>Equipe</a>
       <a href="#mapa3d" data-v="mapa3d" hidden title="Mapa de processos 3D: o caminho do material no galpão, etapa por etapa" style="--c:var(--geral)"><span class="sw"></span>Mapa 3D</a>
       <span class="grp">Módulos</span>
+      <!-- v171: ordem pedida — Lotes, Certificados, Calibração, Avaliação de fornecedores, RIR, NCF, NCC, Retrabalho, Soldagem, Treinamento, RIF, Serviços -->
       <a href="#av" data-v="av" style="--c:var(--av)"><span class="sw"></span>Lotes (AV)</a>
-      <a href="#rir" data-v="rir" title="Relatório de Inspeção de Recebimento" style="--c:var(--rir)"><span class="sw"></span>RIR</a>
-      <a href="#ret" data-v="ret" title="Ordens de retrabalho interno: previsto e por defeito, com reinspeção no RIR" style="--c:var(--ret)"><span class="sw"></span>Retrabalho</a>
-      <a href="#serv" data-v="serv" style="--c:var(--serv)"><span class="sw"></span>Serviços</a>
       <a href="#certq" data-v="certq" style="--c:var(--tcr)"><span class="sw"></span>Certificados</a>
+      <a href="#cal" data-v="cal" style="--c:var(--cal)"><span class="sw"></span>Calibração</a>
+      <a href="#iqf" data-v="iqf" style="--c:var(--iqf)"><span class="sw"></span>Avaliação de fornecedores</a>
+      <a href="#rir" data-v="rir" title="Relatório de Inspeção de Recebimento" style="--c:var(--rir)"><span class="sw"></span>RIR</a>
       <a href="#rnc" data-v="rnc" title="Registro de Não Conformidade de Fornecedor" style="--c:var(--rnc)"><span class="sw"></span>NCF</a>
       <a href="#rncc" data-v="rncc" title="Registro de Não Conformidade de Cliente" style="--c:var(--rncc)"><span class="sw"></span>NCC</a>
-      <a href="#cal" data-v="cal" style="--c:var(--cal)"><span class="sw"></span>Calibração</a>
+      <a href="#ret" data-v="ret" title="Ordens de retrabalho interno: previsto e por defeito, com reinspeção no RIR" style="--c:var(--ret)"><span class="sw"></span>Retrabalho</a>
       <a href="#sold" data-v="sold" style="--c:var(--sold)"><span class="sw"></span>Soldagem</a>
-      <a href="#iqf" data-v="iqf" style="--c:var(--iqf)"><span class="sw"></span>Avaliação de fornecedores</a>
+      <a href="#trein" data-v="trein" title="Simuladores de instrumentos e leitura de certificado de usina: treino, exercício e prova do inspetor" style="--c:var(--trn)"><span class="sw"></span>Treinamento</a>
       <a href="#rif" data-v="rif" title="Relatório de Inspeção Final (Usinagem)" style="--c:var(--rif)"><span class="sw"></span>RIF</a>
+      <a href="#serv" data-v="serv" style="--c:var(--serv)"><span class="sw"></span>Serviços</a>
       <span class="grp">Ferramentas</span>
       <a href="#auditoria" data-v="auditoria" style="--c:var(--warn)"><span class="sw"></span>Auditoria<span class="ct" id="ct-aud" hidden></span></a>
       <a href="#relatorio" data-v="relatorio" style="--c:var(--geral)"><span class="sw"></span>Relatórios</a>
       <a href="#manual" data-v="manual" style="--c:var(--geral)"><span class="sw"></span>Manual</a>
       <a href="#ramos" data-v="ramos" title="A ramificação do processo, do recebimento ao destino: abra as ramificações com os dedos; modo apresentação para a TV" style="--c:var(--av)"><span class="sw"></span>Ramificações</a>
-      <a href="#trein" data-v="trein" title="Simuladores de instrumentos e leitura de certificado de usina: treino, exercício e prova do inspetor" style="--c:var(--trn)"><span class="sw"></span>Treinamento</a>
       <a href="#trello" data-v="trello" style="--c:var(--jur)"><span class="sw"></span>Trello Jurong</a>
       <a href="#acomp" data-v="acomp" style="--c:var(--acj)"><span class="sw"></span>Acompanhamento Jurong</a>
       <a href="#historico" data-v="historico" style="--c:var(--geral)"><span class="sw"></span>Histórico</a>
@@ -6155,7 +6172,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 169; window.CQ_V = APP_V;
+    const APP_V = 173; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -8273,16 +8290,17 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     main.innerHTML = `<div class="view">${head('Painel de indicadores', '', ehH ? '' : `<button class="btn tvfs0" type="button" data-act="tv-on" title="Tela cheia (rolando)" aria-label="Tela cheia">${TV_ICO}</button>`)}
       ${ehH}
       ${'' /* v103: os cartões-resumo por módulo (gerPainelHTML) saíram: cada módulo tem agora o próprio bloco no visual novo */}
+      ${'' /* v170: mesma sequência do menu lateral */}
+      ${avPainelHTML()}
+      ${cqNxPainelHTML() /* v112: Certificados no visual novo (cqPainelHTML, o de antes, ficou dentro de "Mais") */}
+      ${calPainelHTML()}
+      ${iqfNxPainelHTML() /* v111: o IQF no visual novo (iqPainelHTML, o de antes, ficou sem uso) */}
+      ${rirNxPainelHTML() /* v107: o RIR no visual novo (riPainelHTML, o de antes, ficou sem uso) */}
       ${ncfPainelHTML()}
       ${nccPainelHTML()}
-      ${avPainelHTML()}
-      ${servPainelHTML()}
-      ${calPainelHTML()}
-      ${rirNxPainelHTML() /* v107: o RIR no visual novo (riPainelHTML, o de antes, ficou sem uso) */}
-      ${rifNxPainelHTML() /* v108: o RIF no visual novo (rfPainelHTML, o de antes, ficou sem uso) */}
       ${soldNxPainelHTML() /* v110: a Soldagem no visual novo (soldPainelHTML, o de antes, ficou sem uso) */}
-      ${iqfNxPainelHTML() /* v111: o IQF no visual novo (iqPainelHTML, o de antes, ficou sem uso) */}
-      ${cqNxPainelHTML() /* v112: Certificados no visual novo (cqPainelHTML, o de antes, ficou dentro de "Mais") */}
+      ${rifNxPainelHTML() /* v108: o RIF no visual novo (rfPainelHTML, o de antes, ficou sem uso) */}
+      ${servPainelHTML()}
       ${'' /* v146: "Visão do processo" saiu do Painel a pedido (procNxPainelHTML ficou sem uso; a Ramificações continua) */}
     </div>`;
 
@@ -8440,12 +8458,14 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   /* v169: entregas de uma pessoa agrupadas por tipo; "instrumento atualizado" e "configuração alterada" contam uma vez por item no dia
      (e o instrumento que já teve outra entrega no dia não conta de novo como atualizado) */
   const EH_UMA = { insatu: 1, cfg: 1 };
+  const EH_ORD = ['AV', 'CERTQ', 'INS', 'IQF', 'RIR', 'RNC', 'RNCC', 'RET', 'SOLD', 'RIF', 'SERV', 'GERAL'];   /* v170: a sequência do menu lateral */
+  const ehOrd = (m) => { const i = EH_ORD.indexOf(m); return i < 0 ? 99 : i; };
   function ehGrupos(L) {
     const G = new Map();
     L.forEach((x) => { const e = ehEnt(x); if (!e) return; const g = G.get(e[0]) || { k: e[0], m: x.mod, n: 0, r: [], lg: e[2], at: x.at }; if (EH_UMA[e[0]] && e[1] && g.r.includes(e[1])) return; g.n++; if (e[1] && !g.r.includes(e[1])) g.r.push(e[1]); G.set(e[0], g); });
     const ga = G.get('insatu');
     if (ga) { const ja = new Set(); G.forEach((g) => { if (g.m === 'INS' && g.k !== 'insatu') g.r.forEach((r) => ja.add(r)); }); ga.r = ga.r.filter((r) => !ja.has(r)); ga.n = ga.r.length; if (ga.n === 1) ga.lg = ga.r[0]; if (!ga.n) G.delete('insatu'); }
-    const gs = Array.from(G.values()).sort((a, b) => b.n - a.n || b.at - a.at);
+    const gs = Array.from(G.values()).sort((a, b) => ehOrd(a.m) - ehOrd(b.m) || b.n - a.n || b.at - a.at);   /* v170: pela sequência dos módulos; dentro do módulo, o mais feito primeiro */
     return { gs, n: gs.reduce((t, g) => t + g.n, 0) };
   }
   const ehConcN = (L) => { const P2 = new Map(); L.forEach((x) => { const k = x.by || '—'; (P2.get(k) || P2.set(k, []).get(k)).push(x); }); let n = 0; P2.forEach((l) => { n += ehGrupos(l).n; }); return n; };
@@ -8592,6 +8612,20 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     if (agora != null) { const xa = L + iw * (agora + 0.5) / n; o.push(`<line x1="${xa.toFixed(1)}" x2="${xa.toFixed(1)}" y1="${T - 4}" y2="${T + ih}" class="now"/><text x="${(xa + 4).toFixed(1)}" y="${T + 6}" class="nowt">agora</text>`); }
     return `<div class="ehlg">${series.map((s) => `<span><i style="background:${s.cor}"></i>${esc(s.nome)}</span>`).join('')}</div><svg class="ehsvg" viewBox="0 0 ${w} ${h}" role="img" aria-label="Ações por hora e por módulo">${o.join('')}</svg>`;
   }
+  /* v173: aniversário de empresa no mês (pela admissão da Equipe; só quem completa 1 ano ou mais) — quem não vê a Equipe não vê */
+  function ehAnivHTML() {
+    if (!viewOk('equipe') || eqNivel() !== 'tudo') return '';
+    const h = new Date(), mes = h.getMonth() + 1, ano = h.getFullYear(), dia = h.getDate();
+    const L = eqAll().filter((p) => !p.inativo && /^\d{4}-\d{2}-\d{2}$/.test(p.admissao || '')).map((p) => { const [y, m, d] = p.admissao.split('-').map(Number); return { p, m, d, a: ano - y }; })
+      .filter((x) => x.m === mes && x.a >= 1).sort((a, b) => a.d - b.d || a.p.nome.localeCompare(b.p.nome, 'pt-BR'));
+    if (!L.length) return '';
+    const nome = (n) => { const w = String(n || '').trim().split(/\s+/); return w.length > 2 ? w[0] + ' ' + w[w.length - 1] : w.join(' '); };
+    const MESX = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+    return `<div class="ehaniv"><span class="ehfzh"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="M9 13.5 7.5 21l4.5-2.5 4.5 2.5-1.5-7.5"/></svg>Aniversário de empresa · ${MESX[mes - 1]}</span><div class="ehanl">${L.map((x) => {
+      const f = eqFoto(x.p), hj = x.d === dia, ja = x.d < dia;
+      return `<button type="button" class="ehan${hj ? ' hj' : ja ? ' ja' : ''}" data-act="eq-ver" data-key="${esc(x.p.id)}" title="${esc(x.p.nome + ' · admissão ' + eqDia(x.p.admissao) + ' · ' + x.a + (x.a === 1 ? ' ano' : ' anos') + ' de casa')}"><span class="ehav${f ? ' fo' : ''}">${f ? ehImg(f) : esc(ehIni(x.p.nome))}</span><span><b>${esc(nome(x.p.nome))}</b><small>${hj ? 'hoje' : 'dia ' + String(x.d).padStart(2, '0')}</small></span><em>${x.a}<small>${x.a === 1 ? 'ano' : 'anos'}</small></em></button>`;
+    }).join('')}</div></div>`;
+  }
   function ehPainelHTML() {
     if (!S.model || !DB.db || !viewOk('historico')) return '';
     ehCarrega();
@@ -8610,7 +8644,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
       <select id="eh-ins" class="inp" aria-label="Pessoa"><option value="">Pessoa: todas</option>${pessoas.map((p) => `<option value="${esc(p.k)}"${p.k === EH.ins ? ' selected' : ''}>${esc(p.nome)}</option>`).join('')}</select></div>`;
     const sec = (corpo) => `<section class="sec" id="eh-sec">${band('GERAL', 'Equipe hoje · todos os módulos').replace('</h2>', `</h2><button class="tvfs" type="button" data-act="tv-on" title="Tela cheia (rolando) · para a TV: o Painel ocupa a tela toda e rola sozinho" aria-label="Tela cheia">${TV_ICO}</button>`)}<div class="block"><div class="body">${bar}${corpo}</div></div></section>`;
     if (!TODAS) return sec('<div class="loading"><span class="spin"></span><span>Carregando o dia…</span></div>');
-    if (!TODAS.length) return sec(`<div class="empty">${hoje ? 'Ninguém gravou nada na Central hoje ainda.' : 'Ninguém gravou nada na Central neste dia.'}</div>`);
+    if (!TODAS.length) return sec(ehAnivHTML() + `<div class="empty">${hoje ? 'Ninguém gravou nada na Central hoje ainda.' : 'Ninguém gravou nada na Central neste dia.'}</div>`);
     /* resumo */
     const porMod = new Map(); X.forEach((x) => porMod.set(x.mod, (porMod.get(x.mod) || 0) + 1));
     const mods = Array.from(porMod.entries()).sort((a, b) => b[1] - a[1]);
@@ -8643,7 +8677,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
       /* as 3 últimas movimentações; ações seguidas no mesmo item viram uma linha (×N) */
       const MV = []; p.L.forEach((x) => { const l = MV[MV.length - 1]; if (l && l.x.mod === x.mod && l.x.key === x.key && l.x.act === x.act && ehMov(l.x)[0] === ehMov(x)[0]) l.n++; else MV.push({ x, n: 1 }); });
       const mv = `<div class="ehmv"><span class="ehfzh">Últimas movimentações</span><ol>${MV.slice(0, 3).map(({ x, n }) => { const [t, d] = ehMov(x); return `<li style="--m:${ehCor(x.mod)}" title="${esc(hhmm(x.at) + ' · ' + t + (n > 1 ? ' ×' + n : '') + (d ? ' · ' + d : ''))}"><time>${hhmm(x.at)}</time><i></i><div><span>${esc(t)}${n > 1 ? ` <em>×${n}</em>` : ''}</span>${d ? `<small>${esc(d)}</small>` : ''}</div></li>`; }).join('')}</ol></div>`;
-      const chips = Array.from(cm.entries()).sort((a, b) => b[1] - a[1]).map(([m, n]) => `<span class="ehpm" style="--m:${ehCor(m)}" title="${n} ${n === 1 ? 'registro' : 'registros'} em ${esc(EH_NOME[m] || m)}"><span>${esc(EH_NOME[m] || m)}</span></span>`).join('') + (cm.size > 1 ? `<span class="ehpm mais" style="display:none"><b>+0</b></span>` : '');
+      const chips = Array.from(cm.entries()).sort((a, b) => ehOrd(a[0]) - ehOrd(b[0])).map(([m, n]) => `<span class="ehpm" style="--m:${ehCor(m)}" title="${n} ${n === 1 ? 'registro' : 'registros'} em ${esc(EH_NOME[m] || m)}"><span>${esc(EH_NOME[m] || m)}</span></span>`).join('') + (cm.size > 1 ? `<span class="ehpm mais" style="display:none"><b>+0</b></span>` : '');
       return `<button type="button" class="ehpc${o ? ' on' : ''}" data-act="eh-p" data-key="${esc(p.k)}" aria-pressed="${EH.ins === p.k}" title="${EH.ins === p.k ? 'Mostrar todos' : 'Ver só ' + esc(p.nome)}">${ehCracha(p.k, p.nome, o)}<div class="ehnm"><b>${esc(p.nome)}</b><em title="${NF.format(nC)} ${nC === 1 ? 'entrega' : 'entregas'} · ${NF.format(nE)} ${nE === 1 ? 'ajuste' : 'ajustes'}">${NF.format(nC)}<small>${nC === 1 ? 'entrega' : 'entregas'}</small></em></div><small class="ehst"><i></i>${o ? 'online agora' : hoje ? 'última ação ' + ehHa(u.at) : 'última ação às ' + hhmm(u.at)}</small>
         <div class="ehpms">${chips}</div>${fz}${mv}<div class="ehpt"><span>desde ${hhmm(p.L[p.L.length - 1].at)}${nE ? ` · <b>${NF.format(nE)} ${nE === 1 ? 'ajuste' : 'ajustes'}</b>` : ''}</span><span>${hoje ? ehHa(u.at) : 'última ' + hhmm(u.at)}</span></div></button>`;
     };
@@ -8662,7 +8696,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     /* v100: a linha do tempo tem a altura do gráfico ao lado e rola por dentro (todas as ações do dia); cada ação em até 2 linhas, o texto inteiro no "title" */
     const tl = `<div class="chart ehtlc"><h3>Linha do tempo do dia<small>${NF.format(X.length)} ${X.length === 1 ? 'ação' : 'ações'} · a mais nova em cima</small></h3><ul class="ehtl">${X.slice(0, 150).map((x) => `<li title="${esc(hhmm(x.at) + ' · ' + who(x.by) + ' ' + (EH_VERBO[x.act] || 'alterou') + ' · ' + (ehCqExtra(x) ? ehCqExtra(x) + ' · ' : '') + (x.label || x.key || ''))}"><time>${hhmm(x.at)}</time>${ehAvP(x.by, who(x.by), 'ehav')}<div class="ehtx"><b>${esc(who(x.by).split(' ')[0])}</b> ${ehTxt(x)}</div><span class="ehmc" style="--m:${ehCor(x.mod)}">${esc(EH_NOME[x.mod] || x.mod)}</span></li>`).join('')}</ul>
       <button type="button" class="ehmais" data-go='${esc(JSON.stringify({ v: 'historico' }))}'>Abrir no Histórico →</button></div>`;
-    return sec(ins + cards + `<div class="ehc2">${graf}${tl}</div>`);
+    return sec(ins + ehAnivHTML() + cards + `<div class="ehc2">${graf}${tl}</div>`);
   }
   /* topo do Painel: mesmo layout de cartões de antes, 1 cartão por módulo — número do mês grande e o % no anel */
   function gerPainelHTML() {
@@ -20843,6 +20877,14 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   const eqIni = (n) => String(n || '?').trim().split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
   const eqFotoHTML = (p, cls) => { const f = eqFoto(p); return f ? `<img class="${cls}" src="${f}" alt="Foto de ${esc(p.nome)}">` : `<span class="${cls} sini" aria-hidden="true">${esc(eqIni(p.nome))}</span>`; };
   const eqDia = (iso) => (/^\d{4}-\d{2}-\d{2}$/.test(iso || '') ? iso.split('-').reverse().join('/') : '');
+  /* v173: tempo de casa pela admissão (anos e meses completos até hoje) */
+  function eqCasa(iso, ref) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(iso || '')) return '';
+    const [y, m, d] = iso.split('-').map(Number), h = ref || new Date(); let mm = (h.getFullYear() - y) * 12 + (h.getMonth() + 1 - m); if (h.getDate() < d) mm--;
+    if (mm < 0) return ''; if (mm < 1) return 'menos de 1 mês de casa';
+    const a = Math.floor(mm / 12), r = mm % 12, A = a ? `${a} ${a === 1 ? 'ano' : 'anos'}` : '', M = r ? `${r} ${r === 1 ? 'mês' : 'meses'}` : '';
+    return [A, M].filter(Boolean).join(' e ') + ' de casa';
+  }
   /** soldador = funcionário: foto, setor, filial e admissão vêm da ficha (quando preenchidos) */
   function eqSoldMerge(w) {
     const p = (w.pes && eqBy(w.pes)) || eqPorNome(w.nome); if (!p) return;
@@ -20920,7 +20962,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const modo = soOrg ? 'org' : EQ.modo || lsGet('cq-eq-modo', 'cards'), all = eqAll().sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')), ativos = all.filter((p) => !p.inativo);
     const c = S.model.cfg, f = EQ.f, adm = eqAdm();
     const sel = (id, l, vals, v, todos) => `<label class="field"><span>${l}</span><select id="${id}"><option value="">${todos}</option>${vals.map((x) => `<option ${E.key(x) === E.key(v || '') ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select></label>`;
-    const acts = soOrg ? '' : '<button class="btn" type="button" data-act="eq-exp">Exportar (.xlsx)</button>' + (adm ? '<button class="btn primary" type="button" data-act="eq-novo">+ Novo funcionário</button>' : '');
+    const acts = soOrg ? '' : '<button class="btn" type="button" data-act="eq-exp">Exportar (.xlsx)</button>' + (adm ? '<button class="btn" type="button" data-act="eq-imp" title="Planilha do RH com Nome, Admissão, Cargo e Departamento: confere antes de gravar">Importar planilha</button><button class="btn primary" type="button" data-act="eq-novo">+ Novo funcionário</button>' : '');
     const semFoto = ativos.filter((p) => !eqFoto(p)).length;
     const filtros = modo === 'org' ? '<span></span>' : `<div class="filters"><label class="field"><span>Buscar</span><input id="eq-q" type="search" placeholder="nome, cargo, e-mail…" value="${esc(f.q || '')}" autocomplete="off"></label>
       ${sel('eq-set', 'Setor', eqSetores(), f.set, 'Todos')}${sel('eq-fil', 'Filial', uniq((c.GER_FILIAIS || []).concat(all.map((p) => p.filial).filter(Boolean))), f.fil, 'Todas')}
@@ -21083,9 +21125,9 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const link = (x) => `<button type="button" class="plink" data-act="eq-ver" data-key="${esc(x.id)}">${esc(x.nome)}</button>`;
     const body = `<div class="sfh">${eqFotoHTML(p, 'sfph')}<div class="sfi"><span class="pset" style="--k:${eqCor(p.setor)}">${esc([p.setor, p.filial].filter(Boolean).join(' · ') || 'sem setor')}</span><h3>${esc(p.nome)}</h3><div class="pcc" style="font-size:14px">${esc(p.cargo || 'cargo não informado')}</div>
         <div>${p.inativo ? '<span class="chip off"><i>–</i>Inativo</span>' : '<span class="chip ok"><i>✓</i>Ativo</span>'}${w ? ` <span class="chip info"><i>●</i>soldador ${esc(w.sinete || '')}</span>` : ''}</div>
-        <div class="muted" style="font-size:12.5px">${[p.admissao ? 'admissão ' + eqDia(p.admissao) : '', g ? 'responde a ' + link(g) + (g.cargo ? ' · ' + esc(g.cargo) : '') : ''].filter(Boolean).join(' · ') || '&nbsp;'}</div></div></div>
+        <div class="muted" style="font-size:12.5px">${[p.admissao ? 'admissão ' + eqDia(p.admissao) + (!p.inativo && eqCasa(p.admissao) ? ' · <b class="eqcasa">' + eqCasa(p.admissao) + '</b>' : '') : '', g ? 'responde a ' + link(g) + (g.cargo ? ' · ' + esc(g.cargo) : '') : ''].filter(Boolean).join(' · ') || '&nbsp;'}</div></div></div>
       ${adm ? `<div class="formfoot">${bt('eq-ed', 'Editar dados', 'primary')}${bt('eq-foto', eqFoto(p) ? 'Trocar foto' : 'Pôr foto')}${bt('eq-cracha', 'Crachá')}${bt('eq-print', 'Imprimir ficha')}${bt('eq-sit', p.inativo ? 'Reativar' : 'Desligar', 'ghost" style="margin-left:auto')}</div>` : ''}
-      <div class="fsec"><h3>Dados</h3>${kv([['Cargo', esc(p.cargo || '')], ['Setor', esc(p.setor || '')], ['Filial', esc(p.filial || '')], ['Responde a', g ? link(g) + (g.cargo ? ' · ' + esc(g.cargo) : '') : ''], ['E-mail', p.email ? `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>` : ''], ['Telefone / ramal', esc([p.tel, p.ramal ? 'ramal ' + p.ramal : ''].filter(Boolean).join(' · '))], ['Admissão', eqDia(p.admissao)]])}</div>
+      <div class="fsec"><h3>Dados</h3>${kv([['Cargo', esc(p.cargo || '')], ['Setor', esc(p.setor || '')], ['Filial', esc(p.filial || '')], ['Responde a', g ? link(g) + (g.cargo ? ' · ' + esc(g.cargo) : '') : ''], ['E-mail', p.email ? `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>` : ''], ['Telefone / ramal', esc([p.tel, p.ramal ? 'ramal ' + p.ramal : ''].filter(Boolean).join(' · '))], ['Admissão', eqDia(p.admissao) + (!p.inativo && eqCasa(p.admissao) ? ` · ${eqCasa(p.admissao)}` : '')]])}</div>
       <div class="fsec"><h3>Funções na Central</h3>${(p.funcoes || []).length ? `<div class="pfu" style="gap:6px">${p.funcoes.map((k) => `<span>${esc(fl(k))}</span>`).join('')}</div>` : '<span class="muted">Nenhuma.</span>'}<span class="muted" style="font-size:12px">Definem em quais listas o nome aparece (Conferido por, Emissor…).</span></div>
       ${w ? `<div class="fsec"><h3>Soldador</h3><div class="rfacts2"><span class="mono" style="font-weight:700">${esc(w.sinete || '')}</span>${chipW(w.st)}<button class="btn small" type="button" data-open="SOLD:${esc(w.key)}">Abrir ficha de soldador</button></div><span class="muted" style="font-size:12px">Mesma pessoa: a ficha de soldagem usa a foto, o setor, a filial e a admissão daqui.</span></div>` : ''}
       ${eq.length ? `<div class="fsec"><h3>Equipe direta (${eq.length})</h3><div class="pteam">${eq.map((x) => `<button type="button" data-act="eq-ver" data-key="${esc(x.id)}"><span class="oi">${eqFoto(x) ? `<img src="${eqFoto(x)}" alt="">` : esc(eqIni(x.nome))}</span><span><b>${esc(x.nome)}</b><span>${esc(x.cargo || '')}</span></span></button>`).join('')}</div></div>` : ''}
@@ -21103,6 +21145,129 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   function eqFichaSync() { const d = $('#layer .drawer [data-eqid]'); if (d) { const sc = $('#layer .drawer .dbody'), top = sc ? sc.scrollTop : 0; eqFicha(d.dataset.eqid).then(() => { const s2 = $('#layer .drawer .dbody'); if (s2) s2.scrollTop = top; }); } }
 
   /* ---------- editar ---------- */
+  /* ================= v173: importar a planilha do RH (Nome · Admissão · Descrição cargo · Descrição Dpto) =================
+     Acha cada pessoa na Equipe (nome igual ou abreviado: "Dayse Caroline" = "DAYSE CAROLINE JERONIMO"), mostra o que muda e só grava
+     o que ficar marcado. Quem já existe recebe admissão e cargo (o nome cadastrado não muda; o setor só entra se estiver vazio).
+     Quem não existe é cadastrado com o nome completo. */
+  const EQI_PART = ['de', 'da', 'do', 'das', 'dos', 'e'];
+  const eqiTok = (n) => E.key(n || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z\s]/g, ' ').split(/\s+/).filter((w) => w && !EQI_PART.includes(w));
+  const eqiNome = (n) => String(n || '').trim().replace(/\s+/g, ' ').toLowerCase().split(' ').map((w, i) => (i && EQI_PART.includes(w) ? w : w.charAt(0).toUpperCase() + w.slice(1))).join(' ');
+  const eqiCargo = (c) => { const t = String(c || '').trim().replace(/\s+/g, ' ').toLowerCase(); return t ? t.charAt(0).toUpperCase() + t.slice(1) : ''; };
+  function eqiData(v) {
+    if (v == null || v === '') return '';
+    if (typeof v === 'number' && window.XLSX && XLSX.SSF) { const d = XLSX.SSF.parse_date_code(v); return d ? `${d.y}-${String(d.m).padStart(2, '0')}-${String(d.d).padStart(2, '0')}` : ''; }
+    if (v instanceof Date && !isNaN(v)) return `${v.getFullYear()}-${String(v.getMonth() + 1).padStart(2, '0')}-${String(v.getDate()).padStart(2, '0')}`;
+    let m = /^(\d{1,2})[/.-](\d{1,2})[/.-](\d{2,4})$/.exec(String(v).trim()); if (m) { const y = m[3].length === 2 ? 2000 + Number(m[3]) : Number(m[3]); return `${y}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`; }
+    m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(v).trim()); return m ? `${m[1]}-${m[2]}-${m[3]}` : '';
+  }
+  /* mesma pessoa: todas as palavras do nome mais curto aparecem, na ordem, no mais comprido, começando pelo primeiro nome */
+  function eqiMesma(a, b) {
+    let A = eqiTok(a), B = eqiTok(b); if (!A.length || !B.length) return false; if (A.length > B.length) [A, B] = [B, A];
+    if (A[0] !== B[0]) return false; let j = 0;
+    for (const w of A) { while (j < B.length && B[j] !== w) j++; if (j >= B.length) return false; j++; }
+    return true;
+  }
+  function eqiLer(rows) {
+    const nk = (c) => String(c || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const hi = rows.findIndex((r) => r.some((c) => /^nome/.test(nk(c).trim())) && r.some((c) => /admiss/.test(nk(c))));
+    if (hi < 0) return null;
+    const H = rows[hi].map(nk), col = (re) => H.findIndex((c) => re.test(c));
+    const cN = col(/^\s*nome/), cA = col(/admiss/), cC = col(/cargo/), cD = col(/dpto|depart|setor/);
+    return rows.slice(hi + 1).map((r) => ({ nome: String(r[cN] || '').trim(), adm: eqiData(r[cA]), cargo: cC >= 0 ? eqiCargo(r[cC]) : '', dpto: cD >= 0 ? String(r[cD] || '').trim() : '' })).filter((x) => x.nome && (x.adm || x.cargo));   /* linha sem data e sem cargo (título, observação) fica de fora */
+  }
+  function eqImportar() {
+    if (!eqAdm()) { toast('Só administradores alteram funcionários.', true); return; }
+    const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.xlsx,.xls,.csv';
+    inp.onchange = async () => {
+      const file = inp.files && inp.files[0]; if (!file) return;
+      let rows;
+      try { const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' }); rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, defval: '', raw: true }); }
+      catch (e) { toast('Não foi possível ler a planilha: ' + ((e && e.message) || e), true); return; }
+      const L = eqiLer(rows || []);
+      if (!L) { toast('A planilha precisa ter as colunas "Nome" e "Admissão" (e, se tiver, "Cargo" e "Dpto").', true); return; }
+      if (!L.length) { toast('Nenhum funcionário na planilha.', true); return; }
+      eqiConferir(L, file.name);
+    };
+    inp.click();
+  }
+  function eqiConferir(L, arq) {
+    const all = eqAll(), setores = (S.model.cfg.GER_SETORES || []);
+    const setorDe = (d) => { if (!d) return ''; const k = E.key(d); return setores.find((x) => E.key(x) === k) || eqiCargo(d); };
+    const R = L.map((x, i) => {
+      const ig = all.filter((p) => E.key(p.nome) === E.key(x.nome)), ab = ig.length ? ig : all.filter((p) => eqiMesma(p.nome, x.nome));
+      return { i, x, cand: ab, p: ab.length === 1 ? ab[0] : null, amb: ab.length > 1 };
+    });
+    const muda = (r) => {
+      const x = r.x, p = r.p, set = setorDe(x.dpto);
+      if (!p) return [['Cadastro novo', ''], ...(x.adm ? [['Admissão', eqDia(x.adm)]] : []), ...(x.cargo ? [['Cargo', x.cargo]] : []), ...(set ? [['Setor', set]] : [])];
+      const M = [];
+      if (x.adm && x.adm !== (p.admissao || '')) M.push(['Admissão', `${eqDia(p.admissao) || '—'} → ${eqDia(x.adm)}`]);
+      if (x.cargo && E.key(x.cargo) !== E.key(p.cargo || '')) M.push(['Cargo', `${p.cargo || '—'} → ${x.cargo}`]);
+      if (set && !p.setor) M.push(['Setor', `— → ${set}`]);
+      return M;
+    };
+    const ano = new Date().getFullYear(), d26 = L.filter((x) => x.adm && Number(x.adm.slice(0, 4)) === ano).length;
+    /* uma coluna por dado (admissão · cargo · setor): o que fica em cinza; o que muda em negrito, com o valor de antes riscado */
+    const cel = (r, antes, novo, so) => {
+      if (r.amb && !r.esc) return '<span class="muted">—</span>';
+      if (!r.p) return novo ? `<b>${esc(novo)}</b>` : '<span class="muted">—</span>';
+      if (!novo || (so && antes) || E.key(antes || '') === E.key(novo)) return `<span class="muted">${esc(antes || '—')}</span>`;
+      return `${antes ? `<s class="muted">${esc(antes)}</s> ` : ''}<b>${esc(novo)}</b>`;
+    };
+    const cols = (r) => `<td class="nw">${cel(r, eqDia((r.p || {}).admissao), eqDia(r.x.adm))}</td><td>${cel(r, (r.p || {}).cargo, r.x.cargo)}</td><td>${cel(r, (r.p || {}).setor, setorDe(r.x.dpto), true)}</td>`;
+    const linha = (r) => {
+      const M = r.amb ? [] : muda(r), sem = !r.amb && r.p && !M.length;
+      const alvo = r.amb ? `<select class="inp eqi-sel" data-i="${r.i}" aria-label="Qual pessoa da Central"><option value="">Qual destas pessoas?</option>${r.cand.map((p) => `<option value="${esc(p.id)}">${esc(p.nome)}</option>`).join('')}<option value="__novo">É outra pessoa (cadastrar)</option></select>`
+        : r.p ? esc(r.p.nome) + (sem ? ' <span class="muted">· sem mudança</span>' : '') : '<span class="chip info"><i>+</i>Novo</span>';
+      return `<tr data-i="${r.i}"${sem ? ' class="eqi-igual"' : ''}><td><input type="checkbox" class="eqi-ck" data-i="${r.i}" ${sem || r.amb ? '' : 'checked'} ${sem || r.amb ? 'disabled' : ''} aria-label="Gravar ${esc(eqiNome(r.x.nome))}"></td><td><b>${esc(eqiNome(r.x.nome))}</b></td><td class="eqi-al">${alvo}</td>${cols(r)}</tr>`;
+    };
+    const conta = () => { const n = $$('.eqi-ck:checked').length; const b = $('#eqi-ok'); if (b) { b.disabled = !n; b.textContent = n ? `Gravar ${n} ${n === 1 ? 'funcionário' : 'funcionários'}` : 'Nada marcado'; } };
+    const nN = R.filter((r) => !r.p && !r.amb).length, nA = R.filter((r) => r.p && muda(r).length).length, nI = R.filter((r) => r.p && !muda(r).length).length, nD = R.filter((r) => r.amb).length;
+    openModal('Importar planilha da Equipe', `<p style="margin:0">${esc(arq)} · <b>${NF.format(L.length)}</b> ${L.length === 1 ? 'funcionário' : 'funcionários'}: ${[nA ? `<b>${nA}</b> para atualizar` : '', nN ? `<b>${nN}</b> ${nN === 1 ? 'novo' : 'novos'}` : '', nI ? `${nI} sem mudança` : '', nD ? `<b>${nD}</b> para escolher` : ''].filter(Boolean).join(' · ')}. Desmarque o que não quiser gravar. O nome já cadastrado na Central não muda.</p>
+      ${d26 ? `<div class="warnbox">${NF.format(d26)} ${d26 === 1 ? 'data de admissão é' : 'datas de admissão são'} de ${ano}. Confirme com o RH se é a admissão mesmo (e não a data de mudança de cargo).</div>` : ''}
+      <div class="eqiw"><table class="eqit"><thead><tr><th></th><th>Na planilha</th><th>Na Central</th><th>Admissão</th><th>Cargo</th><th>Setor</th></tr></thead><tbody>${R.map(linha).join('')}</tbody></table></div>
+      <div class="formfoot"><button class="btn primary" type="button" id="eqi-ok">Gravar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    $('.modal').classList.add('wide');
+    $$('.eqi-ck').forEach((c) => { c.onchange = conta; });
+    $$('.eqi-sel').forEach((sl) => { sl.onchange = () => {
+      const r = R[+sl.dataset.i]; r.novo = sl.value === '__novo'; r.p = r.novo ? null : all.find((p) => p.id === sl.value) || null; r.esc = !!sl.value;
+      const tr = sl.closest('tr'), M = sl.value ? muda(r) : [], ck = tr.querySelector('.eqi-ck');
+      Array.from(tr.children).slice(3).forEach((td) => td.remove()); tr.insertAdjacentHTML('beforeend', cols(r));
+      ck.checked = !!sl.value && !!M.length; ck.disabled = !sl.value || !M.length; conta();
+    }; });
+    conta();
+    $('#eqi-ok').onclick = async () => {
+      const sel = $$('.eqi-ck:checked').map((c) => R[+c.dataset.i]).filter((r) => !r.amb || r.esc);
+      if (!sel.length) return;
+      const b = $('#eqi-ok'); b.disabled = true; b.textContent = 'Gravando…';
+      const hist = []; let nA = 0, nN = 0;
+      try {
+        const ok = await savePessoas((cur) => {
+          sel.forEach((r) => {
+            const x = r.x, set = setorDe(x.dpto);
+            if (r.p) {
+              const i = cur.findIndex((c) => eqIdDe(c) === r.p.id); if (i < 0) return;
+              const o = cur[i], M = [];
+              if (x.adm && x.adm !== (o.admissao || '')) { M.push(`Admissão: ${eqDia(o.admissao) || '—'} → ${eqDia(x.adm)}`); o.admissao = x.adm; }
+              if (x.cargo && E.key(x.cargo) !== E.key(o.cargo || '')) { M.push(`Cargo: ${o.cargo || '—'} → ${x.cargo}`); o.cargo = x.cargo; }
+              if (set && !o.setor) { M.push('Setor: ' + set); o.setor = set; }
+              if (M.length) { nA++; hist.push([eqIdDe(o), M.join(' · ')]); }
+            } else {
+              const nome = eqiNome(x.nome); if (cur.some((c) => E.key(c.nome) === E.key(nome))) return;
+              let id = eqSlug(nome); if (cur.some((c) => eqIdDe(c) === id)) id += '-' + Date.now().toString(36).slice(-4);
+              const np = { id, nome, funcoes: [] }; if (x.adm) np.admissao = x.adm; if (x.cargo) np.cargo = x.cargo; if (set) np.setor = set;
+              cur.push(np); nN++; hist.push([id, 'Cadastro pela planilha do RH']);
+            }
+          });
+          return cur;
+        }, `Equipe: planilha do RH importada (${arq})`);
+        if (!ok) { b.disabled = false; conta(); return; }
+        for (const [id, t] of hist) await eqHist(id, 'Planilha do RH', t);
+        closeLayer(); toast(`Planilha importada: ${NF.format(nA)} ${nA === 1 ? 'atualizado' : 'atualizados'} · ${NF.format(nN)} ${nN === 1 ? 'novo' : 'novos'}.`);
+        SDMv = -1; await sleep(300); S.stale = false; render();
+      } catch (err) { toast(err && (err.code === 'invalid_argument' || err.code === 'permission_denied') ? 'Só administradores alteram funcionários.' : 'Não foi possível gravar: ' + ((err && (err.message || err.code)) || err), true); b.disabled = false; conta(); }
+    };
+  }
   async function eqHist(id, t, txt) { try { const ts = Date.now(); await DB.db.doc('pes/' + id).merge({ h: { [ts + '-' + TAB]: { t, txt: txt || '', by: DB.me || null, at: ts } } }); } catch (e) { /* histórico não gravado */ } }
   async function eqFotoRecorta(file) {
     const url = URL.createObjectURL(file);
@@ -21297,6 +21462,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   function eqAct(a, key) {
     if (a === 'eq-ver') { if (eqNivel() === 'tudo') eqFicha(key); return true; }
     if (a === 'eq-novo') { eqEditar(null); return true; }
+    if (a === 'eq-imp') { eqImportar(); return true; }   /* v173 */
     if (a === 'eq-ed') { eqEditar(key); return true; }
     if (a === 'eq-foto') { eqEditar(key, true); return true; }
     if (a === 'eq-sit') { eqSituacao(key); return true; }
