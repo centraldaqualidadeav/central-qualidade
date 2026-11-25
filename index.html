@@ -6183,7 +6183,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 178; window.CQ_V = APP_V;
+    const APP_V = 179; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -18125,7 +18125,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const rp = ck.filter(([, , a]) => a.r === 'NC'), nAp = ck.filter(([, , a]) => a.r === 'C').length, nNa = ck.filter(([, , a]) => a.r === 'NA').length;
     const med = rel.itens.filter((it) => it.med);
     const lotes = rel.lotes.map((k) => { const x = findRec('AV', k) || {}, r = res(k), mot = ((rel.lotRes || {})[k] || {}).mot;
-      return `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:2px 0"><button type="button" class="lchip" data-open="AV:${esc(k)}">${esc(lotId(k))}${x.desc ? ` <small>${esc(lotTxt(x))}</small>` : ''}</button>${r ? `<span class="chip ${r === 'Reprovado' ? 'crit' : r === 'Aprovado' ? 'ok' : 'warn'}">${esc(r)}</span>` : ''}${mot ? `<span class="muted" style="font-size:12.5px">${esc(mot)}</span>` : ''}</div>`; }).join('');
+      return `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:2px 0"><button type="button" class="lchip" data-open="AV:${esc(k)}">${esc(lotId(k))}${x.desc ? ` <small>${esc(lotTxt(x))}</small>` : ''}</button>${r ? `<span class="chip ${r === 'Reprovado' ? 'crit' : r === 'Aprovado' ? 'ok' : 'warn'}">${esc(r)}</span>` : ''}${mot ? `<span class="muted" style="font-size:12.5px">${esc(mot)}</span>` : ''}${riRtDepois(rel, k, findRec('AV', k))}</div>`; }).join('');   /* v179: retrabalho na nota concluída */
     const ckTxt = `${rp.length ? `<span class="chip crit">${rp.length} RP</span> ` : ''}<b>${NF.format(nAp)} AP</b>${nNa ? ` · ${NF.format(nNa)} N/A` : ''} <span class="muted">de ${NF.format(ck.length)} respostas</span>`
       + rp.map(([it, sc, a]) => `<div style="margin-top:4px;font-size:12.5px"><b style="color:var(--crit)">RP</b> ${esc(it.t)}${sc === 'nf' ? '' : ' · ' + esc(lotId(sc))}${a.o ? ' — ' + esc(a.o) : ''}</div>`).join('');
     const medTxt = med.length ? rel.lotes.map((k) => `${rel.lotes.length > 1 ? `<span class="mono">${esc(lotId(k))}</span>: ` : ''}${med.map((it) => { const a = riAns(rel, it, k); return `${esc(it.t)} <b>${a.v ? esc(a.v) : '—'}</b>${a.r ? ` <span style="color:${a.r === 'NC' ? 'var(--crit)' : 'var(--ok)'};font-size:12px">${RI_MARCA[a.r]}</span>` : ''}`; }).join(' · ')}`).join('<br>') : '';
@@ -18733,7 +18733,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
       const x = findRec('AV', k), r = riRes(rel, k), o = (rel.lotRes || {})[k] || {}, sug = riSug(rel, k), mot = o.mot != null ? o.mot : (r === 'Reprovado' ? riMotSug(rel, k) : '');
       return `<div class="rires"><div><b class="mono">${esc(lotId(k))}</b><span class="muted">${x ? esc(lotTxt(x)) + (E.filled(x.corrida) ? ' · corrida ' + esc(x.corrida) : '') : ''}</span>${sug && !o.man ? '<small class="muted">sugerido pelo checklist</small>' : ''}</div>
         <div class="seg" role="group">${RI_RES.map((v) => `<button type="button" ${ro ? 'disabled' : ''} data-act="ri-res" data-key="${esc(k)}" data-v="${v}" aria-pressed="${r === v}">${v}</button>`).join('')}</div>
-        <div class="riret"><span>Retrabalho</span><div class="seg" role="group" aria-label="Retrabalho do lote">${cfgL('AV_RETRABALHO').map((v) => `<button type="button" ${ro ? 'disabled' : ''} data-act="ri-ret" data-key="${esc(k)}" data-v="${esc(v)}" aria-pressed="${riRet(rel, k) === v}">${esc(v)}</button>`).join('')}</div></div>
+        <div class="riret"><span>Retrabalho</span><div class="seg" role="group" aria-label="Retrabalho do lote">${cfgL('AV_RETRABALHO').map((v) => `<button type="button" ${ro ? 'disabled' : ''} data-act="ri-ret" data-key="${esc(k)}" data-v="${esc(v)}" aria-pressed="${riRet(rel, k) === v}">${esc(v)}</button>`).join('')}</div>${riRtDepois(rel, k, x)}</div>
         ${r === 'Reprovado' ? `<input class="inp" ${ro ? 'disabled' : ''} data-rimot="${esc(k)}" value="${esc(mot)}" placeholder="motivo da reprovação${riRet(rel, k) === 'Sim' ? '' : ' (vai para a NCF)'}" autocomplete="off">` : ''}
         ${riRet(rel, k) === 'Sim' ? `<div class="rirtb" data-rtlot="${esc(k)}"><b>↻ Mandar para retrabalho · ${r === 'Reprovado' ? 'por defeito' : 'previsto'}<small>${o.rt && o.rt.num ? esc(o.rt.num) : r === 'Reprovado' ? 'em vez da fila da NCF · o lote fica bloqueado até a reinspeção' : 'a compra já sabia · o lote fica bloqueado até a reinspeção'}</small></b>${retCamposHTML('rib' + rel.lotes.indexOf(k), o.rt || {}, ro, 'ri-rtoq', k, true)}</div>` : ''}</div>`;
     }).join('');
@@ -18916,6 +18916,12 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
       form: 'RIR', rodape: 'Aços Vital · Qualidade · Relatório de Inspeção de Recebimento', rodNum: esc(rel.numero || 'Rascunho') }));
   }
   function riAct(a, key, el) {
+    if (a === 'ri-rtdep') {   /* v179 */
+      const rel = RI.ed && RI.ed.rel; if (!rel) return true; const x = findRec('AV', key); if (!x) { toast('Lote não encontrado.', true); return true; }
+      const mot = ((rel.lotRes || {})[key] || {}).mot || '';
+      retDialog(null, { tipo: riRes(rel, key) === 'Reprovado' ? 'def' : 'prev', orig: 'RIR', ref: rel.numero || '', lote: x.id, motivo: mot });
+      return true;
+    }
     if (a === 'ri-sub') { RI.sub = key; RI.fx = key === 'conc' ? 'conc' : 'todas'; render(); return true; }
     if (a === 'ri-ind') { rindNav(key); render(); return true; }   /* v81: indicadores do RIR no Painel */
     if (a === 'ri-fx') { RI.fx = key; RI.sub = key === 'conc' ? 'conc' : 'ag'; render(); return true; }   /* v78 etapa 2 */
@@ -22346,7 +22352,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   function retDialog(key, pre) {
     const o = key ? retGet(key) : null, P = Object.assign({ tipo: 'def', orig: 'AV' }, pre || {}, o || {});
     const lotes = (S.model.av || []).slice(-800).reverse().map((x) => x.id).filter(Boolean);
-    openModal(o ? `Editar ${o.num}` : 'Nova ordem de retrabalho', `${o ? '' : '<p class="muted" style="margin:0">O caminho normal é o inspetor mandar no RIR. Use aqui para NCC, material achado no estoque ou um caso que ficou para depois.</p>'}<div class="fgrid cm-grid">
+    openModal(o ? `Editar ${o.num}` : 'Nova ordem de retrabalho', `${o || (pre && pre.orig === 'RIR') ? '' : '<p class="muted" style="margin:0">O caminho normal é o inspetor mandar no RIR. Use aqui para NCC, material achado no estoque ou um caso que ficou para depois.</p>'}<div class="fgrid cm-grid">
       <label class="field" style="grid-column:1/-1"><span>Tipo <b>*</b></span><div class="seg" id="rt-tp" style="display:grid;grid-template-columns:1fr 1fr">${Object.entries(RET_TIPO).map(([k, l]) => `<button type="button" data-v="${k}" aria-pressed="${P.tipo === k}">${l}</button>`).join('')}</div></label>
       ${sfield('rt-orig', 'Origem', RET_ORIG[P.orig] || 'Avulso', { type: 'select', opts: Object.values(RET_ORIG), blank: false })}${sfield('rt-ref', 'Número da origem', P.ref, { ph: 'ex.: RIR-2026-00152 ou NCC-2026-00008' })}
       ${sfield('rt-lote', 'Lote (AV)', P.lote, { list: lotes, ph: 'ex.: AV-26-00211' })}${sfield('rt-qtd', 'Quantidade', P.qtd, { ph: 'ex.: 22 pç' })}
@@ -22378,6 +22384,13 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
         closeLayer(); toast(`${r.num}: mandado para retrabalho.`); setTimeout(() => retFicha(r.id), 400);
       } catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); b.disabled = false; b.textContent = o ? 'Salvar' : 'Mandar para retrabalho'; }
     };
+  }
+  /* v179: nota já concluída — o lote ainda pode ir para o retrabalho (ex.: viram depois que precisava) */
+  function riRtDepois(rel, k, x) {
+    if (rel.status !== 'finalizado' || !x || !retInsp()) return '';
+    const s0 = lotSt(x);
+    if (s0.rtb) return `<span class="chip warn rtdep"><i>↻</i>em retrabalho · ${esc(s0.rtb.ord || '')}</span>`;
+    return `<button type="button" class="btn small rtdep" data-act="ri-rtdep" data-key="${esc(k)}">↻ Mandar para retrabalho</button>`;
   }
   function retPillsWire(host) {
     if (!host) return;
