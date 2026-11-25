@@ -33,7 +33,7 @@
   --tcr: #707a2c;
   --usi: #497a98;
   --sold: #be5615;
-  --iqf: #986b3e; --rif: #1B3A6B; --rir: #4b6320; --trn: #2f6f7e;
+  --iqf: #986b3e; --rif: #1B3A6B; --rir: #4b6320; --trn: #2f6f7e; --ret: #33428F;
   --ok: #1d7446;
   --warn: #9a6400;
   --serious: #b9500e;
@@ -52,7 +52,7 @@
   :root:not([data-theme="light"]) {
     --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
     --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #6c7772;
-    --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --trn: #5fb2c2; --rir: #8fb35a;
+    --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --trn: #5fb2c2; --rir: #8fb35a; --ret: #6f7fd6;
     --ok: #5dcb8d; --warn: #e3ad48; --serious: #ef8a4c; --crit: #ff6f63; --info: #72a8de; --off: #9aa39f; --focus: #72a8de;
     --n-av: #3fbf8f; --n-serv: #d99a3c; --n-rnc: #ff5a47; --n-rncc: #a07cf0; --n-cal: #3d9bff; --n-sold: #ff7a33; --n-iqf: #d4955a; --n-tcr: #b8c34a; --ct-tubos: #b8c34a; --ct-grades: #4fb3c9; --ct-valvulas: #c3ced6; --n-rif: #5b8ff0; --n-rir: #9fd16a; --n-geral: #8a958f; --n-roxo: #8f63d6; --n-ouro: #e3b85a; --n-azul: #5b9be6;
     --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
@@ -62,7 +62,7 @@
 :root[data-theme="dark"] {
   --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
   --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #6c7772;
-  --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --trn: #5fb2c2; --rir: #8fb35a;
+  --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --trn: #5fb2c2; --rir: #8fb35a; --ret: #6f7fd6;
   --ok: #5dcb8d; --warn: #e3ad48; --serious: #ef8a4c; --crit: #ff6f63; --info: #72a8de; --off: #9aa39f; --focus: #72a8de;
   --n-av: #3fbf8f; --n-serv: #d99a3c; --n-rnc: #ff5a47; --n-rncc: #a07cf0; --n-cal: #3d9bff; --n-sold: #ff7a33; --n-iqf: #d4955a; --n-tcr: #b8c34a; --ct-tubos: #b8c34a; --ct-grades: #4fb3c9; --ct-valvulas: #c3ced6; --n-rif: #5b8ff0; --n-rir: #9fd16a; --n-geral: #8a958f; --n-roxo: #8f63d6; --n-ouro: #e3b85a; --n-azul: #5b9be6;
   --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
@@ -608,6 +608,21 @@ button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 /* ---------- status ---------- */
 .chip { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px 2px 6px; border-radius: 10px; font: 600 11.5px/1.5 var(--f-body); white-space: nowrap; color: var(--k); background: color-mix(in srgb, var(--k) 13%, transparent); }
 .chip i { font-style: normal; font-size: 10px; width: 12px; text-align: center; }
+/* v160: Retrabalho */
+.rtorgs { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 3px; }
+.rtorg { display: inline-flex; align-items: center; font: 600 11px/1.5 var(--f-body); border-radius: 5px; padding: 0 7px; border: 1px solid color-mix(in srgb, var(--k) 35%, transparent); color: var(--k); background: color-mix(in srgb, var(--k) 9%, transparent); white-space: nowrap; }
+.rtorg.rt-rir { --k: var(--rir); } .rtorg.rt-ncc { --k: var(--rncc); } .rtorg.rt-av { --k: var(--ink-3); } .rtorg.rt-prev { --k: var(--ret); } .rtorg.rt-def { --k: var(--crit); }
+.view > .seg.rtsub { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); justify-self: stretch; width: 100%; } .rtsub button { text-align: center; }
+.rtsub small { font: 500 11.5px var(--f-mono); opacity: .75; margin-left: 3px; }
+@media (max-width: 640px) { .rtsub button { padding: 7px 4px; font-size: 12.5px; line-height: 1.25; } .rtsub small { display: block; margin: 2px 0 0; } }
+.rtpills { display: flex; flex-wrap: wrap; gap: 6px; }
+.rtpill { border: 1px solid var(--line-2); border-radius: 999px; padding: 5px 12px; background: var(--surface); color: var(--ink-2); font: 500 13px var(--f-body); cursor: pointer; }
+.rtpill[aria-pressed="true"] { border-color: var(--ret); background: color-mix(in srgb, var(--ret) 12%, var(--surface)); color: var(--ret); font-weight: 600; }
+.rtdl { display: grid; grid-template-columns: 130px 1fr; gap: 6px 12px; margin: 0; font-size: 13.5px; } .rtdl dt { color: var(--ink-3); } .rtdl dd { margin: 0; }
+.rttl { position: relative; padding-left: 24px; } .rttl::before { content: ''; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px; background: var(--line); }
+.rtev { position: relative; margin-bottom: 12px; display: grid; gap: 1px; } .rtev::before { content: ''; position: absolute; left: -22px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 3px var(--surface); }
+.rtev span { color: var(--ink-2); font-size: 12.5px; } .rtev small { color: var(--ink-3); font: 500 11px var(--f-mono); }
+.rtev.fut::before { background: var(--surface); border: 2px dashed var(--ink-3); width: 8px; height: 8px; } .rtev.fut b { color: var(--ink-3); }
 .chip.ok { --k: var(--ok); } .chip.warn { --k: var(--warn); } .chip.serious { --k: var(--serious); } .chip.crit { --k: var(--crit); } .chip.info { --k: var(--info); } .chip.off { --k: var(--off); }
 .mtag { display: inline-flex; align-items: center; gap: 6px; font: 600 11px/1 var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
 .mtag::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--c); }
@@ -2851,6 +2866,7 @@ body.cq-ver .tbhd { top: 36px; }
       <span class="grp">Módulos</span>
       <a href="#av" data-v="av" style="--c:var(--av)"><span class="sw"></span>Lotes (AV)</a>
       <a href="#rir" data-v="rir" title="Relatório de Inspeção de Recebimento" style="--c:var(--rir)"><span class="sw"></span>RIR</a>
+      <a href="#ret" data-v="ret" title="Ordens de retrabalho interno: previsto e por defeito, com reinspeção no RIR" style="--c:var(--ret)"><span class="sw"></span>Retrabalho</a>
       <a href="#serv" data-v="serv" style="--c:var(--serv)"><span class="sw"></span>Serviços</a>
       <a href="#certq" data-v="certq" style="--c:var(--tcr)"><span class="sw"></span>Certificados</a>
       <a href="#rnc" data-v="rnc" title="Registro de Não Conformidade de Fornecedor" style="--c:var(--rnc)"><span class="sw"></span>NCF</a>
@@ -5756,8 +5772,8 @@ re2js/build/index.js:
   const NIVEIS = [['nao', 'Não vê'], ['ver', 'Só consulta'], ['lanca', 'Lança']];
   const SEAL = '<svg class="seal" aria-hidden="true" viewBox="0 0 100 100"><g fill="none" stroke-width="10"><path d="M58.5 13.0A38 38 0 0 1 65.0 15.1" stroke="#e9d89f" stroke-linecap="round"/><path d="M64.4 14.8A38 38 0 0 1 70.4 17.9" stroke="#e6d092"/><path d="M69.9 17.6A38 38 0 0 1 75.3 21.6" stroke="#e3c885"/><path d="M74.8 21.2A38 38 0 0 1 79.5 26.1" stroke="#e0bf78"/><path d="M79.2 25.6A38 38 0 0 1 83.0 31.2" stroke="#dcb76a"/><path d="M82.7 30.7A38 38 0 0 1 85.6 36.7" stroke="#d9af5d"/><path d="M85.4 36.2A38 38 0 0 1 87.3 42.6" stroke="#d4a653"/><path d="M87.2 42.1A38 38 0 0 1 88.0 48.8" stroke="#cd9c4d"/><path d="M88.0 48.2A38 38 0 0 1 87.7 54.9" stroke="#c69147"/><path d="M87.8 54.3A38 38 0 0 1 86.4 60.9" stroke="#be8741"/><path d="M86.6 60.3A38 38 0 0 1 84.2 66.6" stroke="#b77c3b"/><path d="M84.4 66.1A38 38 0 0 1 81.0 71.9" stroke="#af7235"/><path d="M81.4 71.4A38 38 0 0 1 77.1 76.6" stroke="#a86834"/><path d="M77.5 76.2A38 38 0 0 1 72.4 80.7" stroke="#a06141"/><path d="M72.9 80.3A38 38 0 0 1 67.2 83.9" stroke="#985a4e"/><path d="M67.7 83.6A38 38 0 0 1 61.5 86.2" stroke="#8f535a"/><path d="M62.1 86.0A38 38 0 0 1 55.5 87.6" stroke="#874c67"/><path d="M56.1 87.5A38 38 0 0 1 49.4 88.0" stroke="#7f4574"/><path d="M50.0 88.0A38 38 0 0 1 43.3 87.4" stroke="#75417c"/><path d="M43.9 87.5A38 38 0 0 1 37.3 85.8" stroke="#68417f"/><path d="M37.9 86.0A38 38 0 0 1 31.7 83.3" stroke="#5c4183"/><path d="M32.3 83.6A38 38 0 0 1 26.6 79.9" stroke="#4f4287"/><path d="M27.1 80.3A38 38 0 0 1 22.1 75.8" stroke="#43428a"/><path d="M22.5 76.2A38 38 0 0 1 18.3 70.9" stroke="#36428e"/><path d="M18.6 71.4A38 38 0 0 1 15.3 65.6" stroke="#364a96"/><path d="M15.6 66.1A38 38 0 0 1 13.3 59.8" stroke="#3b569f"/><path d="M13.4 60.3A38 38 0 0 1 12.2 53.7" stroke="#4061a8"/><path d="M12.2 54.3A38 38 0 0 1 12.1 47.6" stroke="#446cb1"/><path d="M12.0 48.2A38 38 0 0 1 13.0 41.5" stroke="#4977ba"/><path d="M12.8 42.1A38 38 0 0 1 14.8 35.6" stroke="#4d83c4"/><path d="M14.6 36.2A38 38 0 0 1 17.6 30.1" stroke="#578ac5"/><path d="M17.3 30.7A38 38 0 0 1 21.2 25.2" stroke="#638fc1"/><path d="M20.8 25.6A38 38 0 0 1 25.6 20.9" stroke="#7095bd"/><path d="M25.2 21.2A38 38 0 0 1 30.6 17.3" stroke="#7d9ab9"/><path d="M30.1 17.6A38 38 0 0 1 36.1 14.6" stroke="#899fb5"/><path d="M35.6 14.8A38 38 0 0 1 41.5 13.0" stroke="#96a4b1" stroke-linecap="round"/></g><path d="M35 51 L46 62 L67 39" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   let GATE_LOGO = null;
-  const MODCOLS = ['av', 'rir', 'serv', 'certq', 'rif', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp', 'rnctab'];
-  const MODULOS = [['av', 'Lotes (AV)'], ['rir', 'RIR · Relatório de Inspeção de Recebimento'], ['serv', 'Serviços'], ['certq', 'Certificados'], ['rif', 'RIF · Relatório de Inspeção Final (Usinagem)'], ['rnc', 'NCF · Registro de Não Conformidade de Fornecedor'], ['rncc', 'NCC · Registro de Não Conformidade de Cliente'], ['ins', 'Calibração'], ['sold', 'Soldagem'], ['iqf', 'Avaliação de fornecedores'], ['trello', 'Trello Jurong'], ['acomp', 'Acompanhamento Jurong']];
+  const MODCOLS = ['av', 'rir', 'ret', 'serv', 'certq', 'rif', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp', 'rnctab'];
+  const MODULOS = [['av', 'Lotes (AV)'], ['rir', 'RIR · Relatório de Inspeção de Recebimento'], ['ret', 'Retrabalho'], ['serv', 'Serviços'], ['certq', 'Certificados'], ['rif', 'RIF · Relatório de Inspeção Final (Usinagem)'], ['rnc', 'NCF · Registro de Não Conformidade de Fornecedor'], ['rncc', 'NCC · Registro de Não Conformidade de Cliente'], ['ins', 'Calibração'], ['sold', 'Soldagem'], ['iqf', 'Avaliação de fornecedores'], ['trello', 'Trello Jurong'], ['acomp', 'Acompanhamento Jurong']];
   /* inspetor "só tablet": ferramentas do tablet e o módulo do banco que cada uma usa (NCF pelo tablet só cria a entrada na caixa do tablet) */
   const TAB_FERR = [['rir', 'RIR', 'Inspeção de recebimento', 'checklist da nota recebida e resultado de cada lote'], ['rnc', 'NCF', 'Não conformidade', 'abre a NCF do lote reprovado; a Qualidade numera e acompanha na Central'], ['rif', 'RIF', 'Inspeção final', 'mede, fotografa e assina o RIF da peça']];
   const TAB_COL = { rir: 'rir', rnc: 'rnctab', rif: 'rif' };
@@ -6085,7 +6101,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 159; window.CQ_V = APP_V;
+    const APP_V = 160; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -6597,6 +6613,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     CERTQ: { c: 'var(--tcr)', name: 'Certificados', one: 'Pedido', view: 'certq', col: 'certq' },
     RIF: { c: 'var(--rif)', name: 'RIF', full: 'Relatório de Inspeção Final (Usinagem)', one: 'Pedido', view: 'rif', col: 'rif' },
     RIR: { c: 'var(--rir)', name: 'RIR', full: 'Relatório de Inspeção de Recebimento', one: 'Nota', view: 'rir', col: 'rir' },
+    RET: { c: 'var(--ret)', name: 'Retrabalho', one: 'Ordem', view: 'ret', col: 'ret' },
     GERAL: { c: 'var(--geral)', name: 'Geral', one: '', view: 'painel', col: 'cfg' }
   };
   /* campos gravados no banco (nome) ↔ coluna usada pelo motor de cálculo */
@@ -6739,7 +6756,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     return `<div class="cols"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Gráfico de colunas">${g}${bars}${xl}${vl}</svg></div>`;
   }
   function chartHTML(title, inner, sub) { return `<div class="chart"><h3>${esc(title)}${sub ? `<small>${esc(sub)}</small>` : ''}</h3>${inner}</div>`; }
-  const COLOR_COL = { 'var(--rir)': 'rir', 'var(--av)': 'av', 'var(--serv)': 'serv', 'var(--rnc)': 'rnc', 'var(--rncc)': 'rncc', 'var(--cal)': 'ins' };
+  const COLOR_COL = { 'var(--ret)': 'ret', 'var(--rir)': 'rir', 'var(--av)': 'av', 'var(--serv)': 'serv', 'var(--rnc)': 'rnc', 'var(--rncc)': 'rncc', 'var(--cal)': 'ins' };
   function kpiHTML(k) {
     if (COLOR_COL[k.c] && !vis(COLOR_COL[k.c])) return '';
     const tag = k.go ? 'button' : 'div';
@@ -6839,6 +6856,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     c.RNC_COMPRADORES = comF('comprador', 'RNC_COMPRADORES'); c.CAL_RESPONSAVEIS = comF('resp_cal', 'CAL_RESPONSAVEIS');
     c.AV_RETRABALHO = c.RNC_CORRETIVA = c.RNC_CANCELAMENTO = ['Sim', 'Não'];
     const dflt = { RNCC_MOTIVOS: ['Dimensional', 'Material', 'Documentação / certificado', 'Identificação', 'Embalagem', 'Quantidade', 'Prazo de entrega', 'Avaria no transporte', 'Outro'], RNCC_CANAIS: ['E-mail', 'Telefone', 'Visita', 'WhatsApp', 'Portal do cliente'], RNCC_DISPOSICAO: ['Troca', 'Devolução', 'Retrabalho', 'Crédito / abatimento', 'Aceite sob concessão', 'Sem disposição (improcedente)'] };
+    dflt.RET_TIPOS = ['Corte de pontas', 'Usinagem / faceamento', 'Chanfro', 'Limpeza / decapagem', 'Desempeno', 'Remarcação', 'Outro']; dflt.RET_SETORES = ['Corte', 'Usinagem', 'Raio X'];   /* v160 */
     Object.keys(dflt).forEach((k) => { if (!l[k]) c[k] = dflt[k].slice(); });
     [['RNCC_PRAZO_CONTENCAO', 1], ['RNCC_PRAZO_RESPOSTA', 5], ['RNCC_PRAZO_FINAL', 30], ['RNCC_PRAZO_EFICACIA', 30]].forEach(([k, v]) => { if (typeof c[k] !== 'number') c[k] = v; });
     c.RNCC_GRAVIDADE = ['Baixa', 'Média', 'Alta']; c.RNCC_PROCEDENTE = ['Em análise', 'Sim', 'Não']; c.RNCC_ORIGENS = ['Interna', 'Fornecedor', 'Transporte', 'Cliente (uso/aplicação)']; c.RNCC_EFICACIA = ['Em verificação', 'Eficaz', 'Não eficaz'];
@@ -7094,6 +7112,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       updateChrome();
       if (['sold', 'painel', 'alertas', 'equipe'].includes(S.view)) { const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
     }, (e) => { anotaErro('sold', e);  SD.ready = true; });
+    if (!CQ_ABA && accBanco('ret') !== 'nao') db.collection('ret').onSnapshot((snap) => {   /* v160: Retrabalho */
+      const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RTR.docs = o; RTR.ready = true; RTR.ver++;
+      if (!S.model) return;
+      const dr = $('#layer .drawer'); if (dr && dr.dataset.ret && retGet(dr.dataset.ret)) { retFicha(dr.dataset.ret); return; }
+      if (S.view === 'ret') { const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
+    }, (e) => { anotaErro('ret', e); RTR.ready = true; });
+    else RTR.ready = true;
     db.collection('certq').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); CQF.docs = o; CQF.ready = true; CQF.ver++;
       if (!S.model) return;
@@ -7171,8 +7196,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* acesso por módulo (versão hospedada): 'nao' = não vê, 'ver' = só consulta, 'lanca' = lança */
   /* módulos em teste: a conta dona esconde de todo mundo (inclusive administradores) até liberar.
      Sem escolha gravada, os módulos novos ou reformulados começam escondidos. */
-  const TESTE_MODS = [['rir', 'RIR · Relatório de Inspeção de Recebimento', 'módulo novo: checklist da nota recebida no tablet ou no computador, resultado por lote; reprovado vai para a fila da NCF'], ['ins', 'Calibração', 'reformulada: EMA, histórico, envio ao laboratório, etiqueta QR, cronograma e custos'], ['sold', 'Soldagem', 'módulo novo'], ['iqf', 'Avaliação de fornecedores', 'módulo novo'], ['certq', 'Certificados', 'módulo novo: fila de pedidos do Omie e emissão do certificado de qualidade'], ['rif', 'RIF · Relatório de Inspeção Final (Usinagem)', 'módulo novo: quadro da usinagem e relatório de inspeção final'], ['trein', 'Treinamento', 'módulo novo: simuladores de paquímetro, micrômetro e goniômetro e leitura de certificado de usina (treino, exercício e prova do inspetor gravada)'], ['ramos', 'Ramificações do processo', 'módulo novo: o rio do processo com os lotes reais; abrir as ramificações com os dedos, linha do tempo, mesa de comparação e modo apresentação para a TV (só mostra, não grava nada)']];
-  const TESTE_DEF = { rir: true, ins: true, sold: true, iqf: true, certq: true, rif: true, trein: true, ramos: true, ticker: true };
+  const TESTE_MODS = [['rir', 'RIR · Relatório de Inspeção de Recebimento', 'módulo novo: checklist da nota recebida no tablet ou no computador, resultado por lote; reprovado vai para a fila da NCF'], ['ret', 'Retrabalho', 'módulo novo: ordens de retrabalho interno (previsto e por defeito) com reinspeção'], ['ins', 'Calibração', 'reformulada: EMA, histórico, envio ao laboratório, etiqueta QR, cronograma e custos'], ['sold', 'Soldagem', 'módulo novo'], ['iqf', 'Avaliação de fornecedores', 'módulo novo'], ['certq', 'Certificados', 'módulo novo: fila de pedidos do Omie e emissão do certificado de qualidade'], ['rif', 'RIF · Relatório de Inspeção Final (Usinagem)', 'módulo novo: quadro da usinagem e relatório de inspeção final'], ['trein', 'Treinamento', 'módulo novo: simuladores de paquímetro, micrômetro e goniômetro e leitura de certificado de usina (treino, exercício e prova do inspetor gravada)'], ['ramos', 'Ramificações do processo', 'módulo novo: o rio do processo com os lotes reais; abrir as ramificações com os dedos, linha do tempo, mesa de comparação e modo apresentação para a TV (só mostra, não grava nada)']];
+  const TESTE_DEF = { ret: true, rir: true, ins: true, sold: true, iqf: true, certq: true, rif: true, trein: true, ramos: true, ticker: true };
   const ocultos = () => { const o = ((DB.cfg || {}).ocultos) || {}; return Object.assign({}, TESTE_DEF, o); };
   const emTeste = (col) => !!ocultos()[col];
   window.CQ_EMTESTE = (col) => emTeste(col); /* Usuários avisa quando a ferramenta do tablet ainda está em teste */
@@ -7181,7 +7206,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const ACC = (col) => (!DB.owner && emTeste(col) ? 'nao' : typeof window.CQ_ACCESS === 'function' ? window.CQ_ACCESS(col) : 'lanca');
   const vis = (col) => ACC(col) !== 'nao';
   const cw = (col) => canWrite() && ACC(col) === 'lanca';
-  const VIEW_COL = { av: 'av', rir: 'rir', serv: 'serv', certq: 'certq', rif: 'rif', rnc: 'rnc', rncc: 'rncc', cal: 'ins', sold: 'sold', iqf: 'iqf', trello: 'trello', acomp: 'acomp' };
+  const VIEW_COL = { av: 'av', rir: 'rir', ret: 'ret', serv: 'serv', certq: 'certq', rif: 'rif', rnc: 'rnc', rncc: 'rncc', cal: 'ins', sold: 'sold', iqf: 'iqf', trello: 'trello', acomp: 'acomp' };
   const visMod = (m) => !MOD[m] || m === 'GERAL' || vis(MOD[m].col);
   const anyLanca = () => canWrite() && Object.values(VIEW_COL).some((c) => ACC(c) === 'lanca');
   /* telas gerais (versão hospedada): Painel, Alertas, ... 've'/'nao' · Configurações 'nao'/'ver'/'edita'/'admin' · Exportar tudo 'sim'/'nao' */
@@ -7412,9 +7437,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>',
       cube: '<path d="M12 2.8 4 7.2v9.6l8 4.4 8-4.4V7.2z"/><path d="M4 7.2 12 11.6l8-4.4M12 11.6v9.6"/>',
       ramo: '<circle cx="5" cy="12" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 12h10M7 12c5 0 5-7 10-7M7 12c5 0 5 7 10 7"/>',
+      retr: '<path d="M20 11a8 8 0 0 0-14.5-4.5L3 9"/><path d="M3 4v5h5"/><path d="M4 13a8 8 0 0 0 14.5 4.5L21 15"/><path d="M21 20v-5h-5"/>',
       cap: '<path d="M2 9.5 12 4.5l10 5-10 5z"/><path d="M6 11.5v4.8c3.3 2.3 8.7 2.3 12 0v-4.8M22 9.5v5"/>'
     };
-    const V = { painel: 'grid', alertas: 'bell', rastreio: 'route', equipe: 'org', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rir: 'rirc', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', manual: 'book', mapa3d: 'cube', trein: 'cap', ramos: 'ramo', trello: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
+    const V = { painel: 'grid', alertas: 'bell', rastreio: 'route', equipe: 'org', ret: 'retr', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rir: 'rirc', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', manual: 'book', mapa3d: 'cube', trein: 'cap', ramos: 'ramo', trello: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
     const o = {}; Object.keys(V).forEach((v) => { o[v] = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[V[v]]}</svg>`; });
     return o;
   })();
@@ -7749,6 +7775,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   }
   async function openRecord(mod, key) {
     if (mod === 'SOLD') { soldFicha(key); return; }
+    if (mod === 'RET') { retFicha(key); return; }
     if (mod === 'TREIN') { trFicha(key); return; }
     if (mod === 'IQF') { iqOpen(key); return; }
     if (mod === 'RIR') { riAbrir(key); return; }
@@ -13950,7 +13977,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     </div></div></section>`;
   }
   /* todas as coleções da Central (backup completo e "Começar do zero" usam a mesma lista) */
-  const COLS_TUDO = ['av', 'rir', 'rird', 'rirf', 'serv', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'certq', 'certd', 'rifp', 'rif', 'rifv', 'rifn', 'riff', 'rncin', 'rncinf', 'rncfot', 'rnccf', 'insfot', 'corr', 'nfe', 'pub', 'trello', 'acomp', 'cfg', 'meta', 'log', 'usuarios', 'pes'];
+  const COLS_TUDO = ['av', 'rir', 'rird', 'rirf', 'ret', 'serv', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'certq', 'certd', 'rifp', 'rif', 'rifv', 'rifn', 'riff', 'rncin', 'rncinf', 'rncfot', 'rnccf', 'insfot', 'corr', 'nfe', 'pub', 'trello', 'acomp', 'cfg', 'meta', 'log', 'usuarios', 'pes'];
   const COLS_FOTOS = ['rirf', 'riff', 'rncinf', 'rncfot', 'rnccf', 'insfot'];
   const COLS_NOVAS = ['nfe']; /* coleções novas: enquanto as regras novas do Firebase não forem publicadas, não dá para ler (e não há nada nelas) */
   /* o que o "Começar do zero" apaga: [coleção, descrição, guarda(docId, dados) = true mantém] */
@@ -14097,6 +14124,8 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     ['RNCC_DISPOSICAO', 'Disposição', 'RNCC', 'NCC › Disposição', [['RNCC', 'disp']]],
     ['CAL_FREQUENCIAS', 'Frequência de calibração (meses)', 'INS', 'Calibração › Frequência', [['INS', 'freq']]],
     ['CAL_LABS', 'Laboratórios de calibração', 'INS', 'Calibração › Laboratório', [['INS', 'lab']]],
+    ['RET_TIPOS', 'O que fazer', 'RET', 'Retrabalho › O que fazer', []],
+    ['RET_SETORES', 'Setores que fazem retrabalho', 'RET', 'Retrabalho › Setor (quem faz)', []],
     ['CAL_EMAILS', 'E-mails de aviso', 'INS', 'Destinatários do aviso semanal de calibração (enviado toda segunda-feira pelo script de e-mail, depois de instalado)', []]];
   const CFG_PARAMS_RNCC = [['RNCC_PRAZO_EFICACIA', 'Verificação de eficácia (dias corridos depois da última ação)'], ['RNCC_PRAZO_CONTENCAO', 'Prazo de contenção (dias úteis)'], ['RNCC_PRAZO_RESPOSTA', 'Prazo para responder ao cliente (dias úteis)'], ['RNCC_PRAZO_FINAL', 'Prazo final (dias úteis)']];
   /* valor efetivo do parâmetro (os horários do expediente têm padrão 7h e 17h) */
@@ -14172,6 +14201,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       </div></div></div></section>`)}
       ${bkPode() && vis('certq') ? sec('certq', cqCfgHTML(false)) : ''}
       ${bkPode() && vis('rir') ? sec('rir', riCfgHTML()) : ''}
+      ${sec('ret', `<section class="sec">${band('RET', 'Retrabalho')}<div class="block"><div class="body"><div class="cfg">${lists('RET')}</div></div></div></section>`)}
       ${bkPode() && vis('rif') ? sec('rif', rfCfgHTML()) : ''}
       ${DB.owner ? sec('teste', testeHTML()) : ''}
       ${DB.owner ? sec('zero', resetHTML()) : ''}</div></div></div>`;
@@ -14217,7 +14247,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     wireReset();
   };
   /* ---------- funcionários (cadastro único usado por todos os módulos) ---------- */
-  const CFG_TABS = [['geral', 'Geral'], ['func', 'Funcionários'], ['forn', 'Fornecedores'], ['cli', 'Clientes'], ['tags', 'Tags'], ['saude', 'Saúde do banco'], ['av', 'Lotes (AV)', 'AV'], ['serv', 'Serviços', 'SERV'], ['rnc', 'NCF', 'RNC'], ['rncc', 'NCC', 'RNCC'], ['cal', 'Calibração', 'INS'], ['certq', 'Certificados', 'CERTQ'], ['rir', 'RIR', 'RIR'], ['rif', 'RIF', 'RIF'], ['emails', 'E-mails'], ['modelos', 'Modelos de mensagem'], ['logo', 'Aparência, logo e Drive'], ['aparelho', 'Este aparelho'], ['manual', 'Manual da Qualidade'], ['backup', 'Backup por ano'], ['teste', 'Módulos em teste'], ['zero', 'Começar do zero']];
+  const CFG_TABS = [['geral', 'Geral'], ['func', 'Funcionários'], ['forn', 'Fornecedores'], ['cli', 'Clientes'], ['tags', 'Tags'], ['saude', 'Saúde do banco'], ['av', 'Lotes (AV)', 'AV'], ['serv', 'Serviços', 'SERV'], ['rnc', 'NCF', 'RNC'], ['rncc', 'NCC', 'RNCC'], ['cal', 'Calibração', 'INS'], ['certq', 'Certificados', 'CERTQ'], ['rir', 'RIR', 'RIR'], ['ret', 'Retrabalho', 'RET'], ['rif', 'RIF', 'RIF'], ['emails', 'E-mails'], ['modelos', 'Modelos de mensagem'], ['logo', 'Aparência, logo e Drive'], ['aparelho', 'Este aparelho'], ['manual', 'Manual da Qualidade'], ['backup', 'Backup por ano'], ['teste', 'Módulos em teste'], ['zero', 'Começar do zero']];
   const FUNC_COR = { conferente: 'var(--av)', emissor: 'var(--rnc)', comprador: 'var(--serv)', resp_cal: 'var(--cal)' };
   const FUNC_USO = { conferente: [['AV', 'conf']], emissor: [['RNC', 'emissor']], comprador: [['RNC', 'comprador']], resp_cal: [['INS', 'resp']] };
   const FUNC_ONDE = { conferente: 'Conferido por (lotes)', emissor: 'Emissor (NCF)', comprador: 'Comprador (NCF)', resp_cal: 'Responsável (calibração)' };
@@ -21822,6 +21852,195 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     const mini = (o) => `<span class="iqmini">${[['q', 'Qual.'], ['r', 'Ocorr.'], ['d', 'Doc.'], ['a', 'NCF']].map(([c, l]) => `<span><small>${l}</small><i><b style="width:${o[c] == null ? 0 : o[c]}%;background:${o[c] == null ? 'transparent' : IQC[iqClsV(o[c], cf)]}"></b></i></span>`).join('')}</span>`;
     return `<div class="swall iqwall">${sl.map((o) => { const tr = iqTrend(o); return `<button type="button" class="scard iqcard${o.cls ? ' c' + o.cls : ''}" data-open="IQF:${esc(o.key)}"><span class="iqgw">${iqGauge(o.cls ? o.iqf : null, 124)}<span class="iqlt ${o.cls ? 'c' + o.cls : ''}">${o.cls || '–'}</span></span><span class="scb"><b class="iqn">${esc(o.nome)}</b><span class="iqme">${NF.format(o.lotes)} lote(s) · ${o.rnc} NCF${tr ? ' · ' + tr : ''}${o.cls ? '' : ' · poucos dados'}</span><span class="iqme2">nota mês a mês</span>${iqSpark(o.key, 180, 30)}${mini(o)}</span></button>`; }).join('')}</div>${rows.length > n ? `<div class="formfoot" style="justify-content:center;margin-top:12px"><button class="btn" type="button" data-act="iq-more">Mostrar mais ${NF.format(Math.min(60, rows.length - n))} (de ${NF.format(rows.length - n)} restantes)</button></div>` : ''}`;
   }
+  /* ================= v160: RETRABALHO (módulo próprio) =================
+     Ordens de retrabalho interno. Banco: ret/m-AAAA-MM { items: { <id>: ordem } } (mês da abertura).
+     Tipo: 'prev' (previsto: a compra já sabia; lote aprovado; não conta contra o fornecedor) ou 'def' (por defeito: lote reprovado).
+     Origem: RIR, NCC ou avulso. Situação: afazer → em → pronto (aguarda reinspeção) → enc (encerrada) · canc (cancelada).
+     Reinspeção reprovada: o inspetor decide — retrabalhar de novo (volta para "a fazer", tentativa + 1) ou encerrar e abrir NCF. */
+  const RTR = { docs: {}, ready: false, ver: 0 };
+  const RET_TIPO = { prev: 'Previsto', def: 'Por defeito' };
+  const RET_ORIG = { RIR: 'RIR', NCC: 'NCC', AV: 'Avulso' };
+  const RET_ST = { afazer: 'A fazer', em: 'Em retrabalho', pronto: 'Aguardando reinspeção', enc: 'Encerrada', canc: 'Cancelada' };
+  const RET_EV = { cria: 'Ordem aberta', ini: 'Retrabalho iniciado', pronto: 'Marcado pronto · vai para reinspeção', reap: 'Reinspeção aprovada · lote liberado', rerep: 'Reinspeção reprovada', denovo: 'Volta para retrabalho', ncf: 'Encerrada · vai para NCF', dados: 'Dados alterados', canc: 'Ordem cancelada' };
+  function retAll() {
+    const L = [];
+    Object.keys(RTR.docs).forEach((docId) => {
+      const its = (RTR.docs[docId] || {}).items || {};
+      Object.keys(its).forEach((id) => {
+        const r = its[id]; if (!r || r._del) return;
+        const venc = ['afazer', 'em'].includes(r.st) && r.prazo != null && r.prazo < S.today;
+        const dias = r.prazo != null ? r.prazo - S.today : null;
+        L.push(Object.assign({}, r, { key: id, mod: 'RET', mes: docId.replace(/^m-/, ''), venc, dias, aberta: ['afazer', 'em', 'pronto'].includes(r.st) }));
+      });
+    });
+    return L.sort((a, b) => (b.at || 0) - (a.at || 0));
+  }
+  const retGet = (k) => retAll().find((o) => o.key === k) || null;
+  const retW = () => cw('ret');
+  function retChip(o) {
+    if (o.st === 'canc') return '<span class="chip off"><i>–</i>Cancelada</span>';
+    if (o.st === 'enc') return o.res === 'rep' ? '<span class="chip crit"><i>✕</i>Encerrada · NCF</span>' : '<span class="chip ok"><i>✓</i>Encerrada</span>';
+    if (o.st === 'pronto') return '<span class="chip ok"><i>↻</i>Reinspeção</span>';
+    if (o.venc) return `<span class="chip crit"><i>●</i>Prazo vencido</span>`;
+    if (o.dias != null && o.dias <= 1) return `<span class="chip warn"><i>●</i>${o.dias === 0 ? 'Vence hoje' : 'Vence amanhã'}</span>`;
+    if (o.st === 'em') return '<span class="chip" style="--k:var(--ret)"><i>↻</i>Em retrabalho</span>';
+    return '<span class="chip off"><i>○</i>A fazer</span>';
+  }
+  const retPrazoTxt = (o) => (o.prazo == null ? '—' : o.aberta && o.st !== 'pronto' && o.venc ? `${NF.format(-o.dias)} ${-o.dias === 1 ? 'dia' : 'dias'} atrasado` : fD(o.prazo));
+  const retOrigTag = (o) => `<span class="rtorg rt-${o.orig === 'RIR' ? 'rir' : o.orig === 'NCC' ? 'ncc' : 'av'}">${esc(o.orig === 'AV' ? 'Avulso' : (o.ref ? o.ref : RET_ORIG[o.orig] || ''))}</span><span class="rtorg rt-${o.tipo === 'def' ? 'def' : 'prev'}">${o.tipo === 'def' ? 'defeito' : 'previsto'}</span>`;
+  async function retWrite(o, patch, ev) {
+    const at = Date.now(), hid = at.toString(36) + Math.random().toString(36).slice(2, 5);
+    const p = Object.assign({}, patch, { _u: at, _ub: DB.me || null });
+    if (ev) p.h = { [hid]: clean(Object.assign({ at, by: DB.me || null, nome: myPessoa() || DB.meName || null }, ev)) };
+    await soldWrite('ret/m-' + o.mes, { items: { [o.key]: clean(p) } });
+  }
+  function retNum() {
+    const y = E.ymd(S.today).y; let mx = 0;
+    retAll().forEach((o) => { const m = /^RT-(\d{4})-(\d+)$/.exec(o.num || ''); if (m && +m[1] === y) mx = Math.max(mx, +m[2]); });
+    return `RT-${y}-${String(mx + 1).padStart(4, '0')}`;
+  }
+  VIEWS.ret = (main) => {
+    const A = retAll(), sub = S.retSub || 'abertas', w = retW(), f = S.f.ret || (S.f.ret = {});
+    const ab = A.filter((o) => o.aberta), nAf = A.filter((o) => o.st === 'afazer').length, nEm = A.filter((o) => o.st === 'em').length, nPr = A.filter((o) => o.st === 'pronto').length;
+    const vAf = A.filter((o) => o.st === 'afazer' && o.venc).length, vEm = A.filter((o) => o.st === 'em' && o.venc).length, ym = mesId(Date.now());
+    const encM = A.filter((o) => o.st === 'enc' && o.encAt && mesId(o.encAt) === ym), enc1 = encM.filter((o) => o.res !== 'rep' && !(o.tent > 1)).length;
+    const kpis = `<div class="kpis sm">
+      ${kpiHTML({ l: 'A fazer', v: NF.format(nAf), sub: vAf ? `${NF.format(vAf)} com prazo vencido` : 'esperando o setor começar', c: MOD.RET.c, cls: vAf ? 'crit' : '' })}
+      ${kpiHTML({ l: 'Em retrabalho', v: NF.format(nEm), sub: vEm ? `${NF.format(vEm)} com prazo vencido` : 'nenhuma com prazo vencido', c: MOD.RET.c, cls: vEm ? 'crit' : '' })}
+      ${kpiHTML({ l: 'Aguardando reinspeção', v: NF.format(nPr), sub: 'prontas, esperando o RIR', c: MOD.RET.c })}
+      ${kpiHTML({ l: 'Encerradas no mês', v: NF.format(encM.length), sub: encM.length ? `${NF.format(enc1)} aprovadas na 1ª reinspeção` : '', c: MOD.RET.c, pct: encM.length ? [enc1, encM.length, 'aprovadas na 1ª reinspeção', 'ok'] : null })}
+    </div>`;
+    const SUBS = [['abertas', 'Abertas', ab.length], ['afazer', 'A fazer', nAf], ['em', 'Em retrabalho', nEm], ['pronto', 'Reinspeção', nPr], ['enc', 'Encerradas', A.filter((o) => o.st === 'enc' || o.st === 'canc').length]];
+    const tabs = `<div class="seg calsub rtsub" role="group" aria-label="Ver">${SUBS.map(([k, l, n]) => `<button type="button" data-act="ret-sub" data-key="${k}" aria-pressed="${sub === k}">${l} <small>${NF.format(n)}</small></button>`).join('')}</div>`;
+    const acts = w ? '<button class="btn primary" type="button" data-act="ret-nova">+ Nova ordem</button>' : '';
+    const desc = 'Ordens de retrabalho interno: o que fazer, quem faz e até quando. Quando fica pronto, o lote volta para o RIR (reinspeção). <b>Previsto</b> = a compra já sabia (não conta contra o fornecedor) · <b>por defeito</b> = lote reprovado.';
+    main.innerHTML = `<div class="view">${head('Retrabalho', desc, acts)}${kpis}${tabs}<div class="filters">${ftext('rtf-q', 'Buscar', f.q, 'ordem, lote, RIR, fornecedor, responsável…', 1)}${fsel('rtf-tipo', 'Tipo', ['Previsto', 'Por defeito'], f.tipo)}${fsel('rtf-setor', 'Setor', uniq(cfgL('RET_SETORES').concat(A.map((o) => o.setor).filter(Boolean))), f.setor)}</div><div id="rt-tbl"></div></div>`;
+    const draw = () => {
+      const rows = A.filter((o) => (sub === 'abertas' ? o.aberta : sub === 'enc' ? o.st === 'enc' || o.st === 'canc' : o.st === sub)
+        && (!f.tipo || RET_TIPO[o.tipo] === f.tipo) && eqL(o.setor, f.setor)
+        && txtMatch(f.q, [o.num, o.lote, o.ref, o.forn, o.resp, o.setor, o.oque, o.desc, o.cli]));
+      if (sub !== 'enc') rows.sort((a, b) => (a.st === 'pronto') - (b.st === 'pronto') || (b.venc - a.venc) || ((a.prazo == null ? 1e9 : a.prazo) - (b.prazo == null ? 1e9 : b.prazo)));
+      mountTable($('#rt-tbl'), { id: 'ret-' + sub, rows, total: A.length, noun: 'ordens', open: true, export: 'Retrabalho', cols: [
+        { k: 'st', l: 'Situação', f: retChip, x: (o) => (o.venc && o.aberta && o.st !== 'pronto' ? 'Prazo vencido' : RET_ST[o.st] || '') },
+        { k: 'num', l: 'Ordem · origem', f: (o) => `<span class="mono">${esc(o.num || '')}</span><div class="rtorgs">${retOrigTag(o)}</div>`, x: (o) => `${o.num || ''} · ${o.orig === 'AV' ? 'Avulso' : o.ref || RET_ORIG[o.orig] || ''} · ${RET_TIPO[o.tipo] || ''}` },
+        { k: 'lote', l: 'Lote · o que fazer', f: (o) => `${o.lote ? `<span class="mono" style="color:var(--av)">${esc(o.lote)}</span>` : '<span class="muted">sem lote</span>'}<div class="muted">${esc([o.oque, o.qtd].filter(Boolean).join(' · '))}</div>`, x: (o) => [o.lote, o.oque, o.qtd].filter(Boolean).join(' · ') },
+        { k: 'resp', l: 'Quem faz', f: (o) => `${esc(o.resp || 'sem responsável')}<div class="muted">${esc(o.setor || '')}</div>`, x: (o) => [o.resp, o.setor].filter(Boolean).join(' · ') },
+        { k: 'prazo', l: 'Prazo', f: (o) => (o.st === 'pronto' ? `<span class="muted">pronto em ${o.prontoAt ? new Date(o.prontoAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) : '—'}</span>` : `<span class="mono${o.venc && o.aberta ? '" style="color:var(--crit)' : ''}">${esc(retPrazoTxt(o))}</span>`), x: (o) => (o.prazo != null ? fD(o.prazo) : '') }] });
+    };
+    wireFilters('ret', [['rtf-q', 'q'], ['rtf-tipo', 'tipo'], ['rtf-setor', 'setor']], draw); draw();
+  };
+  /* nova ordem (ou editar a ordem aberta) */
+  function retDialog(key, pre) {
+    const o = key ? retGet(key) : null, c = S.model.cfg, P = Object.assign({ tipo: 'def', orig: 'RIR' }, pre || {}, o || {});
+    const tipos = uniq(cfgL('RET_TIPOS').concat(P.oque ? [P.oque] : [])), setores = uniq(cfgL('RET_SETORES').concat(P.setor ? [P.setor] : []));
+    const lotes = (S.model.av || []).slice(-800).reverse().map((x) => x.id).filter(Boolean);
+    const pill = (v) => `<button type="button" class="rtpill" data-v="${esc(v)}" aria-pressed="${E.key(v) === E.key(P.oque || '')}">${esc(v)}</button>`;
+    openModal(o ? `Editar ${o.num}` : 'Nova ordem de retrabalho', `<div class="fgrid cm-grid">
+      <label class="field" style="grid-column:1/-1"><span>Tipo <b>*</b></span><div class="seg" id="rt-tp" style="display:grid;grid-template-columns:1fr 1fr">${Object.entries(RET_TIPO).map(([k, l]) => `<button type="button" data-v="${k}" aria-pressed="${P.tipo === k}">${l}</button>`).join('')}</div></label>
+      ${sfield('rt-orig', 'Origem', RET_ORIG[P.orig] || 'RIR', { type: 'select', opts: Object.values(RET_ORIG), blank: false })}${sfield('rt-ref', 'Número da origem', P.ref, { ph: 'ex.: RIR-2026-00152 ou NCC-2026-00008' })}
+      ${sfield('rt-lote', 'Lote (AV)', P.lote, { list: lotes, ph: 'ex.: AV-26-00211' })}${sfield('rt-qtd', 'Quantidade', P.qtd, { ph: 'ex.: 22 pç' })}
+      ${sfield('rt-mot', 'Motivo', P.motivo, { span: 1, ph: P.tipo === 'prev' ? 'ex.: tubo comprado maior para cortar no comprimento' : 'ex.: face com riscos acima do permitido' })}
+      <label class="field" style="grid-column:1/-1"><span>O que fazer <b>*</b></span><div class="rtpills" id="rt-oq">${tipos.map(pill).join('')}</div><small class="muted">A lista é editada em Configurações › Retrabalho.</small></label>
+      ${sfield('rt-setor', 'Setor <b>*</b>', P.setor, { type: 'select', opts: setores })}
+      <label class="field"><span>Responsável</span><select id="rt-resp"></select></label>
+      ${sfield('rt-prazo', 'Prazo <b>*</b>', P.prazo, { type: 'date' })}<div></div>
+      ${sfield('rt-instr', 'Instrução', P.instr, { type: 'area', span: 1, ph: 'o que exatamente fazer, medida, norma…' })}</div>
+      <div class="formfoot"><button class="btn primary" type="button" id="rt-ok">${o ? 'Salvar' : 'Abrir ordem'}</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    let tipo = P.tipo, oque = P.oque || '';
+    $$('#rt-tp button').forEach((b) => { b.onclick = () => { tipo = b.dataset.v; $$('#rt-tp button').forEach((x) => x.setAttribute('aria-pressed', x === b)); }; });
+    $$('#rt-oq .rtpill').forEach((b) => { b.onclick = () => { oque = b.dataset.v; $$('#rt-oq .rtpill').forEach((x) => x.setAttribute('aria-pressed', x === b)); }; });
+    const respOpts = () => {
+      const st = sv('rt-setor'), all = eqAll().filter((p) => !p.inativo).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+      const doSetor = all.filter((p) => st && E.key(p.setor || '') === E.key(st)), L = doSetor.length ? doSetor : all, cur = (o && o.resp) || P.resp || '';
+      $('#rt-resp').innerHTML = `<option value="">— sem responsável (o setor decide) —</option>${uniq(L.map((p) => p.nome).concat(cur ? [cur] : [])).map((n) => `<option ${E.key(n) === E.key(cur) ? 'selected' : ''}>${esc(n)}</option>`).join('')}`;
+    };
+    respOpts(); $('#rt-setor').onchange = respOpts;
+    $('#rt-ok').onclick = async () => {
+      const setor = sv('rt-setor'), prazo = sdate('rt-prazo'), origL = sv('rt-orig'), orig = Object.keys(RET_ORIG).find((k) => RET_ORIG[k] === origL) || 'AV';
+      if (!oque || !setor || prazo == null) { toast('Preencha o que fazer, o setor e o prazo.', true); return; }
+      const loteTxt = sv('rt-lote').toUpperCase(), lx = loteTxt ? (S.model.av || []).find((x) => E.key(x.id) === E.key(loteTxt)) : null;
+      const d = { tipo, orig, ref: sv('rt-ref').toUpperCase() || null, lote: loteTxt || null, loteK: lx ? lx.key : null, desc: lx ? lx.desc || null : null, forn: lx ? lx.forn || null : null, qtd: sv('rt-qtd') || null, motivo: sv('rt-mot') || null, oque, setor, resp: sv('rt-resp') || null, prazo, instr: sv('rt-instr') || null };
+      const b = $('#rt-ok'); b.disabled = true; b.textContent = 'Gravando…';
+      try {
+        if (o) {
+          const mud = [['oque', 'o que fazer'], ['setor', 'setor'], ['resp', 'responsável'], ['prazo', 'prazo'], ['tipo', 'tipo'], ['lote', 'lote'], ['qtd', 'quantidade'], ['instr', 'instrução'], ['motivo', 'motivo']].filter(([k]) => String(o[k] ?? '') !== String(d[k] ?? '')).map(([, l]) => l);
+          await retWrite(o, d, mud.length ? { t: 'dados', txt: mud.join(', ') } : null);
+          logEntry('RET', o.key, 'alterado', `${o.num} · ${mud.join(', ') || 'sem mudança'}`, null);
+          closeLayer(); toast(`${o.num} salva.`); setTimeout(() => retFicha(o.key), 300); return;
+        }
+        const at = Date.now(), id = 'R' + at.toString(36).toUpperCase() + Math.random().toString(36).slice(2, 4).toUpperCase(), mes = mesId(at), num = retNum();
+        const nova = clean(Object.assign(d, { num, st: 'afazer', tent: 1, at, by: DB.me || null, criNome: myPessoa() || DB.meName || null, h: { [at.toString(36)]: { t: 'cria', at, by: DB.me || null, nome: myPessoa() || DB.meName || null, txt: `${RET_TIPO[tipo]} · ${oque} · ${setor}` } } }));
+        await soldWrite('ret/m-' + mes, { items: { [id]: nova } });
+        logEntry('RET', id, 'novo', `${num} · ${oque}${d.lote ? ' · ' + d.lote : ''}`, null);
+        closeLayer(); toast(`${num} aberta.`); setTimeout(() => retFicha(id), 400);
+      } catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); b.disabled = false; b.textContent = o ? 'Salvar' : 'Abrir ordem'; }
+    };
+  }
+  async function retFicha(key) {
+    const o = retGet(key); if (!o) return;
+    const H = Object.keys(o.h || {}).map((k) => Object.assign({ id: k }, o.h[k])).sort((a, b) => (a.at || 0) - (b.at || 0));
+    await resolveNames(H.map((h) => h.by));
+    const w = retW(), ins = w || cw('rir'), bt = (a, l, cls) => `<button class="btn${cls ? ' ' + cls : ''}" type="button" data-act="${a}" data-key="${esc(key)}">${l}</button>`;
+    const evCor = (t) => (t === 'cria' ? 'var(--rir)' : t === 'reap' ? 'var(--ok)' : t === 'rerep' || t === 'ncf' || t === 'canc' ? 'var(--crit)' : t === 'dados' ? 'var(--ink-3)' : 'var(--ret)');
+    const tl = `<div class="rttl">${H.map((h) => `<div class="rtev" style="--c:${evCor(h.t)}"><b>${esc(RET_EV[h.t] || h.t)}</b>${h.txt ? `<span>${esc(h.txt)}</span>` : ''}<small>${new Date(h.at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })} · ${esc(h.nome || who(h.by))}</small></div>`).join('')}
+      ${o.aberta ? `${o.st !== 'pronto' ? '<div class="rtev fut"><b>Pronto → reinspeção no RIR</b></div>' : ''}<div class="rtev fut"><b>Encerrada</b><span>reinspeção aprovada; lote liberado</span></div>` : ''}</div>`;
+    const pares = [['Tipo', esc(RET_TIPO[o.tipo] || '')], ['Origem', esc(o.orig === 'AV' ? 'Avulso' : o.ref || RET_ORIG[o.orig] || '')], ['Lote', o.lote ? `<span class="mono">${esc(o.lote)}</span>${o.desc ? ' · ' + esc(o.desc) : ''}` : ''], ['Fornecedor', esc(o.forn || '')], ['Quantidade', esc(o.qtd || '')],
+      ['Motivo', esc(o.motivo || '')], ['O que fazer', `<b>${esc(o.oque || '')}</b>`], ['Instrução', o.instr ? `<span style="white-space:pre-wrap">${esc(o.instr)}</span>` : ''], ['Setor', esc(o.setor || '')], ['Responsável', esc(o.resp || 'sem responsável')],
+      ['Prazo', o.prazo != null ? `${fD(o.prazo)}${o.aberta && o.st !== 'pronto' ? ` <span class="muted">(${o.venc ? retPrazoTxt(o) : o.dias === 0 ? 'hoje' : 'daqui a ' + NF.format(o.dias) + (o.dias === 1 ? ' dia' : ' dias')})</span>` : ''}` : ''], ['Tentativa', o.tent > 1 ? NF.format(o.tent) + 'ª' : '']].filter((p) => p[1]);
+    const acts = [];
+    if (w && o.st === 'afazer') acts.push(bt('ret-ini', 'Iniciar', 'primary'));
+    if (w && ['afazer', 'em'].includes(o.st)) acts.push(bt('ret-pronto', 'Marcar pronto', o.st === 'em' ? 'primary' : ''));
+    if (ins && o.st === 'pronto') acts.push(bt('ret-reins', 'Registrar reinspeção', 'primary'));
+    if (w && o.aberta) acts.push(bt('ret-ed', 'Editar (responsável, prazo…)'), bt('ret-canc', 'Cancelar ordem', 'danger'));
+    const body = `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${retChip(o)}<span class="rtorgs">${retOrigTag(o)}</span></div>
+      ${acts.length ? `<div class="formfoot" style="justify-content:flex-start">${acts.join('')}</div>` : ''}
+      ${o.st === 'pronto' ? '<div class="warnbox">Pronto. Falta a <b>reinspeção</b>: o inspetor confere o lote e registra o resultado.</div>' : ''}
+      <div class="fsec"><dl class="rtdl">${pares.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></div>
+      <div class="fsec"><h3>Caminho da ordem</h3>${tl}</div>`;
+    openDrawer(o.num || 'Ordem de retrabalho', 'Retrabalho · ' + (RET_ST[o.st] || ''), body, MOD.RET.c);
+    const dr = $('#layer .drawer'); if (dr) dr.dataset.ret = key;
+  }
+  async function retPasso(key, st) {
+    const o = retGet(key); if (!o) return;
+    const ev = st === 'em' ? { t: 'ini', txt: o.resp || '' } : { t: 'pronto', txt: '' }, at = Date.now();
+    try {
+      await retWrite(o, st === 'em' ? { st, iniAt: at } : { st, prontoAt: at }, ev);
+      logEntry('RET', key, 'alterado', `${o.num} · ${RET_ST[st]}`, null);
+      toast(st === 'em' ? `${o.num}: retrabalho iniciado.` : `${o.num}: pronto. Agora falta a reinspeção.`); setTimeout(() => retFicha(key), 300);
+    } catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); }
+  }
+  function retReins(key) {
+    const o = retGet(key); if (!o) return;
+    openModal(`Reinspeção · ${o.num}`, `<p style="margin:0">${o.lote ? `Lote <b class="mono">${esc(o.lote)}</b> · ` : ''}${esc(o.oque || '')}. Confira o lote retrabalhado e registre o resultado.</p>
+      <div class="seg" id="rr-res" style="display:grid;grid-template-columns:1fr 1fr"><button type="button" data-v="ap" aria-pressed="false">✓ Aprovado</button><button type="button" data-v="rep" aria-pressed="false">✕ Reprovado</button></div>
+      <div id="rr-rep" hidden><p class="muted" style="margin:0">Reprovado: o que fazer agora?</p><div class="seg" id="rr-dec" style="display:grid;grid-template-columns:1fr 1fr"><button type="button" data-v="denovo" aria-pressed="false">Retrabalhar de novo</button><button type="button" data-v="ncf" aria-pressed="false">Encerrar e abrir NCF</button></div></div>
+      ${sfield('rr-ref', 'RIR da reinspeção', '', { ph: 'ex.: RIR-2026-00160 (opcional)' })}${sfield('rr-obs', 'Observação', '', { type: 'area' })}
+      <div class="formfoot"><button class="btn primary" type="button" id="rr-ok">Registrar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    let res = '', dec = '';
+    $$('#rr-res button').forEach((b) => { b.onclick = () => { res = b.dataset.v; $$('#rr-res button').forEach((x) => x.setAttribute('aria-pressed', x === b)); $('#rr-rep').hidden = res !== 'rep'; }; });
+    $$('#rr-dec button').forEach((b) => { b.onclick = () => { dec = b.dataset.v; $$('#rr-dec button').forEach((x) => x.setAttribute('aria-pressed', x === b)); }; });
+    $('#rr-ok').onclick = async () => {
+      if (!res || (res === 'rep' && !dec)) { toast(res ? 'Escolha: retrabalhar de novo ou encerrar e abrir NCF.' : 'Escolha Aprovado ou Reprovado.', true); return; }
+      const at = Date.now(), ref = sv('rr-ref').toUpperCase(), obs = sv('rr-obs'), txt = [ref, obs].filter(Boolean).join(' · ');
+      const b = $('#rr-ok'); b.disabled = true; b.textContent = 'Gravando…';
+      try {
+        if (res === 'ap') await retWrite(o, { st: 'enc', res: 'ap', encAt: at, reRef: ref || null }, { t: 'reap', txt });
+        else if (dec === 'denovo') await retWrite(o, { st: 'afazer', tent: (o.tent || 1) + 1, prontoAt: null, iniAt: null }, { t: 'rerep', txt: 'retrabalhar de novo' + (txt ? ' · ' + txt : '') });
+        else await retWrite(o, { st: 'enc', res: 'rep', encAt: at, reRef: ref || null }, { t: 'ncf', txt: txt || 'reprovado na reinspeção' });
+        logEntry('RET', key, 'alterado', `${o.num} · reinspeção ${res === 'ap' ? 'aprovada' : 'reprovada'}`, null);
+        closeLayer(); toast(res === 'ap' ? `${o.num} encerrada: lote liberado.` : dec === 'denovo' ? `${o.num} volta para retrabalho.` : `${o.num} encerrada. Abra a NCF do lote.`); setTimeout(() => retFicha(key), 300);
+      } catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); b.disabled = false; b.textContent = 'Registrar'; }
+    };
+  }
+  function retCancel(key) {
+    const o = retGet(key); if (!o) return;
+    openModal(`Cancelar ${o.num}`, `${sfield('rc-mot', 'Motivo do cancelamento <b>*</b>', '', { type: 'area', ph: 'ex.: aberta por engano' })}<div class="formfoot"><button class="btn danger" type="button" id="rc-ok">Cancelar a ordem</button><button class="btn" type="button" data-act="close">Voltar</button></div>`);
+    $('#rc-ok').onclick = async () => {
+      const m = sv('rc-mot'); if (!m) { toast('Escreva o motivo.', true); return; }
+      try { await retWrite(o, { st: 'canc', cancAt: Date.now() }, { t: 'canc', txt: m }); logEntry('RET', key, 'alterado', `${o.num} cancelada: ${m}`, null); closeLayer(); toast(`${o.num} cancelada.`); }
+      catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); }
+    };
+  }
   VIEWS.iqf = (main) => {
     const f = S.f.iqf || (S.f.iqf = {}), per = f.per || '12m', cf = iqCfg(), P = iqPeriod(per);
     const len = P.b - P.a, prevL = iqCalc(P.a - len, P.a), prev = new Map(prevL.map((o) => [o.key, o]));
@@ -24307,7 +24526,7 @@ ${trGuil(W, H, M, B)}
   const tbInsp = () => canWrite() && ACC('rnctab') === 'lanca';
   /* "só tablet": definido em Usuários (versão hospedada); sem essa informação vale a regra antiga (só "NCF pelo tablet" e nenhum outro módulo) */
   const TBC = () => (typeof window.CQ_TABLET === 'function' ? window.CQ_TABLET() || {} : {});
-  const tbOnly = () => { const t = TBC(); if (typeof t.so === 'boolean') return t.so; return tbInsp() && !['av', 'rir', 'serv', 'certq', 'rif', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp'].some((c) => vis(c)); };
+  const tbOnly = () => { const t = TBC(); if (typeof t.so === 'boolean') return t.so; return tbInsp() && !['av', 'rir', 'ret', 'serv', 'certq', 'rif', 'rnc', 'rncc', 'ins', 'sold', 'iqf', 'trello', 'acomp'].some((c) => vis(c)); };
   const tbTool = (k) => { const t = TBC(); return t.tools ? !!t.tools[k] : k === 'rnc'; };
   const INB = { started: false, docs: [], mine: null, busy: false, again: false };
   const RRC = { key: null, cid: null, uid: null };
@@ -24578,6 +24797,13 @@ ${trGuil(W, H, M, B)}
       if (a === 'iq-acao') { iqAcaoDialog(key); return; }
       if (a === 'iq-print') { iqPrint(key); return; }
       if (a === 'iq-cad') { closeLayer(); S.cfgFocus = 'forn:' + key; go('config'); return; }
+      if (a === 'ret-sub') { S.retSub = key; render(); return; }
+      if (a === 'ret-nova') { retDialog(null); return; }
+      if (a === 'ret-ed') { retDialog(key); return; }
+      if (a === 'ret-ini') { retPasso(key, 'em'); return; }
+      if (a === 'ret-pronto') { retPasso(key, 'pronto'); return; }
+      if (a === 'ret-reins') { retReins(key); return; }
+      if (a === 'ret-canc') { retCancel(key); return; }
       if (a === 'sold-sub') { S.soldSub = key; render(); return; }
       if (a === 'sold-novo') { soldWDialog(null); return; }
       if (a === 'sold-ed') { soldWDialog(key); return; }
