@@ -2183,6 +2183,14 @@ table.t tbody tr.sel td { background: color-mix(in srgb, var(--rif) 9%, var(--su
 .pbar { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; margin: 12px 0 4px; }
 .pbar .filters { flex: 1 1 520px; }
 .eqk { margin-top: 2px; }
+/* v175: Equipe — botões e Cartões/Lista/Organograma na linha do título; números na linha do organograma ou dos filtros */
+.vhead.eqvh { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+.vhead.eqvh h1 { grid-column: 1; grid-row: 1; } .vhead.eqvh p { grid-column: 1 / -1; grid-row: 2; }
+.vhead.eqvh .actions { grid-column: 2; grid-row: 1; align-items: center; }
+.vhead.eqvh .actions .seg { margin-left: 8px; }
+@media (max-width: 860px) { .vhead.eqvh { grid-template-columns: minmax(0, 1fr); } .vhead.eqvh .actions { grid-column: 1; grid-row: 2; margin-top: 6px; } .vhead.eqvh p { grid-row: 3; } .vhead.eqvh .actions .seg { margin-left: 0; } }
+.band .eqk { margin: 0 0 0 auto; gap: 16px; color: rgba(255, 255, 255, .85); font-size: 12.5px; align-items: baseline; } .band .eqk b { color: #fff; font-size: 17px; }
+.pbar .eqk { margin: 0 0 0 auto; align-self: end; padding-bottom: 6px; }
 .pcard.inat { opacity: .62; }
 .pcard .chip { font-size: 11px; }
 .eqav { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; overflow: hidden; vertical-align: middle; margin-right: 8px; background: var(--surface-2); border: 1px solid var(--line); font: 700 11px var(--f-display); color: var(--ink-3); }
@@ -6168,7 +6176,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 174; window.CQ_V = APP_V;
+    const APP_V = 175; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -20907,19 +20915,23 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const c = S.model.cfg, f = EQ.f, adm = eqAdm();
     const sel = (id, l, vals, v, todos) => `<label class="field"><span>${l}</span><select id="${id}"><option value="">${todos}</option>${vals.map((x) => `<option ${E.key(x) === E.key(v || '') ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select></label>`;
     const acts = soOrg ? '' : '<button class="btn" type="button" data-act="eq-exp">Exportar (.xlsx)</button>' + (adm ? '<button class="btn" type="button" data-act="eq-imp" title="Planilha do RH com Nome, Admissão, Cargo e Departamento: confere antes de gravar">Importar planilha</button><button class="btn primary" type="button" data-act="eq-novo">+ Novo funcionário</button>' : '');
-    const semFoto = ativos.filter((p) => !eqFoto(p)).length;
     const filtros = modo === 'org' ? '<span></span>' : `<div class="filters"><label class="field"><span>Buscar</span><input id="eq-q" type="search" placeholder="nome, cargo, e-mail…" value="${esc(f.q || '')}" autocomplete="off"></label>
       ${sel('eq-set', 'Setor', eqSetores(), f.set, 'Todos')}${sel('eq-fil', 'Filial', uniq((c.GER_FILIAIS || []).concat(all.map((p) => p.filial).filter(Boolean))), f.fil, 'Todas')}
       <label class="field"><span>Situação</span><select id="eq-sit"><option value="ativos" ${f.sit === 'ativos' ? 'selected' : ''}>Ativos</option><option value="inativos" ${f.sit === 'inativos' ? 'selected' : ''}>Inativos</option><option value="todos" ${f.sit === 'todos' ? 'selected' : ''}>Todos</option></select></label></div>`;
-    main.innerHTML = `<div class="view">${head(soOrg ? 'Organograma' : 'Equipe', soOrg ? 'Quem responde a quem na Aços Vital, montado pelo campo “Responde a” de cada funcionário.' : 'Funcionários da Aços Vital: ficha com foto, cargo, setor e a quem cada um responde. As funções definem em quais listas o nome aparece na Central.' + (adm ? '' : ' Só administradores alteram.'), acts)}
-      <div class="eqk"><span><b>${NF.format(ativos.length)}</b>ativos</span><span><b>${NF.format(uniq(ativos.map((p) => p.setor).filter(Boolean)).length)}</b>${uniq(ativos.map((p) => p.setor).filter(Boolean)).length === 1 ? 'setor' : 'setores'}</span><span><b>${NF.format(uniq(ativos.map((p) => p.filial).filter(Boolean)).length)}</b>${uniq(ativos.map((p) => p.filial).filter(Boolean)).length === 1 ? 'filial' : 'filiais'}</span>${soOrg ? '' : `<span><b>${NF.format(semFoto)}</b>sem foto</span>`}</div>
-      ${soOrg ? '' : `<div class="pbar">${filtros}<span class="seg">${[['cards', 'Cartões'], ['lista', 'Lista'], ['org', 'Organograma']].map(([k, l]) => `<button type="button" data-act="eq-modo" data-key="${k}" aria-pressed="${modo === k}">${l}</button>`).join('')}</span></div>`}
+    /* v175: sem a descrição; botões e Cartões/Lista/Organograma na linha do título; os números vão para a linha do organograma (ou dos filtros) */
+    const seg = soOrg ? '' : `<span class="seg">${[['cards', 'Cartões'], ['lista', 'Lista'], ['org', 'Organograma']].map(([k, l]) => `<button type="button" data-act="eq-modo" data-key="${k}" aria-pressed="${modo === k}">${l}</button>`).join('')}</span>`;
+    main.innerHTML = `<div class="view">${head(soOrg ? 'Organograma' : 'Equipe', soOrg ? 'Quem responde a quem na Aços Vital, montado pelo campo “Responde a” de cada funcionário.' : '', acts + seg).replace('class="vhead"', 'class="vhead eqvh"')}
+      ${soOrg || modo === 'org' ? '' : `<div class="pbar">${filtros}${eqKHTML(ativos, true)}</div>`}
       <div id="eq-body">${!all.length ? '<div class="readonly">Nenhum funcionário cadastrado ainda.' + (adm ? ' Use “+ Novo funcionário”.' : '') + '</div>' : modo === 'org' ? eqOrgHTML(ativos, soOrg) : modo === 'lista' ? eqListaHTML(eqFiltra(all)) : eqCardsHTML(eqFiltra(all))}</div></div>`;
     const redraw = () => { const b = $('#eq-body'); if (b) b.innerHTML = EQ.modo === 'lista' || (!EQ.modo && lsGet('cq-eq-modo', 'cards') === 'lista') ? eqListaHTML(eqFiltra(all)) : eqCardsHTML(eqFiltra(all)); };
     eqConst();
     const q = $('#eq-q'); if (q) q.oninput = () => { f.q = q.value; redraw(); };
     [['eq-set', 'set'], ['eq-fil', 'fil'], ['eq-sit', 'sit']].forEach(([id, k]) => { const el = $('#' + id); if (el) el.onchange = () => { f[k] = el.value; redraw(); }; });
   };
+  function eqKHTML(ativos, foto) {   /* v175: ativos · setores · filiais · sem foto */
+    const ns = uniq(ativos.map((p) => p.setor).filter(Boolean)).length, nf = uniq(ativos.map((p) => p.filial).filter(Boolean)).length;
+    return `<div class="eqk"><span><b>${NF.format(ativos.length)}</b>ativos</span><span><b>${NF.format(ns)}</b>${ns === 1 ? 'setor' : 'setores'}</span><span><b>${NF.format(nf)}</b>${nf === 1 ? 'filial' : 'filiais'}</span>${foto ? `<span><b>${NF.format(ativos.filter((p) => !eqFoto(p)).length)}</b>sem foto</span>` : ''}</div>`;
+  }
   function eqCardsHTML(L) {
     if (!L.length) return '<div class="empty">Ninguém com esses filtros.</div>';
     const grupos = {}; L.forEach((p) => { const s = p.setor || 'Sem setor'; (grupos[s] = grupos[s] || []).push(p); });
@@ -20990,7 +21002,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const nt = all ? `Empresa toda: todos os setores. Toque em “${esc(nome(pri))}” para voltar só para ela.`
       : vis_.length ? `${esc(nome(pri))} + ${esc(vis_.join(' + '))}. Toque de novo no setor para esconder; “Empresa toda” mostra todos.`
       : `Abre sempre assim: só a ${esc(nome(pri))}. Quem está acima (a quem ela responde) aparece apagado, só para mostrar onde ela fica. Toque num setor para ir mostrando.`;
-    return `<div class="orgset"><div class="l1"><span class="t">Mostrar no organograma:</span>${chips}<button type="button" class="osc all" data-act="eq-oall" aria-pressed="${all}">Empresa toda</button></div><div class="nt">${nt}</div></div>`;
+    return `<div class="orgset"><div class="l1">${chips}<button type="button" class="osc all" data-act="eq-oall" aria-pressed="${all}">Empresa toda</button></div><div class="nt">${nt}</div></div>`;
   }
   /* organograma: monta sozinho pelo "Responde a" */
   function eqOrgHTML(L0, soOrg) {
@@ -21036,7 +21048,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
       const semNv = L0.filter((p) => !nv(p)).length;
       if (semNv) confere.push(`${semNv} pessoa(s) sem <b>nível</b> no cadastro: elas aparecem por último entre os colegas. Preencha o nível na ficha (Editar).`);
     }
-    return `<section class="sec">${band('GERAL', 'Organograma', 'monta sozinho pelo campo "Responde a" de cada ficha')}<div class="block"><div class="body" style="display:grid;gap:10px">
+    return `<section class="sec">${band('GERAL', 'Organograma').replace('</h2>', '</h2>' + eqKHTML(L0, !soOrg))}<div class="block"><div class="body" style="display:grid;gap:10px">
       ${pri ? eqOrgBarHTML(L0, pri) : ''}
       <div class="orgleg">${setores.map((s) => `<span style="--k:${eqCor(s)}"><i></i>${esc(s)}</span>`).join('')}</div>
       ${confere.length ? `<div class="warnbox"><b>Conferir a hierarquia:</b><ul style="margin:4px 0 0;padding-left:18px">${confere.map((t) => `<li>${t}</li>`).join('')}</ul></div>` : ''}
