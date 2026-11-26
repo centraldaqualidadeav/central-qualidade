@@ -609,6 +609,26 @@ body.qcmini .qcemop { left: 8px; right: 8px; bottom: 62px; grid-template-columns
 .nxclg { display: grid; gap: 2px; font-size: 12px; color: var(--ink-2); } .nxclg span { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 7px; align-items: center; } .nxclg i { width: 10px; height: 10px; border-radius: 3px; } .nxclg b { color: var(--ink); font-weight: 600; }
 .nxcx .o1 { opacity: .72; } .nxcx .o2 { opacity: .5; } .nxcx .o3 { opacity: .3; }
 button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
+/* v200: ritmo por hora e por semana (balão do 1º número dos Lotes, Certificados e RIR) */
+.nxk[data-rit] .val { text-decoration: underline dotted color-mix(in srgb, var(--c) 60%, transparent); text-underline-offset: 6px; text-decoration-thickness: 2px; }
+.nxrit { position: fixed; z-index: 80; width: 440px; max-width: calc(100vw - 16px); padding: 14px 16px 12px; border-radius: 14px; background: var(--surface); border: 1px solid color-mix(in srgb, var(--k) 55%, var(--line)); box-shadow: 0 18px 44px rgba(0, 0, 0, .45), 0 0 22px color-mix(in srgb, var(--k) 16%, transparent); pointer-events: none; }
+.nxrit::before { content: ''; position: absolute; left: var(--ax, 30px); top: -7px; width: 12px; height: 12px; background: var(--surface); border-left: 1px solid color-mix(in srgb, var(--k) 55%, var(--line)); border-top: 1px solid color-mix(in srgb, var(--k) 55%, var(--line)); transform: rotate(45deg); }
+.nxrit.cima::before { top: auto; bottom: -7px; transform: rotate(225deg); } .nxrit.sobre::before { display: none; }
+.nxrit .rtt { font: 700 14px var(--f-display); letter-spacing: .06em; text-transform: uppercase; color: var(--k); margin-bottom: 8px; }
+.nxrit .rbig { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.nxrit .rbig > div { display: grid; gap: 1px; padding: 9px 11px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--line); }
+.nxrit .rbig b { font: 700 30px/1 var(--f-display); color: var(--ink); }
+.nxrit .rbig span { font-size: 12px; color: var(--ink-2); }
+.nxrit .rbig em { font: 600 11px var(--f-mono); font-style: normal; color: var(--ink-3); } .nxrit .rbig em.up { color: var(--ok); } .nxrit .rbig em.dn { color: var(--serious); }
+.nxrit .rsh { display: flex; justify-content: space-between; gap: 8px; font: 600 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin: 2px 0 4px; }
+.nxrit .rsh span { text-transform: none; letter-spacing: 0; font-weight: 500; color: var(--ink-2); } .nxrit .rnow { font: 600 11px var(--f-mono); font-style: normal; color: var(--n-ouro); }
+.nxrit .rtb { display: flex; align-items: flex-end; gap: 4px; margin-bottom: 8px; }
+.nxrit .rtb .b { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 2px; height: 100%; }
+.nxrit .rtb .b i { display: block; width: 100%; border-radius: 4px 4px 1px 1px; background: color-mix(in srgb, var(--k) 40%, var(--line)); }
+.nxrit .rtb .b.on i { background: var(--k); box-shadow: 0 0 10px color-mix(in srgb, var(--k) 70%, transparent); }
+.nxrit .rtb .b em { font: 600 10.5px var(--f-mono); font-style: normal; color: var(--ink-2); min-height: 13px; }
+.nxrit .rtb .b small { font: 500 9.5px var(--f-mono); color: var(--ink-3); white-space: nowrap; } .nxrit .rtb .b.on small { color: var(--k); font-weight: 700; }
+.nxrit .rtb .b.f i { height: 12px; background: none; border: 1px dashed var(--line-2); } .nxrit .rtb .b.f small { opacity: .55; }
 .nxk::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--c); }
 .nxk .lbl { font: 600 11px/1.25 var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); padding-right: 6px; }
 .nxk .vr { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
@@ -6313,7 +6333,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 199; window.CQ_V = APP_V;
+    const APP_V = 200; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -9026,8 +9046,81 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const d = 'M' + P.map((p) => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L'), [x, y] = P[n - 1];
     return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="${d} L${x.toFixed(1)} ${h} L${P[0][0].toFixed(1)} ${h}Z" style="fill:var(--c)" fill-opacity=".2"/><path d="${d}" fill="none" style="stroke:var(--c)" stroke-width="1.6" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg><i style="left:calc(${(x / w * 100).toFixed(1)}% - 3px);top:${(y - 3).toFixed(1)}px"></i>`;
   }
+  /* v200: RITMO — passar o mouse (ou tocar) no 1º número dos Lotes, Certificados e RIR: no Dia, por hora; no Mês (e trimestre, 12 meses), por dia e por hora.
+     Expediente: segunda a quinta das 7h às 17h, sexta das 7h às 16h (horas de trabalho dos dias úteis do período; hoje conta até agora). */
+  const NX_EXP = { 1: [7, 17], 2: [7, 17], 3: [7, 17], 4: [7, 17], 5: [7, 16] };
+  const NXR = { n: 0, m: {} };
+  function nxRitReg(rit, P) { const id = 'r' + (++NXR.n); NXR.m[id] = Object.assign({ P }, rit); if (NXR.n > 400) { const ks = Object.keys(NXR.m); ks.slice(0, ks.length - 60).forEach((k) => delete NXR.m[k]); } return id; }
+  function nxHorasDia(t, hol) {   /* horas de expediente do dia (hoje: só as que já passaram) */
+    const e = NX_EXP[E.dow(t)]; if (!e || hol.has(t)) return 0;
+    if (t === S.today) { const d = new Date(), h = d.getHours() + d.getMinutes() / 60; return Math.max(0, Math.min(e[1], h) - e[0]); }
+    return t > S.today ? 0 : e[1] - e[0];
+  }
+  function nxRitCalc(R, a, b) {
+    const hol = (S.model || {}).hol || new Set(), fim = Math.min(b, S.today); let horas = 0, dias = 0;
+    for (let t = a; t <= fim; t++) { const h = nxHorasDia(t, hol), e = NX_EXP[E.dow(t)]; horas += h; if (e && !hol.has(t)) dias += h / (e[1] - e[0]); }
+    const n = R.cnt(a, b);
+    return { n, horas, dias, h: horas > 0 ? n / horas : null, d: dias > 0 ? n / dias : null, w: dias > 0 ? n / (dias / 5) : null };
+  }
+  function nxRitHTML(R) {
+    const P = R.P, hol = (S.model || {}).hol || new Set(), nfx = (v) => (v == null ? '—' : v >= 10 ? NF.format(Math.round(v)) : NF1.format(Math.round(v * 10) / 10)), un = R.un[1];
+    const cur = nxRitCalc(R, P.a, P.b), DIAS = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+    const dlt = (a, b, txt) => { if (a == null || b == null) return ''; const d = Math.round((a - b) * 10) / 10; return `<em class="${d > 0 ? 'up' : d < 0 ? 'dn' : 'eq'}">${d > 0 ? '▲ ' : d < 0 ? '▼ ' : '= '}${d ? nfx(Math.abs(d)) + ' ' : ''}${esc(txt)}</em>`; };
+    /* hora a hora: 7h…16h (o que cair fora do expediente entra na primeira ou na última faixa) */
+    const MS = R.ms(P.a, P.b), hs = MS.map((ms) => new Date(ms).getHours()), H0 = Math.min(7, ...hs), H1 = Math.max(17, ...hs.map((h) => h + 1)), SL = []; for (let h = H0; h < H1; h++) SL.push(h);   /* o que foi feito fora do expediente aparece na sua hora */
+    const cntH = SL.map(() => 0); hs.forEach((h) => { cntH[h - H0]++; });
+    const agoraH = new Date().getHours(), eDia = P.m === 'd';
+    const fut = (i) => eDia && P.a === S.today && SL[i] > agoraH;
+    const valH = eDia ? cntH : cntH.map((v) => (cur.dias > 0 ? v / cur.dias : 0));
+    const iP = valH.reduce((m, v, i) => (v > valH[m] ? i : m), 0), temH = valH.some((v) => v > 0);
+    const bars = (vals, labs, hi, isF, tips, mostra, alt) => { const mx = Math.max(1e-9, ...vals.filter((v, i) => !isF(i))); return `<div class="rtb" style="height:${alt}px">${vals.map((v, i) => isF(i) ? `<div class="b f"><i></i><small>${esc(labs[i])}</small></div>`
+      : `<div class="b${i === hi ? ' on' : ''}" title="${esc(tips[i])}"><em>${mostra && v ? esc(nfx(v)) : ''}</em><i style="height:${Math.max(3, Math.round((v / mx) * (alt - 34)))}px"></i><small>${esc(labs[i])}</small></div>`).join('')}</div>`; };
+    const horasH = bars(valH, SL.map((h) => h + 'h'), temH ? iP : -1, fut, SL.map((h, i) => `${h}h às ${h + 1}h: ${eDia ? NF.format(valH[i]) : nfx(valH[i]) + ' por dia, em média'}`), eDia, 104);
+    let big, sem = '';
+    if (eDia) {   /* Dia: só por hora */
+      const d = P.a, m0 = E.serialFromYMD(E.ymd(d).y, E.ymd(d).m, 1), mes = nxRitCalc(R, m0, d - 1);
+      big = `<div><b>${nfx(cur.h)}</b><span>${un} por hora ${P.cur ? 'hoje' : 'no dia'}</span>${mes.h != null ? dlt(cur.h, mes.h, 'vs média do mês') : ''}</div>
+        <div><b>${temH ? SL[iP] + 'h' : '—'}</b><span>hora mais forte${temH ? ` · ${NF.format(valH[iP])} ${valH[iP] === 1 ? R.un[0] : un}` : ''}</span>${P.cur ? `<em class="eq">até ${hhmm(Date.now())}</em>` : ''}</div>`;
+    } else {   /* Mês, trimestre e 12 meses: por dia e por hora */
+      const pv = P.prev ? nxRitCalc(R, P.prev.a, P.prev.b) : null, cmp = String(P.cmp || '');
+      big = `<div><b>${nfx(cur.d)}</b><span>${un} por dia</span>${pv ? dlt(cur.d, pv.d, cmp) : ''}</div>
+        <div><b>${nfx(cur.h)}</b><span>${un} por hora</span>${pv ? dlt(cur.h, pv.h, cmp) : ''}</div>`;
+      let B = [];
+      if (P.m === 'm') { const fimP = P.bFull || P.b; for (let t = P.a; t <= fimP; t++) if (riUtil(t, hol)) B.push({ a: t, b: t, l: String(E.ymd(t).d) }); }
+      else if (P.m === 'a') B = (P.hist || []).map((h) => ({ a: h.a, b: h.b, l: h.l || '' }));
+      else { for (let k = 0; k < 3; k++) { const y = E.ymd(P.a), mm = y.m + k, r = nxMes(y.y, mm); B.push({ a: r.a, b: r.b, l: MES3[mm - 1] }); } }
+      const bv = B.map((x) => (x.a > S.today ? 0 : R.cnt(x.a, Math.min(x.b, S.today)))), isF = (i) => B[i].a > S.today;
+      const iW = bv.reduce((m, v, i) => (!isF(i) && v > bv[m] ? i : m), 0), tem = bv.some((v) => v);
+      sem = `<div class="rsh">${P.m === 'm' ? 'Dia a dia' : 'Por mês'}<span>${tem ? (P.m === 'm' ? 'dia mais forte: ' + esc(E.fmtDate(B[iW].a)) + ' · ' + NF.format(bv[iW]) : 'mês mais forte: ' + esc(B[iW].l)) : ''}</span></div>`
+        + bars(bv, B.map((x) => x.l), tem ? iW : -1, isF, B.map((x, i) => (P.m === 'm' ? `${DIAS[E.dow(x.a)]}, ${E.fmtDate(x.a)}` : `${E.fmtDate(x.a)} a ${E.fmtDate(x.b)}`) + `: ${NF.format(bv[i])}`), B.length <= 12, B.length <= 12 ? 84 : 74);
+    }
+    const pico = temH ? `pico ${SL[iP]}h às ${SL[iP] + 1}h` : '';
+    return `<div class="rtt">Ritmo · ${esc(P.label)}</div><div class="rbig">${big}</div>
+      ${sem}<div class="rsh">${eDia ? 'Hora a hora' : 'Por hora do dia · média'}<span>${eDia && P.cur ? `<i class="rnow">agora ${hhmm(Date.now())}</i>` : esc(pico)}</span></div>${horasH}`;
+  }
+  function nxRitShow(el) {
+    const R = NXR.m[el.getAttribute('data-rit')]; if (!R) return;
+    let b = document.getElementById('nxrit'); if (!b) { b = document.createElement('div'); b.id = 'nxrit'; b.className = 'nxrit'; b.setAttribute('role', 'tooltip'); document.body.appendChild(b); }
+    try { b.innerHTML = nxRitHTML(R); } catch (e) { return; }
+    b.style.setProperty('--k', R.cor); b.hidden = false; NXR.el = el;
+    const r = el.getBoundingClientRect(), w = b.offsetWidth, h = b.offsetHeight, vw = document.documentElement.clientWidth;
+    let x = Math.max(8, Math.min(r.left + 20, vw - w - 8)), y = r.bottom + 10; b.classList.toggle('cima', y + h > innerHeight - 8 && r.top - h - 10 > 8); if (b.classList.contains('cima')) y = r.top - h - 10; else if (y + h > innerHeight - 8) { y = Math.max(8, innerHeight - h - 8); b.classList.add('sobre'); } else b.classList.remove('sobre');
+    b.style.left = x + 'px'; b.style.top = Math.max(8, y) + 'px'; b.style.setProperty('--ax', Math.max(14, Math.min(w - 28, r.left + 40 - x)) + 'px');
+  }
+  function nxRitHide() { const b = document.getElementById('nxrit'); if (b) b.hidden = true; NXR.el = null; }
+  document.addEventListener('mouseover', (e) => { if (NXR.pt === 'touch') return; const el = e.target.closest && e.target.closest('[data-rit]'); if (el && el !== NXR.el) { clearTimeout(NXR.t); NXR.t = setTimeout(() => nxRitShow(el), 220); } else if (!el && NXR.el) { clearTimeout(NXR.t); nxRitHide(); } else if (!el) clearTimeout(NXR.t); });
+  document.addEventListener('pointerdown', (e) => { NXR.pt = e.pointerType; }, true);
+  document.addEventListener('click', (e) => {   /* no tablet: o 1º toque mostra o ritmo; o 2º abre a lista, como antes */
+    const el = e.target.closest && e.target.closest('[data-rit]');
+    if (NXR.pt === 'touch' && el && NXR.el !== el) { e.preventDefault(); e.stopPropagation(); nxRitShow(el); return; }
+    if (!el && NXR.el) nxRitHide();
+  }, true);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Tab') NXR.pt = 'kb'; }, true);
+  document.addEventListener('focusin', (e) => { if (NXR.pt !== 'kb') return; const el = e.target.closest && e.target.closest('[data-rit]'); if (el) nxRitShow(el); else if (NXR.el) nxRitHide(); });
+  addEventListener('scroll', () => { if (NXR.el) nxRitHide(); }, { passive: true, capture: true });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && NXR.el) nxRitHide(); });
   function nxKpi(k, P) {
-    const tag = k.go ? 'button' : 'div', go = k.go ? ` type="button" data-go="${esc(JSON.stringify(k.go))}"` : '';
+    const tag = k.go ? 'button' : 'div', go = (k.go ? ` type="button" data-go="${esc(JSON.stringify(k.go))}"` : '') + (k.rit ? ` data-rit="${nxRitReg(k.rit, P)}"` : '');
     const dl = k.dl ? `<span class="nxdl ${k.dl[1]}">${esc(k.dl[0])}</span>` : '';
     return `<${tag} class="nxk ${k.cls || ''}"${go}><span class="lbl">${esc(k.l)}</span><div class="vr"><b class="val">${k.v}</b>${dl}</div><span class="sub">${esc(k.sub || '')}</span>${k.extra || ''}${k.pct ? pctRing(k.pct) : ''}<div class="nxsp">${k.serie ? nxSpark(k.serie) : ''}<span>${esc(P.spl)}</span></div></${tag}>`;
   }
@@ -9511,6 +9604,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     /* dia em que o lote foi inspecionado (RIR concluído) */
     const dInsp = new Map(); (rirOn() && RI.ready ? riCards() : []).filter((c) => c.st === 'f' && c.fin).forEach((c) => Object.keys(c.res || {}).forEach((k) => { const d = msSer(c.fin); if (!dInsp.has(k) || d < dInsp.get(k)) dInsp.set(k, d); }));
     const ab = (a, b) => R.filter((x) => dentro(x.data, a, b)), cc = (a, b) => R.filter((x) => dentro(dInsp.get(x.key), a, b));
+    const avRit = { cor: 'var(--n-av)', un: ['lote', 'lotes'], cnt: (a, b) => ab(a, b).length, ms: (a, b) => ab(a, b).map((x) => ((DB.meta.AV || {})[x.key] || {})._c).filter(Boolean) };   /* v200: ritmo por hora e por semana (a hora vem de quando o lote foi lançado na Central) */
     const fornOpc = new Map(); TODOS.forEach((x) => { const k = E.key(x.forn || ''); if (k && !fornOpc.has(k)) fornOpc.set(k, String(x.forn).trim()); });
     const filtro = `<select id="nx-av-f" class="inp" aria-label="Fornecedor"><option value="">Fornecedor: todos</option>${Array.from(fornOpc).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR')).map(([k, n]) => `<option value="${esc(k)}"${k === fk ? ' selected' : ''}>${esc(n)}</option>`).join('')}</select>`;
     const sec = (corpo) => `<section class="sec nxsec" id="nx-av" style="--c:var(--n-av)">${band('AV', 'Indicadores de lotes (AV)')}<div class="block"><div class="body">${nxBarra('av', st, P, filtro, dia)}${corpo}${avFiHTML()}${avOpHTML()}</div></div></section>`;   /* v143: + Desempenho por quem lança; v145: + por filial e top 10 fornecedores */
@@ -9753,7 +9847,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
         ser: ['Lançamentos', 'Alterações', 'Outras'], tabCab: ['Pessoa', 'Lançou', 'Outras', 'Ações', 'Ritmo', 'Parte'],
         cards: ({ d, LG, X, mAc, pronto, hist6, media, atrD }) => { const a = ab(d, d), i = cc(d, d), r = repDia(d), mA = media(P.ant.map((t) => ab(t, t).length)), mI = media(P.ant.map((t) => cc(t, t).length));
           return [
-            { l: P.cur ? 'Recebidos hoje' : 'Recebidos no dia', v: NF.format(a.length), sub: `${NF.format(nNotas(a))} nota(s) fiscal(is)`, dl: nxDl(a.length, mA, P, 'sobe'), serie: hist6.map((t) => ab(t, t).length), go: goA({ de: E.isoDate(d), ate: E.isoDate(d) }) },
+            { rit: avRit, l: P.cur ? 'Recebidos hoje' : 'Recebidos no dia', v: NF.format(a.length), sub: `${NF.format(nNotas(a))} nota(s) fiscal(is)`, dl: nxDl(a.length, mA, P, 'sobe'), serie: hist6.map((t) => ab(t, t).length), go: goA({ de: E.isoDate(d), ate: E.isoDate(d) }) },
             { l: P.cur ? 'Inspecionados hoje' : 'Inspecionados no dia', v: NF.format(i.length), sub: 'lotes com RIR concluído', dl: nxDl(i.length, mI, P, 'sobe'), serie: hist6.map((t) => cc(t, t).length), pct: i.length ? [i.filter(apr).length, i.length, 'aprovados', 'ok'] : null, cls: i.length ? 'ok' : '' },
             { l: 'Ações no dia', v: LG ? NF.format(X.length) : '…', sub: 'lançamentos e alterações de lotes', dl: LG && mAc != null ? nxDl(X.length, mAc, P, 'sobe') : null, serie: pronto ? P.ant.slice(0, 5).reverse().map((t) => (EH.docs[nxD8(t)] || []).filter((x) => x.mod === 'AV').length).concat([X.length]) : null },
             { l: P.cur ? 'Reprovados hoje' : 'Reprovados no dia', v: NF.format(r.length), sub: 'no RIR (inclui concessão)', serie: hist6.map((t) => repDia(t).length), pct: r.length && i.length ? [r.length, i.length, 'dos inspecionados', 'crit'] : null, cls: r.length ? 'crit' : '' },
@@ -9766,7 +9860,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const tx = taxa(A), txp = taxa(Ap), semC = A.filter(semCert).length, semCp = Ap.filter(semCert).length, nC = A.filter(conc).length, nCp = Ap.filter(conc).length;
     const ret = (L) => L.filter((x) => E.low(avRet(x)) === 'sim').length, nRet = ret(A), nRep = A.filter(rep).length;
     const ks = [
-      { l: 'Lotes ' + quando, v: NF.format(A.length), sub: `${NF.format(nNotas(A))} notas fiscais · ${esc(P.label)}`, dl: nxDl(A.length, Ap.length, P, 'sobe', NF.format), serie: serie((a, b) => ab(a, b).length), pct: A.length ? [iR(A).length, A.length, 'com resultado', 'ok'] : null, go: goA({ de: E.isoDate(P.a), ate: E.isoDate(P.b) }) },
+      { rit: avRit, l: 'Lotes ' + quando, v: NF.format(A.length), sub: `${NF.format(nNotas(A))} notas fiscais · ${esc(P.label)}`, dl: nxDl(A.length, Ap.length, P, 'sobe', NF.format), serie: serie((a, b) => ab(a, b).length), pct: A.length ? [iR(A).length, A.length, 'com resultado', 'ok'] : null, go: goA({ de: E.isoDate(P.a), ate: E.isoDate(P.b) }) },
       { l: 'Aprovação na inspeção', v: tx == null ? '—' : NF1.format(Math.round(tx * 10) / 10) + '%', sub: `${NF.format(nRep + nC)} reprovado(s) de ${NF.format(iR(A).length)}`, dl: tx != null && txp != null ? nxDl(tx, txp, P, 'sobe', (v) => NF1.format(v) + ' p.p.') : null, serie: serie((a, b) => taxa(ab(a, b)) || 0), cls: tx != null && tx >= 95 ? 'ok' : tx != null ? 'warn' : '', go: nRep ? goA({ insp: 'Reprovado' }) : null },
       { l: 'Sem certificado', v: NF.format(semC), sub: 'certificado "*" ou vazio', dl: nxDl(semC, semCp, P, 'desce', NF.format), serie: serie((a, b) => ab(a, b).filter(semCert).length), pct: A.length && semC ? [semC, A.length, 'dos lotes', 'warn'] : null, cls: semC ? 'warn' : '', go: goA({ cert: 'sem' }) },
       { l: 'Sob concessão', v: NF.format(nC), sub: 'reprovados liberados com autorização', dl: nxDl(nC, nCp, P, 'desce', NF.format), serie: serie((a, b) => ab(a, b).filter(conc).length), pct: nC ? [nC, nC + nRep, 'dos reprovados', 'warn'] : null, go: goA({ insp: CONC }) },
@@ -10110,6 +10204,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const sec = (corpo) => `<section class="sec nxsec" id="nx-rir" style="--c:var(--n-rir)">${band('RIR', 'Indicadores de inspeção de recebimento (RIR)')}<div class="block"><div class="body">${nxBarra('rir', st, P, filtro, true)}${corpo}</div></div></section>`;
     const go = { v: 'rir' };
     const CF = C.filter(okI), dFin = (c) => msSer(c.fin), ab = (a, b) => CF.filter((c) => dFin(c) >= a && dFin(c) <= b);
+    const riRit = { cor: 'var(--n-rir)', un: ['RIR', 'RIR'], cnt: (a, b) => ab(a, b).length, ms: (a, b) => ab(a, b).map((c) => c.fin) };   /* v200 */
     const lots = (L) => L.reduce((n, c) => n + Object.keys(c.res || {}).length, 0), reps = (L) => L.reduce((n, c) => n + Object.values(c.res || {}).filter((r) => r === 'Reprovado').length, 0);
     const tempos = (L) => { const T = []; L.forEach((c) => (c.lotes || []).forEach((k) => { const x = findRec('AV', k); if (x && x.data != null) T.push(Math.max(0, E.workdaysBetween(fl(x.data), dFin(c), hol))); })); return T; };
     const med = (T) => (T.length ? Math.round((T.reduce((a, b) => a + b, 0) / T.length) * 10) / 10 : null);
@@ -10237,7 +10332,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
       const mR = media(P.ant.map((t) => ab(t, t).length)), mRp = media(P.ant.map((t) => reps(ab(t, t)))), rasF = ras.filter(okI);
       const porQ = Array.from(rasF.reduce((m, c) => m.set((c.nome || '—').split(' ')[0], (m.get((c.nome || '—').split(' ')[0]) || 0) + 1), new Map()));
       const ks = [
-        { l: P.cur ? 'RIR hoje' : 'RIR no dia', v: NF.format(CD.length), sub: `${NF.format(nL)} ${nL === 1 ? 'lote inspecionado' : 'lotes inspecionados'}`, dl: nxDl(CD.length, mR, P, 'sobe'), serie: hist6.map((t) => ab(t, t).length), pct: nL ? [nL - nR, nL, 'lotes aprovados', 'ok'] : null, go },
+        { rit: riRit, l: P.cur ? 'RIR hoje' : 'RIR no dia', v: NF.format(CD.length), sub: `${NF.format(nL)} ${nL === 1 ? 'lote inspecionado' : 'lotes inspecionados'}`, dl: nxDl(CD.length, mR, P, 'sobe'), serie: hist6.map((t) => ab(t, t).length), pct: nL ? [nL - nR, nL, 'lotes aprovados', 'ok'] : null, go },
         { l: P.cur ? 'Reprovados hoje' : 'Reprovados no dia', v: NF.format(nR), sub: nL ? `${nR === 1 ? 'lote' : 'lotes'} de ${NF.format(nL)} inspecionados` : 'nenhum lote inspecionado', dl: nxDl(nR, mRp, P, 'desce'), serie: hist6.map((t) => reps(ab(t, t))), pct: nL && nR ? [nR, nL, 'reprovação', 'warn'] : null, cls: nR ? 'warn' : '', go },
         { l: 'Tempo até o RIR', v: tM == null ? '—' : NF1.format(tM) + ' d', sub: 'dias úteis, da entrada ao RIR', serie: hist6.map((t) => med(tempos(ab(t, t))) || 0), pct: T.length ? [nOk, T.length, 'em até 2 dias', nOk === T.length ? 'ok' : 'warn'] : null, go },
         P.cur ? kAgu : { l: 'Aguardando no dia', v: NF.format(aguEm(d).n), sub: 'notas sem RIR no fim do dia', serie: hist6.map((t) => aguEm(t).n), go },
@@ -10265,7 +10360,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const quando = nxQuando(P), qual = { m: 'no mês', t: 'no trimestre', a: 'em 12 meses' }[P.m];
     const nL = lots(A), nR = reps(A), T = tempos(A), tM = med(T), nOk = T.filter((v) => v <= RI_UTEIS).length, tMp = med(tempos(Ap));
     const ks = [
-      { l: 'RIR ' + qual, v: NF.format(A.length), sub: `${NF.format(nL)} ${nL === 1 ? 'lote inspecionado' : 'lotes inspecionados'}`, dl: nxDl(A.length, Ap.length, P, 'sobe', NF.format), serie: serie((L) => L.length), pct: nL ? [nL - nR, nL, 'lotes aprovados', 'ok'] : null, go },
+      { rit: riRit, l: 'RIR ' + qual, v: NF.format(A.length), sub: `${NF.format(nL)} ${nL === 1 ? 'lote inspecionado' : 'lotes inspecionados'}`, dl: nxDl(A.length, Ap.length, P, 'sobe', NF.format), serie: serie((L) => L.length), pct: nL ? [nL - nR, nL, 'lotes aprovados', 'ok'] : null, go },
       { l: 'Reprovados ' + qual, v: NF.format(nR), sub: nL ? `${nR === 1 ? 'lote' : 'lotes'} de ${NF.format(nL)} inspecionados` : 'nenhum lote inspecionado', dl: nxDl(nR, reps(Ap), P, 'desce', NF.format), serie: serie(reps), pct: nL && nR ? [nR, nL, 'reprovação', 'warn'] : null, cls: nR ? 'warn' : '', go },
       { l: 'Tempo até o RIR', v: tM == null ? '—' : NF1.format(tM) + ' d', sub: 'dias úteis, da entrada ao RIR', dl: tM != null && tMp != null ? nxDl(tM, tMp, P, 'desce', (v) => NF1.format(v) + ' d') : null, serie: serie((L) => med(tempos(L)) || 0), pct: T.length ? [nOk, T.length, 'em até 2 dias', nOk === T.length ? 'ok' : 'warn'] : null, go },
       kAgu,
@@ -10532,6 +10627,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const filtro = `<select id="nx-cq-f" class="inp" aria-label="Cliente"><option value="">Cliente: todos</option>${Array.from(cliOpc).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR')).map(([k, n]) => `<option value="${esc(k)}"${k === fk ? ' selected' : ''}>${esc(n)}</option>`).join('')}</select>`;
     const sec = (corpo) => `<section class="sec nxsec" id="nx-cq" style="--c:var(--n-tcr)">${band('CERTQ', 'Indicadores de certificados', 'só dono e administradores')}<div class="block"><div class="body">${nxBarra('cq', st, P, filtro, true)}${corpo}</div></div></section>`;
     const CC = L.filter((c) => c.st === 'c' && c.conc && c.conc.at), dC = (c) => cqSer(c.conc.at), ab = (a, b) => CC.filter((c) => dC(c) >= a && dC(c) <= b);
+    const cqRit = { cor: 'var(--n-tcr)', un: ['certificado', 'certificados'], cnt: (a, b) => ab(a, b).length, ms: (a, b) => ab(a, b).map((c) => c.conc.at) };   /* v200 */
     const itens = (A) => A.reduce((s, c) => s + (c.conc.itens || 0), 0);
     const tipo = (c) => (c.conc.avulso || !c.fat ? 'v' : cqNoPrazo(c) ? 'a' : 'f');
     const tempo = (A) => { const T = A.filter((c) => !c.conc.avulso && c.fat).map(cqDias); return T.length ? { m: Math.round(T.reduce((s, v) => s + v, 0) / T.length * 10) / 10, ok: A.filter((c) => !c.conc.avulso && c.fat && cqNoPrazo(c)).length, n: T.length } : null; };
@@ -10702,7 +10798,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
       const d = P.a, CD = ab(d, d), hist6 = P.hist.map((h) => h.a), mE = media(P.ant.map((t) => ab(t, t).length)), tD = tempo(CD);
       const porQ = Array.from(pegos.reduce((m, c) => m.set(String(c.porNome || '—').split(' ')[0], (m.get(String(c.porNome || '—').split(' ')[0]) || 0) + 1), new Map()));
       const ks = [
-        { l: P.cur ? 'Emitidos hoje' : 'Emitidos no dia', v: NF.format(CD.length), sub: `${NF.format(itens(CD))} itens`, dl: nxDl(CD.length, mE, P, 'sobe'), serie: hist6.map((t) => ab(t, t).length), pct: tD ? [tD.ok, tD.n, 'no prazo', tD.ok === tD.n ? 'ok' : 'warn'] : null, go },
+        { rit: cqRit, l: P.cur ? 'Emitidos hoje' : 'Emitidos no dia', v: NF.format(CD.length), sub: `${NF.format(itens(CD))} itens`, dl: nxDl(CD.length, mE, P, 'sobe'), serie: hist6.map((t) => ab(t, t).length), pct: tD ? [tD.ok, tD.n, 'no prazo', tD.ok === tD.n ? 'ok' : 'warn'] : null, go },
         { l: 'Itens no dia', v: NF.format(itens(CD)), sub: 'itens certificados', dl: nxDl(itens(CD), media(P.ant.map((t) => itens(ab(t, t)))), P, 'sobe'), serie: hist6.map((t) => itens(ab(t, t))), go },
         kFila, kAtr,
         { l: 'Pegos · agora', v: NF.format(pegos.length), sub: porQ.length ? porQ.map(([n, q]) => `${q} com ${n}`).join(' · ') : 'ninguém com pedido', go }];
@@ -10725,7 +10821,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     /* v113: Data Book = pedido com o documento completo salvo (conta a partir da v113) */
     const dbAb = (a, b) => L.filter((c) => c.db && c.db.at && cqSer(c.db.at) >= a && cqSer(c.db.at) <= b);
     const ks = [
-      { l: 'Emitidos ' + qual, v: NF.format(A.length), sub: `${NF.format(new Set(A.map((c) => cqDig(c.pv))).size)} pedidos`, dl: nxDl(A.length, Ap.length, P, 'sobe', NF.format), serie: H.map((h) => ab(h.a, h.b).length), go },
+      { rit: cqRit, l: 'Emitidos ' + qual, v: NF.format(A.length), sub: `${NF.format(new Set(A.map((c) => cqDig(c.pv))).size)} pedidos`, dl: nxDl(A.length, Ap.length, P, 'sobe', NF.format), serie: H.map((h) => ab(h.a, h.b).length), go },
       kFila, kAtr,
       (() => {   /* v187: ★ Clientes críticos no lugar de "Tempo de emissão": pedidos dos clientes críticos emitidos no período e quantos no prazo */
         const cr = (X) => X.filter((c) => tipo(c) !== 'v' && cqCrit(c)), Co = cr(A), Cp = cr(Ap), ok = Co.filter(cqNoPrazo).length;
