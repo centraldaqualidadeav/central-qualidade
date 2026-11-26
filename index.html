@@ -6313,7 +6313,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 195; window.CQ_V = APP_V;
+    const APP_V = 197; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -21094,9 +21094,17 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     QC.unMsgK = key; QC.msgs = {};
     QC.unMsg = yms.map((ym) => DB.db.doc(`qc/${cid}/mes/${ym}`).onSnapshot((s) => { QC.msgs[ym] = (s && s.exists && (s.data() || {}).m) || {}; if (S.view === 'qchat' && QC.aberta === cid) { qcDesenhaMsgs(); qcMarcaLido(); } }, () => {}));
   }
+  /* v197: cada computador tem o seu relógio; se o de quem responde estiver atrasado, a resposta ficava acima da pergunta.
+     A mensagem nova sempre fica depois da última que a pessoa já está vendo na conversa. */
+  function qcUltAt(cid) {
+    let mx = 0; const c = QC.conv[cid]; if (c && c.ult && c.ult.at) mx = c.ult.at;
+    if (cid === QC.aberta) Object.values(QC.msgs).forEach((o) => Object.values(o || {}).forEach((m) => { if (m && m.at > mx) mx = m.at; }));
+    return mx;
+  }
   function qcMarcaLido() {
     const c = QC.conv[QC.aberta]; if (!c || !(c.membros || []).map(E.low).includes(qcEu()) || !qcNaoLida(c) || document.hidden) return;
-    const now = Date.now(); if (now - QC.lidoT < 1500) return; QC.lidoT = now;
+    const agora = Date.now(); if (agora - QC.lidoT < 1500) return; QC.lidoT = agora;
+    const now = Math.max(agora, qcUltAt(QC.aberta));   /* v197: o relógio deste computador pode estar atrasado: lido nunca fica antes da última mensagem vista */
     DB.db.doc('qc/' + QC.aberta).merge({ lido: { [qcK(qcEu())]: now } }).catch(() => {});
   }
   document.addEventListener('visibilitychange', () => { if (!document.hidden && S.view === 'qchat' && QC.aberta) qcMarcaLido(); });
@@ -21153,7 +21161,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   VIEWS.qchat = () => { qcLiga(); qcDesenha(); };
   async function qcEnvia() {
     const inp = $('#qc-in'), t = String((inp && inp.value) || '').trim(), cid = QC.aberta; if (!t || !cid) return;
-    const at = Date.now(), id = at.toString(36) + Math.random().toString(36).slice(2, 6), eu = qcEu(), nome = myPessoa() || DB.meName || eu, msg = { t: t.slice(0, 2000), e: eu, n: nome, at };
+    const at = Math.max(Date.now(), qcUltAt(cid) + 1), id = at.toString(36) + Math.random().toString(36).slice(2, 6), eu = qcEu(), nome = myPessoa() || DB.meName || eu, msg = { t: t.slice(0, 2000), e: eu, n: nome, at };
     if (QC.resp && QC.resp.cid === cid) { msg.r = { id: QC.resp.id, e: QC.resp.e, n: QC.resp.n, t: String(QC.resp.t || '').slice(0, 140) }; }
     QC.resp = null; const rb = $('#qc-resp'); if (rb) { rb.hidden = true; rb.innerHTML = ''; }
     inp.value = ''; inp.focus();
@@ -21221,7 +21229,10 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   async function qcJanela() {
     if (qcJanelaAberta()) { try { QC.jan.focus(); } catch (e) { /* o navegador decide */ } return; }
     const url = 'index.html?qualichat';
-    if (window.documentPictureInPicture && window.matchMedia && matchMedia('(pointer: fine)').matches) {
+    /* v196: com a Central instalada (aberta como aplicativo), a janela do QualiChat abre como janela do aplicativo, sem a faixa do endereço do site;
+       a flutuante (sempre por cima) só quando a Central está aberta numa aba do navegador */
+    const instalada = !!(window.matchMedia && (matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: window-controls-overlay)').matches || matchMedia('(display-mode: minimal-ui)').matches));
+    if (!instalada && window.documentPictureInPicture && window.matchMedia && matchMedia('(pointer: fine)').matches) {
       try {
         const w = await window.documentPictureInPicture.requestWindow({ width: 340, height: 480 });
         w.document.title = 'QualiChat'; w.document.body.style.cssText = 'margin:0;height:100vh;overflow:hidden;background:' + getComputedStyle(document.body).backgroundColor;
