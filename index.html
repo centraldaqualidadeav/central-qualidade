@@ -445,13 +445,24 @@ ul.dvdl, p.dvdl { display: none !important; } .dvdl { list-style: none; margin: 
 .qcvolta { all: unset; display: none; cursor: pointer; font: 700 26px/1 var(--f-body); color: var(--ink-2); padding: 0 6px; }
 .qcmsgs { flex: 1; min-height: 0; overflow-y: auto; padding: 18px 22px; display: flex; flex-direction: column; gap: 6px; background: radial-gradient(circle at 15% 8%, color-mix(in srgb, var(--qc) 6%, transparent), transparent 45%); }
 .qcdia { align-self: center; margin: 8px 0 4px; font: 600 11px var(--f-body); color: var(--ink-3); background: var(--surface-2); padding: 3px 10px; border-radius: 999px; }
-.qcm { display: flex; } .qcm.eu { justify-content: flex-end; } .qcm:not(.seg) { margin-top: 4px; }
+.qcm { display: flex; } .qcm.eu { justify-content: flex-end; } .qcm:not(.qcseq) { margin-top: 4px; }
 .qcm .bb { max-width: min(68%, 560px); padding: 7px 11px 5px; border-radius: 14px 14px 14px 4px; background: var(--surface-2); border: 1px solid var(--line); font-size: 13.5px; line-height: 1.4; overflow-wrap: anywhere; }
 .qcm.eu .bb { border-radius: 14px 14px 4px 14px; background: color-mix(in srgb, var(--qc) 18%, var(--surface-2)); border-color: color-mix(in srgb, var(--qc) 38%, transparent); }
 .qcm .who { display: block; font: 700 11.5px var(--f-body); margin-bottom: 1px; }
 .qcm .tx { white-space: pre-wrap; }
 .qcm .ft { float: right; margin: 6px 0 -2px 10px; font: 500 10.5px var(--f-mono); color: var(--ink-3); }
 .qcm .ck { font-style: normal; color: var(--ink-3); } .qcm .ck.ok { color: var(--qc); }
+/* v192: responder uma mensagem */
+.qcm { position: relative; align-items: center; gap: 6px; } .qcm.eu { flex-direction: row-reverse; justify-content: flex-start; }
+.qcrb { all: unset; cursor: pointer; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; color: var(--ink-3); background: var(--surface-2); border: 1px solid var(--line); opacity: 0; transition: opacity .15s; flex: none; }
+.qcm:hover .qcrb, .qcrb:focus-visible { opacity: 1; } .qcrb:hover { color: var(--qc); border-color: var(--qc); }
+@media (hover: none) { .qcrb { opacity: .55; } }
+.qcrq { all: unset; box-sizing: border-box; display: grid; gap: 1px; width: 100%; margin: 2px 0 5px; padding: 5px 9px; border-radius: 8px; background: color-mix(in srgb, var(--ink) 6%, transparent); box-shadow: inset 3px 0 0 var(--k); cursor: pointer; min-width: 0; }
+.qcrq b { font: 700 11.5px var(--f-body); color: var(--k); } .qcrq span { font-size: 12.5px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qcresp { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 8px 16px 0; }
+.qcresp .qcrq { cursor: default; margin: 0; }
+.qcrx { all: unset; cursor: pointer; font-size: 20px; color: var(--ink-3); padding: 0 6px; }
+.qcpisca .bb { animation: qcpisca 1.2s ease-out; } @keyframes qcpisca { 0%, 40% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--qc) 55%, transparent); } 100% { box-shadow: none; } }
 .qccx { display: flex; gap: 10px; align-items: center; padding: 12px 16px; border-top: 1px solid var(--line); }
 .qccx .inp { flex: 1; height: 42px; border-radius: 12px; }
 .qcenv { width: 42px; height: 42px; padding: 0; border-radius: 12px; display: grid; place-items: center; background: var(--qc); border-color: var(--qc); color: #0b0f0d; font-size: 17px; box-shadow: 0 0 14px color-mix(in srgb, var(--qc) 45%, transparent); }
@@ -6270,7 +6281,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 191; window.CQ_V = APP_V;
+    const APP_V = 192; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -21064,7 +21075,8 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     L.forEach((m) => {
       const d = dmy(m.at); if (d !== dia) { dia = d; ant = ''; o.push(`<span class="qcdia">${d === dmy(Date.now()) ? 'Hoje' : esc(d)}</span>`); }
       const eu = meus.includes(E.low(m.e)), visto = eu && porP.size && Array.from(porP.values()).every((t) => t >= m.at);
-      o.push(`<div class="qcm${eu ? ' eu' : ''}${ant === m.e ? ' seg' : ''}"><div class="bb">${!eu && c.tipo === 'g' && ant !== m.e ? `<b class="who" style="color:${qcCorDe(m.e)}">${esc(qcCurto(m.n || qcNomeDe(m.e)))}</b>` : ''}<span class="tx">${esc(m.t)}</span><span class="ft">${hhmm(m.at)}${eu ? ` <i class="ck${visto ? ' ok' : ''}" title="${visto ? 'Lida' : 'Enviada'}">${visto ? '✓✓' : '✓'}</i>` : ''}</span></div></div>`);
+      const rq = m.r ? `<button type="button" class="qcrq" data-act="qc-vai" data-key="${esc(m.r.id)}" style="--k:${qcMeus().includes(E.low(m.r.e)) ? 'var(--qc)' : qcCorDe(m.r.e)}"><b>${esc(qcMeus().includes(E.low(m.r.e)) ? 'Você' : qcCurto(m.r.n || qcNomeDe(m.r.e)))}</b><span>${esc(m.r.t || '')}</span></button>` : '';   /* v192: resposta a uma mensagem */
+      o.push(`<div class="qcm${eu ? ' eu' : ''}${ant === m.e ? ' qcseq' : ''}" id="qcm-${esc(m.id)}" data-mid="${esc(m.id)}"><div class="bb">${!eu && c.tipo === 'g' && ant !== m.e ? `<b class="who" style="color:${qcCorDe(m.e)}">${esc(qcCurto(m.n || qcNomeDe(m.e)))}</b>` : ''}${rq}<span class="tx">${esc(m.t)}</span><span class="ft">${hhmm(m.at)}${eu ? ` <i class="ck${visto ? ' ok' : ''}" title="${visto ? 'Lida' : 'Enviada'}">${visto ? '✓✓' : '✓'}</i>` : ''}</span></div>${QC.podeEsc ? `<button type="button" class="qcrb" data-act="qc-resp" data-key="${esc(m.id)}" title="Responder" aria-label="Responder esta mensagem">↩</button>` : ''}</div>`);
       ant = m.e;
     });
     return o.join('');
@@ -21082,7 +21094,8 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     if (!QC.aberta && F.length && window.innerWidth > 860) QC.aberta = F[0].id;
     const nNl = L.filter(qcNaoLida).length;
     const item = (c) => `<button type="button" class="qcv${c.id === QC.aberta ? ' on' : ''}" data-act="qc-abre" data-key="${esc(c.id)}">${qcAv(c)}<span class="tx"><b>${esc(qcTitulo(c))}</b><span>${c.ult ? (c.tipo === 'g' && E.low(c.ult.e) !== eu ? esc(qcCurto(c.ult.n || '').split(' ')[0]) + ': ' : E.low(c.ult.e) === eu ? 'Você: ' : '') + esc(c.ult.t || '') : '<i>sem mensagens</i>'}</span></span><span class="r"><small>${c.ult ? qcHora(c.ult.at) : ''}</small>${qcNaoLida(c) ? '<em>●</em>' : ''}</span></button>`;
-    const c = QC.aberta ? Object.assign({ id: QC.aberta }, QC.conv[QC.aberta]) : null, membro = c && (c.membros || []).map(E.low).includes(eu);
+    const c = QC.aberta ? Object.assign({ id: QC.aberta }, QC.conv[QC.aberta]) : null, membro = c && (c.membros || []).map(E.low).includes(eu); QC.podeEsc = !!membro;
+    if (QC.resp && QC.resp.cid !== QC.aberta) QC.resp = null;
     const mems = c ? Array.from(new Map((c.membros || []).map((e) => [qcPesK(e), { e, n: qcNomeDe(e), p: qcPorEmail(e) }])).values()).sort((a, b) => a.n.localeCompare(b.n, 'pt-BR')) : [];
     main.innerHTML = `<div class="view qcview"><div class="qcw${c ? ' tem' : ''}">
       <aside class="qcl"><div class="hd"><h2>QualiChat<button type="button" class="qcmais" data-act="qc-nova" title="Nova conversa" aria-label="Nova conversa">+</button></h2>
@@ -21092,7 +21105,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
         <div class="qcls">${!QC.ready ? '<div class="loading"><span class="spin"></span><span>Carregando…</span></div>' : F.length ? F.map(item).join('') : `<div class="qcvazio">${L.length ? 'Nada com esse filtro.' : 'Nenhuma conversa ainda. Toque em + para começar.'}</div>`}</div></aside>   ${'' /* v189: o aviso da conta dona saiu da tela (a pedido) */}
       <section class="qcc">${c ? `<div class="top"><button type="button" class="qcvolta" data-act="qc-volta" aria-label="Voltar">‹</button>${qcAv(c)}<div><b>${esc(qcTitulo(c))}</b><span>${c.tipo === 'g' ? NF.format(mems.length) + ' pessoas' : esc((qcPorEmail((mems.find((m) => !qcMeus().includes(E.low(m.e))) || {}).e || '') || {}).cargo || '')}</span></div></div>
         <div class="qcmsgs" id="qc-msgs"></div>
-        ${membro ? `<form class="qccx" id="qc-form"><input id="qc-in" class="inp" placeholder="Escreva uma mensagem…" autocomplete="off" maxlength="2000"><button class="btn qcenv" type="submit" aria-label="Enviar">➤</button></form>` : '<div class="qcro">Você está vendo como conta dona (não participa desta conversa).</div>'}`
+        ${membro ? `<div class="qcresp" id="qc-resp"${QC.resp ? '' : ' hidden'}>${QC.resp ? qcRespBar() : ''}</div><form class="qccx" id="qc-form"><input id="qc-in" class="inp" placeholder="Escreva uma mensagem…" autocomplete="off" maxlength="2000"><button class="btn qcenv" type="submit" aria-label="Enviar">➤</button></form>` : '<div class="qcro">Você está vendo como conta dona (não participa desta conversa).</div>'}`
         : '<div class="qcvazio grande">Escolha uma conversa ou toque em + para começar.</div>'}</section>
       <aside class="qcs">${c ? `<h3>${c.tipo === 'g' ? 'Pessoas · ' + NF.format(mems.length) : 'Conversa'}</h3>${mems.map((m) => `<div class="mb">${qcAvP(m.e)}<div>${esc(m.n)}${qcMeus().includes(E.low(m.e)) ? ' <small>(você)</small>' : ''}<small>${esc((m.p && m.p.cargo) || '')}</small></div></div>`).join('')}
         ${c.tipo === 'g' && qcPodeGrupo() ? '<button type="button" class="btn small" data-act="qc-grupo-ed">Editar grupo</button>' : ''}${DB.owner ? '<button type="button" class="btn small ghost tcrit" data-act="qc-apagar">Apagar conversa (conta dona)</button>' : ''}` : ''}</aside></div></div>`;
@@ -21105,6 +21118,8 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   async function qcEnvia() {
     const inp = $('#qc-in'), t = String((inp && inp.value) || '').trim(), cid = QC.aberta; if (!t || !cid) return;
     const at = Date.now(), id = at.toString(36) + Math.random().toString(36).slice(2, 6), eu = qcEu(), nome = myPessoa() || DB.meName || eu, msg = { t: t.slice(0, 2000), e: eu, n: nome, at };
+    if (QC.resp && QC.resp.cid === cid) { msg.r = { id: QC.resp.id, e: QC.resp.e, n: QC.resp.n, t: String(QC.resp.t || '').slice(0, 140) }; }
+    QC.resp = null; const rb = $('#qc-resp'); if (rb) { rb.hidden = true; rb.innerHTML = ''; }
     inp.value = ''; inp.focus();
     const ym = qcYm(at); QC.msgs[ym] = Object.assign({}, QC.msgs[ym] || {}, { [id]: msg }); qcDesenhaMsgs();
     try {
@@ -21164,7 +21179,13 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
       } catch (e) { toast('Não foi possível salvar: ' + ((e && (e.message || e.code)) || e), true); }
     };
   }
+  /* v192: responder uma mensagem (como nos aplicativos de conversa) */
+  function qcMsgPorId(id) { for (const ym of Object.keys(QC.msgs)) { const m = (QC.msgs[ym] || {})[id]; if (m) return m; } return null; }
+  function qcRespBar() { const r = QC.resp; if (!r) return ''; const meu = qcMeus().includes(E.low(r.e)); return `<div class="qcrq" style="--k:${meu ? 'var(--qc)' : qcCorDe(r.e)}"><b>${esc(meu ? 'Você' : qcCurto(r.n || qcNomeDe(r.e)))}</b><span>${esc(r.t)}</span></div><button type="button" class="qcrx" data-act="qc-resp-x" aria-label="Cancelar resposta">×</button>`; }
   function qcAct(a, key) {
+    if (a === 'qc-resp') { const m = qcMsgPorId(key); if (!m) return true; QC.resp = { cid: QC.aberta, id: key, e: m.e, n: m.n, t: m.t }; const b = $('#qc-resp'); if (b) { b.innerHTML = qcRespBar(); b.hidden = false; } const i = $('#qc-in'); if (i) i.focus(); return true; }
+    if (a === 'qc-resp-x') { QC.resp = null; const b = $('#qc-resp'); if (b) { b.hidden = true; b.innerHTML = ''; } return true; }
+    if (a === 'qc-vai') { const el = document.getElementById('qcm-' + key); if (el) { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); el.classList.remove('qcpisca'); void el.offsetWidth; el.classList.add('qcpisca'); } else toast('Essa mensagem é de um mês anterior.'); return true; }
     if (a === 'qc-abre') { QC.aberta = key; qcDesenha(); return true; }
     if (a === 'qc-volta') { QC.aberta = null; QC.voltou = true; qcDesenha(); return true; }
     if (a === 'qc-f') { QC.f = key; qcDesenha(); return true; }
