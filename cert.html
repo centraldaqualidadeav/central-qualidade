@@ -4258,10 +4258,14 @@ function dcCliCurto(cli) {
   return P[i] + (P[i + 1] && /^\d+$/.test(P[i + 1]) ? P[i + 1] : '');   /* POLAR 1 → POLAR1 */
 }
 const dcNfDig = () => cleanText(state.v[REF_NF] || '').replace(/\D+/g, '');
+/* padrão do nome do Data Book (mudou): "NF 54422 - POB302002826 - CQ 27973-5 Documentação completa Jurong - Aços Vital.pdf"
+   NF · O.C. do cliente · número do certificado · cliente (primeira palavra, só a inicial maiúscula); o que faltar sai do nome */
 function dcNomePadrao() {
-  const nf = dcNfDig(), cli = dcCliCurto(state.v[REF_CLIENTE]);
-  const base = nf ? `NF ${nf} Documentação Completa` : `${nomeArquivo(state) || 'Certificado'} Documentação Completa`;
-  return limparNome(base + (cli ? '_' + cli : '')) + '.pdf';
+  const nf = dcNfDig(), oc = limparNome(cleanText(state.v[REF_OC] || '')), cli = dcCliCurto(state.v[REF_CLIENTE]);
+  const cq = (doc && doc.certs && doc.certs.length > 1 ? nomeConjunto() : nomeArquivo(state)) || '';
+  const cliT = cli ? cli.charAt(0) + cli.slice(1).toLowerCase() : '';
+  const partes = [nf ? `NF ${nf}` : '', oc, cq].filter(Boolean);
+  return limparNome(`${partes.length ? partes.join(' - ') + ' ' : ''}Documentação completa${cliT ? ' ' + cliT : ''} - Aços Vital`) + '.pdf';
 }
 const dcTam = b => (b >= 1048576 ? (b / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB');
 const dcEsc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
