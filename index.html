@@ -6270,7 +6270,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 190; window.CQ_V = APP_V;
+    const APP_V = 191; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -6398,7 +6398,7 @@ re2js/build/index.js:
           Object.keys(TELA_DEF).forEach((k) => { const on = accBox.querySelector(`[data-t="${k}"][aria-pressed="true"]`); telas[k] = on ? on.dataset.v : TELA_DEF[k]; });
         }
         const d = { pessoaId: pesSel.value || null, nome: nomeP(document.getElementById('u-nome').value), perfil: adm ? 'admin' : 'usuario', tipo: adm ? null : tipo, acesso, telas, ativo: document.getElementById('u-ativo').checked, _u: Date.now(), _ub: ME.email };
-        try { await SDK.setDoc(SDK.doc(fs, 'usuarios/' + email), d); A.closeLayer(); A.toast(novo ? 'Usuário liberado: ' + email : 'Usuário atualizado. A pessoa vê a mudança ao recarregar a página.'); }
+        try { await SDK.setDoc(SDK.doc(fs, 'usuarios/' + email), d); window.dispatchEvent(new Event('cq-usuarios')); A.closeLayer(); A.toast(novo ? 'Usuário liberado: ' + email : 'Usuário atualizado. A pessoa vê a mudança ao recarregar a página.'); }
         catch (e) { A.toast(mapErr(e).message, true); }
       };
     }
@@ -6454,7 +6454,7 @@ re2js/build/index.js:
       if (dp) dp.onchange = async () => { const v = dp.value || null; try { if (PREV) throw mapErr({ code: 'preview' }); await SDK.setDoc(SDK.doc(fs, 'perfis/' + ME.uid), { pessoaId: v }, { merge: true }); ME.pessoaId = v; A.DB.mePes = v; A.DB.perfU[ME.uid] = Object.assign({}, A.DB.perfU[ME.uid] || {}, { pessoaId: v, email: ME.email }); A.toast(v ? 'Pronto: a conta dona ficou ligada a esse funcionário (a foto dele aparece no Painel).' : 'Conta dona sem funcionário ligado.'); } catch (e) { A.toast('Não gravou: ' + mapErr(e).message, true); } };
       main.querySelectorAll('[data-u-edit]').forEach((b) => b.onclick = () => form(L.find((u) => u.email === b.dataset.uEdit)));
       main.querySelectorAll('[data-u-ver]').forEach((b) => b.onclick = () => { const w2 = window.open(location.pathname + '?vercomo=' + encodeURIComponent(b.dataset.uVer), '_blank'); if (!w2) A.toast('O navegador bloqueou a nova aba. Libere pop-ups para esta página.', true); });
-      main.querySelectorAll('[data-u-del]').forEach((b) => b.onclick = () => A.confirmBox('Remover usuário', `${b.dataset.uDel} perde o acesso à Central. Os registros que essa pessoa lançou continuam.`, 'Remover', async () => { try { if (PREV) throw mapErr({ code: 'preview' }); await SDK.deleteDoc(SDK.doc(fs, 'usuarios/' + b.dataset.uDel)); A.toast('Acesso removido.'); } catch (e) { A.toast(mapErr(e).message, true); } }, true));
+      main.querySelectorAll('[data-u-del]').forEach((b) => b.onclick = () => A.confirmBox('Remover usuário', `${b.dataset.uDel} perde o acesso à Central. Os registros que essa pessoa lançou continuam.`, 'Remover', async () => { try { if (PREV) throw mapErr({ code: 'preview' }); await SDK.deleteDoc(SDK.doc(fs, 'usuarios/' + b.dataset.uDel)); window.dispatchEvent(new Event('cq-usuarios')); A.toast('Acesso removido.'); } catch (e) { A.toast(mapErr(e).message, true); } }, true));
       const ib = document.getElementById('u-imp-b'); if (ib) { const inp = document.getElementById('u-imp'); ib.onclick = () => inp.click(); inp.onchange = () => { const f = inp.files && inp.files[0]; inp.value = ''; if (f) importBackup(f); }; }
     };
     A.VIEWS.usuarios.always = true;
@@ -20948,33 +20948,47 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   const qcYm = (t) => { const d = new Date(t || Date.now()); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); };
   /* v190: quem aparece no QualiChat = quem tem login Google na Central (perfis/<uid>: e-mail do login + funcionário ligado em Usuários).
      O nome, a foto e o cargo vêm da Equipe (pelo funcionário ligado; senão pelo e-mail ou pelo nome). Quem não tem login não aparece. */
-  QC.perf = null;
-  function qcCarregaPerfis(force) {
-    if (!DB.db || (QC.perf && !force) || QC.perfL) return; QC.perfL = true;
-    DB.db.collection('perfis').get().then((q) => { QC.perf = q.docs.map((d) => Object.assign({ uid: d.id }, d.data())).filter((x) => x.email && /@/.test(x.email)); }).catch(() => { QC.perf = QC.perf || []; }).then(() => { QC.perfL = false; qcRedesenha(); });
+  /* v191: quem aparece no QualiChat = quem está em Configurações › Usuários (ativo) + a conta dona. Como só administradores leem
+     Usuários, a Central monta um diretório (qcdir/main: e-mail, funcionário ligado, nome) quando um administrador abre a Central
+     ou mexe em Usuários; todos leem esse diretório. A mesma pessoa com 2 logins aparece UMA vez (os 2 e-mails entram na conversa). */
+  QC.dir = null;
+  function qcOuveDir() { if (!DB.db || QC.unDir) return; QC.unDir = DB.db.doc('qcdir/main').onSnapshot((sn) => { QC.dir = (sn && sn.exists && (sn.data() || {}).u) || {}; qcRedesenha(); }, () => { QC.dir = QC.dir || {}; }); }
+  async function qcSyncDir() {
+    if (!DB.db || !(DB.owner || DB.admin === true)) return;
+    try {
+      const q = await DB.db.collection('usuarios').get(), u = {};
+      q.docs.forEach((d) => { const x = d.data() || {}, em = E.low(d.id); if (!/@/.test(em) || x.ativo === false) return; u[qcK(em)] = { e: em, p: x.pessoaId || null, n: x.nome || '' }; });
+      const dona = E.low(window.CQ_OWNER || CQ_DONA || ''); if (dona) u[qcK(dona)] = Object.assign({ e: dona, p: null, n: 'Conta dona' }, (QC.dir || {})[qcK(dona)] || {}, DB.owner ? { e: dona, p: DB.mePes || null, n: myPessoa() || DB.meName || 'Conta dona' } : {});
+      if (JSON.stringify(u) !== JSON.stringify(QC.dir || {})) await DB.db.doc('qcdir/main').set({ u, at: Date.now() });
+    } catch (e) { /* sem acesso a Usuários */ }
   }
+  window.addEventListener('cq-usuarios', () => setTimeout(qcSyncDir, 500));
   const qcPessoas = () => {
-    const L = eqAll(), out = new Map();
-    (QC.perf || []).forEach((x) => {
-      const em = E.low(x.email); if (out.has(em)) return;
-      const pes = (x.pessoaId && L.find((p) => p.id === x.pessoaId)) || L.find((p) => p.email && E.low(p.email) === em) || (x.nome ? L.filter((p) => E.key(p.nome) === E.key(x.nome))[0] : null) || null;
+    const L = eqAll(), grp = new Map();
+    Object.values(QC.dir || {}).forEach((x) => {
+      const em = E.low(x.e); if (!em) return;
+      const pes = (x.p && L.find((p) => p.id === x.p)) || L.find((p) => p.email && E.low(p.email) === em) || (x.n ? L.filter((p) => E.key(p.nome) === E.key(x.n))[0] : null) || null;
       if (pes && pes.inativo) return;
-      out.set(em, { email: em, nome: (pes && pes.nome) || x.nome || em.split('@')[0], cargo: (pes && pes.cargo) || '', setor: (pes && pes.setor) || '', pes });
+      const k = pes ? 'p:' + pes.id : 'e:' + em, g = grp.get(k) || { key: k, emails: [], nome: (pes && pes.nome) || x.n || em.split('@')[0], cargo: (pes && pes.cargo) || '', setor: (pes && pes.setor) || '', pes };
+      if (!g.emails.includes(em)) g.emails.push(em); g.email = g.emails[0]; grp.set(k, g);
     });
-    return Array.from(out.values());
+    return Array.from(grp.values());
   };
-  const qcPorEmail = (em) => qcPessoas().find((p) => p.email === E.low(em)) || null;
+  const qcPorEmail = (em) => { const e = E.low(em); return qcPessoas().find((p) => p.emails.includes(e)) || null; };
+  const qcMeus = () => { const p = qcPorEmail(qcEu()); return p ? p.emails : [qcEu()]; };
+  const qcPesK = (em) => { const p = qcPorEmail(em); return p ? p.key : 'e:' + E.low(em); };
+
   const qcNomeDe = (em) => { const p = qcPorEmail(em); return p ? p.nome : (E.low(em) === qcEu() ? (myPessoa() || DB.meName || em) : String(em || '').split('@')[0]); };
   const qcCurto = (n) => { const w = String(n || '').trim().split(/\s+/); return w.length > 2 ? w[0] + ' ' + w[w.length - 1] : w.join(' '); };
   const qcPodeGrupo = () => !!(DB.owner || DB.admin === true);
-  function qcTitulo(c) { if (c.tipo === 'g') return c.nome || 'Grupo'; const o = (c.membros || []).find((e) => E.low(e) !== qcEu()) || (c.membros || [])[0]; return qcNomeDe(o); }
+  function qcTitulo(c) { if (c.tipo === 'g') return c.nome || 'Grupo'; const me = qcMeus(), o = (c.membros || []).find((e) => !me.includes(E.low(e))) || (c.membros || [])[0]; return qcNomeDe(o); }
   function qcAv(c, cls) {
     if (c.tipo === 'g') return `<span class="qcav g ${cls || ''}" style="--k:${c.cor || 'var(--qc)'}">${esc((c.nome || 'G').replace(/[^A-Za-zÀ-ú0-9 ]/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || 'G')}</span>`;
-    const o = (c.membros || []).find((e) => E.low(e) !== qcEu()) || '', p = qcPorEmail(o), f = p && p.pes ? eqFoto(p.pes) : null;
+    const me = qcMeus(), o = (c.membros || []).find((e) => !me.includes(E.low(e))) || '', p = qcPorEmail(o), f = p && p.pes ? eqFoto(p.pes) : null;
     return `<span class="qcav ${cls || ''}${f ? ' fo' : ''}">${f ? `<img src="${f}" alt="">` : esc(ehIni(qcNomeDe(o)))}</span>`;
   }
   function qcAvP(em) { const p = qcPorEmail(em), f = p && p.pes ? eqFoto(p.pes) : null; return `<span class="qcav${f ? ' fo' : ''}">${f ? `<img src="${f}" alt="">` : esc(ehIni(qcNomeDe(em)))}</span>`; }
-  const qcNaoLida = (c) => !!(c.ult && c.ult.at && E.low(c.ult.e) !== qcEu() && (((c.lido || {})[qcK(qcEu())] || 0) < c.ult.at));
+  const qcNaoLida = (c) => { if (!(c.ult && c.ult.at)) return false; const me = qcMeus(); if (me.includes(E.low(c.ult.e))) return false; const l = c.lido || {}; return Math.max(0, ...me.map((e) => l[qcK(e)] || 0)) < c.ult.at; };
   const qcLista = () => Object.keys(QC.conv).map((id) => Object.assign({ id }, QC.conv[id])).filter((c) => DB.owner || (c.membros || []).map(E.low).includes(qcEu())).sort((a, b) => ((b.ult && b.ult.at) || b.at || 0) - ((a.ult && a.ult.at) || a.at || 0));
   function qcBadge() {
     const n = qcLista().filter((c) => (c.membros || []).map(E.low).includes(qcEu()) && qcNaoLida(c)).length, el = $('#ct-qchat');
@@ -21016,7 +21030,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   }
   /* ouvir: o índice da pessoa e cada conversa dela (a conta dona ouve todas) */
   function qcLiga() {
-    qcCarregaPerfis();
+    qcOuveDir(); qcSyncDir(); try { ouvePes(); } catch (e) { /* fotos da Equipe */ }
     if (!DB.db || !qcEu() || QC.unIdx || QC.unAll) return;
     const ouveConv = (cid) => { if (QC.un[cid]) return; QC.un[cid] = DB.db.doc('qc/' + cid).onSnapshot((s) => { if (s && s.exists) QC.conv[cid] = s.data(); else delete QC.conv[cid]; QC.ready = true; qcRedesenha(); }, () => {}); };
     if (DB.owner) {
@@ -21045,11 +21059,11 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   function qcMsgsHTML(c) {
     const L = []; Object.values(QC.msgs).forEach((m) => Object.keys(m || {}).forEach((id) => L.push(Object.assign({ id }, m[id])))); L.sort((a, b) => a.at - b.at);
     if (!L.length) return `<div class="qcvazio">${c.tipo === 'g' ? 'Nenhuma mensagem neste grupo ainda.' : 'Comece a conversa.'}</div>`;
-    const outros = (c.membros || []).map(E.low).filter((e) => e !== qcEu()), lido = c.lido || {};
+    const meus = qcMeus(), lido = c.lido || {}, porP = new Map(); (c.membros || []).map(E.low).filter((e) => !meus.includes(e)).forEach((e) => { const k = qcPesK(e); porP.set(k, Math.max(porP.get(k) || 0, lido[qcK(e)] || 0)); });
     let dia = '', ant = ''; const o = [];
     L.forEach((m) => {
       const d = dmy(m.at); if (d !== dia) { dia = d; ant = ''; o.push(`<span class="qcdia">${d === dmy(Date.now()) ? 'Hoje' : esc(d)}</span>`); }
-      const eu = E.low(m.e) === qcEu(), visto = eu && outros.length && outros.every((e) => (lido[qcK(e)] || 0) >= m.at);
+      const eu = meus.includes(E.low(m.e)), visto = eu && porP.size && Array.from(porP.values()).every((t) => t >= m.at);
       o.push(`<div class="qcm${eu ? ' eu' : ''}${ant === m.e ? ' seg' : ''}"><div class="bb">${!eu && c.tipo === 'g' && ant !== m.e ? `<b class="who" style="color:${qcCorDe(m.e)}">${esc(qcCurto(m.n || qcNomeDe(m.e)))}</b>` : ''}<span class="tx">${esc(m.t)}</span><span class="ft">${hhmm(m.at)}${eu ? ` <i class="ck${visto ? ' ok' : ''}" title="${visto ? 'Lida' : 'Enviada'}">${visto ? '✓✓' : '✓'}</i>` : ''}</span></div></div>`);
       ant = m.e;
     });
@@ -21069,18 +21083,18 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const nNl = L.filter(qcNaoLida).length;
     const item = (c) => `<button type="button" class="qcv${c.id === QC.aberta ? ' on' : ''}" data-act="qc-abre" data-key="${esc(c.id)}">${qcAv(c)}<span class="tx"><b>${esc(qcTitulo(c))}</b><span>${c.ult ? (c.tipo === 'g' && E.low(c.ult.e) !== eu ? esc(qcCurto(c.ult.n || '').split(' ')[0]) + ': ' : E.low(c.ult.e) === eu ? 'Você: ' : '') + esc(c.ult.t || '') : '<i>sem mensagens</i>'}</span></span><span class="r"><small>${c.ult ? qcHora(c.ult.at) : ''}</small>${qcNaoLida(c) ? '<em>●</em>' : ''}</span></button>`;
     const c = QC.aberta ? Object.assign({ id: QC.aberta }, QC.conv[QC.aberta]) : null, membro = c && (c.membros || []).map(E.low).includes(eu);
-    const mems = c ? (c.membros || []).map((e) => ({ e, n: qcNomeDe(e), p: qcPorEmail(e) })).sort((a, b) => a.n.localeCompare(b.n, 'pt-BR')) : [];
+    const mems = c ? Array.from(new Map((c.membros || []).map((e) => [qcPesK(e), { e, n: qcNomeDe(e), p: qcPorEmail(e) }])).values()).sort((a, b) => a.n.localeCompare(b.n, 'pt-BR')) : [];
     main.innerHTML = `<div class="view qcview"><div class="qcw${c ? ' tem' : ''}">
       <aside class="qcl"><div class="hd"><h2>QualiChat<button type="button" class="qcmais" data-act="qc-nova" title="Nova conversa" aria-label="Nova conversa">+</button></h2>
         <input id="qc-q" class="inp" type="search" placeholder="Buscar pessoa, grupo ou mensagem" value="${esc(QC.q || '')}" autocomplete="off">
         ${window.Notification && Notification.permission === 'default' ? '<button type="button" class="qcwin" data-act="qc-win">🔔 Ativar avisos do Windows (com a Central minimizada)</button>' : ''}
         <div class="qcf">${[['todas', 'Todas'], ['grupos', 'Grupos'], ['nlidas', 'Não lidas' + (nNl ? ' · ' + nNl : '')]].map(([k, l]) => `<button type="button" data-act="qc-f" data-key="${k}" aria-pressed="${QC.f === k}">${l}</button>`).join('')}</div></div>
         <div class="qcls">${!QC.ready ? '<div class="loading"><span class="spin"></span><span>Carregando…</span></div>' : F.length ? F.map(item).join('') : `<div class="qcvazio">${L.length ? 'Nada com esse filtro.' : 'Nenhuma conversa ainda. Toque em + para começar.'}</div>`}</div></aside>   ${'' /* v189: o aviso da conta dona saiu da tela (a pedido) */}
-      <section class="qcc">${c ? `<div class="top"><button type="button" class="qcvolta" data-act="qc-volta" aria-label="Voltar">‹</button>${qcAv(c)}<div><b>${esc(qcTitulo(c))}</b><span>${c.tipo === 'g' ? NF.format(mems.length) + ' pessoas' : esc((qcPorEmail((mems.find((m) => E.low(m.e) !== eu) || {}).e || '') || {}).cargo || '')}</span></div></div>
+      <section class="qcc">${c ? `<div class="top"><button type="button" class="qcvolta" data-act="qc-volta" aria-label="Voltar">‹</button>${qcAv(c)}<div><b>${esc(qcTitulo(c))}</b><span>${c.tipo === 'g' ? NF.format(mems.length) + ' pessoas' : esc((qcPorEmail((mems.find((m) => !qcMeus().includes(E.low(m.e))) || {}).e || '') || {}).cargo || '')}</span></div></div>
         <div class="qcmsgs" id="qc-msgs"></div>
         ${membro ? `<form class="qccx" id="qc-form"><input id="qc-in" class="inp" placeholder="Escreva uma mensagem…" autocomplete="off" maxlength="2000"><button class="btn qcenv" type="submit" aria-label="Enviar">➤</button></form>` : '<div class="qcro">Você está vendo como conta dona (não participa desta conversa).</div>'}`
         : '<div class="qcvazio grande">Escolha uma conversa ou toque em + para começar.</div>'}</section>
-      <aside class="qcs">${c ? `<h3>${c.tipo === 'g' ? 'Pessoas · ' + NF.format(mems.length) : 'Conversa'}</h3>${mems.map((m) => `<div class="mb">${qcAvP(m.e)}<div>${esc(m.n)}${E.low(m.e) === eu ? ' <small>(você)</small>' : ''}<small>${esc((m.p && m.p.cargo) || '')}</small></div></div>`).join('')}
+      <aside class="qcs">${c ? `<h3>${c.tipo === 'g' ? 'Pessoas · ' + NF.format(mems.length) : 'Conversa'}</h3>${mems.map((m) => `<div class="mb">${qcAvP(m.e)}<div>${esc(m.n)}${qcMeus().includes(E.low(m.e)) ? ' <small>(você)</small>' : ''}<small>${esc((m.p && m.p.cargo) || '')}</small></div></div>`).join('')}
         ${c.tipo === 'g' && qcPodeGrupo() ? '<button type="button" class="btn small" data-act="qc-grupo-ed">Editar grupo</button>' : ''}${DB.owner ? '<button type="button" class="btn small ghost tcrit" data-act="qc-apagar">Apagar conversa (conta dona)</button>' : ''}` : ''}</aside></div></div>`;
     const qi = $('#qc-q'); if (qi) qi.oninput = () => { QC.q = qi.value; clearTimeout(QC.qT); QC.qT = setTimeout(() => { qcDesenha(); const j = $('#qc-q'); if (j) { j.focus(); j.setSelectionRange(j.value.length, j.value.length); } }, 200); };
     if (c) { qcOuveMsgs(c.id); qcDesenhaMsgs(); qcMarcaLido(); }
@@ -21100,12 +21114,12 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   }
   /* nova conversa (qualquer pessoa) ou novo grupo (só administradores) */
   function qcNova() {
-    if (!QC.perf) { qcCarregaPerfis(); toast('Carregando as pessoas… tente de novo em um instante.'); return; }
-    const eu = qcEu(), P = qcPessoas().filter((p) => E.low(p.email) !== eu).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    if (!QC.dir) { qcOuveDir(); toast('Carregando as pessoas… tente de novo em um instante.'); return; }
+    const eu = qcEu(), meus = qcMeus(), P = qcPessoas().filter((p) => !p.emails.some((e) => meus.includes(e))).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
     openModal('Nova conversa', `${qcPodeGrupo() ? '<div class="seg" id="qcn-tp" style="display:grid;grid-template-columns:1fr 1fr"><button type="button" data-v="d" aria-pressed="true">Com uma pessoa</button><button type="button" data-v="g" aria-pressed="false">Novo grupo</button></div>' : ''}
       <label class="field" id="qcn-nm" hidden><span>Nome do grupo <b>*</b></span><input id="qcn-nome" class="inp" placeholder="ex.: Recebimento · RIR" maxlength="40" autocomplete="off"></label>
       <input id="qcn-q" class="inp" type="search" placeholder="Buscar pessoa…" autocomplete="off">
-      <div class="qcpick" id="qcn-l">${P.length ? P.map((p) => `<label class="qcpi" data-n="${esc(E.key(p.nome + ' ' + (p.cargo || '')))}"><input type="checkbox" value="${esc(E.low(p.email))}">${qcAvP(E.low(p.email))}<span><b>${esc(p.nome)}</b><small>${esc([p.cargo, p.setor].filter(Boolean).join(' · '))}</small></span></label>`).join('') : '<div class="qcvazio">Ninguém mais entrou na Central com login Google ainda.</div>'}</div>
+      <div class="qcpick" id="qcn-l">${P.length ? P.map((p) => `<label class="qcpi" data-n="${esc(E.key(p.nome + ' ' + (p.cargo || '')))}"><input type="checkbox" value="${esc(p.key)}">${qcAvP(p.email)}<span><b>${esc(p.nome)}</b><small>${esc([p.cargo, p.setor].filter(Boolean).join(' · '))}</small></span></label>`).join('') : `<div class="qcvazio">${Object.keys(QC.dir || {}).length ? 'Ninguém mais em Usuários.' : 'A lista de pessoas é montada quando um administrador abre a Central.'}</div>`}</div>
       <div class="formfoot"><button class="btn primary" type="button" id="qcn-ok">Conversar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
     let tp = 'd';
     const sync = () => { $('#qcn-nm').hidden = tp !== 'g'; $$('#qcn-l input').forEach((i) => { i.type = tp === 'g' ? 'checkbox' : 'radio'; i.name = 'qcn'; }); $('#qcn-ok').textContent = tp === 'g' ? 'Criar grupo' : 'Conversar'; };
@@ -21113,21 +21127,22 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     sync();
     $('#qcn-q').oninput = (e) => { const q = E.key(e.target.value); $$('#qcn-l .qcpi').forEach((l) => { l.hidden = q && !l.dataset.n.includes(q); }); };
     $('#qcn-ok').onclick = async () => {
-      const sel = $$('#qcn-l input:checked').map((i) => i.value);
+      const selK = $$('#qcn-l input:checked').map((i) => i.value), selP = P.filter((p) => selK.includes(p.key)), sel = [].concat(...selP.map((p) => p.emails));
       if (!sel.length) { toast(tp === 'g' ? 'Escolha as pessoas do grupo.' : 'Escolha a pessoa.', true); return; }
       const b = $('#qcn-ok'); b.disabled = true;
       try {
         let cid, d;
         if (tp === 'g') {
           const nome = ($('#qcn-nome').value || '').trim(); if (!nome) { toast('Dê um nome ao grupo.', true); b.disabled = false; return; }
-          cid = 'g-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); d = { tipo: 'g', nome, membros: Array.from(new Set([eu].concat(sel))), by: eu, at: Date.now() };
+          cid = 'g-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); d = { tipo: 'g', nome, membros: Array.from(new Set(meus.concat(sel))), by: eu, at: Date.now() };
         } else {
-          const o = sel[0]; cid = 'd-' + [qcK(eu), qcK(o)].sort().join('--'); d = { tipo: 'd', membros: [eu, o], by: eu, at: Date.now() };
-          if (QC.conv[cid]) { closeLayer(); QC.aberta = cid; qcDesenha(); return; }
+          const o = selP[0], k1 = qcK(qcPesK(eu)), k2 = qcK(o.key); cid = 'd-' + [k1, k2].sort().join('--'); d = { tipo: 'd', membros: Array.from(new Set(meus.concat(o.emails))), by: eu, at: Date.now() };
+          const ja = QC.conv[cid] ? cid : Object.keys(QC.conv).find((x) => QC.conv[x].tipo === 'd' && (QC.conv[x].membros || []).some((e) => o.emails.includes(E.low(e))) && (QC.conv[x].membros || []).some((e) => meus.includes(E.low(e))));
+          if (ja) { closeLayer(); QC.aberta = ja; qcDesenha(); return; }
         }
         await DB.db.doc('qc/' + cid).set(d);
         for (const em of d.membros) await DB.db.doc('qcu/' + em).merge({ c: { [cid]: d.at } });
-        logEntry('GERAL', 'qc', 'criado', tp === 'g' ? `QualiChat: grupo “${d.nome}” criado (${d.membros.length} pessoas)` : 'QualiChat: conversa nova', null);
+        logEntry('GERAL', 'qc', 'criado', tp === 'g' ? `QualiChat: grupo “${d.nome}” criado (${selP.length + 1} pessoas)` : 'QualiChat: conversa nova', null);
         closeLayer(); QC.aberta = cid; QC.conv[cid] = QC.conv[cid] || d; qcDesenha();
       } catch (e) { toast('Não foi possível criar: ' + ((e && (e.message || e.code)) || e), true); b.disabled = false; }
     };
@@ -21136,15 +21151,15 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const c = QC.conv[QC.aberta]; if (!c || c.tipo !== 'g' || !qcPodeGrupo()) return;
     const mem = (c.membros || []).map(E.low), P = qcPessoas().sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
     openModal('Editar grupo', `<label class="field"><span>Nome do grupo</span><input id="qce-nome" class="inp" value="${esc(c.nome || '')}" maxlength="40"></label>
-      <div class="qcpick">${P.map((p) => `<label class="qcpi"><input type="checkbox" value="${esc(E.low(p.email))}" ${mem.includes(E.low(p.email)) ? 'checked' : ''}>${qcAvP(E.low(p.email))}<span><b>${esc(p.nome)}</b><small>${esc(p.cargo || '')}</small></span></label>`).join('')}</div>
+      <div class="qcpick">${P.map((p) => `<label class="qcpi"><input type="checkbox" value="${esc(p.key)}" ${p.emails.some((e) => mem.includes(e)) ? 'checked' : ''}>${qcAvP(p.email)}<span><b>${esc(p.nome)}</b><small>${esc(p.cargo || '')}</small></span></label>`).join('')}</div>
       <div class="formfoot"><button class="btn primary" type="button" id="qce-ok">Salvar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
     $('#qce-ok').onclick = async () => {
-      const nome = ($('#qce-nome').value || '').trim() || c.nome, sel = $$('.modal .qcpick input:checked').map((i) => i.value);
+      const nome = ($('#qce-nome').value || '').trim() || c.nome, selK = $$('.modal .qcpick input:checked').map((i) => i.value), sel = [].concat(...P.filter((p) => selK.includes(p.key)).map((p) => p.emails));
       if (!sel.length) { toast('O grupo precisa de pelo menos uma pessoa.', true); return; }
       try {
         await DB.db.doc('qc/' + QC.aberta).merge({ nome, membros: sel });
         for (const em of sel.filter((e) => !mem.includes(e))) await DB.db.doc('qcu/' + em).merge({ c: { [QC.aberta]: Date.now() } });
-        logEntry('GERAL', 'qc', 'alterado', `QualiChat: grupo “${nome}” editado (${sel.length} pessoas)`, null);
+        logEntry('GERAL', 'qc', 'alterado', `QualiChat: grupo “${nome}” editado (${selK.length} pessoas)`, null);
         closeLayer(); qcDesenha();
       } catch (e) { toast('Não foi possível salvar: ' + ((e && (e.message || e.code)) || e), true); }
     };
