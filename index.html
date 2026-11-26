@@ -1661,7 +1661,7 @@ body.tabmode .main { padding: 0 !important; }
 .tbdone h2 { margin: 6px 0 0; font: 800 34px/1 var(--f-display); letter-spacing: .03em; text-transform: uppercase; }
 .tbdone .n { font: 700 34px var(--f-mono); color: var(--rnc); }
 .tick { display: flex; align-items: center; gap: 12px; font: 600 16px var(--f-body); color: var(--ink-2); } .tick i { color: var(--ok); font-style: normal; font-weight: 800; font-size: 20px; }
-@media (max-width: 560px) { .tbb { padding: 14px 12px 20px; } .tblr { flex-wrap: wrap; } .tblr .btn.big, .tblr .btn.red { width: 100%; min-width: 0 !important; } .rtk { grid-template-columns: 1fr 1fr 1fr; gap: 6px; } .rtk b { font-size: 22px; } }
+@media (max-width: 560px) { .tbb { padding: 14px 12px 20px; } .tblr { flex-wrap: wrap; } .tblr .btn.big, .tblr .btn.red { width: 100%; min-width: 0 !important; } .rtk, .rtk.r4 { grid-template-columns: 1fr 1fr 1fr; gap: 6px; } .rtk b { font-size: 22px; } }
 @media (max-width: 700px) { .tbrow2, .tbfound, .tbsum { grid-template-columns: 1fr; } .tbrowq { grid-template-columns: 1fr; } .tbfotos { grid-template-columns: repeat(3, 1fr); } }
 
 
@@ -2262,6 +2262,8 @@ table.t tbody tr.sel td { background: color-mix(in srgb, var(--rif) 9%, var(--su
 .tbw.rirt .tbcard .ch .cnt { color: var(--rir); }
 .tbw.rirt .tbcard .ch.gr { background: #5b6560; }
 .tbw .btn.rirb { background: var(--rir); border-color: var(--rir); color: #fff; }
+.tbcard.tbret .ch.ch { background: var(--ret); } .tbcard.tbret .ch .cnt { color: var(--ret); }   /* v183: retrabalho no tablet com a cor do módulo (índigo) */
+.tbw .btn.retb { background: var(--ret); border-color: var(--ret); color: #fff; }
 .tbw.rirt .btn:disabled { opacity: .45; }
 .tbw.rirt .tblr .btn.big { min-width: 170px; }
 .tbw.rirt .riv { display: grid; gap: 14px; }
@@ -2744,6 +2746,8 @@ body.tvmode .tvbar { display: none !important; }   /* v47: no painel rolando nã
 .tbw .mwrap { grid-template-columns: 260px minmax(0, 1fr); } .tbw .mdoc { font-size: 15.5px; }
 @media (max-width: 900px) { .mwrap, .tbw .mwrap { grid-template-columns: 1fr; } .mlist { position: static; } .mdoc { padding: 14px; } .mdoc .mcab { grid-template-columns: 1fr; } .mdoc .mtt { border-left: 0; border-right: 0; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); } .mdoc .mass { grid-template-columns: 1fr; } .mdoc .mass div + div { border-left: 0; border-top: 1px solid var(--line); } .mdoc table.mt { display: block; overflow-x: auto; } }
 .rtk { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.rtk.r4 { grid-template-columns: repeat(4, 1fr); }   /* v181: + "para reinspecionar" (retrabalho) */
+.rtk .rtkre span small { display: block; font: 500 11.5px var(--f-body); color: var(--ink-3); } .rtk .rtkre.tem { border-color: var(--k); }
 .rtk div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; box-shadow: inset 0 4px 0 var(--k); }
 .rtk b { display: block; font: 800 30px/1.1 var(--f-display); color: var(--k); } .rtk span { font: 600 13.5px var(--f-body); color: var(--ink-2); }
 .rtval { display: flex; gap: 12px; align-items: center; border: 2px solid color-mix(in srgb, var(--ok) 45%, var(--surface)); background: color-mix(in srgb, var(--ok) 7%, var(--surface)); border-radius: 12px; padding: 12px 14px; font: 600 15px var(--f-body); }
@@ -2837,7 +2841,7 @@ body.tvmode .tvbar { display: none !important; }   /* v47: no painel rolando nã
 .rtres b { font: 800 40px/1 var(--f-display); letter-spacing: .04em; } .rtres span { font: 600 15px var(--f-body); opacity: .92; }
 .rtresb { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; font: 600 14px var(--f-body); color: var(--ink-2); }
 .rtsum { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; }
-@media (max-width: 640px) { .rtk, .rtgrid2, .rtsum { grid-template-columns: 1fr; } .rtadd { grid-template-columns: 1fr 1fr; } .rtv { grid-template-columns: 1fr; } .tbw.rift .tblr { flex-wrap: wrap; } }
+@media (max-width: 640px) { .rtk, .rtk.r4, .rtgrid2, .rtsum { grid-template-columns: 1fr; } .rtadd { grid-template-columns: 1fr 1fr; } .rtv { grid-template-columns: 1fr; } .tbw.rift .tblr { flex-wrap: wrap; } }
 
 /* versão hospedada: tela de entrada e usuário logado */
 #fb-gate { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: var(--bg); }
@@ -6183,7 +6187,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 179; window.CQ_V = APP_V;
+    const APP_V = 183; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -18590,6 +18594,18 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
 
   /* ---------- tela do tablet (#rirtab): mesma lista em formato de tablet, no verde do RIR ---------- */
   VIEWS.rirtab = (main) => VIEWS.rir(main);
+  /* v180: retrabalho no tablet — o que voltou (Reinspecionar) e o que está fora (Recebido, para quem recebe o material) */
+  function riTabRetHTML(bate) {
+    const L = retFilaRIR().filter((o) => bate([o.nf, o.forn, o.lote, o.num, o.ref, o.oque].join(' ')));
+    const rec = L.filter((o) => o.st === 'rec').sort((a, b) => (a.recAt || 0) - (b.recAt || 0)), em = L.filter((o) => o.st === 'em').sort((a, b) => (b.fora || 0) - (a.fora || 0));
+    const dias = (n) => `${NF.format(n || 0)} ${n === 1 ? 'dia' : 'dias'}`;
+    const lin = (o, bt) => `<div class="tblr"><div><div class="t"><b class="mono">${esc(o.lote || '—')}</b><span class="chip ${o.st === 'rec' ? 'info' : 'warn'}"><i>↻</i>${esc(o.num || '')}</span>${o.tipo === 'def' ? '<span class="chip crit">defeito</span>' : ''}</div>
+      <div class="d">${esc(o.oque || '')}${o.setor ? ' · ' + esc(o.setor) : ''}</div><div class="w">${o.nf ? 'NF ' + esc(o.nf) + ' · ' : ''}${esc(o.forn || '')}${o.st === 'rec' ? ` · voltou ${o.recAt ? 'em ' + esc(dmy(o.recAt)) : ''}` : ` · fora há ${dias(o.fora)}`}</div></div><div class="tbacts">${bt}</div></div>`;
+    const btR = (o) => (retInsp() ? `<button class="btn retb big" type="button" data-act="ret-reins" data-key="${esc(o.key || o.id)}">↻ Reinspecionar</button>` : '');
+    const btE = (o) => (retW() ? `<button class="btn big" type="button" data-act="ret-rec" data-key="${esc(o.key || o.id)}">Recebido do retrabalho</button>` : `<button class="btn big" type="button" data-open="RET:${esc(o.key || o.id)}">Ver</button>`);
+    return (rec.length ? `<div class="tbcard tbret"><div class="ch">Voltaram do retrabalho · reinspecionar<span class="cnt">${rec.length}</span></div>${rec.map((o) => lin(o, btR(o))).join('')}</div>` : '')
+      + (em.length ? `<div class="tbcard tbret"><div class="ch">Em retrabalho · aguardando voltar<span class="cnt">${em.length}</span></div>${em.map((o) => lin(o, btE(o))).join('')}</div>` : '');
+  }
   function riTabHome(main) {
     const w = cw('rir'), C = riCards(), P = riPend(), rasT = C.filter((c) => c.st === 'r'), ras = rasT.filter(riMeu), nOutros = rasT.length - ras.length, q = E.key(RI.tq || '');
     RI.pend = P;
@@ -18608,10 +18624,11 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const body = !RI.ready ? '<div class="loading"><span class="spin"></span><span>Carregando…</span></div>' : `
       <div class="tbrowq" style="grid-template-columns:1fr auto"><input id="rit-q" class="tbin" placeholder="Buscar NF, fornecedor ou lote" value="${esc(RI.tq || '')}" autocomplete="off"><button class="btn big" type="button" data-act="ri-tlimpa" ${RI.tq ? '' : 'disabled'}>Limpar</button></div>
       ${w ? '' : '<div class="tbwarn">Seu acesso ao RIR é só de consulta: dá para ver as notas, mas não para inspecionar.</div>'}
-      <div class="rtk"><div style="--k:var(--rir)"><b>${NF.format(P.length)}</b><span>notas aguardando RIR</span></div><div style="--k:var(--info)"><b>${NF.format(ras.length)}</b><span>com você${nOutros ? ` · ${nOutros} com outros` : ''}</span></div><div style="--k:var(--ok)"><b>${NF.format(nHoje)}</b><span>lotes inspecionados hoje</span></div></div>
+      <div class="rtk r4"><div style="--k:var(--rir)"><b>${NF.format(P.length)}</b><span>notas aguardando RIR</span></div><div style="--k:var(--info)"><b>${NF.format(ras.length)}</b><span>com você${nOutros ? ` · ${nOutros} com outros` : ''}</span></div><div style="--k:var(--ok)"><b>${NF.format(nHoje)}</b><span>lotes inspecionados hoje</span></div>${(() => { const n = retFilaRIR().filter((o) => o.st === 'rec').length; return `<div class="rtkre${n ? ' tem' : ''}" style="--k:var(--ret)"><b>${NF.format(n)}</b><span>para reinspecionar <small>voltaram do retrabalho</small></span></div>`; })()}</div>
       ${(() => { const PL = riPassouL(); return rs.length || PL.length ? `<div class="tbcard"><div class="ch">Com você<span class="cnt">${rs.length}</span></div>${riPassouHTML(PL)}${rs.map(rasRow).join('')}</div>` : ''; })()}
       ${(() => { const ou = rasT.filter((c) => !riMeu(c)).filter((c) => bate([c.nf, c.forn, (c.ids || []).join(' '), c.nome].join(' ')));   /* v128: notas com outros inspetores também no tablet (Ver → só olhando → Assumir) */
         return ou.length ? `<div class="tbcard"><div class="ch">Com outros inspetores<span class="cnt">${ou.length}</span></div>${ou.map(outRow).join('')}</div>` : ''; })()}
+      ${riTabRetHTML(bate)}
       <div class="tbcard"><div class="ch">Notas aguardando inspeção<span class="cnt">${ag.length}</span></div>${ag.length ? ag.map(([g, i]) => agRow(g, i)).join('') : `<div class="tbnone">${q ? 'Nenhuma nota com essa busca.' : 'Nenhuma nota aguardando inspeção de recebimento. 👍'}</div>`}</div>
       ${(() => { const TR = riTravados(); RI.trav = TR; const tr = TR.map((o, i) => [o, i]).filter(([o]) => bate([o.nf, o.forn, o.lots.map((x) => x.id).join(' ')].join(' ')));
         return tr.length ? `<div class="tbcard"><div class="ch">Travados · sem inspeção<span class="cnt">${tr.length}</span></div>${tr.map(([o, i]) => `<div class="tblr"><div><div class="t"><b>NF ${esc(disp(o.nf) || '—')}</b><span class="risit ${SEMI_MOT[o.mot][3]}">${SEMI_MOT[o.mot][0]}</span></div>${tagsHTML(o.lots, o.lots.map((x) => x.key).filter(Boolean))}<div class="d">${esc(o.forn || 'sem fornecedor')}</div><div class="m">${o.lots.length} ${o.lots.length === 1 ? 'lote' : 'lotes'}: ${esc(lotTx(o.lots))}</div><div class="w">marcado ${esc(dmy(o.ev.at))} por ${esc(who(o.ev.by))}${o.ev.obs ? ' · ' + esc(o.ev.obs) : ''}</div></div>${w ? `<button class="btn big" type="button" data-act="ri-semix" data-key="${i}">Voltar para a fila</button>` : ''}</div>`).join('')}</div>` : ''; })()}
@@ -22412,6 +22429,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     if (w && o.st === 'em') acts.push(bt('ret-rec', 'Recebido do retrabalho', 'primary'));
     if (retInsp() && o.st === 'rec') acts.push(bt('ret-reins', 'Reinspecionar', 'primary'));
     if (w && o.aberta) acts.push(bt('ret-lib', 'Liberado sem reinspeção'), bt('ret-ed', o.setor ? 'Editar (filial, o que fazer…)' : 'Definir filial', o.setor ? '' : 'primary'), bt('ret-canc', 'Cancelar ordem', 'danger'));
+    if (DB.owner) acts.push(bt('ret-apagar', 'Apagar (conta dona)', 'ghost tcrit push'));   /* v182: apagar testes */
     const body = `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${retChip(o)}<span class="rtorgs" style="margin:0">${retOrigTag(o)}</span></div>
       ${acts.length ? `<div class="formfoot" style="justify-content:flex-start">${acts.join('')}</div>` : ''}
       <div class="fsec"><dl class="rtdl">${pares.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></div>
@@ -22450,6 +22468,18 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
         if (S.view === 'ret') setTimeout(() => retFicha(key), 300); else render();
       } catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); b.disabled = false; b.textContent = 'Registrar'; }
     };
+  }
+  /* v182: a conta dona apaga a ordem de vez (testes); se ainda estava aberta, o lote sai do retrabalho antes */
+  function retApagar(key) {
+    const o = retGet(key); if (!o || !DB.owner) return;
+    confirmBox(`Apagar ${o.num}`, `Apagar a ordem ${o.num}${o.lote ? ' (lote ' + o.lote + ')' : ''} de vez? Ela some da lista e do Painel e não dá para desfazer.${o.aberta && o.loteK ? ' O lote sai do retrabalho e volta para a situação de antes.' : ''}`, 'Apagar de vez', async () => {
+      try {
+        if (o.aberta && o.loteK) await addDecisions([{ k: o.loteK, ev: { t: 'rtbx', ord: o.num, oid: o.key } }]);
+        await soldWrite('ret/m-' + o.mes, { items: { [o.key]: { _del: true, _u: Date.now(), _ub: DB.me || null } } });
+        logEntry('RET', key, 'excluído', `${o.num} apagada pela conta dona${o.lote ? ' · ' + o.lote : ''}`, null);
+        closeLayer(); toast(`${o.num} apagada.`); render();
+      } catch (e) { toast('Não foi possível apagar: ' + ((e && (e.message || e.code)) || e), true); }
+    }, true);
   }
   function retCancel(key) {
     const o = retGet(key); if (!o) return;
@@ -25267,6 +25297,7 @@ ${trGuil(W, H, M, B)}
       if (a === 'ret-rec') { retRecebido(key); return; }
       if (a === 'ret-lib') { retLib(key); return; }
       if (a === 'ret-canc') { retCancel(key); return; }
+      if (a === 'ret-apagar') { retApagar(key); return; }   /* v182 */
       if (a === 'sold-sub') { S.soldSub = key; render(); return; }
       if (a === 'sold-novo') { soldWDialog(null); return; }
       if (a === 'sold-ed') { soldWDialog(key); return; }
