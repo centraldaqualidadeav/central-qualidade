@@ -463,6 +463,38 @@ ul.dvdl, p.dvdl { display: none !important; } .dvdl { list-style: none; margin: 
 .qcresp .qcrq { cursor: default; margin: 0; }
 .qcrx { all: unset; cursor: pointer; font-size: 20px; color: var(--ink-3); padding: 0 6px; }
 .qcpisca .bb { animation: qcpisca 1.2s ease-out; } @keyframes qcpisca { 0%, 40% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--qc) 55%, transparent); } 100% { box-shadow: none; } }
+/* v194: janela do QualiChat */
+.qchb { display: inline-flex; gap: 8px; align-items: center; }
+.qcjan { all: unset; cursor: pointer; width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; border: 1px solid var(--line-2); color: var(--ink-2); box-sizing: border-box; }
+.qcjan svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.qcjan:hover, .qcjan:focus-visible { color: var(--qc); border-color: var(--qc); box-shadow: 0 0 10px color-mix(in srgb, var(--qc) 35%, transparent); }
+body.qcmini .rail, body.qcmini .tk, body.qcmini .tkpill, body.qcmini .railtip, body.qcmini #tk, body.qcmini #tk-pill { display: none !important; }
+body.qcmini .app { grid-template-columns: minmax(0, 1fr) !important; }
+body.qcmini .main { padding: 0 !important; }
+body.qcmini .qcw { grid-template-columns: minmax(0, 1fr); height: 100vh; height: 100dvh; min-height: 0; border: 0; border-radius: 0; }
+body.qcmini .qcs { display: none; } body.qcmini .qcw.tem .qcl { display: none; } body.qcmini .qcw:not(.tem) .qcc { display: none; } body.qcmini .qcvolta { display: block; }
+body.qcmini .qcl .hd { padding: 10px 12px 8px; gap: 8px; } body.qcmini .qcl .hd h2 { font-size: 19px; }
+body.qcmini .qcv { padding: 8px 12px; grid-template-columns: 38px minmax(0, 1fr) auto; } body.qcmini .qcv .qcav { width: 38px; height: 38px; font-size: 13px; }
+body.qcmini .qcc .top { padding: 8px 10px; gap: 10px; } body.qcmini .qcc .top .qcav { width: 38px; height: 38px; }
+body.qcmini .qcmsgs { padding: 10px 10px; } body.qcmini .qcm .bb { max-width: 82%; } body.qcmini .qccx { padding: 8px 10px; gap: 8px; } body.qcmini .qcresp { padding: 6px 10px 0; }
+body.qcmini .qcwin { display: none; }
+.qcstrip { display: flex; gap: 8px; padding: 8px 10px; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--surface-2) 40%, var(--surface)); overflow-x: auto; scrollbar-width: none; flex: none; }
+.qcsi { all: unset; cursor: pointer; position: relative; flex: none; border-radius: 50%; }
+.qcsi .qcav { width: 34px; height: 34px; font-size: 12px; } .qcsi .qcav.g { border-radius: 11px; }
+.qcsi.on .qcav { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--qc); }
+.qcsi u { position: absolute; right: -2px; top: -2px; width: 11px; height: 11px; border-radius: 50%; background: var(--qc); border: 2px solid var(--surface); box-shadow: 0 0 8px var(--qc); }
+.qcsi:focus-visible { outline: 2px solid var(--qc); outline-offset: 2px; }
+/* v195: fundo animado (constelação) e emojis */
+.qcc { position: relative; } .qcc > :not(.qcfx):not(.qcemop) { position: relative; z-index: 1; }
+.qcfx { position: absolute; left: 0; top: 0; width: 100%; height: 0; z-index: 0; pointer-events: none; color: var(--qc); display: block; }
+.qcemo { all: unset; cursor: pointer; flex: none; width: 38px; height: 42px; display: grid; place-items: center; color: var(--ink-3); border-radius: 12px; }
+.qcemo svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.qcemo:hover, .qcemo[aria-expanded="true"] { color: var(--qc); } .qcemo:focus-visible { outline: 2px solid var(--qc); }
+.qcemop { position: absolute; left: 12px; bottom: 70px; z-index: 5; display: grid; grid-template-columns: repeat(8, 38px); gap: 2px; padding: 8px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line-2); box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--qc) 18%, transparent); }
+.qcemop button { all: unset; cursor: pointer; width: 38px; height: 38px; display: grid; place-items: center; font-size: 22px; border-radius: 10px; }
+.qcemop button:hover, .qcemop button:focus-visible { background: var(--surface-2); }
+.qcm .tx.emo { font-size: 32px; line-height: 1.15; }
+body.qcmini .qcemop { left: 8px; right: 8px; bottom: 62px; grid-template-columns: repeat(auto-fill, minmax(34px, 1fr)); } body.qcmini .qcemop button { width: auto; height: 34px; font-size: 20px; } body.qcmini .qcemo { width: 30px; }
 .qccx { display: flex; gap: 10px; align-items: center; padding: 12px 16px; border-top: 1px solid var(--line); }
 .qccx .inp { flex: 1; height: 42px; border-radius: 12px; }
 .qcenv { width: 42px; height: 42px; padding: 0; border-radius: 12px; display: grid; place-items: center; background: var(--qc); border-color: var(--qc); color: #0b0f0d; font-size: 17px; box-shadow: 0 0 14px color-mix(in srgb, var(--qc) 45%, transparent); }
@@ -6281,7 +6313,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 192; window.CQ_V = APP_V;
+    const APP_V = 195; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -6824,7 +6856,12 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   /* v42: aba de certificados (index.html?certificados) — a mesma Central, só com o certificado e a fila ao lado */
   const CQ_ABA = (() => { try { return new URLSearchParams(location.search).has('certificados'); } catch (e) { return false; } })();
   if (CQ_ABA) { document.body.classList.add('cqaba'); document.title = 'Certificados · Central'; }
-  const S = { model: null, audit: [], idx: null, today: E.todaySerial(), view: CQ_ABA ? 'certq' : 'painel', f: {}, t: {}, form: 'av', editKey: null, rq: '', repMonth: null, stale: false, histDays: 7 };
+  /* v194: janela do QualiChat (index.html?qualichat) — a mesma Central, só com o QualiChat e sem ouvir os módulos; &pip = dentro da janela flutuante */
+  const QC_MINI = (() => { try { return !CQ_ABA && new URLSearchParams(location.search).has('qualichat'); } catch (e) { return false; } })();
+  const QC_PIP = QC_MINI && /[?&]pip\b/.test(location.search);
+  const LEVE = CQ_ABA || QC_MINI;
+  if (QC_MINI) { document.body.classList.add('qcmini'); if (QC_PIP) document.body.classList.add('qcpip'); document.title = 'QualiChat'; }
+  const S = { model: null, audit: [], idx: null, today: E.todaySerial(), view: CQ_ABA ? 'certq' : QC_MINI ? 'qchat' : 'painel', f: {}, t: {}, form: 'av', editKey: null, rq: '', repMonth: null, stale: false, histDays: 7 };
   const DB = { db: null, user: null, me: null, canWrite: null, docs: { AV: {}, SERV: {}, RNC: {}, INS: {}, RNCC: {} }, snapPend: {}, cfg: null, ready: {}, where: {}, meta: {}, names: {}, perfU: {}, state: 'wait', last: null, raw: null, numer: {}, owner: false, admin: null };
 
   /* ================= utilidades ================= */
@@ -7277,7 +7314,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     /* v42: a aba de certificados só ouve o que o certificado usa: lotes (AV), NCFs, a fila, o RIF e a configuração */
     const ABA_MODS = ['AV', 'RNC'];
     MODS.forEach((mod) => {
-      if (CQ_ABA && !ABA_MODS.includes(mod)) { DB.docs[mod] = {}; DB.ready[mod] = true; return; }
+      if ((CQ_ABA && !ABA_MODS.includes(mod)) || QC_MINI) { DB.docs[mod] = {}; DB.ready[mod] = true; return; }
       db.collection(MOD[mod].col).onSnapshot((snap) => {
         DB.ready[mod] = true; DB.state = 'on';
         if (rebAdiar() && DB.docs[mod]) { DB.snapPend[mod] = snap; scheduleRebuild(); return; }
@@ -7291,20 +7328,20 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         DB.state = 'off'; DB.parou = true; updateChrome(); diagParado();
       });
     });
-    if (CQ_ABA) { IQ.ready = true; SD.ready = true; RI.ready = true; RFI.valReady = true; }
-    if (!CQ_ABA) db.collection('iqf').onSnapshot((snap) => {
+    if (LEVE) { IQ.ready = true; SD.ready = true; RI.ready = true; RFI.valReady = true; }
+    if (!LEVE) db.collection('iqf').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); IQ.docs = o; IQ.ready = true; IQ.ver++;
       if (autoOk()) setTimeout(iqSitSync, 2000);
       if (!S.model) return;
       if (['iqf', 'painel'].includes(S.view)) { const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
     }, (e) => { anotaErro('iqf', e);  IQ.ready = true; });
-    if (!CQ_ABA) db.collection('sold').onSnapshot((snap) => {
+    if (!LEVE) db.collection('sold').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); SD.docs = o; SD.ready = true; SD.ver++;
       if (!S.model) return;
       updateChrome();
       if (['sold', 'painel', 'alertas', 'equipe'].includes(S.view)) { const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
     }, (e) => { anotaErro('sold', e);  SD.ready = true; });
-    if (!CQ_ABA && (accBanco('ret') !== 'nao' || accBanco('rir') !== 'nao')) db.collection('ret').onSnapshot((snap) => {   /* v160: Retrabalho */
+    if (!LEVE && (accBanco('ret') !== 'nao' || accBanco('rir') !== 'nao')) db.collection('ret').onSnapshot((snap) => {   /* v160: Retrabalho */
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RTR.docs = o; RTR.ready = true; RTR.ver++;
       if (!S.model) return;
       if (S.audit) { const sevO = { alta: 0, media: 1, baixa: 2 }; S.audit = S.audit.filter((a) => a.mod !== 'RET').concat(retAudit()).sort((a, b) => sevO[a.sev] - sevO[b.sev] || b.items.length - a.items.length); updateChrome(); }
@@ -7312,13 +7349,13 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       if (S.view === 'ret' || (S.view === 'rir' && RI.sub !== 'ed')) { const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
     }, (e) => { anotaErro('ret', e); RTR.ready = true; });
     else RTR.ready = true;
-    db.collection('certq').onSnapshot((snap) => {
+    if (QC_MINI) CQF.ready = true; else db.collection('certq').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); CQF.docs = o; CQF.ready = true; CQF.ver++;
       if (!S.model) return;
       updateChrome();
       if (S.view === 'certq' || S.view === 'painel') { if (S.view === 'certq' && S.cqSub === 'ed') { cqPanelSync(); if (CQ_ABA) abaFila(); else if (!S.cqEd) render(); return; } const ae = document.activeElement; if ($('#layer').innerHTML || (ae && ae.closest && ae.closest('#main') && /INPUT|SELECT|TEXTAREA/.test(ae.tagName))) S.stale = true; else render(); }
     }, (e) => { anotaErro('certq', e);  CQF.ready = true; });
-    if (accBanco('rif') === 'nao' && accBanco('certq') === 'nao' && accBanco('rncc') === 'nao') { RFI.ped = {}; RFI.pedReady = true; } else db.collection('rifp').onSnapshot((snap) => {   /* v71: só quem pode ler (regras) */
+    if (QC_MINI || (accBanco('rif') === 'nao' && accBanco('certq') === 'nao' && accBanco('rncc') === 'nao')) { RFI.ped = {}; RFI.pedReady = true; } else db.collection('rifp').onSnapshot((snap) => {   /* v71: só quem pode ler (regras) */
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RFI.ped = o; RFI.pedReady = true;
       if (!S.model) return;
       rtSnap();
@@ -7331,7 +7368,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
         else { const busca = document.activeElement && document.activeElement.id === 'rf-q'; render(); if (busca) { const i = $('#rf-q'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } } }
       }
     }, (e) => { anotaErro('rifp', e);  RFI.pedReady = true; });
-    if (!CQ_ABA) db.collection('rir').onSnapshot((snap) => {
+    if (!LEVE) db.collection('rir').onSnapshot((snap) => {
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RI.docs = o; RI.ready = true;
       if (!S.model) return;
       updateChrome();
@@ -7341,7 +7378,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       else if (S.view === 'painel' && !$('#layer').innerHTML) render();
     }, (e) => { anotaErro('rir', e);  RI.ready = true; });
     db.doc('iqf/sit').onSnapshot((snap) => { IQSIT.s = (snap.exists && (snap.data() || {}).s) || {}; }, (e) => { anotaErro('iqf/sit', e); });
-    if (!CQ_ABA && accBanco('rif') === 'nao') { RFI.val = {}; RFI.valReady = true; } else if (!CQ_ABA) db.collection('rifv').onSnapshot((snap) => {   /* v71 */
+    if (!CQ_ABA && accBanco('rif') === 'nao') { RFI.val = {}; RFI.valReady = true; } else if (!LEVE) db.collection('rifv').onSnapshot((snap) => {   /* v71 */
       const o = {}; snap.docs.forEach((d) => { o[d.id] = d.data(); }); RFI.val = o; RFI.valReady = true;
       rtSnap();
       if (S.view === 'config' && S.cfgTab === 'rif' && !$('#layer').innerHTML) rfCfgPane();
@@ -7384,7 +7421,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   const PREVIEW = () => !!window.CQ_PREVIEW;
   /* P8: a tela pode estar com os dados guardados no aparelho (sem resposta do servidor); aí nada é gravado sozinho */
   const dadoVelho = () => !!(window.CQ_BANCO && window.CQ_BANCO.velho());
-  const autoOk = () => !PREVIEW() && !dadoVelho() && !CQ_ABA;   /* v42: na aba de certificados nada grava sozinho */
+  const autoOk = () => !PREVIEW() && !dadoVelho() && !LEVE;   /* v42: na aba de certificados nada grava sozinho */
   window.addEventListener('cq-cache', () => { if (S.model) updateChrome(); });
   /* acesso por módulo (versão hospedada): 'nao' = não vê, 'ver' = só consulta, 'lanca' = lança */
   /* módulos em teste: a conta dona esconde de todo mundo (inclusive administradores) até liberar.
@@ -8149,6 +8186,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     if (!S.model) return;
     try { cqDbRecAuto(); } catch (e) { /* v135 */ }
     if (CQ_ABA) { S.view = 'certq'; VIEWS.certq(main); return; }   /* v42: a aba de certificados só tem esta tela */
+    if (QC_MINI) { S.view = 'qchat'; VIEWS.qchat(main); return; }   /* v194: a janela do QualiChat só tem esta tela */
     if (!viewOk(S.view)) {
       const fv = firstView();
       if (!fv) { document.body.classList.toggle('tabmode', false); applyTheme(); main.innerHTML = tbOnly() ? '<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--warn)">Tablet</span><h2>Nenhuma ferramenta do tablet liberada</h2><p>Peça ao administrador da Central: em <b>Usuários</b>, marque as ferramentas do tablet (RIR, NCF ou RIF) para você. RIR e RIF também precisam estar liberados em Configurações › Módulos em teste.</p></div></div>' : '<div class="landing"><div class="drop"><span class="mtag" style="--c:var(--warn)">Sem telas liberadas</span><h2>Nenhuma tela liberada para você</h2><p>Peça ao administrador da Central para liberar as telas que você usa, na tela Usuários.</p></div></div>'; return; }
@@ -8666,7 +8704,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   const ehAvP = (uid, nome, cls, on) => { const f = ehFoto(uid); return `<span class="${cls}${f ? ' fo' : ''}${on ? ' on' : ''}">${f ? ehImg(f) : esc(ehIni(nome))}</span>`; };
   const ehModOk = (m) => { if (m === 'GERAL' || typeof window.CQ_ACCESS !== 'function') return true; const col = MOD[m] ? MOD[m].col : (VIEW_COL[m] || null); return !col || vis(col); };
   function ehGuarda(d, snap) {
-    const L = snap && snap.exists ? Object.values((snap.data() || {}).e || {}).filter((x) => x && x.at) : [];   /* os módulos de cada um são filtrados na hora de mostrar (o acesso pode chegar depois) */
+    const L = snap && snap.exists ? Object.values((snap.data() || {}).e || {}).filter((x) => x && x.at && x.key !== 'qc') : [];   /* v193: conversas do QualiChat não entram nas linhas do tempo */   /* os módulos de cada um são filtrados na hora de mostrar (o acesso pode chegar depois) */
     L.sort((a, b) => b.at - a.at); EH.docs[d] = L;
     const falta = L.map((x) => x.by).filter((i) => i && !(i in DB.names));
     if (falta.length) resolveNames(falta).then(ehAtualiza).catch(() => {});
@@ -11066,7 +11104,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   }
   /* aviso ao entrar, uma vez por dia */
   function rncDailyNotice() {
-    if (CQ_ABA || !S.model || !vis('rnc') || $('#layer').innerHTML) return;
+    if (LEVE || !S.model || !vis('rnc') || $('#layer').innerHTML) return;
     if (navigator.webdriver && !window.__CQ_AVISO) return; /* testes automáticos */
     if (lsGet('cq-rnc-aviso', '') === String(S.today)) return;
     const L = rncOpen(), V = L.filter((o) => o.venc), H = L.filter((o) => o.hoje), P = pendLots();
@@ -15747,7 +15785,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     for (let i = 0; i < S.histDays; i++) { const d = new Date(); d.setDate(d.getDate() - i); days.push(today8(d)); }
     const snaps = await Promise.all(days.map((d) => DB.db.doc('log/' + d).get().catch(() => null)));
     const entries = [];
-    snaps.forEach((s) => { if (s && s.exists) Object.values((s.data().e) || {}).forEach((e) => entries.push(e)); });
+    snaps.forEach((s) => { if (s && s.exists) Object.values((s.data().e) || {}).forEach((e) => { if (e && e.key !== 'qc') entries.push(e); }); });   /* v193: sem o QualiChat */
     entries.sort((a, b) => b.at - a.at);
     if (typeof window.CQ_ACCESS === 'function') { for (let i = entries.length - 1; i >= 0; i--) { const m = entries[i].mod; const col = MOD[m] ? MOD[m].col : (VIEW_COL[m] || null); if (m !== 'GERAL' && col && !vis(col)) entries.splice(i, 1); } }
     await resolveNames(entries.map((e) => e.by));
@@ -15988,7 +16026,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   const bkPode = () => !!(DB.owner || DB.admin === true);
   const bkFeitos = (y) => { const a = ((VY.bk || {}).anos || {})[y] || {}; return Object.keys(a).map((id) => Object.assign({ id }, a[id])).sort((p, q) => q.at - p.at); };
   async function bkLoad(force) {
-    if (CQ_ABA || !bkPode() || !DB.db || VY.bkLoading || (VY.bk && !force)) return;
+    if (LEVE || !bkPode() || !DB.db || VY.bkLoading || (VY.bk && !force)) return;
     VY.bkLoading = true;
     try { const d = await DB.db.doc('meta/backups').get(); VY.bk = d.exists ? d.data() || {} : {}; } catch (e) { VY.bk = VY.bk || {}; }
     VY.bkLoading = false;
@@ -21016,11 +21054,12 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
       if (u.at <= QC.visto[cid]) return; QC.visto[cid] = u.at;
       if (E.low(u.e) === eu || !(c.membros || []).map(E.low).includes(eu)) return;
       if (S.view === 'qchat' && QC.aberta === cid && !document.hidden) return;   /* já está olhando esta conversa */
+      if (qcJanelaAberta()) return;   /* v194: a janela do QualiChat está aberta: ela é que avisa */
       const tit = c.tipo === 'g' ? (c.nome || 'Grupo') : qcNomeDe(u.e), txt = (c.tipo === 'g' ? qcCurto(u.n || qcNomeDe(u.e)).split(' ')[0] + ': ' : '') + (u.t || '');
       if (document.hidden && window.Notification && Notification.permission === 'granted') {
         try { const n = new Notification(tit, { body: txt.slice(0, 140), tag: 'qc-' + cid, icon: 'apple-touch-icon.png?v=39' }); n.onclick = () => { window.focus(); QC.aberta = cid; go('qchat'); n.close(); }; } catch (e) { /* sem aviso do sistema */ }
       }
-      qcBalao(cid, c, tit, txt); qcSom();
+      if (!QC_MINI) qcBalao(cid, c, tit, txt); qcSom();   /* v194: na janela pequena, só o som (a conversa fica marcada na lista) */
     });
   }
   function qcBalao(cid, c, tit, txt) {
@@ -21044,10 +21083,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     qcOuveDir(); qcSyncDir(); try { ouvePes(); } catch (e) { /* fotos da Equipe */ }
     if (!DB.db || !qcEu() || QC.unIdx || QC.unAll) return;
     const ouveConv = (cid) => { if (QC.un[cid]) return; QC.un[cid] = DB.db.doc('qc/' + cid).onSnapshot((s) => { if (s && s.exists) QC.conv[cid] = s.data(); else delete QC.conv[cid]; QC.ready = true; qcRedesenha(); }, () => {}); };
-    if (DB.owner) {
-      QC.unAll = DB.db.collection('qc').onSnapshot((q) => { const o = {}; q.docs.forEach((d) => { o[d.id] = d.data(); }); QC.conv = o; QC.ready = true; qcRedesenha(); }, () => { QC.ready = true; });
-      return;
-    }
+    /* v194: a conta dona vê só as conversas dela, como todo mundo */
     QC.unIdx = DB.db.doc('qcu/' + qcEu()).onSnapshot((s) => { QC.idx = (s && s.exists && (s.data() || {}).c) || {}; Object.keys(QC.idx).forEach(ouveConv); QC.ready = true; qcRedesenha(); }, () => { QC.ready = true; });
   }
   setInterval(() => { if (DB.db && qcEu() && !QC.unIdx && !QC.unAll) qcLiga(); }, 2000);
@@ -21076,7 +21112,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
       const d = dmy(m.at); if (d !== dia) { dia = d; ant = ''; o.push(`<span class="qcdia">${d === dmy(Date.now()) ? 'Hoje' : esc(d)}</span>`); }
       const eu = meus.includes(E.low(m.e)), visto = eu && porP.size && Array.from(porP.values()).every((t) => t >= m.at);
       const rq = m.r ? `<button type="button" class="qcrq" data-act="qc-vai" data-key="${esc(m.r.id)}" style="--k:${qcMeus().includes(E.low(m.r.e)) ? 'var(--qc)' : qcCorDe(m.r.e)}"><b>${esc(qcMeus().includes(E.low(m.r.e)) ? 'Você' : qcCurto(m.r.n || qcNomeDe(m.r.e)))}</b><span>${esc(m.r.t || '')}</span></button>` : '';   /* v192: resposta a uma mensagem */
-      o.push(`<div class="qcm${eu ? ' eu' : ''}${ant === m.e ? ' qcseq' : ''}" id="qcm-${esc(m.id)}" data-mid="${esc(m.id)}"><div class="bb">${!eu && c.tipo === 'g' && ant !== m.e ? `<b class="who" style="color:${qcCorDe(m.e)}">${esc(qcCurto(m.n || qcNomeDe(m.e)))}</b>` : ''}${rq}<span class="tx">${esc(m.t)}</span><span class="ft">${hhmm(m.at)}${eu ? ` <i class="ck${visto ? ' ok' : ''}" title="${visto ? 'Lida' : 'Enviada'}">${visto ? '✓✓' : '✓'}</i>` : ''}</span></div>${QC.podeEsc ? `<button type="button" class="qcrb" data-act="qc-resp" data-key="${esc(m.id)}" title="Responder" aria-label="Responder esta mensagem">↩</button>` : ''}</div>`);
+      o.push(`<div class="qcm${eu ? ' eu' : ''}${ant === m.e ? ' qcseq' : ''}" id="qcm-${esc(m.id)}" data-mid="${esc(m.id)}"><div class="bb">${!eu && c.tipo === 'g' && ant !== m.e ? `<b class="who" style="color:${qcCorDe(m.e)}">${esc(qcCurto(m.n || qcNomeDe(m.e)))}</b>` : ''}${rq}<span class="tx${qcSoEmo(m.t) ? ' emo' : ''}">${esc(m.t)}</span><span class="ft">${hhmm(m.at)}${eu ? ` <i class="ck${visto ? ' ok' : ''}" title="${visto ? 'Lida' : 'Enviada'}">${visto ? '✓✓' : '✓'}</i>` : ''}</span></div>${QC.podeEsc ? `<button type="button" class="qcrb" data-act="qc-resp" data-key="${esc(m.id)}" title="Responder" aria-label="Responder esta mensagem">↩</button>` : ''}</div>`);
       ant = m.e;
     });
     return o.join('');
@@ -21098,19 +21134,19 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     if (QC.resp && QC.resp.cid !== QC.aberta) QC.resp = null;
     const mems = c ? Array.from(new Map((c.membros || []).map((e) => [qcPesK(e), { e, n: qcNomeDe(e), p: qcPorEmail(e) }])).values()).sort((a, b) => a.n.localeCompare(b.n, 'pt-BR')) : [];
     main.innerHTML = `<div class="view qcview"><div class="qcw${c ? ' tem' : ''}">
-      <aside class="qcl"><div class="hd"><h2>QualiChat<button type="button" class="qcmais" data-act="qc-nova" title="Nova conversa" aria-label="Nova conversa">+</button></h2>
+      <aside class="qcl"><div class="hd"><h2>QualiChat<span class="qchb">${QC_MINI ? '' : `<button type="button" class="qcjan" data-act="qc-janela" title="Abrir em janela" aria-label="Abrir o QualiChat em janela"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-8 8"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></button>`}<button type="button" class="qcmais" data-act="qc-nova" title="Nova conversa" aria-label="Nova conversa">+</button></span></h2>
         <input id="qc-q" class="inp" type="search" placeholder="Buscar pessoa, grupo ou mensagem" value="${esc(QC.q || '')}" autocomplete="off">
         ${window.Notification && Notification.permission === 'default' ? '<button type="button" class="qcwin" data-act="qc-win">🔔 Ativar avisos do Windows (com a Central minimizada)</button>' : ''}
         <div class="qcf">${[['todas', 'Todas'], ['grupos', 'Grupos'], ['nlidas', 'Não lidas' + (nNl ? ' · ' + nNl : '')]].map(([k, l]) => `<button type="button" data-act="qc-f" data-key="${k}" aria-pressed="${QC.f === k}">${l}</button>`).join('')}</div></div>
         <div class="qcls">${!QC.ready ? '<div class="loading"><span class="spin"></span><span>Carregando…</span></div>' : F.length ? F.map(item).join('') : `<div class="qcvazio">${L.length ? 'Nada com esse filtro.' : 'Nenhuma conversa ainda. Toque em + para começar.'}</div>`}</div></aside>   ${'' /* v189: o aviso da conta dona saiu da tela (a pedido) */}
-      <section class="qcc">${c ? `<div class="top"><button type="button" class="qcvolta" data-act="qc-volta" aria-label="Voltar">‹</button>${qcAv(c)}<div><b>${esc(qcTitulo(c))}</b><span>${c.tipo === 'g' ? NF.format(mems.length) + ' pessoas' : esc((qcPorEmail((mems.find((m) => !qcMeus().includes(E.low(m.e))) || {}).e || '') || {}).cargo || '')}</span></div></div>
+      <section class="qcc">${c ? '<canvas class="qcfx" aria-hidden="true"></canvas>' : ''}${c && QC_PIP ? `<div class="qcstrip">${L.slice(0, 7).map((x) => `<button type="button" class="qcsi${x.id === c.id ? ' on' : ''}" data-act="qc-abre" data-key="${esc(x.id)}" title="${esc(qcTitulo(x))}">${qcAv(x)}${x.id !== c.id && qcNaoLida(x) ? '<u></u>' : ''}</button>`).join('')}</div>` : ''}${c ? `<div class="top"><button type="button" class="qcvolta" data-act="qc-volta" aria-label="Voltar">‹</button>${qcAv(c)}<div><b>${esc(qcTitulo(c))}</b><span>${c.tipo === 'g' ? NF.format(mems.length) + ' pessoas' : esc((qcPorEmail((mems.find((m) => !qcMeus().includes(E.low(m.e))) || {}).e || '') || {}).cargo || '')}</span></div></div>
         <div class="qcmsgs" id="qc-msgs"></div>
-        ${membro ? `<div class="qcresp" id="qc-resp"${QC.resp ? '' : ' hidden'}>${QC.resp ? qcRespBar() : ''}</div><form class="qccx" id="qc-form"><input id="qc-in" class="inp" placeholder="Escreva uma mensagem…" autocomplete="off" maxlength="2000"><button class="btn qcenv" type="submit" aria-label="Enviar">➤</button></form>` : '<div class="qcro">Você está vendo como conta dona (não participa desta conversa).</div>'}`
+        ${membro ? `<div class="qcresp" id="qc-resp"${QC.resp ? '' : ' hidden'}>${QC.resp ? qcRespBar() : ''}</div><div class="qcemop" id="qc-emop" hidden>${QC_EMO.map((e) => `<button type="button" data-act="qc-emo-p" data-key="${e}">${e}</button>`).join('')}</div><form class="qccx" id="qc-form"><button type="button" class="qcemo" data-act="qc-emo" title="Emojis" aria-label="Emojis" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0"/><path d="M9 9.5h.01M15 9.5h.01"/></svg></button><input id="qc-in" class="inp" placeholder="Escreva uma mensagem…" autocomplete="off" maxlength="2000"><button class="btn qcenv" type="submit" aria-label="Enviar">➤</button></form>` : '<div class="qcro">Você está vendo como conta dona (não participa desta conversa).</div>'}`
         : '<div class="qcvazio grande">Escolha uma conversa ou toque em + para começar.</div>'}</section>
       <aside class="qcs">${c ? `<h3>${c.tipo === 'g' ? 'Pessoas · ' + NF.format(mems.length) : 'Conversa'}</h3>${mems.map((m) => `<div class="mb">${qcAvP(m.e)}<div>${esc(m.n)}${qcMeus().includes(E.low(m.e)) ? ' <small>(você)</small>' : ''}<small>${esc((m.p && m.p.cargo) || '')}</small></div></div>`).join('')}
         ${c.tipo === 'g' && qcPodeGrupo() ? '<button type="button" class="btn small" data-act="qc-grupo-ed">Editar grupo</button>' : ''}${DB.owner ? '<button type="button" class="btn small ghost tcrit" data-act="qc-apagar">Apagar conversa (conta dona)</button>' : ''}` : ''}</aside></div></div>`;
     const qi = $('#qc-q'); if (qi) qi.oninput = () => { QC.q = qi.value; clearTimeout(QC.qT); QC.qT = setTimeout(() => { qcDesenha(); const j = $('#qc-q'); if (j) { j.focus(); j.setSelectionRange(j.value.length, j.value.length); } }, 200); };
-    if (c) { qcOuveMsgs(c.id); qcDesenhaMsgs(); qcMarcaLido(); }
+    if (c) { qcOuveMsgs(c.id); qcDesenhaMsgs(); qcMarcaLido(); qcFxLiga(); }
     const fm = $('#qc-form'); if (fm) fm.onsubmit = (e) => { e.preventDefault(); qcEnvia(); };
     const inp = $('#qc-in'); if (inp && window.innerWidth > 860) inp.focus();
   }
@@ -21157,7 +21193,6 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
         }
         await DB.db.doc('qc/' + cid).set(d);
         for (const em of d.membros) await DB.db.doc('qcu/' + em).merge({ c: { [cid]: d.at } });
-        logEntry('GERAL', 'qc', 'criado', tp === 'g' ? `QualiChat: grupo “${d.nome}” criado (${selP.length + 1} pessoas)` : 'QualiChat: conversa nova', null);
         closeLayer(); QC.aberta = cid; QC.conv[cid] = QC.conv[cid] || d; qcDesenha();
       } catch (e) { toast('Não foi possível criar: ' + ((e && (e.message || e.code)) || e), true); b.disabled = false; }
     };
@@ -21174,7 +21209,6 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
       try {
         await DB.db.doc('qc/' + QC.aberta).merge({ nome, membros: sel });
         for (const em of sel.filter((e) => !mem.includes(e))) await DB.db.doc('qcu/' + em).merge({ c: { [QC.aberta]: Date.now() } });
-        logEntry('GERAL', 'qc', 'alterado', `QualiChat: grupo “${nome}” editado (${selK.length} pessoas)`, null);
         closeLayer(); qcDesenha();
       } catch (e) { toast('Não foi possível salvar: ' + ((e && (e.message || e.code)) || e), true); }
     };
@@ -21182,7 +21216,69 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   /* v192: responder uma mensagem (como nos aplicativos de conversa) */
   function qcMsgPorId(id) { for (const ym of Object.keys(QC.msgs)) { const m = (QC.msgs[ym] || {})[id]; if (m) return m; } return null; }
   function qcRespBar() { const r = QC.resp; if (!r) return ''; const meu = qcMeus().includes(E.low(r.e)); return `<div class="qcrq" style="--k:${meu ? 'var(--qc)' : qcCorDe(r.e)}"><b>${esc(meu ? 'Você' : qcCurto(r.n || qcNomeDe(r.e)))}</b><span>${esc(r.t)}</span></div><button type="button" class="qcrx" data-act="qc-resp-x" aria-label="Cancelar resposta">×</button>`; }
+  /* v194: abrir o QualiChat numa janela própria — no PC (Chrome/Edge) flutua por cima de tudo; nos outros, janela pequena */
+  const qcJanelaAberta = () => { try { return !!(QC.jan && !QC.jan.closed); } catch (e) { return false; } };
+  async function qcJanela() {
+    if (qcJanelaAberta()) { try { QC.jan.focus(); } catch (e) { /* o navegador decide */ } return; }
+    const url = 'index.html?qualichat';
+    if (window.documentPictureInPicture && window.matchMedia && matchMedia('(pointer: fine)').matches) {
+      try {
+        const w = await window.documentPictureInPicture.requestWindow({ width: 340, height: 480 });
+        w.document.title = 'QualiChat'; w.document.body.style.cssText = 'margin:0;height:100vh;overflow:hidden;background:' + getComputedStyle(document.body).backgroundColor;
+        const f = w.document.createElement('iframe'); f.src = url + '&pip'; f.title = 'QualiChat'; f.style.cssText = 'border:0;width:100%;height:100%;display:block';
+        w.document.body.appendChild(f); QC.jan = w; w.addEventListener('pagehide', () => { QC.jan = null; });
+        return;
+      } catch (e) { /* sem a janela flutuante: abre a comum */ }
+    }
+    const w = window.open(url, 'cq-qualichat', 'popup,width=380,height=640');
+    if (!w) toast('O navegador bloqueou a janela. Permita janelas para a Central e tente de novo.', true); else QC.jan = w;
+  }
+  /* v195: emojis principais (botão ao lado da caixa) e mensagem só de emoji aparece grande */
+  const QC_EMO = ['👍', '👏', '🙏', '🤝', '💪', '👀', '✅', '❌', '⚠️', '📌', '🔥', '🎉', '😀', '😂', '😊', '😉', '😍', '😎', '🤔', '😮', '😢', '😡', '❤️', '☕'];
+  const qcSoEmo = (t) => { const x = String(t || '').trim(); return !!x && x.length <= 16 && /\p{Extended_Pictographic}/u.test(x) && /^[\p{Extended_Pictographic}‍️\u{1F3FB}-\u{1F3FF}\s]+$/u.test(x); };
+  function qcEmoAbre(abre) { const p = $('#qc-emop'), b = document.querySelector('.qcemo'); if (!p) return; p.hidden = !abre; if (b) b.setAttribute('aria-expanded', String(!!abre)); }
+  document.addEventListener('click', (e) => { const p = document.getElementById('qc-emop'); if (p && !p.hidden && !e.target.closest('.qcemop, .qcemo')) qcEmoAbre(false); }, true);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { const p = document.getElementById('qc-emop'); if (p && !p.hidden) qcEmoAbre(false); } });
+  /* v195: fundo animado da conversa — constelação: pontos turquesa ligados entre si, bem devagar (pára com a tela escondida; quem pede menos movimento vê parado) */
+  const QFX = { on: false, P: [], w: 0, h: 0 };
+  function qcFxLiga() { if (!QFX.on) { QFX.on = true; qcFx(); } }
+  function qcFx() {
+    const cv = document.querySelector('.qcfx'), ms = document.getElementById('qc-msgs');
+    if (!cv || !ms || S.view !== 'qchat') { QFX.on = false; return; }
+    const red = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+    if (!document.hidden) {
+      const dpr = Math.min(2, window.devicePixelRatio || 1), W = ms.clientWidth, H = ms.clientHeight;
+      cv.style.top = ms.offsetTop + 'px'; cv.style.height = H + 'px';
+      if (W && H) {
+        if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+        const n = Math.max(14, Math.min(42, Math.round(W * H / 15000)));
+        if (QFX.w && (QFX.w !== W || QFX.h !== H)) QFX.P.forEach((p) => { p.x *= W / QFX.w; p.y *= H / QFX.h; });
+        QFX.w = W; QFX.h = H;
+        while (QFX.P.length < n) QFX.P.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.36, vy: (Math.random() - 0.5) * 0.36 });
+        if (QFX.P.length > n) QFX.P.length = n;
+        const x = cv.getContext('2d'), cor = getComputedStyle(cv).color || '#1fd1c1', L = 118;
+        x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, W, H); x.strokeStyle = cor; x.fillStyle = cor; x.lineWidth = 1;
+        for (const p of QFX.P) { if (!red) { p.x += p.vx; p.y += p.vy; } if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1; }
+        for (let i = 0; i < QFX.P.length; i++) for (let j = i + 1; j < QFX.P.length; j++) {
+          const a = QFX.P[i], b = QFX.P[j], d = Math.hypot(a.x - b.x, a.y - b.y); if (d >= L) continue;
+          x.globalAlpha = (1 - d / L) * 0.2; x.beginPath(); x.moveTo(a.x, a.y); x.lineTo(b.x, b.y); x.stroke();
+        }
+        x.globalAlpha = 0.45; for (const p of QFX.P) { x.beginPath(); x.arc(p.x, p.y, 1.6, 0, 6.3); x.fill(); } x.globalAlpha = 1;
+      }
+    }
+    setTimeout(() => requestAnimationFrame(qcFx), red || document.hidden ? 1000 : 40);
+  }
   function qcAct(a, key) {
+    if (a === 'qc-emo') { const p = $('#qc-emop'); qcEmoAbre(p && p.hidden); return true; }
+    if (a === 'qc-emo-p') {
+      const i = $('#qc-in'); if (!i) return true;
+      const ini = i.selectionStart == null ? i.value.length : i.selectionStart, fim = i.selectionEnd == null ? ini : i.selectionEnd;
+      i.value = (i.value.slice(0, ini) + key + i.value.slice(fim)).slice(0, 2000); const pos = ini + key.length;
+      if (window.matchMedia && matchMedia('(pointer: fine)').matches) i.focus();
+      try { i.setSelectionRange(pos, pos); } catch (e) { /* ok */ }
+      return true;
+    }
+    if (a === 'qc-janela') { qcJanela(); return true; }
     if (a === 'qc-resp') { const m = qcMsgPorId(key); if (!m) return true; QC.resp = { cid: QC.aberta, id: key, e: m.e, n: m.n, t: m.t }; const b = $('#qc-resp'); if (b) { b.innerHTML = qcRespBar(); b.hidden = false; } const i = $('#qc-in'); if (i) i.focus(); return true; }
     if (a === 'qc-resp-x') { QC.resp = null; const b = $('#qc-resp'); if (b) { b.hidden = true; b.innerHTML = ''; } return true; }
     if (a === 'qc-vai') { const el = document.getElementById('qcm-' + key); if (el) { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); el.classList.remove('qcpisca'); void el.offsetWidth; el.classList.add('qcpisca'); } else toast('Essa mensagem é de um mês anterior.'); return true; }
@@ -21198,7 +21294,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
         try {
           for (const ym of [qcYm(), qcYm(Date.now() - 32 * 864e5)]) await DB.db.doc(`qc/${cid}/mes/${ym}`).delete().catch(() => {});
           await DB.db.doc('qc/' + cid).delete(); delete QC.conv[cid]; QC.aberta = null;
-          logEntry('GERAL', 'qc', 'excluído', 'QualiChat: conversa apagada pela conta dona', null); toast('Conversa apagada.'); qcDesenha();
+          toast('Conversa apagada.'); qcDesenha();
         } catch (e) { toast('Não foi possível apagar: ' + ((e && (e.message || e.code)) || e), true); }
       }, true);
       return true;
