@@ -4261,7 +4261,7 @@ const dcNfDig = () => cleanText(state.v[REF_NF] || '').replace(/\D+/g, '');
 /* padrão do nome do Data Book (mudou): "NF 54422 - POB302002826 - CQ 27973-5 Documentação completa Jurong - Aços Vital.pdf"
    NF · O.C. do cliente · número do certificado · cliente (primeira palavra, só a inicial maiúscula); o que faltar sai do nome */
 function dcNomePadrao() {
-  const nf = dcNfDig(), oc = limparNome(cleanText(state.v[REF_OC] || '')), cli = dcCliCurto(state.v[REF_CLIENTE]);
+  const nf = dcNfDig(), oc = limparNome(cleanText(state.v[REF_OC] || '').replace(/\s*[-–—]\s*/g, ' - '))   /* "B302002826-P85" → "B302002826 - P85" */, cli = dcCliCurto(state.v[REF_CLIENTE]);
   const cq = (doc && doc.certs && doc.certs.length > 1 ? nomeConjunto() : nomeArquivo(state)) || '';
   const cliT = cli ? cli.charAt(0) + cli.slice(1).toLowerCase() : '';
   const partes = [nf ? `NF ${nf}` : '', oc, cq].filter(Boolean);
