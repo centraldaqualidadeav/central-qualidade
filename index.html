@@ -33,7 +33,7 @@
   --tcr: #707a2c;
   --usi: #497a98;
   --sold: #be5615;
-  --iqf: #986b3e; --rif: #1B3A6B; --rir: #4b6320; --trn: #2f6f7e; --ret: #33428F;
+  --iqf: #986b3e; --rif: #1B3A6B; --rir: #4b6320; --trn: #2f6f7e; --ret: #33428F; --qc: #0f8f86;
   --ok: #1d7446;
   --warn: #9a6400;
   --serious: #b9500e;
@@ -52,7 +52,7 @@
   :root:not([data-theme="light"]) {
     --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
     --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #6c7772;
-    --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --trn: #5fb2c2; --rir: #8fb35a; --ret: #6f7fd6;
+    --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --trn: #5fb2c2; --rir: #8fb35a; --ret: #6f7fd6; --qc: #1fd1c1;
     --ok: #5dcb8d; --warn: #e3ad48; --serious: #ef8a4c; --crit: #ff6f63; --info: #72a8de; --off: #9aa39f; --focus: #72a8de;
     --n-av: #3fbf8f; --n-serv: #d99a3c; --n-rnc: #ff5a47; --n-rncc: #a07cf0; --n-cal: #3d9bff; --n-sold: #ff7a33; --n-iqf: #d4955a; --n-tcr: #b8c34a; --ct-tubos: #b8c34a; --ct-grades: #4fb3c9; --ct-valvulas: #c3ced6; --n-rif: #5b8ff0; --n-rir: #9fd16a; --n-geral: #8a958f; --n-roxo: #8f63d6; --n-ouro: #e3b85a; --n-azul: #5b9be6;
     --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
@@ -62,7 +62,7 @@
 :root[data-theme="dark"] {
   --bg: #111413; --surface: #191d1b; --surface-2: #1f2421; --sunken: #0d100f; --line: #2d3430; --line-2: #3c4540;
   --ink: #e6eae7; --ink-2: #b2bbb6; --ink-3: #87918c; --geral: #6c7772;
-  --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --trn: #5fb2c2; --rir: #8fb35a; --ret: #6f7fd6;
+  --av: #378267; --serv: #996c21; --rnc: #d9362a; --rncc: #825ddc; --cal: #2d77c1; --jur: #2e7f87; --acj: #5f67e3; --tcr: #707a2c; --usi: #497a98; --sold: #be5615; --iqf: #986b3e; --rif: #4a78c2; --trn: #5fb2c2; --rir: #8fb35a; --ret: #6f7fd6; --qc: #1fd1c1;
   --ok: #5dcb8d; --warn: #e3ad48; --serious: #ef8a4c; --crit: #ff6f63; --info: #72a8de; --off: #9aa39f; --focus: #72a8de;
   --n-av: #3fbf8f; --n-serv: #d99a3c; --n-rnc: #ff5a47; --n-rncc: #a07cf0; --n-cal: #3d9bff; --n-sold: #ff7a33; --n-iqf: #d4955a; --n-tcr: #b8c34a; --ct-tubos: #b8c34a; --ct-grades: #4fb3c9; --ct-valvulas: #c3ced6; --n-rif: #5b8ff0; --n-rir: #9fd16a; --n-geral: #8a958f; --n-roxo: #8f63d6; --n-ouro: #e3b85a; --n-azul: #5b9be6;
   --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 28px rgba(0, 0, 0, .35);
@@ -298,7 +298,12 @@ button.ehpc { cursor: pointer; } button.ehpc:hover { border-color: var(--ink-3);
 .cnsit .dvpq small { display: block; font-size: 11px; color: var(--ink-3); }
 button.cnm { font: inherit; color: inherit; text-align: left; cursor: pointer; width: 100%; } button.cnm:hover { border-color: var(--c); }
 .cnpx { display: flex; flex-direction: column; } .cncu { cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; } .cnl { display: flex; flex-direction: column; min-width: 0; }   /* v164: custo na largura toda */ .cnv { font: 700 34px/1 var(--f-display); color: var(--c); text-shadow: 0 0 14px color-mix(in srgb, var(--c) 45%, transparent); margin-bottom: 12px; }
-.cncl li { grid-template-columns: 22px 96px minmax(20px, 1fr) 96px; } .cncl b { font: 700 15px var(--f-display); white-space: nowrap; }
+.cncl li { grid-template-columns: 22px 96px minmax(20px, 1fr) 96px; }
+.cnst3 { grid-column: 1 / -1; margin-top: 2px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }   /* v186 */
+.cnst3 > div { display: grid; gap: 3px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: color-mix(in srgb, var(--n-cal) 7%, var(--surface-2)); box-shadow: inset 0 3px 0 color-mix(in srgb, var(--n-cal) 70%, transparent); min-width: 0; }
+.cnst3 small { font: 700 10px var(--f-body); letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cnst3 b { font: 700 19px/1.1 var(--f-display); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 0 12px color-mix(in srgb, var(--n-cal) 45%, transparent); }
+.cnst3 span { font: 500 11.5px var(--f-mono); color: var(--n-cal); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cncl b { font: 700 15px var(--f-display); white-space: nowrap; }
 .cncu .cnco { height: auto; min-height: 150px; margin: 0; padding: 0; } .cncu .cnco .dvco { grid-template-rows: 1fr auto auto; } .cnco .dvco b { font-size: 12px; white-space: nowrap; }
 .cnsec { margin-top: 14px; } .cnok { margin-top: auto; border-radius: 12px; } .cnlv li { grid-template-columns: 10px minmax(0, 1fr); } .cnlv small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
 @container (max-width: 860px) { .cnop .dvc2 { grid-template-columns: minmax(0, 1fr); } }
@@ -411,6 +416,71 @@ ul.dvdl, p.dvdl { display: none !important; } .dvdl { list-style: none; margin: 
 .ehan.hj { border-color: var(--n-ouro); box-shadow: 0 0 0 1px var(--n-ouro), 0 0 14px color-mix(in srgb, var(--n-ouro) 40%, transparent); } .ehan.hj > span small { color: var(--n-ouro); font-weight: 700; }
 .ehan.ja { opacity: .65; }
 .eqcasa { font-weight: 600; color: var(--ink-2); }
+/* v188: QualiChat — cor do módulo: turquesa (--qc) */
+.qcview { padding-top: 0; }
+.qcw { display: grid; grid-template-columns: 300px minmax(0, 1fr) 260px; height: calc(100dvh - 96px); min-height: 460px; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--surface); }
+.qcl { display: flex; flex-direction: column; min-width: 0; min-height: 0; border-right: 1px solid var(--line); background: color-mix(in srgb, var(--surface-2) 40%, var(--surface)); }
+.qcl .hd { padding: 14px 14px 10px; display: grid; gap: 10px; }
+.qcl .hd h2 { margin: 0; font: 700 22px var(--f-display); text-transform: uppercase; letter-spacing: .02em; display: flex; justify-content: space-between; align-items: center; }
+.qcmais { all: unset; cursor: pointer; width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: var(--qc); color: #0b0f0d; font: 800 20px/1 var(--f-body); box-shadow: 0 0 12px color-mix(in srgb, var(--qc) 45%, transparent); }
+.qcmais:focus-visible { outline: 2px solid var(--qc); outline-offset: 2px; }
+.qcf { display: flex; gap: 6px; flex-wrap: wrap; }
+.qcf button { font: 600 12px var(--f-body); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--ink-2); cursor: pointer; }
+.qcf button[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.qcls { flex: 1; min-height: 0; overflow-y: auto; }
+.qcv { width: 100%; display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 14px; border: 0; border-left: 3px solid transparent; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.qcv:hover { background: color-mix(in srgb, var(--surface-2) 70%, transparent); }
+.qcv.on { background: color-mix(in srgb, var(--qc) 12%, transparent); border-left-color: var(--qc); }
+.qcv .tx { min-width: 0; } .qcv .tx b { display: block; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qcv .tx span { display: block; font-size: 12.5px; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qcv .r { display: grid; justify-items: end; gap: 5px; } .qcv .r small { font: 500 11px var(--f-mono); color: var(--ink-3); }
+.qcv .r em { font-style: normal; color: var(--qc); font-size: 13px; line-height: 1; text-shadow: 0 0 8px var(--qc); }
+.qcav { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; overflow: hidden; font: 700 15px var(--f-display); color: var(--ink-2); background: var(--surface-2); border: 1px solid var(--line); }
+.qcav.fo { border: 0; } .qcav img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.qcav.g { border-radius: 14px; border: 0; color: #0b0f0d; background: var(--k); }
+.qcdona { padding: 10px 14px; font-size: 11.5px; color: var(--ink-3); border-top: 1px solid var(--line); }
+.qcc { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.qcc .top { display: flex; align-items: center; gap: 12px; padding: 12px 18px; border-bottom: 1px solid var(--line); }
+.qcc .top > div b { display: block; font-size: 15px; } .qcc .top > div > span { font-size: 12px; color: var(--ink-3); }
+.qcvolta { all: unset; display: none; cursor: pointer; font: 700 26px/1 var(--f-body); color: var(--ink-2); padding: 0 6px; }
+.qcmsgs { flex: 1; min-height: 0; overflow-y: auto; padding: 18px 22px; display: flex; flex-direction: column; gap: 6px; background: radial-gradient(circle at 15% 8%, color-mix(in srgb, var(--qc) 6%, transparent), transparent 45%); }
+.qcdia { align-self: center; margin: 8px 0 4px; font: 600 11px var(--f-body); color: var(--ink-3); background: var(--surface-2); padding: 3px 10px; border-radius: 999px; }
+.qcm { display: flex; } .qcm.eu { justify-content: flex-end; } .qcm:not(.seg) { margin-top: 4px; }
+.qcm .bb { max-width: min(68%, 560px); padding: 7px 11px 5px; border-radius: 14px 14px 14px 4px; background: var(--surface-2); border: 1px solid var(--line); font-size: 13.5px; line-height: 1.4; overflow-wrap: anywhere; }
+.qcm.eu .bb { border-radius: 14px 14px 4px 14px; background: color-mix(in srgb, var(--qc) 18%, var(--surface-2)); border-color: color-mix(in srgb, var(--qc) 38%, transparent); }
+.qcm .who { display: block; font: 700 11.5px var(--f-body); margin-bottom: 1px; }
+.qcm .tx { white-space: pre-wrap; }
+.qcm .ft { float: right; margin: 6px 0 -2px 10px; font: 500 10.5px var(--f-mono); color: var(--ink-3); }
+.qcm .ck { font-style: normal; color: var(--ink-3); } .qcm .ck.ok { color: var(--qc); }
+.qccx { display: flex; gap: 10px; align-items: center; padding: 12px 16px; border-top: 1px solid var(--line); }
+.qccx .inp { flex: 1; height: 42px; border-radius: 12px; }
+.qcenv { width: 42px; height: 42px; padding: 0; border-radius: 12px; display: grid; place-items: center; background: var(--qc); border-color: var(--qc); color: #0b0f0d; font-size: 17px; box-shadow: 0 0 14px color-mix(in srgb, var(--qc) 45%, transparent); }
+.qcro { padding: 12px 16px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-3); text-align: center; }
+.qcvazio { padding: 24px 16px; text-align: center; color: var(--ink-3); font-size: 13px; } .qcvazio.grande { margin: auto; }
+.qcs { border-left: 1px solid var(--line); padding: 16px; display: grid; align-content: start; gap: 10px; overflow-y: auto; background: color-mix(in srgb, var(--surface-2) 40%, var(--surface)); }
+.qcs h3 { margin: 0; font: 700 11px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.qcs .mb { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 10px; align-items: center; font-size: 13px; }
+.qcs .mb .qcav { width: 32px; height: 32px; font-size: 12px; } .qcs .mb small { display: block; color: var(--ink-3); font-size: 11.5px; }
+.qcpick { display: grid; gap: 2px; max-height: 46vh; overflow-y: auto; border: 1px solid var(--line); border-radius: 10px; padding: 4px; }
+.qcpi { display: grid; grid-template-columns: 20px 36px minmax(0, 1fr); gap: 10px; align-items: center; padding: 6px 8px; border-radius: 8px; cursor: pointer; }
+.qcpi:hover { background: var(--surface-2); } .qcpi .qcav { width: 36px; height: 36px; font-size: 12px; }
+.qcpi b { display: block; font-size: 13.5px; font-weight: 600; } .qcpi small { display: block; font-size: 11.5px; color: var(--ink-3); }
+.qcpi[hidden] { display: none; }
+#nav .qcct { background: var(--qc); color: #0b0f0d; }
+/* v189: aviso de mensagem nova */
+.qcnts { position: fixed; right: 20px; bottom: 20px; z-index: 120; display: grid; gap: 10px; width: min(360px, calc(100vw - 32px)); }
+.qcnt { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 14px 14px 12px; border-radius: 16px; background: var(--surface-2); border: 1px solid color-mix(in srgb, var(--qc) 55%, transparent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--qc) 25%, transparent), 0 0 24px color-mix(in srgb, var(--qc) 28%, transparent), 0 12px 30px rgba(0, 0, 0, .4); animation: qcin .25s ease-out; }
+.qcnt.sai { opacity: 0; transform: translateY(8px); transition: .25s; }
+@keyframes qcin { from { opacity: 0; transform: translateY(12px); } }
+.qcnt small { display: block; font: 700 10.5px var(--f-body); letter-spacing: .07em; text-transform: uppercase; color: var(--qc); } .qcnt b { display: block; font-size: 14px; margin: 2px 0; }
+.qcnt > div > span { display: block; font-size: 13px; color: var(--ink-2); line-height: 1.35; overflow-wrap: anywhere; }
+.qcnt .x { all: unset; cursor: pointer; color: var(--ink-3); font-size: 18px; line-height: 1; padding: 0 2px; }
+.qcnt .bt { grid-column: 2 / -1; display: flex; gap: 8px; margin-top: 4px; } .qcnt .bt .p { background: var(--qc); border-color: var(--qc); color: #0b0f0d; }
+.qcwin { all: unset; cursor: pointer; font: 600 12px var(--f-body); color: var(--qc); padding: 6px 10px; border-radius: 9px; border: 1px dashed color-mix(in srgb, var(--qc) 60%, transparent); text-align: center; }
+@media (prefers-reduced-motion: reduce) { .qcnt { animation: none; } }
+@media (max-width: 1100px) { .qcw { grid-template-columns: 280px minmax(0, 1fr); } .qcs { display: none; } }
+@media (max-width: 860px) { .qcw { grid-template-columns: minmax(0, 1fr); height: calc(100dvh - 120px); } .qcw.tem .qcl { display: none; } .qcw:not(.tem) .qcc { display: none; } .qcvolta { display: block; } }
+
 /* v184: aviso insistente de ordem sem filial (não trava) */
 .rtnagb { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; margin: 12px 0; padding: 12px 14px; border-radius: 10px; border: 2px solid var(--crit); background: color-mix(in srgb, var(--crit) 12%, var(--surface)); animation: rtnag 1.6s ease-in-out infinite; }
 .rtnagb .ic { font-size: 22px; color: var(--crit); line-height: 1; } .rtnagb b { display: block; color: var(--crit); font-size: 14.5px; } .rtnagb span:not(.ic) { display: block; font-size: 13px; color: var(--ink-2); }
@@ -2959,6 +3029,7 @@ body.cq-ver .tbhd { top: 36px; }
       <a href="#painel" data-v="painel" style="--c:var(--geral)"><span class="sw"></span>Painel</a>
       <a href="#alertas" data-v="alertas" style="--c:var(--crit)"><span class="sw"></span>Alertas<span class="ct" id="ct-alertas" hidden></span></a>
       <a href="#equipe" data-v="equipe" style="--c:var(--geral)"><span class="sw"></span>Equipe</a>
+      <a href="#qchat" data-v="qchat" title="QualiChat: conversas da equipe" style="--c:var(--qc)"><span class="sw"></span>QualiChat<span class="ct qcct" id="ct-qchat" hidden></span></a>
       <a href="#mapa3d" data-v="mapa3d" hidden title="Mapa de processos 3D: o caminho do material no galpão, etapa por etapa" style="--c:var(--geral)"><span class="sw"></span>Mapa 3D</a>
       <span class="grp">Módulos</span>
       <!-- v171: ordem pedida — Lotes, Certificados, Calibração, Avaliação de fornecedores, RIR, NCF, NCC, Retrabalho, Soldagem, Treinamento, RIF, Serviços -->
@@ -6199,7 +6270,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 185; window.CQ_V = APP_V;
+    const APP_V = 189; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7549,9 +7620,10 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       cube: '<path d="M12 2.8 4 7.2v9.6l8 4.4 8-4.4V7.2z"/><path d="M4 7.2 12 11.6l8-4.4M12 11.6v9.6"/>',
       ramo: '<circle cx="5" cy="12" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 12h10M7 12c5 0 5-7 10-7M7 12c5 0 5 7 10 7"/>',
       retr: '<path d="M20 11a8 8 0 0 0-14.5-4.5L3 9"/><path d="M3 4v5h5"/><path d="M4 13a8 8 0 0 0 14.5 4.5L21 15"/><path d="M21 20v-5h-5"/>',
+      chat: '<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/>',
       cap: '<path d="M2 9.5 12 4.5l10 5-10 5z"/><path d="M6 11.5v4.8c3.3 2.3 8.7 2.3 12 0v-4.8M22 9.5v5"/>'
     };
-    const V = { painel: 'grid', alertas: 'bell', equipe: 'org', ret: 'retr', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rir: 'rirc', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', manual: 'book', mapa3d: 'cube', trein: 'cap', ramos: 'ramo', trello: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
+    const V = { painel: 'grid', alertas: 'bell', equipe: 'org', qchat: 'chat', ret: 'retr', av: 'tag', serv: 'wrench', certq: 'cert', rif: 'rifi', rir: 'rirc', rnc: 'truck', rncc: 'user', cal: 'gauge', sold: 'flame', iqf: 'medal', cadastro: 'plus', auditoria: 'check', relatorio: 'doc', manual: 'book', mapa3d: 'cube', trein: 'cap', ramos: 'ramo', trello: 'board', acomp: 'flow', historico: 'clock', config: 'gear', usuarios: 'users' };
     const o = {}; Object.keys(V).forEach((v) => { o[v] = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[V[v]]}</svg>`; });
     return o;
   })();
@@ -9927,14 +9999,14 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
       const sitH = `<div class="dvt dvpf cnsit" style="--c:var(--n-cal)"><div class="dvgl"></div><span class="dvk cnst">Situação dos instrumentos</span>
         <div class="cntt"><b>${nf(T0)}</b><span class="dvk">Total de instrumentos</span><small>sem os descartados${dT ? ` · <span style="color:${cor(dT[1])}">${esc(dT[0])}</span>` : ''}</small></div>
         <div class="cnbars">${SIT.map(([l, n, c, sts]) => `<${sts ? 'button type="button"' : 'div'} class="cnb"${sts ? ` data-go="${esc(JSON.stringify(goC({ status: sts })))}"` : ''}><div class="cnbh"><span>${l}</span><b${n && /rnc\)$/.test(c) ? ` style="color:${c}"` : ''}>${nf(n)}</b><em>${pctT(n)}</em></div><div class="cnbt"><i style="width:${T0 ? Math.max(n / T0 * 100, n ? 1.5 : 0) : 0}%;background:${c};box-shadow:0 0 10px ${c}"></i></div></${sts ? 'button' : 'div'}>`).join('')}</div>
-        <div class="dvpq"><div><small>Em uso</small><b>${pctT(nUso)}</b><small>${nf(nUso)} de ${nf(T0)}</small></div><div><small>Parados</small><b>${nf(par)}</b><small>sem uso agora</small></div></div></div>`;
+        <div class="dvpq"><div><small>Em uso</small><b>${pctT(nUso)}</b><small>${nf(nUso)} de ${nf(T0)}</small></div><div><small>Parados</small><b>${pctT(par)}</b><small>${nf(par)} de ${nf(T0)}</small></div></div></div>`;
       /* calibração: 4 cartões */
       const agH = H.map((h) => { const f = fotoAt(h.b); return h.b >= hoje ? nAg : f && f.ag != null ? f.ag : null; });
       const ks4 = `<div class="dvms">
-        ${mini('Em dia', pA == null ? '—' : nf(Math.round(pA)) + '%', `${nf(eA.n)} de ${nf(eA.d)} em uso`, pA != null && pP != null ? nxDl(pA, pP, P, 'sobe', (v) => NF1.format(v) + ' p.p.') : null, H.map((h) => pctD(emDia(U, h.b))), 'var(--ok)', goC({ status: ['CONFORME'] }))}
-        ${mini('Calibração vencida', nf(xA), 'usar só depois de calibrar', nxDl(xA, xP, P, 'desce', nf), H.map((h) => conta(U, h.b, 'venc')), 'var(--n-rnc)', goC({ status: ['VENCIDO'] }))}
-        ${mini('Aguardando análise', nf(nAg), 'certificado sem o maior erro lançado', fP && fP.ag != null ? nxDl(nAg, fP.ag, P, 'desce', nf) : null, agH, 'var(--n-ouro)', null)}
-        ${mini('Calibrações realizadas', nf(cA.length), `de ${nf(prevE(P.a, P.b))} previstas${prevE(P.a, P.b) ? ' · ' + Math.round(Math.min(cA.length, prevE(P.a, P.b)) / prevE(P.a, P.b) * 100) + '%' : ''}`, nxDl(cA.length, cP.length, P, 'sobe', nf), H.map((h) => CE(h.a, h.b).length), 'var(--n-cal)', null)}</div>`;
+        ${mini('Em dia', pA == null ? '—' : nf(Math.round(pA)) + '%', '&nbsp;', pA != null && pP != null ? nxDl(pA, pP, P, 'sobe', (v) => NF1.format(v) + ' p.p.') : null, H.map((h) => pctD(emDia(U, h.b))), 'var(--ok)', goC({ status: ['CONFORME'] }))}
+        ${mini('Calibração vencida', nf(xA), '&nbsp;', nxDl(xA, xP, P, 'desce', nf), H.map((h) => conta(U, h.b, 'venc')), 'var(--n-rnc)', goC({ status: ['VENCIDO'] }))}
+        ${mini('Aguardando análise', nf(nAg), '&nbsp;', fP && fP.ag != null ? nxDl(nAg, fP.ag, P, 'desce', nf) : null, agH, 'var(--n-ouro)', null)}
+        ${mini('Calibrações realizadas', nf(cA.length), '&nbsp;', nxDl(cA.length, cP.length, P, 'sobe', nf), H.map((h) => CE(h.a, h.b).length), 'var(--n-cal)', null)}</div>`;
       /* custo */
       const pt = INS_CUSTOS.map(([k, l]) => [l, cA.reduce((s2, h) => s2 + (h[k] || 0), 0)]), mxp = Math.max(1e-9, ...pt.map((p) => p[1]));
       const cs = H.map((h) => soma(CE(h.a, h.b))), mxc = Math.max(1e-9, ...cs), hl = (h, i) => (P.m === 'a' ? h.l : P.m === 't' ? `${Math.floor((E.ymd(h.a).m - 1) / 3) + 1}º tri` : MES3[E.ymd(h.a).m - 1]);
@@ -9943,7 +10015,13 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
         <b class="cnv">${cA.length && cA.length > semCusto ? 'R$ ' + money(gA) : '—'}</b>
         ${gA > 0 ? `<div class="dvfx">${pt.map(([, v], k) => (v > 0 ? `<i style="flex:${v};opacity:${(1 - k * 0.22).toFixed(2)}"></i>` : '')).join('')}</div>` : ''}
         <ul class="dvcl cncl">${pt.map(([l, v], k) => `<li><span class="cp">${k + 1}</span><span class="cn">${l}</span><span class="cb"><i style="width:${(v / mxp * 100).toFixed(0)}%"></i></span><b>R$ ${money(v)}</b></li>`).join('')}</ul></div>
-        <div class="dvcols cnco" style="grid-template-columns:repeat(${H.length},minmax(0,1fr))">${H.map((h, i) => `<div class="dvco" title="${esc('R$ ' + money(cs[i]))}"><div class="dvcb"><i style="height:${cs[i] ? Math.max(4, cs[i] / mxc * 100).toFixed(0) : 0}%"></i></div><b>${cs[i] >= 1000 ? NF1.format(Math.round(cs[i] / 100) / 10) + ' mil' : nf(Math.round(cs[i]))}</b><span>${esc(hl(h, i))}</span></div>`).join('')}</div></div>`;
+        <div class="dvcols cnco" style="grid-template-columns:repeat(${H.length},minmax(0,1fr))">${H.map((h, i) => `<div class="dvco" title="${esc('R$ ' + money(cs[i]))}"><div class="dvcb"><i style="height:${cs[i] ? Math.max(4, cs[i] / mxc * 100).toFixed(0) : 0}%"></i></div><b>${cs[i] >= 1000 ? NF1.format(Math.round(cs[i] / 100) / 10) + ' mil' : nf(Math.round(cs[i]))}</b><span>${esc(hl(h, i))}</span></div>`).join('')}</div>${(() => {   /* v186: média, a mais cara e o laboratório que mais custou */
+          const tc = (h) => INS_CUSTOS.reduce((t, [k]) => t + (h[k] || 0), 0), cc = cA.filter((h) => tc(h) > 0);
+          if (!cc.length) return '';
+          const mx = cc.reduce((a, h) => (tc(h) > tc(a) ? h : a), cc[0]), lb = new Map(); cc.forEach((h) => { const l = h.lab || 'sem laboratório'; lb.set(l, (lb.get(l) || 0) + tc(h)); });
+          const [lN, lV] = Array.from(lb.entries()).sort((a, b) => b[1] - a[1])[0];
+          return `<div class="cnst3"><div><small>Média por calibração</small><b>R$ ${money(gA / cc.length)}</b><span>${nf(cc.length)} com custo</span></div><div><small>A mais cara</small><b>R$ ${money(tc(mx))}</b><span>${esc(mx.x.codigo || '')}</span></div><div><small>Laboratório</small><b>R$ ${money(lV)}</b><span title="${esc(lN)}">${esc(lN)}</span></div></div>`;
+        })()}</div>`;
       /* próximos vencimentos (agora) */
       const LV = vencN.map((x) => [x, `vencido há ${-x.dias} d`, 'r']).concat(retA.map((x) => [x, 'retorno do laboratório atrasado', 'r'])).concat(v30N.map((x) => [x, x.dias ? `vence em ${x.dias} d` : 'vence hoje', 'p']));
       void LV; /* v164: "Próximos vencimentos" neon saiu (o clássico fica ao lado de Instrumentos por responsável) */
@@ -10600,7 +10678,10 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const ks = [
       { l: 'Emitidos ' + qual, v: NF.format(A.length), sub: `${NF.format(new Set(A.map((c) => cqDig(c.pv))).size)} pedidos`, dl: nxDl(A.length, Ap.length, P, 'sobe', NF.format), serie: H.map((h) => ab(h.a, h.b).length), go },
       kFila, kAtr,
-      { l: 'Tempo de emissão', v: tA ? NF1.format(tA.m) + ' d' : '—', sub: 'dias úteis, do faturamento ao certificado', dl: tA && tP ? nxDl(tA.m, tP.m, P, 'desce', (v) => NF1.format(v) + ' d') : null, serie: H.map((h) => { const t = tempo(ab(h.a, h.b)); return t ? t.m : 0; }), pct: tA ? [tA.ok, tA.n, 'no prazo', tA.ok === tA.n ? 'ok' : 'warn'] : null, go },
+      (() => {   /* v187: ★ Clientes críticos no lugar de "Tempo de emissão": pedidos dos clientes críticos emitidos no período e quantos no prazo */
+        const cr = (X) => X.filter((c) => tipo(c) !== 'v' && cqCrit(c)), Co = cr(A), Cp = cr(Ap), ok = Co.filter(cqNoPrazo).length;
+        return { l: '★ Clientes críticos', v: NF.format(Co.length), sub: Co.length ? `${NF.format(ok)} de ${NF.format(Co.length)} no prazo` : 'nenhum pedido no período', dl: nxDl(Co.length, Cp.length, P, 'sobe', NF.format), serie: H.map((h) => cr(ab(h.a, h.b)).length), pct: Co.length ? [ok, Co.length, 'no prazo', ok === Co.length ? 'ok' : 'warn'] : null, go };
+      })(),
       { l: 'Data Book', v: NF.format(dbAb(P.a, P.b).length), sub: `NF + certificado + origem · ${NF.format(itens(A))} itens no período`, dl: nxDl(dbAb(P.a, P.b).length, dbAb(P.prev.a, P.prev.b).length, P, 'sobe', NF.format), serie: H.map((h) => dbAb(h.a, h.b).length), pct: A.length && dbAb(P.a, P.b).length ? [Math.min(A.length, dbAb(P.a, P.b).length), A.length, 'dos emitidos', 'ok'] : null, go }
     ];
     const g = nxRng(P, (a, b) => ab(a, b).length);
@@ -20855,6 +20936,211 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     if (RT.step === 0 || RT.step === 1 || RT.step === 5) render();
   }
 
+  /* ================= v188: QUALICHAT — conversas da equipe dentro da Central (etapa 1: conversas, grupos, lidas) =================
+     qc/<cid>             conversa: { tipo: 'd' (pessoa a pessoa) | 'g' (grupo), nome, membros: [e-mails], by, at, ult: { t, e, n, at }, lido: { <chave do e-mail>: at } }
+     qc/<cid>/mes/<AAAA-MM> mensagens do mês: { m: { <id>: { t, e, n, at } } }
+     qcu/<e-mail>         as conversas de cada pessoa: { c: { <cid>: at } }  (quem cria a conversa põe nos outros)
+     Grupos: só administradores criam. A conta dona vê todas as conversas (está escrito na tela). */
+  const QC = { idx: {}, conv: {}, un: {}, unIdx: null, unAll: null, aberta: null, msgs: {}, unMsg: null, unMsgK: '', q: '', f: 'todas', lidoT: 0, ready: false };
+  window.__CQ_QC = QC;
+  const qcEu = () => E.low(DB.meEmail || ME.email || '');
+  const qcK = (em) => String(em || '').toLowerCase().replace(/[^a-z0-9]/g, '_');
+  const qcYm = (t) => { const d = new Date(t || Date.now()); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); };
+  const qcPessoas = () => eqAll().filter((p) => !p.inativo && p.email && /@/.test(p.email));
+  const qcPorEmail = (em) => qcPessoas().find((p) => E.low(p.email) === E.low(em)) || null;
+  const qcNomeDe = (em) => { const p = qcPorEmail(em); return p ? p.nome : (E.low(em) === qcEu() ? (myPessoa() || DB.meName || em) : String(em || '').split('@')[0]); };
+  const qcCurto = (n) => { const w = String(n || '').trim().split(/\s+/); return w.length > 2 ? w[0] + ' ' + w[w.length - 1] : w.join(' '); };
+  const qcPodeGrupo = () => !!(DB.owner || DB.admin === true);
+  function qcTitulo(c) { if (c.tipo === 'g') return c.nome || 'Grupo'; const o = (c.membros || []).find((e) => E.low(e) !== qcEu()) || (c.membros || [])[0]; return qcNomeDe(o); }
+  function qcAv(c, cls) {
+    if (c.tipo === 'g') return `<span class="qcav g ${cls || ''}" style="--k:${c.cor || 'var(--qc)'}">${esc((c.nome || 'G').replace(/[^A-Za-zÀ-ú0-9 ]/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || 'G')}</span>`;
+    const o = (c.membros || []).find((e) => E.low(e) !== qcEu()) || '', p = qcPorEmail(o), f = p ? eqFoto(p) : null;
+    return `<span class="qcav ${cls || ''}${f ? ' fo' : ''}">${f ? `<img src="${f}" alt="">` : esc(ehIni(qcNomeDe(o)))}</span>`;
+  }
+  function qcAvP(em) { const p = qcPorEmail(em), f = p ? eqFoto(p) : null; return `<span class="qcav${f ? ' fo' : ''}">${f ? `<img src="${f}" alt="">` : esc(ehIni(qcNomeDe(em)))}</span>`; }
+  const qcNaoLida = (c) => !!(c.ult && c.ult.at && E.low(c.ult.e) !== qcEu() && (((c.lido || {})[qcK(qcEu())] || 0) < c.ult.at));
+  const qcLista = () => Object.keys(QC.conv).map((id) => Object.assign({ id }, QC.conv[id])).filter((c) => DB.owner || (c.membros || []).map(E.low).includes(qcEu())).sort((a, b) => ((b.ult && b.ult.at) || b.at || 0) - ((a.ult && a.ult.at) || a.at || 0));
+  function qcBadge() {
+    const n = qcLista().filter((c) => (c.membros || []).map(E.low).includes(qcEu()) && qcNaoLida(c)).length, el = $('#ct-qchat');
+    if (el) { el.hidden = !n; el.textContent = n; }
+  }
+  function qcRedesenha() { qcAvisa(); qcBadge(); if (S.view === 'qchat' && !$('#layer .modal')) qcDesenha(); }
+  /* v189: aviso de mensagem nova — balão na Central (com som) e aviso do Windows quando a Central está minimizada */
+  QC.visto = {};
+  function qcAvisa() {
+    const eu = qcEu();
+    Object.keys(QC.conv).forEach((cid) => {
+      const c = QC.conv[cid], u = c && c.ult; if (!u || !u.at) return;
+      if (!(cid in QC.visto)) { QC.visto[cid] = u.at; return; }   /* conversa que acabou de carregar: não avisa o que já estava lá */
+      if (u.at <= QC.visto[cid]) return; QC.visto[cid] = u.at;
+      if (E.low(u.e) === eu || !(c.membros || []).map(E.low).includes(eu)) return;
+      if (S.view === 'qchat' && QC.aberta === cid && !document.hidden) return;   /* já está olhando esta conversa */
+      const tit = c.tipo === 'g' ? (c.nome || 'Grupo') : qcNomeDe(u.e), txt = (c.tipo === 'g' ? qcCurto(u.n || qcNomeDe(u.e)).split(' ')[0] + ': ' : '') + (u.t || '');
+      if (document.hidden && window.Notification && Notification.permission === 'granted') {
+        try { const n = new Notification(tit, { body: txt.slice(0, 140), tag: 'qc-' + cid, icon: 'apple-touch-icon.png?v=39' }); n.onclick = () => { window.focus(); QC.aberta = cid; go('qchat'); n.close(); }; } catch (e) { /* sem aviso do sistema */ }
+      }
+      qcBalao(cid, c, tit, txt); qcSom();
+    });
+  }
+  function qcBalao(cid, c, tit, txt) {
+    let box = document.getElementById('qcnts'); if (!box) { box = document.createElement('div'); box.id = 'qcnts'; box.className = 'qcnts'; box.setAttribute('aria-live', 'polite'); document.body.appendChild(box); }
+    const old = box.querySelector(`[data-cid="${CSS.escape(cid)}"]`); if (old) old.remove();
+    const el = document.createElement('div'); el.className = 'qcnt'; el.dataset.cid = cid;
+    el.innerHTML = `${qcAv(Object.assign({ id: cid }, c))}<div><small>QualiChat · ${c.tipo === 'g' ? 'grupo' : 'conversa'}</small><b>${esc(tit)}</b><span>${esc(txt.slice(0, 160))}</span></div><button type="button" class="x" aria-label="Fechar">×</button><div class="bt"><button type="button" class="btn small p">Abrir</button><button type="button" class="btn small">Depois</button></div>`;
+    const fecha = () => { el.classList.add('sai'); setTimeout(() => el.remove(), 250); };
+    el.querySelector('.p').onclick = () => { fecha(); QC.aberta = cid; if (S.view === 'qchat') qcDesenha(); else go('qchat'); };
+    el.querySelector('.x').onclick = fecha; el.querySelectorAll('.bt .btn')[1].onclick = fecha;
+    box.appendChild(el); while (box.children.length > 3) box.firstChild.remove();
+    setTimeout(fecha, 9000);
+  }
+  function qcSom() {
+    try { const A = window.AudioContext || window.webkitAudioContext; if (!A) return; QC.ac = QC.ac || new A(); const ac = QC.ac, t = ac.currentTime;
+      [[880, 0], [1320, 0.11]].forEach(([f, d]) => { const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0.0001, t + d); g.gain.exponentialRampToValueAtTime(0.12, t + d + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.18); o.connect(g); g.connect(ac.destination); o.start(t + d); o.stop(t + d + 0.2); });
+    } catch (e) { /* sem som */ }
+  }
+  /* ouvir: o índice da pessoa e cada conversa dela (a conta dona ouve todas) */
+  function qcLiga() {
+    if (!DB.db || !qcEu() || QC.unIdx || QC.unAll) return;
+    const ouveConv = (cid) => { if (QC.un[cid]) return; QC.un[cid] = DB.db.doc('qc/' + cid).onSnapshot((s) => { if (s && s.exists) QC.conv[cid] = s.data(); else delete QC.conv[cid]; QC.ready = true; qcRedesenha(); }, () => {}); };
+    if (DB.owner) {
+      QC.unAll = DB.db.collection('qc').onSnapshot((q) => { const o = {}; q.docs.forEach((d) => { o[d.id] = d.data(); }); QC.conv = o; QC.ready = true; qcRedesenha(); }, () => { QC.ready = true; });
+      return;
+    }
+    QC.unIdx = DB.db.doc('qcu/' + qcEu()).onSnapshot((s) => { QC.idx = (s && s.exists && (s.data() || {}).c) || {}; Object.keys(QC.idx).forEach(ouveConv); QC.ready = true; qcRedesenha(); }, () => { QC.ready = true; });
+  }
+  setInterval(() => { if (DB.db && qcEu() && !QC.unIdx && !QC.unAll) qcLiga(); }, 2000);
+  /* mensagens da conversa aberta: este mês e o anterior */
+  function qcOuveMsgs(cid) {
+    const yms = [qcYm(), qcYm(Date.now() - 32 * 864e5)], key = cid + '|' + yms[0];
+    if (QC.unMsgK === key) return; if (QC.unMsg) QC.unMsg.forEach((u) => { try { u(); } catch (e) { /* ok */ } });
+    QC.unMsgK = key; QC.msgs = {};
+    QC.unMsg = yms.map((ym) => DB.db.doc(`qc/${cid}/mes/${ym}`).onSnapshot((s) => { QC.msgs[ym] = (s && s.exists && (s.data() || {}).m) || {}; if (S.view === 'qchat' && QC.aberta === cid) { qcDesenhaMsgs(); qcMarcaLido(); } }, () => {}));
+  }
+  function qcMarcaLido() {
+    const c = QC.conv[QC.aberta]; if (!c || !(c.membros || []).map(E.low).includes(qcEu()) || !qcNaoLida(c) || document.hidden) return;
+    const now = Date.now(); if (now - QC.lidoT < 1500) return; QC.lidoT = now;
+    DB.db.doc('qc/' + QC.aberta).merge({ lido: { [qcK(qcEu())]: now } }).catch(() => {});
+  }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && S.view === 'qchat' && QC.aberta) qcMarcaLido(); });
+  const qcHora = (t) => { const d = new Date(t), h = new Date(); return d.toDateString() === h.toDateString() ? hhmm(t) : (h - d < 7 * 864e5 ? ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'][d.getDay()] : dmy(t)); };
+  const QC_COR = ['#8fd3a0', '#e3b85a', '#b9a7f0', '#7cc4f2', '#f2a65a', '#9fd16a', '#ff8a7a', '#6fd6c8'];
+  const qcCorDe = (em) => { let h = 0; String(em).split('').forEach((ch) => { h = (h * 31 + ch.charCodeAt(0)) >>> 0; }); return QC_COR[h % QC_COR.length]; };
+  function qcMsgsHTML(c) {
+    const L = []; Object.values(QC.msgs).forEach((m) => Object.keys(m || {}).forEach((id) => L.push(Object.assign({ id }, m[id])))); L.sort((a, b) => a.at - b.at);
+    if (!L.length) return `<div class="qcvazio">${c.tipo === 'g' ? 'Nenhuma mensagem neste grupo ainda.' : 'Comece a conversa.'}</div>`;
+    const outros = (c.membros || []).map(E.low).filter((e) => e !== qcEu()), lido = c.lido || {};
+    let dia = '', ant = ''; const o = [];
+    L.forEach((m) => {
+      const d = dmy(m.at); if (d !== dia) { dia = d; ant = ''; o.push(`<span class="qcdia">${d === dmy(Date.now()) ? 'Hoje' : esc(d)}</span>`); }
+      const eu = E.low(m.e) === qcEu(), visto = eu && outros.length && outros.every((e) => (lido[qcK(e)] || 0) >= m.at);
+      o.push(`<div class="qcm${eu ? ' eu' : ''}${ant === m.e ? ' seg' : ''}"><div class="bb">${!eu && c.tipo === 'g' && ant !== m.e ? `<b class="who" style="color:${qcCorDe(m.e)}">${esc(qcCurto(m.n || qcNomeDe(m.e)))}</b>` : ''}<span class="tx">${esc(m.t)}</span><span class="ft">${hhmm(m.at)}${eu ? ` <i class="ck${visto ? ' ok' : ''}" title="${visto ? 'Lida' : 'Enviada'}">${visto ? '✓✓' : '✓'}</i>` : ''}</span></div></div>`);
+      ant = m.e;
+    });
+    return o.join('');
+  }
+  function qcDesenhaMsgs() {
+    const box = $('#qc-msgs'), c = QC.conv[QC.aberta]; if (!box || !c) return;
+    const noFim = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
+    box.innerHTML = qcMsgsHTML(c); if (noFim || !box.dataset.ok) { box.scrollTop = box.scrollHeight; box.dataset.ok = '1'; }
+  }
+  function qcDesenha() {
+    const main = $('#main'); if (!main) return;
+    const L = qcLista(), q = E.key(QC.q || ''), eu = qcEu();
+    const F = L.filter((c) => (QC.f !== 'grupos' || c.tipo === 'g') && (QC.f !== 'nlidas' || qcNaoLida(c)) && (!q || E.key(qcTitulo(c) + ' ' + ((c.ult && c.ult.t) || '')).includes(q)));
+    if (QC.aberta && !QC.conv[QC.aberta]) QC.aberta = null;
+    if (!QC.aberta && F.length && window.innerWidth > 860) QC.aberta = F[0].id;
+    const nNl = L.filter(qcNaoLida).length;
+    const item = (c) => `<button type="button" class="qcv${c.id === QC.aberta ? ' on' : ''}" data-act="qc-abre" data-key="${esc(c.id)}">${qcAv(c)}<span class="tx"><b>${esc(qcTitulo(c))}</b><span>${c.ult ? (c.tipo === 'g' && E.low(c.ult.e) !== eu ? esc(qcCurto(c.ult.n || '').split(' ')[0]) + ': ' : E.low(c.ult.e) === eu ? 'Você: ' : '') + esc(c.ult.t || '') : '<i>sem mensagens</i>'}</span></span><span class="r"><small>${c.ult ? qcHora(c.ult.at) : ''}</small>${qcNaoLida(c) ? '<em>●</em>' : ''}</span></button>`;
+    const c = QC.aberta ? Object.assign({ id: QC.aberta }, QC.conv[QC.aberta]) : null, membro = c && (c.membros || []).map(E.low).includes(eu);
+    const mems = c ? (c.membros || []).map((e) => ({ e, n: qcNomeDe(e), p: qcPorEmail(e) })).sort((a, b) => a.n.localeCompare(b.n, 'pt-BR')) : [];
+    main.innerHTML = `<div class="view qcview"><div class="qcw${c ? ' tem' : ''}">
+      <aside class="qcl"><div class="hd"><h2>QualiChat<button type="button" class="qcmais" data-act="qc-nova" title="Nova conversa" aria-label="Nova conversa">+</button></h2>
+        <input id="qc-q" class="inp" type="search" placeholder="Buscar pessoa, grupo ou mensagem" value="${esc(QC.q || '')}" autocomplete="off">
+        ${window.Notification && Notification.permission === 'default' ? '<button type="button" class="qcwin" data-act="qc-win">🔔 Ativar avisos do Windows (com a Central minimizada)</button>' : ''}
+        <div class="qcf">${[['todas', 'Todas'], ['grupos', 'Grupos'], ['nlidas', 'Não lidas' + (nNl ? ' · ' + nNl : '')]].map(([k, l]) => `<button type="button" data-act="qc-f" data-key="${k}" aria-pressed="${QC.f === k}">${l}</button>`).join('')}</div></div>
+        <div class="qcls">${!QC.ready ? '<div class="loading"><span class="spin"></span><span>Carregando…</span></div>' : F.length ? F.map(item).join('') : `<div class="qcvazio">${L.length ? 'Nada com esse filtro.' : 'Nenhuma conversa ainda. Toque em + para começar.'}</div>`}</div></aside>   ${'' /* v189: o aviso da conta dona saiu da tela (a pedido) */}
+      <section class="qcc">${c ? `<div class="top"><button type="button" class="qcvolta" data-act="qc-volta" aria-label="Voltar">‹</button>${qcAv(c)}<div><b>${esc(qcTitulo(c))}</b><span>${c.tipo === 'g' ? NF.format(mems.length) + ' pessoas' : esc((qcPorEmail((mems.find((m) => E.low(m.e) !== eu) || {}).e || '') || {}).cargo || '')}</span></div></div>
+        <div class="qcmsgs" id="qc-msgs"></div>
+        ${membro ? `<form class="qccx" id="qc-form"><input id="qc-in" class="inp" placeholder="Escreva uma mensagem…" autocomplete="off" maxlength="2000"><button class="btn qcenv" type="submit" aria-label="Enviar">➤</button></form>` : '<div class="qcro">Você está vendo como conta dona (não participa desta conversa).</div>'}`
+        : '<div class="qcvazio grande">Escolha uma conversa ou toque em + para começar.</div>'}</section>
+      <aside class="qcs">${c ? `<h3>${c.tipo === 'g' ? 'Pessoas · ' + NF.format(mems.length) : 'Conversa'}</h3>${mems.map((m) => `<div class="mb">${qcAvP(m.e)}<div>${esc(m.n)}${E.low(m.e) === eu ? ' <small>(você)</small>' : ''}<small>${esc((m.p && m.p.cargo) || '')}</small></div></div>`).join('')}
+        ${c.tipo === 'g' && qcPodeGrupo() ? '<button type="button" class="btn small" data-act="qc-grupo-ed">Editar grupo</button>' : ''}` : ''}</aside></div></div>`;
+    const qi = $('#qc-q'); if (qi) qi.oninput = () => { QC.q = qi.value; clearTimeout(QC.qT); QC.qT = setTimeout(() => { qcDesenha(); const j = $('#qc-q'); if (j) { j.focus(); j.setSelectionRange(j.value.length, j.value.length); } }, 200); };
+    if (c) { qcOuveMsgs(c.id); qcDesenhaMsgs(); qcMarcaLido(); }
+    const fm = $('#qc-form'); if (fm) fm.onsubmit = (e) => { e.preventDefault(); qcEnvia(); };
+    const inp = $('#qc-in'); if (inp && window.innerWidth > 860) inp.focus();
+  }
+  VIEWS.qchat = () => { qcLiga(); qcDesenha(); };
+  async function qcEnvia() {
+    const inp = $('#qc-in'), t = String((inp && inp.value) || '').trim(), cid = QC.aberta; if (!t || !cid) return;
+    const at = Date.now(), id = at.toString(36) + Math.random().toString(36).slice(2, 6), eu = qcEu(), nome = myPessoa() || DB.meName || eu, msg = { t: t.slice(0, 2000), e: eu, n: nome, at };
+    inp.value = ''; inp.focus();
+    const ym = qcYm(at); QC.msgs[ym] = Object.assign({}, QC.msgs[ym] || {}, { [id]: msg }); qcDesenhaMsgs();
+    try {
+      await DB.db.doc(`qc/${cid}/mes/${ym}`).merge({ m: { [id]: msg } });
+      await DB.db.doc('qc/' + cid).merge({ ult: { t: msg.t.slice(0, 140), e: eu, n: nome, at }, lido: { [qcK(eu)]: at } });
+    } catch (e) { toast('Mensagem não enviada: ' + ((e && (e.message || e.code)) || e), true); }
+  }
+  /* nova conversa (qualquer pessoa) ou novo grupo (só administradores) */
+  function qcNova() {
+    const eu = qcEu(), P = qcPessoas().filter((p) => E.low(p.email) !== eu).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    openModal('Nova conversa', `${qcPodeGrupo() ? '<div class="seg" id="qcn-tp" style="display:grid;grid-template-columns:1fr 1fr"><button type="button" data-v="d" aria-pressed="true">Com uma pessoa</button><button type="button" data-v="g" aria-pressed="false">Novo grupo</button></div>' : ''}
+      <label class="field" id="qcn-nm" hidden><span>Nome do grupo <b>*</b></span><input id="qcn-nome" class="inp" placeholder="ex.: Recebimento · RIR" maxlength="40" autocomplete="off"></label>
+      <input id="qcn-q" class="inp" type="search" placeholder="Buscar pessoa…" autocomplete="off">
+      <div class="qcpick" id="qcn-l">${P.length ? P.map((p) => `<label class="qcpi" data-n="${esc(E.key(p.nome + ' ' + (p.cargo || '')))}"><input type="checkbox" value="${esc(E.low(p.email))}">${qcAvP(E.low(p.email))}<span><b>${esc(p.nome)}</b><small>${esc([p.cargo, p.setor].filter(Boolean).join(' · '))}</small></span></label>`).join('') : '<div class="qcvazio">Ninguém da Equipe tem e-mail cadastrado. Preencha o e-mail na ficha (Equipe › Editar).</div>'}</div>
+      <div class="formfoot"><button class="btn primary" type="button" id="qcn-ok">Conversar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    let tp = 'd';
+    const sync = () => { $('#qcn-nm').hidden = tp !== 'g'; $$('#qcn-l input').forEach((i) => { i.type = tp === 'g' ? 'checkbox' : 'radio'; i.name = 'qcn'; }); $('#qcn-ok').textContent = tp === 'g' ? 'Criar grupo' : 'Conversar'; };
+    $$('#qcn-tp button').forEach((b) => { b.onclick = () => { tp = b.dataset.v; $$('#qcn-tp button').forEach((x) => x.setAttribute('aria-pressed', x === b)); sync(); }; });
+    sync();
+    $('#qcn-q').oninput = (e) => { const q = E.key(e.target.value); $$('#qcn-l .qcpi').forEach((l) => { l.hidden = q && !l.dataset.n.includes(q); }); };
+    $('#qcn-ok').onclick = async () => {
+      const sel = $$('#qcn-l input:checked').map((i) => i.value);
+      if (!sel.length) { toast(tp === 'g' ? 'Escolha as pessoas do grupo.' : 'Escolha a pessoa.', true); return; }
+      const b = $('#qcn-ok'); b.disabled = true;
+      try {
+        let cid, d;
+        if (tp === 'g') {
+          const nome = ($('#qcn-nome').value || '').trim(); if (!nome) { toast('Dê um nome ao grupo.', true); b.disabled = false; return; }
+          cid = 'g-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); d = { tipo: 'g', nome, membros: Array.from(new Set([eu].concat(sel))), by: eu, at: Date.now() };
+        } else {
+          const o = sel[0]; cid = 'd-' + [qcK(eu), qcK(o)].sort().join('--'); d = { tipo: 'd', membros: [eu, o], by: eu, at: Date.now() };
+          if (QC.conv[cid]) { closeLayer(); QC.aberta = cid; qcDesenha(); return; }
+        }
+        await DB.db.doc('qc/' + cid).set(d);
+        for (const em of d.membros) await DB.db.doc('qcu/' + em).merge({ c: { [cid]: d.at } });
+        logEntry('GERAL', 'qc', 'criado', tp === 'g' ? `QualiChat: grupo “${d.nome}” criado (${d.membros.length} pessoas)` : 'QualiChat: conversa nova', null);
+        closeLayer(); QC.aberta = cid; QC.conv[cid] = QC.conv[cid] || d; qcDesenha();
+      } catch (e) { toast('Não foi possível criar: ' + ((e && (e.message || e.code)) || e), true); b.disabled = false; }
+    };
+  }
+  function qcGrupoEd() {
+    const c = QC.conv[QC.aberta]; if (!c || c.tipo !== 'g' || !qcPodeGrupo()) return;
+    const mem = (c.membros || []).map(E.low), P = qcPessoas().sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    openModal('Editar grupo', `<label class="field"><span>Nome do grupo</span><input id="qce-nome" class="inp" value="${esc(c.nome || '')}" maxlength="40"></label>
+      <div class="qcpick">${P.map((p) => `<label class="qcpi"><input type="checkbox" value="${esc(E.low(p.email))}" ${mem.includes(E.low(p.email)) ? 'checked' : ''}>${qcAvP(E.low(p.email))}<span><b>${esc(p.nome)}</b><small>${esc(p.cargo || '')}</small></span></label>`).join('')}</div>
+      <div class="formfoot"><button class="btn primary" type="button" id="qce-ok">Salvar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+    $('#qce-ok').onclick = async () => {
+      const nome = ($('#qce-nome').value || '').trim() || c.nome, sel = $$('.modal .qcpick input:checked').map((i) => i.value);
+      if (!sel.length) { toast('O grupo precisa de pelo menos uma pessoa.', true); return; }
+      try {
+        await DB.db.doc('qc/' + QC.aberta).merge({ nome, membros: sel });
+        for (const em of sel.filter((e) => !mem.includes(e))) await DB.db.doc('qcu/' + em).merge({ c: { [QC.aberta]: Date.now() } });
+        logEntry('GERAL', 'qc', 'alterado', `QualiChat: grupo “${nome}” editado (${sel.length} pessoas)`, null);
+        closeLayer(); qcDesenha();
+      } catch (e) { toast('Não foi possível salvar: ' + ((e && (e.message || e.code)) || e), true); }
+    };
+  }
+  function qcAct(a, key) {
+    if (a === 'qc-abre') { QC.aberta = key; qcDesenha(); return true; }
+    if (a === 'qc-volta') { QC.aberta = null; QC.voltou = true; qcDesenha(); return true; }
+    if (a === 'qc-f') { QC.f = key; qcDesenha(); return true; }
+    if (a === 'qc-nova') { qcNova(); return true; }
+    if (a === 'qc-win') { try { Notification.requestPermission().then(() => qcDesenha()); } catch (e) { /* navegador sem aviso */ } return true; }
+    if (a === 'qc-grupo-ed') { qcGrupoEd(); return true; }
+    return false;
+  }
+
   /* ================= EQUIPE (funcionários) =================
      Os funcionários continuam na lista cfg/main.pessoas (nome, setor, filial, e-mail, funções, inativo)
      e ganham: id, cargo, gestor (id de quem a pessoa responde), tel, ramal, admissao (AAAA-MM-DD).
@@ -25257,6 +25543,7 @@ ${trGuil(W, H, M, B)}
       if (a && a.startsWith('tr-') && trAct(a, key)) return;
       if (a && a.startsWith('rt-') && rtAct(a, key, act)) return;
       if (a && a.startsWith('eh-') && ehAct(a, key)) return;   /* v99: Equipe hoje no Painel */
+      if (a && a.startsWith('qc-') && qcAct(a, key)) return;   /* v188: QualiChat */
       if (a === 'cq-op') { NX.cq.op = key; nxAtualiza('cq'); return; }   /* v131 */
       if (a === 'rir-op') { NX.rir.op = key; nxAtualiza('rir'); return; }   /* v141 */
       if (a === 'av-op') { NX.av.op = key; nxAtualiza('av'); return; }   /* v143 */
