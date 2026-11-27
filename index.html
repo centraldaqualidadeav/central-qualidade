@@ -629,6 +629,8 @@ button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 .nxrit .rtb .b em { font: 600 10.5px var(--f-mono); font-style: normal; color: var(--ink-2); min-height: 13px; }
 .nxrit .rtb .b small { font: 500 9.5px var(--f-mono); color: var(--ink-3); white-space: nowrap; } .nxrit .rtb .b.on small { color: var(--k); font-weight: 700; }
 .nxrit .rtb .b.f i { height: 12px; background: none; border: 1px dashed var(--line-2); } .nxrit .rtb .b.f small { opacity: .55; }
+.nxlazy { min-height: 220px; margin-top: 18px; border-radius: var(--r); background: linear-gradient(90deg, var(--surface) 0%, var(--surface-2) 50%, var(--surface) 100%); background-size: 200% 100%; animation: nxlz 1.2s linear infinite; }   /* v201 */
+@keyframes nxlz { from { background-position: 200% 0; } to { background-position: 0 0; } }
 .nxk::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--c); }
 .nxk .lbl { font: 600 11px/1.25 var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); padding-right: 6px; }
 .nxk .vr { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
@@ -6333,7 +6335,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 200; window.CQ_V = APP_V;
+    const APP_V = 201; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7649,7 +7651,14 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
     return `${x.codigo} · ${x.desc}`;
   }
   const listOf = (mod) => (mod === 'AV' ? S.model.av : mod === 'SERV' ? S.model.serv : mod === 'RNC' ? S.model.rnc : mod === 'RNCC' ? (S.model.rncc || []) : S.model.ins);
-  function findRec(mod, key) { return listOf(mod).find((x) => x.key === key); }
+  /* v201: busca pela chave com um índice (antes percorria a lista inteira a cada chamada; no Painel isso pesava) */
+  const FR_IDX = new WeakMap();
+  function findRec(mod, key) {
+    const L = listOf(mod); if (!L) return undefined;
+    let m = FR_IDX.get(L); if (!m || m.n !== L.length) { m = new Map(); for (let i = L.length - 1; i >= 0; i--) m.set(L[i].key, L[i]); m.n = L.length; FR_IDX.set(L, m); }
+    const x = m.get(key); if (x && x.key === key) return x;
+    return L.find((y) => y.key === key);
+  }
   const recTitle = (x) => (x.mod === 'AV' ? x.id : x.mod === 'SERV' ? `${x.sv || 'Serviço'} · ${x.desc || ''} · NF ${disp(x.nf)}` : (x.mod === 'RNC' || x.mod === 'RNCC') ? x.num : x.codigo);
 
   /* ================= chrome ================= */
@@ -8435,6 +8444,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
   window.addEventListener('resize', () => { if (TV.on) requestAnimationFrame(tvMede); });
 
   /* ================= PAINEL ================= */
+  let PAINEL_TOK = 0;
   VIEWS.painel = (main) => {
     const M = S.model, t = S.today, o = E.ymd(t);
     const [m0, m1] = monthRange(o.y, o.m);
@@ -8463,22 +8473,21 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     const proxN = insSt('VENCE EM BREVE') + insSt('VENCE HOJE');
     const mesAt = { de: E.isoDate(m0), ate: E.isoDate(m1 - 1) }, mesAn = { de: E.isoDate(p0), ate: E.isoDate(p1 - 1) };
     const ehH = ehPainelHTML();   /* v167: sem descrição; a tela cheia virou o símbolo na barra da Equipe hoje (sem a Equipe hoje, fica no alto) */
+    /* v170: mesma sequência do menu lateral · v201: na 1ª abertura, só o 1º bloco é montado antes de mostrar a tela */
+    const PN = [avPainelHTML, cqNxPainelHTML, calPainelHTML, iqfNxPainelHTML, rirNxPainelHTML, ncfPainelHTML, nccPainelHTML, soldNxPainelHTML, rifNxPainelHTML, servPainelHTML];
+    const jaNaTela = !!main.querySelector('.view #nx-av, .view .nxsec, .view #eh-sec'), nSync = jaNaTela ? PN.length : 1;
+    PAINEL_TOK++;
     main.innerHTML = `<div class="view">${head('Painel de indicadores', '', ehH ? '' : `<button class="btn tvfs0" type="button" data-act="tv-on" title="Tela cheia (rolando)" aria-label="Tela cheia">${TV_ICO}</button>`)}
       ${ehH}
       ${'' /* v103: os cartões-resumo por módulo (gerPainelHTML) saíram: cada módulo tem agora o próprio bloco no visual novo */}
       ${'' /* v170: mesma sequência do menu lateral */}
-      ${avPainelHTML()}
-      ${cqNxPainelHTML() /* v112: Certificados no visual novo (cqPainelHTML, o de antes, ficou dentro de "Mais") */}
-      ${calPainelHTML()}
-      ${iqfNxPainelHTML() /* v111: o IQF no visual novo (iqPainelHTML, o de antes, ficou sem uso) */}
-      ${rirNxPainelHTML() /* v107: o RIR no visual novo (riPainelHTML, o de antes, ficou sem uso) */}
-      ${ncfPainelHTML()}
-      ${nccPainelHTML()}
-      ${soldNxPainelHTML() /* v110: a Soldagem no visual novo (soldPainelHTML, o de antes, ficou sem uso) */}
-      ${rifNxPainelHTML() /* v108: o RIF no visual novo (rfPainelHTML, o de antes, ficou sem uso) */}
-      ${servPainelHTML()}
+      ${PN.map((f, i) => (i < nSync ? f() : `<div class="nxlazy" data-pn="${i}" aria-hidden="true"></div>`)).join('')}
       ${'' /* v146: "Visão do processo" saiu do Painel a pedido (procNxPainelHTML ficou sem uso; a Ramificações continua) */}
     </div>`;
+    /* v201: ao entrar no Painel, o 1º bloco aparece na hora e os outros entram em seguida, um por vez (a tela não espera todos ficarem prontos) */
+    if (nSync < PN.length) { const tok = ++PAINEL_TOK; let k = nSync;
+      const passo = () => { if (tok !== PAINEL_TOK || S.view !== 'painel') return; const ph = main.querySelector(`.nxlazy[data-pn="${k}"]`); if (ph) { let h = ''; try { h = PN[k](); } catch (e) { h = ''; } ph.outerHTML = h; } k++; if (k < PN.length) setTimeout(passo, 0); };
+      requestAnimationFrame(() => setTimeout(passo, 0)); }
 
   };
 
