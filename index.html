@@ -704,7 +704,7 @@ button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 @media (max-width: 980px) { .nxbar { grid-template-columns: minmax(0, 1fr); } .nxseg { grid-auto-columns: minmax(0, 1fr); } .nxbar .rindn { grid-template-columns: 48px minmax(0, 1fr) 48px; } .nxh { display: none; }
   .nxins { grid-template-columns: minmax(0, 1fr); } .nxins ul { grid-template-columns: minmax(0, 1fr); gap: 8px; } .nxins li { border-left: 0; padding-left: 0; }
   .nxks { grid-template-columns: repeat(2, minmax(0, 1fr)); } .nxk:last-child:nth-child(odd) { grid-column: 1 / -1; } .nxc2, .nxc2b { grid-template-columns: minmax(0, 1fr); } }
-.nxks.cnks { grid-template-columns: repeat(4, minmax(0, 1fr)); } .nxks.cnks > .nxk { grid-column: auto; } .cnks .nxk .lbl { min-height: 2.5em; } .cnks .nxk .sub { padding-right: 0; }   /* v204: calibração, 4 cartões */
+.nxks.cnks { grid-template-columns: repeat(4, minmax(0, 1fr)); } .nxks.cnks.cnks > .nxk.nxk:nth-child(n) { grid-column: auto; }   /* v206: vence a regra de 981–1280px que esticava cada cartão numa linha */ .cnks .nxk .lbl { min-height: 2.5em; } .cnks .nxk .sub { padding-right: 0; }   /* v204: calibração, 4 cartões */
 @media (max-width: 980px) { .nxks.cnks { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .nxtb th:nth-child(3), .nxtb td:nth-child(3) { display: none; } }
 /* v78 etapa 3: tabela compacta da lista do RIR (mesmas colunas em todas as linhas) */
@@ -6338,7 +6338,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 205; window.CQ_V = APP_V;
+    const APP_V = 206; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
