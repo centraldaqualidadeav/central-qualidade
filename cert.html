@@ -4349,8 +4349,12 @@ async function abrirDocCompleto() {
   } catch (e) { console.error(e); DC.cert = { erro: String(e && e.message || e) }; }
   if (DC.ov === ov) dcDesenhar();
 }
+const DC_ROLOS = ['.dc-dlg', '.dc-bd', '.dc-th2', '.dc-cv', '.dc-sd2', '.dc-strip', '.dc-sd', '.dc-ol'];
 function dcDesenhar() {
   const ov = DC.ov; if (!ov) return;
+  /* v203: guarda onde cada rolagem estava (a janela, a lista de folhas, a página, o lado) para não voltar para o alto a cada clique */
+  const rolo = DC.roloPasso === DC.passo ? [[null, ov.scrollTop, ov.scrollLeft], ...DC_ROLOS.map(q => { const el = ov.querySelector(q); return el ? [q, el.scrollTop, el.scrollLeft] : null; }).filter(Boolean)] : [];
+  DC.roloPasso = DC.passo;
   const certNum = cleanText(state.v[REF_NUMERO] || ''), cli = cleanText(state.v[REF_CLIENTE] || '');
   const passos = [['Arquivos e ordem', 1], ['Etiquetas nos certificados de origem', 2], ['Conferir e salvar', 3]].map(([t, n]) => `<div class="${DC.passo === n ? 'on' : ''}${n === 2 && !DC.orig.length ? ' off' : ''}"><b>${n}</b><span>${t}${n === 2 && !DC.orig.length ? '<small>sem certificado de origem</small>' : ''}</span></div>`).join('');
   const it = (o, extra, acts, grip, i) => `<div class="dc-it"${grip ? ` draggable="true" data-i="${i}"` : ''}><span class="dc-g" aria-hidden="true">${grip ? '⋮⋮' : ''}</span>${o && o.thumb ? `<img src="${o.thumb}" alt="">` : '<span class="dc-th0"></span>'}<div class="dc-nm">${dcEsc(o ? o.nome : '')}<small>${o && o.pags ? `${o.pags} página${o.pags > 1 ? 's' : ''}` : ''}${o && o.tam ? ' · ' + dcTam(o.tam) : ''}${o && o.foto ? ' · foto' : ''}</small></div><div class="dc-lk">${extra || ''}</div><div class="dc-ac">${acts || ''}</div></div>`;
@@ -4396,6 +4400,8 @@ function dcDesenhar() {
     <div class="dc-dh"><h2>Documento completo</h2><span class="dc-mut">NF + certificado Aços Vital + certificados de origem, nesta ordem</span><span class="dc-cli">${dcEsc(cli)}${certNum ? ' · certificado ' + dcEsc(certNum) : ''}</span><button type="button" class="dc-close" data-dc="fechar" aria-label="Fechar">✕</button></div>
     <div class="dc-steps">${passos}</div>${corpo}<div class="dc-ft${DC.passo === 1 ? '' : DC.passo === 2 ? ' p2' : ' p3'}">${pe}</div></div>`;
   dcLigar(); if (DC.passo === 2) dcLigar2();
+  for (const [q, t, l] of rolo) { const el = q ? ov.querySelector(q) : ov; if (el) { el.scrollTop = t; el.scrollLeft = l; } }
+  const sel = ov.querySelector('.dc-t2.on, .dc-pg.on'); if (sel && rolo.length) { const box = sel.closest('.dc-th2, .dc-strip'); if (box) { const r = sel.getBoundingClientRect(), b = box.getBoundingClientRect(); if (r.top < b.top || r.bottom > b.bottom) sel.scrollIntoView({ block: 'nearest' }); } }
 }
 function dcLigar() {
   const ov = DC.ov; if (!ov) return;
