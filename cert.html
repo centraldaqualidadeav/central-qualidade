@@ -80,7 +80,8 @@
 .dc-sd2 { border-left: 1px solid #d6dbe1; padding: 14px; display: grid; gap: 12px; align-content: start; }
 .dc-sd2 h3 { margin: 0; font-size: 16px; text-transform: uppercase; letter-spacing: .05em; color: var(--marinho); }
 .dc-cd { border: 1px solid #d6dbe1; border-left: 4px solid #d6dbe1; border-radius: 10px; padding: 12px; display: grid; gap: 10px; } .dc-cd.on { border-left-color: var(--laranja); }
-.dc-cdh { display: flex; align-items: center; justify-content: space-between; gap: 8px; } .dc-cdh .btn { height: 34px; }
+.dc-cdh { display: flex; align-items: center; justify-content: space-between; gap: 8px; } .dc-cdh .btn { height: 34px; } .dc-cdb { display: inline-flex; gap: 6px; }
+.dc-cola { border-color: #E85D22 !important; color: #E85D22 !important; }
 .dc-lin { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 36px; gap: 8px; align-items: end; }
 .dc-lin label { display: grid; gap: 3px; min-width: 0; } .dc-lin span { font-size: 11.5px; font-weight: 600; color: #5d6874; }
 .dc-lin .dc-in { height: 38px; font-weight: 600; color: var(--marinho); padding: 0 8px; }
@@ -4320,7 +4321,15 @@ async function dcConfereNf(o) {
 }
 function dcFechar() { if (DC.ov) { DC.ov.remove(); DC.ov = null; document.removeEventListener('keydown', dcTecla, true); } }
 const dcTemEtq = () => DC.orig.some(o => Object.values(o.etq || {}).some(L => L.length));
-function dcTecla(e) { if (e.key === 'Escape' && DC.ov && !DC.ov.querySelector('.dc-busy') && !dcTemEtq()) { e.preventDefault(); dcFechar(); } }   /* com etiquetas postas, o Esc não fecha */
+function dcTecla(e) {
+  if (DC.ov && DC.passo === 2 && (e.ctrlKey || e.metaKey) && !e.altKey && /^[cv]$/i.test(e.key)) {   /* Ctrl+C / Ctrl+V na etiqueta (fora das caixas de texto) */
+    const t = e.target, emTexto = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+    if (!emTexto && !DC.ov.querySelector('.dc-busy')) {
+      if (/c/i.test(e.key) && DC.selE) { const f = dcAchaEtq(DC.selE); if (f) { e.preventDefault(); dcCopiaEtq(f); return; } }
+      if (/v/i.test(e.key) && DC.clip) { e.preventDefault(); dcColaEtq(); return; }
+    }
+  }
+  if (e.key === 'Escape' && DC.ov && !DC.ov.querySelector('.dc-busy') && !dcTemEtq()) { e.preventDefault(); dcFechar(); } }   /* com etiquetas postas, o Esc não fecha */
 function dcVer(bytes) {
   const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
   const w = window.open(url, '_blank'); if (!w) toast('O navegador bloqueou a janela nova.', true);
@@ -4329,7 +4338,7 @@ function dcVer(bytes) {
 async function abrirDocCompleto() {
   if (!nomeArquivo(state)) { await exigirNumero('Documento completo'); return; }
   dcFechar();
-  Object.assign(DC, { passo: 1, nf: null, cert: null, orig: [], nome: dcNomePadrao(), nomeMexido: false, final: null, finalPdf: null, sel: 0, arr: -1, cur: null, selE: null, excl: new Set(), exclRot: [], giro: new Map() });
+  Object.assign(DC, { clip: null, passo: 1, nf: null, cert: null, orig: [], nome: dcNomePadrao(), nomeMexido: false, final: null, finalPdf: null, sel: 0, arr: -1, cur: null, selE: null, excl: new Set(), exclRot: [], giro: new Map() });
   const ov = document.createElement('div'); ov.className = 'dc-ov'; DC.ov = ov; document.body.appendChild(ov);
   document.addEventListener('keydown', dcTecla, true);
   dcDesenhar();
@@ -4649,7 +4658,7 @@ function dcEtqHTML(e, s) {
 function dcCorpo2() {
   const o = DC.orig[DC.cur.oi], L = dcEtqs(o, DC.cur.pi), E = dcEscala();
   const th = DC.orig.map((q, oi) => Array.from({ length: q.pags }, (_, pi) => { const n = (q.etq && q.etq[pi] || []).length; return `<button type="button" class="dc-t2${oi === DC.cur.oi && pi === DC.cur.pi ? ' on' : ''}" data-dc="p2" data-oi="${oi}" data-pi="${pi}"><img src="${q.thumbs[pi]}" alt=""><b>${dcEsc(q.nome.replace(/\.(pdf|jpe?g|png)$/i, ''))}${q.pags > 1 ? ' · pág. ' + (pi + 1) : ''}</b><span class="${n ? 'ok' : ''}">${n ? `✓ ${n} etiqueta${n > 1 ? 's' : ''}` : 'sem etiqueta'}</span></button>`; }).join('')).join('');
-  const card = (e, k) => `<div class="dc-cd${DC.selE === e.id ? ' on' : ''}" data-card="${e.id}"><div class="dc-cdh"><b>Etiqueta ${k + 1}</b><button type="button" class="btn secondary dc-x" data-dc="etq-" data-e="${e.id}">Remover etiqueta</button></div>
+  const card = (e, k) => `<div class="dc-cd${DC.selE === e.id ? ' on' : ''}" data-card="${e.id}"><div class="dc-cdh"><b>Etiqueta ${k + 1}</b><span class="dc-cdb"><button type="button" class="btn secondary" data-dc="etq-cp" data-e="${e.id}" title="Copiar esta etiqueta com os lotes e corridas (Ctrl+C)">Copiar</button><button type="button" class="btn secondary dc-x" data-dc="etq-" data-e="${e.id}">Remover</button></span></div>
     ${e.lin.map((r, i) => `<div class="dc-lin"><label><span>Lote Aços Vital</span><input class="dc-in" data-lin="${e.id}:${i}:lote" value="${dcEsc(r.lote)}" placeholder="ex.: AV-26-00004" autocomplete="off"></label><label><span>Corrida da usina</span><input class="dc-in" data-lin="${e.id}:${i}:cor" value="${dcEsc(r.cor)}" autocomplete="off"></label>${e.lin.length > 1 ? `<button type="button" class="dc-lx" data-dc="lin-" data-e="${e.id}" data-k="${i}" title="Tirar esta linha" aria-label="Tirar esta linha">✕</button>` : '<span></span>'}</div>`).join('')}
     ${e.lin.length < DC_LMAX ? `<button type="button" class="dc-add" data-dc="lin+" data-e="${e.id}">+ Mais um lote / corrida nesta etiqueta</button>` : `<span class="dc-mut">Máximo de ${DC_LMAX} linhas por etiqueta: use outra etiqueta.</span>`}
     <div class="dc-tam"><span>Tamanho</span><div>${[['P', 'Pequena'], ['M', 'Média'], ['G', 'Grande']].map(([t, l]) => `<button type="button" data-dc="tam" data-e="${e.id}" data-t="${t}" aria-pressed="${Math.abs(e.w - DC_TAM[t]) < 1}">${l}</button>`).join('')}</div></div></div>`;
@@ -4658,6 +4667,7 @@ function dcCorpo2() {
       <div class="dc-page" id="dc-page" style="width:${E.W.toFixed(0)}px;height:${E.H.toFixed(0)}px">${o.big && o.big[DC.cur.pi] ? `<img src="${o.big[DC.cur.pi]}" alt="" draggable="false">` : ''}${L.map(e => dcEtqHTML(e, E.s)).join('')}</div></div>
     <div class="dc-sd2"><h3>Etiquetas nesta página</h3>${L.map(card).join('') || '<p class="dc-mut" style="margin:0">Nenhuma etiqueta nesta página. Clique num lugar em branco da página.</p>'}
       <button type="button" class="btn secondary" data-dc="etq+">+ ${L.length ? 'Outra etiqueta nesta página' : 'Etiqueta nesta página'}</button>
+      ${DC.clip ? `<button type="button" class="btn secondary dc-cola" data-dc="etq-cl" title="Ctrl+V">Colar etiqueta copiada · ${dcEsc(DC.clip.lin.map(r => r.lote || r.cor).filter(Boolean).slice(0, 2).join(', '))}${DC.clip.lin.length > 2 ? ' +' + (DC.clip.lin.length - 2) : ''}</button>${dcSemEtq() ? `<button type="button" class="btn secondary dc-cola" data-dc="etq-clt">Colar em todas as folhas sem etiqueta (${dcSemEtq()})</button>` : ''}` : ''}
       <div class="dc-tip">Um certificado com mais de uma corrida da nota pode ter várias linhas na mesma etiqueta. A Central sugere a corrida do certificado Aços Vital (e o lote, dentro da Central); confira e corrija se precisar.</div></div></div>`;
 }
 function dcNovaEtq(x, y) {
@@ -4666,6 +4676,30 @@ function dcNovaEtq(x, y) {
   if (x == null) { let k = 0; while (k < 6 && L.some(e => Math.abs(e.y - py) < h && Math.abs(e.x - px) < w)) { py -= h + 10; k++; } }
   const e = { id: 'e' + (++dcSeq), x: Math.max(0, Math.min(v.w - w, px)), y: Math.max(0, Math.min(v.h - h, py)), w, lin: [sg] };
   L.push(e); DC.selE = e.id; return e;
+}
+/* copiar e colar a etiqueta (com os lotes e as corridas) em outra página: botões ou Ctrl+C / Ctrl+V */
+function dcCopiaEtq(f) {
+  const v = f.o.vp[f.pi];
+  DC.clip = { lin: f.e.lin.map(r => Object.assign({}, r)), w: f.e.w, rx: v.w ? f.e.x / v.w : 0, ry: v.h ? f.e.y / v.h : 0 };
+  toast('Etiqueta copiada. Abra outra página e clique em "Colar etiqueta copiada" (ou Ctrl+V).'); dcDesenhar();
+}
+function dcColaEtq() {
+  if (!DC.clip || !DC.cur) return;
+  const o = DC.orig[DC.cur.oi], v = o.vp[DC.cur.pi], L = dcEtqs(o, DC.cur.pi), c = DC.clip, w = Math.min(c.w, v.w), h = w * dcEtqAlt(c.lin.length) / 300;
+  let x = Math.max(0, Math.min(v.w - w, c.rx * v.w)), y = Math.max(0, Math.min(v.h - h, c.ry * v.h));
+  for (let k = 0; k < 6 && L.some(e => Math.abs(e.x - x) < 8 && Math.abs(e.y - y) < 8); k++) y = y + h + 10 <= v.h - h ? y + h + 10 : Math.max(0, y - h - 10);   /* já tem uma no mesmo lugar: põe logo abaixo (ou acima) */
+  const e = { id: 'e' + (++dcSeq), x, y, w, lin: c.lin.map(r => Object.assign({}, r)) };
+  L.push(e); DC.selE = e.id; dcDesenhar(); toast('Etiqueta colada.');
+}
+const dcSemEtq = () => DC.orig.reduce((n, o) => n + Array.from({ length: o.pags || 0 }, (_, pi) => pi).filter(pi => o.vp && o.vp[pi] && !((o.etq || {})[pi] || []).length).length, 0);
+function dcColaTodas() {   /* a mesma etiqueta em todas as folhas que ainda não têm etiqueta, no mesmo lugar da copiada */
+  if (!DC.clip) return; const c = DC.clip; let n = 0;
+  for (const o of DC.orig) for (let pi = 0; pi < (o.pags || 0); pi++) {
+    const v = o.vp && o.vp[pi], L = dcEtqs(o, pi); if (!v || L.length) continue;
+    const w = Math.min(c.w, v.w), h = w * dcEtqAlt(c.lin.length) / 300;
+    L.push({ id: 'e' + (++dcSeq), x: Math.max(0, Math.min(v.w - w, c.rx * v.w)), y: Math.max(0, Math.min(v.h - h, c.ry * v.h)), w, lin: c.lin.map(r => Object.assign({}, r)) }); n++;
+  }
+  DC.selE = null; dcDesenhar(); toast(n ? `Etiqueta colada em ${n} folha${n > 1 ? 's' : ''}. Confira cada uma e mude o que precisar.` : 'Todas as folhas já têm etiqueta.');
 }
 function dcAchaEtq(id) { for (const o of DC.orig) for (const [pi, L] of Object.entries(o.etq || {})) { const i = L.findIndex(e => e.id === id); if (i >= 0) return { o, pi: +pi, L, i, e: L[i] }; } return null; }
 function dcAtuEtqDom(e) {
@@ -4710,7 +4744,10 @@ function dcLigar2() {
 async function dcAcao2(a, b) {
   if (a === 'p2') { DC.cur = { oi: +b.dataset.oi, pi: +b.dataset.pi }; DC.selE = null; await dcComBusy('Abrindo a página…', dcBigAtual); dcDesenhar(); return true; }
   if (a === 'etq+') { dcNovaEtq(); dcDesenhar(); return true; }
+  if (a === 'etq-cl') { dcColaEtq(); return true; }
+  if (a === 'etq-clt') { dcColaTodas(); return true; }
   const f = b.dataset.e && dcAchaEtq(b.dataset.e);
+  if (a === 'etq-cp' && f) { dcCopiaEtq(f); return true; }
   if (a === 'etq-' && f) { f.L.splice(f.i, 1); if (DC.selE === f.e.id) DC.selE = null; dcDesenhar(); return true; }
   if (a === 'lin+' && f && f.e.lin.length < DC_LMAX) {
     f.e.lin.push(dcLinha(dcCorSug(f.o)));
