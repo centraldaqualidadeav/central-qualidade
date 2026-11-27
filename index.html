@@ -707,6 +707,42 @@ button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 .nxks.cnks { grid-template-columns: repeat(4, minmax(0, 1fr)); } .nxks.cnks.cnks > .nxk.nxk:nth-child(n) { grid-column: auto; }   /* v206: vence a regra de 981–1280px que esticava cada cartão numa linha */ .cnks .nxk .lbl { min-height: 2.5em; } .cnks .nxk .sub { padding-right: 0; }   /* v204: calibração, 4 cartões */
 @media (max-width: 980px) { .nxks.cnks { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .nxtb th:nth-child(3), .nxtb td:nth-child(3) { display: none; } }
+/* v207: wallpaper da conta dona — a imagem fica numa camada fixa atrás de tudo e os quadros viram vidro */
+#wpbg { position: fixed; inset: calc(var(--wp-blur, 0px) * -2); z-index: -1; background: #000 center / cover no-repeat; filter: blur(var(--wp-blur, 0px)) brightness(calc(1 - var(--wp-dim, .35))); pointer-events: none; }
+body.cq-wp { background: transparent !important; --wp-solid: #ffffff; --surface: rgba(255, 255, 255, .80); --surface-2: rgba(247, 248, 246, .74); --sunken: rgba(236, 239, 235, .66); }
+:root[data-theme="dark"] body.cq-wp { --wp-solid: #191d1b; --surface: rgba(16, 19, 18, .62); --surface-2: rgba(22, 26, 24, .56); --sunken: rgba(6, 8, 7, .48); }
+html:has(body.cq-wp) { background: #000; }
+body.cq-wp .tbw, body.cq-wp .rail { background: var(--surface-2); }
+body.cq-wp .rail { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+body.cq-wp :is(.btn.primary, .seg button[aria-pressed="true"], .qcf button[aria-pressed="true"], .motv button[aria-pressed="true"], .tip, .toast, .mine-tg .btn[aria-pressed="true"], .eqtog button[aria-pressed="true"], .cqtabs button[aria-pressed="true"] b.am, .cqflt button[aria-pressed="true"], .cqtoast, .osc.all[aria-pressed="true"], .tbhd .tbme) { color: var(--wp-solid); }
+body.cq-wp :is(.cqnova .btn, .cqtoast .btn) { background: var(--wp-solid); border-color: var(--wp-solid); }
+body.cq-wp .qcsi u { border-color: var(--wp-solid); }
+body.cq-wp .ehav.st::after, body.cq-wp .cqfpv.late::after { border-color: var(--wp-solid); }
+body.cq-wp .modal, body.cq-wp .drawer { background: var(--wp-solid); }
+body.cq-wp .vhead h1 { color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, .85), 0 0 18px rgba(0, 0, 0, .6); } body.cq-wp .vhead > div > p { color: rgba(255, 255, 255, .86); text-shadow: 0 1px 3px rgba(0, 0, 0, .9); }   /* título fica direto sobre a imagem */
+.wphd { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.wpcnt { font: 500 12px var(--f-mono); color: var(--ink-2); border: 1px solid var(--line); padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+.wpgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.wpt { position: relative; aspect-ratio: 16 / 10; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); background: var(--sunken); cursor: pointer; padding: 0; font: inherit; color: inherit; text-align: center; }
+.wpt img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.wpt.on { outline: 3px solid var(--n-ouro); outline-offset: -1px; }
+.wpt:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.wptag { position: absolute; left: 8px; top: 8px; background: var(--n-ouro); color: #1a1408; font: 700 10.5px var(--f-body); letter-spacing: .06em; padding: 3px 8px; border-radius: 4px; }
+.wpdel { position: absolute; right: 8px; top: 8px; width: 32px; height: 32px; border-radius: 6px; background: rgba(0, 0, 0, .6); border: 1px solid rgba(255, 255, 255, .2); display: grid; place-items: center; cursor: pointer; padding: 0; }
+.wpdel svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.wpdel:hover { background: var(--crit); border-color: var(--crit); }
+.wpcap { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 16px 10px 7px; font-size: 12px; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, .75)); text-align: left; }
+.wpcap small { color: rgba(255, 255, 255, .7); }
+.wpadd, .wpnone { display: grid; place-items: center; border-style: dashed; color: var(--ink-2); background: transparent; }
+.wpadd b { display: block; font-size: 30px; line-height: 1; font-weight: 400; color: var(--n-ouro); margin-bottom: 6px; }
+.wpadd small, .wpnone small { display: block; color: var(--ink-3); font-size: 11px; margin-top: 3px; }
+.wpadd:disabled { opacity: .55; cursor: not-allowed; }
+.wpnone i { display: block; width: 44px; height: 28px; border-radius: 4px; background: #111413; border: 1px solid #2d3430; margin: 0 auto 8px; }
+.wpctl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.wpsl { display: grid; gap: 8px; } .wpsl > span { display: flex; justify-content: space-between; font: 600 11px var(--f-body); letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
+.wpsl b { color: var(--ink); font: 500 12px var(--f-mono); letter-spacing: 0; } .wpsl input { width: 100%; accent-color: var(--n-ouro); }
+.wpdlg { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 12px; align-items: center; margin-bottom: 4px; } .wpdlg img { width: 120px; height: 75px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); } .wpdlg p { margin: 0; color: var(--ink-2); }
+@media (max-width: 980px) { .wpgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .wpctl { grid-template-columns: minmax(0, 1fr); gap: 14px; } }
 /* v78 etapa 3: tabela compacta da lista do RIR (mesmas colunas em todas as linhas) */
 .ritb { border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--surface); margin-bottom: 18px; }
 .rirw { display: grid; grid-template-columns: 128px 196px minmax(0, 1fr) 84px 120px 110px 132px; column-gap: 14px; align-items: center; min-height: 58px; padding: 6px 14px; border-top: 1px solid var(--line); }
@@ -6338,7 +6374,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 206; window.CQ_V = APP_V;
+    const APP_V = 207; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -7329,7 +7365,7 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
       try { DB.canWrite = await u.can('data.write'); } catch (e) { DB.canWrite = null; }
       try { DB.owner = !!(await u.isOwner()); } catch (e) { DB.owner = false; }
       try { DB.admin = !!(await u.canEdit()); } catch (e) { DB.admin = null; }
-      applyTheme(); loadTheme();
+      applyTheme(); loadTheme(); if (DB.owner) wpStart();
       try { if (typeof u.me === 'function') { const me = await u.me(); DB.meName = (me && me.name) || ''; DB.meEmail = (me && me.email) || ''; DB.mePes = (me && me.pessoaId) || null; } } catch (e) { /* sem nome */ }
       if (DB.me) DB.perfU[DB.me] = { pessoaId: DB.mePes || null, email: DB.meEmail || '' };   /* v104: a própria foto no "Equipe hoje" */
       updateChrome();
@@ -7718,6 +7754,108 @@ window.CQ_RIF_NORMAS = [{"id":"ASME_B16_5","sigla":"ASME B16.5","edicao":"2009",
   async function loadTheme() {
     if (!canTheme() || !DB.me || !DB.db) return;
     try { const sn = await DB.db.doc('perfis/' + DB.me).get(); if (sn.exists) { const t = (sn.data() || {}).tema; if (t === 'escuro' || t === 'claro') { DB.tema = t; lsSet('cq-tema', t); applyTheme(); } } } catch (e) { /* fica a escolha deste aparelho */ }
+  }
+  /* ---------- v207: wallpaper da conta dona (galeria de até 8 imagens, guardada em wp/*; cópia no aparelho para não reler o banco) ---------- */
+  const WP_PRE = [['bn', 'Buraco negro', 'buraco-negro.jpg'], ['jp', 'Japonês', 'japones.jpg'], ['tn', 'Túnel neon', 'tunel-neon.jpg'], ['hx', 'Colmeia azul', 'colmeia-azul.jpg']];
+  const WP_MAX = 8;
+  const WP = { meta: null, url: null, urlId: null, un: null };
+  const wpIdb = (() => { let pr = null; const open = () => pr || (pr = new Promise((res, rej) => { try { const r = indexedDB.open('cq-wp', 1); r.onupgradeneeded = () => r.result.createObjectStore('img'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); } catch (e) { rej(e); } }));
+    const tx = (mode, f) => open().then((db) => new Promise((res, rej) => { const t = db.transaction('img', mode), st = t.objectStore('img'), q = f(st); t.oncomplete = () => res(q && q.result); t.onerror = () => rej(t.error); }));
+    return { get: (k) => tx('readonly', (st) => st.get(k)).catch(() => null), put: (k, v) => tx('readwrite', (st) => st.put(v, k)).catch(() => null), del: (k) => tx('readwrite', (st) => st.delete(k)).catch(() => null) };
+  })();
+  const wpMeta = () => Object.assign({ sel: null, dim: 35, blur: 0, ocu: [], lista: [] }, WP.meta || {});
+  const wpItens = () => { const m = wpMeta(); return WP_PRE.filter(([id]) => !(m.ocu || []).includes(id)).map(([id, n, f]) => ({ id, n, pre: true, mini: 'wallpapers/mini/' + f, src: 'wallpapers/' + f })).concat((m.lista || []).map((x) => ({ id: x.id, n: x.n, at: x.at, mini: x.mini }))); };
+  async function wpSrc(id) {
+    const pre = WP_PRE.find((x) => x[0] === id); if (pre) return 'wallpapers/' + pre[2];
+    let d = await wpIdb.get(id);
+    if (!d) { try { const sn = await DB.db.doc('wp/' + id).get(); d = sn.exists ? (sn.data() || {}).img : null; if (d) wpIdb.put(id, d); } catch (e) { d = null; } }
+    if (!d) return null;
+    try { const b = await (await fetch(d)).blob(); return URL.createObjectURL(b); } catch (e) { return d; }
+  }
+  async function wpApply() {
+    const m = wpMeta(), on = !!(DB.owner && m.sel && wpItens().some((x) => x.id === m.sel));
+    let el = document.getElementById('wpbg');
+    if (!on) { document.body.classList.remove('cq-wp'); if (el) el.remove(); return; }
+    if (WP.urlId !== m.sel) { const u = await wpSrc(m.sel); if (wpMeta().sel !== m.sel) return; if (WP.url && WP.url.startsWith('blob:')) URL.revokeObjectURL(WP.url); WP.url = u; WP.urlId = m.sel; }
+    if (!WP.url) { document.body.classList.remove('cq-wp'); if (el) el.remove(); return; }
+    el = document.getElementById('wpbg');   /* outra chamada pode ter criado a camada enquanto esta esperava a imagem */
+    if (!el) { el = document.createElement('div'); el.id = 'wpbg'; el.setAttribute('aria-hidden', 'true'); document.body.prepend(el); }
+    el.style.backgroundImage = `url("${WP.url}")`;
+    el.style.setProperty('--wp-dim', String(Math.max(0, Math.min(80, +m.dim || 0)) / 100));
+    el.style.setProperty('--wp-blur', Math.max(0, Math.min(20, +m.blur || 0)) + 'px');
+    document.body.classList.add('cq-wp');
+  }
+  function wpStart() {
+    if (!DB.owner || !DB.db || WP.un || QC_MINI) return;
+    try { const c = JSON.parse(lsGet('cq-wp-meta', 'null')); if (c) { WP.meta = c; wpApply(); } } catch (e) { /* sem cópia */ }
+    WP.un = DB.db.doc('wp/meta').onSnapshot((snap) => { WP.meta = snap.exists ? snap.data() : null; lsSet('cq-wp-meta', JSON.stringify(WP.meta)); wpApply(); if (S.view === 'config' && S.cfgTab === 'logo' && !$('#layer').innerHTML) wpPane(); }, (e) => { anotaErro('wp/meta', e); });
+  }
+  async function wpSalvaMeta(o) {
+    const m = Object.assign(wpMeta(), o); WP.meta = m; lsSet('cq-wp-meta', JSON.stringify(m)); wpApply();
+    await DB.db.doc('wp/meta').set(m);
+  }
+  function wpPrep(file) {   /* até 4K; o documento do banco aceita ~1 MB, então a qualidade desce até caber */
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file), im = new Image();
+      im.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Arquivo de imagem inválido.')); };
+      im.onload = () => {
+        URL.revokeObjectURL(url);
+        const pinta = (mx) => { const k = Math.min(1, mx / im.naturalWidth, (mx * 0.625) / im.naturalHeight); const cv = document.createElement('canvas'); cv.width = Math.max(1, Math.round(im.naturalWidth * k)); cv.height = Math.max(1, Math.round(im.naturalHeight * k)); cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height); return cv; };
+        let cv = pinta(3840), q = 0.86, d = cv.toDataURL('image/jpeg', q);
+        while (d.length > 940000 && q > 0.5) { q -= 0.06; d = cv.toDataURL('image/jpeg', q); }
+        if (d.length > 940000) { cv = pinta(2560); q = 0.8; d = cv.toDataURL('image/jpeg', q); while (d.length > 940000 && q > 0.4) { q -= 0.08; d = cv.toDataURL('image/jpeg', q); } }
+        if (d.length > 940000) { reject(new Error('A imagem ficou grande demais mesmo reduzida.')); return; }
+        const mc = document.createElement('canvas'); mc.width = 320; mc.height = 200; const g = mc.getContext('2d'); const k2 = Math.max(320 / cv.width, 200 / cv.height); g.drawImage(cv, (320 - cv.width * k2) / 2, (200 - cv.height * k2) / 2, cv.width * k2, cv.height * k2);
+        resolve({ img: d, mini: mc.toDataURL('image/jpeg', 0.72), w: cv.width, h: cv.height });
+      };
+      im.src = url;
+    });
+  }
+  const WP_LIX = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>';
+  function wpHTML() {
+    const m = wpMeta(), it = wpItens(), cheio = it.length >= WP_MAX;
+    return `<div class="fsec" id="cfg-wp"><h3>Wallpaper</h3><div class="wphd"><p class="use" style="margin:0">Só a conta dona vê. Fica guardado no banco: aparece igual no computador e no tablet.</p><span class="wpcnt">${it.length} de ${WP_MAX} imagens</span></div>
+      <div class="wpgrid">${it.map((x) => `<div class="wpt${m.sel === x.id ? ' on' : ''}" role="button" tabindex="0" data-wp="${esc(x.id)}" aria-pressed="${m.sel === x.id}" aria-label="Usar ${esc(x.n)}"><img src="${esc(x.mini)}" alt="" loading="lazy">${m.sel === x.id ? '<span class="wptag">EM USO</span>' : ''}<button type="button" class="wpdel" data-wpdel="${esc(x.id)}" aria-label="Apagar ${esc(x.n)}">${WP_LIX}</button><span class="wpcap"><span>${esc(x.n)}</span>${x.at ? `<small>${esc(dmy(x.at).slice(0, 5))}</small>` : ''}</span></div>`).join('')}
+        <button type="button" class="wpt wpadd" id="wp-add" ${cheio ? 'disabled' : ''}><span><b>+</b>Enviar imagem<small>${cheio ? 'galeria cheia: apague uma para enviar' : 'JPG ou PNG · até 4K'}</small></span></button>
+        <button type="button" class="wpt wpnone${!m.sel ? ' on' : ''}" data-wp="" aria-pressed="${!m.sel}"><span><i></i>Sem wallpaper<small>volta ao fundo normal</small></span></button></div>
+      <input type="file" id="wp-file" accept="image/png,image/jpeg,image/webp" hidden>
+      <div class="wpctl"><label class="wpsl"><span>Escurecer a imagem <b id="wp-dimv">${+m.dim || 0}%</b></span><input type="range" id="wp-dim" min="0" max="80" step="5" value="${+m.dim || 0}"></label>
+        <label class="wpsl"><span>Desfoque da imagem <b id="wp-blurv">${+m.blur || 0} px</b></span><input type="range" id="wp-blur" min="0" max="20" step="1" value="${+m.blur || 0}"></label></div></div>`;
+  }
+  function wpPane() { const el = $('#cfg-wp'); if (!el) return; el.outerHTML = wpHTML(); wpWire(); }
+  function wpWire() {
+    const box = $('#cfg-wp'); if (!box) return;
+    const usa = async (id) => { try { await wpSalvaMeta({ sel: id || null }); wpPane(); } catch (e) { toast('Não foi possível gravar: ' + ((e && (e.message || e.code)) || e), true); } };
+    $$('#cfg-wp [data-wp]').forEach((t) => { t.onclick = (ev) => { if (ev.target.closest('[data-wpdel]')) return; usa(t.dataset.wp); }; t.onkeydown = (ev) => { if ((ev.key === 'Enter' || ev.key === ' ') && !ev.target.closest('[data-wpdel]')) { ev.preventDefault(); usa(t.dataset.wp); } }; });
+    $$('#cfg-wp [data-wpdel]').forEach((b) => { b.onclick = (ev) => {
+      ev.stopPropagation(); const x = wpItens().find((i) => i.id === b.dataset.wpdel); if (!x) return;
+      openModal('Apagar este wallpaper?', `<div class="wpdlg"><img src="${esc(x.mini)}" alt=""><p>“${esc(x.n)}” sai da galeria. As outras imagens continuam guardadas.</p></div><div class="formfoot"><button class="btn danger" type="button" id="wp-del-ok">Apagar</button><button class="btn" type="button" data-act="close">Cancelar</button></div>`);
+      $('#wp-del-ok').onclick = async () => {
+        $('#layer').innerHTML = ''; document.body.style.overflow = '';
+        const m = wpMeta(), o = { sel: m.sel === x.id ? null : m.sel };
+        if (x.pre) o.ocu = (m.ocu || []).concat(x.id); else o.lista = (m.lista || []).filter((i) => i.id !== x.id);
+        try { await wpSalvaMeta(o); if (!x.pre) { await DB.db.doc('wp/' + x.id).delete(); wpIdb.del(x.id); } toast('Wallpaper apagado.'); wpPane(); }
+        catch (e) { toast('Não foi possível apagar: ' + ((e && (e.message || e.code)) || e), true); }
+      };
+    }; });
+    const add = $('#wp-add'), inp = $('#wp-file');
+    if (add) add.onclick = () => inp.click();
+    if (inp) inp.onchange = async () => {
+      const f = inp.files && inp.files[0]; inp.value = ''; if (!f) return;
+      if (!/^image\//.test(f.type)) { toast('Escolha uma imagem (JPG ou PNG).', true); return; }
+      if (wpItens().length >= WP_MAX) { toast('A galeria está cheia: apague uma imagem antes.', true); return; }
+      try {
+        add.disabled = true; add.querySelector('small').textContent = 'enviando…';
+        const r = await wpPrep(f), id = 'u' + Date.now().toString(36), n = (f.name || 'Imagem').replace(/\.[a-z0-9]+$/i, '').slice(0, 40), at = Date.now();
+        await DB.db.doc('wp/' + id).set({ img: r.img, n, at, w: r.w, h: r.h });
+        await wpIdb.put(id, r.img);
+        await wpSalvaMeta({ sel: id, lista: (wpMeta().lista || []).concat({ id, n, at, mini: r.mini }) });
+        toast('Wallpaper enviado e em uso.'); wpPane();
+      } catch (e) { toast('Não foi possível enviar: ' + ((e && (e.message || e.code)) || e), true); wpPane(); }
+    };
+    const sl = (k, un) => { const r = $('#wp-' + k); if (!r) return; let tm = 0;
+      r.oninput = () => { $('#wp-' + k + 'v').textContent = r.value + un; const el = $('#wpbg'); if (el) el.style.setProperty(k === 'dim' ? '--wp-dim' : '--wp-blur', k === 'dim' ? String(r.value / 100) : r.value + 'px'); clearTimeout(tm); tm = setTimeout(() => { wpSalvaMeta({ [k]: +r.value }).catch(() => toast('Não foi possível gravar o ajuste.', true)); }, 500); }; };
+    sl('dim', '%'); sl('blur', ' px');
   }
   async function setTheme(t) {
     DB.tema = t; lsSet('cq-tema', t); applyTheme();
@@ -14631,6 +14769,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
         </div></div></div></section>`)}
       ${sec('logo', `<section class="sec">${band('GERAL', 'Aparência, logo e Drive')}<div class="block"><div class="body">
         ${canTheme() ? `<div class="fsec" id="cfg-tema"><h3>Modo escuro</h3><p class="use" style="margin:0">Só para o dono e os administradores. A escolha é sua: vale para a sua conta, no computador e no celular, e não muda nada para as outras pessoas. Etiquetas, impressão e relatórios continuam brancos.</p><div class="seg" id="tema-seg" role="group" aria-label="Modo escuro"><button type="button" data-tema="escuro" aria-pressed="${document.documentElement.dataset.theme === 'dark'}">Ligado</button><button type="button" data-tema="claro" aria-pressed="${document.documentElement.dataset.theme !== 'dark'}">Desligado</button></div></div>` : ''}
+        ${DB.owner ? wpHTML() : ''}
         <div class="fsec" id="cfg-logo-sec"><h3>Logo da empresa</h3>
           <p class="use" style="margin:0">Aparece no menu, na tela de entrada e no cabeçalho dos relatórios diário e mensal. PNG, JPG ou SVG — a Central reduz o tamanho automaticamente. Vale na hora para toda a equipe.</p>
           <div class="cfg-logo"><div class="lp">${DB.logo ? `<img src="${DB.logo}" alt="Logo atual">` : '<span class="muted">sem logo</span>'}</div>${roA ? '' : `<input type="file" id="logo-file" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden><button class="btn small" type="button" id="logo-up">${DB.logo ? 'Trocar logo' : 'Enviar logo'}</button>${DB.logo ? '<button class="btn small ghost" type="button" id="logo-del">Remover logo</button>' : ''}`}</div>
@@ -14685,6 +14824,7 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
     $('#cfg-ccatraso').addEventListener('input', (e) => dirty(e.target));
     wireLogo();
     if (bkPode() && vis('certq')) cqCfgWire(false);
+    wpWire();
     $$('#tema-seg [data-tema]').forEach((b) => { b.onclick = async () => { $$('#tema-seg [data-tema]').forEach((x) => x.setAttribute('aria-pressed', x === b)); await setTheme(b.dataset.tema); toast(b.dataset.tema === 'escuro' ? 'Modo escuro ligado.' : 'Modo escuro desligado.'); }; });
     if (S.cfgFocus) { const fo = S.cfgFocus; S.cfgFocus = null; if (/^forn:/.test(fo)) setTimeout(() => entDrawer('forn', fo.slice(5), mode === 'ver'), 80); else { const el = $('#' + fo); if (el) setTimeout(() => el.scrollIntoView({ block: 'start', behavior: 'smooth' }), 60); } }
     const fg = $('#fer-gen'); if (fg) fg.onclick = () => {
