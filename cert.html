@@ -1467,8 +1467,16 @@ function lerPedidoOmie(pages) {
  * Saída: { tipo: 'oc', oc, cliente, pedidoCliente, pv: '', itens: [{ itemOC, codigo, descricao, qtd }] } */
 function lerOrdemCompra(pages) {
   const norm = s => String(s).replace(/\s+/g, ' ').trim();
+  /* v205: alguns PDFs juntam colunas vizinhas num pedaço só ("00010 3800191143", "00020 BB-80.01.02."): separa as palavras,
+     cada uma na sua posição (estimada pela largura do pedaço), para cada uma cair na coluna certa */
+  const separa = i => {
+    const t = String(i.s); if (!/^\s*\d+\s+\S/.test(t) || !(i.w > 0)) return [i];   /* só o que começa com número (nº do item, nº da linha) */
+    const out = [], re = /\S+/g; let m;
+    while ((m = re.exec(t))) out.push(Object.assign({}, i, { s: m[0], x: +(i.x + i.w * (m.index / t.length)).toFixed(2), w: +(i.w * (m[0].length / t.length)).toFixed(2) }));
+    return out;
+  };
   const paginas = pages.map(pg => {
-    const its = pg.items.filter(i => i.s && i.s.trim()).slice().sort((a, b) => a.y - b.y || a.x - b.x);
+    const its = pg.items.filter(i => i.s && i.s.trim()).flatMap(separa).sort((a, b) => a.y - b.y || a.x - b.x);
     const out = [];
     let cur = null;
     for (const it of its) {

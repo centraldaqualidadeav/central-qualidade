@@ -604,6 +604,7 @@ body.qcmini .qcemop { left: 8px; right: 8px; bottom: 62px; grid-template-columns
 .nxins li b { color: var(--ink); font-weight: 600; } .nxins li i { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; background: var(--ink-3); }
 .nxins li.ok i { background: var(--ok); } .nxins li.warn i { background: var(--warn); } .nxins li.info i { background: var(--info); } .nxins li.crit i { background: var(--crit); box-shadow: 0 0 0 3px color-mix(in srgb, var(--crit) 25%, transparent); }
 .nxks { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+
 .nxk { position: relative; display: grid; grid-template-rows: auto auto 1fr auto; gap: 4px; padding: 12px 14px 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); overflow: hidden; min-height: 190px; text-align: left; font: inherit; color: inherit; }
 .nxcx { display: grid; gap: 6px; margin-bottom: 6px; } .nxcmix { display: flex; height: 8px; border-radius: 4px; overflow: hidden; gap: 2px; } .nxcmix i, .nxclg i { display: block; background: var(--c); }   /* v138 */
 .nxclg { display: grid; gap: 2px; font-size: 12px; color: var(--ink-2); } .nxclg span { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 7px; align-items: center; } .nxclg i { width: 10px; height: 10px; border-radius: 3px; } .nxclg b { color: var(--ink); font-weight: 600; }
@@ -703,6 +704,8 @@ button.nxk { cursor: pointer; } button.nxk:hover { border-color: var(--ink-3); }
 @media (max-width: 980px) { .nxbar { grid-template-columns: minmax(0, 1fr); } .nxseg { grid-auto-columns: minmax(0, 1fr); } .nxbar .rindn { grid-template-columns: 48px minmax(0, 1fr) 48px; } .nxh { display: none; }
   .nxins { grid-template-columns: minmax(0, 1fr); } .nxins ul { grid-template-columns: minmax(0, 1fr); gap: 8px; } .nxins li { border-left: 0; padding-left: 0; }
   .nxks { grid-template-columns: repeat(2, minmax(0, 1fr)); } .nxk:last-child:nth-child(odd) { grid-column: 1 / -1; } .nxc2, .nxc2b { grid-template-columns: minmax(0, 1fr); } }
+.nxks.cnks { grid-template-columns: repeat(4, minmax(0, 1fr)); } .nxks.cnks > .nxk { grid-column: auto; } .cnks .nxk .lbl { min-height: 2.5em; } .cnks .nxk .sub { padding-right: 0; }   /* v204: calibração, 4 cartões */
+@media (max-width: 980px) { .nxks.cnks { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .nxtb th:nth-child(3), .nxtb td:nth-child(3) { display: none; } }
 /* v78 etapa 3: tabela compacta da lista do RIR (mesmas colunas em todas as linhas) */
 .ritb { border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--surface); margin-bottom: 18px; }
@@ -6335,7 +6338,7 @@ re2js/build/index.js:
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
     /* v40: tablet ou computador que fica com a Central aberta por dias não pegava a versão nova.
        A cada 20 minutos (e ao voltar para a tela) confere o número da versão no sw.js; se for mais nova, mostra o aviso para atualizar. */
-    const APP_V = 203; window.CQ_V = APP_V;
+    const APP_V = 205; window.CQ_V = APP_V;
     let novaAvisada = false;
     const confereVersao = () => {
       if (novaAvisada || document.visibilityState === 'hidden' || navigator.onLine === false) return;
@@ -10154,11 +10157,14 @@ const TV_ICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20
         <div class="dvpq"><div><small>Em uso</small><b>${pctT(nUso)}</b><small>${nf(nUso)} de ${nf(T0)}</small></div><div><small>Parados</small><b>${pctT(par)}</b><small>${nf(par)} de ${nf(T0)}</small></div></div></div>`;
       /* calibração: 4 cartões */
       const agH = H.map((h) => { const f = fotoAt(h.b); return h.b >= hoje ? nAg : f && f.ag != null ? f.ag : null; });
-      const ks4 = `<div class="dvms">
-        ${mini('Em dia', pA == null ? '—' : nf(Math.round(pA)) + '%', '&nbsp;', pA != null && pP != null ? nxDl(pA, pP, P, 'sobe', (v) => NF1.format(v) + ' p.p.') : null, H.map((h) => pctD(emDia(U, h.b))), 'var(--ok)', goC({ status: ['CONFORME'] }))}
-        ${mini('Calibração vencida', nf(xA), '&nbsp;', nxDl(xA, xP, P, 'desce', nf), H.map((h) => conta(U, h.b, 'venc')), 'var(--n-rnc)', goC({ status: ['VENCIDO'] }))}
-        ${mini('Aguardando análise', nf(nAg), '&nbsp;', fP && fP.ag != null ? nxDl(nAg, fP.ag, P, 'desce', nf) : null, agH, 'var(--n-ouro)', null)}
-        ${mini('Calibrações realizadas', nf(cA.length), '&nbsp;', nxDl(cA.length, cP.length, P, 'sobe', nf), H.map((h) => CE(h.a, h.b).length), 'var(--n-cal)', null)}</div>`;
+      /* v204: os 4 cartões da calibração no mesmo modelo dos outros indicadores (rótulo, número, variação, texto e a linha dos 6 meses) */
+      const qd = nxQuando(P) || 'no dia';
+      const ks4 = `<div class="nxks cnks">${[
+        { l: 'Em dia', v: pA == null ? '—' : nf(Math.round(pA)) + '%', sub: `${nf(eA.n)} de ${nf(eA.d)} em uso`, dl: pA != null && pP != null ? nxDl(pA, pP, P, 'sobe', (v) => NF1.format(v) + ' p.p.') : null, serie: H.map((h) => pctD(emDia(U, h.b)) || 0), go: goC({ status: ['CONFORME'] }) },
+        { l: 'Calibração vencida', v: nf(xA), sub: xA ? `${xA === 1 ? 'instrumento' : 'instrumentos'} em uso` : 'nenhum instrumento em uso', dl: nxDl(xA, xP, P, 'desce', nf), serie: H.map((h) => conta(U, h.b, 'venc')), cls: xA ? 'crit' : '', go: goC({ status: ['VENCIDO'] }) },
+        { l: 'Aguardando análise', v: nf(nAg), sub: nAg ? `${nAg === 1 ? 'certificado' : 'certificados'} para conferir` : 'nenhum certificado parado', dl: fP && fP.ag != null ? nxDl(nAg, fP.ag, P, 'desce', nf) : null, serie: agH.map((v) => v || 0), cls: nAg ? 'warn' : '' },
+        { l: 'Calibrações realizadas', v: nf(cA.length), sub: `${qd}${semCusto ? ` · ${nf(semCusto)} sem custo` : ''}`, dl: nxDl(cA.length, cP.length, P, 'sobe', nf), serie: H.map((h) => CE(h.a, h.b).length) }
+      ].map((k) => nxKpi(k, P)).join('')}</div>`;
       /* custo */
       const pt = INS_CUSTOS.map(([k, l]) => [l, cA.reduce((s2, h) => s2 + (h[k] || 0), 0)]), mxp = Math.max(1e-9, ...pt.map((p) => p[1]));
       const cs = H.map((h) => soma(CE(h.a, h.b))), mxc = Math.max(1e-9, ...cs), hl = (h, i) => (P.m === 'a' ? h.l : P.m === 't' ? `${Math.floor((E.ymd(h.a).m - 1) / 3) + 1}º tri` : MES3[E.ymd(h.a).m - 1]);
